@@ -1,5 +1,5 @@
 # General Configuration
-version: 1.1.0.{build}
+version: 1.0.0.{build}
 skip_branch_with_pr: true
 
 # Environment Configuration
@@ -31,22 +31,22 @@ build:
   publish_nuget: true
   include_nuget_references: true
   publish_nuget_symbols: true
-  project: SpeckleElements.sln
+  project: SpeckleStructural.sln
   verbosity: minimal
 
 after_build:
 # remove garbage
 #  - ps: |
-#      Remove-Item "$Env:APPVEYOR_BUILD_FOLDER\SpeckleElements\bin\Release\x86" -Recurse -ErrorAction Ignore
-#      Remove-Item "$Env:APPVEYOR_BUILD_FOLDER\SpeckleElements\bin\Release\x64" -Recurse -ErrorAction Ignore
-#      Remove-Item "$Env:APPVEYOR_BUILD_FOLDER\SpeckleElements\bin\Release\*.pdb" -Recurse -ErrorAction Ignore
-#      Remove-Item "$Env:APPVEYOR_BUILD_FOLDER\SpeckleElements\bin\Release\SpeckleElements.dll.config" -Recurse -ErrorAction Ignore
+#      Remove-Item "$Env:APPVEYOR_BUILD_FOLDER\SpeckleStructural\bin\Release\x86" -Recurse -ErrorAction Ignore
+#      Remove-Item "$Env:APPVEYOR_BUILD_FOLDER\SpeckleStructural\bin\Release\x64" -Recurse -ErrorAction Ignore
+#      Remove-Item "$Env:APPVEYOR_BUILD_FOLDER\SpeckleStructural\bin\Release\*.pdb" -Recurse -ErrorAction Ignore
+#      Remove-Item "$Env:APPVEYOR_BUILD_FOLDER\SpeckleStructural\bin\Release\SpeckleStructural.dll.config" -Recurse -ErrorAction Ignore
 
 # zip everything into a zip file containing package folder structure
-  - 7z a SpeckleElements.zip "%APPVEYOR_BUILD_FOLDER%\SpeckleElements\bin\Release\*"
+  - 7z a SpeckleStructural.zip "%APPVEYOR_BUILD_FOLDER%\SpeckleStructural\bin\Release\*"
 
 artifacts:
-  path: SpeckleElements.zip
+  path: SpeckleStructural.zip
   name: Release
 
 #deploy to nuget
