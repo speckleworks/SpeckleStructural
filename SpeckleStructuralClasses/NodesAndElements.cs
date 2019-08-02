@@ -15,7 +15,8 @@ namespace SpeckleStructuralClasses
     Column,
     Beam,
     Cantilever,
-    Brace
+    Brace,
+    Spring
   }
 
   public enum Structural2DElementType
@@ -281,9 +282,9 @@ namespace SpeckleStructuralClasses
   }
 
   [Serializable]
-  public partial class Structural1DSpring : SpeckleLine, IStructural
+  public partial class Structural0DSpring : SpecklePoint, IStructural
   {
-    public override string Type { get => base.Type + "/Structural1DSpring"; }
+    public override string Type { get => base.Type + "/Structural0DSpring"; }
 
     [JsonIgnore]
     private Dictionary<string, object> StructuralProperties
@@ -310,13 +311,13 @@ namespace SpeckleStructuralClasses
 
     /// <summary>Base SpeckleLine.</summary>
     [JsonIgnore]
-    public SpeckleLine baseLine
+    public SpecklePoint basePoint
     {
-      get => this as SpeckleLine;
+      get => this as SpecklePoint;
       set => this.Value = value.Value;
     }
-    
-    /// <summary>Application ID of StructuralSpringProperty.</summary>
+
+    /// <summary>Application ID of Structural1DProperty.</summary>
     [JsonIgnore]
     public string PropertyRef
     {
@@ -324,49 +325,12 @@ namespace SpeckleStructuralClasses
       set => StructuralProperties["propertyRef"] = value;
     }
 
-    /// <summary>Local axis of 1D spring.</summary>
-    [JsonIgnore]
-    public StructuralVectorThree ZAxis
-    {
-      get => StructuralProperties.ContainsKey("zAxis") ? (StructuralProperties["zAxis"] as StructuralVectorThree) : null;
-      set => StructuralProperties["zAxis"] = value;
-    }
-    
     /// <summary>GSA dummy status.</summary>
     [JsonIgnore]
-    public bool GSADummy
+    public bool Dummy
     {
       get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool)StructuralProperties["gsaDummy"]) : false;
       set => StructuralProperties["gsaDummy"] = value;
-    }
-
-    /// <summary>Vertex location of results.</summary>
-    [JsonIgnore]
-    public List<double> ResultVertices
-    {
-      get
-      {
-        if (StructuralProperties.ContainsKey("resultVertices"))
-        {
-          try
-          {
-            try
-            {
-              return (List<double>)StructuralProperties["resultVertices"];
-            }
-            catch
-            {
-              this.ResultVertices = ((List<object>)StructuralProperties["resultVertices"]).Select(x => Convert.ToDouble(x)).ToList();
-              return this.ResultVertices;
-            }
-          }
-          catch
-          { return null; }
-        }
-        else
-          return null;
-      }
-      set => StructuralProperties["resultVertices"] = value;
     }
 
     /// <summary>Analysis results.</summary>
@@ -685,6 +649,13 @@ namespace SpeckleStructuralClasses
     {
       get => StructuralProperties.ContainsKey("gsaMeshSize") ? ((double)StructuralProperties["gsaMeshSize"]) : 0;
       set => StructuralProperties["gsaMeshSize"] = value;
+    }
+
+    [JsonIgnore]
+    public bool GSAAutoOffsets
+    {
+      get => StructuralProperties.ContainsKey("gsaAutoOffsets") ? ((bool)StructuralProperties["gsaAutoOffsets"]) : false;
+      set => StructuralProperties["gsaAutoOffsets"] = value;
     }
 
     /// <summary>GSA dummy status.</summary>

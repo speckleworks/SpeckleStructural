@@ -68,31 +68,6 @@ namespace SpeckleStructuralClasses
     }
   }
 
-  public partial class Structural1DSpring
-  {
-    public Structural1DSpring() { }
-
-    public Structural1DSpring(double[] value, string propertyRef, StructuralVectorThree zAxis, string applicationId = null, Dictionary<string, object> properties = null)
-    {
-      this.Properties = properties;
-      this.Value = value.ToList();
-      this.PropertyRef = propertyRef;
-      this.ZAxis = zAxis;
-      this.ApplicationId = applicationId;
-
-      GenerateHash();
-    }
-
-    public override void Scale(double factor)
-    {
-      for (int i = 0; i < this.Value.Count(); i++)
-        this.Value[i] *= factor;
-
-      this.Properties = ScaleProperties(this.Properties, factor);
-      this.GenerateHash();
-    }
-  }
-
   public partial class Structural1DElementPolyline
   {
     public Structural1DElementPolyline() { }

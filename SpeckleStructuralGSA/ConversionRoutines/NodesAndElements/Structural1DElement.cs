@@ -10,7 +10,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("EL.4", new string[] { "NODE.2" }, "elements", true, false, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSA1DProperty) })]
+  [GSAObject("EL.4", new string[] { "NODE.2" }, "elements", true, false, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSA1DProperty), typeof(GSASpringProperty) })]
   public class GSA1DElement : IGSASpeckleContainer
   {
     public string Member;
@@ -226,7 +226,7 @@ namespace SpeckleStructuralGSA
     }
   }
 
-  [GSAObject("MEMB.7", new string[] { "NODE.2" }, "elements", false, true, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSA1DProperty) })]
+  [GSAObject("MEMB.7", new string[] { "NODE.2" }, "elements", false, true, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSA1DProperty), typeof(GSASpringProperty) })]
   public class GSA1DMember : IGSASpeckleContainer
   {
     public int Group; // Keep for load targetting
@@ -323,17 +323,20 @@ namespace SpeckleStructuralGSA
       int propRef = 0;
       try
       {
-        propRef = GSA.Indexer.LookupIndex(typeof(GSA1DProperty), member.PropertyRef).Value;
+        propRef = (member.ElementType == Structural1DElementType.Spring)
+          ? GSA.Indexer.LookupIndex(typeof(GSASpringProperty), member.PropertyRef).Value
+          : GSA.Indexer.LookupIndex(typeof(GSA1DProperty), member.PropertyRef).Value;
       }
       catch { }
 
-      List<string> ls = new List<string>();
-
-      ls.Add("SET");
-      ls.Add(keyword + ":" + GSA.GenerateSID(member));
-      ls.Add(index.ToString());
-      ls.Add(member.Name == null || member.Name == "" ? " " : member.Name);
-      ls.Add("NO_RGB");
+      var ls = new List<string>
+      {
+        "SET",
+        keyword + ":" + GSA.GenerateSID(member),
+        index.ToString(),
+        member.Name == null || member.Name == "" ? " " : member.Name,
+        "NO_RGB"
+      };
       if (member.ElementType == Structural1DElementType.Beam)
         ls.Add("BEAM");
       else if (member.ElementType == Structural1DElementType.Column)
@@ -356,12 +359,12 @@ namespace SpeckleStructuralGSA
       catch { ls.Add("0"); }
       ls.Add(member.GSAMeshSize == 0 ? "0" : member.GSAMeshSize.ToString()); // Target mesh size
       ls.Add("MESH"); // TODO: What is this?
-      ls.Add("BEAM"); // Element type
+      ls.Add((member.ElementType == Structural1DElementType.Spring) ? "SPRING" : "BEAM"); // Element type
       ls.Add("0"); // Fire
       ls.Add("0"); // Time 1
       ls.Add("0"); // Time 2
       ls.Add("0"); // Time 3
-      ls.Add("0"); // TODO: What is this?
+      ls.Add("0"); // Time 4
       ls.Add(member.GSADummy ? "DUMMY" : "ACTIVE");
 
       try

@@ -10,7 +10,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("", new string[] { }, "results", true, false, new Type[] { typeof(GSA1DElement), typeof(GSA1DSpring) }, new Type[] { })]
+  [GSAObject("", new string[] { }, "results", true, false, new Type[] { typeof(GSA1DElement) }, new Type[] { })]
   public class GSA1DElementResult : IGSASpeckleContainer
   {
     public int GSAId { get; set; }
@@ -32,10 +32,8 @@ namespace SpeckleStructuralGSA
       if (Conversions.GSAEmbedResults)
       {
         List<GSA1DElement> elements = GSASenderObjects[typeof(GSA1DElement)].Cast<GSA1DElement>().ToList();
-        List<GSA1DSpring> springs = GSASenderObjects[typeof(GSA1DSpring)].Cast<GSA1DSpring>().ToList();
 
         List<IGSASpeckleContainer> entities = elements.Cast<IGSASpeckleContainer>().ToList();
-        entities.AddRange(springs.Cast<IGSASpeckleContainer>());
 
         foreach (KeyValuePair<string, Tuple<int, int, List<string>>> kvp in Conversions.GSAElement1DResults)
         {

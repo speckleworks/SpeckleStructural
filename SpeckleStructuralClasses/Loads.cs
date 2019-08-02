@@ -310,11 +310,11 @@ namespace SpeckleStructuralClasses
 
     /// <summary>Temperature at the top surface of the element.</summary>
     [JsonProperty("topTemperature", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double TopTemperature;
+    public double TopTemperature { get; set; }
 
     /// <summary>Temperature at the bottom surface of the element.</summary>
     [JsonProperty("bottomTemperature", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double BottomTemperature;
+    public double BottomTemperature { get; set; }
 
     /// <summary>Application ID of StructuralLoadCase.</summary>
     [JsonProperty("loadCaseRef", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]

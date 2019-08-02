@@ -85,7 +85,13 @@ namespace SpeckleStructuralClasses
     {
       this.Profile.Scale(factor);
       this.Thickness *= factor;
-
+      if (this.Voids != null && this.Voids.Count() > 0)
+      {
+        for (var i = 0; i < this.Voids.Count(); i++)
+        {
+          this.Voids[i].Scale(factor);
+        }
+      }
       this.Properties = ScaleProperties(this.Properties, factor);
       this.GenerateHash();
     }
