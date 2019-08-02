@@ -111,39 +111,31 @@ namespace SpeckleStructuralGSA
       if (this.Value == null)
         return;
 
-      StructuralRigidConstraints constraint = this.Value as StructuralRigidConstraints;
+      var constraint = this.Value as StructuralRigidConstraints;
 
-      string keyword = typeof(GSARigidConstraints).GetGSAKeyword();
+      var keyword = typeof(GSARigidConstraints).GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(typeof(GSARigidConstraints), constraint);
+      var index = GSA.Indexer.ResolveIndex(typeof(GSARigidConstraints), constraint);
       
-      List<string> nodeRefs = GSA.Indexer.LookupIndices(typeof(GSANode), constraint.NodeRefs).Where(x => x.HasValue).Select(x => x.Value.ToString()).ToList();
-      var nodes = nodeRefs.Count > 0 ? string.Join(" ", nodeRefs) : "none";
+      var slaveNodeIndices = GSA.Indexer.LookupIndices(typeof(GSANode), constraint.NodeRefs).Where(x => x.HasValue).Select(x => x.Value.ToString()).ToList();
+      var slaveNodeIndicesSummary = slaveNodeIndices.Count > 0 ? string.Join(" ", slaveNodeIndices) : "none";
+      var masterNodeIndex = GSA.Indexer.LookupIndex(typeof(GSANode), constraint.MasterNodeRef);
+      var stageDefRefs = GSA.Indexer.LookupIndices(typeof(GSAConstructionStage), constraint.ConstructionStageRefs).Where(x => x.HasValue).Select(x => x.Value.ToString()).ToList();
 
-      List<string> stageDefRefs = GSA.Indexer.LookupIndices(typeof(GSAConstructionStage), constraint.ConstructionStageRefs).Where(x => x.HasValue).Select(x => x.Value.ToString()).ToList();
-
-      List<string> ls = new List<string>();
-
-      ls.Add("SET_AT");
-      ls.Add(index.ToString());
-      ls.Add(keyword + ":" + GSA.GenerateSID(constraint));
-      ls.Add(constraint.Name == null || constraint.Name == "" ? " " : constraint.Name);
-      ls.Add("0"); // Master node
-
-      List<string> subLs = new List<string>();
+      var subLs = new List<string>();
       if (constraint.Constraint.Value[0])
       {
-        string x = "X:X";
+        var x = "X:X";
         if (constraint.Constraint.Value[4])
           x += "YY";
-        if (constraint.Constraint.Value[5])
+        if (constraint.Constraint.Value[5]) 
           x += "ZZ";
         subLs.Add(x);
       }
 
       if (constraint.Constraint.Value[1])
       {
-        string y = "Y:Y";
+        var y = "Y:Y";
         if (constraint.Constraint.Value[3])
           y += "XX";
         if (constraint.Constraint.Value[5])
@@ -153,7 +145,7 @@ namespace SpeckleStructuralGSA
 
       if (constraint.Constraint.Value[2])
       {
-        string z = "Z:Z";
+        var z = "Z:Z";
         if (constraint.Constraint.Value[3])
           z += "XX";
         if (constraint.Constraint.Value[4])
@@ -170,10 +162,18 @@ namespace SpeckleStructuralGSA
       if (constraint.Constraint.Value[5])
         subLs.Add("ZZ:ZZ");
 
-      ls.Add(string.Join("-", subLs));
-      ls.Add(string.Join(" ", nodeRefs));
-      ls.Add(string.Join(" ", stageDefRefs));
-      ls.Add("0"); // Parent member
+      var ls = new List<string>
+      {
+        "SET_AT",
+        index.ToString(),
+        keyword + ":" + GSA.GenerateSID(constraint),
+        constraint.Name == null || constraint.Name == "" ? " " : constraint.Name,
+        (masterNodeIndex.HasValue) ? masterNodeIndex.Value.ToString() : "0", // Master node
+        string.Join("-", subLs),
+        string.Join(" ", slaveNodeIndices),
+        string.Join(" ", stageDefRefs),
+        "0" // Parent member
+      };
 
       GSA.RunGWACommand(string.Join("\t", ls));
     }
