@@ -1,5 +1,5 @@
 # General Configuration
-version: 1.0.0.{build}
+version: 1.0.1.{build}
 skip_branch_with_pr: true
 
 # Environment Configuration
@@ -58,6 +58,6 @@ deploy:
     secure: n4EiHDLVSLjOzqT7OOOg3US3PWs6fNsOaGpyT/EFBKrTKl/1wMmmKt73MNuTngD+
   skip_symbols: false
   symbol_server:           # remove to push symbols to SymbolSource.org
-  artifact: /.*\.nupkg/
+  artifact: /.*(\.|\.s)nupkg/
   on:
     branch: nuget
