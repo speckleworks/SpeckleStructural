@@ -1,5 +1,5 @@
 # General Configuration
-version: 1.0.1.{build}
+version: 1.0.2.{build}
 skip_branch_with_pr: true
 
 # Environment Configuration
@@ -44,20 +44,32 @@ after_build:
 #      Remove-Item "$Env:APPVEYOR_BUILD_FOLDER\SpeckleStructural\bin\Release\SpeckleStructural.dll.config" -Recurse -ErrorAction Ignore
 
 # zip everything into a zip file containing package folder structure
-  - 7z a SpeckleStructural.zip "%APPVEYOR_BUILD_FOLDER%\SpeckleStructural\bin\Release\*"
+  - 7z a SpeckleStructural-%APPVEYOR_BUILD_VERSION%.zip "%APPVEYOR_BUILD_FOLDER%\SpeckleStructural\bin\Release\*"
 
 artifacts:
-  path: SpeckleStructural.zip
+  path: SpeckleStructural-%APPVEYOR_BUILD_VERSION%.zip
   name: Release
 
-#deploy to nuget
 deploy:
-  provider: NuGet
-  server:                  # remove to push to NuGet.org
-  api_key:
-    secure: n4EiHDLVSLjOzqT7OOOg3US3PWs6fNsOaGpyT/EFBKrTKl/1wMmmKt73MNuTngD+
-  skip_symbols: false
-  symbol_server:           # remove to push symbols to SymbolSource.org
-  artifact: /.*(\.|\.s)nupkg/
-  on:
-    branch: nuget
+  - release: SpeckleStructural-$(APPVEYOR_BUILD_VERSION)
+    tag: $(APPVEYOR_REPO_TAG_NAME)
+    description: 'The best Speckle so far...'
+    provider: GitHub
+    auth_token:
+      secure: D5tPFvdQMg9sIe0sSvQjEWw4KAdOk1jyxNwiH5qP5DpDmUH6n6NgTdA+56vXS1Pe # your encrypted token from GitHub
+    artifact: SpeckleStructural-$(APPVEYOR_BUILD_VERSION).zip
+    draft: false
+    prerelease: true
+    force_update: true
+    on:              # release from master branch only
+      branch: master
+      appveyor_repo_tag: true        # deploy on tag push only
+  - provider: NuGet
+    server:                  # remove to push to NuGet.org
+    api_key:
+      secure: n4EiHDLVSLjOzqT7OOOg3US3PWs6fNsOaGpyT/EFBKrTKl/1wMmmKt73MNuTngD+
+    skip_symbols: false
+    symbol_server:           # remove to push symbols to SymbolSource.org
+    artifact: /.*(\.|\.s)nupkg/
+    on:
+      branch: nuget
