@@ -1,5 +1,5 @@
 # General Configuration
-version: 1.0.3.{build}
+version: 1.0.4.{build}
 skip_branch_with_pr: true
 
 # Environment Configuration
@@ -53,7 +53,7 @@ artifacts:
 deploy:
   - release: SpeckleStructural-$(APPVEYOR_BUILD_VERSION)
     tag: $(APPVEYOR_REPO_TAG_NAME)
-    description: 'The best Speckle so far...'
+    description: 'Structural based object model built on top of SpeckleCoreGeometry.'
     provider: GitHub
     auth_token:
       secure: D5tPFvdQMg9sIe0sSvQjEWw4KAdOk1jyxNwiH5qP5DpDmUH6n6NgTdA+56vXS1Pe # your encrypted token from GitHub
