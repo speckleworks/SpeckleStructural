@@ -55,7 +55,7 @@ namespace SpeckleStructuralGSA
       {
         GSANode node = nodes.Where(n => n.GSAId == Convert.ToInt32(orientationNodeRef)).FirstOrDefault();
         obj.ZAxis = GSA.Parse1DAxis(obj.Value.ToArray(),
-            rotationAngle, node.Value.ToArray()).Normal as StructuralVectorThree;
+            rotationAngle, node.Value.Value.ToArray()).Normal as StructuralVectorThree;
         this.SubGWACommand.Add(node.GWACommand);
       }
       else
@@ -521,9 +521,13 @@ namespace SpeckleStructuralGSA
         string[] pPieces = p.ListSplit("\t");
         if (pPieces[4].ParseElementNumNodes() == 2 && pPieces[4] == "BEAM")
         {
-          GSA1DElement element = new GSA1DElement() { GWACommand = p };
-          element.ParseGWACommand(GSA, nodes);
-          elements.Add(element);
+          try
+          {
+            GSA1DElement element = new GSA1DElement() { GWACommand = p };
+            element.ParseGWACommand(GSA, nodes);
+            elements.Add(element);
+          }
+          catch { }
         }
       }
 
@@ -564,9 +568,13 @@ namespace SpeckleStructuralGSA
         string[] pPieces = p.ListSplit("\t");
         if (pPieces[4].MemberIs1D())
         {
-          GSA1DMember member = new GSA1DMember() { GWACommand = p };
-          member.ParseGWACommand(GSA, nodes);
-          members.Add(member);
+          try
+          {
+            GSA1DMember member = new GSA1DMember() { GWACommand = p };
+            member.ParseGWACommand(GSA, nodes);
+            members.Add(member);
+          }
+          catch { }
         }
       }
 

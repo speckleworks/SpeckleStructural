@@ -229,10 +229,14 @@ namespace SpeckleStructuralGSA
 
       foreach (string p in newLines)
       {
-        GSAAssembly assembly = new GSAAssembly() { GWACommand = p };
-        //Pass in ALL the nodes and members - the Parse_ method will search through them
-        assembly.ParseGWACommand(GSA, nodes, e1Ds, e2Ds, m1Ds, m2Ds);
-        assemblies.Add(assembly);
+        try
+        {
+          GSAAssembly assembly = new GSAAssembly() { GWACommand = p };
+          //Pass in ALL the nodes and members - the Parse_ method will search through them
+          assembly.ParseGWACommand(GSA, nodes, e1Ds, e2Ds, m1Ds, m2Ds);
+          assemblies.Add(assembly);
+        }
+        catch { }
       }
 
       GSASenderObjects[objType].AddRange(assemblies);

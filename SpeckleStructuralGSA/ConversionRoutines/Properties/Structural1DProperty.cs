@@ -190,7 +190,6 @@ namespace SpeckleStructuralGSA
                 new SpeckleVector(1, 0, 0),
                 new SpeckleVector(0, 1, 0)),
             diameter / 2);
-        (prop.Profile as SpecklePolyline).Closed = true;
         prop.Shape = Structural1DPropertyShape.Circular;
         prop.Hollow = false;
       }
@@ -205,7 +204,6 @@ namespace SpeckleStructuralGSA
                 new SpeckleVector(1, 0, 0),
                 new SpeckleVector(0, 1, 0)),
             diameter / 2);
-        (prop.Profile as SpecklePolyline).Closed = true;
         prop.Shape = Structural1DPropertyShape.Circular;
         prop.Hollow = true;
         prop.Thickness = t;
@@ -696,9 +694,13 @@ namespace SpeckleStructuralGSA
 
       foreach (string p in newLines)
       {
-        GSA1DProperty prop = new GSA1DProperty() { GWACommand = p };
-        prop.ParseGWACommand(GSA, GSAUnits, steels, concretes);
-        props.Add(prop);
+        try
+        {
+          GSA1DProperty prop = new GSA1DProperty() { GWACommand = p };
+          prop.ParseGWACommand(GSA, GSAUnits, steels, concretes);
+          props.Add(prop);
+        }
+        catch { }
       }
 
       GSASenderObjects[typeof(GSA1DProperty)].AddRange(props);

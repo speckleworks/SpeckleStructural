@@ -191,9 +191,13 @@ namespace SpeckleStructuralGSA
 
       foreach (string p in newLines)
       {
-        GSA2DProperty prop = new GSA2DProperty() { GWACommand = p };
-        prop.ParseGWACommand(GSA, steels, concretes);
-        props.Add(prop);
+        try
+        {
+          GSA2DProperty prop = new GSA2DProperty() { GWACommand = p };
+          prop.ParseGWACommand(GSA, steels, concretes);
+          props.Add(prop);
+        }
+        catch { }
       }
 
       GSASenderObjects[typeof(GSA2DProperty)].AddRange(props);

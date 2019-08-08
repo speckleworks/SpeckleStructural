@@ -346,9 +346,13 @@ namespace SpeckleStructuralGSA
         string[] pPieces = p.ListSplit("\t");
         if (pPieces[4].ParseElementNumNodes() == 3 | pPieces[4].ParseElementNumNodes() == 4)
         {
-          GSA2DElement element = new GSA2DElement() { GWACommand = p };
-          element.ParseGWACommand(GSA, nodes, props);
-          elements.Add(element);
+          try
+          {
+            GSA2DElement element = new GSA2DElement() { GWACommand = p };
+            element.ParseGWACommand(GSA, nodes, props);
+            elements.Add(element);
+          }
+          catch { }
         }
       }
 
@@ -393,9 +397,13 @@ namespace SpeckleStructuralGSA
           // Check if dummy
           if (pPieces[pPieces.Length - 4] == "ACTIVE")
           {
-            GSA2DMember member = new GSA2DMember() { GWACommand = p };
-            member.ParseGWACommand(GSA, nodes, props);
-            members.Add(member);
+            try
+            {
+              GSA2DMember member = new GSA2DMember() { GWACommand = p };
+              member.ParseGWACommand(GSA, nodes, props);
+              members.Add(member);
+            }
+            catch { }
           }
         }
       }

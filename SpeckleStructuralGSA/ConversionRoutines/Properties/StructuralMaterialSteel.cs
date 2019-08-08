@@ -152,9 +152,13 @@ namespace SpeckleStructuralGSA
 
       foreach (string p in newLines)
       {
-        GSAMaterialSteel mat = new GSAMaterialSteel() { GWACommand = p };
-        mat.ParseGWACommand(GSA);
-        materials.Add(mat);
+        try
+        {
+          GSAMaterialSteel mat = new GSAMaterialSteel() { GWACommand = p };
+          mat.ParseGWACommand(GSA);
+          materials.Add(mat);
+        }
+        catch { }
       }
 
       GSASenderObjects[typeof(GSAMaterialSteel)].AddRange(materials);

@@ -138,9 +138,13 @@ namespace SpeckleStructuralGSA
 
       foreach (string p in newLines)
       {
-        var genNodeRestraint = new GSAStructuralStagedNodalRestraints() { GWACommand = p };
-        genNodeRestraint.ParseGWACommand(GSA, nodes, stageDefs);
-        genNodeRestraints.Add(genNodeRestraint);
+        try
+        {
+          var genNodeRestraint = new GSAStructuralStagedNodalRestraints() { GWACommand = p };
+          genNodeRestraint.ParseGWACommand(GSA, nodes, stageDefs);
+          genNodeRestraints.Add(genNodeRestraint);
+        }
+        catch { }
       }
 
       GSASenderObjects[destinationType].AddRange(genNodeRestraints);

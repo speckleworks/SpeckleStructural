@@ -149,9 +149,13 @@ namespace SpeckleStructuralGSA
           // Check if void
           if (pPieces[4] == "2D_VOID_CUTTER")
           {
-            GSA2DVoid v = new GSA2DVoid() { GWACommand = p };
-            v.ParseGWACommand(GSA, nodes);
-            voids.Add(v);
+            try
+            {
+              GSA2DVoid v = new GSA2DVoid() { GWACommand = p };
+              v.ParseGWACommand(GSA, nodes);
+              voids.Add(v);
+            }
+            catch { }
           }
         }
       }

@@ -164,9 +164,13 @@ namespace SpeckleStructuralGSA
         string[] pPieces = p.ListSplit("\t");
         if ( pPieces[4] == "SPRING" )
         {
-          GSA1DSpring spring = new GSA1DSpring() { GWACommand = p };
-          spring.ParseGWACommand(GSA, nodes);
-          springs.Add(spring);
+          try
+          {
+            GSA1DSpring spring = new GSA1DSpring() { GWACommand = p };
+            spring.ParseGWACommand(GSA, nodes);
+            springs.Add(spring);
+          }
+          catch { }
         }
       }
 

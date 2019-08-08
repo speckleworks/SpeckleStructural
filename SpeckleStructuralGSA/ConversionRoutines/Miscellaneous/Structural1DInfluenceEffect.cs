@@ -192,9 +192,13 @@ namespace SpeckleStructuralGSA
 
       foreach (string p in newLines)
       {
-        GSA1DInfluenceEffect infl = new GSA1DInfluenceEffect() { GWACommand = p };
-        infl.ParseGWACommand(GSA, e1Ds);
-        infls.Add(infl);
+        try
+        {
+          GSA1DInfluenceEffect infl = new GSA1DInfluenceEffect() { GWACommand = p };
+          infl.ParseGWACommand(GSA, e1Ds);
+          infls.Add(infl);
+        }
+        catch { }
       }
 
       GSASenderObjects[typeof(GSA1DInfluenceEffect)].AddRange(infls);

@@ -157,12 +157,16 @@ namespace SpeckleStructuralGSA
       var uniqueMembers = new List<string>(GSASenderObjects[typeof(GSA2DElement)].Select(x => (x as GSA2DElement).Member).Where(m => Convert.ToInt32(m) > 0).Distinct());
       foreach (string member in uniqueMembers)
       {
-        var elementList = GSASenderObjects[typeof(GSA2DElement)].Where(x => (x as GSA2DElement).Member == member).Cast<GSA2DElement>().ToList();
-        GSA2DElementMesh mesh = new GSA2DElementMesh() { GSAId = Convert.ToInt32(member) };
-        mesh.ParseGWACommand(GSA, elementList);
-        meshes.Add(mesh);
+        try
+        {
+          var elementList = GSASenderObjects[typeof(GSA2DElement)].Where(x => (x as GSA2DElement).Member == member).Cast<GSA2DElement>().ToList();
+          GSA2DElementMesh mesh = new GSA2DElementMesh() { GSAId = Convert.ToInt32(member) };
+          mesh.ParseGWACommand(GSA, elementList);
+          meshes.Add(mesh);
 
-        GSASenderObjects[typeof(GSA2DElement)].RemoveAll(x => elementList.Contains(x));
+          GSASenderObjects[typeof(GSA2DElement)].RemoveAll(x => elementList.Contains(x));
+        }
+        catch { }
       }
 
       GSASenderObjects[typeof(GSA2DElementMesh)].AddRange(meshes);
