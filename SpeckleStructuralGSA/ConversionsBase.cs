@@ -6,11 +6,16 @@ using System.Threading.Tasks;
 using SpeckleCore;
 using Interop.Gsa_10_0;
 using SQLite;
+using SpeckleGSAInterfaces;
 
 namespace SpeckleStructuralGSA
 {
   public class Initialiser : ISpeckleInitializer
   {
+    public static IGSASettings TestSettings;
+    public static IGSAIndexer TestIndexer;
+    public static IGSAInterfacer TestInterface;
+
     public Initialiser() { }
 
     public static GSAInterfacer GSA { get; set; } = new GSAInterfacer();
