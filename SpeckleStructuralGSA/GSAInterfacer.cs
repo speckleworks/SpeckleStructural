@@ -1171,17 +1171,51 @@ namespace SpeckleStructuralGSA
             PreviousGSAResultInit = initKey;
           }
           try
-
           { 
-            GSAObject.Output_Extract_Arr(id, out var outputExtractResults, out num);
-            res = (GsaResults[])outputExtractResults;
+            try
+            { 
+              GSAObject.Output_Extract_Arr(id, out var outputExtractResults, out num);
+              res = (GsaResults[])outputExtractResults;
+            }
+            catch
+            {
+              // Try reinit if fail
+              GSAObject.Output_Init_Arr(flags, axis, loadCase, (ResHeader)resHeader, num1DPoints);
+              GSAObject.Output_Extract_Arr(id, out var outputExtractResults, out num);
+              res = (GsaResults[])outputExtractResults;
+            }
           }
           catch
           {
-            // Try reinit if fail
-            GSAObject.Output_Init_Arr(flags, axis, loadCase, (ResHeader)resHeader, num1DPoints);
-            GSAObject.Output_Extract_Arr(id, out var outputExtractResults, out num);
-            res = (GsaResults[])outputExtractResults;
+            PreviousGSAResultInit = ""; // Blank the prev set
+
+            res = new GsaResults[keys.Count];
+            var resList = new List<GsaResults>();
+
+            // Try individual extract
+            for (int i = 1; i <= keys.Count; i++)
+            {
+              var indivResHeader = resHeader + i;
+              GSAObject.Output_Init(flags, axis, loadCase, indivResHeader, num1DPoints);
+
+              var numPos = 1;
+
+              try
+              {
+                numPos = GSAObject.Output_NumElemPos(id);
+              }
+              catch { }
+              
+              if (i == 1)
+              {
+                res = new GsaResults[numPos];
+                for (int j = 0; j < res.Length; j++)
+                  res[j] = new GsaResults() { dynaResults = new double[keys.Count] };
+              }
+
+              for (int j = 0; j < numPos; j++)
+                res[j].dynaResults[i - 1] = (double)GSAObject.Output_Extract(id, j);
+            }
           }
         }
         else
