@@ -330,7 +330,7 @@ namespace SpeckleStructuralClasses
       }
 
       // Get distinct edges
-      List<Tuple<int, int, string, string>> edges = new List<Tuple<int, int, string, string>>();
+      List<Tuple<int, int, string, string, double>> edges = new List<Tuple<int, int, string, string, double>>();
 
       foreach (int[] conn in faceConnnectivities)
       {
@@ -338,6 +338,10 @@ namespace SpeckleStructuralClasses
         {
           string c1 = string.Join(",", this.Vertices.Skip(conn[i] * 3).Take(3).Select(x => Math.Round(x, 4).ToString()));
           string c2 = string.Join(",", this.Vertices.Skip(conn[i + 1] * 3).Take(3).Select(x => Math.Round(x, 4).ToString()));
+          double length = Math.Pow(this.Vertices.Skip(conn[i] * 3).Take(1).First() - this.Vertices.Skip(conn[i + 1] * 3).Take(1).First(), 2) +
+            Math.Pow(this.Vertices.Skip(conn[i] * 3 + 1).Take(1).First() - this.Vertices.Skip(conn[i + 1] * 3 + 1).Take(1).First(), 2) +
+            Math.Pow(this.Vertices.Skip(conn[i] * 3 + 2).Take(1).First() - this.Vertices.Skip(conn[i + 1] * 3 + 2).Take(1).First(), 2);
+          length = Math.Sqrt(length);
 
           if (edges.Any(e => (e.Item3 == c1 & e.Item4 == c2) |
               (e.Item3 == c2 & e.Item4 == c1)))
@@ -347,14 +351,17 @@ namespace SpeckleStructuralClasses
           else
           {
             if (conn[i] < conn[i + 1])
-              edges.Add(new Tuple<int, int, string, string>(conn[i], conn[i + 1], c1, c2));
+              edges.Add(new Tuple<int, int, string, string, double>(conn[i], conn[i + 1], c1, c2, length));
             else
-              edges.Add(new Tuple<int, int, string, string>(conn[i + 1], conn[i], c2, c1));
+              edges.Add(new Tuple<int, int, string, string, double>(conn[i + 1], conn[i], c2, c1, length));
           }
         }
       }
 
       // Reorder the edges
+      List<double> lengthsOfEdges = new List<double>();
+      double currentLength = 0;
+
       List<int> currentLoop = new List<int>();
       List<string> flatCoor = new List<string>();
       currentLoop.Add(edges[0].Item1);
@@ -368,13 +375,14 @@ namespace SpeckleStructuralClasses
       {
         string commonVertex = flatCoor.Last();
 
-        List<Tuple<int, int, string, string>> nextEdge = edges.Where(e => e.Item3 == commonVertex | e.Item4 == commonVertex).ToList();
+        List<Tuple<int, int, string, string, double>> nextEdge = edges.Where(e => e.Item3 == commonVertex | e.Item4 == commonVertex).ToList();
 
         if (nextEdge.Count > 0)
         {
           currentLoop.Add(nextEdge[0].Item3 == commonVertex ? nextEdge[0].Item2 : nextEdge[0].Item1);
           flatCoor.Add(nextEdge[0].Item3 == commonVertex ? nextEdge[0].Item4 : nextEdge[0].Item3);
           edges.Remove(nextEdge[0]);
+          currentLength += nextEdge[0].Item5;
         }
         else
         {
@@ -387,6 +395,9 @@ namespace SpeckleStructuralClasses
           currentLoop.RemoveAt(0);
 
           edgeConnectivities.Add(currentLoop.ToArray());
+          lengthsOfEdges.Add(currentLength);
+
+          currentLength = 0;
           currentLoop = new List<int>();
           faceConnnectivities = new List<int[]>();
 
@@ -402,7 +413,19 @@ namespace SpeckleStructuralClasses
         }
       }
 
-      return edgeConnectivities;
+      // Sort based on length
+      var ordered = lengthsOfEdges
+        .Select((x, i) => new KeyValuePair<double, int>(x, i))
+        .OrderBy(x => x.Key)
+        .Select(x => x.Value)
+        .Reverse();
+
+      var sortedEdgeConnectivities = new List<int[]>();
+
+      foreach (int i in ordered)
+        sortedEdgeConnectivities.Add(edgeConnectivities[i]);
+
+      return sortedEdgeConnectivities;
     }
 
     public override void Scale(double factor)
@@ -621,45 +644,59 @@ namespace SpeckleStructuralClasses
       }
 
       // Get distinct edges
-      List<Tuple<int, int>> edges = new List<Tuple<int, int>>();
+      List<Tuple<int, int, string, string, double>> edges = new List<Tuple<int, int, string, string, double>>();
 
       foreach (int[] conn in faceConnnectivities)
       {
         for (int i = 0; i < conn.Length - 1; i++)
         {
-          if (edges.Any(e => (e.Item1 == conn[i] & e.Item2 == conn[i + 1]) |
-              (e.Item1 == conn[i + 1] & e.Item2 == conn[i])))
+          string c1 = string.Join(",", this.Vertices.Skip(conn[i] * 3).Take(3).Select(x => Math.Round(x, 4).ToString()));
+          string c2 = string.Join(",", this.Vertices.Skip(conn[i + 1] * 3).Take(3).Select(x => Math.Round(x, 4).ToString()));
+          double length = Math.Pow(this.Vertices.Skip(conn[i] * 3).Take(1).First() - this.Vertices.Skip(conn[i + 1] * 3).Take(1).First(), 2) +
+            Math.Pow(this.Vertices.Skip(conn[i] * 3 + 1).Take(1).First() - this.Vertices.Skip(conn[i + 1] * 3 + 1).Take(1).First(), 2) +
+            Math.Pow(this.Vertices.Skip(conn[i] * 3 + 2).Take(1).First() - this.Vertices.Skip(conn[i + 1] * 3 + 2).Take(1).First(), 2);
+          length = Math.Sqrt(length);
+
+          if (edges.Any(e => (e.Item3 == c1 & e.Item4 == c2) |
+              (e.Item3 == c2 & e.Item4 == c1)))
           {
-            edges.Remove(new Tuple<int, int>(conn[i], conn[i + 1]));
-            edges.Remove(new Tuple<int, int>(conn[i + 1], conn[i]));
+            edges.RemoveAll(x => (x.Item3 == c1 && x.Item4 == c2) || (x.Item3 == c2 && x.Item4 == c1));
           }
           else
           {
             if (conn[i] < conn[i + 1])
-              edges.Add(new Tuple<int, int>(conn[i], conn[i + 1]));
+              edges.Add(new Tuple<int, int, string, string, double>(conn[i], conn[i + 1], c1, c2, length));
             else
-              edges.Add(new Tuple<int, int>(conn[i + 1], conn[i]));
+              edges.Add(new Tuple<int, int, string, string, double>(conn[i + 1], conn[i], c2, c1, length));
           }
         }
       }
 
       // Reorder the edges
+      List<double> lengthsOfEdges = new List<double>();
+      double currentLength = 0;
+
       List<int> currentLoop = new List<int>();
+      List<string> flatCoor = new List<string>();
       currentLoop.Add(edges[0].Item1);
       currentLoop.Add(edges[0].Item2);
+      flatCoor.Add(edges[0].Item3);
+      flatCoor.Add(edges[0].Item4);
 
       edges.RemoveAt(0);
 
       while (edges.Count > 0)
       {
-        int commonVertex = currentLoop[currentLoop.Count() - 1];
+        string commonVertex = flatCoor.Last();
 
-        List<Tuple<int, int>> nextEdge = edges.Where(e => e.Item1 == commonVertex | e.Item2 == commonVertex).ToList();
+        List<Tuple<int, int, string, string, double>> nextEdge = edges.Where(e => e.Item3 == commonVertex | e.Item4 == commonVertex).ToList();
 
         if (nextEdge.Count > 0)
         {
-          currentLoop.Add(nextEdge[0].Item1 == commonVertex ? nextEdge[0].Item2 : nextEdge[0].Item1);
+          currentLoop.Add(nextEdge[0].Item3 == commonVertex ? nextEdge[0].Item2 : nextEdge[0].Item1);
+          flatCoor.Add(nextEdge[0].Item3 == commonVertex ? nextEdge[0].Item4 : nextEdge[0].Item3);
           edges.Remove(nextEdge[0]);
+          currentLength += nextEdge[0].Item5;
         }
         else
         {
@@ -667,23 +704,42 @@ namespace SpeckleStructuralClasses
           break;
         }
 
-        if (currentLoop[0] == currentLoop[currentLoop.Count() - 1])
+        if (currentLoop[0] == currentLoop.Last())
         {
           currentLoop.RemoveAt(0);
 
           edgeConnectivities.Add(currentLoop.ToArray());
+          lengthsOfEdges.Add(currentLength);
+
+          currentLength = 0;
           currentLoop = new List<int>();
+          faceConnnectivities = new List<int[]>();
 
           if (edges.Count > 0)
           {
             currentLoop.Add(edges[0].Item1);
             currentLoop.Add(edges[0].Item2);
+            flatCoor.Add(edges[0].Item3);
+            flatCoor.Add(edges[0].Item4);
+
             edges.RemoveAt(0);
           }
         }
       }
 
-      return edgeConnectivities;
+      // Sort based on length
+      var ordered = lengthsOfEdges
+        .Select((x, i) => new KeyValuePair<double, int>(x, i))
+        .OrderBy(x => x.Key)
+        .Select(x => x.Value)
+        .Reverse();
+
+      var sortedEdgeConnectivities = new List<int[]>();
+
+      foreach (int i in ordered)
+        sortedEdgeConnectivities.Add(edgeConnectivities[i]);
+
+      return sortedEdgeConnectivities;
     }
 
     public override void Scale(double factor)

@@ -267,12 +267,11 @@ namespace SpeckleStructuralGSA
       string topo = "";
       List<int[]> connectivities = mesh.Edges();
       List<double> coor = new List<double>();
-      foreach (int[] conn in connectivities)
-        foreach (int c in conn)
-        {
-          coor.AddRange(mesh.Vertices.Skip(c * 3).Take(3));
-          topo += GSA.NodeAt(mesh.Vertices[c * 3], mesh.Vertices[c * 3 + 1], mesh.Vertices[c * 3 + 2], Conversions.GSACoincidentNodeAllowance).ToString() + " ";
-        }
+      foreach (int c in connectivities[0])
+      {
+        coor.AddRange(mesh.Vertices.Skip(c * 3).Take(3));
+        topo += GSA.NodeAt(mesh.Vertices[c * 3], mesh.Vertices[c * 3 + 1], mesh.Vertices[c * 3 + 2], Conversions.GSACoincidentNodeAllowance).ToString() + " ";
+      }
       ls.Add(topo);
       ls.Add("0"); // Orientation node
       try
@@ -294,6 +293,48 @@ namespace SpeckleStructuralGSA
       ls.Add("ALL"); // Exposure
 
       GSA.RunGWACommand(string.Join("\t", ls));
+
+      // Add voids
+      foreach (int[] conn in connectivities.Skip(1))
+      {
+        ls.Clear();
+
+        index = GSA.Indexer.ResolveIndex(typeof(GSA2DVoid));
+
+        ls.Add("SET");
+        ls.Add(keyword + ":" + GSA.GenerateSID(mesh));
+        ls.Add(index.ToString());
+        ls.Add(mesh.Name == null || mesh.Name == "" ? " " : mesh.Name);
+        ls.Add(mesh.Colors == null || mesh.Colors.Count() < 1 ? "NO_RGB" : mesh.Colors[0].ArgbToHexColor().ToString());
+        ls.Add("2D_VOID_CUTTER");
+        ls.Add("1"); // Property reference
+        ls.Add("0"); // Group
+        topo = "";
+        coor.Clear();
+        foreach (int c in conn)
+        {
+          coor.AddRange(mesh.Vertices.Skip(c * 3).Take(3));
+          topo += GSA.NodeAt(mesh.Vertices[c * 3], mesh.Vertices[c * 3 + 1], mesh.Vertices[c * 3 + 2], Conversions.GSACoincidentNodeAllowance).ToString() + " ";
+        }
+        ls.Add(topo);
+        ls.Add("0"); // Orientation node
+        ls.Add("0"); // Angles
+        ls.Add("1"); // Target mesh size
+        ls.Add("MESH"); // TODO: What is this?
+        ls.Add("LINEAR"); // Element type
+        ls.Add("0"); // Fire
+        ls.Add("0"); // Time 1
+        ls.Add("0"); // Time 2
+        ls.Add("0"); // Time 3
+        ls.Add("0"); // TODO: What is this?
+        ls.Add("ACTIVE"); // Dummy
+        ls.Add("NO"); // Internal auto offset
+        ls.Add("0"); // Offset z
+        ls.Add("ALL"); // Exposure
+
+        GSA.RunGWACommand(string.Join("\t", ls));
+      }
+
     }
   }
   
