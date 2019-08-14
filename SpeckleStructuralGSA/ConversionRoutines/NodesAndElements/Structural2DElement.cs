@@ -265,12 +265,16 @@ namespace SpeckleStructuralGSA
       ls.Add(propRef.ToString());
       ls.Add(group != 0 ? group.ToString() : index.ToString()); // TODO: This allows for targeting of elements from members group
       string topo = "";
+      int prevNodeIndex = -1;
       List<int[]> connectivities = mesh.Edges();
       List<double> coor = new List<double>();
       foreach (int c in connectivities[0])
       {
         coor.AddRange(mesh.Vertices.Skip(c * 3).Take(3));
-        topo += GSA.NodeAt(mesh.Vertices[c * 3], mesh.Vertices[c * 3 + 1], mesh.Vertices[c * 3 + 2], Conversions.GSACoincidentNodeAllowance).ToString() + " ";
+        var currIndex = GSA.NodeAt(mesh.Vertices[c * 3], mesh.Vertices[c * 3 + 1], mesh.Vertices[c * 3 + 2], Conversions.GSACoincidentNodeAllowance);
+        if (prevNodeIndex != currIndex)
+          topo += currIndex.ToString() + " ";
+        prevNodeIndex = currIndex;
       }
       ls.Add(topo);
       ls.Add("0"); // Orientation node
@@ -310,11 +314,15 @@ namespace SpeckleStructuralGSA
         ls.Add("1"); // Property reference
         ls.Add("0"); // Group
         topo = "";
+        prevNodeIndex = -1;
         coor.Clear();
         foreach (int c in conn)
         {
           coor.AddRange(mesh.Vertices.Skip(c * 3).Take(3));
-          topo += GSA.NodeAt(mesh.Vertices[c * 3], mesh.Vertices[c * 3 + 1], mesh.Vertices[c * 3 + 2], Conversions.GSACoincidentNodeAllowance).ToString() + " ";
+          var currIndex = GSA.NodeAt(mesh.Vertices[c * 3], mesh.Vertices[c * 3 + 1], mesh.Vertices[c * 3 + 2], Conversions.GSACoincidentNodeAllowance);
+          if (prevNodeIndex != currIndex)
+            topo += currIndex.ToString() + " ";
+          prevNodeIndex = currIndex;
         }
         ls.Add(topo);
         ls.Add("0"); // Orientation node
