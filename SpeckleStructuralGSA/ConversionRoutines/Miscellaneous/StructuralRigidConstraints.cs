@@ -217,9 +217,13 @@ namespace SpeckleStructuralGSA
 
       foreach (string p in newLines)
       {
-        GSARigidConstraints constraint = new GSARigidConstraints() { GWACommand = p };
-        constraint.ParseGWACommand(GSA, nodes, stages);
-        constraints.Add(constraint);
+        try
+        {
+          GSARigidConstraints constraint = new GSARigidConstraints() { GWACommand = p };
+          constraint.ParseGWACommand(GSA, nodes, stages);
+          constraints.Add(constraint);
+        }
+        catch { }
       }
 
       GSASenderObjects[typeof(GSARigidConstraints)].AddRange(constraints);

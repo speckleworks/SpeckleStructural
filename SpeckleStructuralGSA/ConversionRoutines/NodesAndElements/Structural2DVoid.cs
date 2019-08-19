@@ -80,14 +80,22 @@ namespace SpeckleStructuralGSA
       ls.Add("1"); // Property reference
       ls.Add("0"); // Group
       string topo = "";
+      int prevNodeIndex = -1;
       List<int[]> connectivities = v.Edges();
       List<double> coor = new List<double>();
-      foreach (int[] conn in connectivities)
-        foreach (int c in conn)
-        {
-          coor.AddRange(v.Vertices.Skip(c * 3).Take(3));
-          topo += HelperClass.NodeAt(GSA, v.Vertices[c * 3], v.Vertices[c * 3 + 1], v.Vertices[c * 3 + 2], Conversions.GSACoincidentNodeAllowance).ToString() + " ";
-        }
+
+      if (connectivities.Count == 0)
+        return;
+      
+      foreach (int c in connectivities[0])
+      {
+        coor.AddRange(v.Vertices.Skip(c * 3).Take(3));
+        var currIndex = HelperClass.NodeAt(GSA, v.Vertices[c * 3], v.Vertices[c * 3 + 1], v.Vertices[c * 3 + 2], Conversions.GSACoincidentNodeAllowance);
+        if (prevNodeIndex != currIndex)
+          topo += currIndex.ToString() + " ";
+        prevNodeIndex = currIndex;
+      }
+
       ls.Add(topo);
       ls.Add("0"); // Orientation node
       ls.Add("0"); // Angles
@@ -150,9 +158,13 @@ namespace SpeckleStructuralGSA
           // Check if void
           if (pPieces[4] == "2D_VOID_CUTTER")
           {
-            GSA2DVoid v = new GSA2DVoid() { GWACommand = p };
-            v.ParseGWACommand(GSA, nodes);
-            voids.Add(v);
+            try
+            {
+              GSA2DVoid v = new GSA2DVoid() { GWACommand = p };
+              v.ParseGWACommand(GSA, nodes);
+              voids.Add(v);
+            }
+            catch { }
           }
         }
       }

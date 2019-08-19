@@ -164,9 +164,13 @@ namespace SpeckleStructuralGSA
 
       foreach (string p in newLines)
       {
-        var springProperty = new GSASpringProperty() { GWACommand = p };
-        springProperty.ParseGWACommand(GSA);
-        springProperties.Add(springProperty);
+        try
+        {
+          var springProperty = new GSASpringProperty() { GWACommand = p };
+          springProperty.ParseGWACommand(GSA);
+          springProperties.Add(springProperty);
+        }
+        catch { }
       }
 
       GSASenderObjects[objType].AddRange(springProperties);

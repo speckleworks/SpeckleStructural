@@ -193,9 +193,13 @@ namespace SpeckleStructuralGSA
 
       foreach (string p in newLines)
       {
-        GSANodalInfluenceEffect infl = new GSANodalInfluenceEffect() { GWACommand = p };
-        infl.ParseGWACommand(GSA, nodes);
-        infls.Add(infl);
+        try
+        {
+          GSANodalInfluenceEffect infl = new GSANodalInfluenceEffect() { GWACommand = p };
+          infl.ParseGWACommand(GSA, nodes);
+          infls.Add(infl);
+        }
+        catch { }
       }
 
       GSASenderObjects[typeof(GSANodalInfluenceEffect)].AddRange(infls);

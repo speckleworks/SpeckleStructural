@@ -188,9 +188,13 @@ namespace SpeckleStructuralGSA
 
       foreach (string p in newLines)
       {
-        GSAConstructionStage stageDef = new GSAConstructionStage() { GWACommand = p };
-        stageDef.ParseGWACommand(GSA, e1Ds, e2Ds, m1Ds, m2Ds);
-        stageDefs.Add(stageDef);
+        try
+        {
+          GSAConstructionStage stageDef = new GSAConstructionStage() { GWACommand = p };
+          stageDef.ParseGWACommand(GSA, e1Ds, e2Ds, m1Ds, m2Ds);
+          stageDefs.Add(stageDef);
+        }
+        catch { }
       }
 
       GSASenderObjects[typeof(GSAConstructionStage)].AddRange(stageDefs);

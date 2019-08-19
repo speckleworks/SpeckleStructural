@@ -405,22 +405,26 @@ namespace SpeckleStructuralGSA
         string[] pPieces = p.ListSplit("\t");
         if (pPieces[4].ParseElementNumNodes() == 1)
         {
-          GSA0DElement massNode = new GSA0DElement() { GWACommand = p };
-          massNode.ParseGWACommand(GSA);
-
-          GSANode match = nodes
-              .Where(n => n.Value.ApplicationId == massNode.Value.ApplicationId)
-              .First();
-
-          if (match != null)
+          try
           {
-            match.Value.Mass = massNode.Value.Mass;
-            match.SubGWACommand.AddRange(massNode.SubGWACommand.Concat(new string[] { p }));
+            GSA0DElement massNode = new GSA0DElement() { GWACommand = p };
+            massNode.ParseGWACommand(GSA);
 
-            match.ForceSend = true;
+            GSANode match = nodes
+                .Where(n => n.Value.ApplicationId == massNode.Value.ApplicationId)
+                .First();
 
-            changed = true;
+            if (match != null)
+            {
+              match.Value.Mass = massNode.Value.Mass;
+              match.SubGWACommand.AddRange(massNode.SubGWACommand.Concat(new string[] { p }));
+
+              match.ForceSend = true;
+
+              changed = true;
+            }
           }
+          catch { }
         }
       }
 

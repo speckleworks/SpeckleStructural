@@ -266,14 +266,17 @@ namespace SpeckleStructuralGSA
       ls.Add(propRef.ToString());
       ls.Add(group != 0 ? group.ToString() : index.ToString()); // TODO: This allows for targeting of elements from members group
       string topo = "";
+      int prevNodeIndex = -1;
       List<int[]> connectivities = mesh.Edges();
       List<double> coor = new List<double>();
-      foreach (int[] conn in connectivities)
-        foreach (int c in conn)
-        {
-          coor.AddRange(mesh.Vertices.Skip(c * 3).Take(3));
-          topo += HelperClass.NodeAt(GSA, mesh.Vertices[c * 3], mesh.Vertices[c * 3 + 1], mesh.Vertices[c * 3 + 2], Conversions.GSACoincidentNodeAllowance).ToString() + " ";
-        }
+      foreach (int c in connectivities[0])
+      {
+        coor.AddRange(mesh.Vertices.Skip(c * 3).Take(3));
+        var currIndex = HelperClass.NodeAt(GSA, mesh.Vertices[c * 3], mesh.Vertices[c * 3 + 1], mesh.Vertices[c * 3 + 2], Conversions.GSACoincidentNodeAllowance);
+        if (prevNodeIndex != currIndex)
+          topo += currIndex.ToString() + " ";
+        prevNodeIndex = currIndex;
+      }
       ls.Add(topo);
       ls.Add("0"); // Orientation node
       try
@@ -295,6 +298,52 @@ namespace SpeckleStructuralGSA
       ls.Add("ALL"); // Exposure
 
       GSA.RunGWACommand(string.Join("\t", ls));
+
+      // Add voids
+      foreach (int[] conn in connectivities.Skip(1))
+      {
+        ls.Clear();
+
+        index = GSA.Indexer.ResolveIndex(typeof(GSA2DVoid).GetGSAKeyword());
+
+        ls.Add("SET");
+        ls.Add(keyword + ":" + HelperClass.GenerateSID(mesh));
+        ls.Add(index.ToString());
+        ls.Add(mesh.Name == null || mesh.Name == "" ? " " : mesh.Name);
+        ls.Add(mesh.Colors == null || mesh.Colors.Count() < 1 ? "NO_RGB" : mesh.Colors[0].ArgbToHexColor().ToString());
+        ls.Add("2D_VOID_CUTTER");
+        ls.Add("1"); // Property reference
+        ls.Add("0"); // Group
+        topo = "";
+        prevNodeIndex = -1;
+        coor.Clear();
+        foreach (int c in conn)
+        {
+          coor.AddRange(mesh.Vertices.Skip(c * 3).Take(3));
+          var currIndex = HelperClass.NodeAt(GSA, mesh.Vertices[c * 3], mesh.Vertices[c * 3 + 1], mesh.Vertices[c * 3 + 2], Conversions.GSACoincidentNodeAllowance);
+          if (prevNodeIndex != currIndex)
+            topo += currIndex.ToString() + " ";
+          prevNodeIndex = currIndex;
+        }
+        ls.Add(topo);
+        ls.Add("0"); // Orientation node
+        ls.Add("0"); // Angles
+        ls.Add("1"); // Target mesh size
+        ls.Add("MESH"); // TODO: What is this?
+        ls.Add("LINEAR"); // Element type
+        ls.Add("0"); // Fire
+        ls.Add("0"); // Time 1
+        ls.Add("0"); // Time 2
+        ls.Add("0"); // Time 3
+        ls.Add("0"); // TODO: What is this?
+        ls.Add("ACTIVE"); // Dummy
+        ls.Add("NO"); // Internal auto offset
+        ls.Add("0"); // Offset z
+        ls.Add("ALL"); // Exposure
+
+        GSA.RunGWACommand(string.Join("\t", ls));
+      }
+
     }
   }
   
@@ -347,9 +396,13 @@ namespace SpeckleStructuralGSA
         string[] pPieces = p.ListSplit("\t");
         if (pPieces[4].ParseElementNumNodes() == 3 | pPieces[4].ParseElementNumNodes() == 4)
         {
-          GSA2DElement element = new GSA2DElement() { GWACommand = p };
-          element.ParseGWACommand(GSA, nodes, props);
-          elements.Add(element);
+          try
+          {
+            GSA2DElement element = new GSA2DElement() { GWACommand = p };
+            element.ParseGWACommand(GSA, nodes, props);
+            elements.Add(element);
+          }
+          catch { }
         }
       }
 
@@ -394,9 +447,13 @@ namespace SpeckleStructuralGSA
           // Check if dummy
           if (pPieces[pPieces.Length - 4] == "ACTIVE")
           {
-            GSA2DMember member = new GSA2DMember() { GWACommand = p };
-            member.ParseGWACommand(GSA, nodes, props);
-            members.Add(member);
+            try
+            {
+              GSA2DMember member = new GSA2DMember() { GWACommand = p };
+              member.ParseGWACommand(GSA, nodes, props);
+              members.Add(member);
+            }
+            catch { }
           }
         }
       }
