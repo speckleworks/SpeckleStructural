@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
@@ -20,7 +21,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new Structural0DLoad();
 
-    public void ParseGWACommand(GSAInterfacer GSA, List<GSANode> nodes)
+    public void ParseGWACommand(IGSAInterfacer GSA, List<GSANode> nodes)
     {
       if (this.GWACommand == null)
         return;
@@ -32,7 +33,7 @@ namespace SpeckleStructuralGSA
       int counter = 1; // Skip identifier
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
 
-      int[] targetNodeRefs = GSA.ConvertGSAList(pieces[counter++], GSAEntity.NODE);
+      int[] targetNodeRefs = GSA.ConvertGSAList(pieces[counter++], SpeckleGSAInterfaces.GSAEntity.NODE);
 
       if (nodes != null)
       {
@@ -81,7 +82,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(GSAInterfacer GSA)
+    public void SetGWACommand(IGSAInterfacer GSA)
     {
       if (this.Value == null)
         return;
@@ -93,13 +94,18 @@ namespace SpeckleStructuralGSA
 
       string keyword = typeof(GSA0DLoad).GetGSAKeyword();
 
-      List<int> nodeRefs = GSA.Indexer.LookupIndices(typeof(GSANode), load.NodeRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+      //List<int> nodeRefs = GSA.Indexer.LookupIndices(typeof(GSANode).GetGSAKeyword(), load.NodeRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+      var nodeRefs = GSA.Indexer.LookupIndices(typeof(GSANode).GetGSAKeyword().GetGSAKeyword(), load.NodeRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
       int loadCaseRef = 0;
       try
       {
-        loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase), load.LoadCaseRef).Value;
+        //loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef).Value;
+        loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword().GetGSAKeyword(), load.LoadCaseRef).Value;
       }
-      catch { loadCaseRef = GSA.Indexer.ResolveIndex(typeof(GSALoadCase), load.LoadCaseRef); }
+      catch {
+        //loadCaseRef = GSA.Indexer.ResolveIndex(typeof(GSALoadCase), load.LoadCaseRef); 
+        loadCaseRef = GSA.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef);
+      }
 
       string[] direction = new string[6] { "X", "Y", "Z", "XX", "YY", "ZZ" };
 
@@ -109,11 +115,13 @@ namespace SpeckleStructuralGSA
 
         if (load.Loading.Value[i] == 0) continue;
 
-        int index = GSA.Indexer.ResolveIndex(typeof(GSA0DLoad));
+        //int index = GSA.Indexer.ResolveIndex(typeof(GSA0DLoad));
+        var index = GSA.Indexer.ResolveIndex(typeof(GSA0DLoad).GetGSAKeyword());
 
         ls.Add("SET_AT");
         ls.Add(index.ToString());
-        ls.Add(keyword + ":" + GSA.GenerateSID(load));
+        //ls.Add(keyword + ":" + GSA.GenerateSID(load));
+        ls.Add(keyword + ":" + HelperClass.GenerateSID(load));
         ls.Add(load.Name == null || load.Name == "" ? " " : load.Name);
         ls.Add(string.Join(" ", nodeRefs));
         ls.Add(loadCaseRef.ToString());
@@ -130,7 +138,8 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this Structural0DLoad load)
     {
-      new GSA0DLoad() { Value = load }.SetGWACommand(GSA);
+      //new GSA0DLoad() { Value = load }.SetGWACommand(Initialiser.Interface);
+      new GSA0DLoad() { Value = load }.SetGWACommand(Initialiser.Interface);
 
       return true;
     }
@@ -186,7 +195,7 @@ namespace SpeckleStructuralGSA
           // Transform load to defined axis
           GSANode node = nodes.Where(n => (n.Value.ApplicationId == nRef)).First();
           string gwaRecord = null;
-          StructuralAxis loadAxis = GSA.Parse0DAxis(initLoad.Axis, out gwaRecord, node.Value.Value.ToArray());
+          StructuralAxis loadAxis = HelperClass.Parse0DAxis(initLoad.Axis, GSA, out gwaRecord, node.Value.Value.ToArray());
           load.Value.Loading = initLoad.Value.Loading;
           load.Value.Loading.TransformOntoAxis(loadAxis);
 

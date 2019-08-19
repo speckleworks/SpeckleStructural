@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
@@ -19,7 +20,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new Structural2DElementMesh();
 
-    public void ParseGWACommand(GSAInterfacer GSA, List<GSA2DElement> elements)
+    public void ParseGWACommand(IGSAInterfacer GSA, List<GSA2DElement> elements)
     {
       if (elements.Count() < 1)
         return;
@@ -101,21 +102,21 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(GSAInterfacer GSA)
+    public void SetGWACommand(IGSAInterfacer GSA)
     {
       if (this.Value == null)
         return;
 
       Structural2DElementMesh obj = this.Value as Structural2DElementMesh;
 
-      int group = GSA.Indexer.ResolveIndex(typeof(GSA2DElementMesh), obj);
+      int group = GSA.Indexer.ResolveIndex(typeof(GSA2DElementMesh).GetGSAKeyword(), obj.ApplicationId);
 
       Structural2DElement[] elements = obj.Explode();
 
       foreach (Structural2DElement element in elements)
       {
         if (Conversions.GSATargetLayer == GSATargetLayer.Analysis)
-          new GSA2DElement() { Value = element }.SetGWACommand(GSA, group);
+          new GSA2DElement() { Value = element }.SetGWACommand(Initialiser.Interface, group);
       }
     }
   }
@@ -139,9 +140,9 @@ namespace SpeckleStructuralGSA
     public static bool ToNative(this Structural2DElementMesh mesh)
     {
       if (Conversions.GSATargetLayer == GSATargetLayer.Analysis)
-        new GSA2DElementMesh() { Value = mesh }.SetGWACommand(GSA);
+        new GSA2DElementMesh() { Value = mesh }.SetGWACommand(Initialiser.Interface);
       else if (Conversions.GSATargetLayer == GSATargetLayer.Design)
-        new GSA2DMember() { Value = mesh }.SetGWACommand(GSA);
+        new GSA2DMember() { Value = mesh }.SetGWACommand(Initialiser.Interface);
 
       return true;
     }

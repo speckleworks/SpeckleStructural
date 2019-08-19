@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
@@ -22,7 +23,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new Structural1DLoad();
 
-    public void ParseGWACommand(GSAInterfacer GSA, List<GSA1DElement> elements, List<GSA1DMember> members)
+    public void ParseGWACommand(IGSAInterfacer GSA, List<GSA1DElement> elements, List<GSA1DMember> members)
     {
       if (this.GWACommand == null)
         return;
@@ -38,7 +39,7 @@ namespace SpeckleStructuralGSA
 
       if (Conversions.GSATargetLayer == GSATargetLayer.Analysis)
       {
-        int[] targetElements = GSA.ConvertGSAList(pieces[counter++], GSAEntity.ELEMENT);
+        int[] targetElements = GSA.ConvertGSAList(pieces[counter++], SpeckleGSAInterfaces.GSAEntity.ELEMENT);
 
         if (elements != null)
         {
@@ -50,7 +51,7 @@ namespace SpeckleStructuralGSA
       }
       else if (Conversions.GSATargetLayer == GSATargetLayer.Design)
       {
-        int[] targetGroups = GSA.GetGroupsFromGSAList(pieces[counter++]);
+        int[] targetGroups = HelperClass.GetGroupsFromGSAList(pieces[counter++]);
 
         if (members != null)
         {
@@ -137,7 +138,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(GSAInterfacer GSA)
+    public void SetGWACommand(IGSAInterfacer GSA)
     {
       if (this.Value == null)
         return;
@@ -154,14 +155,16 @@ namespace SpeckleStructuralGSA
 
       if (Conversions.GSATargetLayer == GSATargetLayer.Analysis)
       {
-        elementRefs = GSA.Indexer.LookupIndices(typeof(GSA1DElement), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-        groupRefs = GSA.Indexer.LookupIndices(typeof(GSA1DElementPolyline), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+        //elementRefs = GSA.Indexer.LookupIndices(typeof(GSA1DElement).GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+        elementRefs = GSA.Indexer.LookupIndices(typeof(GSA1DElement).GetGSAKeyword().GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+        //groupRefs = GSA.Indexer.LookupIndices(typeof(GSA1DElementPolyline).GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+        groupRefs = GSA.Indexer.LookupIndices(typeof(GSA1DElementPolyline).GetGSAKeyword().GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
       }
       else if (Conversions.GSATargetLayer == GSATargetLayer.Design)
       {
         elementRefs = new List<int>();
-        groupRefs = GSA.Indexer.LookupIndices(typeof(GSA1DMember), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-        groupRefs.AddRange(GSA.Indexer.LookupIndices(typeof(GSA1DElementPolyline), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList());
+        groupRefs = GSA.Indexer.LookupIndices(typeof(GSA1DMember).GetGSAKeyword().GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+        groupRefs.AddRange(GSA.Indexer.LookupIndices(typeof(GSA1DElementPolyline).GetGSAKeyword().GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList());
       }
       else
       {
@@ -171,9 +174,13 @@ namespace SpeckleStructuralGSA
       int loadCaseRef = 0;
       try
       {
-        loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase), load.LoadCaseRef).Value;
+        //loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef).Value;
+        loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword().GetGSAKeyword(), load.LoadCaseRef).Value;
       }
-      catch { loadCaseRef = GSA.Indexer.ResolveIndex(typeof(GSALoadCase), load.LoadCaseRef); }
+      catch {
+        //loadCaseRef = GSA.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef);
+        loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword().GetGSAKeyword(), load.LoadCaseRef).Value;
+      }
 
       string[] direction = new string[6] { "X", "Y", "Z", "XX", "YY", "ZZ" };
 
@@ -183,11 +190,13 @@ namespace SpeckleStructuralGSA
 
         if (load.Loading.Value[i] == 0) continue;
 
-        int index = GSA.Indexer.ResolveIndex(typeof(GSA1DLoad));
+        //int index = GSA.Indexer.ResolveIndex(typeof(GSA1DLoad).GetGSAKeyword());
+        var index = GSA.Indexer.ResolveIndex(typeof(GSA1DLoad).GetGSAKeyword());
 
         ls.Add("SET_AT");
         ls.Add(index.ToString());
-        ls.Add("LOAD_BEAM_UDL" + ":" + GSA.GenerateSID(load)); // TODO: Only writes to UDL load
+        //ls.Add("LOAD_BEAM_UDL" + ":" + HelperClass.GenerateSID(load)); // TODO: Only writes to UDL load
+        ls.Add("LOAD_BEAM_UDL" + ":" + HelperClass.GenerateSID(load)); // TODO: Only writes to UDL load
         ls.Add(load.Name == null || load.Name == "" ? " " : load.Name);
         // TODO: This is a hack.
         ls.Add(string.Join(
@@ -210,7 +219,8 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this Structural1DLoad load)
     {
-      new GSA1DLoad() { Value = load }.SetGWACommand(GSA);
+      //new GSA1DLoad() { Value = load }.SetGWACommand(Initialiser.Interface);
+      new GSA1DLoad() { Value = load }.SetGWACommand(Initialiser.Interface);
 
       return true;
     }
@@ -267,7 +277,7 @@ namespace SpeckleStructuralGSA
                 new StructuralVectorThree(new double[] { 1, 0, 0 }),
                 new StructuralVectorThree(new double[] { 0, 1, 0 }),
                 new StructuralVectorThree(new double[] { 0, 0, 1 })) :
-                GSA.LocalAxisEntity1D(elem.Value.Value.ToArray(), elem.Value.ZAxis); // Assumes if not global, local
+                HelperClass.LocalAxisEntity1D(elem.Value.Value.ToArray(), elem.Value.ZAxis); // Assumes if not global, local
             load.Value.Loading = initLoad.Value.Loading;
             load.Value.Loading.TransformOntoAxis(loadAxis);
 
@@ -318,7 +328,7 @@ namespace SpeckleStructuralGSA
                 new StructuralVectorThree(new double[] { 1, 0, 0 }),
                 new StructuralVectorThree(new double[] { 0, 1, 0 }),
                 new StructuralVectorThree(new double[] { 0, 0, 1 })) :
-                GSA.LocalAxisEntity1D(memb.Value.Value.ToArray(), memb.Value.ZAxis); // Assumes if not global, local
+                HelperClass.LocalAxisEntity1D(memb.Value.Value.ToArray(), memb.Value.ZAxis); // Assumes if not global, local
             load.Value.Loading = initLoad.Value.Loading;
             load.Value.Loading.TransformOntoAxis(loadAxis);
 

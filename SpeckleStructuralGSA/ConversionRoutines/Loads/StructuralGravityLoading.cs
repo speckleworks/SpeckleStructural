@@ -1,4 +1,5 @@
 ﻿using SpeckleCore;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralGravityLoading();
 
-    public void ParseGWACommand(GSAInterfacer GSA)
+    public void ParseGWACommand(IGSAInterfacer GSA)
     {
       if (this.GWACommand == null)
         return;
@@ -39,7 +40,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(GSAInterfacer GSA)
+    public void SetGWACommand(IGSAInterfacer GSA)
     {
       if (this.Value == null)
         return;
@@ -54,17 +55,23 @@ namespace SpeckleStructuralGSA
       int loadCaseIndex = 0;
       try
       {
-        loadCaseIndex = GSA.Indexer.LookupIndex(typeof(GSALoadCase), load.LoadCaseRef).Value;
+        //loadCaseIndex = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef).Value;
+        loadCaseIndex = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword().GetGSAKeyword(), load.LoadCaseRef).Value;
       }
-      catch { loadCaseIndex = GSA.Indexer.ResolveIndex(typeof(GSALoadCase), load.LoadCaseRef); }
+      catch {
+        //loadCaseIndex = GSA.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef);
+        loadCaseIndex = GSA.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef);
+      }
 
-      int index = GSA.Indexer.ResolveIndex(typeof(GSAGravityLoading));
+      //int index = GSA.Indexer.ResolveIndex(typeof(GSAGravityLoading).GetGSAKeyword());
+      var index = GSA.Indexer.ResolveIndex(typeof(GSAGravityLoading).GetGSAKeyword());
 
       var ls = new List<string>
         {
           "SET_AT",
           index.ToString(),
-          keyword + ":" + GSA.GenerateSID(load),
+          //keyword + ":" + HelperClass.GenerateSID(load),
+          keyword + ":" + HelperClass.GenerateSID(load),
           string.IsNullOrEmpty(load.Name) ? "" : load.Name,
           "all",
           loadCaseIndex.ToString(),
@@ -82,7 +89,8 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this StructuralGravityLoading load)
     {
-      new GSAGravityLoading() { Value = load }.SetGWACommand(GSA);
+      //new GSAGravityLoading() { Value = load }.SetGWACommand(Initialiser.Interface);
+      new GSAGravityLoading() { Value = load }.SetGWACommand(Initialiser.Interface);
 
       return true;
     }

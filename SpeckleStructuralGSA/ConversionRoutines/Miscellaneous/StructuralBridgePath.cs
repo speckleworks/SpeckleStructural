@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
@@ -15,7 +16,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralBridgePath();
 
-    public void ParseGWACommand(GSAInterfacer GSA)
+    public void ParseGWACommand(IGSAInterfacer GSA)
     {
       if (this.GWACommand == null)
         return;
@@ -35,7 +36,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(GSAInterfacer GSA)
+    public void SetGWACommand(IGSAInterfacer GSA)
     {
       if (this.Value == null)
         return;
@@ -46,8 +47,8 @@ namespace SpeckleStructuralGSA
 
       string keyword = destType.GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(destType, path);
-      int alignmentIndex = GSA.Indexer.LookupIndex(typeof(GSABridgeAlignment), path.AlignmentRef) ?? 1;
+      int index = GSA.Indexer.ResolveIndex(keyword, path.ApplicationId);
+      int alignmentIndex = GSA.Indexer.LookupIndex(typeof(GSABridgeAlignment).GetGSAKeyword(), path.AlignmentRef) ?? 1;
 
       var left = path.Offsets.First();
       var right = (path.PathType == StructuralBridgePathType.Track || path.PathType == StructuralBridgePathType.Vehicle) ? path.Gauge : path.Offsets.Last();
@@ -55,7 +56,7 @@ namespace SpeckleStructuralGSA
       var ls = new List<string>
         {
           "SET",
-          keyword + ":" + GSA.GenerateSID(path),
+          keyword + ":" + HelperClass.GenerateSID(path),
           index.ToString(),
           string.IsNullOrEmpty(path.Name) ? "" : path.Name,
           PathTypeToGWAString(path.PathType),
@@ -87,7 +88,7 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this StructuralBridgePath path)
     {
-      new GSABridgePath() { Value = path }.SetGWACommand(GSA);
+      new GSABridgePath() { Value = path }.SetGWACommand(Initialiser.Interface);
 
       return true;
     }

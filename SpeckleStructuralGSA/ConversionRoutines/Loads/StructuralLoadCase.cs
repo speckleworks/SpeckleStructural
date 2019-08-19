@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
@@ -18,7 +19,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralLoadCase();
 
-    public void ParseGWACommand(GSAInterfacer GSA)
+    public void ParseGWACommand(IGSAInterfacer GSA)
     {
       if (this.GWACommand == null)
         return;
@@ -67,7 +68,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(GSAInterfacer GSA)
+    public void SetGWACommand(IGSAInterfacer GSA)
     {
       if (this.Value == null)
         return;
@@ -76,12 +77,12 @@ namespace SpeckleStructuralGSA
 
       string keyword = typeof(GSALoadCase).GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(typeof(GSALoadCase), loadCase);
+      int index = GSA.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), loadCase.ApplicationId);
 
       List<string> ls = new List<string>();
 
       ls.Add("SET");
-      ls.Add(keyword + ":" + GSA.GenerateSID(loadCase));
+      ls.Add(keyword + ":" + HelperClass.GenerateSID(loadCase));
       ls.Add(index.ToString());
       ls.Add(loadCase.Name == null || loadCase.Name == "" ? " " : loadCase.Name);
       switch (loadCase.CaseType)
@@ -124,7 +125,7 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this StructuralLoadCase load)
     {
-      new GSALoadCase() { Value = load }.SetGWACommand(GSA);
+      new GSALoadCase() { Value = load }.SetGWACommand(Initialiser.Interface);
 
       return true;
     }

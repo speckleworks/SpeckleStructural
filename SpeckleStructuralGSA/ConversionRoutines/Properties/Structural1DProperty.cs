@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 using SQLite;
 
@@ -20,7 +21,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new Structural1DProperty();
 
-    public void ParseGWACommand(GSAInterfacer GSA, string GSAUnits, List<GSAMaterialSteel> steels, List<GSAMaterialConcrete> concretes)
+    public void ParseGWACommand(IGSAInterfacer GSA, string GSAUnits, List<GSAMaterialSteel> steels, List<GSAMaterialConcrete> concretes)
     {
       if (this.GWACommand == null)
         return;
@@ -66,7 +67,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(GSAInterfacer GSA, string GSAUnits)
+    public void SetGWACommand(IGSAInterfacer GSA, string GSAUnits)
     {
       if (this.Value == null)
         return;
@@ -78,11 +79,11 @@ namespace SpeckleStructuralGSA
 
       string keyword = typeof(GSA1DProperty).GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(typeof(GSA1DProperty), prop);
+      int index = GSA.Indexer.ResolveIndex(typeof(GSA1DProperty).GetGSAKeyword(), prop.ApplicationId);
       int materialRef = 0;
       string materialType = "UNDEF";
 
-      var res = GSA.Indexer.LookupIndex(typeof(GSAMaterialSteel), prop.MaterialRef);
+      var res = GSA.Indexer.LookupIndex(typeof(GSAMaterialSteel).GetGSAKeyword(), prop.MaterialRef);
       if (res.HasValue)
       {
         materialRef = res.Value;
@@ -90,7 +91,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        res = GSA.Indexer.LookupIndex(typeof(GSAMaterialConcrete), prop.MaterialRef);
+        res = GSA.Indexer.LookupIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), prop.MaterialRef);
         if (res.HasValue)
         {
           materialRef = res.Value;
@@ -101,7 +102,7 @@ namespace SpeckleStructuralGSA
       List<string> ls = new List<string>();
 
       ls.Add("SET");
-      ls.Add(keyword + ":" + GSA.GenerateSID(prop));
+      ls.Add(keyword + ":" + HelperClass.GenerateSID(prop));
       ls.Add(index.ToString());
       ls.Add(prop.Name == null || prop.Name == "" ? " " : prop.Name);
       ls.Add("NO_RGB");
@@ -677,7 +678,7 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this Structural1DProperty prop)
     {
-      new GSA1DProperty() { Value = prop }.SetGWACommand(GSA, GSAUnits);
+      new GSA1DProperty() { Value = prop }.SetGWACommand(Initialiser.Interface, GSAUnits);
 
       return true;
     }

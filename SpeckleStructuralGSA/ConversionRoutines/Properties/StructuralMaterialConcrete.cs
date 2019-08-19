@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
@@ -19,7 +20,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralMaterialConcrete();
 
-    public void ParseGWACommand(GSAInterfacer GSA)
+    public void ParseGWACommand(IGSAInterfacer GSA)
     {
       if (this.GWACommand == null)
         return;
@@ -55,7 +56,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(GSAInterfacer GSA)
+    public void SetGWACommand(IGSAInterfacer GSA)
     {
       if (this.Value == null)
         return;
@@ -64,13 +65,13 @@ namespace SpeckleStructuralGSA
 
       string keyword = typeof(GSAMaterialConcrete).GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(typeof(GSAMaterialConcrete), mat);
+      int index = GSA.Indexer.ResolveIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), mat.ApplicationId);
 
       // TODO: This function barely works.
       List<string> ls = new List<string>();
 
       ls.Add("SET");
-      ls.Add("MAT_CONCRETE.16" + ":" + GSA.GenerateSID(mat));
+      ls.Add("MAT_CONCRETE.16" + ":" + HelperClass.GenerateSID(mat));
       ls.Add(index.ToString());
       ls.Add("MAT.8");
       ls.Add(mat.Name == null || mat.Name == "" ? " " : mat.Name);
@@ -148,7 +149,7 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this StructuralMaterialConcrete mat)
     {
-      new GSAMaterialConcrete() { Value = mat }.SetGWACommand(GSA);
+      new GSAMaterialConcrete() { Value = mat }.SetGWACommand(Initialiser.Interface);
 
       return true;
     }

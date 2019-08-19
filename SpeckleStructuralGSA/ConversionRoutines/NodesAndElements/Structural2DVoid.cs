@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
@@ -18,7 +19,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new Structural2DVoid();
 
-    public void ParseGWACommand(GSAInterfacer GSA, List<GSANode> nodes)
+    public void ParseGWACommand(IGSAInterfacer GSA, List<GSANode> nodes)
     {
       if (this.GWACommand == null)
         return;
@@ -57,7 +58,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(GSAInterfacer GSA)
+    public void SetGWACommand(IGSAInterfacer GSA)
     {
       if (this.Value == null)
         return;
@@ -66,12 +67,12 @@ namespace SpeckleStructuralGSA
 
       string keyword = typeof(GSA2DVoid).GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(typeof(GSA2DVoid), v);
+      int index = GSA.Indexer.ResolveIndex(typeof(GSA2DVoid).GetGSAKeyword(), v.ApplicationId);
 
       List<string> ls = new List<string>();
 
       ls.Add("SET");
-      ls.Add(keyword + ":" + GSA.GenerateSID(v));
+      ls.Add(keyword + ":" + HelperClass.GenerateSID(v));
       ls.Add(index.ToString());
       ls.Add(v.Name == null || v.Name == "" ? " " : v.Name);
       ls.Add(v.Colors == null || v.Colors.Count() < 1 ? "NO_RGB" : v.Colors[0].ArgbToHexColor().ToString());
@@ -85,7 +86,7 @@ namespace SpeckleStructuralGSA
         foreach (int c in conn)
         {
           coor.AddRange(v.Vertices.Skip(c * 3).Take(3));
-          topo += GSA.NodeAt(v.Vertices[c * 3], v.Vertices[c * 3 + 1], v.Vertices[c * 3 + 2], Conversions.GSACoincidentNodeAllowance).ToString() + " ";
+          topo += HelperClass.NodeAt(GSA, v.Vertices[c * 3], v.Vertices[c * 3 + 1], v.Vertices[c * 3 + 2], Conversions.GSACoincidentNodeAllowance).ToString() + " ";
         }
       ls.Add(topo);
       ls.Add("0"); // Orientation node
@@ -111,7 +112,7 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this Structural2DVoid v)
     {
-      new GSA2DVoid() { Value = v }.SetGWACommand(GSA);
+      new GSA2DVoid() { Value = v }.SetGWACommand(Initialiser.Interface);
 
       return true;
     }

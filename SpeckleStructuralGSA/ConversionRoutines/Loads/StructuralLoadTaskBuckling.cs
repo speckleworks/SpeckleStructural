@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SpeckleCore;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
@@ -14,7 +15,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralLoadTaskBuckling();
 
-    public void ParseGWACommand(GSAInterfacer GSA)
+    public void ParseGWACommand(IGSAInterfacer GSA)
     {
       //if (this.GWACommand == null)
       //  return;
@@ -45,7 +46,7 @@ namespace SpeckleStructuralGSA
       //this.Value = obj;
     }
 
-    public void SetGWACommand(GSAInterfacer GSA)
+    public void SetGWACommand(IGSAInterfacer GSA)
     {
       if (this.Value == null)
         return;
@@ -55,9 +56,9 @@ namespace SpeckleStructuralGSA
       string keyword = typeof(GSALoadTaskBuckling).GetGSAKeyword();
       string subkeyword = typeof(GSALoadTaskBuckling).GetSubGSAKeyword().First();
 
-      int taskIndex = GSA.Indexer.ResolveIndex("TASK.1", loadTask);
-      int? comboIndex = GSA.Indexer.LookupIndex(typeof(GSALoadCombo), loadTask.ResultCaseRef);
-      int? stageIndex = GSA.Indexer.LookupIndex(typeof(GSAConstructionStage), loadTask.StageDefinitionRef);
+      int taskIndex = GSA.Indexer.ResolveIndex("TASK.1", loadTask.ApplicationId);
+      int? comboIndex = GSA.Indexer.LookupIndex(typeof(GSALoadCombo).GetGSAKeyword(), loadTask.ResultCaseRef);
+      int? stageIndex = GSA.Indexer.LookupIndex(typeof(GSAConstructionStage).GetGSAKeyword(), loadTask.StageDefinitionRef);
 
       List<string> ls = new List<string>
         {
@@ -115,7 +116,7 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this StructuralLoadTaskBuckling loadTask)
     {
-      new GSALoadTaskBuckling() { Value = loadTask }.SetGWACommand(GSA);
+      new GSALoadTaskBuckling() { Value = loadTask }.SetGWACommand(Initialiser.Interface);
 
       return true;
     }

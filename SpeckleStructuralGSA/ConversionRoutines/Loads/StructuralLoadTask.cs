@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
@@ -18,7 +19,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralLoadTask();
 
-    public void ParseGWACommand(GSAInterfacer GSA)
+    public void ParseGWACommand(IGSAInterfacer GSA)
     {
       if (this.GWACommand == null)
         return;
@@ -35,8 +36,8 @@ namespace SpeckleStructuralGSA
 
       //Find task type
       string taskRef = pieces[counter++];
-      string taskRec;
-      (obj.TaskType, taskRec) = GSA.GetLoadTaskType(taskRef);
+      var taskRec = GSA.GetGWARecords("GET\tTASK.1\t" + taskRef).First();
+      obj.TaskType = HelperClass.GetLoadTaskType(taskRec);
       this.SubGWACommand.Add(taskRec);
 
       // Parse description
@@ -67,7 +68,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(GSAInterfacer GSA)
+    public void SetGWACommand(IGSAInterfacer GSA)
     {
       if (this.Value == null)
         return;
@@ -76,14 +77,14 @@ namespace SpeckleStructuralGSA
 
       string keyword = typeof(GSALoadTask).GetGSAKeyword();
 
-      int taskIndex = GSA.Indexer.ResolveIndex("TASK.1", loadTask);
-      int index = GSA.Indexer.ResolveIndex(typeof(GSALoadTask), loadTask);
+      int taskIndex = GSA.Indexer.ResolveIndex("TASK.1", loadTask.ApplicationId);
+      int index = GSA.Indexer.ResolveIndex(typeof(GSALoadTask).GetGSAKeyword(), loadTask.ApplicationId);
 
       List<string> ls = new List<string>();
 
       // Set TASK
       ls.Add("SET");
-      ls.Add("TASK.1" + ":" + GSA.GenerateSID(loadTask));
+      ls.Add("TASK.1" + ":" + HelperClass.GenerateSID(loadTask));
       ls.Add(taskIndex.ToString());
       ls.Add(""); // Name
       ls.Add("0"); // Stage
@@ -209,7 +210,7 @@ namespace SpeckleStructuralGSA
       // Set ANAL
       ls.Clear();
       ls.Add("SET");
-      ls.Add(keyword + ":" + GSA.GenerateSID(loadTask));
+      ls.Add(keyword + ":" + HelperClass.GenerateSID(loadTask));
       ls.Add(index.ToString());
       ls.Add(loadTask.Name == null || loadTask.Name == "" ? " " : loadTask.Name);
       ls.Add(taskIndex.ToString());
@@ -220,7 +221,7 @@ namespace SpeckleStructuralGSA
         List<string> subLs = new List<string>();
         for (int i = 0; i < loadTask.LoadCaseRefs.Count(); i++)
         {
-          int? loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase), loadTask.LoadCaseRefs[i]);
+          int? loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), loadTask.LoadCaseRefs[i]);
 
           if (loadCaseRef.HasValue)
           {
@@ -240,7 +241,7 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this StructuralLoadTask loadTask)
     {
-      new GSALoadTask() { Value = loadTask }.SetGWACommand(GSA);
+      new GSALoadTask() { Value = loadTask }.SetGWACommand(Initialiser.Interface);
 
       return true;
     }

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
@@ -18,7 +19,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new Structural1DElementPolyline();
 
-    public void ParseGWACommand(GSAInterfacer GSA, List<GSA1DElement> elements)
+    public void ParseGWACommand(IGSAInterfacer GSA, List<GSA1DElement> elements)
     {
       if (elements.Count() < 1)
         return;
@@ -174,23 +175,23 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(GSAInterfacer GSA)
+    public void SetGWACommand(IGSAInterfacer GSA)
     {
       if (this.Value == null)
         return;
 
       Structural1DElementPolyline obj = this.Value as Structural1DElementPolyline;
 
-      int group = GSA.Indexer.ResolveIndex(typeof(GSA1DElementPolyline), obj);
+      int group = GSA.Indexer.ResolveIndex(typeof(GSA1DElementPolyline).GetGSAKeyword(), obj.ApplicationId);
 
       Structural1DElement[] elements = obj.Explode();
 
       foreach (Structural1DElement element in elements)
       {
         if (Conversions.GSATargetLayer == GSATargetLayer.Analysis)
-          new GSA1DElement() { Value = element }.SetGWACommand(GSA, group);
+          new GSA1DElement() { Value = element }.SetGWACommand(Initialiser.Interface, group);
         else if (Conversions.GSATargetLayer == GSATargetLayer.Design)
-          new GSA1DMember() { Value = element }.SetGWACommand(GSA, group);
+          new GSA1DMember() { Value = element }.SetGWACommand(Initialiser.Interface, group);
       }
     }
   }
@@ -213,7 +214,7 @@ namespace SpeckleStructuralGSA
 
     public static bool ToNative(this Structural1DElementPolyline poly)
     {
-      new GSA1DElementPolyline() { Value = poly }.SetGWACommand(GSA);
+      new GSA1DElementPolyline() { Value = poly }.SetGWACommand(Initialiser.Interface);
 
       return true;
     }

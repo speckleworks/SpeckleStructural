@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SpeckleCore;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
@@ -14,7 +15,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralStagedNodalRestraints();
 
-    public void ParseGWACommand(GSAInterfacer GSA, List<GSANode> nodes, List<GSAConstructionStage> stages)
+    public void ParseGWACommand(IGSAInterfacer GSA, List<GSANode> nodes, List<GSAConstructionStage> stages)
     {
       if (this.GWACommand == null)
         return;
@@ -33,7 +34,7 @@ namespace SpeckleStructuralGSA
         restraints[i] = pieces[counter++] == "1";
       obj.Restraint = new StructuralVectorBoolSix(restraints);
       
-      int[] targetNodeRefs = GSA.ConvertGSAList(pieces[counter++], GSAEntity.NODE);
+      int[] targetNodeRefs = GSA.ConvertGSAList(pieces[counter++], SpeckleGSAInterfaces.GSAEntity.NODE);
 
       if (nodes != null)
       {
@@ -53,7 +54,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(GSAInterfacer GSA)
+    public void SetGWACommand(IGSAInterfacer GSA)
     {
       if (this.Value == null)
         return;
@@ -64,19 +65,19 @@ namespace SpeckleStructuralGSA
 			string keyword = destinationType.GetGSAKeyword();
       var subkeywords = destinationType.GetSubGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(destinationType, obj);
+      int index = GSA.Indexer.ResolveIndex(keyword, obj.ApplicationId);
 
       var nodesStr = "none"; //default value
       if (obj.NodeRefs != null && obj.NodeRefs.Count() >= 1)
       {
-        var nodeIndices = GSA.Indexer.LookupIndices(typeof(GSANode), obj.NodeRefs);
+        var nodeIndices = GSA.Indexer.LookupIndices(typeof(GSANode).GetGSAKeyword(), obj.NodeRefs);
         nodesStr = string.Join(" ", nodeIndices);
       }
 
       var stageDefStr = "all"; //default value
       if (obj.ConstructionStageRefs != null && obj.ConstructionStageRefs.Count() >= 1)
       {
-        var stageDefIndices = GSA.Indexer.LookupIndices(typeof(GSAConstructionStage), obj.ConstructionStageRefs);
+        var stageDefIndices = GSA.Indexer.LookupIndices(typeof(GSAConstructionStage).GetGSAKeyword(), obj.ConstructionStageRefs);
         stageDefStr = string.Join(" ", stageDefIndices);
       }
 
@@ -84,7 +85,7 @@ namespace SpeckleStructuralGSA
       {
         "SET_AT",
         index.ToString(),
-        keyword + ":" + GSA.GenerateSID(obj),
+        keyword + ":" + HelperClass.GenerateSID(obj),
 				string.IsNullOrEmpty(obj.Name) ? " " : obj.Name
 			};
 
@@ -102,7 +103,7 @@ namespace SpeckleStructuralGSA
     {
       var gsaGeneralisedNodeRestraints = new GSAStructuralStagedNodalRestraints() { Value = restraint };
 
-      gsaGeneralisedNodeRestraints.SetGWACommand(GSA);
+      gsaGeneralisedNodeRestraints.SetGWACommand(Initialiser.Interface);
 
       return true;
     }

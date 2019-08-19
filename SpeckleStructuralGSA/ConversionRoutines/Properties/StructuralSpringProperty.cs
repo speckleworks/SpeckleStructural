@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SpeckleCore;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
@@ -16,7 +17,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralSpringProperty();
 
-    public void ParseGWACommand(GSAInterfacer GSA)
+    public void ParseGWACommand(IGSAInterfacer GSA)
     {
       if (this.GWACommand == null)
         return;
@@ -34,12 +35,12 @@ namespace SpeckleStructuralGSA
       string gsaAxis = pieces[counter++];
 
       if (gsaAxis == "GLOBAL")
-        obj.Axis = GSA.Parse0DAxis(0, out string gwaRec);
+        obj.Axis = HelperClass.Parse0DAxis(0, GSA, out string gwaRec);
       else if (gsaAxis == "VERTICAL")
-        obj.Axis = GSA.Parse0DAxis(-14, out string gwaRec);
+        obj.Axis = HelperClass.Parse0DAxis(-14, GSA, out string gwaRec);
       else
       {
-        obj.Axis = GSA.Parse0DAxis(Convert.ToInt32(gsaAxis), out string gwaRec);
+        obj.Axis = HelperClass.Parse0DAxis(Convert.ToInt32(gsaAxis), GSA, out string gwaRec);
         this.SubGWACommand.Add(gwaRec);
       }
 
@@ -69,7 +70,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(GSAInterfacer GSA)
+    public void SetGWACommand(IGSAInterfacer GSA)
     {
       if (this.Value == null)
         return;
@@ -80,7 +81,7 @@ namespace SpeckleStructuralGSA
 
       string keyword = destType.GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(destType, springProp);
+      int index = GSA.Indexer.ResolveIndex(keyword, springProp.ApplicationId);
 
       string axisRef = "GLOBAL";
 
@@ -95,7 +96,7 @@ namespace SpeckleStructuralGSA
       else
         try
         {
-          axisRef = GSA.SetAxis(springProp.Axis, springProp.Name).ToString();
+          axisRef = HelperClass.SetAxis(springProp.Axis, springProp.Name).ToString();
         }
         catch { axisRef = "GLOBAL"; }
 
@@ -103,7 +104,7 @@ namespace SpeckleStructuralGSA
       List<string> ls = new List<string>
       {
         "SET",
-        keyword + ":" + GSA.GenerateSID(springProp),
+        keyword + ":" + HelperClass.GenerateSID(springProp),
         index.ToString(),
         string.IsNullOrEmpty(springProp.Name) ? "" : springProp.Name,
         "NO_RGB",
@@ -127,9 +128,9 @@ namespace SpeckleStructuralGSA
     public static bool ToNative(this StructuralSpringProperty prop)
     {
       if (Conversions.GSATargetLayer == GSATargetLayer.Analysis)
-        new GSASpringProperty() { Value = prop }.SetGWACommand(GSA);
+        new GSASpringProperty() { Value = prop }.SetGWACommand(Initialiser.Interface);
       else if (Conversions.GSATargetLayer == GSATargetLayer.Design)
-        new GSASpringProperty() { Value = prop }.SetGWACommand(GSA);
+        new GSASpringProperty() { Value = prop }.SetGWACommand(Initialiser.Interface);
 
       return true;
     }

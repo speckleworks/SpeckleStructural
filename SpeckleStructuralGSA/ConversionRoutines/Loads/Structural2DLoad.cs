@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
@@ -22,7 +23,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new Structural2DLoad();
 
-    public void ParseGWACommand(GSAInterfacer GSA, List<GSA2DElement> elements, List<GSA2DMember> members)
+    public void ParseGWACommand(IGSAInterfacer GSA, List<GSA2DElement> elements, List<GSA2DMember> members)
     {
       if (this.GWACommand == null)
         return;
@@ -37,7 +38,7 @@ namespace SpeckleStructuralGSA
 
       if (Conversions.GSATargetLayer == GSATargetLayer.Analysis)
       {
-        int[] targetElements = GSA.ConvertGSAList(pieces[counter++], GSAEntity.ELEMENT);
+        int[] targetElements = GSA.ConvertGSAList(pieces[counter++], SpeckleGSAInterfaces.GSAEntity.ELEMENT);
 
         if (elements != null)
         {
@@ -49,7 +50,7 @@ namespace SpeckleStructuralGSA
       }
       else if (Conversions.GSATargetLayer == GSATargetLayer.Design)
       {
-        int[] targetGroups = GSA.GetGroupsFromGSAList(pieces[counter++]);
+        int[] targetGroups = HelperClass.GetGroupsFromGSAList(pieces[counter++]);
 
         if (members != null)
         {
@@ -93,7 +94,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(GSAInterfacer GSA)
+    public void SetGWACommand(IGSAInterfacer GSA)
     {
       if (this.Value == null)
         return;
@@ -110,13 +111,16 @@ namespace SpeckleStructuralGSA
 
       if (Conversions.GSATargetLayer == GSATargetLayer.Analysis)
       {
-        elementRefs = GSA.Indexer.LookupIndices(typeof(GSA2DElement), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-        groupRefs = GSA.Indexer.LookupIndices(typeof(GSA2DElementMesh), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+        //elementRefs = GSA.Indexer.LookupIndices(typeof(GSA2DElement).GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+        elementRefs = GSA.Indexer.LookupIndices(typeof(GSA2DElement).GetGSAKeyword().GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+        //groupRefs = GSA.Indexer.LookupIndices(typeof(GSA2DElementMesh).GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+        groupRefs = GSA.Indexer.LookupIndices(typeof(GSA2DElementMesh).GetGSAKeyword().GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
       }
       else if (Conversions.GSATargetLayer == GSATargetLayer.Design)
       {
         elementRefs = new List<int>();
-        groupRefs = GSA.Indexer.LookupIndices(typeof(GSA2DMember), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+        //groupRefs = GSA.Indexer.LookupIndices(typeof(GSA2DMember).GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+        groupRefs = GSA.Indexer.LookupIndices(typeof(GSA2DMember).GetGSAKeyword().GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
       }
       else
       {
@@ -126,9 +130,13 @@ namespace SpeckleStructuralGSA
       int loadCaseRef = 0;
       try
       {
-        loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase), load.LoadCaseRef).Value;
+        //loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef).Value;
+        loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword().GetGSAKeyword(), load.LoadCaseRef).Value;
       }
-      catch { loadCaseRef = GSA.Indexer.ResolveIndex(typeof(GSALoadCase), load.LoadCaseRef); }
+      catch {
+        //loadCaseRef = GSA.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef);
+        loadCaseRef = GSA.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef);
+      }
 
       string[] direction = new string[3] { "X", "Y", "Z" };
 
@@ -138,10 +146,12 @@ namespace SpeckleStructuralGSA
 
         if (load.Loading.Value[i] == 0) continue;
 
-        int index = GSA.Indexer.ResolveIndex(typeof(GSA2DLoad));
+        //int index = GSA.Indexer.ResolveIndex(typeof(GSA2DLoad).GetGSAKeyword());
+        var index = GSA.Indexer.ResolveIndex(typeof(GSA2DLoad).GetGSAKeyword());
         ls.Add("SET_AT");
         ls.Add(index.ToString());
-        ls.Add(keyword + ":" + GSA.GenerateSID(load));
+        //ls.Add(keyword + ":" + HelperClass.GenerateSID(load));
+        ls.Add(keyword + ":" + HelperClass.GenerateSID(load));
         ls.Add(load.Name == null || load.Name == "" ? " " : load.Name);
         // TODO: This is a hack.
         ls.Add(string.Join(
@@ -165,7 +175,8 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this Structural2DLoad load)
     {
-      new GSA2DLoad() { Value = load }.SetGWACommand(GSA);
+      //new GSA2DLoad() { Value = load }.SetGWACommand(Initialiser.Interface);
+      new GSA2DLoad() { Value = load }.SetGWACommand(Initialiser.Interface);
 
       return true;
     }
@@ -218,7 +229,7 @@ namespace SpeckleStructuralGSA
 
             // Transform load to defined axis
             GSA2DElement elem = elements.Where(e => e.Value.ApplicationId == nRef).First();
-            StructuralAxis loadAxis = GSA.Parse2DAxis(elem.Value.Vertices.ToArray(), 0, load.Axis != 0); // Assumes if not global, local
+            StructuralAxis loadAxis = HelperClass.Parse2DAxis(elem.Value.Vertices.ToArray(), 0, load.Axis != 0); // Assumes if not global, local
             load.Value.Loading = initLoad.Value.Loading;
 
             // Perform projection
@@ -253,7 +264,7 @@ namespace SpeckleStructuralGSA
 
             // Transform load to defined axis
             GSA2DMember memb = members.Where(e => e.Value.ApplicationId == nRef).First();
-            StructuralAxis loadAxis = GSA.Parse2DAxis(memb.Value.Vertices.ToArray(), 0, load.Axis != 0); // Assumes if not global, local
+            StructuralAxis loadAxis = HelperClass.Parse2DAxis(memb.Value.Vertices.ToArray(), 0, load.Axis != 0); // Assumes if not global, local
             load.Value.Loading = initLoad.Value.Loading;
             load.Value.Loading.TransformOntoAxis(loadAxis);
 

@@ -12,25 +12,24 @@ namespace SpeckleStructuralGSA
 {
   public class Initialiser : ISpeckleInitializer
   {
-    public static IGSASettings TestSettings;
-    public static IGSAIndexer TestIndexer;
-    public static IGSAInterfacer TestInterface;
+    public static IGSASettings Settings { get; set; }
+    public static IGSAInterfacer Interface { get; set; }
 
     public Initialiser() { }
 
-    public static GSAInterfacer GSA { get; set; } = new GSAInterfacer();
+    //public static GSAInterfacer GSA { get; set; } = new GSAInterfacer();
 
     public static Dictionary<Type, List<object>> GSASenderObjects { get; set; } = new Dictionary<Type, List<object>>();
 
-    public static string GSAUnits { get; set; }
+    //public static string GSAUnits { get; set; }
 
-    public static double GSACoincidentNodeAllowance { get; set; }
+    //public static double GSACoincidentNodeAllowance { get; set; }
 
-    public static GSATargetLayer GSATargetLayer { get; set; }
+    //public static GSATargetLayer GSATargetLayer { get; set; }
 
-    public static bool GSATargetDesignLayer { set => GSATargetLayer = value ? GSATargetLayer.Design : GSATargetLayer.Analysis; }
+    //public static bool GSATargetDesignLayer { set => GSATargetLayer = value ? GSATargetLayer.Design : GSATargetLayer.Analysis; }
 
-    public static bool GSATargetAnalysisLayer { set => GSATargetLayer = value ? GSATargetLayer.Analysis : GSATargetLayer.Design; }
+    //public static bool GSATargetAnalysisLayer { set => GSATargetLayer = value ? GSATargetLayer.Analysis : GSATargetLayer.Design; }
 
     public static Dictionary<string, Tuple<int, int, List<string>>> GSANodalResults { get; set; } = new Dictionary<string, Tuple<int, int, List<string>>>();
   
@@ -53,13 +52,13 @@ namespace SpeckleStructuralGSA
   {
     public static Dictionary<Type, List<object>> GSASenderObjects { get => Initialiser.GSASenderObjects; }
 
-    public static GSAInterfacer GSA { get => Initialiser.GSA; }
+    public static IGSAInterfacer GSA { get => Initialiser.Interface; }
 
-    public static string GSAUnits { get => Initialiser.GSAUnits; }
+    public static string GSAUnits { get => Initialiser.Settings.Units; }
 
-    public static double GSACoincidentNodeAllowance { get => Initialiser.GSACoincidentNodeAllowance; }
+    public static double GSACoincidentNodeAllowance { get => Initialiser.Settings.CoincidentNodeAllowance; }
 
-    public static GSATargetLayer GSATargetLayer { get => Initialiser.GSATargetLayer; }
+    public static GSATargetLayer GSATargetLayer { get => (Initialiser.Settings.TargetDesignLayer) ? GSATargetLayer.Design : GSATargetLayer.Analysis ; }
     
     public static Dictionary<string, Tuple<int, int, List<string>>> GSANodalResults { get => Initialiser.GSANodalResults; }
 

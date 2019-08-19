@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 using SQLite;
 
@@ -20,7 +21,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new Structural1DInfluenceEffect();
 
-    public void ParseGWACommand(GSAInterfacer GSA, List<GSA1DElement> e1Ds)
+    public void ParseGWACommand(IGSAInterfacer GSA, List<GSA1DElement> e1Ds)
     {
       if (this.GWACommand == null)
         return;
@@ -108,7 +109,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(GSAInterfacer GSA)
+    public void SetGWACommand(IGSAInterfacer GSA)
     {
       if (this.Value == null)
         return;
@@ -117,9 +118,9 @@ namespace SpeckleStructuralGSA
       
       string keyword = typeof(GSA1DInfluenceEffect).GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(typeof(GSA1DInfluenceEffect), infl);
+      int index = GSA.Indexer.ResolveIndex(typeof(GSA1DInfluenceEffect).GetGSAKeyword(), infl.ApplicationId);
 
-      int? elementRef = GSA.Indexer.LookupIndex(typeof(GSA1DElement), infl.ElementRef);
+      int? elementRef = GSA.Indexer.LookupIndex(typeof(GSA1DElement).GetGSAKeyword(), infl.ElementRef);
 
       if (!elementRef.HasValue)
         return;
@@ -132,7 +133,7 @@ namespace SpeckleStructuralGSA
 
         ls.Add("SET_AT");
         ls.Add(index.ToString());
-        ls.Add(keyword + ":" + GSA.GenerateSID(infl));
+        ls.Add(keyword + ":" + HelperClass.GenerateSID(infl));
         ls.Add(infl.Name == null || infl.Name == "" ? " " : infl.Name);
         ls.Add(infl.GSAEffectGroup.ToString());
         ls.Add(elementRef.Value.ToString());
@@ -160,7 +161,7 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this Structural1DInfluenceEffect infl)
     {
-      new GSA1DInfluenceEffect() { Value = infl }.SetGWACommand(GSA);
+      new GSA1DInfluenceEffect() { Value = infl }.SetGWACommand(Initialiser.Interface);
 
       return true;
     }

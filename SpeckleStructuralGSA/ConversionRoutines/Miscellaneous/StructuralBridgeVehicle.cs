@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
@@ -15,7 +16,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralBridgeVehicle();
 
-    public void ParseGWACommand(GSAInterfacer GSA)
+    public void ParseGWACommand(IGSAInterfacer GSA)
     {
       if (this.GWACommand == null)
         return;
@@ -35,7 +36,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(GSAInterfacer GSA)
+    public void SetGWACommand(IGSAInterfacer GSA)
     {
       if (this.Value == null)
         return;
@@ -46,7 +47,7 @@ namespace SpeckleStructuralGSA
 
       string keyword = destType.GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(destType, vehicle);
+      int index = GSA.Indexer.ResolveIndex(keyword, vehicle.ApplicationId);
 
       //The width parameter is intentionally not being used here as the meaning doesn't map to the y coordinate parameter of the ASSEMBLY keyword
       //It is therefore to be ignored here for GSA purposes.
@@ -54,7 +55,7 @@ namespace SpeckleStructuralGSA
       var ls = new List<string>
         {
           "SET",
-          keyword + ":" + GSA.GenerateSID(vehicle),
+          keyword + ":" + HelperClass.GenerateSID(vehicle),
           index.ToString(),
           string.IsNullOrEmpty(vehicle.Name) ? "" : vehicle.Name,
           vehicle.Width.ToString(),
@@ -78,7 +79,7 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this StructuralBridgeVehicle assembly)
     {
-      new GSABridgeVehicle() { Value = assembly }.SetGWACommand(GSA);
+      new GSABridgeVehicle() { Value = assembly }.SetGWACommand(Initialiser.Interface);
 
       return true;
     }

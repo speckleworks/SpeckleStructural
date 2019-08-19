@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
@@ -18,7 +19,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralLoadCombo();
 
-    public void ParseGWACommand(GSAInterfacer GSA)
+    public void ParseGWACommand(IGSAInterfacer GSA)
     {
       if (this.GWACommand == null)
         return;
@@ -74,7 +75,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(GSAInterfacer GSA)
+    public void SetGWACommand(IGSAInterfacer GSA)
     {
       if (this.Value == null)
         return;
@@ -83,12 +84,12 @@ namespace SpeckleStructuralGSA
 
       string keyword = typeof(GSALoadCombo).GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(typeof(GSALoadCombo), loadCombo);
+      int index = GSA.Indexer.ResolveIndex(typeof(GSALoadCombo).GetGSAKeyword(), loadCombo.ApplicationId);
 
       List<string> ls = new List<string>();
 
       ls.Add("SET");
-      ls.Add(keyword + ":" + GSA.GenerateSID(loadCombo));
+      ls.Add(keyword + ":" + HelperClass.GenerateSID(loadCombo));
       ls.Add(index.ToString());
       ls.Add(loadCombo.Name == null || loadCombo.Name == "" ? " " : loadCombo.Name);
 
@@ -97,7 +98,7 @@ namespace SpeckleStructuralGSA
       {
         for (int i = 0; i < loadCombo.LoadTaskRefs.Count(); i++)
         {
-          int? loadTaskRef = GSA.Indexer.LookupIndex(typeof(GSALoadTask), loadCombo.LoadTaskRefs[i]);
+          int? loadTaskRef = GSA.Indexer.LookupIndex(typeof(GSALoadTask).GetGSAKeyword(), loadCombo.LoadTaskRefs[i]);
 
           if (loadTaskRef.HasValue)
           {
@@ -113,7 +114,7 @@ namespace SpeckleStructuralGSA
       {
         for (int i = 0; i < loadCombo.LoadComboRefs.Count(); i++)
         {
-          int? loadComboRef = GSA.Indexer.LookupIndex(typeof(GSALoadTask), loadCombo.LoadComboRefs[i]);
+          int? loadComboRef = GSA.Indexer.LookupIndex(typeof(GSALoadTask).GetGSAKeyword(), loadCombo.LoadComboRefs[i]);
 
           if (loadComboRef.HasValue)
           {
@@ -146,7 +147,7 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this StructuralLoadCombo loadCombo)
     {
-      new GSALoadCombo() { Value = loadCombo }.SetGWACommand(GSA);
+      new GSALoadCombo() { Value = loadCombo }.SetGWACommand(Initialiser.Interface);
 
       return true;
     }

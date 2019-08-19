@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SpeckleCore;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
@@ -14,7 +15,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new Structural2DThermalLoad();
 
-    public void ParseGWACommand(GSAInterfacer GSA, List<GSA2DElement> e2Ds, List<GSA2DMember> m2Ds)
+    public void ParseGWACommand(IGSAInterfacer GSA, List<GSA2DElement> e2Ds, List<GSA2DMember> m2Ds)
     {
       if (this.GWACommand == null)
         return;
@@ -33,7 +34,7 @@ namespace SpeckleStructuralGSA
 
       if (Conversions.GSATargetLayer == GSATargetLayer.Analysis)
       {
-        var elementId = GSA.ConvertGSAList(elementList, GSAEntity.ELEMENT);
+        var elementId = GSA.ConvertGSAList(elementList, SpeckleGSAInterfaces.GSAEntity.ELEMENT);
         foreach (int id in elementId)
         {
           IGSASpeckleContainer elem = e2Ds.Where(e => e.GSAId == id).FirstOrDefault();
@@ -47,7 +48,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        var groupIds = GSA.GetGroupsFromGSAList(elementList).ToList();
+        var groupIds = HelperClass.GetGroupsFromGSAList(elementList).ToList();
         foreach (int id in groupIds)
         {
           var memb2Ds = m2Ds.Where(m => m.Group == id);
@@ -86,7 +87,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(GSAInterfacer GSA)
+    public void SetGWACommand(IGSAInterfacer GSA)
     {
       if (this.Value == null)
         return;
@@ -95,16 +96,19 @@ namespace SpeckleStructuralGSA
 
       string keyword = typeof(GSA2DThermalLoading).GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(typeof(GSA2DThermalLoading), loading);
-      
+      //int index = GSA.Indexer.ResolveIndex(typeof(GSA2DThermalLoading).GetGSAKeyword(), loading);
+      var index = GSA.Indexer.ResolveIndex(typeof(GSA2DThermalLoading).GetGSAKeyword(), loading.ApplicationId);
+
       var targetString = " ";
 
       if (loading.ElementRefs != null && loading.ElementRefs.Count() > 0)
       {
         if (Conversions.GSATargetLayer == GSATargetLayer.Analysis)
         {
-          var e2DIndices = GSA.Indexer.LookupIndices(typeof(GSA2DElement), loading.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-          var e2DMeshIndices = GSA.Indexer.LookupIndices(typeof(GSA2DElementMesh), loading.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          //var e2DIndices = GSA.Indexer.LookupIndices(typeof(GSA2DElement).GetGSAKeyword(), loading.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var e2DIndices = GSA.Indexer.LookupIndices(typeof(GSA2DElement).GetGSAKeyword().GetGSAKeyword(), loading.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          //var e2DMeshIndices = GSA.Indexer.LookupIndices(typeof(GSA2DElementMesh).GetGSAKeyword(), loading.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var e2DMeshIndices = GSA.Indexer.LookupIndices(typeof(GSA2DElementMesh).GetGSAKeyword().GetGSAKeyword(), loading.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
           targetString = string.Join(" ",
             e2DIndices.Select(x => x.ToString())
             .Concat(e2DMeshIndices.Select(x => "G" + x.ToString()))
@@ -112,13 +116,15 @@ namespace SpeckleStructuralGSA
         }
         else if (Conversions.GSATargetLayer == GSATargetLayer.Design)
         {
-          var m2DIndices = GSA.Indexer.LookupIndices(typeof(GSA2DMember), loading.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          //var m2DIndices = GSA.Indexer.LookupIndices(typeof(GSA2DMember).GetGSAKeyword(), loading.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var m2DIndices = GSA.Indexer.LookupIndices(typeof(GSA2DMember).GetGSAKeyword().GetGSAKeyword(), loading.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
           targetString = string.Join(" ",
             m2DIndices.Select(x => "G" + x.ToString()));
         }
       }
 
-      int? loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase), loading.LoadCaseRef);
+      //int? loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), loading.LoadCaseRef);
+      var loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword().GetGSAKeyword(), loading.LoadCaseRef);
 
       var loadingName = string.IsNullOrEmpty(loading.Name) ? " " : loading.Name;
 
@@ -126,7 +132,8 @@ namespace SpeckleStructuralGSA
         {
           "SET_AT",
           index.ToString(),
-          keyword + ":" + GSA.GenerateSID(loading),
+          //keyword + ":" + HelperClass.GenerateSID(loading),
+          keyword + ":" + HelperClass.GenerateSID(loading),
           loadingName, // Name
           targetString, //Elements
 					(loadCaseRef.HasValue) ? loadCaseRef.Value.ToString() : "1",
@@ -154,7 +161,8 @@ namespace SpeckleStructuralGSA
     {
       var GSA2DElementLoadingThermal = new GSA2DThermalLoading() { Value = load };
 
-      GSA2DElementLoadingThermal.SetGWACommand(GSA);
+      //GSA2DElementLoadingThermal.SetGWACommand(Initialiser.Interface);
+      GSA2DElementLoadingThermal.SetGWACommand(Initialiser.Interface);
 
       return true;
     }
