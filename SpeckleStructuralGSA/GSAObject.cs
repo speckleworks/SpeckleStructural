@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace SpeckleStructuralGSA
 {
+  /*
   /// <summary>
   /// Attribute containing read and write information for the object.
   /// </summary>
@@ -94,7 +95,6 @@ namespace SpeckleStructuralGSA
       get { return writePrerequisite; }
     }
   }
-
   public interface IGSASpeckleContainer
   {
     /// <summary>
@@ -117,4 +117,5 @@ namespace SpeckleStructuralGSA
     /// </summary>
     dynamic Value { get; set; }
   }
+  */
 }

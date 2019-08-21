@@ -140,6 +140,7 @@
     </Reference>
     <Reference Include="SpeckleGSAInterfaces">
       <HintPath>.\SpeckleGSAInterfaces.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="SQLite-net, Version=1.5.231.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\sqlite-net-pcl.1.5.231\lib\netstandard1.1\SQLite-net.dll</HintPath>
@@ -222,6 +223,7 @@
     <Compile Include="GSAObject.cs" />
     <Compile Include="HelperClass.cs" />
     <Compile Include="Indexer.cs" />
+    <Compile Include="Initialiser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

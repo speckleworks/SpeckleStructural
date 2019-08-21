@@ -6,7 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
+using SpeckleGSAInterfaces;
 
 namespace SpeckleStructuralGSA
 {

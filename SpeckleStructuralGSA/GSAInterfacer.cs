@@ -1,4 +1,5 @@
-﻿  using Interop.Gsa_10_0;
+﻿/*
+ *using Interop.Gsa_10_0;
   using SpeckleCore;
   using SpeckleCoreGeometryClasses;
   using SpeckleStructuralClasses;
@@ -1249,3 +1250,4 @@ namespace SpeckleStructuralGSA
     #endregion
   }
 }
+*/
