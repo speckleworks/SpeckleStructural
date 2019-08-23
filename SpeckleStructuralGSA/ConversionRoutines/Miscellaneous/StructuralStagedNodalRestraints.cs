@@ -93,7 +93,7 @@ namespace SpeckleStructuralGSA
 			ls.Add(nodesStr);
 			ls.Add(stageDefStr);
 
-      GSA.RunGWACommand(string.Join("\t", ls));
+      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
     }
   }
 
@@ -112,29 +112,29 @@ namespace SpeckleStructuralGSA
     {
       var destinationType = typeof(GSAStructuralStagedNodalRestraints);
 
-      if (!GSASenderObjects.ContainsKey(destinationType))
-        GSASenderObjects[destinationType] = new List<object>();
+      if (!Initialiser.GSASenderObjects.ContainsKey(destinationType))
+        Initialiser.GSASenderObjects[destinationType] = new List<object>();
 
       var genNodeRestraints = new List<GSAStructuralStagedNodalRestraints>();
 
-      var stageDefs = GSASenderObjects[typeof(GSAConstructionStage)].Cast<GSAConstructionStage>().ToList();
-      var nodes = GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
+      var stageDefs = Initialiser.GSASenderObjects[typeof(GSAConstructionStage)].Cast<GSAConstructionStage>().ToList();
+      var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
 
       string keyword = destinationType.GetGSAKeyword();
       string[] subKeywords = destinationType.GetSubGSAKeyword();
 
-      string[] lines = GSA.GetGWARecords("GET_ALL\t" + keyword);
-      List<string> deletedLines = GSA.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
+      string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
+      List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
       foreach (string k in subKeywords)
-        deletedLines.AddRange(GSA.GetDeletedGWARecords("GET_ALL\t" + k));
+        deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
 
       // Remove deleted lines
-      GSASenderObjects[destinationType].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (var kvp in GSASenderObjects)
+      Initialiser.GSASenderObjects[destinationType].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
+      foreach (var kvp in Initialiser.GSASenderObjects)
         kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
 
       // Filter only new lines
-      string[] prevLines = GSASenderObjects[destinationType].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
+      string[] prevLines = Initialiser.GSASenderObjects[destinationType].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
       string[] newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
 
       foreach (string p in newLines)
@@ -142,13 +142,13 @@ namespace SpeckleStructuralGSA
         try
         {
           var genNodeRestraint = new GSAStructuralStagedNodalRestraints() { GWACommand = p };
-          genNodeRestraint.ParseGWACommand(GSA, nodes, stageDefs);
+          genNodeRestraint.ParseGWACommand(Initialiser.Interface, nodes, stageDefs);
           genNodeRestraints.Add(genNodeRestraint);
         }
         catch { }
       }
 
-      GSASenderObjects[destinationType].AddRange(genNodeRestraints);
+      Initialiser.GSASenderObjects[destinationType].AddRange(genNodeRestraints);
 
       if (genNodeRestraints.Count() > 0 || deletedLines.Count() > 0) return new SpeckleObject();
 

@@ -27,7 +27,7 @@ namespace SpeckleStructuralGSA
       var elementsListCopy = new List<GSA1DElement>(elements);
 
       Structural1DElementPolyline obj = new Structural1DElementPolyline();
-      obj.ApplicationId = GSA.GetSID(typeof(GSA1DElementPolyline).GetGSAKeyword(), GSAId);
+      obj.ApplicationId = Initialiser.Interface.GetSID(typeof(GSA1DElementPolyline).GetGSAKeyword(), GSAId);
 
       obj.Value = new List<double>();
       obj.ElementApplicationId = new List<string>();
@@ -39,7 +39,7 @@ namespace SpeckleStructuralGSA
       obj.Offset = new List<StructuralVectorThree>();
       obj.ResultVertices = new List<double>();
 
-      if (Conversions.GSAElement1DResults.Count > 0 && Conversions.GSAEmbedResults)
+      if (Initialiser.GSAElement1DResults.Count > 0 && Initialiser.GSAEmbedResults)
         obj.Result = new Dictionary<string, object>();
 
       // Match up coordinates
@@ -93,7 +93,7 @@ namespace SpeckleStructuralGSA
           obj.EndRelease.AddRange(element.Value.EndRelease);
           obj.Offset.AddRange(element.Value.Offset);
 
-          if (Conversions.GSAElement1DResults.Count > 0 && Conversions.GSAEmbedResults)
+          if (Initialiser.GSAElement1DResults.Count > 0 && Initialiser.GSAEmbedResults)
             obj.ResultVertices.AddRange(element.Value.ResultVertices);
           else
             obj.ResultVertices.AddRange((element.Value.Value as List<double>));
@@ -107,7 +107,7 @@ namespace SpeckleStructuralGSA
           obj.Offset.Add((element.Value.Offset as List<StructuralVectorThree>).Last());
           obj.Offset.Add((element.Value.Offset as List<StructuralVectorThree>).First());
 
-          if (Conversions.GSAElement1DResults.Count > 0 && Conversions.GSAEmbedResults)
+          if (Initialiser.GSAElement1DResults.Count > 0 && Initialiser.GSAEmbedResults)
             for (int i = element.Value.ResultVertices.Count - 3; i >= 0; i -= 3)
               obj.ResultVertices.AddRange((element.Value.ResultVertices as List<double>).Skip(i).Take(3));
           else
@@ -128,7 +128,7 @@ namespace SpeckleStructuralGSA
                 obj.Result[loadCase] = new Structural1DElementResult()
                 {
                   Value = new Dictionary<string, object>(),
-                  IsGlobal = !Conversions.GSAResultInLocalAxis,
+                  IsGlobal = !Initialiser.GSAResultInLocalAxis,
                 };
 
               var resultExport = element.Value.Result[loadCase] as Structural1DElementResult;
@@ -221,28 +221,28 @@ namespace SpeckleStructuralGSA
 
     public static SpeckleObject ToSpeckle(this GSA1DElementPolyline dummyObject)
     {
-      if (!GSASenderObjects.ContainsKey(typeof(GSA1DElementPolyline)))
-        GSASenderObjects[typeof(GSA1DElementPolyline)] = new List<object>();
+      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSA1DElementPolyline)))
+        Initialiser.GSASenderObjects[typeof(GSA1DElementPolyline)] = new List<object>();
 
       List<GSA1DElementPolyline> polylines = new List<GSA1DElementPolyline>();
 
       // Perform mesh merging
-      var uniqueMembers = new List<string>(GSASenderObjects[typeof(GSA1DElement)].Select(x => (x as GSA1DElement).Member).Where(m => Convert.ToInt32(m) > 0).Distinct());
+      var uniqueMembers = new List<string>(Initialiser.GSASenderObjects[typeof(GSA1DElement)].Select(x => (x as GSA1DElement).Member).Where(m => Convert.ToInt32(m) > 0).Distinct());
       foreach (string member in uniqueMembers)
       {
         try
         {
-          var elementList = GSASenderObjects[typeof(GSA1DElement)].Where(x => (x as GSA1DElement).Member == member).Cast<GSA1DElement>().ToList();
+          var elementList = Initialiser.GSASenderObjects[typeof(GSA1DElement)].Where(x => (x as GSA1DElement).Member == member).Cast<GSA1DElement>().ToList();
           GSA1DElementPolyline poly = new GSA1DElementPolyline() { GSAId = Convert.ToInt32(member) };
-          poly.ParseGWACommand(GSA, elementList);
+          poly.ParseGWACommand(Initialiser.Interface, elementList);
           polylines.Add(poly);
 
-          GSASenderObjects[typeof(GSA1DElement)].RemoveAll(x => elementList.Contains(x));
+          Initialiser.GSASenderObjects[typeof(GSA1DElement)].RemoveAll(x => elementList.Contains(x));
         }
         catch { }
       }
 
-      GSASenderObjects[typeof(GSA1DElementPolyline)].AddRange(polylines);
+      Initialiser.GSASenderObjects[typeof(GSA1DElementPolyline)].AddRange(polylines);
 
       return new SpeckleNull(); // Return null because ToSpeckle method for GSA1DElement will handle this change
     }

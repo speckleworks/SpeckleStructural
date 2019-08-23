@@ -68,7 +68,7 @@ namespace SpeckleStructuralGSA
       var axis = pieces[counter++];
       if (axis == "GLOBAL")
       {
-        obj.Axis = HelperClass.Parse0DAxis(0, GSA, out string temp);
+        obj.Axis = HelperClass.Parse0DAxis(0, Initialiser.Interface, out string temp);
       }
       else if (axis == "LOCAL")
       {
@@ -76,7 +76,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        obj.Axis = HelperClass.Parse0DAxis(Convert.ToInt32(axis), GSA, out string rec, targetNode.Value.Value.ToArray());
+        obj.Axis = HelperClass.Parse0DAxis(Convert.ToInt32(axis), Initialiser.Interface, out string rec, targetNode.Value.Value.ToArray());
         if (rec != null)
           this.SubGWACommand.Add(rec);
       }
@@ -152,7 +152,7 @@ namespace SpeckleStructuralGSA
         }
         ls.Add(axisRef.ToString());
         ls.Add(direction[i]);
-        GSA.RunGWACommand(string.Join("\t", ls));
+        Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
       }
     }
   }
@@ -168,27 +168,27 @@ namespace SpeckleStructuralGSA
 
     public static SpeckleObject ToSpeckle(this GSANodalInfluenceEffect dummyObject)
     {
-      if (!GSASenderObjects.ContainsKey(typeof(GSANodalInfluenceEffect)))
-        GSASenderObjects[typeof(GSANodalInfluenceEffect)] = new List<object>();
+      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSANodalInfluenceEffect)))
+        Initialiser.GSASenderObjects[typeof(GSANodalInfluenceEffect)] = new List<object>();
 
       List<GSANodalInfluenceEffect> infls = new List<GSANodalInfluenceEffect>();
-      List<GSANode> nodes = GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
+      List<GSANode> nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
 
       string keyword = typeof(GSANodalInfluenceEffect).GetGSAKeyword();
       string[] subKeywords = typeof(GSANodalInfluenceEffect).GetSubGSAKeyword();
 
-      string[] lines = GSA.GetGWARecords("GET_ALL\t" + keyword);
-      List<string> deletedLines = GSA.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
+      string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
+      List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
       foreach (string k in subKeywords)
-        deletedLines.AddRange(GSA.GetDeletedGWARecords("GET_ALL\t" + k));
+        deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
 
       // Remove deleted lines
-      GSASenderObjects[typeof(GSANodalInfluenceEffect)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (KeyValuePair<Type, List<object>> kvp in GSASenderObjects)
+      Initialiser.GSASenderObjects[typeof(GSANodalInfluenceEffect)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
+      foreach (KeyValuePair<Type, List<object>> kvp in Initialiser.GSASenderObjects)
         kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
 
       // Filter only new lines
-      string[] prevLines = GSASenderObjects[typeof(GSANodalInfluenceEffect)].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
+      string[] prevLines = Initialiser.GSASenderObjects[typeof(GSANodalInfluenceEffect)].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
       string[] newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
 
       foreach (string p in newLines)
@@ -196,13 +196,13 @@ namespace SpeckleStructuralGSA
         try
         {
           GSANodalInfluenceEffect infl = new GSANodalInfluenceEffect() { GWACommand = p };
-          infl.ParseGWACommand(GSA, nodes);
+          infl.ParseGWACommand(Initialiser.Interface, nodes);
           infls.Add(infl);
         }
         catch { }
       }
 
-      GSASenderObjects[typeof(GSANodalInfluenceEffect)].AddRange(infls);
+      Initialiser.GSASenderObjects[typeof(GSANodalInfluenceEffect)].AddRange(infls);
 
       if (infls.Count() > 0 || deletedLines.Count() > 0) return new SpeckleObject();
 

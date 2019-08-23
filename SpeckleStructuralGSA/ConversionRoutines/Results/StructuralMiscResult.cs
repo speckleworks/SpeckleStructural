@@ -24,18 +24,18 @@ namespace SpeckleStructuralGSA
   {
     public static SpeckleObject ToSpeckle(this GSAMiscResult dummyObject)
     {
-      GSASenderObjects[typeof(GSAMiscResult)] = new List<object>();
+      Initialiser.GSASenderObjects[typeof(GSAMiscResult)] = new List<object>();
 
-      if (Conversions.GSAMiscResults.Count() == 0)
+      if (Initialiser.GSAMiscResults.Count() == 0)
         return new SpeckleNull();
 
       List<GSAMiscResult> results = new List<GSAMiscResult>();
 
-      foreach (KeyValuePair<string, Tuple<string, int, int, List<string>>> kvp in Conversions.GSAMiscResults)
+      foreach (var kvp in Initialiser.GSAMiscResults)
       {
-        foreach (string loadCase in GSAResultCases)
+        foreach (string loadCase in Initialiser.GSAResultCases)
         {
-          if (!GSA.CaseExist(loadCase))
+          if (!Initialiser.Interface.CaseExist(loadCase))
             continue;
 
           int id = 0;
@@ -43,15 +43,15 @@ namespace SpeckleStructuralGSA
 
           if (!string.IsNullOrEmpty(kvp.Value.Item1))
           {
-            highestIndex = (int)GSA.RunGWACommand("HIGHEST\t" + kvp.Value.Item1);
+            highestIndex = (int)Initialiser.Interface.RunGWACommand("HIGHEST\t" + kvp.Value.Item1);
             id = 1;
           }
 
           while (id <= highestIndex)
           {
-            if (id == 0 || (int)GSA.RunGWACommand("EXIST\t" + kvp.Value.Item1 + "\t" + id.ToString()) == 1)
+            if (id == 0 || (int)Initialiser.Interface.RunGWACommand("EXIST\t" + kvp.Value.Item1 + "\t" + id.ToString()) == 1)
             {
-              var resultExport = GSA.GetGSAResult(id, kvp.Value.Item2, kvp.Value.Item3, kvp.Value.Item4, loadCase, GSAResultInLocalAxis ? "local" : "global");
+              var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item2, kvp.Value.Item3, kvp.Value.Item4, loadCase, Initialiser.GSAResultInLocalAxis ? "local" : "global");
 
               if (resultExport == null)
               {
@@ -59,13 +59,15 @@ namespace SpeckleStructuralGSA
                 continue;
               }
 
-              StructuralMiscResult newRes = new StructuralMiscResult();
-              newRes.Description = kvp.Key;
+              var newRes = new StructuralMiscResult
+              {
+                Description = kvp.Key,
+                IsGlobal = !Initialiser.GSAResultInLocalAxis,
+                Value = resultExport,
+                ResultSource = loadCase
+              };
               if (id != 0)
-                newRes.TargetRef = GSA.GetSID(kvp.Value.Item1, id);
-              newRes.IsGlobal = !GSAResultInLocalAxis;
-              newRes.Value = resultExport;
-              newRes.ResultSource = loadCase;
+                newRes.TargetRef = Initialiser.Interface.GetSID(kvp.Value.Item1, id);
               newRes.GenerateHash();
               results.Add(new GSAMiscResult() { Value = newRes });
             }
@@ -74,7 +76,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      GSASenderObjects[typeof(GSAMiscResult)].AddRange(results);
+      Initialiser.GSASenderObjects[typeof(GSAMiscResult)].AddRange(results);
 
       return new SpeckleObject();
     }

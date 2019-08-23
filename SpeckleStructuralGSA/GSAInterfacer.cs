@@ -16,7 +16,7 @@
 
 namespace SpeckleStructuralGSA
 {
-  public class GSAInterfacer
+  public class Initialiser.Interfacer
   {
     public ComAuto GSAObject;
 

@@ -61,7 +61,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      obj.LoadCaseRef = GSA.GetSID(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
+      obj.LoadCaseRef = Initialiser.Interface.GetSID(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
 
       string axis = pieces[counter++];
       this.Axis = axis == "GLOBAL" ? 0 : -1;// Convert.ToInt32(axis); // TODO: Assume local if not global
@@ -166,7 +166,7 @@ namespace SpeckleStructuralGSA
         ls.Add(direction[i]);
         ls.Add(load.Loading.Value[i].ToString());
 
-        GSA.RunGWACommand(string.Join("\t", ls));
+        Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
       }
     }
   }
@@ -183,28 +183,28 @@ namespace SpeckleStructuralGSA
 
     public static SpeckleObject ToSpeckle(this GSA2DLoad dummyObject)
     {
-      if (!GSASenderObjects.ContainsKey(typeof(GSA2DLoad)))
-        GSASenderObjects[typeof(GSA2DLoad)] = new List<object>();
+      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSA2DLoad)))
+        Initialiser.GSASenderObjects[typeof(GSA2DLoad)] = new List<object>();
 
       List<GSA2DLoad> loads = new List<GSA2DLoad>();
-      List<GSA2DElement> elements = GSATargetLayer == GSATargetLayer.Analysis ? GSASenderObjects[typeof(GSA2DElement)].Cast<GSA2DElement>().ToList() : new List<GSA2DElement>();
-      List<GSA2DMember> members = GSATargetLayer == GSATargetLayer.Design ? GSASenderObjects[typeof(GSA2DMember)].Cast<GSA2DMember>().ToList() : new List<GSA2DMember>();
+      List<GSA2DElement> elements = GSATargetLayer == GSATargetLayer.Analysis ? Initialiser.GSASenderObjects[typeof(GSA2DElement)].Cast<GSA2DElement>().ToList() : new List<GSA2DElement>();
+      List<GSA2DMember> members = GSATargetLayer == GSATargetLayer.Design ? Initialiser.GSASenderObjects[typeof(GSA2DMember)].Cast<GSA2DMember>().ToList() : new List<GSA2DMember>();
 
       string keyword = typeof(GSA2DLoad).GetGSAKeyword();
       string[] subKeywords = typeof(GSA2DLoad).GetSubGSAKeyword();
 
-      string[] lines = GSA.GetGWARecords("GET_ALL\t" + keyword);
-      List<string> deletedLines = GSA.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
+      string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
+      List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
       foreach (string k in subKeywords)
-        deletedLines.AddRange(GSA.GetDeletedGWARecords("GET_ALL\t" + k));
+        deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
 
       // Remove deleted lines
-      GSASenderObjects[typeof(GSA2DLoad)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (KeyValuePair<Type, List<object>> kvp in GSASenderObjects)
+      Initialiser.GSASenderObjects[typeof(GSA2DLoad)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
+      foreach (KeyValuePair<Type, List<object>> kvp in Initialiser.GSASenderObjects)
         kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
 
       // Filter only new lines
-      string[] prevLines = GSASenderObjects[typeof(GSA2DLoad)].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
+      string[] prevLines = Initialiser.GSASenderObjects[typeof(GSA2DLoad)].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
       string[] newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
 
       foreach (string p in newLines)
@@ -214,7 +214,7 @@ namespace SpeckleStructuralGSA
         // Placeholder load object to get list of elements and load values
         // Need to transform to axis so one load definition may be transformed to many
         GSA2DLoad initLoad = new GSA2DLoad() { GWACommand = p };
-        initLoad.ParseGWACommand(GSA, elements, members);
+        initLoad.ParseGWACommand(Initialiser.Interface, elements, members);
 
         if (Conversions.GSATargetLayer == GSATargetLayer.Analysis)
         {
@@ -291,7 +291,7 @@ namespace SpeckleStructuralGSA
         loads.AddRange(loadSubList);
       }
 
-      GSASenderObjects[typeof(GSA2DLoad)].AddRange(loads);
+      Initialiser.GSASenderObjects[typeof(GSA2DLoad)].AddRange(loads);
 
       if (loads.Count() > 0 || deletedLines.Count() > 0) return new SpeckleObject();
 

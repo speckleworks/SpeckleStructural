@@ -31,12 +31,12 @@ namespace SpeckleStructuralGSA
       int counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = GSA.GetSID(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Initialiser.Interface.GetSID(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++];
 
       //Find task type
       string taskRef = pieces[counter++];
-      var taskRec = GSA.GetGWARecords("GET\tTASK.1\t" + taskRef).First();
+      var taskRec = Initialiser.Interface.GetGWARecords("GET\tTASK.1\t" + taskRef).First();
       obj.TaskType = HelperClass.GetLoadTaskType(taskRec);
       this.SubGWACommand.Add(taskRec);
 
@@ -55,7 +55,7 @@ namespace SpeckleStructuralGSA
           switch (t.Item1[0])
           {
             case 'L':
-              obj.LoadCaseRefs.Add(GSA.GetSID(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(t.Item1.Substring(1))));
+              obj.LoadCaseRefs.Add(Initialiser.Interface.GetSID(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(t.Item1.Substring(1))));
               obj.LoadFactors.Add(t.Item2);
               break;
           }
@@ -205,7 +205,7 @@ namespace SpeckleStructuralGSA
           ls.Add("1");
           break;
       }
-      GSA.RunGWACommand(string.Join("\t", ls));
+      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
 
       // Set ANAL
       ls.Clear();
@@ -233,7 +233,7 @@ namespace SpeckleStructuralGSA
         }
         ls.Add(string.Join(" + ", subLs));
       }
-      GSA.RunGWACommand(string.Join("\t", ls));
+      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
     }
   }
 
@@ -248,36 +248,36 @@ namespace SpeckleStructuralGSA
 
     public static SpeckleObject ToSpeckle(this GSALoadTask dummyObject)
     {
-      if (!GSASenderObjects.ContainsKey(typeof(GSALoadTask)))
-        GSASenderObjects[typeof(GSALoadTask)] = new List<object>();
+      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSALoadTask)))
+        Initialiser.GSASenderObjects[typeof(GSALoadTask)] = new List<object>();
 
       List<GSALoadTask> loadTasks = new List<GSALoadTask>();
 
       string keyword = typeof(GSALoadTask).GetGSAKeyword();
       string[] subKeywords = typeof(GSALoadTask).GetSubGSAKeyword();
 
-      string[] lines = GSA.GetGWARecords("GET_ALL\t" + keyword);
-      List<string> deletedLines = GSA.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
+      string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
+      List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
       foreach (string k in subKeywords)
-        deletedLines.AddRange(GSA.GetDeletedGWARecords("GET_ALL\t" + k));
+        deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
 
       // Remove deleted lines
-      GSASenderObjects[typeof(GSALoadTask)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (KeyValuePair<Type, List<object>> kvp in GSASenderObjects)
+      Initialiser.GSASenderObjects[typeof(GSALoadTask)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
+      foreach (KeyValuePair<Type, List<object>> kvp in Initialiser.GSASenderObjects)
         kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
 
       // Filter only new lines
-      string[] prevLines = GSASenderObjects[typeof(GSALoadTask)].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
+      string[] prevLines = Initialiser.GSASenderObjects[typeof(GSALoadTask)].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
       string[] newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
 
       foreach (string p in newLines)
       {
         GSALoadTask task = new GSALoadTask() { GWACommand = p };
-        task.ParseGWACommand(GSA);
+        task.ParseGWACommand(Initialiser.Interface);
         loadTasks.Add(task);
       }
 
-      GSASenderObjects[typeof(GSALoadTask)].AddRange(loadTasks);
+      Initialiser.GSASenderObjects[typeof(GSALoadTask)].AddRange(loadTasks);
 
       if (loadTasks.Count() > 0 || deletedLines.Count() > 0) return new SpeckleObject();
 

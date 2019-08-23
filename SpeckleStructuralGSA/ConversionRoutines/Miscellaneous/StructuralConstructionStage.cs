@@ -27,7 +27,7 @@ namespace SpeckleStructuralGSA
       int counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = GSA.GetSID(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Initialiser.Interface.GetSID(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++];
 
       counter++; //Skip colour
@@ -132,7 +132,7 @@ namespace SpeckleStructuralGSA
           stageDef.StageDays.ToString() // Stage
         };
 
-      GSA.RunGWACommand(string.Join("\t", ls));
+      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
     }
   }
 
@@ -149,8 +149,8 @@ namespace SpeckleStructuralGSA
 
     public static SpeckleObject ToSpeckle(this GSAConstructionStage dummyObject)
     {
-      if (!GSASenderObjects.ContainsKey(typeof(GSAConstructionStage)))
-        GSASenderObjects[typeof(GSAConstructionStage)] = new List<object>();
+      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSAConstructionStage)))
+        Initialiser.GSASenderObjects[typeof(GSAConstructionStage)] = new List<object>();
 
       List<GSAConstructionStage> stageDefs = new List<GSAConstructionStage>();
       var e1Ds = new List<GSA1DElement>();
@@ -160,30 +160,30 @@ namespace SpeckleStructuralGSA
 
       if (Conversions.GSATargetLayer == GSATargetLayer.Analysis)
       {
-        e1Ds = GSASenderObjects[typeof(GSA1DElement)].Cast<GSA1DElement>().ToList();
-        e2Ds = GSASenderObjects[typeof(GSA2DElement)].Cast<GSA2DElement>().ToList();
+        e1Ds = Initialiser.GSASenderObjects[typeof(GSA1DElement)].Cast<GSA1DElement>().ToList();
+        e2Ds = Initialiser.GSASenderObjects[typeof(GSA2DElement)].Cast<GSA2DElement>().ToList();
       }
       else if (Conversions.GSATargetLayer == GSATargetLayer.Design)
       {
-        m1Ds = GSASenderObjects[typeof(GSA1DMember)].Cast<GSA1DMember>().ToList();
-        m2Ds = GSASenderObjects[typeof(GSA2DMember)].Cast<GSA2DMember>().ToList();
+        m1Ds = Initialiser.GSASenderObjects[typeof(GSA1DMember)].Cast<GSA1DMember>().ToList();
+        m2Ds = Initialiser.GSASenderObjects[typeof(GSA2DMember)].Cast<GSA2DMember>().ToList();
       }
 
       string keyword = typeof(GSAConstructionStage).GetGSAKeyword();
       string[] subKeywords = typeof(GSAConstructionStage).GetSubGSAKeyword();
 
-      string[] lines = GSA.GetGWARecords("GET_ALL\t" + keyword);
-      List<string> deletedLines = GSA.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
+      string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
+      List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
       foreach (string k in subKeywords)
-        deletedLines.AddRange(GSA.GetDeletedGWARecords("GET_ALL\t" + k));
+        deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
 
       // Remove deleted lines
-      GSASenderObjects[typeof(GSAConstructionStage)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (KeyValuePair<Type, List<object>> kvp in GSASenderObjects)
+      Initialiser.GSASenderObjects[typeof(GSAConstructionStage)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
+      foreach (KeyValuePair<Type, List<object>> kvp in Initialiser.GSASenderObjects)
         kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
 
       // Filter only new lines
-      string[] prevLines = GSASenderObjects[typeof(GSAConstructionStage)].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
+      string[] prevLines = Initialiser.GSASenderObjects[typeof(GSAConstructionStage)].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
       string[] newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
 
       foreach (string p in newLines)
@@ -191,13 +191,13 @@ namespace SpeckleStructuralGSA
         try
         {
           GSAConstructionStage stageDef = new GSAConstructionStage() { GWACommand = p };
-          stageDef.ParseGWACommand(GSA, e1Ds, e2Ds, m1Ds, m2Ds);
+          stageDef.ParseGWACommand(Initialiser.Interface, e1Ds, e2Ds, m1Ds, m2Ds);
           stageDefs.Add(stageDef);
         }
         catch { }
       }
 
-      GSASenderObjects[typeof(GSAConstructionStage)].AddRange(stageDefs);
+      Initialiser.GSASenderObjects[typeof(GSAConstructionStage)].AddRange(stageDefs);
 
       if (stageDefs.Count() > 0 || deletedLines.Count() > 0) return new SpeckleObject();
 

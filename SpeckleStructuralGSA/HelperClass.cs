@@ -864,7 +864,7 @@ namespace SpeckleStructuralGSA
     /// <param name="gwaRecord">GWA record of AXIS if used</param>
     /// <param name="evalAtCoor">Coordinates to evaluate axis at</param>
     /// <returns>Axis</returns>
-    public static StructuralAxis Parse0DAxis(int axis, IGSAInterfacer gsaInterface, out string gwaRecord, double[] evalAtCoor = null)
+    public static StructuralAxis Parse0DAxis(int axis, IGSAInterfacer interfacer, out string gwaRecord, double[] evalAtCoor = null)
     {
       Vector3D x;
       Vector3D y;
@@ -915,7 +915,7 @@ namespace SpeckleStructuralGSA
               new StructuralVectorThree(new double[] { z.X, z.Y, z.Z })
           );
         default:
-          string res = gsaInterface.GetGWARecords("GET\tAXIS\t" + axis.ToString()).FirstOrDefault();
+          string res = Initialiser.Interface.GetGWARecords("GET\tAXIS\t" + axis.ToString()).FirstOrDefault();
           gwaRecord = res;
 
           string[] pieces = res.Split(new char[] { '\t' });
@@ -1109,7 +1109,7 @@ namespace SpeckleStructuralGSA
 
     public static int NodeAt(IGSAInterfacer GSA, double x, double y, double z, double coincidentNodeAllowance, string applicationId = null)
     {
-      return GSA.NodeAt(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).Name, x, y, z, Conversions.GSACoincidentNodeAllowance, applicationId);
+      return GSA.NodeAt(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).Name, x, y, z, Initialiser.Settings.CoincidentNodeAllowance, applicationId);
     }
     #endregion
   }

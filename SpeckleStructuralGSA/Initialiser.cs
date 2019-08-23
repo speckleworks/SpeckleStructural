@@ -12,19 +12,9 @@ namespace SpeckleStructuralGSA
 
     public Initialiser() { }
 
-    //public static GSAInterfacer GSA { get; set; } = new GSAInterfacer();
+    //public static Initialiser.Interfacer GSA { get; set; } = new Initialiser.Interfacer();
 
     public static Dictionary<Type, List<object>> GSASenderObjects { get; set; } = new Dictionary<Type, List<object>>();
-
-    //public static string GSAUnits { get; set; }
-
-    //public static double GSACoincidentNodeAllowance { get; set; }
-
-    //public static GSATargetLayer GSATargetLayer { get; set; }
-
-    //public static bool GSATargetDesignLayer { set => GSATargetLayer = value ? GSATargetLayer.Design : GSATargetLayer.Analysis; }
-
-    //public static bool GSATargetAnalysisLayer { set => GSATargetLayer = value ? GSATargetLayer.Analysis : GSATargetLayer.Design; }
 
     public static Dictionary<string, Tuple<int, int, List<string>>> GSANodalResults { get; set; } = new Dictionary<string, Tuple<int, int, List<string>>>();
   

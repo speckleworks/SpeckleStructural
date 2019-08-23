@@ -58,7 +58,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      obj.LoadCaseRef = GSA.GetSID(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
+      obj.LoadCaseRef = Initialiser.Interface.GetSID(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
 
       var loadingType = pieces[counter++];
 
@@ -151,7 +151,7 @@ namespace SpeckleStructuralGSA
         ls.Add(loading.BottomTemperature.ToString());
       }
 
-      GSA.RunGWACommand(string.Join("\t", ls));
+      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
     }
   }
 
@@ -169,8 +169,8 @@ namespace SpeckleStructuralGSA
 
     public static SpeckleObject ToSpeckle(this GSA2DThermalLoading dummyObject)
     {
-      if (!GSASenderObjects.ContainsKey(typeof(GSA2DThermalLoading)))
-        GSASenderObjects[typeof(GSA2DThermalLoading)] = new List<object>();
+      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSA2DThermalLoading)))
+        Initialiser.GSASenderObjects[typeof(GSA2DThermalLoading)] = new List<object>();
 
       List<GSA2DThermalLoading> loads = new List<GSA2DThermalLoading>();
       var e2Ds = new List<GSA2DElement>();
@@ -178,38 +178,38 @@ namespace SpeckleStructuralGSA
 
       if (Conversions.GSATargetLayer == GSATargetLayer.Analysis)
       {
-        e2Ds = GSASenderObjects[typeof(GSA2DElement)].Cast<GSA2DElement>().ToList();
+        e2Ds = Initialiser.GSASenderObjects[typeof(GSA2DElement)].Cast<GSA2DElement>().ToList();
       }
       else if (Conversions.GSATargetLayer == GSATargetLayer.Design)
       {
-        m2Ds = GSASenderObjects[typeof(GSA2DMember)].Cast<GSA2DMember>().ToList();
+        m2Ds = Initialiser.GSASenderObjects[typeof(GSA2DMember)].Cast<GSA2DMember>().ToList();
       }
 
       string keyword = typeof(GSA2DThermalLoading).GetGSAKeyword();
       string[] subKeywords = typeof(GSA2DThermalLoading).GetSubGSAKeyword();
 
-      string[] lines = GSA.GetGWARecords("GET_ALL\t" + keyword);
-      List<string> deletedLines = GSA.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
+      string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
+      List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
       foreach (string k in subKeywords)
-        deletedLines.AddRange(GSA.GetDeletedGWARecords("GET_ALL\t" + k));
+        deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
 
       // Remove deleted lines
-      GSASenderObjects[typeof(GSA2DThermalLoading)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (KeyValuePair<Type, List<object>> kvp in GSASenderObjects)
+      Initialiser.GSASenderObjects[typeof(GSA2DThermalLoading)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
+      foreach (KeyValuePair<Type, List<object>> kvp in Initialiser.GSASenderObjects)
         kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
 
       // Filter only new lines
-      string[] prevLines = GSASenderObjects[typeof(GSA2DThermalLoading)].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
+      string[] prevLines = Initialiser.GSASenderObjects[typeof(GSA2DThermalLoading)].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
       string[] newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
 
       foreach (string p in newLines)
       {
         GSA2DThermalLoading load= new GSA2DThermalLoading() { GWACommand = p };
-        load.ParseGWACommand(GSA, e2Ds, m2Ds);
+        load.ParseGWACommand(Initialiser.Interface, e2Ds, m2Ds);
         loads.Add(load);
       }
 
-      GSASenderObjects[typeof(GSA2DThermalLoading)].AddRange(loads);
+      Initialiser.GSASenderObjects[typeof(GSA2DThermalLoading)].AddRange(loads);
 
       if (loads.Count() > 0 || deletedLines.Count() > 0) return new SpeckleObject();
 

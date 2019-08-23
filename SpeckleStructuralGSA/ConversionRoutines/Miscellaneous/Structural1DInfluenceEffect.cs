@@ -152,7 +152,7 @@ namespace SpeckleStructuralGSA
         }
         ls.Add("GLOBAL"); // TODO: GSA TEAM TO LOOK INTO THIS. GLOBAL IS DEFAULT IN GSA
         ls.Add(direction[i]);
-        GSA.RunGWACommand(string.Join("\t", ls));
+        Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
       }
     }
   }
@@ -168,27 +168,27 @@ namespace SpeckleStructuralGSA
 
     public static SpeckleObject ToSpeckle(this GSA1DInfluenceEffect dummyObject)
     {
-      if (!GSASenderObjects.ContainsKey(typeof(GSA1DInfluenceEffect)))
-        GSASenderObjects[typeof(GSA1DInfluenceEffect)] = new List<object>();
+      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSA1DInfluenceEffect)))
+        Initialiser.GSASenderObjects[typeof(GSA1DInfluenceEffect)] = new List<object>();
 
       List<GSA1DInfluenceEffect> infls = new List<GSA1DInfluenceEffect>();
-      List<GSA1DElement> e1Ds = GSASenderObjects[typeof(GSA1DElement)].Cast<GSA1DElement>().ToList();
+      List<GSA1DElement> e1Ds = Initialiser.GSASenderObjects[typeof(GSA1DElement)].Cast<GSA1DElement>().ToList();
 
       string keyword = typeof(GSA1DInfluenceEffect).GetGSAKeyword();
       string[] subKeywords = typeof(GSA1DInfluenceEffect).GetSubGSAKeyword();
 
-      string[] lines = GSA.GetGWARecords("GET_ALL\t" + keyword);
-      List<string> deletedLines = GSA.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
+      string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
+      List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
       foreach (string k in subKeywords)
-        deletedLines.AddRange(GSA.GetDeletedGWARecords("GET_ALL\t" + k));
+        deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
 
       // Remove deleted lines
-      GSASenderObjects[typeof(GSA1DInfluenceEffect)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (KeyValuePair<Type, List<object>> kvp in GSASenderObjects)
+      Initialiser.GSASenderObjects[typeof(GSA1DInfluenceEffect)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
+      foreach (KeyValuePair<Type, List<object>> kvp in Initialiser.GSASenderObjects)
         kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
 
       // Filter only new lines
-      string[] prevLines = GSASenderObjects[typeof(GSA1DInfluenceEffect)].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
+      string[] prevLines = Initialiser.GSASenderObjects[typeof(GSA1DInfluenceEffect)].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
       string[] newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
 
       foreach (string p in newLines)
@@ -196,13 +196,13 @@ namespace SpeckleStructuralGSA
         try
         {
           GSA1DInfluenceEffect infl = new GSA1DInfluenceEffect() { GWACommand = p };
-          infl.ParseGWACommand(GSA, e1Ds);
+          infl.ParseGWACommand(Initialiser.Interface, e1Ds);
           infls.Add(infl);
         }
         catch { }
       }
 
-      GSASenderObjects[typeof(GSA1DInfluenceEffect)].AddRange(infls);
+      Initialiser.GSASenderObjects[typeof(GSA1DInfluenceEffect)].AddRange(infls);
 
       if (infls.Count() > 0 || deletedLines.Count() > 0) return new SpeckleObject();
 
