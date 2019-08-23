@@ -12,7 +12,7 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   // Keyword set as MEMB to not clash with grouping of members
-  [GSAObject("MEMB.7", new string[] { }, "elements", true, false, new Type[] { typeof(GSA2DElement), typeof(GSA2DLoad), typeof(GSA2DElementResult), typeof(GSAAssembly), typeof(GSAConstructionStage) }, new Type[] { typeof(GSA2DElement), typeof(GSA2DProperty) })]
+  [GSAObject("MEMB.7", new string[] { }, "elements", true, false, new Type[] { typeof(GSA2DElement), typeof(GSA2DLoad), typeof(GSA2DElementResult), typeof(GSAAssembly), typeof(GSAConstructionStage) }, new Type[] { typeof(GSA2DProperty) })]
   public class GSA2DElementMesh : IGSASpeckleContainer
   {
     public int GSAId { get; set; }
