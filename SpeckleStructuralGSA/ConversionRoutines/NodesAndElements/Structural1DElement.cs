@@ -11,7 +11,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("EL.4", new string[] { "NODE.2" }, "elements", true, false, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSA1DProperty), typeof(GSASpringProperty) })]
+  [GSAObject("EL.4", new string[] { "NODE.2" }, "elements", true, false, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode), typeof(GSA1DProperty), typeof(GSASpringProperty) })]
   public class GSA1DElement : IGSASpeckleContainer
   {
     public string Member;
@@ -227,7 +227,7 @@ namespace SpeckleStructuralGSA
     }
   }
 
-  [GSAObject("MEMB.7", new string[] { "NODE.2" }, "elements", false, true, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSA1DProperty), typeof(GSASpringProperty) })]
+  [GSAObject("MEMB.7", new string[] { "NODE.2" }, "elements", false, true, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode), typeof(GSA1DProperty), typeof(GSASpringProperty) })]
   public class GSA1DMember : IGSASpeckleContainer
   {
     public int Group; // Keep for load targetting
