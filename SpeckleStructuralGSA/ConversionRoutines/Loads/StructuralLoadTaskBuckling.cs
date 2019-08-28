@@ -140,7 +140,7 @@ namespace SpeckleStructuralGSA
 
       //    // Remove deleted lines
       //    Initialiser.GSASenderObjects[typeof(GSALoadTaskBuckling)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      //    foreach (KeyValuePair<Type, List<object>> kvp in Initialiser.GSASenderObjects)
+      //    foreach (var kvp in Initialiser.GSASenderObjects)
       //      kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
 
       //    // Filter only new lines

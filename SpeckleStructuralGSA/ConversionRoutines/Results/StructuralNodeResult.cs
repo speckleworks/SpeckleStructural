@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using SpeckleCore;
-using SpeckleCoreGeometryClasses;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
@@ -25,19 +21,19 @@ namespace SpeckleStructuralGSA
   {
     public static SpeckleObject ToSpeckle(this GSANodeResult dummyObject)
     {
-      if (Initialiser.GSANodalResults.Count() == 0)
+      if (Initialiser.Settings.NodalResults.Count() == 0)
         return new SpeckleNull();
 
-      if (Initialiser.GSAEmbedResults && !Initialiser.GSASenderObjects.ContainsKey(typeof(GSANode)))
+      if (Initialiser.Settings.EmbedResults && !Initialiser.GSASenderObjects.ContainsKey(typeof(GSANode)))
         return new SpeckleNull();
 
-      if (Initialiser.GSAEmbedResults)
+      if (Initialiser.Settings.EmbedResults)
       {
         var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
 
-        foreach (var kvp in Initialiser.GSANodalResults)
+        foreach (var kvp in Initialiser.Settings.NodalResults)
         {
-          foreach (string loadCase in Initialiser.GSAResultCases)
+          foreach (string loadCase in Initialiser.Settings.ResultCases)
           {
             if (!Initialiser.Interface.CaseExist(loadCase))
               continue;
@@ -49,7 +45,7 @@ namespace SpeckleStructuralGSA
               if (node.Value.Result == null)
                 node.Value.Result = new Dictionary<string, object>();
 
-              var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.GSAResultInLocalAxis ? "local" : "global");
+              var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
 
               if (resultExport == null)
                 continue;
@@ -74,9 +70,9 @@ namespace SpeckleStructuralGSA
 
         string keyword = HelperClass.GetGSAKeyword(typeof(GSANode));
 
-        foreach (var kvp in Initialiser.GSANodalResults)
+        foreach (var kvp in Initialiser.Settings.NodalResults)
         {
-          foreach (string loadCase in Initialiser.GSAResultCases)
+          foreach (string loadCase in Initialiser.Settings.ResultCases)
           {
             if (!Initialiser.Interface.CaseExist(loadCase))
               continue;
@@ -88,7 +84,7 @@ namespace SpeckleStructuralGSA
             {
               if ((int)Initialiser.Interface.RunGWACommand("EXIST\t" + keyword + "\t" + id.ToString()) == 1)
               {
-                var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.GSAResultInLocalAxis ? "local" : "global");
+                var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
 
                 if (resultExport == null)
                 {
@@ -103,7 +99,7 @@ namespace SpeckleStructuralGSA
                   {
                     Value = new Dictionary<string, object>(),
                     TargetRef = Initialiser.Interface.GetSID(typeof(GSANode).GetGSAKeyword(), id),
-                    IsGlobal = !Initialiser.GSAResultInLocalAxis,
+                    IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
                   };
                   newRes.Value[kvp.Key] = resultExport;
 

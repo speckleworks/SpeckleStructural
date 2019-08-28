@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using SpeckleCore;
-using SpeckleCoreGeometryClasses;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
@@ -26,14 +22,14 @@ namespace SpeckleStructuralGSA
     {
       Initialiser.GSASenderObjects[typeof(GSAMiscResult)] = new List<object>();
 
-      if (Initialiser.GSAMiscResults.Count() == 0)
+      if (Initialiser.Settings.MiscResults.Count() == 0)
         return new SpeckleNull();
 
       List<GSAMiscResult> results = new List<GSAMiscResult>();
 
-      foreach (var kvp in Initialiser.GSAMiscResults)
+      foreach (var kvp in Initialiser.Settings.MiscResults)
       {
-        foreach (string loadCase in Initialiser.GSAResultCases)
+        foreach (string loadCase in Initialiser.Settings.ResultCases)
         {
           if (!Initialiser.Interface.CaseExist(loadCase))
             continue;
@@ -51,7 +47,7 @@ namespace SpeckleStructuralGSA
           {
             if (id == 0 || (int)Initialiser.Interface.RunGWACommand("EXIST\t" + kvp.Value.Item1 + "\t" + id.ToString()) == 1)
             {
-              var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item2, kvp.Value.Item3, kvp.Value.Item4, loadCase, Initialiser.GSAResultInLocalAxis ? "local" : "global");
+              var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item2, kvp.Value.Item3, kvp.Value.Item4, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
 
               if (resultExport == null)
               {
@@ -62,7 +58,7 @@ namespace SpeckleStructuralGSA
               var newRes = new StructuralMiscResult
               {
                 Description = kvp.Key,
-                IsGlobal = !Initialiser.GSAResultInLocalAxis,
+                IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
                 Value = resultExport,
                 ResultSource = loadCase
               };

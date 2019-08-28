@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
 using SpeckleGSAInterfaces;
@@ -39,7 +37,7 @@ namespace SpeckleStructuralGSA
       obj.Offset = new List<StructuralVectorThree>();
       obj.ResultVertices = new List<double>();
 
-      if (Initialiser.GSAElement1DResults.Count > 0 && Initialiser.GSAEmbedResults)
+      if (Initialiser.Settings.Element1DResults.Count > 0 && Initialiser.Settings.EmbedResults)
         obj.Result = new Dictionary<string, object>();
 
       // Match up coordinates
@@ -93,7 +91,7 @@ namespace SpeckleStructuralGSA
           obj.EndRelease.AddRange(element.Value.EndRelease);
           obj.Offset.AddRange(element.Value.Offset);
 
-          if (Initialiser.GSAElement1DResults.Count > 0 && Initialiser.GSAEmbedResults)
+          if (Initialiser.Settings.Element1DResults.Count > 0 && Initialiser.Settings.EmbedResults)
             obj.ResultVertices.AddRange(element.Value.ResultVertices);
           else
             obj.ResultVertices.AddRange((element.Value.Value as List<double>));
@@ -107,7 +105,7 @@ namespace SpeckleStructuralGSA
           obj.Offset.Add((element.Value.Offset as List<StructuralVectorThree>).Last());
           obj.Offset.Add((element.Value.Offset as List<StructuralVectorThree>).First());
 
-          if (Initialiser.GSAElement1DResults.Count > 0 && Initialiser.GSAEmbedResults)
+          if (Initialiser.Settings.Element1DResults.Count > 0 && Initialiser.Settings.EmbedResults)
             for (int i = element.Value.ResultVertices.Count - 3; i >= 0; i -= 3)
               obj.ResultVertices.AddRange((element.Value.ResultVertices as List<double>).Skip(i).Take(3));
           else
@@ -128,7 +126,7 @@ namespace SpeckleStructuralGSA
                 obj.Result[loadCase] = new Structural1DElementResult()
                 {
                   Value = new Dictionary<string, object>(),
-                  IsGlobal = !Initialiser.GSAResultInLocalAxis,
+                  IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
                 };
 
               var resultExport = element.Value.Result[loadCase] as Structural1DElementResult;
@@ -188,9 +186,9 @@ namespace SpeckleStructuralGSA
 
       foreach (Structural1DElement element in elements)
       {
-        if (Conversions.GSATargetLayer == GSATargetLayer.Analysis)
+        if (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
           new GSA1DElement() { Value = element }.SetGWACommand(Initialiser.Interface, group);
-        else if (Conversions.GSATargetLayer == GSATargetLayer.Design)
+        else if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
           new GSA1DMember() { Value = element }.SetGWACommand(Initialiser.Interface, group);
       }
     }

@@ -217,12 +217,8 @@
     <Compile Include="ConversionRoutines\NodesAndElements\StructuralNode.cs" />
     <Compile Include="ConversionRoutines\Results\StructuralMiscResult.cs" />
     <Compile Include="ConversionRoutines\Results\StructuralNodeResult.cs" />
-    <Compile Include="ConversionsBase.cs" />
     <Compile Include="Enum.cs" />
-    <Compile Include="GSAInterfacer.cs" />
-    <Compile Include="GSAObject.cs" />
     <Compile Include="HelperClass.cs" />
-    <Compile Include="Indexer.cs" />
     <Compile Include="Initialiser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

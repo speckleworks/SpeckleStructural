@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
@@ -127,9 +125,9 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this StructuralSpringProperty prop)
     {
-      if (Conversions.GSATargetLayer == GSATargetLayer.Analysis)
+      if (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
         new GSASpringProperty() { Value = prop }.SetGWACommand(Initialiser.Interface);
-      else if (Conversions.GSATargetLayer == GSATargetLayer.Design)
+      else if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
         new GSASpringProperty() { Value = prop }.SetGWACommand(Initialiser.Interface);
 
       return true;
@@ -155,7 +153,7 @@ namespace SpeckleStructuralGSA
 
       // Remove deleted lines
       Initialiser.GSASenderObjects[objType].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (KeyValuePair<Type, List<object>> kvp in Initialiser.GSASenderObjects)
+      foreach (var kvp in Initialiser.GSASenderObjects)
         kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
 
       // Filter only new lines

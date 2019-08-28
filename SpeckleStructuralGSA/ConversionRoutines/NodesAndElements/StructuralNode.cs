@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
 using SpeckleGSAInterfaces;
@@ -346,7 +344,7 @@ namespace SpeckleStructuralGSA
 
       // Remove deleted lines
       Initialiser.GSASenderObjects[typeof(GSANode)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (KeyValuePair<Type, List<object>> kvp in Initialiser.GSASenderObjects)
+      foreach (var kvp in Initialiser.GSASenderObjects)
         kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
 
       // Filter only new lines
@@ -386,7 +384,7 @@ namespace SpeckleStructuralGSA
       bool changed = false;
 
       // Remove deleted lines
-      foreach (KeyValuePair<Type, List<object>> kvp in Initialiser.GSASenderObjects)
+      foreach (var kvp in Initialiser.GSASenderObjects)
         foreach (IGSASpeckleContainer o in kvp.Value.Where(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x))))
         {
           o.Value.Mass = 0;

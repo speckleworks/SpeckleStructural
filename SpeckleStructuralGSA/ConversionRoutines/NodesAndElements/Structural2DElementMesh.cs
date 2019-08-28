@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
 using SpeckleGSAInterfaces;
@@ -37,7 +35,7 @@ namespace SpeckleStructuralGSA
       obj.Axis = new List<StructuralAxis>();
       obj.Offset = new List<double>();
 
-      if (Initialiser.GSAElement2DResults.Count > 0 && Initialiser.GSAEmbedResults)
+      if (Initialiser.Settings.Element2DResults.Count > 0 && Initialiser.Settings.EmbedResults)
         obj.Result = new Dictionary<string, object>();
 
       foreach (GSA2DElement e in elements)
@@ -63,7 +61,7 @@ namespace SpeckleStructuralGSA
                 obj.Result[loadCase] = new Structural2DElementResult()
                 {
                   Value = new Dictionary<string, object>(),
-                  IsGlobal = !Initialiser.GSAResultInLocalAxis,
+                  IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
                 };
 
               var resultExport = e.Value.Result[loadCase] as Structural2DElementResult;
@@ -115,7 +113,7 @@ namespace SpeckleStructuralGSA
 
       foreach (Structural2DElement element in elements)
       {
-        if (Conversions.GSATargetLayer == GSATargetLayer.Analysis)
+        if (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
           new GSA2DElement() { Value = element }.SetGWACommand(Initialiser.Interface, group);
       }
     }
@@ -139,9 +137,9 @@ namespace SpeckleStructuralGSA
 
     public static bool ToNative(this Structural2DElementMesh mesh)
     {
-      if (Conversions.GSATargetLayer == GSATargetLayer.Analysis)
+      if (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
         new GSA2DElementMesh() { Value = mesh }.SetGWACommand(Initialiser.Interface);
-      else if (Conversions.GSATargetLayer == GSATargetLayer.Design)
+      else if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
         new GSA2DMember() { Value = mesh }.SetGWACommand(Initialiser.Interface);
 
       return true;
