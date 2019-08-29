@@ -345,18 +345,11 @@ namespace SpeckleStructuralGSA
     /// <returns>Attribute value</returns>
     public static object GetAttribute(this object t, string attribute)
     {
+      var attributeType = typeof(GSAConversionAttribute);
       try
       {
-        if (t is Type)
-        {
-          GSAObject attObj = (GSAObject)Attribute.GetCustomAttribute((Type)t, typeof(GSAObject));
-          return typeof(GSAObject).GetProperty(attribute).GetValue(attObj);
-        }
-        else
-        {
-          GSAObject attObj = (GSAObject)Attribute.GetCustomAttribute(t.GetType(), typeof(GSAObject));
-          return typeof(GSAObject).GetProperty(attribute).GetValue(attObj);
-        }
+        var attObj = (t is Type) ? Attribute.GetCustomAttribute((Type)t, attributeType) : Attribute.GetCustomAttribute(t.GetType(), attributeType);
+        return attributeType.GetProperty(attribute).GetValue(attObj);
       }
       catch { return null; }
     }

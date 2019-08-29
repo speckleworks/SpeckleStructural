@@ -8,7 +8,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("LOAD_BEAM", new string[] { "EL.3", "MEMB.7" }, "loads", true, true, new Type[] { typeof(GSA1DElement), typeof(GSA1DMember) }, new Type[] { typeof(GSA1DElement), typeof(GSA1DMember), typeof(GSA1DElementPolyline) })]
+  [GSAConversion("LOAD_BEAM", new string[] { "EL.3", "MEMB.7" }, "loads", true, true, new Type[] { typeof(GSA1DElement), typeof(GSA1DMember) }, new Type[] { typeof(GSA1DElement), typeof(GSA1DMember), typeof(GSA1DElementPolyline) })]
   public class GSA1DLoad : IGSASpeckleContainer
   {
     public int Axis; // Store this temporarily to generate other loads

@@ -7,7 +7,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("ALIGN.1", new string[] { }, "misc", true, true, new Type[] { }, new Type[] { })]
+  [GSAConversion("ALIGN.1", new string[] { }, "misc", true, true, new Type[] { }, new Type[] { })]
   public class GSABridgeAlignment : IGSASpeckleContainer
   {
     public int GSAId { get; set; }

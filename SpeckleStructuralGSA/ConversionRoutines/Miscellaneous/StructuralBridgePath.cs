@@ -7,7 +7,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("PATH.1", new string[] { "ALIGN.1" }, "misc", true, true, new Type[] { }, new Type[] { })]
+  [GSAConversion("PATH.1", new string[] { "ALIGN.1" }, "misc", true, true, new Type[] { }, new Type[] { })]
   public class GSABridgePath
   {
     public int GSAId { get; set; }

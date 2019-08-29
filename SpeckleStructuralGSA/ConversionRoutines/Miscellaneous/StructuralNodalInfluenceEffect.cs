@@ -7,7 +7,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("INF_NODE.1", new string[] { }, "misc", true, false, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode) })]
+  [GSAConversion("INF_NODE.1", new string[] { }, "misc", true, false, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode) })]
   public class GSANodalInfluenceEffect : IGSASpeckleContainer
   {
     public int GSAId { get; set; }

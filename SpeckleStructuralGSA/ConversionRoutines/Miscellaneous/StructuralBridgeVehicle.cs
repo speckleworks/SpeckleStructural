@@ -7,7 +7,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("USER_VEHICLE.1", new string[] { }, "misc", true, true, new Type[] { }, new Type[] { })]
+  [GSAConversion("USER_VEHICLE.1", new string[] { }, "misc", true, true, new Type[] { }, new Type[] { })]
   public class GSABridgeVehicle
   {
     public int GSAId { get; set; }

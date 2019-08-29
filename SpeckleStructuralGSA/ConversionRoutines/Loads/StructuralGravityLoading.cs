@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("LOAD_GRAVITY.2", new string[] { }, "loads", true, true, new Type[] { typeof(GSALoadCase) }, new Type[] { typeof(GSALoadCase) })]
+  [GSAConversion("LOAD_GRAVITY.2", new string[] { }, "loads", true, true, new Type[] { typeof(GSALoadCase) }, new Type[] { typeof(GSALoadCase) })]
   public class GSAGravityLoading : IGSASpeckleContainer
   {
     public int GSAId { get; set; }
