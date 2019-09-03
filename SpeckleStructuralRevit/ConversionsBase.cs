@@ -74,7 +74,7 @@ namespace SpeckleStructuralRevit
             // populate units dictionary
             UnitDictionary[ p.Definition.UnitType.ToString() ] = p.DisplayUnitType.ToString();
           }
-          catch( Exception e )
+          catch
           {
             myParamDict[ p.Definition.Name ] = val;
           }
@@ -161,7 +161,7 @@ namespace SpeckleStructuralRevit
             break;
           }
         }
-        catch( Exception e )
+        catch
         {
         }
       }
