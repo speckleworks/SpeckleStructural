@@ -207,7 +207,7 @@ namespace SpeckleStructuralGSA
       ls.Add(gridPlaneIndex.ToString());
       ls.Add(load.Name == null || load.Name == "" ? " " : load.Name);
       ls.Add("GENERAL"); // Type
-      ls.Add(GSA.SetAxis(axis).ToString());
+      ls.Add(GSA.SetAxis(axis, load.Name).ToString());
       ls.Add(elevation.ToString());
       ls.Add("0"); // Elevation above
       ls.Add("0"); // Elevation below

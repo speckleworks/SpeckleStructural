@@ -485,9 +485,9 @@ namespace SpeckleStructuralGSA
             return "STD%T(" + gsaUnit + ")%" + depth.ToString() + "%" + width.ToString() + "%" + T.ToString() + "%" + t.ToString();
           }
         }
-        else if (prop.Shape == Structural1DPropertyShape.Generic)
-        {
-        }
+        // Structural1DPropertyShape.Generic
+
+
 
         if (X.Count() < 3 || Y.Count() < 3) return "";
 
@@ -501,11 +501,25 @@ namespace SpeckleStructuralGSA
 
         for (int i = 0; i < X.Count(); i++)
         {
-          string point = i == 0 ? "M" : "L";
-
-          point += "(" + X[i].ToString() + "|" + Y[i].ToString() + ")";
+          string point = ((i == 0) ? "M" : "L") + "(" + X[i].ToString() + "|" + Y[i].ToString() + ")";
 
           ls.Add(point);
+        }
+
+        if (prop.Voids != null && prop.Voids.Count() > 0)
+        {
+          foreach (var propVoid in prop.Voids)
+          {
+            X = (propVoid as SpecklePolyline).Value.Where((x, i) => i % 3 == 0).ToList();
+            Y = (propVoid as SpecklePolyline).Value.Where((x, i) => i % 3 == 1).ToList();
+
+            for (int i = 0; i < X.Count(); i++)
+            {
+              string point = ((i == 0) ? "M" : "L") + "(" + X[i].ToString() + "|" + Y[i].ToString() + ")";
+
+              ls.Add(point);
+            }
+          }
         }
 
         return string.Join("%", ls);

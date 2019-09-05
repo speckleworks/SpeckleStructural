@@ -95,7 +95,7 @@ namespace SpeckleStructuralGSA
       else
         try
         {
-          axisRef = GSA.SetAxis(springProp.Axis).ToString();
+          axisRef = GSA.SetAxis(springProp.Axis, springProp.Name).ToString();
         }
         catch { axisRef = "GLOBAL"; }
 

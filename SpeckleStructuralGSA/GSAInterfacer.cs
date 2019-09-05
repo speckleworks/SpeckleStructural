@@ -1,16 +1,17 @@
-﻿using Interop.Gsa_10_0;
-using SpeckleCore;
-using SpeckleStructuralClasses;
-using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Media.Media3D;
+﻿  using Interop.Gsa_10_0;
+  using SpeckleCore;
+  using SpeckleCoreGeometryClasses;
+  using SpeckleStructuralClasses;
+  using SQLite;
+  using System;
+  using System.Collections.Generic;
+  using System.Diagnostics;
+  using System.Linq;
+  using System.Reflection;
+  using System.Text;
+  using System.Text.RegularExpressions;
+  using System.Threading.Tasks;
+  using System.Windows.Media.Media3D;
 
 namespace SpeckleStructuralGSA
 {
@@ -118,7 +119,7 @@ namespace SpeckleStructuralGSA
         if ((result as string) == (PreviousGSAGetCache[command] as string))
           return new string[0];
 
-        string[] newPieces = ((string)result).Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries).Select((s,idx) => idx.ToString() + ":" + s).ToArray();
+        string[] newPieces = ((string)result).Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries).Select((s, idx) => idx.ToString() + ":" + s).ToArray();
         string[] prevPieces = ((string)PreviousGSAGetCache[command]).Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries).Select((s, idx) => idx.ToString() + ":" + s).ToArray();
 
         string[] ret = newPieces.Where(n => !prevPieces.Contains(n)).ToArray();
@@ -173,72 +174,18 @@ namespace SpeckleStructuralGSA
         {
           if (!GSAGetCache.ContainsKey(command))
           {
-            if (command.StartsWith("GET_ALL\tMEMB"))
+            // Let's speed things up a bit
+            var commandPieces = command.Split(new char[] { '\t' });
+            var newCommand = "GET_ALL\t" + commandPieces[1];
+
+            GSAGetCache[newCommand] = GSAObject.GwaCommand(newCommand);
+
+            var allRecords = ((string)GSAGetCache[newCommand]).Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (string rec in allRecords)
             {
-              // TODO: Member GET_ALL work around
-              GSAObject.EntitiesInList("all", GsaEntity.MEMBER, out int[] memberRefs);
-
-              if (memberRefs == null || memberRefs.Length == 0)
-                return "";
-
-              List<string> result = new List<string>();
-
-              foreach (int r in memberRefs)
-                (result as List<string>).Add((string)RunGWACommand("GET\tMEMB\t" + r.ToString()));
-
-              GSAGetCache[command] = string.Join("\n", result);
-            }
-            else if (command.StartsWith("GET_ALL\tANAL.") || (command.StartsWith("GET_ALL\tANAL\t")))
-            {
-              // TODO: Anal GET_ALL work around
-              int highestRef = (int)RunGWACommand("HIGHEST\tANAL.1");
-
-              List<string> result = new List<string>();
-
-              for (int i = 1; i <= highestRef; i++)
-              {
-                string res = (string)RunGWACommand("GET\tANAL\t" + i.ToString());
-                if (res != null && res != "")
-                  (result as List<string>).Add(res);
-              }
-
-              GSAGetCache[command] = string.Join("\n", result);
-            }
-            else if (command.StartsWith("GET_ALL\tPOLYLINE"))
-            {
-              // TODO: Polyline GET_ALL work around
-              int highestRef = (int)RunGWACommand("HIGHEST\tPOLYLINE.1");
-
-              List<string> result = new List<string>();
-
-              for (int i = 1; i <= highestRef; i++)
-              {
-                string res = (string)RunGWACommand("GET\tPOLYLINE\t" + i.ToString());
-                if (res != null && res != "")
-                  (result as List<string>).Add(res);
-              }
-
-              GSAGetCache[command] = string.Join("\n", result);
-            }
-            else if (!command.StartsWith("GET\tMEMB") && !(command.StartsWith("GET\tANAL.") || command.StartsWith("GET\tANAL\t")) && !command.StartsWith("GET\tPOLYLINE"))
-            {
-              // Let's speed things up a bit
-              var commandPieces = command.Split(new char[] { '\t' });
-              var newCommand = "GET_ALL\t" + commandPieces[1];
-
-              GSAGetCache[newCommand] = GSAObject.GwaCommand(newCommand);
-
-              var allRecords = ((string)GSAGetCache[newCommand]).Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
-              
-              foreach(string rec in allRecords)
-              {
-                var recPieces = rec.Split(new char[] { '\t' });
-                GSAGetCache["GET\t" + commandPieces[1] + "\t" + recPieces[1]] = rec;
-              }
-            }
-            else
-            {
-              GSAGetCache[command] = GSAObject.GwaCommand(command);
+              var recPieces = rec.Split(new char[] { '\t' });
+              GSAGetCache["GET\t" + commandPieces[1] + "\t" + recPieces[1]] = rec;
             }
           }
 
@@ -281,13 +228,13 @@ namespace SpeckleStructuralGSA
 
         string[] split = p.ListSplit("\t");
 
-				if (split[1].IsDigits())
+        if (split[1].IsDigits())
         {
           // Uses SET
           if (!Indexer.InBaseline(split[0], Convert.ToInt32(split[1])))
             RunGWACommand("BLANK\t" + split[0] + "\t" + split[1], false);
         }
-				else if (split[0].IsDigits())
+        else if (split[0].IsDigits())
         {
 
           // Uses SET_AT
@@ -331,11 +278,11 @@ namespace SpeckleStructuralGSA
           }
         }
         else
-				{
-					//Some commands - like "LOAD_GRAVITY.2" and "LOAD_2D_THERMAL.2" have no indices at all in their GWA commands
+        {
+          //Some commands - like "LOAD_GRAVITY.2" and "LOAD_2D_THERMAL.2" have no indices at all in their GWA commands
           //TODO
-				}
-			}
+        }
+      }
     }
     #endregion
 
@@ -373,8 +320,10 @@ namespace SpeckleStructuralGSA
     /// </summary>
     /// <param name="axis">Axis to set</param>
     /// <returns>Index of axis</returns>
-    public int SetAxis(StructuralAxis axis)
+    public int SetAxis(StructuralAxis axis, string name = "")
     {
+      string gwaAxisName = name ?? "";
+
       if (axis.Xdir.Value.SequenceEqual(new double[] { 1, 0, 0 }) &&
           axis.Ydir.Value.SequenceEqual(new double[] { 0, 1, 0 }) &&
           axis.Normal.Value.SequenceEqual(new double[] { 0, 0, 1 }))
@@ -387,7 +336,7 @@ namespace SpeckleStructuralGSA
       ls.Add("SET");
       ls.Add("AXIS");
       ls.Add(res.ToString());
-      ls.Add("");
+      ls.Add(gwaAxisName);
       ls.Add("CART");
 
       ls.Add("0");
@@ -401,6 +350,38 @@ namespace SpeckleStructuralGSA
       ls.Add(axis.Ydir.Value[0].ToString());
       ls.Add(axis.Ydir.Value[1].ToString());
       ls.Add(axis.Ydir.Value[2].ToString());
+
+      RunGWACommand(string.Join("\t", ls));
+
+      return res;
+    }
+
+    public int SetAxis(SpeckleVector xVector, SpeckleVector xyVector, SpecklePoint origin, string name = "")
+    {
+      int res = Indexer.ResolveIndex("AXIS");
+
+      string gwaAxisName = name ?? "";
+
+      var ls = new List<string>()
+        {
+          "SET",
+          "AXIS",
+          res.ToString(),
+          gwaAxisName,
+          "CART",
+
+          origin.Value[0].ToString(),
+          origin.Value[1].ToString(),
+          origin.Value[2].ToString(),
+
+          xVector.Value[0].ToString(),
+          xVector.Value[1].ToString(),
+          xVector.Value[2].ToString(),
+
+          xyVector.Value[0].ToString(),
+          xyVector.Value[1].ToString(),
+          xyVector.Value[2].ToString(),
+        };
 
       RunGWACommand(string.Join("\t", ls));
 
@@ -874,7 +855,7 @@ namespace SpeckleStructuralGSA
     {
       string res = GetGWARecords("GET\tPOLYLINE.1\t" + polylineRef.ToString()).FirstOrDefault();
       string[] pieces = res.ListSplit("\t");
-      
+
       return (pieces[6], res);
     }
 
@@ -958,7 +939,7 @@ namespace SpeckleStructuralGSA
         if (pieces[i].IsDigits())
           items.Add(Convert.ToInt32(pieces[i]));
         else if (pieces[i].Contains('"'))
-        { 
+        {
           items.AddRange(ConvertNamedGSAList(pieces[i], type));
         }
         else if (pieces[i] == "to")
@@ -1015,7 +996,7 @@ namespace SpeckleStructuralGSA
       catch
       {
         try
-        { 
+        {
           GSAObject.EntitiesInList("\"" + list + "\"", (GsaEntity)type, out int[] itemTemp);
           if (itemTemp == null)
             return new int[0];
@@ -1113,7 +1094,7 @@ namespace SpeckleStructuralGSA
             SidCache[keyword + "\t" + id.ToString()] = GSAObject.GetSidTagValue(keyword, id, SID_TAG);
             if (string.IsNullOrEmpty(SidCache[keyword + "\t" + id.ToString()]))
               SidCache[keyword + "\t" + id.ToString()] = "gsa/" + keyword + "_" + id.ToString();
-          } 
+          }
         }
         catch
         {
@@ -1231,7 +1212,7 @@ namespace SpeckleStructuralGSA
           res = new GsaResults[numPos];
 
           try
-          { 
+          {
             for (int i = 0; i < numPos; i++)
               res[i] = new GsaResults() { dynaResults = new double[] { (double)GSAObject.Output_Extract(id, i) } };
           }
@@ -1255,7 +1236,8 @@ namespace SpeckleStructuralGSA
 
         return ret;
       }
-      catch {
+      catch
+      {
         Dictionary<string, object> ret = new Dictionary<string, object>();
 
         foreach (string key in keys)

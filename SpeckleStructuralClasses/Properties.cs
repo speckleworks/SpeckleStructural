@@ -32,6 +32,20 @@ namespace SpeckleStructuralClasses
     Bottom,
   }
 
+  public enum StructuralSpringPropertyType
+  {
+    General,
+    Axial,
+    Torsional,
+    //Matrix, not supported yet
+    Compression,
+    Tension,
+    Connector,
+    Lockup,
+    Gap,
+    Friction
+  }
+
   [Serializable]
   public partial class StructuralMaterialConcrete : SpeckleObject, IStructural
   {
@@ -117,6 +131,10 @@ namespace SpeckleStructuralClasses
     [JsonProperty("profile", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
     public SpeckleObject Profile { get; set; }
 
+    /// <summary>SpecklePolyline or SpeckleCircle of the cross-section.</summary>
+    [JsonProperty("voids", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public List<SpeckleObject> Voids { get; set; }
+
     /// <summary>Cross-section shape.</summary>
     [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     [JsonProperty("shape", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
@@ -183,6 +201,24 @@ namespace SpeckleStructuralClasses
 
         base.Properties["structural"] = value;
       }
+    }
+
+    /// <summary>Application ID of StructuralSpringProperty.</summary>
+    [JsonIgnore]
+    public double DampingRatio
+    {
+      get => StructuralProperties.ContainsKey("dampingRatio") ? (double)StructuralProperties["dampingRatio"] : 0;
+      set => StructuralProperties["dampingRatio"] = value;
+    }
+
+    /// <summary>Application ID of StructuralSpringProperty.</summary>
+    [JsonIgnore]
+    public StructuralSpringPropertyType SpringType
+    {
+      get => StructuralProperties.ContainsKey("springType")
+        ? (StructuralSpringPropertyType)Enum.Parse(typeof(StructuralSpringPropertyType), (StructuralProperties["springType"] as string), true)
+        : StructuralSpringPropertyType.General;
+      set => StructuralProperties["springType"] = value.ToString();
     }
 
     /// <summary>Local axis of the spring.</summary>

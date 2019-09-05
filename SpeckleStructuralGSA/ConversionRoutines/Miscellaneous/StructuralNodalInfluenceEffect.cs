@@ -123,7 +123,7 @@ namespace SpeckleStructuralGSA
       if (!nodeRef.HasValue)
         return;
 
-      int axisRef = GSA.SetAxis(infl.Axis);
+      int axisRef = GSA.SetAxis(infl.Axis, infl.Name);
 
       string[] direction = new string[6] { "X", "Y", "Z", "XX", "YY", "ZZ" };
 
