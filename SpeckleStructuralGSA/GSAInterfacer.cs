@@ -17,7 +17,7 @@ namespace SpeckleStructuralGSA
 {
   public class GSAInterfacer
   {
-    public ComAuto GSAObject;
+    public IComAuto GSAObject;
 
     public Indexer Indexer = new Indexer();
 
@@ -33,8 +33,13 @@ namespace SpeckleStructuralGSA
 
     private string PreviousGSAResultInit = "";
 
+    public List<string> GetSetCache()
+    {
+      return GSASetCache.Keys.Where(k => k.Contains(SID_TAG)).ToList();
+    }
+
     #region Communication
-    public void InitializeReceiver(ComAuto GSAObject)
+    public void InitializeReceiver(IComAuto GSAObject)
     {
       FullClearCache();
       this.GSAObject = GSAObject;
@@ -50,7 +55,7 @@ namespace SpeckleStructuralGSA
       BlankDepreciatedGWASetCommands();
     }
 
-    public void InitializeSender(ComAuto GSAObject)
+    public void InitializeSender(IComAuto GSAObject)
     {
       FullClearCache();
       this.GSAObject = GSAObject;

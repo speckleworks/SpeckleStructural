@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -29,7 +30,9 @@ namespace SpeckleStructuralGSA.Test
           var response = ResponseObject.FromJson(json);
           speckleObjects.AddRange(response.Resources);
         }
-        catch { }
+        catch (Exception e)
+        {
+        }
       }
       return speckleObjects;
     }
@@ -129,6 +132,24 @@ namespace SpeckleStructuralGSA.Test
         }
       }
       catch { return null; }
+    }
+
+    public static bool IsReferencing(this Assembly assembly, AssemblyName referenceName)
+    {
+      if (AssemblyName.ReferenceMatchesDefinition(assembly.GetName(), referenceName))
+      {
+        return true;
+      }
+
+      foreach (var referencedAssemblyName in assembly.GetReferencedAssemblies())
+      {
+        if (AssemblyName.ReferenceMatchesDefinition(referencedAssemblyName, referenceName))
+        {
+          return true;
+        }
+      }
+
+      return false;
     }
   }
 }
