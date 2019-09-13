@@ -1,0 +1,10 @@
+[
+  {
+    "ApplicationId": "testAppId01",
+    "GwaCommand": "testGwaCommand01"
+  },
+  {
+    "ApplicationId": "testAppId02",
+    "GwaCommand": "testGwaCommand02"
+  }
+]
