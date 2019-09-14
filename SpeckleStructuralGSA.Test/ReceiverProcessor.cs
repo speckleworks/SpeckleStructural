@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Interop.Gsa_10_0;
+using Moq;
 using SpeckleCore;
 
 
@@ -18,38 +17,74 @@ namespace SpeckleStructuralGSA.Test
     private bool TargetDesignLayer = true;
     private bool TargetAnalysisLayer = false;
 
-    private IComAuto mockGsaCom;
-    private GSAInterfacer GSAInterfacer;
+    private GSAInterfacer GSAInterfacer = Initialiser.GSA;
+    private List<SpeckleObject> receivedObjects;
 
     //This should match the private member in GSAInterfacer
     private const string SID_TAG = "speckle_app_id";
 
-    public bool SpeckleToGwa(List<SpeckleObject> receivedObjects, out List<Tuple<string, string>> gwaPerIds, bool designLayer = true, bool analysisLayer = false)
+    public bool JsonSpeckleStreamsToGwaRecords(IEnumerable<string> savedJsonFileNames, out List<GwaRecord> gwaRecords, bool designLayer = true, bool analysisLayer = false)
     {
+      gwaRecords = new List<GwaRecord>();
+
+      receivedObjects = JsonSpeckleStreamsToSpeckleObjects(savedJsonFileNames);
+
       TargetDesignLayer = designLayer;
       TargetAnalysisLayer = analysisLayer;
-      GSAInterfacer = Initialiser.GSA;
-      IComAuto mockGsaCom = new MockGsaCom();
-      gwaPerIds = new List<Tuple<string, string>>();
 
-      // Run initialize receiver method in interfacer
-      var assemblies = SpeckleInitializer.GetAssemblies();
+      SetupMockGsaCom();
 
-      GSAInterfacer.InitializeReceiver(mockGsaCom);
+      ConstructTypeCastPriority();
 
+      GSAInterfacer.Indexer.SetBaseline();
+
+      GSAInterfacer.PreReceiving();
+
+      ScaleObjects();
+
+      GSAInterfacer.Indexer.ResetToBaseline();
+
+      ConvertSpeckleObjectsToGsaInterfacerCache();
+
+      var gwaCommands = GSAInterfacer.GetSetCache();
+      foreach (var gwaC in gwaCommands)
+      {
+        gwaRecords.Add(new GwaRecord(ExtractApplicationId(gwaC), gwaC));
+      }
+
+      return true;
+    }
+
+    #region private_methods
+    private void SetupMockGsaCom()
+    {
+      var mockGsaCom = new Mock<IComAuto>();
+      //So far only these methods are actually called
+      mockGsaCom.Setup(x => x.Gen_NodeAt(It.IsAny<double>(), It.IsAny<double>(), It.IsAny<double>(), It.IsAny<double>())).Returns((double x, double y, double z, double coin) => 1);
+      mockGsaCom.Setup(x => x.GwaCommand(It.IsAny<string>())).Returns((string x) => { return x.Contains("GET") ? (object)"" : (object)1; });
+
+      GSAInterfacer.InitializeReceiver(mockGsaCom.Object);
+    }
+
+    private List<SpeckleObject> JsonSpeckleStreamsToSpeckleObjects(IEnumerable<string> savedJsonFileNames)
+    {
+      //This uses the installed SpeckleKits - when SpeckleStructural is built, the built files are copied into the 
+      // %LocalAppData%\SpeckleKits directory, so therefore this project doesn't need to reference the projects within in this solution
+      SpeckleInitializer.Initialize();
+
+      //Read JSON files into objects
+      return Helper.ExtractObjects(savedJsonFileNames.ToArray());
+    }
+
+    private void ConstructTypeCastPriority()
+    {
       // Grab GSA interface and attribute type
       var attributeType = typeof(GSAObject);
       var interfaceType = typeof(IGSASpeckleContainer);
-      
+
       // Grab all GSA related object
-      var objTypes = new List<Type>();
-      foreach (var ass in assemblies)
-      {
-        var types = ass.GetTypes();
-        foreach (var type in types)
-          if (interfaceType.IsAssignableFrom(type) && type != interfaceType)
-            objTypes.Add(type);
-      }
+      var ass = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "SpeckleStructuralGSA");
+      var objTypes = ass.GetTypes().Where(t => interfaceType.IsAssignableFrom(t) && t != interfaceType).ToList();
 
       foreach (var t in objTypes)
       {
@@ -83,12 +118,10 @@ namespace SpeckleStructuralGSA.Test
       // Generate which GSA object to cast for each type
       TypeCastPriority = TypePrerequisites.ToList();
       TypeCastPriority.Sort((x, y) => x.Value.Count().CompareTo(y.Value.Count()));
-      
-      GSAInterfacer.Indexer.SetBaseline();
-   
-      // Run pre receiving method and inject!!!!
-      GSAInterfacer.PreReceiving();
+    }
 
+    private void ScaleObjects()
+    {
       //Status.ChangeStatus("Scaling objects");
       var scaleFactor = (1.0).ConvertUnit("mm", "m");
       foreach (SpeckleObject o in receivedObjects)
@@ -99,9 +132,10 @@ namespace SpeckleStructuralGSA.Test
         }
         catch { }
       }
+    }
 
-      GSAInterfacer.Indexer.ResetToBaseline();
-
+    private void ConvertSpeckleObjectsToGsaInterfacerCache()
+    {
       // Write objects
       var currentBatch = new List<Type>();
       var traversedTypes = new List<Type>();
@@ -112,8 +146,6 @@ namespace SpeckleStructuralGSA.Test
 
         foreach (var t in currentBatch)
         {
-          //Status.ChangeStatus("Writing " + t.Name);
-
           var dummyObject = Activator.CreateInstance(t);
 
           var valueType = t.GetProperty("Value").GetValue(dummyObject).GetType();
@@ -128,22 +160,13 @@ namespace SpeckleStructuralGSA.Test
 
       // Write leftover
       Converter.Deserialise(receivedObjects);
-
-      GSAInterfacer.PostReceiving();
-
-      var gwaCommands = GSAInterfacer.GetSetCache();
-      foreach (var gwaC in gwaCommands)
-      {
-        gwaPerIds.Add(new Tuple<string, string>(ExtractApplicationId(gwaC), gwaC));
-      }
-
-      return true;
     }
 
     private string ExtractApplicationId(string gwaCommand)
     {
       return gwaCommand.Split(new string[] { SID_TAG }, StringSplitOptions.None)[1].Substring(1).Split('}')[0];
     }
+    #endregion
   }
 }
 
