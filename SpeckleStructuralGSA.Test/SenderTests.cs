@@ -16,20 +16,24 @@ namespace SpeckleStructuralGSA.Test
   {
     public SenderTests() : base(AppDomain.CurrentDomain.BaseDirectory.TrimEnd(new[] { '\\' }) + @"\..\..\TestData\") { }
 
+    public static string[] resultTypes = new[] { "Nodal Reaction", "1D Element Strain Energy Density", "1D Element Force", "Nodal Displacements", "1D Element Stress" };
+    public static string[] loadCases = new[] { "A2", "C1" };
+    public static string gsaFileName = "20180906 - Existing structure GSA_V7_modified.gwb";
+
     [OneTimeSetUp]
     public void SetupTests()
     {
       //This uses the installed SpeckleKits - when SpeckleStructural is built, the built files are copied into the 
       // %LocalAppData%\SpeckleKits directory, so therefore this project doesn't need to reference the projects within in this solution
       SpeckleInitializer.Initialize();
-      OpenGsaFile("20180906 - Existing structure GSA_V7_modified.gwb");
+      OpenGsaFile(gsaFileName);
     }
 
     [TestCase("TxSpeckleObjectsDesignLayer.json", GSATargetLayer.Design, false, true)]
-    [TestCase("TxSpeckleObjectsResultsOnly.json", GSATargetLayer.Analysis, true, false, new[] { "A2", "C1" }, new[] { "Nodal Reaction", "0D Element Displacement", "1D Element Force" })]
-    [TestCase("TxSpeckleObjectsEmbedded.json", GSATargetLayer.Analysis, false, true, new[] { "A2", "C1" }, new[] { "Nodal Reaction", "0D Element Displacement", "1D Element Force" })]
-    [TestCase("TxSpeckleObjectsNotEmbedded.json", GSATargetLayer.Analysis, false, false, new[] { "A2", "C1" }, new[] { "Nodal Reaction", "0D Element Displacement", "1D Element Force" })]
-    public void RunTransmissionTest(string inputJsonFileName, GSATargetLayer layer, bool resultsOnly, bool embedResults, string[] cases = null, string[] resultsToSend = null)
+    [TestCase("TxSpeckleObjectsResultsOnly.json", GSATargetLayer.Analysis, true, false)]
+    [TestCase("TxSpeckleObjectsEmbedded.json", GSATargetLayer.Analysis, false, true)]
+    [TestCase("TxSpeckleObjectsNotEmbedded.json", GSATargetLayer.Analysis, false, false)]
+    public void RunTransmissionTest(string inputJsonFileName, GSATargetLayer layer, bool resultsOnly, bool embedResults)
     {
       //Deserialise into Speckle Objects so that these can be compared in any order
 
@@ -40,7 +44,7 @@ namespace SpeckleStructuralGSA.Test
       var expectedObjects = JsonConvert.DeserializeObject<List<SpeckleObject>>(expectedFullJson, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
       expectedObjects = expectedObjects.OrderBy(a => a.ApplicationId).ToList();
 
-      var actualObjects = ModelToSpeckleObjects(layer, resultsOnly, embedResults, cases, resultsToSend);
+      var actualObjects = ModelToSpeckleObjects(layer, resultsOnly, embedResults, loadCases, resultTypes);
       Assert.IsNotNull(actualObjects);
 
       actualObjects = actualObjects.OrderBy(a => a.ApplicationId).ToList();

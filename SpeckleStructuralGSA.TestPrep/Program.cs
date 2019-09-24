@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SpeckleCore;
+using SpeckleStructuralGSA.Test;
 
 namespace SpeckleStructuralGSA.TestPrep
 {
@@ -20,7 +21,7 @@ namespace SpeckleStructuralGSA.TestPrep
       var TestDataDirectory = AppDomain.CurrentDomain.BaseDirectory.TrimEnd(new[] { '\\' }) + @"\..\..\..\SpeckleStructuralGSA.Test\TestData\";
 
       var receiverTestPrep = new ReceiverTestPrep(TestDataDirectory);
-      if (!receiverTestPrep.SetUpReceptionTestData(new[] { "lfsaIEYkR.json", "NaJD7d5kq.json", "U7ntEJkzdZ.json", "UNg87ieJG.json" }, "TestGwaRecords.json", GSATargetLayer.Design))
+      if (!receiverTestPrep.SetUpReceptionTestData(ReceiverTests.savedJsonFileNames, ReceiverTests.expectedGwaPerIdsFileName, GSATargetLayer.Design))
       {
         Console.WriteLine("Error in preparing test data for the rx design layer test");
       }
@@ -30,10 +31,7 @@ namespace SpeckleStructuralGSA.TestPrep
       }
 
       var senderTestPrep = new SenderTestPrep(TestDataDirectory);
-      senderTestPrep.SetupContext("20180906 - Existing structure GSA_V7_modified.gwb");
-
-      var loadCases = new[] { "A2", "C1" };
-      var resultTypes = new [] { "Nodal Reaction", "1D Element Strain Energy Density", "1D Element Force", "Nodal Displacements", "1D Element Stress" };
+      senderTestPrep.SetupContext(SenderTests.gsaFileName);
 
       try
       {
@@ -42,17 +40,17 @@ namespace SpeckleStructuralGSA.TestPrep
           throw new Exception("Transmission: design layer test preparation failed");
         }
         Console.WriteLine("Prepared test data for the tx design layer test");
-        if (!senderTestPrep.SetUpTransmissionTestData("TxSpeckleObjectsResultsOnly.json", GSATargetLayer.Analysis, true, false, loadCases, resultTypes))
+        if (!senderTestPrep.SetUpTransmissionTestData("TxSpeckleObjectsResultsOnly.json", GSATargetLayer.Analysis, true, false, SenderTests.loadCases, SenderTests.resultTypes))
         {
           throw new Exception("Transmission: results-only test preparation failed");
         }
         Console.WriteLine("Prepared test data for the tx results-only test");
-        if (!senderTestPrep.SetUpTransmissionTestData("TxSpeckleObjectsEmbedded.json", GSATargetLayer.Analysis, false, true, loadCases, resultTypes))
+        if (!senderTestPrep.SetUpTransmissionTestData("TxSpeckleObjectsEmbedded.json", GSATargetLayer.Analysis, false, true, SenderTests.loadCases, SenderTests.resultTypes))
         {
           throw new Exception("Transmission: embedded test preparation failed");
         }
         Console.WriteLine("Prepared test data for the tx embedded results test");
-        if (!senderTestPrep.SetUpTransmissionTestData("TxSpeckleObjectsNotEmbedded.json", GSATargetLayer.Analysis, false, false, loadCases, resultTypes))
+        if (!senderTestPrep.SetUpTransmissionTestData("TxSpeckleObjectsNotEmbedded.json", GSATargetLayer.Analysis, false, false, SenderTests.loadCases, SenderTests.resultTypes))
         {
           throw new Exception("Transmission: not-embedded test preparation failed");
         }

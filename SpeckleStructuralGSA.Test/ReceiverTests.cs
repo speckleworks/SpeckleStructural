@@ -9,6 +9,9 @@ namespace SpeckleStructuralGSA.Test
   [TestFixture]
   public class ReceiverTests : TestBase
   {
+    public static string[] savedJsonFileNames = new[] { "lfsaIEYkR.json", "NaJD7d5kq.json", "U7ntEJkzdZ.json", "UNg87ieJG.json" };
+    public static string expectedGwaPerIdsFileName = "TestGwaRecords.json";
+
     public ReceiverTests() : base(AppDomain.CurrentDomain.BaseDirectory.TrimEnd(new[] { '\\' }) + @"\..\..\TestData\") { }
 
     [OneTimeSetUp]
@@ -23,10 +26,10 @@ namespace SpeckleStructuralGSA.Test
 
     //Reception test
     //- Load saved JSON files from 
-    [TestCase(new[] { "lfsaIEYkR.json", "NaJD7d5kq.json", "U7ntEJkzdZ.json", "UNg87ieJG.json" }, "TestGwaRecords.json", GSATargetLayer.Design)]
-    public void ReceiverTestDesignLayer(string[] savedJsonFileNames, string expectedGwaPerIdsFile, GSATargetLayer layer)
+    [TestCase(GSATargetLayer.Design)]
+    public void ReceiverTestDesignLayer(GSATargetLayer layer)
     {
-      DoReceiverTest(savedJsonFileNames, expectedGwaPerIdsFile, layer);
+      DoReceiverTest(savedJsonFileNames, expectedGwaPerIdsFileName, layer);
     }
 
     private void DoReceiverTest(string[] savedJsonFileNames, string expectedGwaPerIdsFile, GSATargetLayer layer)
