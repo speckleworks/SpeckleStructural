@@ -1,5 +1,8 @@
 [
   {
+    "GwaCommand": "SET\tAXIS\t1\tAlignment One\tCART\t0\t0\t20\t1\t0\t0\t0\t1\t0"
+  },
+  {
     "ApplicationId": "AL1",
     "GwaCommand": "SET\tGRID_PLANE.4:{speckle_app_id:AL1}\t1\tAlignment One\tGENERAL\t1\t0\t0\t0"
   },
@@ -14,6 +17,9 @@
   {
     "ApplicationId": "LSP1",
     "GwaCommand": "SET\tPROP_SPR.3:{speckle_app_id:LSP1}\t1\tLSP One\tNO_RGB\tGLOBAL\tGENERAL\t0\t12\t0\t15\t0\t20\t0\t25\t0\t30\t0\t38\t0"
+  },
+  {
+    "GwaCommand": "SET\tNODE.2\t1\t"
   },
   {
     "ApplicationId": "gh/8471296211afb5f5eebbffa4e899dbec",
@@ -60,6 +66,9 @@
     "GwaCommand": "SET\tGRID_SURFACE.1:{speckle_app_id:Live}\t2\tLive load panel\t2\t2\tall\t0.01\tONE\t0"
   },
   {
+    "GwaCommand": "SET\tAXIS\t2\tLive load panel\tCART\t0\t0\t0\t1\t0\t0\t0\t-1\t0"
+  },
+  {
     "ApplicationId": "Live",
     "GwaCommand": "SET\tGRID_PLANE.4:{speckle_app_id:Live}\t2\tLive load panel\tGENERAL\t2\t-11.58\t0\t0"
   },
@@ -70,6 +79,9 @@
   {
     "ApplicationId": "SDL",
     "GwaCommand": "SET\tGRID_SURFACE.1:{speckle_app_id:SDL}\t3\tDead load panel\t3\t2\tall\t0.01\tONE\t0"
+  },
+  {
+    "GwaCommand": "SET\tAXIS\t3\tDead load panel\tCART\t0\t0\t0\t1\t0\t0\t0\t-1\t0"
   },
   {
     "ApplicationId": "SDL",

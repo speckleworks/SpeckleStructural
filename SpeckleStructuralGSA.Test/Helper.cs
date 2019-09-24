@@ -11,47 +11,6 @@ namespace SpeckleStructuralGSA.Test
 {
   public static class Helper
   {
-    public static string TestDataDirectory = AppDomain.CurrentDomain.BaseDirectory + @"/../../TestData/";
-
-    public static List<SpeckleObject> ExtractObjects(string fileName)
-    {
-      return ExtractObjects(new string[] { fileName });
-    }
-
-    public static List<SpeckleObject> ExtractObjects(string[] fileNames)
-    {
-      var speckleObjects = new List<SpeckleObject>();
-      foreach (var fileName in fileNames)
-      {
-        var json = Helper.ReadFile(fileName);
-
-        try
-        {
-          var response = ResponseObject.FromJson(json);
-          speckleObjects.AddRange(response.Resources);
-        }
-        catch (Exception e)
-        {
-        }
-      }
-      return speckleObjects;
-    }
-
-    public static List<ResponseObject> DeserialiseTestData(string fileName)
-    {
-      return DeserialiseTestData(new string[] { fileName });
-    }
-
-    public static List<ResponseObject> DeserialiseTestData(string[] fileNames)
-    {
-      var responses = new List<ResponseObject>();
-      foreach (var fileName in fileNames)
-      {
-        var json = ReadFile(fileName);
-        responses.Add(ResponseObject.FromJson(json));
-      }
-      return responses;
-    }
     public static T DeserialiseJson<T>(string json)
     {
       var response = default(T);
@@ -71,11 +30,10 @@ namespace SpeckleStructuralGSA.Test
       return response;
     }
 
-    public static string ReadFile(string testDataFileName, string directoryOverride = "")
+    public static string ReadFile(string testDataFileName, string directory)
     {
       byte[] buffer;
       //Directory should have a trailing slash
-      var directory = (directoryOverride == "") ? TestDataDirectory : directoryOverride;
      
       var fileStream = new FileStream(directory + testDataFileName, FileMode.Open, FileAccess.Read);
       try
@@ -98,11 +56,15 @@ namespace SpeckleStructuralGSA.Test
       return Encoding.UTF8.GetString(buffer);
     }
 
-    public static void WriteFile(string data, string fileName, string directoryOverride = "")
+    public static string ResolveFullPath(string fileName, string directory)
     {
       //Directory should have a trailing slash
-      var directory = (directoryOverride == "") ? TestDataDirectory : directoryOverride;
 
+      return (directory + fileName);
+    }
+
+    public static void WriteFile(string data, string fileName, string directory)
+    {
       var stream = new MemoryStream();
       var writer = new StreamWriter(stream);
       writer.Write(data);
@@ -111,7 +73,7 @@ namespace SpeckleStructuralGSA.Test
       stream.Position = 0;
       stream.Seek(0, SeekOrigin.Begin);
 
-      var fileStream = File.Create(directory + fileName);
+      var fileStream = File.Create(ResolveFullPath(fileName, directory));
       stream.CopyTo(fileStream);
       fileStream.Close();
     }

@@ -33,10 +33,24 @@ namespace SpeckleStructuralGSA
 
     private string PreviousGSAResultInit = "";
 
+    #region methods_for_testing
     public List<string> GetSetCache()
     {
-      return GSASetCache.Keys.Where(k => k.Contains(SID_TAG)).ToList();
+      //return GSASetCache.Keys.Where(k => k.Contains(SID_TAG)).ToList();
+      return GSASetCache.Keys.ToList();
     }
+
+    public Dictionary<string, object> GetGetCache()
+    {
+      return GSAGetCache;
+    }
+
+    public void SetGetCache(Dictionary<string, object> cache)
+    {
+      GSAGetCache = cache;
+    }
+
+    #endregion
 
     #region Communication
     public void InitializeReceiver(IComAuto GSAObject)

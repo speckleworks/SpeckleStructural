@@ -9,32 +9,22 @@ using SpeckleCore;
 namespace SpeckleStructuralGSA.Test
 {
   //Copied from the Receiver class in SpeckleGSA - this will be refactored to simplify and avoid dependency
-  public class ReceiverProcessor
+  public class ReceiverProcessor : ProcessorBase
   {
-    private Dictionary<Type, List<Type>> TypePrerequisites = new Dictionary<Type, List<Type>>();
-    private List<KeyValuePair<Type, List<Type>>> TypeCastPriority = new List<KeyValuePair<Type, List<Type>>>();
-
-    private bool TargetDesignLayer = true;
-    private bool TargetAnalysisLayer = false;
-
-    private GSAInterfacer GSAInterfacer = Initialiser.GSA;
     private List<SpeckleObject> receivedObjects;
 
-    //This should match the private member in GSAInterfacer
-    private const string SID_TAG = "speckle_app_id";
+    public ReceiverProcessor(string directory, GSAInterfacer gsaInterfacer, GSATargetLayer layer = GSATargetLayer.Design) : base (directory)
+    {
+      GSAInterfacer = gsaInterfacer;
+      Initialiser.GSATargetLayer = layer;
+      ConstructTypeCastPriority(ioDirection.Receive, false);
+    }
 
-    public bool JsonSpeckleStreamsToGwaRecords(IEnumerable<string> savedJsonFileNames, out List<GwaRecord> gwaRecords, bool designLayer = true, bool analysisLayer = false)
+    public void JsonSpeckleStreamsToGwaRecords(IEnumerable<string> savedJsonFileNames, out List<GwaRecord> gwaRecords)
     {
       gwaRecords = new List<GwaRecord>();
 
       receivedObjects = JsonSpeckleStreamsToSpeckleObjects(savedJsonFileNames);
-
-      TargetDesignLayer = designLayer;
-      TargetAnalysisLayer = analysisLayer;
-
-      SetupMockGsaCom();
-
-      ConstructTypeCastPriority();
 
       GSAInterfacer.Indexer.SetBaseline();
 
@@ -51,73 +41,14 @@ namespace SpeckleStructuralGSA.Test
       {
         gwaRecords.Add(new GwaRecord(ExtractApplicationId(gwaC), gwaC));
       }
-
-      return true;
     }
 
-    #region private_methods
-    private void SetupMockGsaCom()
-    {
-      var mockGsaCom = new Mock<IComAuto>();
-      //So far only these methods are actually called
-      mockGsaCom.Setup(x => x.Gen_NodeAt(It.IsAny<double>(), It.IsAny<double>(), It.IsAny<double>(), It.IsAny<double>())).Returns((double x, double y, double z, double coin) => 1);
-      mockGsaCom.Setup(x => x.GwaCommand(It.IsAny<string>())).Returns((string x) => { return x.Contains("GET") ? (object)"" : (object)1; });
-
-      GSAInterfacer.InitializeReceiver(mockGsaCom.Object);
-    }
+    #region private_methods    
 
     private List<SpeckleObject> JsonSpeckleStreamsToSpeckleObjects(IEnumerable<string> savedJsonFileNames)
     {
-      //This uses the installed SpeckleKits - when SpeckleStructural is built, the built files are copied into the 
-      // %LocalAppData%\SpeckleKits directory, so therefore this project doesn't need to reference the projects within in this solution
-      SpeckleInitializer.Initialize();
-
       //Read JSON files into objects
-      return Helper.ExtractObjects(savedJsonFileNames.ToArray());
-    }
-
-    private void ConstructTypeCastPriority()
-    {
-      // Grab GSA interface and attribute type
-      var attributeType = typeof(GSAObject);
-      var interfaceType = typeof(IGSASpeckleContainer);
-
-      // Grab all GSA related object
-      var ass = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "SpeckleStructuralGSA");
-      var objTypes = ass.GetTypes().Where(t => interfaceType.IsAssignableFrom(t) && t != interfaceType).ToList();
-
-      foreach (var t in objTypes)
-      {
-        if (t.GetAttribute("AnalysisLayer", attributeType) != null)
-          if (TargetAnalysisLayer && !(bool)t.GetAttribute("AnalysisLayer", attributeType)) continue;
-
-        if (t.GetAttribute("DesignLayer", attributeType) != null)
-          if (TargetDesignLayer && !(bool)t.GetAttribute("DesignLayer", attributeType)) continue;
-
-        var prereq = new List<Type>();
-        if (t.GetAttribute("WritePrerequisite", attributeType) != null)
-          prereq = ((Type[])t.GetAttribute("WritePrerequisite", attributeType)).ToList();
-
-        TypePrerequisites[t] = prereq;
-      }
-
-      // Remove wrong layer objects from prerequisites
-      foreach (var t in objTypes)
-      {
-        if (t.GetAttribute("AnalysisLayer", attributeType) != null)
-          if (TargetAnalysisLayer && !(bool)t.GetAttribute("AnalysisLayer", attributeType))
-            foreach (var kvp in TypePrerequisites)
-              kvp.Value.Remove(t);
-
-        if (t.GetAttribute("DesignLayer", attributeType) != null)
-          if (TargetDesignLayer && !(bool)t.GetAttribute("DesignLayer", attributeType))
-            foreach (var kvp in TypePrerequisites)
-              kvp.Value.Remove(t);
-      }
-
-      // Generate which GSA object to cast for each type
-      TypeCastPriority = TypePrerequisites.ToList();
-      TypeCastPriority.Sort((x, y) => x.Value.Count().CompareTo(y.Value.Count()));
+      return ExtractObjects(savedJsonFileNames.ToArray(), TestDataDirectory);
     }
 
     private void ScaleObjects()
@@ -164,8 +95,32 @@ namespace SpeckleStructuralGSA.Test
 
     private string ExtractApplicationId(string gwaCommand)
     {
+      if (!gwaCommand.Contains(SID_TAG))
+      {
+        return null;
+      }
       return gwaCommand.Split(new string[] { SID_TAG }, StringSplitOptions.None)[1].Substring(1).Split('}')[0];
     }
+
+
+    public List<SpeckleObject> ExtractObjects(string fileName, string directory)
+    {
+      return ExtractObjects(new string[] { fileName }, directory);
+    }
+
+    public List<SpeckleObject> ExtractObjects(string[] fileNames, string directory)
+    {
+      var speckleObjects = new List<SpeckleObject>();
+      foreach (var fileName in fileNames)
+      {
+        var json = Helper.ReadFile(fileName, directory);
+
+        var response = ResponseObject.FromJson(json);
+        speckleObjects.AddRange(response.Resources);
+      }
+      return speckleObjects;
+    }
+
     #endregion
   }
 }
