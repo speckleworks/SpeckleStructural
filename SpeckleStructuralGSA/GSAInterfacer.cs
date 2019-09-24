@@ -1156,113 +1156,137 @@ namespace SpeckleStructuralGSA
     /// <returns>Dictionary of reactions with keys {x,y,z,xx,yy,zz}.</returns>
     public Dictionary<string, object> GetGSAResult(int id, int resHeader, int flags, List<string> keys, string loadCase, string axis = "local", int num1DPoints = 2)
     {
+      var ret = new Dictionary<string, object>();
+      GsaResults[] res = null;
+      bool exists = false;
+
+      int returnCode = -1;
+
       try
       {
-        GsaResults[] res;
         int num;
 
-        // Special case for assemblies
+        // The 2nd condition here is a special case for assemblies
         if (Enum.IsDefined(typeof(ResHeader), resHeader) || resHeader == 18002000)
         {
-          var initKey = "ARR" + flags.ToString() + axis + loadCase + resHeader.ToString() + num1DPoints.ToString();
-          if (PreviousGSAResultInit != initKey)
-          {
-            GSAObject.Output_Init_Arr(flags, axis, loadCase, (ResHeader)resHeader, num1DPoints);
-            PreviousGSAResultInit = initKey;
-          }
+          returnCode = GSAObject.Output_Init_Arr(flags, axis, loadCase, (ResHeader)resHeader, num1DPoints);
+
           try
-          { 
-            try
-            { 
-              GSAObject.Output_Extract_Arr(id, out var outputExtractResults, out num);
-              res = (GsaResults[])outputExtractResults;
-            }
-            catch
-            {
-              // Try reinit if fail
-              GSAObject.Output_Init_Arr(flags, axis, loadCase, (ResHeader)resHeader, num1DPoints);
-              GSAObject.Output_Extract_Arr(id, out var outputExtractResults, out num);
-              res = (GsaResults[])outputExtractResults;
-            }
-          }
-          catch
           {
-            PreviousGSAResultInit = ""; // Blank the prev set
+            var existsResult = GSAObject.Output_DataExist(id);
+            exists = (existsResult == 1);
+          }
+          catch (Exception e)
+          {
+            return null;
+          }
 
-            res = new GsaResults[keys.Count];
-            var resList = new List<GsaResults>();
-
-            // Try individual extract
-            for (int i = 1; i <= keys.Count; i++)
+          if (exists)
+          {
+            var extracted = false;
+            try
             {
-              var indivResHeader = resHeader + i;
-              GSAObject.Output_Init(flags, axis, loadCase, indivResHeader, num1DPoints);
-
-              var numPos = 1;
-
-              try
-              {
-                numPos = GSAObject.Output_NumElemPos(id);
-              }
-              catch { }
-              
-              if (i == 1)
-              {
-                res = new GsaResults[numPos];
-                for (int j = 0; j < res.Length; j++)
-                  res[j] = new GsaResults() { dynaResults = new double[keys.Count] };
-              }
-
-              for (int j = 0; j < numPos; j++)
-                res[j].dynaResults[i - 1] = (double)GSAObject.Output_Extract(id, j);
+              returnCode = GSAObject.Output_Extract_Arr(id, out var outputExtractResults, out num);
+              res = (GsaResults[])outputExtractResults;
+              extracted = true;
             }
+            catch (Exception e) { }
+
+            if (!extracted)
+            {
+              // Try individual extract
+              for (var i = 1; i <= keys.Count; i++)
+              {
+                var indivResHeader = resHeader + i;
+
+                try
+                {
+                  GSAObject.Output_Init(flags, axis, loadCase, indivResHeader, num1DPoints);
+                }
+                catch (Exception e)
+                {
+                  return null;
+                }
+
+                var numPos = 1;
+
+                try
+                {
+                  numPos = GSAObject.Output_NumElemPos(id);
+                }
+                catch { }
+
+                if (i == 1)
+                {
+                  res = new GsaResults[numPos];
+                  for (var j = 0; j < res.Length; j++)
+                  {
+                    res[j] = new GsaResults() { dynaResults = new double[keys.Count] };
+                  }
+                }
+
+                for (var j = 0; j < numPos; j++)
+                {
+                  res[j].dynaResults[i - 1] = (double)GSAObject.Output_Extract(id, j);
+                }
+              }
+            }
+
+          }
+          else
+          {
+            return null;
           }
         }
         else
         {
-          var initKey = "SINGLE" + flags.ToString() + axis + loadCase + resHeader.ToString() + num1DPoints.ToString();
-          if (PreviousGSAResultInit != initKey)
-          {
-            GSAObject.Output_Init(flags, axis, loadCase, resHeader, num1DPoints);
-            PreviousGSAResultInit = initKey;
-          }
-          int numPos = GSAObject.Output_NumElemPos(id);
-
-          res = new GsaResults[numPos];
-
+          returnCode = GSAObject.Output_Init(flags, axis, loadCase, resHeader, num1DPoints);
+          
           try
           {
-            for (int i = 0; i < numPos; i++)
-              res[i] = new GsaResults() { dynaResults = new double[] { (double)GSAObject.Output_Extract(id, i) } };
+            var existsResult = GSAObject.Output_DataExist(id);
+            exists = (existsResult == 1);
           }
-          catch
+          catch (Exception e)
           {
-            // Try reinit if fail
-            GSAObject.Output_Init(flags, axis, loadCase, resHeader, num1DPoints);
-            for (int i = 0; i < numPos; i++)
-              res[i] = new GsaResults() { dynaResults = new double[] { (double)GSAObject.Output_Extract(id, i) } };
+            return null;
+          }
+
+          if (exists)
+          {
+            var numPos = GSAObject.Output_NumElemPos(id);
+            res = new GsaResults[numPos];
+
+            try
+            {
+              for (var i = 0; i < numPos; i++)
+              {
+                res[i] = new GsaResults() { dynaResults = new double[] { (double)GSAObject.Output_Extract(id, i) } };
+              }
+            }
+            catch
+            {
+              return null;
+            }
+          }
+          else
+          {
+            return null;
           }
         }
 
-        int counter = 0;
-        Dictionary<string, object> ret = new Dictionary<string, object>();
+        var numColumns = res[0].dynaResults.Count();
 
-        foreach (string key in keys)
+        for (var i = 0; i < numColumns; i++)
         {
-          ret[key] = res.Select(x => (double)x.dynaResults.GetValue(counter)).ToList();
-          counter++;
+          ret[keys[i]] = res.Select(x => (double)x.dynaResults.GetValue(i)).ToList();
         }
 
         return ret;
       }
       catch
       {
-        Dictionary<string, object> ret = new Dictionary<string, object>();
-
-        foreach (string key in keys)
-          ret[key] = new List<double>() { 0 };
-
-        return ret;
+        return null;
       }
     }
     #endregion

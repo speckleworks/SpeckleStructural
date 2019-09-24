@@ -59,7 +59,7 @@ namespace SpeckleStructuralGSA.Test
 
         var matchingExpected = expectedJsons.FirstOrDefault(e => JsonCompareAreEqual(e, actualJson));
 
-        Assert.NotNull(matchingExpected);
+        Assert.NotNull(matchingExpected, "Expected and actual JSON representations for " + string.Join(" ", new[] { actualObject.ApplicationId, actualObject.Name, actualObject.Type, actualObject.Hash }));
 
         expectedJsons.Remove(matchingExpected);
       }
