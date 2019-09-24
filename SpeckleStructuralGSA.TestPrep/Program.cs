@@ -33,7 +33,7 @@ namespace SpeckleStructuralGSA.TestPrep
       senderTestPrep.SetupContext("20180906 - Existing structure GSA_V7_modified.gwb");
 
       var loadCases = new[] { "A2", "C1" };
-      var resultTypes = new [] { "Nodal Reaction", "0D Element Displacement", "1D Element Force" };
+      var resultTypes = new [] { "Nodal Reaction", "1D Element Strain Energy Density", "1D Element Force", "Nodal Displacements", "1D Element Stress" };
 
       try
       {
