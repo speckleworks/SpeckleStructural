@@ -1,5 +1,5 @@
 # General Configuration
-version: 1.0.5.{build}
+version: 1.0.6.{build}
 skip_branch_with_pr: true
 
 # Environment Configuration
@@ -45,6 +45,8 @@ after_build:
 
 # zip everything into a zip file containing package folder structure
   - 7z a SpeckleStructural-%APPVEYOR_BUILD_VERSION%.zip "%APPVEYOR_BUILD_FOLDER%\SpeckleStructural\bin\Release\*"
+  
+test: off
 
 artifacts:
   path: SpeckleStructural-%APPVEYOR_BUILD_VERSION%.zip

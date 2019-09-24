@@ -14,7 +14,10 @@ namespace SpeckleStructuralClasses
     {
       this.Value = value.ToList();
       this.ApplicationId = applicationId;
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
 
       GenerateHash();
     }
@@ -23,7 +26,10 @@ namespace SpeckleStructuralClasses
     {
       this.Value = new List<double>(new double[] { x, y, z });
       this.ApplicationId = applicationId;
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
 
       GenerateHash();
     }
@@ -66,7 +72,10 @@ namespace SpeckleStructuralClasses
     {
       this.Value = value.ToList();
       this.ApplicationId = applicationId;
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
 
       GenerateHash();
     }
@@ -75,7 +84,10 @@ namespace SpeckleStructuralClasses
     {
       this.Value = new List<bool>(new bool[] { x, y, z });
       this.ApplicationId = applicationId;
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
 
       GenerateHash();
     }
@@ -94,7 +106,10 @@ namespace SpeckleStructuralClasses
     {
       this.Value = value.ToList();
       this.ApplicationId = applicationId;
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
 
       GenerateHash();
     }
@@ -103,7 +118,10 @@ namespace SpeckleStructuralClasses
     {
       this.Value = new List<double>(new double[] { x, y, z, xx, yy, zz });
       this.ApplicationId = applicationId;
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
 
       GenerateHash();
     }
@@ -155,7 +173,10 @@ namespace SpeckleStructuralClasses
     {
       this.Value = value.ToList();
       this.ApplicationId = applicationId;
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
 
       GenerateHash();
     }
@@ -164,7 +185,10 @@ namespace SpeckleStructuralClasses
     {
       this.Value = new List<bool>(new bool[] { x, y, z, xx, yy, zz });
       this.ApplicationId = applicationId;
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
 
       GenerateHash();
     }
@@ -185,7 +209,10 @@ namespace SpeckleStructuralClasses
       this.Xdir = xdir;
       this.Ydir = ydir;
       this.ApplicationId = applicationId;
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
 
       GenerateHash();
     }
@@ -201,7 +228,10 @@ namespace SpeckleStructuralClasses
       this.Xdir = xdir;
       this.Ydir = ydir;
       this.ApplicationId = applicationId;
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
 
       GenerateHash();
     }

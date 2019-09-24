@@ -10,7 +10,10 @@ namespace SpeckleStructuralClasses
 
     public StructuralAssembly(double[] value, string[] elementRefs, SpeckleLine baseLine, SpecklePoint orientationPoint, int numPoints = 0, double width = 0, string applicationId = null, Dictionary<string, object> properties = null)
     {
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
       this.ApplicationId = applicationId;
       this.ElementRefs = elementRefs.ToList();
       this.Value = value.ToList();
@@ -46,7 +49,10 @@ namespace SpeckleStructuralClasses
       this.ElementRefs = elementRefs.ToList();
       this.StageDays = stageDays;
       this.ApplicationId = applicationId;
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
 
       this.GenerateHash();
     }
@@ -68,7 +74,10 @@ namespace SpeckleStructuralClasses
       this.NodeRefs = nodeRefs.ToList();
       this.ConstructionStageRefs = constructionStageRefs.ToList();
       this.ApplicationId = applicationId;
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
 
       GenerateHash();
     }
@@ -86,7 +95,10 @@ namespace SpeckleStructuralClasses
 
     public StructuralRigidConstraints(StructuralVectorBoolSix constraint, string[] nodeRefs, string masterNodeRef, string[] constructionStageRefs, string applicationId = null, Dictionary<string, object> properties = null)
     {
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
       this.ApplicationId = applicationId;
       this.Constraint = constraint;
       this.NodeRefs = nodeRefs.ToList();
@@ -109,7 +121,10 @@ namespace SpeckleStructuralClasses
 
     public StructuralNodalInfluenceEffect(StructuralInfluenceEffectType effectType, string nodeRef, double factor, StructuralAxis axis, StructuralVectorBoolSix directions, string applicationId = null, Dictionary<string, object> properties = null)
     {
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
       this.ApplicationId = applicationId;
       this.EffectType = effectType;
       this.NodeRef = nodeRef;
@@ -133,7 +148,10 @@ namespace SpeckleStructuralClasses
 
     public Structural1DInfluenceEffect(StructuralInfluenceEffectType effectType, string elementRef, double position, double factor, StructuralVectorBoolSix directions, string applicationId = null, Dictionary<string, object> properties = null)
     {
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
       this.ApplicationId = applicationId;
       this.EffectType = effectType;
       this.ElementRef = elementRef;

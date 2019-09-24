@@ -47,14 +47,18 @@ namespace SpeckleStructuralGSA
 
               var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
 
-              if (resultExport == null)
+              if (resultExport == null || resultExport.Count() == 0)
+              {
                 continue;
+              }
 
               if (!node.Value.Result.ContainsKey(loadCase))
+              {
                 node.Value.Result[loadCase] = new StructuralNodeResult()
                 {
                   Value = new Dictionary<string, object>()
                 };
+              }
               (node.Value.Result[loadCase] as StructuralNodeResult).Value[kvp.Key] = resultExport.ToDictionary( x => x.Key, x => (x.Value as List<double>)[0] as object );
 
               node.ForceSend = true;

@@ -49,6 +49,7 @@ namespace SpeckleStructuralGSA
           case "NO_GRID":
           case "NO_REST":
           case "NO_MESH":
+          case "NO_STIFF":
             continue;
           case "GRID":
             counter++; // Grid place
