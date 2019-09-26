@@ -9,6 +9,10 @@ namespace SpeckleStructuralGSA.TestPrep
 
     public bool SetUpReceptionTestData(string[] savedJsonFileNames, string outputGWAFileName, GSATargetLayer layer)
     {
+      //Set up default values
+      Initialiser.GSACoincidentNodeAllowance = 0.1;
+      Initialiser.GSAResult1DNumPosition = 3;
+
       return PrepareReceptionTestData(savedJsonFileNames, outputGWAFileName, layer);
     }
 

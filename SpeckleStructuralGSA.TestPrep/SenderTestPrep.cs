@@ -9,6 +9,10 @@ namespace SpeckleStructuralGSA.TestPrep
 
     public void SetupContext(string gsaFileName)
     {
+      //Set up default values
+      Initialiser.GSACoincidentNodeAllowance = 0.1;
+      Initialiser.GSAResult1DNumPosition = 3;
+
       OpenGsaFile(gsaFileName);
     }
 

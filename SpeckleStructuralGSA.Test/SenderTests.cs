@@ -23,6 +23,10 @@ namespace SpeckleStructuralGSA.Test
     [OneTimeSetUp]
     public void SetupTests()
     {
+      //Set up default values
+      Initialiser.GSACoincidentNodeAllowance = 0.1;
+      Initialiser.GSAResult1DNumPosition = 3;
+
       //This uses the installed SpeckleKits - when SpeckleStructural is built, the built files are copied into the 
       // %LocalAppData%\SpeckleKits directory, so therefore this project doesn't need to reference the projects within in this solution
       SpeckleInitializer.Initialize();
