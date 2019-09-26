@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SpeckleGSAInterfaces;
+using SpeckleGSAProxy;
 using SpeckleStructuralGSA.Test;
 
 namespace SpeckleStructuralGSA.TestPrep
@@ -10,6 +11,12 @@ namespace SpeckleStructuralGSA.TestPrep
 
     public void SetupContext(string gsaFileName)
     {
+      gsaInterfacer = new GSAInterfacer
+      {
+        Indexer = new Indexer()
+      };
+      Initialiser.Interface = gsaInterfacer;
+      Initialiser.Settings = new Settings();
       gsaInterfacer.OpenFile(Helper.ResolveFullPath(gsaFileName, TestDataDirectory));
     }
 

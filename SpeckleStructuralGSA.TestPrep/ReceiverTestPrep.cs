@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SpeckleGSAInterfaces;
+using SpeckleGSAProxy;
 using SpeckleStructuralGSA.Test;
 
 namespace SpeckleStructuralGSA.TestPrep
@@ -7,6 +8,16 @@ namespace SpeckleStructuralGSA.TestPrep
   public class ReceiverTestPrep : TestBase
   {
     public ReceiverTestPrep(string directory) : base(directory) { }
+
+    public void SetupContext()
+    {
+      gsaInterfacer = new GSAInterfacer
+      {
+        Indexer = new Indexer()
+      };
+      Initialiser.Interface = gsaInterfacer;
+      Initialiser.Settings = new Settings();
+    }
 
     public bool SetUpReceptionTestData(string[] savedJsonFileNames, string outputGWAFileName, GSATargetLayer layer)
     {
