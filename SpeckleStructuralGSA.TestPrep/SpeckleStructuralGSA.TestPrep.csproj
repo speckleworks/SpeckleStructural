@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{99E1E652-6808-4B7E-8156-596220B85D74}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>SpeckleStructuralGSA.TestPrep</RootNamespace>
+    <AssemblyName>SpeckleStructuralGSA.TestPrep</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core.4.4.0\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DesignScriptBuiltin, Version=2.0.2.6986, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.2.6986\lib\net45\DesignScriptBuiltin.dll</HintPath>
+    </Reference>
+    <Reference Include="DSIronPython, Version=2.0.2.6986, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.2.6986\lib\net45\DSIronPython.dll</HintPath>
+    </Reference>
+    <Reference Include="DynamoApplications, Version=2.0.2.6986, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.2.6986\lib\net45\DynamoApplications.dll</HintPath>
+    </Reference>
+    <Reference Include="DynamoCore, Version=2.0.2.6986, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.2.6986\lib\net45\DynamoCore.dll</HintPath>
+    </Reference>
+    <Reference Include="DynamoInstallDetective, Version=2.0.2.6986, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.2.6986\lib\net45\DynamoInstallDetective.dll</HintPath>
+    </Reference>
+    <Reference Include="DynamoServices, Version=2.0.2.6986, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.DynamoServices.2.0.2.6986\lib\net45\DynamoServices.dll</HintPath>
+    </Reference>
+    <Reference Include="DynamoShapeManager, Version=2.0.2.6986, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.2.6986\lib\net45\DynamoShapeManager.dll</HintPath>
+    </Reference>
+    <Reference Include="DynamoUnits, Version=2.0.2.6986, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.ZeroTouchLibrary.2.0.2.6986\lib\net45\DynamoUnits.dll</HintPath>
+    </Reference>
+    <Reference Include="DynamoUtilities, Version=2.0.2.6986, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.2.6986\lib\net45\DynamoUtilities.dll</HintPath>
+    </Reference>
+    <Reference Include="Eto, Version=2.5.0.0, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
+      <HintPath>..\packages\RhinoCommon.6.12.19029.6381\lib\net45\Eto.dll</HintPath>
+    </Reference>
+    <Reference Include="GH_IO, Version=6.12.19029.6380, Culture=neutral, PublicKeyToken=6a29997d2e6b4f97, processorArchitecture=MSIL">
+      <HintPath>..\packages\Grasshopper.6.12.19029.6381\lib\net45\GH_IO.dll</HintPath>
+    </Reference>
+    <Reference Include="Grasshopper, Version=6.12.19029.6380, Culture=neutral, PublicKeyToken=dda4f5ec2cd80803, processorArchitecture=MSIL">
+      <HintPath>..\packages\Grasshopper.6.12.19029.6381\lib\net45\Grasshopper.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.Gsa_10_0, Version=10.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>..\SpeckleStructuralGSA\Interop.Gsa_10_0.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.4.1.0.0\lib\NET40\Microsoft.Expression.Interactions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.4.1.0.0\lib\NET40\Microsoft.Practices.Prism.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.Interactivity, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.4.1.0.0\lib\NET40\Microsoft.Practices.Prism.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq, Version=4.13.0.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\packages\Moq.4.13.0\lib\net45\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="ProtoCore, Version=2.0.2.6986, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.2.6986\lib\net45\ProtoCore.dll</HintPath>
+    </Reference>
+    <Reference Include="ProtoGeometry, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.ZeroTouchLibrary.2.0.2.6986\lib\net45\ProtoGeometry.dll</HintPath>
+    </Reference>
+    <Reference Include="RevitAPI, Version=19.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\Revit.RevitApi.x64.2019.0.0\lib\net45\RevitAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="RevitAPIUI, Version=19.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\Revit.RevitApiUI.x64.2019.0.0\lib\net45\RevitAPIUI.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.UI, Version=6.12.19029.6380, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
+      <HintPath>..\packages\RhinoCommon.6.12.19029.6381\lib\net45\Rhino.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="RhinoCommon, Version=6.12.19029.6380, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
+      <HintPath>..\packages\RhinoCommon.6.12.19029.6381\lib\net45\RhinoCommon.dll</HintPath>
+    </Reference>
+    <Reference Include="SpeckleCore, Version=1.5.1.326, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\SpeckleCore.1.5.1.326\lib\net45\SpeckleCore.dll</HintPath>
+    </Reference>
+    <Reference Include="SpeckleCoreGeometry, Version=1.1.0.57, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SpeckleCoreGeometry.1.1.0.57\lib\net461\SpeckleCoreGeometry.dll</HintPath>
+    </Reference>
+    <Reference Include="SpeckleCoreGeometryClasses, Version=1.1.0.57, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SpeckleCoreGeometry.1.1.0.57\lib\net461\SpeckleCoreGeometryClasses.dll</HintPath>
+    </Reference>
+    <Reference Include="SpeckleCoreGeometryDynamo, Version=1.1.0.57, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SpeckleCoreGeometry.1.1.0.57\lib\net461\SpeckleCoreGeometryDynamo.dll</HintPath>
+    </Reference>
+    <Reference Include="SpeckleCoreGeometryRevit, Version=1.1.0.57, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SpeckleCoreGeometry.1.1.0.57\lib\net461\SpeckleCoreGeometryRevit.dll</HintPath>
+    </Reference>
+    <Reference Include="SpeckleCoreGeometryRhino, Version=1.1.0.57, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SpeckleCoreGeometry.1.1.0.57\lib\net461\SpeckleCoreGeometryRhino.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLite-net, Version=1.5.231.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\sqlite-net-pcl.1.5.231\lib\netstandard1.1\SQLite-net.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.batteries_green, Version=1.1.11.121, Culture=neutral, PublicKeyToken=a84b7dcfb1391f7f, processorArchitecture=MSIL">
+      <HintPath>..\packages\SQLitePCLRaw.bundle_green.1.1.11\lib\net45\SQLitePCLRaw.batteries_green.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.batteries_v2, Version=1.1.11.121, Culture=neutral, PublicKeyToken=8226ea5df37bcae9, processorArchitecture=MSIL">
+      <HintPath>..\packages\SQLitePCLRaw.bundle_green.1.1.11\lib\net45\SQLitePCLRaw.batteries_v2.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.core, Version=1.1.11.121, Culture=neutral, PublicKeyToken=1488e028ca7ab535, processorArchitecture=MSIL">
+      <HintPath>..\packages\SQLitePCLRaw.core.1.1.11\lib\net45\SQLitePCLRaw.core.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.provider.e_sqlite3, Version=1.1.11.121, Culture=neutral, PublicKeyToken=9c301db686d0bd12, processorArchitecture=MSIL">
+      <HintPath>..\packages\SQLitePCLRaw.provider.e_sqlite3.net45.1.1.11\lib\net45\SQLitePCLRaw.provider.e_sqlite3.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.1\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.4.1.0.0\lib\NET40\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="VMDataBridge, Version=2.0.2.6986, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.2.6986\lib\net45\VMDataBridge.dll</HintPath>
+    </Reference>
+    <Reference Include="websocket-sharp, Version=1.0.2.32519, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebSocketSharp-NonPreRelease.1.0.0\lib\net35\websocket-sharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReceiverTestPrep.cs" />
+    <Compile Include="SenderTestPrep.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SpeckleStructuralClasses\SpeckleStructuralClasses.csproj">
+      <Project>{42e1db9c-e4d5-4190-9977-874e8143dcc5}</Project>
+      <Name>SpeckleStructuralClasses</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SpeckleStructuralGSA.Test\SpeckleStructuralGSA.Test.csproj">
+      <Project>{dcd8ca38-f4f0-4f00-af11-f03b089dbdfb}</Project>
+      <Name>SpeckleStructuralGSA.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SpeckleStructuralGSA\SpeckleStructuralGSA.csproj">
+      <Project>{686cf31d-5d4c-4e57-a2fc-267ec7bb78c5}</Project>
+      <Name>SpeckleStructuralGSA</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SpeckleStructural\SpeckleStructural.csproj">
+      <Project>{f7980709-1e82-44b6-b3f8-0450a1fe6dc3}</Project>
+      <Name>SpeckleStructural</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets" Condition="Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets'))" />
+    <Error Condition="!Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets'))" />
+    <Error Condition="!Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets'))" />
+    <Error Condition="!Exists('..\packages\RhinoCommon.6.12.19029.6381\build\net45\RhinoCommon.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\RhinoCommon.6.12.19029.6381\build\net45\RhinoCommon.targets'))" />
+    <Error Condition="!Exists('..\packages\Grasshopper.6.12.19029.6381\build\net45\Grasshopper.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Grasshopper.6.12.19029.6381\build\net45\Grasshopper.targets'))" />
+  </Target>
+  <Import Project="..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets" Condition="Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets')" />
+  <Import Project="..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets" Condition="Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets')" />
+  <Import Project="..\packages\RhinoCommon.6.12.19029.6381\build\net45\RhinoCommon.targets" Condition="Exists('..\packages\RhinoCommon.6.12.19029.6381\build\net45\RhinoCommon.targets')" />
+  <Import Project="..\packages\Grasshopper.6.12.19029.6381\build\net45\Grasshopper.targets" Condition="Exists('..\packages\Grasshopper.6.12.19029.6381\build\net45\Grasshopper.targets')" />
+</Project>

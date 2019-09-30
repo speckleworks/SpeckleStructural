@@ -15,7 +15,10 @@ namespace SpeckleStructuralClasses
 
     public StructuralNode(double[] value, StructuralAxis axis, StructuralVectorBoolSix restraint, StructuralVectorSix stiffness, double mass, string applicationId = null, Dictionary<string, object> properties = null)
     {
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
       this.Value = value.ToList();
       this.Axis = axis;
       this.Restraint = restraint;
@@ -42,7 +45,10 @@ namespace SpeckleStructuralClasses
 
     public Structural1DElement(double[] value, Structural1DElementType elementType, string propertyRef, StructuralVectorThree zAxis, StructuralVectorBoolSix[] endRelease, StructuralVectorThree[] offset, string applicationId = null, Dictionary<string, object> properties = null)
     {
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
       this.Value = value.ToList();
       this.ElementType = elementType;
       this.PropertyRef = propertyRef;
@@ -74,7 +80,10 @@ namespace SpeckleStructuralClasses
 
     public Structural1DElementPolyline(double[] value, Structural1DElementType elementType, string propertyRef, StructuralVectorThree[] zAxis, StructuralVectorBoolSix[] endRelease, StructuralVectorThree[] offset, string applicationId = null, Dictionary<string, object> properties = null)
     {
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
       this.Value = value.ToList();
       this.ElementType = elementType;
       this.PropertyRef = propertyRef;
@@ -91,7 +100,10 @@ namespace SpeckleStructuralClasses
       if (elements.Length == 0)
         throw new Exception("No elements specified.");
 
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
       this.Value = new List<double>(elements[0].Value.Take(3).ToArray());
       this.ElementType = elements[0].ElementType;
       this.PropertyRef = elements[0].PropertyRef;
@@ -164,7 +176,10 @@ namespace SpeckleStructuralClasses
 
     public Structural2DElement(double[] vertices, int[] faces, int[] colors, Structural2DElementType elementType, string propertyRef, StructuralAxis axis, double offset, string applicationId = null, Dictionary<string, object> properties = null)
     {
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
       this.Vertices = vertices.ToList();
       this.Faces = faces.ToList();
       this.Colors = colors == null ? null : colors.ToList();
@@ -197,7 +212,10 @@ namespace SpeckleStructuralClasses
 
     public Structural2DElementMesh(double[] vertices, int[] faces, int[] colors, Structural2DElementType elementType, string propertyRef, StructuralAxis[] axis, double[] offset, string applicationId = null, double meshSize = 0, Dictionary<string, object> properties = null)
     {
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
       this.Vertices = vertices.ToList();
       this.Faces = faces.ToList();
       this.Colors = colors == null ? null : colors.ToList();
@@ -214,7 +232,10 @@ namespace SpeckleStructuralClasses
 
     public Structural2DElementMesh(double[] edgeVertices, int? color, Structural2DElementType elementType, string propertyRef, StructuralAxis[] axis, double[] offset, string applicationId = null, Dictionary<string, object> properties = null)
     {
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
       this.Vertices = edgeVertices.ToList();
 
       // Perform mesh making
@@ -563,7 +584,10 @@ namespace SpeckleStructuralClasses
 
     public Structural2DVoid(double[] vertices, int[] faces, int[] colors, string applicationId = null, Dictionary<string, object> properties = null)
     {
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
       this.Vertices = vertices.ToList();
       this.Faces = faces.ToList();
       this.Colors = colors == null ? null : colors.ToList();
@@ -576,7 +600,10 @@ namespace SpeckleStructuralClasses
 
     public Structural2DVoid(double[] edgeVertices, int? color, string applicationId = null, Dictionary<string, object> properties = null)
     {
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
       this.Vertices = edgeVertices.ToList();
 
       // Perform mesh making

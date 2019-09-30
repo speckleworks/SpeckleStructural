@@ -24,7 +24,10 @@ namespace SpeckleStructuralClasses
       this.MaxStrain = maxStrain;
       this.AggragateSize = aggragateSize;
       this.ApplicationId = applicationId;
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
 
       GenerateHash();
     }
@@ -51,7 +54,10 @@ namespace SpeckleStructuralClasses
       this.UltimateStrength = ultimateStrength;
       this.MaxStrain = maxStrain;
       this.ApplicationId = applicationId;
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
 
       GenerateHash();
     }
@@ -76,7 +82,10 @@ namespace SpeckleStructuralClasses
       this.CatalogueName = catalogueName;
       this.MaterialRef = materialRef;
       this.ApplicationId = applicationId;
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
 
       GenerateHash();
     }
@@ -107,7 +116,10 @@ namespace SpeckleStructuralClasses
       this.MaterialRef = materialRef;
       this.ReferenceSurface = referenceSurface;
       this.ApplicationId = applicationId;
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
 
       GenerateHash();
     }
@@ -130,7 +142,10 @@ namespace SpeckleStructuralClasses
       this.Axis = axis;
       this.Stiffness = stiffness;
       this.ApplicationId = applicationId;
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
       GenerateHash();
     }
 
