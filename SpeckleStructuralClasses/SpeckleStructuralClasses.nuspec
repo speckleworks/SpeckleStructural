@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/speckleworks/SpeckleStructural</projectUrl>
+    <iconUrl>https://avatars2.githubusercontent.com/u/31284874</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes></releaseNotes>
+    <copyright>$copyright$</copyright>
+    <tags>speckle structural</tags>
+    <dependencies>
+      <dependency id="SpeckleCoreGeometry" version="1.2.8" />
+      <dependency id="SpeckleCore" version="1.6.9" />
+    </dependencies>
+  </metadata>
+</package>
