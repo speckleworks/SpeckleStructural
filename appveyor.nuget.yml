@@ -35,6 +35,7 @@ assembly_info:
   file: AssemblyInfo.*
   assembly_version: '{version}'
   assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
 
 # Build Configuration
 platform: Any CPU
@@ -47,7 +48,7 @@ build:
   publish_nuget: true
   include_nuget_references: true
   publish_nuget_symbols: true
-  project: SpeckleElementsClasses\SpeckleElementsClasses.csproj
+  project: SpeckleStructuralClasses\SpeckleStructuralClasses.csproj
   verbosity: minimal
 
 #deploy to nuget

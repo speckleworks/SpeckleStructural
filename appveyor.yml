@@ -1,11 +1,30 @@
 # General Configuration
-version: 1.0.6.{build}
+version: '{build}'
 skip_branch_with_pr: true
 
 # Environment Configuration
 image: Visual Studio 2017
 cache:
   - '%LocalAppData%\NuGet\v3-cache'
+
+init:
+  - ps: |
+      If($Env:APPVEYOR_REPO_TAG -eq "true")
+      {
+        Write-Host "We now have a tagged release. Proper."
+        Write-Host "Tag is $Env:APPVEYOR_REPO_TAG_NAME"
+        $env:APPVEYOR_BUILD_VERSION=$env:APPVEYOR_REPO_TAG_NAME
+        Update-AppveyorBuild -Version "$Env:APPVEYOR_REPO_TAG_NAME"
+      } 
+      else 
+      {
+        $releases = "https://api.github.com/repos/$env:APPVEYOR_REPO_NAME/releases"
+        $tag = (Invoke-WebRequest $releases | ConvertFrom-Json)[0].tag_name
+        $spl = $tag.Split("-")[0]
+        Update-AppveyorBuild -Version "$spl.$Env:APPVEYOR_BUILD_VERSION-wip"
+      }
+      Write-Host "Hello. Build version is: $Env:APPVEYOR_BUILD_VERSION"
+
 
 install:
   #init and update submodules
@@ -17,6 +36,7 @@ assembly_info:
   file: AssemblyInfo.*
   assembly_version: '{version}'
   assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
 
 
 # Build Configuration
@@ -53,22 +73,10 @@ artifacts:
 deploy:
   - release: SpeckleStructural-$(APPVEYOR_BUILD_VERSION)
     tag: $(APPVEYOR_REPO_TAG_NAME)
-    description: 'Structural based object model built on top of SpeckleCoreGeometry.'
     provider: GitHub
     auth_token:
       secure: D5tPFvdQMg9sIe0sSvQjEWw4KAdOk1jyxNwiH5qP5DpDmUH6n6NgTdA+56vXS1Pe # your encrypted token from GitHub
     artifact: SpeckleStructural-$(APPVEYOR_BUILD_VERSION).zip
-    draft: false
-    prerelease: true
     force_update: true
     on:              # release from master branch only
       appveyor_repo_tag: true        # deploy on tag push only
-  - provider: NuGet
-    server:                  # remove to push to NuGet.org
-    api_key:
-      secure: n4EiHDLVSLjOzqT7OOOg3US3PWs6fNsOaGpyT/EFBKrTKl/1wMmmKt73MNuTngD+
-    skip_symbols: false
-    symbol_server:           # remove to push symbols to SymbolSource.org
-    artifact: /.*(\.|\.s)nupkg/
-    on:
-      branch: nuget
