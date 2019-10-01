@@ -25,7 +25,6 @@ init:
       }
       Write-Host "Hello. Build version is: $Env:APPVEYOR_BUILD_VERSION"
 
-
 install:
   #init and update submodules
   - git submodule update --recursive --init
@@ -38,11 +37,9 @@ assembly_info:
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
 
-
 # Build Configuration
 platform: Any CPU
 configuration: Release
-
 
 before_build:
   - nuget restore
@@ -51,34 +48,17 @@ build:
   publish_nuget: true
   include_nuget_references: true
   publish_nuget_symbols: true
-  use_snupkg_format: true
-  project: SpeckleStructural.sln
+  project: SpeckleStructuralClasses\SpeckleStructuralClasses.csproj
   verbosity: minimal
 
-after_build:
-# remove garbage
-#  - ps: |
-#      Remove-Item "$Env:APPVEYOR_BUILD_FOLDER\SpeckleStructural\bin\Release\x86" -Recurse -ErrorAction Ignore
-#      Remove-Item "$Env:APPVEYOR_BUILD_FOLDER\SpeckleStructural\bin\Release\x64" -Recurse -ErrorAction Ignore
-#      Remove-Item "$Env:APPVEYOR_BUILD_FOLDER\SpeckleStructural\bin\Release\*.pdb" -Recurse -ErrorAction Ignore
-#      Remove-Item "$Env:APPVEYOR_BUILD_FOLDER\SpeckleStructural\bin\Release\SpeckleStructural.dll.config" -Recurse -ErrorAction Ignore
-
-# zip everything into a zip file containing package folder structure
-  - 7z a SpeckleStructural-%APPVEYOR_BUILD_VERSION%.zip "%APPVEYOR_BUILD_FOLDER%\SpeckleStructural\bin\Release\*"
-  
-test: off
-
-artifacts:
-  path: SpeckleStructural-%APPVEYOR_BUILD_VERSION%.zip
-  name: Release
-
+#deploy to nuget
 deploy:
-  - release: SpeckleStructural-$(APPVEYOR_BUILD_VERSION)
-    tag: $(APPVEYOR_REPO_TAG_NAME)
-    provider: GitHub
-    auth_token:
-      secure: D5tPFvdQMg9sIe0sSvQjEWw4KAdOk1jyxNwiH5qP5DpDmUH6n6NgTdA+56vXS1Pe # your encrypted token from GitHub
-    artifact: SpeckleStructural-$(APPVEYOR_BUILD_VERSION).zip
-    force_update: true
-    on:              # release from master branch only
-      appveyor_repo_tag: true        # deploy on tag push only
+  - provider: NuGet
+    server:                  # remove to push to NuGet.org
+    api_key:
+      secure: n4EiHDLVSLjOzqT7OOOg3US3PWs6fNsOaGpyT/EFBKrTKl/1wMmmKt73MNuTngD+
+    skip_symbols: false
+    symbol_server:           # remove to push symbols to SymbolSource.org
+    artifact: /.*\.nupkg/
+    on:             
+      appveyor_repo_tag: true

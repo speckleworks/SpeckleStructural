@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
 using Newtonsoft.Json;
@@ -16,7 +13,6 @@ namespace SpeckleStructuralClasses
   {
     public override string Type { get => base.Type + "/StructuralVectorThree"; }
 
-    /// <summary>Base SpeckleVector.</summary>
     [JsonIgnore]
     public SpeckleVector baseVector
     {
