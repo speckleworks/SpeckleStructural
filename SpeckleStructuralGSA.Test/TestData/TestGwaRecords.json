@@ -15,6 +15,18 @@
     "GwaCommand": "SET\tALIGN.1:{speckle_app_id:AL1}\t1\tAlignment One\t1\t3\t0\t0\t40\t-0.01\t80\t-0.01"
   },
   {
+    "ApplicationId": "gh/ae62546782298ee240dcba1541255690",
+    "GwaCommand": "SET\tPATH.1:{speckle_app_id:gh/ae62546782298ee240dcba1541255690}\t1\tPath One\tCWAY_1WAY\t1\t1\t-6.8\t6.8\t0"
+  },
+  {
+    "ApplicationId": "gh/1be0944ea0aa85ffb4b9326b0d49debc",
+    "GwaCommand": "SET\tPATH.1:{speckle_app_id:gh/1be0944ea0aa85ffb4b9326b0d49debc}\t2\tPath Two\tTRACK\t1\t1\t0\t1.4\t0"
+  },
+  {
+    "ApplicationId": "gh/6849beac3a786ce17213ba0815de4859",
+    "GwaCommand": "SET\tUSER_VEHICLE.1:{speckle_app_id:gh/6849beac3a786ce17213ba0815de4859}\t1\tVehicle One\t10\t2\t3\t2\t2\t2\t6\t2\t2\t2"
+  },
+  {
     "ApplicationId": "LSP1",
     "GwaCommand": "SET\tPROP_SPR.3:{speckle_app_id:LSP1}\t1\tLSP One\tNO_RGB\tGLOBAL\tGENERAL\t0\t12\t0\t15\t0\t20\t0\t25\t0\t30\t0\t38\t0"
   },
@@ -361,18 +373,6 @@
   },
   {
     "ApplicationId": "gh/262428f8ed545b21b71a2f7b648c7e52",
-    "GwaCommand": "SET\tNODE.2:{speckle_app_id:gh/262428f8ed545b21b71a2f7b648c7e52}\t1\t \tNO_RGB\t14.7561403508772\t-4.8719298245614\t0\tNO_GRID\t0\tNO_REST\tNO_STIFF\tNO_MESH"
-  },
-  {
-    "ApplicationId": "gh/ae62546782298ee240dcba1541255690",
-    "GwaCommand": "SET\tPATH.1:{speckle_app_id:gh/ae62546782298ee240dcba1541255690}\t1\tPath One\tCWAY_1WAY\t1\t1\t-6.8\t6.8\t0"
-  },
-  {
-    "ApplicationId": "gh/1be0944ea0aa85ffb4b9326b0d49debc",
-    "GwaCommand": "SET\tPATH.1:{speckle_app_id:gh/1be0944ea0aa85ffb4b9326b0d49debc}\t2\tPath Two\tTRACK\t1\t1\t0\t1.4\t0"
-  },
-  {
-    "ApplicationId": "gh/6849beac3a786ce17213ba0815de4859",
-    "GwaCommand": "SET\tUSER_VEHICLE.1:{speckle_app_id:gh/6849beac3a786ce17213ba0815de4859}\t1\tVehicle One\t10\t2\t3\t2\t2\t2\t6\t2\t2\t2"
+    "GwaCommand": "SET\tEL.4:{speckle_app_id:gh/262428f8ed545b21b71a2f7b648c7e52}\t1\t \tNO_RGB\tGRD_SPRING\t1\t1\t1\t0\t0\tNO_RLS\t0\t0\t0\t0\t"
   }
 ]
