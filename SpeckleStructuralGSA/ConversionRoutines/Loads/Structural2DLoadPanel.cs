@@ -67,7 +67,11 @@ namespace SpeckleStructuralGSA
       obj.Value = GSA.MapPointsLocal2Global(polyVals, axis).ToList();
       obj.Closed = true;
 
-      obj.LoadCaseRef = GSA.GetSID(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
+      var loadCaseIndex = Convert.ToInt32(pieces[counter++]);
+      if (loadCaseIndex > 0)
+      {
+        obj.LoadCaseRef = GSA.GetSID(typeof(GSALoadCase).GetGSAKeyword(), loadCaseIndex);
+      }
 
       int loadAxisId = 0;
       string loadAxisData = pieces[counter++];
@@ -135,12 +139,13 @@ namespace SpeckleStructuralGSA
       int gridSurfaceIndex = GSA.Indexer.ResolveIndex("GRID_SURFACE.1", load);
       int gridPlaneIndex = GSA.Indexer.ResolveIndex("GRID_PLANE.4", load);
 
-      int loadCaseRef = 0;
+      int loadCaseIndex = 0;
       try
       {
-        loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase), load.LoadCaseRef).Value;
+        loadCaseIndex = GSA.Indexer.LookupIndex(typeof(GSALoadCase), load.LoadCaseRef).Value;
       }
-      catch { loadCaseRef = GSA.Indexer.ResolveIndex(typeof(GSALoadCase), load.LoadCaseRef); }
+      //catch { loadCaseIndex = GSA.Indexer.ResolveIndex(typeof(GSALoadCase), load.LoadCaseRef); }
+      catch { }
 
       StructuralAxis axis = GSA.Parse2DAxis(load.Value.ToArray());
 
@@ -177,7 +182,7 @@ namespace SpeckleStructuralGSA
         for (int j = 0; j < transformed.Count(); j += 3)
           subLs.Add("(" + transformed[j].ToString() + "," + transformed[j + 1].ToString() + ")");
         ls.Add(string.Join(" ", subLs));
-        ls.Add(loadCaseRef.ToString());
+        ls.Add(loadCaseIndex.ToString());
         ls.Add("GLOBAL");
         ls.Add("NO");
         ls.Add(direction[i]);

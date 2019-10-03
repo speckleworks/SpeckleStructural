@@ -51,12 +51,14 @@ namespace SpeckleStructuralGSA
 
       int index = GSA.Indexer.ResolveIndex(destType, alignment);
 
+      var sid = GSA.GenerateSID(alignment);
+
       var ls = new List<string>();
 
       ls.Clear();
       ls.AddRange(new[] {
         "SET",
-        "GRID_PLANE.4" + ":" + GSA.GenerateSID(alignment),
+        "GRID_PLANE.4" + ":" + sid,
         gridPlaneIndex.ToString(),
         alignment.Name == null || alignment.Name == "" ? " " : alignment.Name,
         "GENERAL", // Type
@@ -68,7 +70,7 @@ namespace SpeckleStructuralGSA
       GSA.RunGWACommand(string.Join("\t", ls));
       ls.Clear();
       ls.Add("SET");
-      ls.Add("GRID_SURFACE.1" + ":" + GSA.GenerateSID(alignment));
+      ls.Add("GRID_SURFACE.1" + ":" + sid);
       ls.Add(gridSurfaceIndex.ToString());
       ls.Add(alignment.Name == null || alignment.Name == "" ? " " : alignment.Name);
       ls.Add(gridPlaneIndex.ToString());
