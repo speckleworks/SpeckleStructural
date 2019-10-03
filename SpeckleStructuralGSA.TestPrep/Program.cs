@@ -31,7 +31,28 @@ namespace SpeckleStructuralGSA.TestPrep
       }
 
       var senderTestPrep = new SenderTestPrep(TestDataDirectory);
-      senderTestPrep.SetupContext(SenderTests.gsaFileName);
+
+      //First the sender test for design layer data without any results being in the file
+      senderTestPrep.SetupContext(SenderTests.gsaFileNameWithoutResults);
+      try
+      {
+        if (!senderTestPrep.SetUpTransmissionTestData("TxSpeckleObjectsDesignLayerBeforeAnalysis.json", GSATargetLayer.Design, false, true))
+        {
+          throw new Exception("Transmission: design layer test preparation failed");
+        }
+        Console.WriteLine("Prepared test data for the tx design layer before analysis test");
+      }
+      catch (Exception e)
+      {
+        Console.WriteLine(e.Message);
+      }
+      finally
+      {
+        senderTestPrep.TearDownContext();
+      }
+
+      //Next the sender tests using a file with results already generated
+      senderTestPrep.SetupContext(SenderTests.gsaFileNameWithResults);
 
       try
       {

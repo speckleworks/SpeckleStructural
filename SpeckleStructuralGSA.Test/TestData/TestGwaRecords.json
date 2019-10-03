@@ -71,7 +71,7 @@
   },
   {
     "ApplicationId": "Live",
-    "GwaCommand": "SET_AT\t1\tLOAD_GRID_AREA.2:{speckle_app_id:Live}\tLive load panel\t2\tPOLYGON\t(14.756140625,24.6719296875) (-24.843859375,24.6719296875) (-24.843859375,-2.52719870209193) (14.756140625,4.8719296875)\t4\tGLOBAL\tNO\tZ\t-4.8"
+    "GwaCommand": "SET_AT\t1\tLOAD_GRID_AREA.2:{speckle_app_id:Live}\tLive load panel\t2\tPOLYGON\t(14.756140625,24.6719296875) (-24.843859375,24.6719296875) (-24.843859375,-2.52719870209193) (14.756140625,4.8719296875)\t0\tGLOBAL\tNO\tZ\t-4.8"
   },
   {
     "ApplicationId": "Live",
@@ -86,7 +86,7 @@
   },
   {
     "ApplicationId": "SDL",
-    "GwaCommand": "SET_AT\t2\tLOAD_GRID_AREA.2:{speckle_app_id:SDL}\tDead load panel\t3\tPOLYGON\t(44.456140625,4.8719296875) (54.356140625,-74.3280703125) (74.156140625,-67.7347695434277) (74.156140625,4.8719296875)\t5\tGLOBAL\tNO\tZ\t-1.2"
+    "GwaCommand": "SET_AT\t2\tLOAD_GRID_AREA.2:{speckle_app_id:SDL}\tDead load panel\t3\tPOLYGON\t(44.456140625,4.8719296875) (54.356140625,-74.3280703125) (74.156140625,-67.7347695434277) (74.156140625,4.8719296875)\t0\tGLOBAL\tNO\tZ\t-1.2"
   },
   {
     "ApplicationId": "SDL",
