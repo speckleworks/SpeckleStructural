@@ -1,1 +1,739 @@
-{"success":true,"resources":[{"private":false,"canRead":[],"canWrite":[],"anonymousComments":false,"comments":[],"name":"Column property","geometryHash":null,"hash":"fab002156f899c7cf42a0e522d24f908","applicationId":"columnProp","properties":null,"deleted":false,"parent":null,"children":[],"ancestors":[],"_id":"5d71b529f659bb2a09edbd46","type":"Structural1DProperty","profile":{"type":"Polyline","value":[-836,-1141,0,-3799,3396,0,1710,992,0,931,-920,0],"closed":true,"domain":{"type":"Interval","start":0,"end":15274.883257192085,"hash":"63a7b6c16c9d8d4b7399df8332f48d2a"},"hash":"7b613d672a90437729b54786a9ac30a0"},"voids":[{"type":"Polyline","value":[-1881,1512,0,-247,1195,0,-431,-418,0],"closed":true,"domain":{"type":"Interval","start":0,"end":5701.927017639648,"hash":"57d11670662f858cbd4d68eca126f07b"},"hash":"e61c5bf65a4b4b728a1a2b940ff6bc07","applicationId":"gh/e61c5bf65a4b4b728a1a2b940ff6bc07"},{"type":"Polyline","value":[1313,588,0,1098,683,0,1115,273,0,1240,259,0],"closed":true,"domain":{"type":"Interval","start":0,"end":1108.188513498638,"hash":"1ac204ab423eef302171a94f94e8c457"},"hash":"aed6879ac6231f4959975a0ded203b31","applicationId":"gh/aed6879ac6231f4959975a0ded203b31"}],"shape":"Generic","hollow":false,"thickness":0,"owner":"5cc252a6f659bb2a09e03748","__v":0,"createdAt":"2019-09-06T01:23:53.145Z","updatedAt":"2019-09-06T01:23:53.145Z"},{"private":false,"canRead":[],"canWrite":[],"anonymousComments":false,"comments":[],"name":"Slab property","geometryHash":null,"hash":"15762259cfd57845c7376973c4e9ffc9","applicationId":"slabProp","properties":null,"deleted":false,"parent":null,"children":[],"ancestors":[],"_id":"5d440c3735db773ba174178f","type":"Structural2DProperty","thickness":300,"materialRef":"concrete","referenceSurface":1,"owner":"5cc252a6f659bb2a09e03748","__v":0,"createdAt":"2019-08-02T10:11:03.601Z","updatedAt":"2019-08-02T10:11:03.601Z"},{"private":false,"canRead":[],"canWrite":[],"anonymousComments":false,"comments":[],"name":"Concrete","geometryHash":null,"hash":"53262bc35966481a6c67e2eef95c92c2","applicationId":"concrete","properties":null,"deleted":false,"parent":null,"children":[],"ancestors":[],"_id":"5d440ca835db773ba1741790","type":"StructuralMaterialConcrete","youngsModulus":28000000000,"shearModulus":11666700000,"poissonsRatio":0.2,"density":2400,"coeffThermalExpansion":0.00001,"compressiveStrength":40000000,"maxStrain":0.003,"aggragateSize":0.02,"owner":"5cc252a6f659bb2a09e03748","__v":0,"createdAt":"2019-08-02T10:12:56.694Z","updatedAt":"2019-08-02T10:12:56.694Z"},{"private":false,"canRead":[],"canWrite":[],"anonymousComments":false,"comments":[],"name":"LSP One","geometryHash":null,"hash":"a1f9e67ba6a84c0ec4341b0ba9e3a73d","applicationId":"LSP1","properties":{"structural":{"springType":"Compression","axis":{"type":"Plane/StructuralAxis","normal":{"type":"Vector","value":[0,0,1],"hash":"f483a1c07f31568446500c526ed9e3bf"},"xdir":{"type":"Vector","value":[1,0,0],"hash":"84b09350c6b5443e8844adc1ba7f6ea7"},"ydir":{"type":"Vector","value":[0,1,0],"hash":"92539628bdf2edbd2f70a87799d70a8c"},"hash":"56b250da0a195a180564227fc4f92573","applicationId":"gh/56b250da0a195a180564227fc4f92573"},"stiffness":{"applicationId":"gh/f2e810f58a493f384112ed1ec10cc5e2","hash":"f2e810f58a493f384112ed1ec10cc5e2","type":"StructuralVectorSix","value":[12,15,20,25,30,38]}}},"deleted":false,"parent":null,"children":[],"ancestors":[],"_id":"5d71b52f35db773ba17a0e9f","type":"Object/StructuralSpringProperty","owner":"5cc252a6f659bb2a09e03748","__v":0,"createdAt":"2019-09-06T01:23:59.634Z","updatedAt":"2019-09-06T01:23:59.634Z"}],"message":"Object list returned. If querying, duplication of objects in list will not be respected."}
+{
+	"success": true,
+	"resources": [
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column property",
+			"geometryHash": null,
+			"hash": "0a04535aec3f2a461cb7d2b87f9b9ef1",
+			"applicationId": "columnProp",
+			"properties": null,
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d96b281fb0e35208ce53e06",
+			"profile": {
+				"type": "Polyline",
+				"value": [
+					-836,
+					-1141,
+					0,
+					-3799,
+					3396,
+					0,
+					1710,
+					992,
+					0,
+					931,
+					-920,
+					0
+				],
+				"closed": true,
+				"domain": {
+					"type": "Interval",
+					"start": 0,
+					"end": 15274.883257192085,
+					"hash": "98dc3b9337bddbae47dea1fbb7d11c4a"
+				},
+				"hash": "e7a2c952dd8b3fa79c9f1da85c077703"
+			},
+			"voids": [
+				{
+					"type": "Polyline",
+					"value": [
+						-1881,
+						1512,
+						0,
+						-247,
+						1195,
+						0,
+						-431,
+						-418,
+						0
+					],
+					"closed": true,
+					"domain": {
+						"type": "Interval",
+						"start": 0,
+						"end": 5701.927017639648,
+						"hash": "8bc807398c150c73695e407ffa925b7c"
+					},
+					"hash": "3e9363a5f938493a3b55c139fd0d1f37",
+					"applicationId": "gh/3e9363a5f938493a3b55c139fd0d1f37"
+				},
+				{
+					"type": "Polyline",
+					"value": [
+						1313,
+						588,
+						0,
+						1098,
+						683,
+						0,
+						1115,
+						273,
+						0,
+						1240,
+						259,
+						0
+					],
+					"closed": true,
+					"domain": {
+						"type": "Interval",
+						"start": 0,
+						"end": 1108.188513498638,
+						"hash": "c6dc66784b3329ee9eb33fcc9a892701"
+					},
+					"hash": "8f0af801c4196a1bb2e3c181428d4534",
+					"applicationId": "gh/8f0af801c4196a1bb2e3c181428d4534"
+				}
+			],
+			"materialRef": "concrete",
+			"type": "Structural1DProperty",
+			"shape": "Generic",
+			"hollow": false,
+			"thickness": 0,
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-04T02:46:25.805Z",
+			"updatedAt": "2019-10-04T02:46:25.805Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Slab property",
+			"geometryHash": null,
+			"hash": "15762259cfd57845c7376973c4e9ffc9",
+			"applicationId": "slabProp",
+			"properties": null,
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d440c3735db773ba174178f",
+			"type": "Structural2DProperty",
+			"thickness": 300,
+			"materialRef": "concrete",
+			"referenceSurface": 1,
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-08-02T10:11:03.601Z",
+			"updatedAt": "2019-08-02T10:11:03.601Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Concrete",
+			"geometryHash": null,
+			"hash": "53262bc35966481a6c67e2eef95c92c2",
+			"applicationId": "concrete",
+			"properties": null,
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d440ca835db773ba1741790",
+			"type": "StructuralMaterialConcrete",
+			"youngsModulus": 28000000000,
+			"shearModulus": 11666700000,
+			"poissonsRatio": 0.2,
+			"density": 2400,
+			"coeffThermalExpansion": 0.00001,
+			"compressiveStrength": 40000000,
+			"maxStrain": 0.003,
+			"aggragateSize": 0.02,
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-08-02T10:12:56.694Z",
+			"updatedAt": "2019-08-02T10:12:56.694Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "LSP-General",
+			"geometryHash": null,
+			"hash": "0e14ea030d377c1860dc6b72453e58fc",
+			"applicationId": "gh/0e14ea030d377c1860dc6b72453e58fc",
+			"properties": {
+				"structural": {
+					"dampingRatio": 0.21,
+					"springType": "General",
+					"axis": {
+						"type": "Plane/StructuralAxis",
+						"normal": {
+							"type": "Vector",
+							"value": [
+								0,
+								0,
+								1
+							],
+							"hash": "1fd663108f95cf672630b053c4202f44"
+						},
+						"xdir": {
+							"type": "Vector",
+							"value": [
+								1,
+								0,
+								0
+							],
+							"hash": "e80c77b8af81536d423bd621f3d50ece"
+						},
+						"ydir": {
+							"type": "Vector",
+							"value": [
+								0,
+								1,
+								0
+							],
+							"hash": "6c4b67e6449c76f35ab0b81ba2cbb107"
+						},
+						"hash": "c8bc738b9904bc6efb6e51ed33cb28bf",
+						"applicationId": "gh/c8bc738b9904bc6efb6e51ed33cb28bf"
+					},
+					"stiffness": {
+						"type": "StructuralVectorSix",
+						"value": [
+							12,
+							15,
+							20,
+							25,
+							30,
+							38
+						],
+						"hash": "f2e810f58a493f384112ed1ec10cc5e2",
+						"applicationId": "gh/f2e810f58a493f384112ed1ec10cc5e2"
+					}
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d96d3b1fb0e35208ce561da",
+			"type": "Object/StructuralSpringProperty",
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-04T05:08:01.262Z",
+			"updatedAt": "2019-10-04T05:08:01.262Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "LSP-Axial",
+			"geometryHash": null,
+			"hash": "34a7311a137096403bbe0296bbed53b7",
+			"applicationId": "gh/34a7311a137096403bbe0296bbed53b7",
+			"properties": {
+				"structural": {
+					"dampingRatio": 0.21,
+					"springType": "Axial",
+					"axis": {
+						"type": "Plane/StructuralAxis",
+						"normal": {
+							"type": "Vector",
+							"value": [
+								0,
+								0,
+								1
+							],
+							"hash": "1fd663108f95cf672630b053c4202f44"
+						},
+						"xdir": {
+							"type": "Vector",
+							"value": [
+								1,
+								0,
+								0
+							],
+							"hash": "e80c77b8af81536d423bd621f3d50ece"
+						},
+						"ydir": {
+							"type": "Vector",
+							"value": [
+								0,
+								1,
+								0
+							],
+							"hash": "6c4b67e6449c76f35ab0b81ba2cbb107"
+						},
+						"hash": "c8bc738b9904bc6efb6e51ed33cb28bf",
+						"applicationId": "gh/c8bc738b9904bc6efb6e51ed33cb28bf"
+					},
+					"stiffness": {
+						"type": "StructuralVectorSix",
+						"value": [
+							12,
+							15,
+							20,
+							25,
+							30,
+							38
+						],
+						"hash": "f2e810f58a493f384112ed1ec10cc5e2",
+						"applicationId": "gh/f2e810f58a493f384112ed1ec10cc5e2"
+					}
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d96d3b1fb0e35208ce561db",
+			"type": "Object/StructuralSpringProperty",
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-04T05:08:01.262Z",
+			"updatedAt": "2019-10-04T05:08:01.262Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "LSP-Torsional",
+			"geometryHash": null,
+			"hash": "d3acde535f3ecd3a9d384929810714dc",
+			"applicationId": "gh/d3acde535f3ecd3a9d384929810714dc",
+			"properties": {
+				"structural": {
+					"dampingRatio": 0.21,
+					"springType": "Torsional",
+					"axis": {
+						"type": "Plane/StructuralAxis",
+						"normal": {
+							"type": "Vector",
+							"value": [
+								0,
+								0,
+								1
+							],
+							"hash": "1fd663108f95cf672630b053c4202f44"
+						},
+						"xdir": {
+							"type": "Vector",
+							"value": [
+								1,
+								0,
+								0
+							],
+							"hash": "e80c77b8af81536d423bd621f3d50ece"
+						},
+						"ydir": {
+							"type": "Vector",
+							"value": [
+								0,
+								1,
+								0
+							],
+							"hash": "6c4b67e6449c76f35ab0b81ba2cbb107"
+						},
+						"hash": "c8bc738b9904bc6efb6e51ed33cb28bf",
+						"applicationId": "gh/c8bc738b9904bc6efb6e51ed33cb28bf"
+					},
+					"stiffness": {
+						"type": "StructuralVectorSix",
+						"value": [
+							12,
+							15,
+							20,
+							25,
+							30,
+							38
+						],
+						"hash": "f2e810f58a493f384112ed1ec10cc5e2",
+						"applicationId": "gh/f2e810f58a493f384112ed1ec10cc5e2"
+					}
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d96d3b1fb0e35208ce561dc",
+			"type": "Object/StructuralSpringProperty",
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-04T05:08:01.262Z",
+			"updatedAt": "2019-10-04T05:08:01.262Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "LSP-Compression",
+			"geometryHash": null,
+			"hash": "150a6a79e8ecbc0f7efb4fa822d67558",
+			"applicationId": "gh/150a6a79e8ecbc0f7efb4fa822d67558",
+			"properties": {
+				"structural": {
+					"dampingRatio": 0.21,
+					"springType": "Compression",
+					"axis": {
+						"type": "Plane/StructuralAxis",
+						"normal": {
+							"type": "Vector",
+							"value": [
+								0,
+								0,
+								1
+							],
+							"hash": "1fd663108f95cf672630b053c4202f44"
+						},
+						"xdir": {
+							"type": "Vector",
+							"value": [
+								1,
+								0,
+								0
+							],
+							"hash": "e80c77b8af81536d423bd621f3d50ece"
+						},
+						"ydir": {
+							"type": "Vector",
+							"value": [
+								0,
+								1,
+								0
+							],
+							"hash": "6c4b67e6449c76f35ab0b81ba2cbb107"
+						},
+						"hash": "c8bc738b9904bc6efb6e51ed33cb28bf",
+						"applicationId": "gh/c8bc738b9904bc6efb6e51ed33cb28bf"
+					},
+					"stiffness": {
+						"type": "StructuralVectorSix",
+						"value": [
+							12,
+							15,
+							20,
+							25,
+							30,
+							38
+						],
+						"hash": "f2e810f58a493f384112ed1ec10cc5e2",
+						"applicationId": "gh/f2e810f58a493f384112ed1ec10cc5e2"
+					}
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d96d3b1fb0e35208ce561dd",
+			"type": "Object/StructuralSpringProperty",
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-04T05:08:01.262Z",
+			"updatedAt": "2019-10-04T05:08:01.262Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "LSP-Tension",
+			"geometryHash": null,
+			"hash": "ee71ea28e5836bad65af7cdde55f37ec",
+			"applicationId": "gh/ee71ea28e5836bad65af7cdde55f37ec",
+			"properties": {
+				"structural": {
+					"dampingRatio": 0.21,
+					"springType": "Tension",
+					"axis": {
+						"type": "Plane/StructuralAxis",
+						"normal": {
+							"type": "Vector",
+							"value": [
+								0,
+								0,
+								1
+							],
+							"hash": "1fd663108f95cf672630b053c4202f44"
+						},
+						"xdir": {
+							"type": "Vector",
+							"value": [
+								1,
+								0,
+								0
+							],
+							"hash": "e80c77b8af81536d423bd621f3d50ece"
+						},
+						"ydir": {
+							"type": "Vector",
+							"value": [
+								0,
+								1,
+								0
+							],
+							"hash": "6c4b67e6449c76f35ab0b81ba2cbb107"
+						},
+						"hash": "c8bc738b9904bc6efb6e51ed33cb28bf",
+						"applicationId": "gh/c8bc738b9904bc6efb6e51ed33cb28bf"
+					},
+					"stiffness": {
+						"type": "StructuralVectorSix",
+						"value": [
+							12,
+							15,
+							20,
+							25,
+							30,
+							38
+						],
+						"hash": "f2e810f58a493f384112ed1ec10cc5e2",
+						"applicationId": "gh/f2e810f58a493f384112ed1ec10cc5e2"
+					}
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d96d3b1fb0e35208ce561de",
+			"type": "Object/StructuralSpringProperty",
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-04T05:08:01.263Z",
+			"updatedAt": "2019-10-04T05:08:01.263Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "LSP-Lockup",
+			"geometryHash": null,
+			"hash": "6854f7b9522dd1c5d13cf369b726cef1",
+			"applicationId": "gh/6854f7b9522dd1c5d13cf369b726cef1",
+			"properties": {
+				"structural": {
+					"dampingRatio": 0.21,
+					"springType": "Lockup",
+					"axis": {
+						"type": "Plane/StructuralAxis",
+						"normal": {
+							"type": "Vector",
+							"value": [
+								0,
+								0,
+								1
+							],
+							"hash": "1fd663108f95cf672630b053c4202f44"
+						},
+						"xdir": {
+							"type": "Vector",
+							"value": [
+								1,
+								0,
+								0
+							],
+							"hash": "e80c77b8af81536d423bd621f3d50ece"
+						},
+						"ydir": {
+							"type": "Vector",
+							"value": [
+								0,
+								1,
+								0
+							],
+							"hash": "6c4b67e6449c76f35ab0b81ba2cbb107"
+						},
+						"hash": "c8bc738b9904bc6efb6e51ed33cb28bf",
+						"applicationId": "gh/c8bc738b9904bc6efb6e51ed33cb28bf"
+					},
+					"stiffness": {
+						"type": "StructuralVectorSix",
+						"value": [
+							12,
+							15,
+							20,
+							25,
+							30,
+							38
+						],
+						"hash": "f2e810f58a493f384112ed1ec10cc5e2",
+						"applicationId": "gh/f2e810f58a493f384112ed1ec10cc5e2"
+					}
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d96d3b1fb0e35208ce561df",
+			"type": "Object/StructuralSpringProperty",
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-04T05:08:01.263Z",
+			"updatedAt": "2019-10-04T05:08:01.263Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "LSP-Gap",
+			"geometryHash": null,
+			"hash": "75e517bb9ccbecdd6b844a57a73f2edb",
+			"applicationId": "gh/75e517bb9ccbecdd6b844a57a73f2edb",
+			"properties": {
+				"structural": {
+					"dampingRatio": 0.21,
+					"springType": "Gap",
+					"axis": {
+						"type": "Plane/StructuralAxis",
+						"normal": {
+							"type": "Vector",
+							"value": [
+								0,
+								0,
+								1
+							],
+							"hash": "1fd663108f95cf672630b053c4202f44"
+						},
+						"xdir": {
+							"type": "Vector",
+							"value": [
+								1,
+								0,
+								0
+							],
+							"hash": "e80c77b8af81536d423bd621f3d50ece"
+						},
+						"ydir": {
+							"type": "Vector",
+							"value": [
+								0,
+								1,
+								0
+							],
+							"hash": "6c4b67e6449c76f35ab0b81ba2cbb107"
+						},
+						"hash": "c8bc738b9904bc6efb6e51ed33cb28bf",
+						"applicationId": "gh/c8bc738b9904bc6efb6e51ed33cb28bf"
+					},
+					"stiffness": {
+						"type": "StructuralVectorSix",
+						"value": [
+							12,
+							15,
+							20,
+							25,
+							30,
+							38
+						],
+						"hash": "f2e810f58a493f384112ed1ec10cc5e2",
+						"applicationId": "gh/f2e810f58a493f384112ed1ec10cc5e2"
+					}
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d96d3b1fb0e35208ce561e0",
+			"type": "Object/StructuralSpringProperty",
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-04T05:08:01.263Z",
+			"updatedAt": "2019-10-04T05:08:01.263Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "LSP-Friction",
+			"geometryHash": null,
+			"hash": "a2f49ec8a94bdebe19c1433d95294955",
+			"applicationId": "gh/a2f49ec8a94bdebe19c1433d95294955",
+			"properties": {
+				"structural": {
+					"dampingRatio": 0.21,
+					"springType": "Friction",
+					"axis": {
+						"type": "Plane/StructuralAxis",
+						"normal": {
+							"type": "Vector",
+							"value": [
+								0,
+								0,
+								1
+							],
+							"hash": "1fd663108f95cf672630b053c4202f44"
+						},
+						"xdir": {
+							"type": "Vector",
+							"value": [
+								1,
+								0,
+								0
+							],
+							"hash": "e80c77b8af81536d423bd621f3d50ece"
+						},
+						"ydir": {
+							"type": "Vector",
+							"value": [
+								0,
+								1,
+								0
+							],
+							"hash": "6c4b67e6449c76f35ab0b81ba2cbb107"
+						},
+						"hash": "c8bc738b9904bc6efb6e51ed33cb28bf",
+						"applicationId": "gh/c8bc738b9904bc6efb6e51ed33cb28bf"
+					},
+					"stiffness": {
+						"type": "StructuralVectorSix",
+						"value": [
+							12,
+							15,
+							20,
+							25,
+							30,
+							38
+						],
+						"hash": "f2e810f58a493f384112ed1ec10cc5e2",
+						"applicationId": "gh/f2e810f58a493f384112ed1ec10cc5e2"
+					}
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d96d3b1fb0e35208ce561e1",
+			"type": "Object/StructuralSpringProperty",
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-04T05:08:01.263Z",
+			"updatedAt": "2019-10-04T05:08:01.263Z"
+		}
+	],
+	"message": "Object list returned. If querying, duplication of objects in list will not be respected."
+}
