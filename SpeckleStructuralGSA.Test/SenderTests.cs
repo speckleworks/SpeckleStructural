@@ -19,7 +19,7 @@ namespace SpeckleStructuralGSA.Test
     public static string[] resultTypes = new[] { "Nodal Reaction", "1D Element Strain Energy Density", "1D Element Force", "Nodal Displacements", "1D Element Stress" };
     public static string[] loadCases = new[] { "A2", "C1" };
     public const string gsaFileNameWithResults = "20180906 - Existing structure GSA_V7_modified.gwb";
-    public const string gsaFileNameWithoutResults = "Structural Demo 191003.gwb";
+    public const string gsaFileNameWithoutResults = "Structural Demo 191004.gwb";
 
     [OneTimeSetUp]
     public void SetupTests()

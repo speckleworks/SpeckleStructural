@@ -32,12 +32,105 @@
   },
   {
     "type": "Object/StructuralSpringProperty",
-    "applicationId": "LSP1",
-    "name": "LSP One",
+    "applicationId": "gh/0e14ea030d377c1860dc6b72453e58fc",
+    "name": "LSP-General",
     "properties": {
       "structural": {
         "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"2cc0b389f8c5e2877e9ac6ac45b72cc2","properties":{}},
-        "stiffness": {"type":"StructuralVectorSix","value":[12.0,15.0,20.0,25.0,30.0,38.0],"hash":"ae836cd82b24e2d7fb085a6d2abfd17e","properties":{}}
+        "springType": "General",
+        "stiffness": {"type":"StructuralVectorSix","value":[12.0,15.0,20.0,25.0,30.0,38.0],"hash":"ae836cd82b24e2d7fb085a6d2abfd17e","properties":{}},
+        "dampingRatio": 0.21
+      }
+    }
+  },
+  {
+    "type": "Object/StructuralSpringProperty",
+    "applicationId": "gh/34a7311a137096403bbe0296bbed53b7",
+    "name": "LSP-Axial",
+    "properties": {
+      "structural": {
+        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"2cc0b389f8c5e2877e9ac6ac45b72cc2","properties":{}},
+        "springType": "Axial",
+        "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
+        "dampingRatio": 0.21
+      }
+    }
+  },
+  {
+    "type": "Object/StructuralSpringProperty",
+    "applicationId": "gh/d3acde535f3ecd3a9d384929810714dc",
+    "name": "LSP-Torsional",
+    "properties": {
+      "structural": {
+        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"2cc0b389f8c5e2877e9ac6ac45b72cc2","properties":{}},
+        "springType": "Torsional",
+        "stiffness": {"type":"StructuralVectorSix","value":[0.0,0.0,0.0,25.0,0.0,0.0],"hash":"98d1640829ffe5e2dffe3ba3ed4b7659","properties":{}},
+        "dampingRatio": 0.21
+      }
+    }
+  },
+  {
+    "type": "Object/StructuralSpringProperty",
+    "applicationId": "gh/150a6a79e8ecbc0f7efb4fa822d67558",
+    "name": "LSP-Compression",
+    "properties": {
+      "structural": {
+        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"2cc0b389f8c5e2877e9ac6ac45b72cc2","properties":{}},
+        "springType": "Compression",
+        "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
+        "dampingRatio": 0.21
+      }
+    }
+  },
+  {
+    "type": "Object/StructuralSpringProperty",
+    "applicationId": "gh/ee71ea28e5836bad65af7cdde55f37ec",
+    "name": "LSP-Tension",
+    "properties": {
+      "structural": {
+        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"2cc0b389f8c5e2877e9ac6ac45b72cc2","properties":{}},
+        "springType": "Tension",
+        "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
+        "dampingRatio": 0.21
+      }
+    }
+  },
+  {
+    "type": "Object/StructuralSpringProperty",
+    "applicationId": "gh/6854f7b9522dd1c5d13cf369b726cef1",
+    "name": "LSP-Lockup",
+    "properties": {
+      "structural": {
+        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"2cc0b389f8c5e2877e9ac6ac45b72cc2","properties":{}},
+        "springType": "Lockup",
+        "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
+        "dampingRatio": 0.21
+      }
+    }
+  },
+  {
+    "type": "Object/StructuralSpringProperty",
+    "applicationId": "gh/75e517bb9ccbecdd6b844a57a73f2edb",
+    "name": "LSP-Gap",
+    "properties": {
+      "structural": {
+        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"2cc0b389f8c5e2877e9ac6ac45b72cc2","properties":{}},
+        "springType": "Gap",
+        "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
+        "dampingRatio": 0.21
+      }
+    }
+  },
+  {
+    "type": "Object/StructuralSpringProperty",
+    "applicationId": "gh/a2f49ec8a94bdebe19c1433d95294955",
+    "name": "LSP-Friction",
+    "properties": {
+      "structural": {
+        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"2cc0b389f8c5e2877e9ac6ac45b72cc2","properties":{}},
+        "springType": "Friction",
+        "stiffness": {"type":"StructuralVectorSix","value":[12.0,15.0,20.0,0.0,0.0,0.0],"hash":"859fa9f418bc114832e1f243fb3f8c61","properties":{}},
+        "dampingRatio": 0.21
       }
     }
   },
@@ -61,7 +154,7 @@
     "name": "Live load panel",
     "properties": {
       "structural": {
-        "loadCaseRef": "gsa/LOAD_TITLE.2_4",
+        "loadCaseRef": "LC1",
         "loading": {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,-4.80000019073],"hash":"9ddd218125d3c53ae30695262e76d1d3","properties":{}}
       }
     }
@@ -86,7 +179,7 @@
     "name": "Dead load panel",
     "properties": {
       "structural": {
-        "loadCaseRef": "gsa/LOAD_TITLE.2_5",
+        "loadCaseRef": "LC2",
         "loading": {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,-1.20000004768],"hash":"61c99049acb76e0d79afd7d883596f57","properties":{}}
       }
     }
@@ -2205,7 +2298,7 @@
       -4.87192982456,
       -0.2
     ],
-    "applicationId": "gh/4701199f8bf3296971602667d2b93d10",
+    "applicationId": "gh/8efda07519fcff8dd8decf9e8a6ffd3d",
     "name": "New spring 0",
     "properties": {
       "structural": {
@@ -2233,7 +2326,7 @@
       -4.87192982456,
       -0.2
     ],
-    "applicationId": "gh/a5949457cd36746718c305618dbaef1d",
+    "applicationId": "gh/a87a35fc075e58ba61cadddbbb977a0d",
     "name": "New spring 1",
     "properties": {
       "structural": {
@@ -2261,7 +2354,7 @@
       94.1280701754,
       -0.2
     ],
-    "applicationId": "gh/37e70ac12575c1d5614fe249fff8e29a",
+    "applicationId": "gh/53af7827399f8a69f031816fe3fac8cb",
     "name": "New spring 2",
     "properties": {
       "structural": {
@@ -2289,7 +2382,7 @@
       54.5280701754,
       -0.2
     ],
-    "applicationId": "gh/64f40fc1e5712ba541cf30f5d6c758ee",
+    "applicationId": "gh/7b21c139611881188a9ecc3797314553",
     "name": "New spring 3",
     "properties": {
       "structural": {
@@ -2317,7 +2410,7 @@
       54.5280701754,
       -0.2
     ],
-    "applicationId": "gh/787cb98c0fd1cf63ba41ffa7858642e2",
+    "applicationId": "gh/0a8854d9654552f7f9720f4f88c37967",
     "name": "New spring 4",
     "properties": {
       "structural": {
@@ -2345,7 +2438,7 @@
       -24.6719298246,
       -0.2
     ],
-    "applicationId": "gh/8e379efaa80605386c39735a25b1e82d",
+    "applicationId": "gh/8fd30e5038124907d4b05e0c96aead3e",
     "name": "New spring 5",
     "properties": {
       "structural": {
@@ -2373,7 +2466,7 @@
       -24.6719298246,
       -0.2
     ],
-    "applicationId": "gh/3e6f381faf721c15ea911ea6f6cbc0c4",
+    "applicationId": "gh/75406fbe353c2a80c2b1a0539eaa56f4",
     "name": "New spring 6",
     "properties": {
       "structural": {
