@@ -65,6 +65,8 @@ after_build:
 
 # zip everything into a zip file containing package folder structure
   - 7z a SpeckleStructural-%APPVEYOR_BUILD_VERSION%.zip "%APPVEYOR_BUILD_FOLDER%\SpeckleStructural\bin\Release\*"
+  
+test: off
 
 artifacts:
   path: SpeckleStructural-%APPVEYOR_BUILD_VERSION%.zip

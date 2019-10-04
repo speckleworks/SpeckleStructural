@@ -1,0 +1,3783 @@
+{
+	"success": true,
+	"resources": [
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": null,
+			"geometryHash": null,
+			"hash": "ad4558d6e5a0784fe711195b15dbb60d",
+			"applicationId": "gh/ad4558d6e5a0784fe711195b15dbb60d",
+			"properties": {
+				"structural": {
+					"restraint": {
+						"type": "StructuralVectorBoolSix",
+						"value": [
+							true,
+							true,
+							true,
+							true,
+							true,
+							true
+						],
+						"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+						"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+					}
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d4401a1f659bb2a09e7beec",
+			"type": "Point/StructuralNode",
+			"value": [
+				14756.140350877193,
+				-4871.929824561402,
+				0
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-08-02T09:25:53.402Z",
+			"updatedAt": "2019-08-02T09:25:53.402Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": null,
+			"geometryHash": null,
+			"hash": "460a05faac77730b25727b360f7d0cec",
+			"applicationId": "gh/460a05faac77730b25727b360f7d0cec",
+			"properties": {
+				"structural": {
+					"restraint": {
+						"type": "StructuralVectorBoolSix",
+						"value": [
+							true,
+							true,
+							true,
+							true,
+							true,
+							true
+						],
+						"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+						"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+					}
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d4401a1f659bb2a09e7beed",
+			"type": "Point/StructuralNode",
+			"value": [
+				74156.14035087719,
+				-4871.929824561402,
+				0
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-08-02T09:25:53.402Z",
+			"updatedAt": "2019-08-02T09:25:53.402Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": null,
+			"geometryHash": null,
+			"hash": "e9901628ee704568be982cf978f99ebb",
+			"applicationId": "gh/e9901628ee704568be982cf978f99ebb",
+			"properties": {
+				"structural": {
+					"restraint": {
+						"type": "StructuralVectorBoolSix",
+						"value": [
+							true,
+							true,
+							true,
+							true,
+							true,
+							true
+						],
+						"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+						"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+					}
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d4401a1f659bb2a09e7beee",
+			"type": "Point/StructuralNode",
+			"value": [
+				74156.14035087719,
+				94128.0701754386,
+				0
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-08-02T09:25:53.402Z",
+			"updatedAt": "2019-08-02T09:25:53.402Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": null,
+			"geometryHash": null,
+			"hash": "fbcd9cadcbb666d66ffe391c8ef78fa8",
+			"applicationId": "gh/fbcd9cadcbb666d66ffe391c8ef78fa8",
+			"properties": {
+				"structural": {
+					"restraint": {
+						"type": "StructuralVectorBoolSix",
+						"value": [
+							true,
+							true,
+							true,
+							true,
+							true,
+							true
+						],
+						"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+						"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+					}
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d4401a1f659bb2a09e7beef",
+			"type": "Point/StructuralNode",
+			"value": [
+				34556.140350877184,
+				54528.0701754386,
+				0
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-08-02T09:25:53.402Z",
+			"updatedAt": "2019-08-02T09:25:53.402Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": null,
+			"geometryHash": null,
+			"hash": "f16de03fe77b08cc3c9dceb84920aff8",
+			"applicationId": "gh/f16de03fe77b08cc3c9dceb84920aff8",
+			"properties": {
+				"structural": {
+					"restraint": {
+						"type": "StructuralVectorBoolSix",
+						"value": [
+							true,
+							true,
+							true,
+							true,
+							true,
+							true
+						],
+						"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+						"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+					}
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d4401a1f659bb2a09e7bef0",
+			"type": "Point/StructuralNode",
+			"value": [
+				-24843.85964912281,
+				54528.0701754386,
+				0
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-08-02T09:25:53.402Z",
+			"updatedAt": "2019-08-02T09:25:53.402Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": null,
+			"geometryHash": null,
+			"hash": "aad3349332e757ba1c6bc306b2a56957",
+			"applicationId": "gh/aad3349332e757ba1c6bc306b2a56957",
+			"properties": {
+				"structural": {
+					"restraint": {
+						"type": "StructuralVectorBoolSix",
+						"value": [
+							true,
+							true,
+							true,
+							true,
+							true,
+							true
+						],
+						"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+						"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+					}
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d4401a1f659bb2a09e7bef1",
+			"type": "Point/StructuralNode",
+			"value": [
+				-24843.85964912281,
+				-24671.929824561405,
+				0
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-08-02T09:25:53.402Z",
+			"updatedAt": "2019-08-02T09:25:53.402Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": null,
+			"geometryHash": null,
+			"hash": "81377a0b1382a79b6833ab88c0a0e311",
+			"applicationId": "gh/81377a0b1382a79b6833ab88c0a0e311",
+			"properties": {
+				"structural": {
+					"restraint": {
+						"type": "StructuralVectorBoolSix",
+						"value": [
+							true,
+							true,
+							true,
+							true,
+							true,
+							true
+						],
+						"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+						"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+					}
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d4401a1f659bb2a09e7bef2",
+			"type": "Point/StructuralNode",
+			"value": [
+				14756.140350877193,
+				-24671.929824561405,
+				0
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-08-02T09:25:53.402Z",
+			"updatedAt": "2019-08-02T09:25:53.402Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 0",
+			"geometryHash": null,
+			"hash": "5f4c8163e9015fa1d400614ca5d4464b",
+			"applicationId": "gh/71aeda7ba88bbbc6dc8f8966d24045bc",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd316",
+			"type": "Line/Structural1DElement",
+			"value": [
+				14756.140350877193,
+				-4871.929824561402,
+				5790,
+				14756.140350877193,
+				-4871.929824561402,
+				0
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.279Z",
+			"updatedAt": "2019-10-03T00:02:18.279Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 1",
+			"geometryHash": null,
+			"hash": "c5be75aa850a6e7ac799bbb6c36ab370",
+			"applicationId": "gh/467503d3bf98b641d3fb7d507c365e53",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd317",
+			"type": "Line/Structural1DElement",
+			"value": [
+				14756.140350877193,
+				-4871.929824561402,
+				11580,
+				14756.140350877193,
+				-4871.929824561402,
+				5790
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.279Z",
+			"updatedAt": "2019-10-03T00:02:18.279Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 2",
+			"geometryHash": null,
+			"hash": "feb2763e420630c6a41c9341496b0526",
+			"applicationId": "gh/5971550242e77e8b899d33d8f65a9681",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd318",
+			"type": "Line/Structural1DElement",
+			"value": [
+				14756.140350877193,
+				-4871.929824561402,
+				17370,
+				14756.140350877193,
+				-4871.929824561402,
+				11580
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.279Z",
+			"updatedAt": "2019-10-03T00:02:18.279Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 3",
+			"geometryHash": null,
+			"hash": "0e6c32f406860ba01d5efd83b723bad3",
+			"applicationId": "gh/7a63661a22286943500cc7b165312546",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd319",
+			"type": "Line/Structural1DElement",
+			"value": [
+				20000,
+				10000,
+				23551.000000000004,
+				20000,
+				10000,
+				17370
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.279Z",
+			"updatedAt": "2019-10-03T00:02:18.279Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 4",
+			"geometryHash": null,
+			"hash": "267fcd145725028f62a287eadb2e4317",
+			"applicationId": "gh/a933d1f9bc5f97bc2e9166dcc2accd2b",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd31a",
+			"type": "Line/Structural1DElement",
+			"value": [
+				20000,
+				10000,
+				29732,
+				20000,
+				10000,
+				23551.000000000004
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.280Z",
+			"updatedAt": "2019-10-03T00:02:18.280Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 5",
+			"geometryHash": null,
+			"hash": "a3dd3d17bd21eb6b5bf432f649d7fb83",
+			"applicationId": "gh/9ee222aeacd6a783edd7996781351117",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd31b",
+			"type": "Line/Structural1DElement",
+			"value": [
+				74156.14035087719,
+				-4871.929824561402,
+				5790,
+				74156.14035087719,
+				-4871.929824561402,
+				0
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.280Z",
+			"updatedAt": "2019-10-03T00:02:18.280Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 6",
+			"geometryHash": null,
+			"hash": "6ebcd96f753eeb7b33c0c58ee310c68d",
+			"applicationId": "gh/154de130d058e883b9f30eed45a72895",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd31c",
+			"type": "Line/Structural1DElement",
+			"value": [
+				74156.14035087719,
+				-4871.929824561402,
+				11580,
+				74156.14035087719,
+				-4871.929824561402,
+				5790
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.280Z",
+			"updatedAt": "2019-10-03T00:02:18.280Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 7",
+			"geometryHash": null,
+			"hash": "06717302bd59c5f9364e795f4d8e2004",
+			"applicationId": "gh/43cfc7591b81b59602d4cc46ee20d226",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd31d",
+			"type": "Line/Structural1DElement",
+			"value": [
+				74156.14035087719,
+				-4871.929824561402,
+				17370,
+				74156.14035087719,
+				-4871.929824561402,
+				11580
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.280Z",
+			"updatedAt": "2019-10-03T00:02:18.280Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 8",
+			"geometryHash": null,
+			"hash": "05ad3c3f8a17bcdb56fd645e29cdf0c7",
+			"applicationId": "gh/fe643881343fd0ba26070cc52e91246c",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd31e",
+			"type": "Line/Structural1DElement",
+			"value": [
+				50000,
+				10000,
+				23551.000000000004,
+				50000,
+				10000,
+				17370
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.280Z",
+			"updatedAt": "2019-10-03T00:02:18.280Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 9",
+			"geometryHash": null,
+			"hash": "45f8f05d111203c7375b5d00a93cc5c1",
+			"applicationId": "gh/e7a4f495bea0d044febe1328ec2eb0df",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd31f",
+			"type": "Line/Structural1DElement",
+			"value": [
+				50000,
+				10000,
+				29732,
+				50000,
+				10000,
+				23551.000000000004
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.280Z",
+			"updatedAt": "2019-10-03T00:02:18.280Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 10",
+			"geometryHash": null,
+			"hash": "ebb507c51cf454962138b981e61d08d5",
+			"applicationId": "gh/37d3376f7550f4d01c5ae2b44eeffd93",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd320",
+			"type": "Line/Structural1DElement",
+			"value": [
+				74156.14035087719,
+				94128.0701754386,
+				5790,
+				74156.14035087719,
+				94128.0701754386,
+				0
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.280Z",
+			"updatedAt": "2019-10-03T00:02:18.280Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 11",
+			"geometryHash": null,
+			"hash": "87f937cee8ecab9eae0d19ec10909a44",
+			"applicationId": "gh/98777989964c2c0822154abc9ad1a7b5",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd321",
+			"type": "Line/Structural1DElement",
+			"value": [
+				74156.14035087719,
+				94128.0701754386,
+				11580,
+				74156.14035087719,
+				94128.0701754386,
+				5790
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.281Z",
+			"updatedAt": "2019-10-03T00:02:18.281Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 12",
+			"geometryHash": null,
+			"hash": "a05bb9d1d210a00ef89e403b1cc4d2e0",
+			"applicationId": "gh/5389b96a589a41cd85610ca769831649",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd322",
+			"type": "Line/Structural1DElement",
+			"value": [
+				74156.14035087719,
+				94128.0701754386,
+				17370,
+				74156.14035087719,
+				94128.0701754386,
+				11580
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.281Z",
+			"updatedAt": "2019-10-03T00:02:18.281Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 13",
+			"geometryHash": null,
+			"hash": "d8030061ee4e8501cb9dfdfb82a98f50",
+			"applicationId": "gh/ec93ebcab0f587089747a2d7445c1039",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd323",
+			"type": "Line/Structural1DElement",
+			"value": [
+				50000,
+				60000,
+				23551.000000000004,
+				50000,
+				60000,
+				17370
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.281Z",
+			"updatedAt": "2019-10-03T00:02:18.281Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 14",
+			"geometryHash": null,
+			"hash": "49393a5e0802dd7e2c32059ce858175c",
+			"applicationId": "gh/e9e01e24eb57e21b087a365ddbe22484",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd324",
+			"type": "Line/Structural1DElement",
+			"value": [
+				50000,
+				60000,
+				29732,
+				50000,
+				60000,
+				23551.000000000004
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.281Z",
+			"updatedAt": "2019-10-03T00:02:18.281Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 15",
+			"geometryHash": null,
+			"hash": "a7214bd7520b293e1cee24e36418f1cd",
+			"applicationId": "gh/79e56706e96ae448c95f28548e2e8521",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd325",
+			"type": "Line/Structural1DElement",
+			"value": [
+				34556.140350877184,
+				54528.0701754386,
+				5790,
+				34556.140350877184,
+				54528.0701754386,
+				0
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.281Z",
+			"updatedAt": "2019-10-03T00:02:18.281Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 16",
+			"geometryHash": null,
+			"hash": "7608b87c41eb7bcb0e90b8490ae2862a",
+			"applicationId": "gh/30b8049b34cc22b6add3f3565129b6f9",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd326",
+			"type": "Line/Structural1DElement",
+			"value": [
+				34556.140350877184,
+				54528.0701754386,
+				11580,
+				34556.140350877184,
+				54528.0701754386,
+				5790
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.281Z",
+			"updatedAt": "2019-10-03T00:02:18.281Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 17",
+			"geometryHash": null,
+			"hash": "816c77f365505e3b1fa4b0a1ae56ba05",
+			"applicationId": "gh/da62f5ea397543274e1f71c0f04e9f0e",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd327",
+			"type": "Line/Structural1DElement",
+			"value": [
+				34556.140350877184,
+				54528.0701754386,
+				17370,
+				34556.140350877184,
+				54528.0701754386,
+				11580
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.281Z",
+			"updatedAt": "2019-10-03T00:02:18.281Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 18",
+			"geometryHash": null,
+			"hash": "41a394e592c4180d13fffe8b5eaec94a",
+			"applicationId": "gh/7edb8fba34a7d36b41634d06d5c7a2e9",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd328",
+			"type": "Line/Structural1DElement",
+			"value": [
+				30000,
+				40000,
+				23551.000000000004,
+				30000,
+				40000,
+				17370
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.282Z",
+			"updatedAt": "2019-10-03T00:02:18.282Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 19",
+			"geometryHash": null,
+			"hash": "bf84e4feab771f1125b48ff3f5268e5e",
+			"applicationId": "gh/d65a448739a36232438e08af84d49a29",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd329",
+			"type": "Line/Structural1DElement",
+			"value": [
+				30000,
+				40000,
+				29732,
+				30000,
+				40000,
+				23551.000000000004
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.282Z",
+			"updatedAt": "2019-10-03T00:02:18.282Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 20",
+			"geometryHash": null,
+			"hash": "60f41be5280b60aa7d4ef3caa15b9646",
+			"applicationId": "gh/2f568fb93557d7e1c5accf5fdaf8b158",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd32a",
+			"type": "Line/Structural1DElement",
+			"value": [
+				-24843.85964912281,
+				54528.0701754386,
+				5790,
+				-24843.85964912281,
+				54528.0701754386,
+				0
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.282Z",
+			"updatedAt": "2019-10-03T00:02:18.282Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 21",
+			"geometryHash": null,
+			"hash": "35c498960e69323ff8c011be12430f0f",
+			"applicationId": "gh/61c3aac7cd02baa986a8e6bea2a5a71c",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd32b",
+			"type": "Line/Structural1DElement",
+			"value": [
+				-24843.85964912281,
+				54528.0701754386,
+				11580,
+				-24843.85964912281,
+				54528.0701754386,
+				5790
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.282Z",
+			"updatedAt": "2019-10-03T00:02:18.282Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 22",
+			"geometryHash": null,
+			"hash": "a8a6aba5532d0ed48807017987fd1439",
+			"applicationId": "gh/36a426efd9c31c0ce970a9d7543010de",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd32c",
+			"type": "Line/Structural1DElement",
+			"value": [
+				-24843.85964912281,
+				54528.0701754386,
+				17370,
+				-24843.85964912281,
+				54528.0701754386,
+				11580
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.282Z",
+			"updatedAt": "2019-10-03T00:02:18.282Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 23",
+			"geometryHash": null,
+			"hash": "fea6342c91a73ecbfb6817c06355880a",
+			"applicationId": "gh/a793eef6a72dbd78839e5c8ce6d67982",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd32d",
+			"type": "Line/Structural1DElement",
+			"value": [
+				0,
+				40000,
+				23551.000000000004,
+				0,
+				40000,
+				17370
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.282Z",
+			"updatedAt": "2019-10-03T00:02:18.283Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 24",
+			"geometryHash": null,
+			"hash": "64b529d99b0213b812bb5363631b247e",
+			"applicationId": "gh/63cd77ed5483f86e5657568dee4876c8",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd32e",
+			"type": "Line/Structural1DElement",
+			"value": [
+				0,
+				40000,
+				29732,
+				0,
+				40000,
+				23551.000000000004
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.283Z",
+			"updatedAt": "2019-10-03T00:02:18.283Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 25",
+			"geometryHash": null,
+			"hash": "2f3f8d1768829d4c875545f1ed073324",
+			"applicationId": "gh/1e3d7853e300b8fa54294c3badb3b424",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd32f",
+			"type": "Line/Structural1DElement",
+			"value": [
+				-24843.85964912281,
+				-24671.929824561405,
+				5790,
+				-24843.85964912281,
+				-24671.929824561405,
+				0
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.283Z",
+			"updatedAt": "2019-10-03T00:02:18.283Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 26",
+			"geometryHash": null,
+			"hash": "30702080ef66f44bd95049602ca58498",
+			"applicationId": "gh/7a6723674cbd08c5a5cc9eabfc2958ea",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd330",
+			"type": "Line/Structural1DElement",
+			"value": [
+				-24843.85964912281,
+				-24671.929824561405,
+				11580,
+				-24843.85964912281,
+				-24671.929824561405,
+				5790
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.283Z",
+			"updatedAt": "2019-10-03T00:02:18.283Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 27",
+			"geometryHash": null,
+			"hash": "233696fadafc9ab45b80b43cc2a472e6",
+			"applicationId": "gh/f6b828cfbbe6dfa459744822105192c4",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd331",
+			"type": "Line/Structural1DElement",
+			"value": [
+				-24843.85964912281,
+				-24671.929824561405,
+				17370,
+				-24843.85964912281,
+				-24671.929824561405,
+				11580
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.283Z",
+			"updatedAt": "2019-10-03T00:02:18.283Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 28",
+			"geometryHash": null,
+			"hash": "921cdd693dcd7e333ff881efd6e2d2d2",
+			"applicationId": "gh/dcf4ad9e8994895a42dcfa5431a4bd31",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd332",
+			"type": "Line/Structural1DElement",
+			"value": [
+				0,
+				0,
+				23551.000000000004,
+				0,
+				0,
+				17370
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.283Z",
+			"updatedAt": "2019-10-03T00:02:18.283Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 29",
+			"geometryHash": null,
+			"hash": "2dbeb2b7f3a06a443e171bbff9e8d44d",
+			"applicationId": "gh/83e4d528ae20104b72e69211e3c21e93",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd333",
+			"type": "Line/Structural1DElement",
+			"value": [
+				0,
+				0,
+				29732,
+				0,
+				0,
+				23551.000000000004
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.283Z",
+			"updatedAt": "2019-10-03T00:02:18.283Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 30",
+			"geometryHash": null,
+			"hash": "c3374468362c3f04c906ac0e6107a304",
+			"applicationId": "gh/65f4e171aed320cb78cfe8a585045bb6",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd334",
+			"type": "Line/Structural1DElement",
+			"value": [
+				14756.140350877193,
+				-24671.929824561405,
+				5790,
+				14756.140350877193,
+				-24671.929824561405,
+				0
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.284Z",
+			"updatedAt": "2019-10-03T00:02:18.284Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 31",
+			"geometryHash": null,
+			"hash": "f922a114bcc3a231125710805733fdc3",
+			"applicationId": "gh/2a555bdfd01233946d31ddd4b072aaf7",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd335",
+			"type": "Line/Structural1DElement",
+			"value": [
+				14756.140350877193,
+				-24671.929824561405,
+				11580,
+				14756.140350877193,
+				-24671.929824561405,
+				5790
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.284Z",
+			"updatedAt": "2019-10-03T00:02:18.284Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 32",
+			"geometryHash": null,
+			"hash": "a77331ede0bc5537e5c9da044a46a8bc",
+			"applicationId": "gh/6e7446596bc26cd0f0fd9c7f78d99a98",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd336",
+			"type": "Line/Structural1DElement",
+			"value": [
+				14756.140350877193,
+				-24671.929824561405,
+				17370,
+				14756.140350877193,
+				-24671.929824561405,
+				11580
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.284Z",
+			"updatedAt": "2019-10-03T00:02:18.284Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 33",
+			"geometryHash": null,
+			"hash": "a7a82a14f29d2a1796be3bb673eef940",
+			"applicationId": "gh/452a6f3af50a7c9626411fe6f5f1d9c2",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd337",
+			"type": "Line/Structural1DElement",
+			"value": [
+				20000,
+				0,
+				23551.000000000004,
+				20000,
+				0,
+				17370
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.285Z",
+			"updatedAt": "2019-10-03T00:02:18.285Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Column 34",
+			"geometryHash": null,
+			"hash": "947139b53a86526ea0c1d932ce81ebef",
+			"applicationId": "gh/832132ef28d937d055d53c0c6fad70ac",
+			"properties": {
+				"structural": {
+					"elementType": "Column",
+					"propertyRef": "columnProp",
+					"endRelease": [
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						},
+						{
+							"type": "StructuralVectorBoolSix",
+							"value": [
+								true,
+								true,
+								true,
+								true,
+								true,
+								true
+							],
+							"hash": "b9a3c327532ae6c0df9305e97e3c853e",
+							"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+						}
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd338",
+			"type": "Line/Structural1DElement",
+			"value": [
+				20000,
+				0,
+				29732,
+				20000,
+				0,
+				23551.000000000004
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.285Z",
+			"updatedAt": "2019-10-03T00:02:18.285Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Slab 0",
+			"geometryHash": null,
+			"hash": "098497014356190ce7bcacf9623bddd0",
+			"applicationId": "Slab 0",
+			"properties": {
+				"structural": {
+					"elementType": "Slab",
+					"propertyRef": "slabProp",
+					"gsaMeshSize": 5
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d44076235db773ba174175b",
+			"type": "Mesh/Structural2DElementMesh",
+			"vertices": [
+				-24843.859375,
+				-24671.9296875,
+				5790,
+				14756.140625,
+				-24671.9296875,
+				5790,
+				14756.140625,
+				-4871.9296875,
+				5790,
+				74156.140625,
+				-4871.9296875,
+				5790,
+				74156.140625,
+				94128.0703125,
+				5790,
+				34556.140625,
+				54528.0703125,
+				5790,
+				-24843.859375,
+				54528.0703125,
+				5790
+			],
+			"faces": [
+				0,
+				2,
+				6,
+				0,
+				0,
+				1,
+				2,
+				0,
+				0,
+				5,
+				2,
+				3,
+				0,
+				3,
+				4,
+				5,
+				0,
+				6,
+				2,
+				5
+			],
+			"colors": [],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-08-02T09:50:26.319Z",
+			"updatedAt": "2019-08-02T09:50:26.319Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Slab 1",
+			"geometryHash": null,
+			"hash": "1adb8804faa0f4e1f4b448099184c271",
+			"applicationId": "Slab 1",
+			"properties": {
+				"structural": {
+					"elementType": "Slab",
+					"propertyRef": "slabProp",
+					"gsaMeshSize": 5
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d44076235db773ba174175c",
+			"type": "Mesh/Structural2DElementMesh",
+			"vertices": [
+				-24843.859375,
+				-24671.9296875,
+				11580,
+				14756.140625,
+				-24671.9296875,
+				11580,
+				14756.140625,
+				-4871.9296875,
+				11580,
+				74156.140625,
+				-4871.9296875,
+				11580,
+				74156.140625,
+				94128.0703125,
+				11580,
+				34556.140625,
+				54528.0703125,
+				11580,
+				-24843.859375,
+				54528.0703125,
+				11580
+			],
+			"faces": [
+				0,
+				2,
+				6,
+				0,
+				0,
+				1,
+				2,
+				0,
+				0,
+				5,
+				2,
+				3,
+				0,
+				3,
+				4,
+				5,
+				0,
+				6,
+				2,
+				5
+			],
+			"colors": [],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-08-02T09:50:26.320Z",
+			"updatedAt": "2019-08-02T09:50:26.320Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Slab 2",
+			"geometryHash": null,
+			"hash": "eec960eaaf4393757358acfc40b7c8af",
+			"applicationId": "Slab 2",
+			"properties": {
+				"structural": {
+					"elementType": "Slab",
+					"propertyRef": "slabProp",
+					"gsaMeshSize": 5
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d44076235db773ba174175d",
+			"type": "Mesh/Structural2DElementMesh",
+			"vertices": [
+				-24843.859375,
+				-24671.9296875,
+				17370,
+				14756.140625,
+				-24671.9296875,
+				17370,
+				14756.140625,
+				-4871.9296875,
+				17370,
+				74156.140625,
+				-4871.9296875,
+				17370,
+				74156.140625,
+				94128.0703125,
+				17370,
+				34556.140625,
+				54528.0703125,
+				17370,
+				-24843.859375,
+				54528.0703125,
+				17370
+			],
+			"faces": [
+				0,
+				2,
+				6,
+				0,
+				0,
+				1,
+				2,
+				0,
+				0,
+				5,
+				2,
+				3,
+				0,
+				3,
+				4,
+				5,
+				0,
+				6,
+				2,
+				5
+			],
+			"colors": [],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-08-02T09:50:26.320Z",
+			"updatedAt": "2019-08-02T09:50:26.320Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Slab 3",
+			"geometryHash": null,
+			"hash": "b13d228ed785aa95bbc295978cba3a25",
+			"applicationId": "Slab 3",
+			"properties": {
+				"structural": {
+					"elementType": "Slab",
+					"propertyRef": "slabProp",
+					"gsaMeshSize": 5
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d44076235db773ba174175e",
+			"type": "Mesh/Structural2DElementMesh",
+			"vertices": [
+				0,
+				0,
+				23551,
+				20000,
+				0,
+				23551,
+				20000,
+				10000,
+				23551,
+				50000,
+				10000,
+				23551,
+				50000,
+				60000,
+				23551,
+				30000,
+				40000,
+				23551,
+				0,
+				40000,
+				23551
+			],
+			"faces": [
+				0,
+				2,
+				6,
+				0,
+				0,
+				1,
+				2,
+				0,
+				0,
+				5,
+				2,
+				3,
+				0,
+				3,
+				4,
+				5,
+				0,
+				6,
+				2,
+				5
+			],
+			"colors": [],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-08-02T09:50:26.320Z",
+			"updatedAt": "2019-08-02T09:50:26.320Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Slab 4",
+			"geometryHash": null,
+			"hash": "34aa944d6f1d00f206f8b39d9f25b174",
+			"applicationId": "Slab 4",
+			"properties": {
+				"structural": {
+					"elementType": "Slab",
+					"propertyRef": "slabProp",
+					"gsaMeshSize": 5
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d44076235db773ba174175f",
+			"type": "Mesh/Structural2DElementMesh",
+			"vertices": [
+				0,
+				0,
+				29732,
+				20000,
+				0,
+				29732,
+				20000,
+				10000,
+				29732,
+				50000,
+				10000,
+				29732,
+				50000,
+				60000,
+				29732,
+				30000,
+				40000,
+				29732,
+				0,
+				40000,
+				29732
+			],
+			"faces": [
+				0,
+				2,
+				6,
+				0,
+				0,
+				1,
+				2,
+				0,
+				0,
+				5,
+				2,
+				3,
+				0,
+				3,
+				4,
+				5,
+				0,
+				6,
+				2,
+				5
+			],
+			"colors": [],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-08-02T09:50:26.320Z",
+			"updatedAt": "2019-08-02T09:50:26.320Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": null,
+			"geometryHash": null,
+			"hash": "037cf82462524222e6251a1b5025cc61",
+			"applicationId": "gh/8471296211afb5f5eebbffa4e899dbec",
+			"properties": null,
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d71b58df659bb2a09edbd47",
+			"type": "Mesh/Structural2DVoid",
+			"vertices": [
+				-801.0022583007813,
+				-2043.3582763671876,
+				5790,
+				18998.998046875,
+				-2043.3582763671876,
+				5790,
+				18998.998046875,
+				7856.6416015625,
+				5790,
+				48698.99609375,
+				7856.6416015625,
+				5790,
+				48698.99609375,
+				57356.640625,
+				5790,
+				28898.998046875,
+				37556.640625,
+				5790,
+				-801.0022583007813,
+				37556.640625,
+				5790
+			],
+			"faces": [
+				0,
+				2,
+				6,
+				0,
+				0,
+				1,
+				2,
+				0,
+				0,
+				5,
+				2,
+				3,
+				0,
+				3,
+				4,
+				5,
+				0,
+				6,
+				2,
+				5
+			],
+			"colors": [],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-09-06T01:25:33.156Z",
+			"updatedAt": "2019-09-06T01:25:33.156Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": null,
+			"geometryHash": null,
+			"hash": "c06b0f1b0bb585321bcdb5ed573d7d0f",
+			"applicationId": "gh/ff7c29fdcbfb53eed7b95b268e72cc35",
+			"properties": null,
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d71b58df659bb2a09edbd48",
+			"type": "Mesh/Structural2DVoid",
+			"vertices": [
+				-801.0022583007813,
+				-2043.3582763671876,
+				11580,
+				18998.998046875,
+				-2043.3582763671876,
+				11580,
+				18998.998046875,
+				7856.6416015625,
+				11580,
+				48698.99609375,
+				7856.6416015625,
+				11580,
+				48698.99609375,
+				57356.640625,
+				11580,
+				28898.998046875,
+				37556.640625,
+				11580,
+				-801.0022583007813,
+				37556.640625,
+				11580
+			],
+			"faces": [
+				0,
+				2,
+				6,
+				0,
+				0,
+				1,
+				2,
+				0,
+				0,
+				5,
+				2,
+				3,
+				0,
+				3,
+				4,
+				5,
+				0,
+				6,
+				2,
+				5
+			],
+			"colors": [],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-09-06T01:25:33.156Z",
+			"updatedAt": "2019-09-06T01:25:33.156Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": null,
+			"geometryHash": null,
+			"hash": "07ba7d776c123d00513e4fab02d063e8",
+			"applicationId": "gh/51e8d0bc5b67257aea4d3f733dc153a2",
+			"properties": null,
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d71b58df659bb2a09edbd49",
+			"type": "Mesh/Structural2DVoid",
+			"vertices": [
+				-801.0022583007813,
+				-2043.3582763671876,
+				17370,
+				18998.998046875,
+				-2043.3582763671876,
+				17370,
+				18998.998046875,
+				7856.6416015625,
+				17370,
+				48698.99609375,
+				7856.6416015625,
+				17370,
+				48698.99609375,
+				57356.640625,
+				17370,
+				28898.998046875,
+				37556.640625,
+				17370,
+				-801.0022583007813,
+				37556.640625,
+				17370
+			],
+			"faces": [
+				0,
+				2,
+				6,
+				0,
+				0,
+				1,
+				2,
+				0,
+				0,
+				5,
+				2,
+				3,
+				0,
+				3,
+				4,
+				5,
+				0,
+				6,
+				2,
+				5
+			],
+			"colors": [],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-09-06T01:25:33.156Z",
+			"updatedAt": "2019-09-06T01:25:33.156Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": null,
+			"geometryHash": null,
+			"hash": "c0c00e54ffeece8a0d1f544b19e6b9e0",
+			"applicationId": "gh/42d2b51094c7c16a565d883dd5dd7a59",
+			"properties": null,
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d71b58df659bb2a09edbd4a",
+			"type": "Mesh/Structural2DVoid",
+			"vertices": [
+				12142.857421875,
+				11428.5712890625,
+				23551,
+				22142.857421875,
+				11428.5712890625,
+				23551,
+				22142.857421875,
+				16428.572265625,
+				23551,
+				37142.85546875,
+				16428.572265625,
+				23551,
+				37142.85546875,
+				41428.5703125,
+				23551,
+				27142.857421875,
+				31428.572265625,
+				23551,
+				12142.857421875,
+				31428.572265625,
+				23551
+			],
+			"faces": [
+				0,
+				2,
+				6,
+				0,
+				0,
+				1,
+				2,
+				0,
+				0,
+				5,
+				2,
+				3,
+				0,
+				3,
+				4,
+				5,
+				0,
+				6,
+				2,
+				5
+			],
+			"colors": [],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-09-06T01:25:33.156Z",
+			"updatedAt": "2019-09-06T01:25:33.156Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": null,
+			"geometryHash": null,
+			"hash": "75b7f0aa006c289013fb0fa9b17f55fa",
+			"applicationId": "gh/a461ec766c5e867d96a5036dc53c811a",
+			"properties": null,
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d71b58df659bb2a09edbd4b",
+			"type": "Mesh/Structural2DVoid",
+			"vertices": [
+				12142.857421875,
+				11428.5712890625,
+				29732,
+				22142.857421875,
+				11428.5712890625,
+				29732,
+				22142.857421875,
+				16428.572265625,
+				29732,
+				37142.85546875,
+				16428.572265625,
+				29732,
+				37142.85546875,
+				41428.5703125,
+				29732,
+				27142.857421875,
+				31428.572265625,
+				29732,
+				12142.857421875,
+				31428.572265625,
+				29732
+			],
+			"faces": [
+				0,
+				2,
+				6,
+				0,
+				0,
+				1,
+				2,
+				0,
+				0,
+				5,
+				2,
+				3,
+				0,
+				3,
+				4,
+				5,
+				0,
+				6,
+				2,
+				5
+			],
+			"colors": [],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-09-06T01:25:33.156Z",
+			"updatedAt": "2019-09-06T01:25:33.156Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Stage One",
+			"geometryHash": null,
+			"hash": "edadd47378ef24dd1efe6d0820b99646",
+			"applicationId": "Stage 1",
+			"properties": null,
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd339",
+			"type": "StructuralConstructionStage",
+			"elementRefs": [
+				"gh/71aeda7ba88bbbc6dc8f8966d24045bc",
+				"gh/467503d3bf98b641d3fb7d507c365e53",
+				"gh/5971550242e77e8b899d33d8f65a9681",
+				"gh/7a63661a22286943500cc7b165312546",
+				"gh/a933d1f9bc5f97bc2e9166dcc2accd2b",
+				"gh/9ee222aeacd6a783edd7996781351117",
+				"gh/154de130d058e883b9f30eed45a72895",
+				"gh/43cfc7591b81b59602d4cc46ee20d226",
+				"gh/fe643881343fd0ba26070cc52e91246c",
+				"gh/e7a4f495bea0d044febe1328ec2eb0df",
+				"gh/37d3376f7550f4d01c5ae2b44eeffd93",
+				"gh/98777989964c2c0822154abc9ad1a7b5",
+				"gh/5389b96a589a41cd85610ca769831649",
+				"gh/ec93ebcab0f587089747a2d7445c1039",
+				"gh/e9e01e24eb57e21b087a365ddbe22484",
+				"gh/79e56706e96ae448c95f28548e2e8521",
+				"gh/30b8049b34cc22b6add3f3565129b6f9",
+				"gh/da62f5ea397543274e1f71c0f04e9f0e",
+				"gh/7edb8fba34a7d36b41634d06d5c7a2e9",
+				"gh/d65a448739a36232438e08af84d49a29",
+				"gh/2f568fb93557d7e1c5accf5fdaf8b158",
+				"gh/61c3aac7cd02baa986a8e6bea2a5a71c",
+				"gh/36a426efd9c31c0ce970a9d7543010de",
+				"gh/a793eef6a72dbd78839e5c8ce6d67982",
+				"gh/63cd77ed5483f86e5657568dee4876c8",
+				"gh/1e3d7853e300b8fa54294c3badb3b424",
+				"gh/7a6723674cbd08c5a5cc9eabfc2958ea",
+				"gh/f6b828cfbbe6dfa459744822105192c4",
+				"gh/dcf4ad9e8994895a42dcfa5431a4bd31",
+				"gh/83e4d528ae20104b72e69211e3c21e93",
+				"gh/65f4e171aed320cb78cfe8a585045bb6",
+				"gh/2a555bdfd01233946d31ddd4b072aaf7",
+				"gh/6e7446596bc26cd0f0fd9c7f78d99a98",
+				"gh/452a6f3af50a7c9626411fe6f5f1d9c2",
+				"gh/832132ef28d937d055d53c0c6fad70ac"
+			],
+			"stageDays": 14,
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.285Z",
+			"updatedAt": "2019-10-03T00:02:18.285Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Stage Two",
+			"geometryHash": null,
+			"hash": "3e37057f2a80f292b2587482eb777b49",
+			"applicationId": "Stage 2",
+			"properties": null,
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d440d3935db773ba1741799",
+			"type": "StructuralConstructionStage",
+			"elementRefs": [
+				"Slab 0",
+				"Slab 1",
+				"Slab 2",
+				"Slab 3",
+				"Slab 4"
+			],
+			"stageDays": 28,
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-08-02T10:15:21.948Z",
+			"updatedAt": "2019-08-02T10:15:21.948Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Node Restraints One",
+			"geometryHash": null,
+			"hash": "178808133e51c519aac010bd6a987342",
+			"applicationId": "Stage 1",
+			"properties": null,
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d71b54c35db773ba17a0ec9",
+			"type": "StructuralStagedNodalRestraints",
+			"restraint": {
+				"applicationId": "gh/abba3e48360064b36d74ca63c744017b",
+				"hash": "abba3e48360064b36d74ca63c744017b",
+				"value": [
+					true,
+					false,
+					false,
+					true,
+					false,
+					true
+				],
+				"type": "StructuralVectorBoolSix"
+			},
+			"nodeRefs": [
+				"gh/460a05faac77730b25727b360f7d0cec",
+				"gh/fbcd9cadcbb666d66ffe391c8ef78fa8"
+			],
+			"constructionStageRefs": [
+				"Stage 2"
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-09-06T01:24:28.988Z",
+			"updatedAt": "2019-09-06T01:24:28.988Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Assembly One",
+			"geometryHash": null,
+			"hash": "818c27d7c19b886a4cd9f03048cb26eb",
+			"applicationId": "gh/818c27d7c19b886a4cd9f03048cb26eb",
+			"properties": {
+				"structural": {
+					"numPoints": 14,
+					"orientationPoint": {
+						"type": "Point",
+						"value": [
+							74156.140625,
+							16626.982992718556,
+							11580
+						],
+						"hash": "ec9724c0c93ec7748c40f8fef43e0766"
+					},
+					"width": 12.5,
+					"elementRefs": [
+						"Slab 1"
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd33a",
+			"type": "Line/StructuralAssembly",
+			"value": [
+				54356.140625,
+				74328.0703125,
+				11580,
+				57579.32338102916,
+				-4871.9296875,
+				11580
+			],
+			"domain": {
+				"type": "Interval",
+				"start": 0,
+				"end": 79265.55940052882,
+				"hash": "9cf929e3659d7c1b6c988b459e84de61"
+			},
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.285Z",
+			"updatedAt": "2019-10-03T00:02:18.285Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Assembly two",
+			"geometryHash": null,
+			"hash": "2c4635a46bc0aa4f0403ca1ac751e2c4",
+			"applicationId": "gh/2c4635a46bc0aa4f0403ca1ac751e2c4",
+			"properties": {
+				"structural": {
+					"numPoints": 14,
+					"orientationPoint": {
+						"type": "Point",
+						"value": [
+							54356.140625,
+							74328.0703125,
+							11580
+						],
+						"hash": "64345ee7fad4c36c36fdb4d7578e5995"
+					},
+					"width": 20.1,
+					"elementRefs": [
+						"Slab 1"
+					]
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d953a8a9727d6208b2bd33b",
+			"type": "Line/StructuralAssembly",
+			"value": [
+				74156.140625,
+				16626.982992718556,
+				11580,
+				48698.99609375,
+				23117.36933596459,
+				11580
+			],
+			"domain": {
+				"type": "Interval",
+				"start": 0,
+				"end": 26271.49258358852,
+				"hash": "d23f3e2274409aceee4e004f1ffc3763"
+			},
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-03T00:02:18.285Z",
+			"updatedAt": "2019-10-03T00:02:18.285Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "Ground Spring",
+			"geometryHash": null,
+			"hash": "368ff2a2cd6d46043094bb944d81527a",
+			"applicationId": "gh/368ff2a2cd6d46043094bb944d81527a",
+			"properties": {
+				"structural": {
+					"propertyRef": "gh/be3861ceb22063e066d43caa51d9db01"
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d96b40b9727d6208b2cac54",
+			"type": "Point/Structural0DSpring",
+			"value": [
+				14756.140350877193,
+				-4871.929824561402,
+				0
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-04T02:52:59.081Z",
+			"updatedAt": "2019-10-04T02:52:59.081Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "New spring 0",
+			"geometryHash": null,
+			"hash": "bfdbe99cfde1f26362f14b144b0f3141",
+			"applicationId": "gh/bfdbe99cfde1f26362f14b144b0f3141",
+			"properties": {
+				"structural": {
+					"elementType": "Spring",
+					"propertyRef": "gh/be3861ceb22063e066d43caa51d9db01"
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d96b40b9727d6208b2cac55",
+			"type": "Line/Structural1DElement",
+			"value": [
+				14756.140350877193,
+				-4871.929824561402,
+				0,
+				14756.140350877193,
+				-4871.929824561402,
+				-200
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-04T02:52:59.081Z",
+			"updatedAt": "2019-10-04T02:52:59.081Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "New spring 1",
+			"geometryHash": null,
+			"hash": "a6d0397fdad99d3455d5b125b2523a09",
+			"applicationId": "gh/a6d0397fdad99d3455d5b125b2523a09",
+			"properties": {
+				"structural": {
+					"elementType": "Spring",
+					"propertyRef": "gh/be3861ceb22063e066d43caa51d9db01"
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d96b40b9727d6208b2cac56",
+			"type": "Line/Structural1DElement",
+			"value": [
+				74156.14035087719,
+				-4871.929824561402,
+				0,
+				74156.14035087719,
+				-4871.929824561402,
+				-200
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-04T02:52:59.081Z",
+			"updatedAt": "2019-10-04T02:52:59.081Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "New spring 2",
+			"geometryHash": null,
+			"hash": "04812414ed54e44b3372e04b6ab20556",
+			"applicationId": "gh/04812414ed54e44b3372e04b6ab20556",
+			"properties": {
+				"structural": {
+					"elementType": "Spring",
+					"propertyRef": "gh/be3861ceb22063e066d43caa51d9db01"
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d96b40b9727d6208b2cac57",
+			"type": "Line/Structural1DElement",
+			"value": [
+				74156.14035087719,
+				94128.0701754386,
+				0,
+				74156.14035087719,
+				94128.0701754386,
+				-200
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-04T02:52:59.081Z",
+			"updatedAt": "2019-10-04T02:52:59.081Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "New spring 3",
+			"geometryHash": null,
+			"hash": "e1d3bfa1c104d2cbac83c00c5a5a91bf",
+			"applicationId": "gh/e1d3bfa1c104d2cbac83c00c5a5a91bf",
+			"properties": {
+				"structural": {
+					"elementType": "Spring",
+					"propertyRef": "gh/be3861ceb22063e066d43caa51d9db01"
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d96b40b9727d6208b2cac58",
+			"type": "Line/Structural1DElement",
+			"value": [
+				34556.140350877184,
+				54528.0701754386,
+				0,
+				34556.140350877184,
+				54528.0701754386,
+				-200
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-04T02:52:59.081Z",
+			"updatedAt": "2019-10-04T02:52:59.081Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "New spring 4",
+			"geometryHash": null,
+			"hash": "fe78ca20d5fa53527e7bb7809138c819",
+			"applicationId": "gh/fe78ca20d5fa53527e7bb7809138c819",
+			"properties": {
+				"structural": {
+					"elementType": "Spring",
+					"propertyRef": "gh/be3861ceb22063e066d43caa51d9db01"
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d96b40b9727d6208b2cac59",
+			"type": "Line/Structural1DElement",
+			"value": [
+				-24843.85964912281,
+				54528.0701754386,
+				0,
+				-24843.85964912281,
+				54528.0701754386,
+				-200
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-04T02:52:59.082Z",
+			"updatedAt": "2019-10-04T02:52:59.082Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "New spring 5",
+			"geometryHash": null,
+			"hash": "77ee0b345f17f46ac0677947d0d1c70b",
+			"applicationId": "gh/77ee0b345f17f46ac0677947d0d1c70b",
+			"properties": {
+				"structural": {
+					"elementType": "Spring",
+					"propertyRef": "gh/be3861ceb22063e066d43caa51d9db01"
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d96b40b9727d6208b2cac5a",
+			"type": "Line/Structural1DElement",
+			"value": [
+				-24843.85964912281,
+				-24671.929824561405,
+				0,
+				-24843.85964912281,
+				-24671.929824561405,
+				-200
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-04T02:52:59.082Z",
+			"updatedAt": "2019-10-04T02:52:59.082Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": "New spring 6",
+			"geometryHash": null,
+			"hash": "9718df1338e56a0746cfdbe383fd2a60",
+			"applicationId": "gh/9718df1338e56a0746cfdbe383fd2a60",
+			"properties": {
+				"structural": {
+					"elementType": "Spring",
+					"propertyRef": "gh/be3861ceb22063e066d43caa51d9db01"
+				}
+			},
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d96b40b9727d6208b2cac5b",
+			"type": "Line/Structural1DElement",
+			"value": [
+				14756.140350877193,
+				-24671.929824561405,
+				0,
+				14756.140350877193,
+				-24671.929824561405,
+				-200
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-10-04T02:52:59.082Z",
+			"updatedAt": "2019-10-04T02:52:59.082Z"
+		},
+		{
+			"private": false,
+			"canRead": [],
+			"canWrite": [],
+			"anonymousComments": false,
+			"comments": [],
+			"name": null,
+			"geometryHash": null,
+			"hash": "247ea14c3351f46f84aa93ae4e31a1a9",
+			"applicationId": "gh/247ea14c3351f46f84aa93ae4e31a1a9",
+			"properties": null,
+			"deleted": false,
+			"parent": null,
+			"children": [],
+			"ancestors": [],
+			"_id": "5d44061b35db773ba1741748",
+			"type": "StructuralRigidConstraints",
+			"constraints": {
+				"type": "StructuralVectorBoolSix",
+				"value": [
+					true,
+					true,
+					false,
+					false,
+					true,
+					true
+				],
+				"hash": "b1caba0edb9877f089b5450d14d5e0ba",
+				"applicationId": "gh/b1caba0edb9877f089b5450d14d5e0ba"
+			},
+			"nodeRefs": [
+				"gh/460a05faac77730b25727b360f7d0cec",
+				"gh/e9901628ee704568be982cf978f99ebb",
+				"gh/fbcd9cadcbb666d66ffe391c8ef78fa8",
+				"gh/f16de03fe77b08cc3c9dceb84920aff8",
+				"gh/aad3349332e757ba1c6bc306b2a56957",
+				"gh/81377a0b1382a79b6833ab88c0a0e311"
+			],
+			"masterNodeRef": "gh/ad4558d6e5a0784fe711195b15dbb60d",
+			"constructionStageRefs": [
+				"Stage 2"
+			],
+			"owner": "5cc252a6f659bb2a09e03748",
+			"__v": 0,
+			"createdAt": "2019-08-02T09:44:59.534Z",
+			"updatedAt": "2019-08-02T09:44:59.534Z"
+		}
+	],
+	"message": "Object list returned. If querying, duplication of objects in list will not be respected."
+}

@@ -49,7 +49,7 @@ namespace SpeckleStructuralGSA
 
               var resultExport = GSA.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, GSAResultInLocalAxis ? "local" : "global");
 
-              if (resultExport == null)
+              if (resultExport == null || resultExport.Count() == 0)
                 continue;
 
               if (!element.Value.Result.ContainsKey(loadCase))

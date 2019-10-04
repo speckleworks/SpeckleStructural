@@ -11,7 +11,10 @@ namespace SpeckleStructuralClasses
     {
       this.CaseType = caseType;
       this.ApplicationId = applicationId;
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
 
       GenerateHash();
     }
@@ -33,7 +36,10 @@ namespace SpeckleStructuralClasses
       this.LoadCaseRefs = loadCaseRefs.ToList();
       this.LoadFactors = loadFactors.ToList();
       this.ApplicationId = applicationId;
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
 
       GenerateHash();
     }
@@ -52,7 +58,10 @@ namespace SpeckleStructuralClasses
     public StructuralLoadTaskBuckling(int numModes, int maxNumIterations, string resultCaseRef, string applicationId = null, Dictionary<string, object> properties = null, string stageDefinitionRef = null)
     {
       this.ApplicationId = applicationId;
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
       this.NumModes = numModes;
       this.MaxNumIterations = maxNumIterations;
       this.ResultCaseRef = resultCaseRef;
@@ -79,7 +88,10 @@ namespace SpeckleStructuralClasses
       this.LoadComboRefs = loadComboRefs.ToList();
       this.LoadComboFactors = loadComboFactors.ToList();
       this.ApplicationId = applicationId;
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
 
       GenerateHash();
     }
@@ -100,7 +112,10 @@ namespace SpeckleStructuralClasses
       this.GravityFactors = gravityFactors;
       this.LoadCaseRef = loadCaseRef;
       this.ApplicationId = applicationId;
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
 
       GenerateHash();
     }
@@ -122,7 +137,10 @@ namespace SpeckleStructuralClasses
       this.NodeRefs = nodeRefs == null ? null : nodeRefs.ToList();
       this.LoadCaseRef = loadCaseRef;
       this.ApplicationId = applicationId;
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
 
       GenerateHash();
     }
@@ -144,7 +162,10 @@ namespace SpeckleStructuralClasses
       this.ElementRefs = elementRefs == null ? null : elementRefs.ToList();
       this.LoadCaseRef = loadCaseRef;
       this.ApplicationId = applicationId;
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
 
       GenerateHash();
     }
@@ -162,7 +183,10 @@ namespace SpeckleStructuralClasses
 
     public Structural1DLoadLine(double[] value, StructuralVectorSix loading, string loadCaseRef, string applicationId = null, Dictionary<string, object> properties = null)
     {
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
       this.Value = value.ToList();
       this.Loading = loading;
       this.LoadCaseRef = loadCaseRef;
@@ -191,7 +215,10 @@ namespace SpeckleStructuralClasses
       this.ElementRefs = elementRefs == null ? null : elementRefs.ToList();
       this.LoadCaseRef = loadCaseRef;
       this.ApplicationId = applicationId;
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
 
       GenerateHash();
     }
@@ -209,7 +236,10 @@ namespace SpeckleStructuralClasses
 
     public Structural2DLoadPanel(double[] value, StructuralVectorThree loading, string loadCaseRef, string applicationId = null, Dictionary<string, object> properties = null)
     {
-      this.Properties = properties;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
       this.Value = value.ToList();
       this.Loading = loading;
       this.LoadCaseRef = loadCaseRef;
