@@ -13,7 +13,6 @@ namespace SpeckleStructuralClasses
   {
     public override string Type { get => base.Type + "/StructuralVectorThree"; }
 
-    /// <summary>Base SpeckleVector.</summary>
     [JsonIgnore]
     public SpeckleVector baseVector
     {

@@ -73,7 +73,12 @@ namespace SpeckleStructuralGSA
           this.SubGWACommand.AddRange(match2D.Select(e => (e as IGSASpeckleContainer).GWACommand));
         }
         else if (targetEntity == "ELEMENT")
+        {
+          //Unlike all other classes, the layer relevant to sending is only determined by looking at a GWA parameter rather than a class attribute.
+          //Once this condition has been met, assign to null so it won't form part of the sender objects list
+          Value = null;
           return;
+        }
       }
 
       obj.Value = new List<double>();
@@ -235,7 +240,14 @@ namespace SpeckleStructuralGSA
           GSAAssembly assembly = new GSAAssembly() { GWACommand = p };
           //Pass in ALL the nodes and members - the Parse_ method will search through them
           assembly.ParseGWACommand(Initialiser.Interface, nodes, e1Ds, e2Ds, m1Ds, m2Ds);
-          assemblies.Add(assembly);
+
+          //This ties into the note further above:
+          //Unlike all other classes, the layer relevant to sending is only determined by looking at a GWA parameter rather than a class attribute.
+          //Once this condition has been met, assign to null so it won't form part of the sender objects list
+          if (assembly.Value != null)
+          {
+            assemblies.Add(assembly);
+          }
         }
         catch { }
       }

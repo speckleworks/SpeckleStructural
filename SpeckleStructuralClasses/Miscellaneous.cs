@@ -4,6 +4,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
+
 namespace SpeckleStructuralClasses
 {
   public enum StructuralInfluenceEffectType

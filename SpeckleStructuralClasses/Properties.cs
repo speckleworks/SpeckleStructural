@@ -36,7 +36,7 @@ namespace SpeckleStructuralClasses
     //Matrix, not supported yet
     Compression,
     Tension,
-    Connector,
+    //Connector, GWA commands using this doesn't seem to work yet
     Lockup,
     Gap,
     Friction

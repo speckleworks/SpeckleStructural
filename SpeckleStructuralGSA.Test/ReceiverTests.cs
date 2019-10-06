@@ -38,10 +38,10 @@ namespace SpeckleStructuralGSA.Test
     [TestCase(GSATargetLayer.Design)]
     public void ReceiverTestDesignLayer(GSATargetLayer layer)
     {
-      DoReceiverTest(savedJsonFileNames, expectedGwaPerIdsFileName, layer);
+      RunReceiverTest(savedJsonFileNames, expectedGwaPerIdsFileName, layer);
     }
 
-    private void DoReceiverTest(string[] savedJsonFileNames, string expectedGwaPerIdsFile, GSATargetLayer layer)
+    private void RunReceiverTest(string[] savedJsonFileNames, string expectedGwaPerIdsFile, GSATargetLayer layer)
     {
       var expectedJson = Helper.ReadFile(expectedGwaPerIdsFile, TestDataDirectory);
       var expectedGwaRecords = Helper.DeserialiseJson<List<GwaRecord>>(expectedJson);

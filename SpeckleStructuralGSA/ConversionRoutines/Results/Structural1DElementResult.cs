@@ -118,7 +118,7 @@ namespace SpeckleStructuralGSA
                 
                 var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global", Initialiser.Settings.Result1DNumPosition);
 
-                if (resultExport == null)
+                if (resultExport == null || resultExport.Count() == 0)
                 {
                   id++;
                   continue;
