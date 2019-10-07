@@ -7,7 +7,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAConversion("COMBINATION.1", new string[] { }, "loads", true, true, new Type[] { typeof(GSALoadCase), typeof(GSALoadTask) }, new Type[] { typeof(GSALoadCase), typeof(GSALoadTask) })]
+  [GSAObject("COMBINATION.1", new string[] { }, "loads", true, true, new Type[] { typeof(GSALoadCase), typeof(GSALoadTask) }, new Type[] { typeof(GSALoadCase), typeof(GSALoadTask) })]
   public class GSALoadCombo : IGSASpeckleContainer
   {
     public int GSAId { get; set; }

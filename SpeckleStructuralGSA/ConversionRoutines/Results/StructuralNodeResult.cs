@@ -7,7 +7,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAConversion("", new string[] { }, "results", true, false, new Type[] { typeof(GSANode) }, new Type[] { })]
+  [GSAObject("", new string[] { }, "results", true, false, new Type[] { typeof(GSANode) }, new Type[] { })]
   public class GSANodeResult : IGSASpeckleContainer
   {
     public int GSAId { get; set; }
