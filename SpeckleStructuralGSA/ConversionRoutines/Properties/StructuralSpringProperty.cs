@@ -123,7 +123,7 @@ namespace SpeckleStructuralGSA
 
       string keyword = destType.GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(keyword, springProp.ApplicationId);
+      int index = GSA.Indexer.ResolveIndex(keyword, destType.Name, springProp.ApplicationId);
 
       string axisRef = "GLOBAL";
 

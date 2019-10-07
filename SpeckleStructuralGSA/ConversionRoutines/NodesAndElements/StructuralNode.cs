@@ -244,9 +244,9 @@ namespace SpeckleStructuralGSA
         return;
 
       string keyword = typeof(GSA0DElement).GetGSAKeyword();
-      int index = GSA.Indexer.ResolveIndex(typeof(GSA0DElement).GetGSAKeyword(), node.ApplicationId);
-      int propIndex = GSA.Indexer.ResolveIndex("PROP_MASS.2", node.ApplicationId);
-      int nodeRef = GSA.Indexer.ResolveIndex(typeof(GSANode).GetGSAKeyword(), node.ApplicationId);
+      int index = GSA.Indexer.ResolveIndex(typeof(GSA0DElement).GetGSAKeyword(), typeof(GSA0DElement).Name, node.ApplicationId);
+      int propIndex = GSA.Indexer.ResolveIndex("PROP_MASS.2", "", node.ApplicationId);
+      int nodeRef = GSA.Indexer.ResolveIndex(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).Name, node.ApplicationId);
 
       List<string> ls = new List<string>();
 

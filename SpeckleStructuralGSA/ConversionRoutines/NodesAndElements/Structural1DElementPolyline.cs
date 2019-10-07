@@ -180,7 +180,7 @@ namespace SpeckleStructuralGSA
 
       Structural1DElementPolyline obj = this.Value as Structural1DElementPolyline;
 
-      int group = GSA.Indexer.ResolveIndex(typeof(GSA1DElementPolyline).GetGSAKeyword(), obj.ApplicationId);
+      int group = GSA.Indexer.ResolveIndex(typeof(GSA1DElementPolyline).GetGSAKeyword(), typeof(GSA1DElementPolyline).Name, obj.ApplicationId);
 
       Structural1DElement[] elements = obj.Explode();
 

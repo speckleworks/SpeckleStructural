@@ -80,7 +80,7 @@ namespace SpeckleStructuralGSA
 
       string keyword = typeof(GSALoadCombo).GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(typeof(GSALoadCombo).GetGSAKeyword(), loadCombo.ApplicationId);
+      int index = GSA.Indexer.ResolveIndex(typeof(GSALoadCombo).GetGSAKeyword(), typeof(GSALoadCombo).Name, loadCombo.ApplicationId);
 
       List<string> ls = new List<string>();
 
@@ -94,7 +94,7 @@ namespace SpeckleStructuralGSA
       {
         for (int i = 0; i < loadCombo.LoadTaskRefs.Count(); i++)
         {
-          int? loadTaskRef = GSA.Indexer.LookupIndex(typeof(GSALoadTask).GetGSAKeyword(), loadCombo.LoadTaskRefs[i]);
+          int? loadTaskRef = GSA.Indexer.LookupIndex(typeof(GSALoadTask).GetGSAKeyword(), typeof(GSALoadTask).Name, loadCombo.LoadTaskRefs[i]);
 
           if (loadTaskRef.HasValue)
           {
@@ -110,7 +110,7 @@ namespace SpeckleStructuralGSA
       {
         for (int i = 0; i < loadCombo.LoadComboRefs.Count(); i++)
         {
-          int? loadComboRef = GSA.Indexer.LookupIndex(typeof(GSALoadTask).GetGSAKeyword(), loadCombo.LoadComboRefs[i]);
+          int? loadComboRef = GSA.Indexer.LookupIndex(typeof(GSALoadTask).GetGSAKeyword(), typeof(GSALoadTask).Name, loadCombo.LoadComboRefs[i]);
 
           if (loadComboRef.HasValue)
           {

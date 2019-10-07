@@ -131,14 +131,15 @@ namespace SpeckleStructuralGSA
 
       string keyword = typeof(GSAGridAreaLoad).GetGSAKeyword();
 
-      int polylineIndex = GSA.Indexer.ResolveIndex("POLYLINE.1", load.ApplicationId);
-      int gridSurfaceIndex = GSA.Indexer.ResolveIndex("GRID_SURFACE.1", load.ApplicationId);
-      int gridPlaneIndex = GSA.Indexer.ResolveIndex("GRID_PLANE.4", load.ApplicationId);
+      //There are no GSA types for these yet so use empty strings for the type names for the index
+      int polylineIndex = GSA.Indexer.ResolveIndex("POLYLINE.1", "", load.ApplicationId);
+      int gridSurfaceIndex = GSA.Indexer.ResolveIndex("GRID_SURFACE.1", "", load.ApplicationId);
+      int gridPlaneIndex = GSA.Indexer.ResolveIndex("GRID_PLANE.4", "", load.ApplicationId);
 
       int loadCaseIndex = 0;
       try
       {
-        loadCaseIndex = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef).Value;
+        loadCaseIndex = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).Name, load.LoadCaseRef).Value;
       }
       //catch { loadCaseIndex = GSA.Indexer.ResolveIndex(typeof(GSALoadCase), load.LoadCaseRef); }
       catch { }
@@ -166,14 +167,12 @@ namespace SpeckleStructuralGSA
       {
         if (load.Loading.Value[i] == 0) continue;
 
-        ls.Clear();
+        var index = GSA.Indexer.ResolveIndex(typeof(GSAGridAreaLoad).GetGSAKeyword(), typeof(GSAGridAreaLoad).Name);
 
-        //int index = GSA.Indexer.ResolveIndex(typeof(GSAGridAreaLoad).GetGSAKeyword());
-        var index = GSA.Indexer.ResolveIndex(typeof(GSAGridAreaLoad).GetGSAKeyword());
+        ls.Clear();
 
         ls.Add("SET_AT");
         ls.Add(index.ToString());
-        //ls.Add(keyword + ":" + HelperClass.GenerateSID(load));
         ls.Add(keyword + ":" + HelperClass.GenerateSID(load));
         ls.Add(load.Name == null || load.Name == "" ? " " : load.Name);
         ls.Add(gridSurfaceIndex.ToString());

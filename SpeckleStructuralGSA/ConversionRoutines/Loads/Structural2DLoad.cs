@@ -106,16 +106,13 @@ namespace SpeckleStructuralGSA
 
       if (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
       {
-        //elementRefs = GSA.Indexer.LookupIndices(typeof(GSA2DElement).GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-        elementRefs = GSA.Indexer.LookupIndices(typeof(GSA2DElement).GetGSAKeyword().GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-        //groupRefs = GSA.Indexer.LookupIndices(typeof(GSA2DElementMesh).GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-        groupRefs = GSA.Indexer.LookupIndices(typeof(GSA2DElementMesh).GetGSAKeyword().GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+        elementRefs = GSA.Indexer.LookupIndices(typeof(GSA2DElement).GetGSAKeyword(), typeof(GSA2DElement).Name, load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+        groupRefs = GSA.Indexer.LookupIndices(typeof(GSA2DElementMesh).GetGSAKeyword(), typeof(GSA2DElementMesh).Name, load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
       }
       else if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
       {
         elementRefs = new List<int>();
-        //groupRefs = GSA.Indexer.LookupIndices(typeof(GSA2DMember).GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-        groupRefs = GSA.Indexer.LookupIndices(typeof(GSA2DMember).GetGSAKeyword().GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+        groupRefs = GSA.Indexer.LookupIndices(typeof(GSA2DMember).GetGSAKeyword(), typeof(GSA2DMember).Name, load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
       }
       else
       {
@@ -125,12 +122,10 @@ namespace SpeckleStructuralGSA
       int loadCaseRef = 0;
       try
       {
-        //loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef).Value;
-        loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword().GetGSAKeyword(), load.LoadCaseRef).Value;
+        loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).Name, load.LoadCaseRef).Value;
       }
       catch {
-        //loadCaseRef = GSA.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef);
-        loadCaseRef = GSA.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef);
+        loadCaseRef = GSA.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).Name, load.LoadCaseRef);
       }
 
       string[] direction = new string[3] { "X", "Y", "Z" };
@@ -141,8 +136,7 @@ namespace SpeckleStructuralGSA
 
         if (load.Loading.Value[i] == 0) continue;
 
-        //int index = GSA.Indexer.ResolveIndex(typeof(GSA2DLoad).GetGSAKeyword());
-        var index = GSA.Indexer.ResolveIndex(typeof(GSA2DLoad).GetGSAKeyword());
+        var index = GSA.Indexer.ResolveIndex(typeof(GSA2DLoad).GetGSAKeyword(), typeof(GSA2DLoad).Name);
         ls.Add("SET_AT");
         ls.Add(index.ToString());
         //ls.Add(keyword + ":" + HelperClass.GenerateSID(load));

@@ -89,11 +89,11 @@ namespace SpeckleStructuralGSA
 
       string keyword = typeof(GSA2DProperty).GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(typeof(GSA2DProperty).GetGSAKeyword(), prop.ApplicationId);
+      int index = GSA.Indexer.ResolveIndex(typeof(GSA2DProperty).GetGSAKeyword(), typeof(GSA2DProperty).Name, prop.ApplicationId);
       int materialRef = 0;
       string materialType = "UNDEF";
 
-      var res = GSA.Indexer.LookupIndex(typeof(GSAMaterialSteel).GetGSAKeyword(), prop.MaterialRef);
+      var res = GSA.Indexer.LookupIndex(typeof(GSAMaterialSteel).GetGSAKeyword(), typeof(GSAMaterialSteel).Name, prop.MaterialRef);
       if (res.HasValue)
       {
         materialRef = res.Value;
@@ -101,7 +101,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        res = GSA.Indexer.LookupIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), prop.MaterialRef);
+        res = GSA.Indexer.LookupIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), typeof(GSAMaterialConcrete).Name, prop.MaterialRef);
         if (res.HasValue)
         {
           materialRef = res.Value;

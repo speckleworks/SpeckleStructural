@@ -71,11 +71,11 @@ namespace SpeckleStructuralGSA
 
       string keyword = typeof(GSA0DSpring).GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(keyword, spring.ApplicationId);
+      int index = GSA.Indexer.ResolveIndex(keyword, typeof(GSA0DSpring).Name, spring.ApplicationId);
       int propRef = 0;
       try
       {
-        propRef = GSA.Indexer.LookupIndex(typeof(GSASpringProperty).GetGSAKeyword(), spring.PropertyRef).Value;
+        propRef = GSA.Indexer.LookupIndex(typeof(GSASpringProperty).GetGSAKeyword(), typeof(GSASpringProperty).Name, spring.PropertyRef).Value;
       }
       catch { }
 
@@ -120,7 +120,7 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this Structural0DSpring spring)
     {
-      int group = Initialiser.Interface.Indexer.ResolveIndex(typeof(GSA0DSpring).GetGSAKeyword(), spring.ApplicationId);
+      int group = Initialiser.Interface.Indexer.ResolveIndex(typeof(GSA0DSpring).GetGSAKeyword(), typeof(GSA0DSpring).Name, spring.ApplicationId);
       new GSA0DSpring() { Value = spring }.SetGWACommand(Initialiser.Interface, group);
 
       return true;

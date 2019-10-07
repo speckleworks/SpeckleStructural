@@ -122,11 +122,11 @@ namespace SpeckleStructuralGSA
 
       string keyword = typeof(GSA1DElement).GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(typeof(GSA1DElement).GetGSAKeyword(), element.ApplicationId);
+      int index = GSA.Indexer.ResolveIndex(typeof(GSA1DElement).GetGSAKeyword(), typeof(GSA1DElement).Name, element.ApplicationId);
       int propRef = 0;
       try
       {
-        propRef = GSA.Indexer.LookupIndex(typeof(GSA1DProperty).GetGSAKeyword(), element.PropertyRef).Value;
+        propRef = GSA.Indexer.LookupIndex(typeof(GSA1DProperty).GetGSAKeyword(), typeof(GSA1DProperty).Name, element.PropertyRef).Value;
       }
       catch { }
 
@@ -318,13 +318,13 @@ namespace SpeckleStructuralGSA
 
       string keyword = typeof(GSA1DMember).GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(typeof(GSA1DMember).GetGSAKeyword(), member.ApplicationId);
+      int index = GSA.Indexer.ResolveIndex(typeof(GSA1DMember).GetGSAKeyword(), typeof(GSA1DMember).Name, member.ApplicationId);
       int propRef = 0;
       try
       {
         propRef = (member.ElementType == Structural1DElementType.Spring)
-          ? GSA.Indexer.LookupIndex(typeof(GSASpringProperty).GetGSAKeyword(), member.PropertyRef).Value
-          : GSA.Indexer.LookupIndex(typeof(GSA1DProperty).GetGSAKeyword(), member.PropertyRef).Value;
+          ? GSA.Indexer.LookupIndex(typeof(GSASpringProperty).GetGSAKeyword(), typeof(GSASpringProperty).Name, member.PropertyRef).Value
+          : GSA.Indexer.LookupIndex(typeof(GSA1DProperty).GetGSAKeyword(), typeof(GSA1DProperty).Name, member.PropertyRef).Value;
       }
       catch { }
 

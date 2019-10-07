@@ -58,7 +58,7 @@ namespace SpeckleStructuralGSA
 
       string keyword = typeof(GSAMaterialSteel).GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(typeof(GSAMaterialSteel).GetGSAKeyword(), mat.ApplicationId);
+      int index = GSA.Indexer.ResolveIndex(typeof(GSAMaterialSteel).GetGSAKeyword(), typeof(GSAMaterialSteel).Name, mat.ApplicationId);
 
       // TODO: This function barely works.
       List<string> ls = new List<string>();

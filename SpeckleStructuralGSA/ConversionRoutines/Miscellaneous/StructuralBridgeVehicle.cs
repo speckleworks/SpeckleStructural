@@ -46,7 +46,7 @@ namespace SpeckleStructuralGSA
 
       string keyword = destType.GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(keyword, vehicle.ApplicationId);
+      int index = GSA.Indexer.ResolveIndex(keyword, destType.Name, vehicle.ApplicationId);
 
       //The width parameter is intentionally not being used here as the meaning doesn't map to the y coordinate parameter of the ASSEMBLY keyword
       //It is therefore to be ignored here for GSA purposes.

@@ -90,17 +90,14 @@ namespace SpeckleStructuralGSA
 
       string keyword = typeof(GSA0DLoad).GetGSAKeyword();
 
-      //List<int> nodeRefs = GSA.Indexer.LookupIndices(typeof(GSANode).GetGSAKeyword(), load.NodeRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-      var nodeRefs = GSA.Indexer.LookupIndices(typeof(GSANode).GetGSAKeyword().GetGSAKeyword(), load.NodeRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+      var nodeRefs = GSA.Indexer.LookupIndices(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).Name, load.NodeRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
       int loadCaseRef = 0;
       try
       {
-        //loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef).Value;
-        loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword().GetGSAKeyword(), load.LoadCaseRef).Value;
+        loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).Name, load.LoadCaseRef).Value;
       }
       catch {
-        //loadCaseRef = GSA.Indexer.ResolveIndex(typeof(GSALoadCase), load.LoadCaseRef); 
-        loadCaseRef = GSA.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef);
+        loadCaseRef = GSA.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).Name, load.LoadCaseRef);
       }
 
       string[] direction = new string[6] { "X", "Y", "Z", "XX", "YY", "ZZ" };
@@ -111,12 +108,10 @@ namespace SpeckleStructuralGSA
 
         if (load.Loading.Value[i] == 0) continue;
 
-        //int index = GSA.Indexer.ResolveIndex(typeof(GSA0DLoad));
-        var index = GSA.Indexer.ResolveIndex(typeof(GSA0DLoad).GetGSAKeyword());
+        var index = GSA.Indexer.ResolveIndex(typeof(GSA0DLoad).GetGSAKeyword(), typeof(GSA0DLoad).Name);
 
         ls.Add("SET_AT");
         ls.Add(index.ToString());
-        //ls.Add(keyword + ":" + GSA.GenerateSID(load));
         ls.Add(keyword + ":" + HelperClass.GenerateSID(load));
         ls.Add(load.Name == null || load.Name == "" ? " " : load.Name);
         ls.Add(string.Join(" ", nodeRefs));

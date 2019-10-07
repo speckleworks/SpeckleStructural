@@ -46,10 +46,10 @@ namespace SpeckleStructuralGSA
 
       string keyword = destType.GetGSAKeyword();
 
-      int gridSurfaceIndex = GSA.Indexer.ResolveIndex("GRID_SURFACE.1", alignment.ApplicationId);
-      int gridPlaneIndex = GSA.Indexer.ResolveIndex("GRID_PLANE.4", alignment.ApplicationId);
+      int gridSurfaceIndex = GSA.Indexer.ResolveIndex("GRID_SURFACE.1", "", alignment.ApplicationId);
+      int gridPlaneIndex = GSA.Indexer.ResolveIndex("GRID_PLANE.4", "", alignment.ApplicationId);
 
-      int index = GSA.Indexer.ResolveIndex(keyword, alignment.ApplicationId);
+      int index = GSA.Indexer.ResolveIndex(keyword, destType.Name, alignment.ApplicationId);
 
       var sid = HelperClass.GenerateSID(alignment);
 

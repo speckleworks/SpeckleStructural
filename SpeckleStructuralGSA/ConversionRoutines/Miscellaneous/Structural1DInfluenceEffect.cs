@@ -112,9 +112,9 @@ namespace SpeckleStructuralGSA
       
       string keyword = typeof(GSA1DInfluenceEffect).GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(typeof(GSA1DInfluenceEffect).GetGSAKeyword(), infl.ApplicationId);
+      int index = GSA.Indexer.ResolveIndex(typeof(GSA1DInfluenceEffect).GetGSAKeyword(), typeof(GSA1DInfluenceEffect).Name, infl.ApplicationId);
 
-      int? elementRef = GSA.Indexer.LookupIndex(typeof(GSA1DElement).GetGSAKeyword(), infl.ElementRef);
+      int? elementRef = GSA.Indexer.LookupIndex(typeof(GSA1DElement).GetGSAKeyword(), typeof(GSA1DElement).Name, infl.ElementRef);
 
       if (!elementRef.HasValue)
         return;

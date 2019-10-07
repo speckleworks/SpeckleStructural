@@ -151,16 +151,14 @@ namespace SpeckleStructuralGSA
 
       if (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
       {
-        //elementRefs = GSA.Indexer.LookupIndices(typeof(GSA1DElement).GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-        elementRefs = GSA.Indexer.LookupIndices(typeof(GSA1DElement).GetGSAKeyword().GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-        //groupRefs = GSA.Indexer.LookupIndices(typeof(GSA1DElementPolyline).GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-        groupRefs = GSA.Indexer.LookupIndices(typeof(GSA1DElementPolyline).GetGSAKeyword().GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+        elementRefs = GSA.Indexer.LookupIndices(typeof(GSA1DElement).GetGSAKeyword(), typeof(GSA1DElement).Name, load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+        groupRefs = GSA.Indexer.LookupIndices(typeof(GSA1DElementPolyline).GetGSAKeyword(), typeof(GSA1DElementPolyline).Name, load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
       }
       else if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
       {
         elementRefs = new List<int>();
-        groupRefs = GSA.Indexer.LookupIndices(typeof(GSA1DMember).GetGSAKeyword().GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-        groupRefs.AddRange(GSA.Indexer.LookupIndices(typeof(GSA1DElementPolyline).GetGSAKeyword().GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList());
+        groupRefs = GSA.Indexer.LookupIndices(typeof(GSA1DMember).GetGSAKeyword(), typeof(GSA1DMember).Name, load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+        groupRefs.AddRange(GSA.Indexer.LookupIndices(typeof(GSA1DElementPolyline).GetGSAKeyword(), typeof(GSA1DElementPolyline).Name, load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList());
       }
       else
       {
@@ -170,12 +168,10 @@ namespace SpeckleStructuralGSA
       int loadCaseRef = 0;
       try
       {
-        //loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef).Value;
-        loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword().GetGSAKeyword(), load.LoadCaseRef).Value;
+        loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).Name, load.LoadCaseRef).Value;
       }
       catch {
-        //loadCaseRef = GSA.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef);
-        loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword().GetGSAKeyword(), load.LoadCaseRef).Value;
+        loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).Name, load.LoadCaseRef).Value;
       }
 
       string[] direction = new string[6] { "X", "Y", "Z", "XX", "YY", "ZZ" };
@@ -186,12 +182,10 @@ namespace SpeckleStructuralGSA
 
         if (load.Loading.Value[i] == 0) continue;
 
-        //int index = GSA.Indexer.ResolveIndex(typeof(GSA1DLoad).GetGSAKeyword());
-        var index = GSA.Indexer.ResolveIndex(typeof(GSA1DLoad).GetGSAKeyword());
+        var index = GSA.Indexer.ResolveIndex(typeof(GSA1DLoad).GetGSAKeyword(), typeof(GSA1DLoad).Name);
 
         ls.Add("SET_AT");
         ls.Add(index.ToString());
-        //ls.Add("LOAD_BEAM_UDL" + ":" + HelperClass.GenerateSID(load)); // TODO: Only writes to UDL load
         ls.Add("LOAD_BEAM_UDL" + ":" + HelperClass.GenerateSID(load)); // TODO: Only writes to UDL load
         ls.Add(load.Name == null || load.Name == "" ? " " : load.Name);
         // TODO: This is a hack.

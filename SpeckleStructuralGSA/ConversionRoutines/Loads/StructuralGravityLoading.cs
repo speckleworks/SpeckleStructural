@@ -55,22 +55,18 @@ namespace SpeckleStructuralGSA
       int loadCaseIndex = 0;
       try
       {
-        //loadCaseIndex = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef).Value;
-        loadCaseIndex = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword().GetGSAKeyword(), load.LoadCaseRef).Value;
+        loadCaseIndex = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).Name, load.LoadCaseRef).Value;
       }
       catch {
-        //loadCaseIndex = GSA.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef);
-        loadCaseIndex = GSA.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef);
+        loadCaseIndex = GSA.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).Name, load.LoadCaseRef);
       }
 
-      //int index = GSA.Indexer.ResolveIndex(typeof(GSAGravityLoading).GetGSAKeyword());
-      var index = GSA.Indexer.ResolveIndex(typeof(GSAGravityLoading).GetGSAKeyword());
+      var index = GSA.Indexer.ResolveIndex(typeof(GSAGravityLoading).GetGSAKeyword(), typeof(GSAGravityLoading).Name);
 
       var ls = new List<string>
         {
           "SET_AT",
           index.ToString(),
-          //keyword + ":" + HelperClass.GenerateSID(load),
           keyword + ":" + HelperClass.GenerateSID(load),
           string.IsNullOrEmpty(load.Name) ? "" : load.Name,
           "all",
