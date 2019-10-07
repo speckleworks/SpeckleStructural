@@ -266,3 +266,6 @@ SS/
 
 # Application lock files
 *.lok
+
+# Files created by previous merges
+*.orig

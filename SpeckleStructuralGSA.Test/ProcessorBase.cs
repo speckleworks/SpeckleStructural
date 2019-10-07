@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SpeckleGSAInterfaces;
+using SpeckleGSAProxy;
 
 namespace SpeckleStructuralGSA.Test
 {
@@ -11,6 +13,7 @@ namespace SpeckleStructuralGSA.Test
     protected Dictionary<Type, List<Type>> TypePrerequisites = new Dictionary<Type, List<Type>>();
     protected List<KeyValuePair<Type, List<Type>>> TypeCastPriority = new List<KeyValuePair<Type, List<Type>>>();
     protected string TestDataDirectory;
+
     protected GSAInterfacer GSAInterfacer;
 
     //This should match the private member in GSAInterfacer
@@ -31,7 +34,7 @@ namespace SpeckleStructuralGSA.Test
     protected void ConstructTypeCastPriority(ioDirection ioDirection, bool resultsOnly)
     {
       // Grab GSA interface and attribute type
-      var attributeType = typeof(GSAObject);
+      var attributeType = typeof(GSAConversionAttribute);
       var interfaceType = typeof(IGSASpeckleContainer);
 
       var ioAttribute = (ioDirection == ioDirection.Receive) ? "WritePrerequisite" : "ReadPrerequisite";
@@ -43,10 +46,10 @@ namespace SpeckleStructuralGSA.Test
       foreach (var t in objTypes)
       {
         if (t.GetAttribute("AnalysisLayer", attributeType) != null)
-          if ((Initialiser.GSATargetLayer == GSATargetLayer.Analysis) && !(bool)t.GetAttribute("AnalysisLayer", attributeType)) continue;
+          if ((Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis) && !(bool)t.GetAttribute("AnalysisLayer", attributeType)) continue;
 
         if (t.GetAttribute("DesignLayer", attributeType) != null)
-          if ((Initialiser.GSATargetLayer == GSATargetLayer.Design) && !(bool)t.GetAttribute("DesignLayer", attributeType)) continue;
+          if ((Initialiser.Settings.TargetLayer == GSATargetLayer.Design) && !(bool)t.GetAttribute("DesignLayer", attributeType)) continue;
 
         if (ioDirection == ioDirection.Send)
         {
@@ -65,12 +68,12 @@ namespace SpeckleStructuralGSA.Test
       foreach (var t in objTypes)
       {
         if (t.GetAttribute("AnalysisLayer", attributeType) != null)
-          if ((Initialiser.GSATargetLayer == GSATargetLayer.Analysis) && !(bool)t.GetAttribute("AnalysisLayer", attributeType))
+          if ((Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis) && !(bool)t.GetAttribute("AnalysisLayer", attributeType))
             foreach (var kvp in TypePrerequisites)
               kvp.Value.Remove(t);
 
         if (t.GetAttribute("DesignLayer", attributeType) != null)
-          if ((Initialiser.GSATargetLayer == GSATargetLayer.Design) && !(bool)t.GetAttribute("DesignLayer", attributeType))
+          if ((Initialiser.Settings.TargetLayer == GSATargetLayer.Design) && !(bool)t.GetAttribute("DesignLayer", attributeType))
             foreach (var kvp in TypePrerequisites)
               kvp.Value.Remove(t);
 

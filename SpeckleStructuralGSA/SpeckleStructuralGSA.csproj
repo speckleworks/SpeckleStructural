@@ -135,6 +135,10 @@
     <Reference Include="SpeckleCoreGeometryClasses, Version=1.2.8.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SpeckleCoreGeometry.1.2.8\lib\net461\SpeckleCoreGeometryClasses.dll</HintPath>
     </Reference>
+    <Reference Include="SpeckleGSAInterfaces">
+      <HintPath>.\SpeckleGSAInterfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SQLite-net, Version=1.5.231.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\sqlite-net-pcl.1.5.231\lib\netstandard1.1\SQLite-net.dll</HintPath>
       <Private>False</Private>
@@ -213,12 +217,9 @@
     <Compile Include="ConversionRoutines\NodesAndElements\StructuralNode.cs" />
     <Compile Include="ConversionRoutines\Results\StructuralMiscResult.cs" />
     <Compile Include="ConversionRoutines\Results\StructuralNodeResult.cs" />
-    <Compile Include="ConversionsBase.cs" />
     <Compile Include="Enum.cs" />
-    <Compile Include="GSAInterfacer.cs" />
-    <Compile Include="GSAObject.cs" />
     <Compile Include="HelperClass.cs" />
-    <Compile Include="Indexer.cs" />
+    <Compile Include="Initialiser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

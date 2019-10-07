@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using SpeckleCore;
-using SpeckleCoreGeometryClasses;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("MEMB.7", new string[] { "NODE.2" }, "elements", false, true, new Type[] { typeof(GSANode) }, new Type[] { })]
+  [GSAConversion("MEMB.7", new string[] { "NODE.2" }, "elements", false, true, new Type[] { typeof(GSANode) }, new Type[] { })]
   public class GSA2DVoid : IGSASpeckleContainer
   {
     public int GSAId { get; set; }
@@ -18,7 +15,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new Structural2DVoid();
 
-    public void ParseGWACommand(GSAInterfacer GSA, List<GSANode> nodes)
+    public void ParseGWACommand(IGSAInterfacer GSA, List<GSANode> nodes)
     {
       if (this.GWACommand == null)
         return;
@@ -29,7 +26,7 @@ namespace SpeckleStructuralGSA
 
       int counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = GSA.GetSID(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Initialiser.Interface.GetSID(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       var color = pieces[counter++].ParseGSAColor();
 
@@ -57,7 +54,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(GSAInterfacer GSA)
+    public void SetGWACommand(IGSAInterfacer GSA)
     {
       if (this.Value == null)
         return;
@@ -66,12 +63,12 @@ namespace SpeckleStructuralGSA
 
       string keyword = typeof(GSA2DVoid).GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(typeof(GSA2DVoid), v);
+      int index = GSA.Indexer.ResolveIndex(keyword, typeof(GSA2DVoid).Name, v.ApplicationId);
 
       List<string> ls = new List<string>();
 
       ls.Add("SET");
-      ls.Add(keyword + ":" + GSA.GenerateSID(v));
+      ls.Add(keyword + ":" + HelperClass.GenerateSID(v));
       ls.Add(index.ToString());
       ls.Add(v.Name == null || v.Name == "" ? " " : v.Name);
       ls.Add(v.Colors == null || v.Colors.Count() < 1 ? "NO_RGB" : v.Colors[0].ArgbToHexColor().ToString());
@@ -89,7 +86,7 @@ namespace SpeckleStructuralGSA
       foreach (int c in connectivities[0])
       {
         coor.AddRange(v.Vertices.Skip(c * 3).Take(3));
-        var currIndex = GSA.NodeAt(v.Vertices[c * 3], v.Vertices[c * 3 + 1], v.Vertices[c * 3 + 2], Conversions.GSACoincidentNodeAllowance);
+        var currIndex = HelperClass.NodeAt(GSA, v.Vertices[c * 3], v.Vertices[c * 3 + 1], v.Vertices[c * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance);
         if (prevNodeIndex != currIndex)
           topo += currIndex.ToString() + " ";
         prevNodeIndex = currIndex;
@@ -111,7 +108,7 @@ namespace SpeckleStructuralGSA
       ls.Add("0"); // Offset z
       ls.Add("ALL"); // Exposure
 
-      GSA.RunGWACommand(string.Join("\t", ls));
+      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
     }
   }
 
@@ -119,34 +116,34 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this Structural2DVoid v)
     {
-      new GSA2DVoid() { Value = v }.SetGWACommand(GSA);
+      new GSA2DVoid() { Value = v }.SetGWACommand(Initialiser.Interface);
 
       return true;
     }
 
     public static SpeckleObject ToSpeckle(this GSA2DVoid dummyObject)
     {
-      if (!GSASenderObjects.ContainsKey(typeof(GSA2DVoid)))
-        GSASenderObjects[typeof(GSA2DVoid)] = new List<object>();
+      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSA2DVoid)))
+        Initialiser.GSASenderObjects[typeof(GSA2DVoid)] = new List<object>();
 
       List<GSA2DVoid> voids = new List<GSA2DVoid>();
-      List<GSANode> nodes = GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
+      List<GSANode> nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
 
       string keyword = typeof(GSA2DVoid).GetGSAKeyword();
       string[] subKeywords = typeof(GSA2DVoid).GetSubGSAKeyword();
 
-      string[] lines = GSA.GetGWARecords("GET_ALL\t" + keyword);
-      List<string> deletedLines = GSA.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
+      string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
+      List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
       foreach (string k in subKeywords)
-        deletedLines.AddRange(GSA.GetDeletedGWARecords("GET_ALL\t" + k));
+        deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
 
       // Remove deleted lines
-      GSASenderObjects[typeof(GSA2DVoid)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (KeyValuePair<Type, List<object>> kvp in GSASenderObjects)
+      Initialiser.GSASenderObjects[typeof(GSA2DVoid)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
+      foreach (var kvp in Initialiser.GSASenderObjects)
         kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
 
       // Filter only new lines
-      string[] prevLines = GSASenderObjects[typeof(GSA2DVoid)].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
+      string[] prevLines = Initialiser.GSASenderObjects[typeof(GSA2DVoid)].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
       string[] newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
 
       foreach (string p in newLines)
@@ -160,7 +157,7 @@ namespace SpeckleStructuralGSA
             try
             {
               GSA2DVoid v = new GSA2DVoid() { GWACommand = p };
-              v.ParseGWACommand(GSA, nodes);
+              v.ParseGWACommand(Initialiser.Interface, nodes);
               voids.Add(v);
             }
             catch { }
@@ -168,7 +165,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      GSASenderObjects[typeof(GSA2DVoid)].AddRange(voids);
+      Initialiser.GSASenderObjects[typeof(GSA2DVoid)].AddRange(voids);
 
       if (voids.Count() > 0 || deletedLines.Count() > 0) return new SpeckleObject();
 

@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.DB;
 using SpeckleCore;
-using SpeckleStructuralClasses;
 using SpeckleCoreGeometryClasses;
 
 namespace SpeckleStructuralRevit
@@ -77,7 +74,7 @@ namespace SpeckleStructuralRevit
             // populate units dictionary
             UnitDictionary[ p.Definition.UnitType.ToString() ] = p.DisplayUnitType.ToString();
           }
-          catch( Exception e )
+          catch
           {
             myParamDict[ p.Definition.Name ] = val;
           }
@@ -164,7 +161,7 @@ namespace SpeckleStructuralRevit
             break;
           }
         }
-        catch( Exception e )
+        catch
         {
         }
       }

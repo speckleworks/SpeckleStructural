@@ -6,12 +6,16 @@ using Moq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SpeckleCore;
+using SpeckleGSAInterfaces;
+using SpeckleGSAProxy;
 
 namespace SpeckleStructuralGSA.Test
 {
   public abstract class TestBase
   {
     protected IComAuto comAuto;
+
+    protected GSAInterfacer gsaInterfacer;
 
     protected JsonSerializerSettings jsonSettings = new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore };
     protected string jsonDecSearch = @"(\d*\.\d\d\d\d\d\d\d\d)\d*";
@@ -29,19 +33,20 @@ namespace SpeckleStructuralGSA.Test
       //So far only these methods are actually called
       mockGsaCom.Setup(x => x.Gen_NodeAt(It.IsAny<double>(), It.IsAny<double>(), It.IsAny<double>(), It.IsAny<double>())).Returns((double x, double y, double z, double coin) => 1);
       mockGsaCom.Setup(x => x.GwaCommand(It.IsAny<string>())).Returns((string x) => { return x.Contains("GET") ? (object)"" : (object)1; });
-
+      mockGsaCom.Setup(x => x.VersionString()).Returns("Test\t1");
+      mockGsaCom.Setup(x => x.LogFeatureUsage(It.IsAny<string>()));
       return mockGsaCom;
     }
 
     protected List<SpeckleObject> ModelToSpeckleObjects(GSATargetLayer layer, bool resultsOnly, bool embedResults, string[] cases = null, string[] resultsToSend = null)
     {
-      Initialiser.GSA.FullClearCache();
+      gsaInterfacer.FullClearCache();
 
       //Clear out all sender objects that might be there from the last test preparation
       Initialiser.GSASenderObjects = new Dictionary<Type, List<object>>();
 
       //Compile all GWA commands with application IDs
-      var senderProcessor = new SenderProcessor(TestDataDirectory, Initialiser.GSA, layer, resultsOnly, embedResults, cases, resultsToSend);
+      var senderProcessor = new SenderProcessor(TestDataDirectory, gsaInterfacer, layer, resultsOnly, embedResults, cases, resultsToSend);
 
       senderProcessor.GsaInstanceToSpeckleObjects(out var speckleObjects);
 
@@ -93,33 +98,6 @@ namespace SpeckleStructuralGSA.Test
       {
         el.Remove();
       }
-    }
-
-    protected bool OpenGsaFile(string savedGsaFileName)
-    {
-      try
-      {
-        comAuto = new ComAuto();
-        comAuto.Open(Helper.ResolveFullPath(savedGsaFileName, TestDataDirectory));
-
-        comAuto.SetLocale(Locale.LOC_EN_GB);
-        comAuto.DisplayGsaWindow(true);
-
-        Initialiser.GSA.InitializeSender(comAuto);
-      }
-      catch
-      {
-        return false;
-      }
-
-      return true;
-    }
-
-    protected bool CloseGsaFile()
-    {
-      comAuto.Close();
-
-      return true;
     }
   }
 }
