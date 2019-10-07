@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SpeckleStructuralGSA
+﻿namespace SpeckleStructuralGSA
 {
-  public enum GSATargetLayer
-  {
-    Design,
-    Analysis
-  }
-
   /// <summary>
   /// Number of nodes in each GSA element definition
   /// </summary>

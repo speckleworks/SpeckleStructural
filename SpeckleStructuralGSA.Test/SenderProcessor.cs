@@ -4,6 +4,8 @@ using System.Linq;
 using Interop.Gsa_10_0;
 using Moq;
 using SpeckleCore;
+using SpeckleGSAInterfaces;
+using SpeckleGSAProxy;
 
 namespace SpeckleStructuralGSA.Test
 {
@@ -12,14 +14,14 @@ namespace SpeckleStructuralGSA.Test
     public SenderProcessor(string directory, GSAInterfacer gsaInterfacer, GSATargetLayer layer, bool resultOnly, bool embedResults, string[] cases = null, string[] resultsToSend = null) : base(directory)
     {
       GSAInterfacer = gsaInterfacer;
-      Initialiser.GSATargetLayer = layer;
+      Initialiser.Settings.TargetLayer = layer;
 
       ConstructTypeCastPriority(ioDirection.Send, resultOnly);
 
-      Initialiser.GSAEmbedResults = embedResults;
+      Initialiser.Settings.EmbedResults = embedResults;
       if (cases != null)
       {
-        Initialiser.GSAResultCases = cases.ToList();
+        Initialiser.Settings.ResultCases = cases.ToList();
       }
       if (resultsToSend != null)
       {
@@ -99,28 +101,28 @@ namespace SpeckleStructuralGSA.Test
       var matchingKey = Result.NodalResultMap.Keys.FirstOrDefault(k => string.Equals(k, resultLabel, StringComparison.OrdinalIgnoreCase));
       if (matchingKey != null)
       {
-        Initialiser.GSANodalResults[matchingKey] = Result.NodalResultMap[matchingKey];
+        Initialiser.Settings.NodalResults[matchingKey] = Result.NodalResultMap[matchingKey];
         return true;
       }
 
       matchingKey = Result.Element1DResultMap.Keys.FirstOrDefault(k => string.Equals(k, resultLabel, StringComparison.OrdinalIgnoreCase));
       if (matchingKey != null)
       {
-        Initialiser.GSAElement1DResults[matchingKey] = Result.Element1DResultMap[matchingKey];
+        Initialiser.Settings.Element1DResults[matchingKey] = Result.Element1DResultMap[matchingKey];
         return true;
       }
 
       matchingKey = Result.Element2DResultMap.Keys.FirstOrDefault(k => string.Equals(k, resultLabel, StringComparison.OrdinalIgnoreCase));
       if (matchingKey != null)
       {
-        Initialiser.GSAElement2DResults[matchingKey] = Result.Element2DResultMap[matchingKey];
+        Initialiser.Settings.Element2DResults[matchingKey] = Result.Element2DResultMap[matchingKey];
         return true;
       }
 
       matchingKey = Result.MiscResultMap.Keys.FirstOrDefault(k => string.Equals(k, resultLabel, StringComparison.OrdinalIgnoreCase));
       if (matchingKey != null)
       {
-        Initialiser.GSAMiscResults[matchingKey] = Result.MiscResultMap[matchingKey];
+        Initialiser.Settings.MiscResults[matchingKey] = Result.MiscResultMap[matchingKey];
         return true;
       }
       return false;

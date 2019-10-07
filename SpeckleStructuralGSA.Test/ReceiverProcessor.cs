@@ -4,7 +4,8 @@ using System.Linq;
 using Interop.Gsa_10_0;
 using Moq;
 using SpeckleCore;
-
+using SpeckleGSAInterfaces;
+using SpeckleGSAProxy;
 
 namespace SpeckleStructuralGSA.Test
 {
@@ -16,7 +17,7 @@ namespace SpeckleStructuralGSA.Test
     public ReceiverProcessor(string directory, GSAInterfacer gsaInterfacer, GSATargetLayer layer = GSATargetLayer.Design) : base (directory)
     {
       GSAInterfacer = gsaInterfacer;
-      Initialiser.GSATargetLayer = layer;
+      Initialiser.Settings.TargetLayer = layer;
       ConstructTypeCastPriority(ioDirection.Receive, false);
     }
 

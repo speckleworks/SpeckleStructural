@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using SpeckleCore;
-using SpeckleCoreGeometryClasses;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("PROP_2D.5", new string[] { "MAT_STEEL.3", "MAT_CONCRETE.16" }, "properties", true, true, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) }, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) })]
+  [GSAConversion("PROP_2D.5", new string[] { "MAT_STEEL.3", "MAT_CONCRETE.16" }, "properties", true, true, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) }, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) })]
   public class GSA2DProperty : IGSASpeckleContainer
   {
     public bool IsAxisLocal;
@@ -21,7 +17,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new Structural2DProperty();
 
-    public void ParseGWACommand(GSAInterfacer GSA, List<GSAMaterialSteel> steels, List<GSAMaterialConcrete> concretes)
+    public void ParseGWACommand(IGSAInterfacer GSA, List<GSAMaterialSteel> steels, List<GSAMaterialConcrete> concretes)
     {
       if (this.GWACommand == null)
         return;
@@ -32,7 +28,7 @@ namespace SpeckleStructuralGSA
 
       int counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = GSA.GetSID(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Initialiser.Interface.GetSID(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; // Color
       counter++; // Type
@@ -84,7 +80,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(GSAInterfacer GSA)
+    public void SetGWACommand(IGSAInterfacer GSA)
     {
       if (this.Value == null)
         return;
@@ -93,11 +89,11 @@ namespace SpeckleStructuralGSA
 
       string keyword = typeof(GSA2DProperty).GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(typeof(GSA2DProperty), prop);
+      int index = GSA.Indexer.ResolveIndex(typeof(GSA2DProperty).GetGSAKeyword(), typeof(GSA2DProperty).Name, prop.ApplicationId);
       int materialRef = 0;
       string materialType = "UNDEF";
 
-      var res = GSA.Indexer.LookupIndex(typeof(GSAMaterialSteel), prop.MaterialRef);
+      var res = GSA.Indexer.LookupIndex(typeof(GSAMaterialSteel).GetGSAKeyword(), typeof(GSAMaterialSteel).Name, prop.MaterialRef);
       if (res.HasValue)
       {
         materialRef = res.Value;
@@ -105,7 +101,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        res = GSA.Indexer.LookupIndex(typeof(GSAMaterialConcrete), prop.MaterialRef);
+        res = GSA.Indexer.LookupIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), typeof(GSAMaterialConcrete).Name, prop.MaterialRef);
         if (res.HasValue)
         {
           materialRef = res.Value;
@@ -116,7 +112,7 @@ namespace SpeckleStructuralGSA
       List<string> ls = new List<string>();
 
       ls.Add("SET");
-      ls.Add(keyword + ":" + GSA.GenerateSID(prop));
+      ls.Add(keyword + ":" + HelperClass.GenerateSID(prop));
       ls.Add(index.ToString());
       ls.Add(prop.Name == null || prop.Name == "" ? " " : prop.Name);
       ls.Add("NO_RGB");
@@ -150,7 +146,7 @@ namespace SpeckleStructuralGSA
       ls.Add("100%"); // Weight modifier
       ls.Add("NO_ENV"); // Environmental data
 
-      GSA.RunGWACommand(string.Join("\t", ls));
+      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
     }
   }
 
@@ -158,35 +154,35 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this Structural2DProperty prop)
     {
-      new GSA2DProperty() { Value = prop }.SetGWACommand(GSA);
+      new GSA2DProperty() { Value = prop }.SetGWACommand(Initialiser.Interface);
 
       return true;
     }
 
     public static SpeckleObject ToSpeckle(this GSA2DProperty dummyObject)
     {
-      if (!GSASenderObjects.ContainsKey(typeof(GSA2DProperty)))
-        GSASenderObjects[typeof(GSA2DProperty)] = new List<object>();
+      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSA2DProperty)))
+        Initialiser.GSASenderObjects[typeof(GSA2DProperty)] = new List<object>();
 
       List<GSA2DProperty> props = new List<GSA2DProperty>();
-      List<GSAMaterialSteel> steels = GSASenderObjects[typeof(GSAMaterialSteel)].Cast<GSAMaterialSteel>().ToList();
-      List<GSAMaterialConcrete> concretes = GSASenderObjects[typeof(GSAMaterialConcrete)].Cast<GSAMaterialConcrete>().ToList();
+      List<GSAMaterialSteel> steels = Initialiser.GSASenderObjects[typeof(GSAMaterialSteel)].Cast<GSAMaterialSteel>().ToList();
+      List<GSAMaterialConcrete> concretes = Initialiser.GSASenderObjects[typeof(GSAMaterialConcrete)].Cast<GSAMaterialConcrete>().ToList();
 
       string keyword = typeof(GSA2DProperty).GetGSAKeyword();
       string[] subKeywords = typeof(GSA2DProperty).GetSubGSAKeyword();
 
-      string[] lines = GSA.GetGWARecords("GET_ALL\t" + keyword);
-      List<string> deletedLines = GSA.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
+      string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
+      List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
       foreach (string k in subKeywords)
-        deletedLines.AddRange(GSA.GetDeletedGWARecords("GET_ALL\t" + k));
+        deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
 
       // Remove deleted lines
-      GSASenderObjects[typeof(GSA2DProperty)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (KeyValuePair<Type, List<object>> kvp in GSASenderObjects)
+      Initialiser.GSASenderObjects[typeof(GSA2DProperty)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
+      foreach (var kvp in Initialiser.GSASenderObjects)
         kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
 
       // Filter only new lines
-      string[] prevLines = GSASenderObjects[typeof(GSA2DProperty)].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
+      string[] prevLines = Initialiser.GSASenderObjects[typeof(GSA2DProperty)].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
       string[] newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
 
       foreach (string p in newLines)
@@ -194,13 +190,13 @@ namespace SpeckleStructuralGSA
         try
         {
           GSA2DProperty prop = new GSA2DProperty() { GWACommand = p };
-          prop.ParseGWACommand(GSA, steels, concretes);
+          prop.ParseGWACommand(Initialiser.Interface, steels, concretes);
           props.Add(prop);
         }
         catch { }
       }
 
-      GSASenderObjects[typeof(GSA2DProperty)].AddRange(props);
+      Initialiser.GSASenderObjects[typeof(GSA2DProperty)].AddRange(props);
 
       if (props.Count() > 0 || deletedLines.Count() > 0) return new SpeckleObject();
 

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using SpeckleCore;
-using SpeckleCoreGeometryClasses;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("ALIGN.1", new string[] { }, "misc", true, true, new Type[] { }, new Type[] { })]
+  [GSAConversion("ALIGN.1", new string[] { }, "misc", true, true, new Type[] { }, new Type[] { })]
   public class GSABridgeAlignment : IGSASpeckleContainer
   {
     public int GSAId { get; set; }
@@ -15,7 +15,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralBridgeAlignment();
 
-    public void ParseGWACommand(GSAInterfacer GSA)
+    public void ParseGWACommand(IGSAInterfacer GSA)
     {
       if (this.GWACommand == null)
         return;
@@ -27,7 +27,7 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = GSA.GetSID(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Initialiser.Interface.GetSID(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
 
       //TO DO
@@ -35,7 +35,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(GSAInterfacer GSA)
+    public void SetGWACommand(IGSAInterfacer GSA)
     {
       if (this.Value == null)
         return;
@@ -46,12 +46,12 @@ namespace SpeckleStructuralGSA
 
       string keyword = destType.GetGSAKeyword();
 
-      int gridSurfaceIndex = GSA.Indexer.ResolveIndex("GRID_SURFACE.1", alignment);
-      int gridPlaneIndex = GSA.Indexer.ResolveIndex("GRID_PLANE.4", alignment);
+      int gridSurfaceIndex = GSA.Indexer.ResolveIndex("GRID_SURFACE.1", "", alignment.ApplicationId);
+      int gridPlaneIndex = GSA.Indexer.ResolveIndex("GRID_PLANE.4", "", alignment.ApplicationId);
 
-      int index = GSA.Indexer.ResolveIndex(destType, alignment);
+      int index = GSA.Indexer.ResolveIndex(keyword, destType.Name, alignment.ApplicationId);
 
-      var sid = GSA.GenerateSID(alignment);
+      var sid = HelperClass.GenerateSID(alignment);
 
       var ls = new List<string>();
 
@@ -62,12 +62,12 @@ namespace SpeckleStructuralGSA
         gridPlaneIndex.ToString(),
         alignment.Name == null || alignment.Name == "" ? " " : alignment.Name,
         "GENERAL", // Type
-        GSA.SetAxis(alignment.Plane.Xdir, alignment.Plane.Ydir, alignment.Plane.Origin, alignment.Name).ToString(),
+        HelperClass.SetAxis(alignment.Plane.Xdir, alignment.Plane.Ydir, alignment.Plane.Origin, alignment.Name).ToString(),
         "0", // Elevation assumed to be at local z=0 (i.e. dictated by the origin)
         "0", // Elevation above
         "0" }); // Elevation below
 
-      GSA.RunGWACommand(string.Join("\t", ls));
+      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
       ls.Clear();
       ls.Add("SET");
       ls.Add("GRID_SURFACE.1" + ":" + sid);
@@ -79,14 +79,14 @@ namespace SpeckleStructuralGSA
       ls.Add("0.01"); // Tolerance
       ls.Add("ONE"); // Span option
       ls.Add("0"); // Span angle
-      GSA.RunGWACommand(string.Join("\t", ls));
+      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
 
 
       ls.Clear();
       ls.AddRange(new []
         {
           "SET",
-          keyword + ":" + GSA.GenerateSID(alignment),
+          keyword + ":" + HelperClass.GenerateSID(alignment),
           index.ToString(),
           string.IsNullOrEmpty(alignment.Name) ? "" : alignment.Name,
           "1", //Grid surface
@@ -106,7 +106,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      GSA.RunGWACommand(string.Join("\t", ls));
+      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
     }
   }
 
@@ -114,7 +114,7 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this StructuralBridgeAlignment alignment)
     {
-      new GSABridgeAlignment() { Value = alignment }.SetGWACommand(GSA);
+      new GSABridgeAlignment() { Value = alignment }.SetGWACommand(Initialiser.Interface);
 
       return true;
     }
@@ -123,8 +123,8 @@ namespace SpeckleStructuralGSA
     {
       var objType = dummyObject.GetType();
 
-      if (!GSASenderObjects.ContainsKey(objType))
-        GSASenderObjects[objType] = new List<object>();
+      if (!Initialiser.GSASenderObjects.ContainsKey(objType))
+        Initialiser.GSASenderObjects[objType] = new List<object>();
 
       //Get all relevant GSA entities in this entire model
       var alignments = new List<GSABridgeAlignment>();
@@ -132,29 +132,29 @@ namespace SpeckleStructuralGSA
       string keyword = objType.GetGSAKeyword();
       string[] subKeywords = objType.GetSubGSAKeyword();
 
-      string[] lines = GSA.GetGWARecords("GET_ALL\t" + keyword);
-      List<string> deletedLines = GSA.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
+      string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
+      List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
       foreach (string k in subKeywords)
-        deletedLines.AddRange(GSA.GetDeletedGWARecords("GET_ALL\t" + k));
+        deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
 
       // Remove deleted lines
-      GSASenderObjects[objType].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (KeyValuePair<Type, List<object>> kvp in GSASenderObjects)
+      Initialiser.GSASenderObjects[objType].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
+      foreach (var kvp in Initialiser.GSASenderObjects)
         kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
 
       // Filter only new lines
-      string[] prevLines = GSASenderObjects[objType].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
+      string[] prevLines = Initialiser.GSASenderObjects[objType].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
       string[] newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
 
       foreach (string p in newLines)
       {
         GSABridgeAlignment alignment = new GSABridgeAlignment() { GWACommand = p };
         //Pass in ALL the nodes and members - the Parse_ method will search through them
-        alignment.ParseGWACommand(GSA);
+        alignment.ParseGWACommand(Initialiser.Interface);
         alignments.Add(alignment);
       }
 
-      GSASenderObjects[objType].AddRange(alignments);
+      Initialiser.GSASenderObjects[objType].AddRange(alignments);
 
       if (alignments.Count() > 0 || deletedLines.Count() > 0) return new SpeckleObject();
 
