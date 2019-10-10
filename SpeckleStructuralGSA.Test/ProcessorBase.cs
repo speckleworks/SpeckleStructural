@@ -34,7 +34,7 @@ namespace SpeckleStructuralGSA.Test
     protected void ConstructTypeCastPriority(ioDirection ioDirection, bool resultsOnly)
     {
       // Grab GSA interface and attribute type
-      var attributeType = typeof(GSAConversionAttribute);
+      var attributeType = typeof(GSAObject);
       var interfaceType = typeof(IGSASpeckleContainer);
 
       var ioAttribute = (ioDirection == ioDirection.Receive) ? "WritePrerequisite" : "ReadPrerequisite";
