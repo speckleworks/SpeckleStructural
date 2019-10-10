@@ -10,7 +10,7 @@ using SQLite;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAConversion("PROP_SEC.3", new string[] { "MAT_STEEL.3", "MAT_CONCRETE.16" }, "properties", true, true, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) }, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) })]
+  [GSAObject("PROP_SEC.3", new string[] { "MAT_STEEL.3", "MAT_CONCRETE.16" }, "properties", true, true, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) }, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) })]
   public class GSA1DProperty : IGSASpeckleContainer
   {
     public int GSAId { get; set; }

@@ -11,7 +11,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAConversion("EL.4", new string[] { "NODE.2" }, "elements", true, false, new Type[] { typeof(GSA0DSpring) }, new Type[] { typeof(GSA1DProperty) })]
+  [GSAObject("EL.4", new string[] { "NODE.2" }, "elements", true, false, new Type[] { typeof(GSA0DSpring) }, new Type[] { typeof(GSA1DProperty) })]
   public class GSA0DSpring : IGSASpeckleContainer
   {
     public string Member;
