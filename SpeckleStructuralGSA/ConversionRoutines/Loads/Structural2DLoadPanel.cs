@@ -224,7 +224,6 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this Structural2DLoadPanel load)
     {
-      //new GSAGridAreaLoad() { Value = load }.SetGWACommand(Initialiser.Interface);
       new GSAGridAreaLoad() { Value = load }.SetGWACommand(Initialiser.Interface);
       return true;
     }

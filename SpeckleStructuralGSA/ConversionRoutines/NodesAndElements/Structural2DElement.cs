@@ -137,7 +137,7 @@ namespace SpeckleStructuralGSA
       ls.Add(mesh.Offset.ToString());
 
       //ls.Add("NORMAL"); // Action // TODO: EL.4 SUPPORT
-      ls.Add(mesh.GSADummy ? "DUMMY" : "");
+      ls.Add((mesh.GSADummy.HasValue & mesh.GSADummy.Value) ? "DUMMY" : "");
 
       Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
     }
@@ -288,7 +288,7 @@ namespace SpeckleStructuralGSA
       ls.Add("0"); // Time 2
       ls.Add("0"); // Time 3
       ls.Add("0"); // TODO: What is this?
-      ls.Add(mesh.GSADummy ? "DUMMY" : "ACTIVE");
+      ls.Add((mesh.GSADummy.HasValue && mesh.GSADummy.Value) ? "DUMMY" : "ACTIVE");
       ls.Add("NO"); // Internal auto offset
       ls.Add(mesh.Offset != null ? mesh.Offset.First().ToString() : "0"); // Offset z
       ls.Add("ALL"); // Exposure

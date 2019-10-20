@@ -204,7 +204,7 @@ namespace SpeckleStructuralGSA
       }
 
       //ls.Add("NORMAL"); // Action // TODO: EL.4 SUPPORT
-      ls.Add(element.GSADummy ? "DUMMY" : "");
+      ls.Add((element.GSADummy.HasValue && element.GSADummy.Value) ? "DUMMY" : "");
 
       Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
     }
@@ -356,7 +356,8 @@ namespace SpeckleStructuralGSA
         ls.Add(HelperClass.Get1DAngle(member.Value.ToArray(), member.ZAxis).ToString());
       }
       catch { ls.Add("0"); }
-      ls.Add(member.GSAMeshSize == 0 ? "0" : member.GSAMeshSize.ToString()); // Target mesh size
+      //ls.Add(member.GSAMeshSize == 0 ? "0" : member.GSAMeshSize.ToString()); // Target mesh size
+      ls.Add(member.GSAMeshSize == null ? "0" : member.GSAMeshSize.ToString()); // Target mesh size
       ls.Add("MESH"); // TODO: What is this?
       ls.Add((member.ElementType == Structural1DElementType.Spring) ? "SPRING" : "BEAM"); // Element type
       ls.Add("0"); // Fire
@@ -364,7 +365,7 @@ namespace SpeckleStructuralGSA
       ls.Add("0"); // Time 2
       ls.Add("0"); // Time 3
       ls.Add("0"); // Time 4
-      ls.Add(member.GSADummy ? "DUMMY" : "ACTIVE");
+      ls.Add((member.GSADummy.HasValue && member.GSADummy.Value) ? "DUMMY" : "ACTIVE");
 
       try
       {

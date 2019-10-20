@@ -209,7 +209,6 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this Structural1DLoad load)
     {
-      //new GSA1DLoad() { Value = load }.SetGWACommand(Initialiser.Interface);
       new GSA1DLoad() { Value = load }.SetGWACommand(Initialiser.Interface);
 
       return true;

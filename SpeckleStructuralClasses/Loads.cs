@@ -8,6 +8,7 @@ namespace SpeckleStructuralClasses
 {
   public enum StructuralLoadCaseType
   {
+    NotSet,
     Generic,
     Dead,
     Soil,
@@ -21,6 +22,7 @@ namespace SpeckleStructuralClasses
 
   public enum StructuralLoadTaskType
   {
+    NotSet,
     LinearStatic,
     NonlinearStatic,
     Modal,
@@ -29,6 +31,7 @@ namespace SpeckleStructuralClasses
 
   public enum StructuralLoadComboType
   {
+    NotSet,
     Envelope,
     LinearAdd
   }
@@ -41,6 +44,8 @@ namespace SpeckleStructuralClasses
     /// <summary>Type of load the case contains.</summary>
     [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     [JsonProperty("caseType", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+
+    [JsonIgnore]
     public StructuralLoadCaseType CaseType { get; set; }
   }
 
@@ -75,11 +80,11 @@ namespace SpeckleStructuralClasses
 
     /// <summary>Number of modes.</summary>
     [JsonProperty("numModes", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public int NumModes { get; set; }
+    public int? NumModes { get; set; }
 
     /// <summary>Maximum number of iterations.</summary>
     [JsonProperty("maxNumIterations", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public int MaxNumIterations { get; set; }
+    public int? MaxNumIterations { get; set; }
 
     /// <summary>Name of the combination case.</summary>
     [JsonProperty("resultCaseRef", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
@@ -307,11 +312,11 @@ namespace SpeckleStructuralClasses
 
     /// <summary>Temperature at the top surface of the element.</summary>
     [JsonProperty("topTemperature", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double TopTemperature { get; set; }
+    public double? TopTemperature { get; set; }
 
     /// <summary>Temperature at the bottom surface of the element.</summary>
     [JsonProperty("bottomTemperature", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double BottomTemperature { get; set; }
+    public double? BottomTemperature { get; set; }
 
     /// <summary>Application ID of StructuralLoadCase.</summary>
     [JsonProperty("loadCaseRef", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]

@@ -108,7 +108,7 @@ namespace SpeckleStructuralGSA
       ls.Add("0");
 
       //ls.Add("NORMAL"); // Action // TODO: EL.4 SUPPORT
-      ls.Add(spring.Dummy ? "DUMMY" : "");
+      ls.Add((spring.Dummy.HasValue && spring.Dummy.Value) ? "DUMMY" : "");
 
       GSA.RunGWACommand(string.Join("\t", ls));
     }

@@ -156,7 +156,6 @@ namespace SpeckleStructuralGSA
     {
       var GSA2DElementLoadingThermal = new GSA2DThermalLoading() { Value = load };
 
-      //GSA2DElementLoadingThermal.SetGWACommand(Initialiser.Interface);
       GSA2DElementLoadingThermal.SetGWACommand(Initialiser.Interface);
 
       return true;

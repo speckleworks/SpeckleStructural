@@ -85,9 +85,9 @@ namespace SpeckleStructuralClasses
 
     /// <summary>Mass of the node.</summary>
     [JsonIgnore]
-    public double Mass
+    public double? Mass
     {
-      get => StructuralProperties.ContainsKey("mass") ? ((double)StructuralProperties["mass"]) : 0;
+      get => StructuralProperties.ContainsKey("mass") ? ((double?)StructuralProperties["mass"]) : null;
       set => StructuralProperties["mass"] = value;
     }
 
@@ -101,7 +101,7 @@ namespace SpeckleStructuralClasses
 
     /// <summary>GSA local mesh size around node.</summary>
     [JsonIgnore]
-    public double GSALocalMeshSize
+    public double? GSALocalMeshSize
     {
       get => StructuralProperties.ContainsKey("gsaLocalMeshSize") ? ((double)StructuralProperties["gsaLocalMeshSize"]) : 0;
       set => StructuralProperties["gsaLocalMeshSize"] = value;
@@ -226,17 +226,17 @@ namespace SpeckleStructuralClasses
 
     /// <summary>GSA target mesh size.</summary>
     [JsonIgnore]
-    public double GSAMeshSize
+    public double? GSAMeshSize
     {
-      get => StructuralProperties.ContainsKey("gsaMeshSize") ? ((double)StructuralProperties["gsaMeshSize"]) : 0;
+      get => StructuralProperties.ContainsKey("gsaMeshSize") ? ((double?)StructuralProperties["gsaMeshSize"]) : null;
       set => StructuralProperties["gsaMeshSize"] = value;
     }
 
     /// <summary>GSA dummy status.</summary>
     [JsonIgnore]
-    public bool GSADummy
+    public bool? GSADummy
     {
-      get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool)StructuralProperties["gsaDummy"]) : false;
+      get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool?)StructuralProperties["gsaDummy"]) : null;
       set => StructuralProperties["gsaDummy"] = value;
     }
 
@@ -324,9 +324,9 @@ namespace SpeckleStructuralClasses
 
     /// <summary>GSA dummy status.</summary>
     [JsonIgnore]
-    public bool Dummy
+    public bool? Dummy
     {
-      get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool)StructuralProperties["gsaDummy"]) : false;
+      get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool?)StructuralProperties["gsaDummy"]) : null;
       set => StructuralProperties["gsaDummy"] = value;
     }
 
@@ -413,7 +413,7 @@ namespace SpeckleStructuralClasses
     [JsonIgnore]
     public Structural1DElementType ElementType
     {
-      get => StructuralProperties.ContainsKey("elementType") ? (Structural1DElementType)Enum.Parse(typeof(Structural1DElementType), (StructuralProperties["elementType"] as string), true) : Structural1DElementType.Generic;
+      get => StructuralProperties.ContainsKey("elementType") ? (Structural1DElementType)Enum.Parse(typeof(Structural1DElementType), (StructuralProperties["elementType"] as string), true) : default;
       set => StructuralProperties["elementType"] = value.ToString();
     }
 
@@ -514,17 +514,17 @@ namespace SpeckleStructuralClasses
 
     /// <summary>GSA target mesh size.</summary>
     [JsonIgnore]
-    public double GSAMeshSize
+    public double? GSAMeshSize
     {
-      get => StructuralProperties.ContainsKey("gsaMeshSize") ? ((double)StructuralProperties["gsaMeshSize"]) : 0;
+      get => StructuralProperties.ContainsKey("gsaMeshSize") ? ((double?)StructuralProperties["gsaMeshSize"]) : null;
       set => StructuralProperties["gsaMeshSize"] = value;
     }
 
     /// <summary>GSA dummy status.</summary>
     [JsonIgnore]
-    public bool GSADummy
+    public bool? GSADummy
     {
-      get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool)StructuralProperties["gsaDummy"]) : false;
+      get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool?)StructuralProperties["gsaDummy"]) : null;
       set => StructuralProperties["gsaDummy"] = value;
     }
 
@@ -612,7 +612,7 @@ namespace SpeckleStructuralClasses
     [JsonIgnore]
     public Structural2DElementType ElementType
     {
-      get => StructuralProperties.ContainsKey("elementType") ? (Structural2DElementType)Enum.Parse(typeof(Structural2DElementType), (StructuralProperties["elementType"] as string), true) : Structural2DElementType.Generic;
+      get => StructuralProperties.ContainsKey("elementType") ? (Structural2DElementType)Enum.Parse(typeof(Structural2DElementType), (StructuralProperties["elementType"] as string), true) : default;
       set => StructuralProperties["elementType"] = value.ToString();
     }
 
@@ -634,32 +634,32 @@ namespace SpeckleStructuralClasses
 
     /// <summary>Offset of 2D element.</summary>
     [JsonIgnore]
-    public double Offset
+    public double? Offset
     {
-      get => StructuralProperties.ContainsKey("offset") ? ((double)StructuralProperties["offset"]) : 0;
+      get => StructuralProperties.ContainsKey("offset") ? ((double?)StructuralProperties["offset"]) : null;
       set => StructuralProperties["offset"] = value;
     }
 
     /// <summary>GSA target mesh size.</summary>
     [JsonIgnore]
-    public double GSAMeshSize
+    public double? GSAMeshSize
     {
-      get => StructuralProperties.ContainsKey("gsaMeshSize") ? ((double)StructuralProperties["gsaMeshSize"]) : 0;
+      get => StructuralProperties.ContainsKey("gsaMeshSize") ? ((double?)StructuralProperties["gsaMeshSize"]) : null;
       set => StructuralProperties["gsaMeshSize"] = value;
     }
 
     [JsonIgnore]
-    public bool GSAAutoOffsets
+    public bool? GSAAutoOffsets
     {
-      get => StructuralProperties.ContainsKey("gsaAutoOffsets") ? ((bool)StructuralProperties["gsaAutoOffsets"]) : false;
+      get => StructuralProperties.ContainsKey("gsaAutoOffsets") ? ((bool?)StructuralProperties["gsaAutoOffsets"]) : null;
       set => StructuralProperties["gsaAutoOffsets"] = value;
     }
 
     /// <summary>GSA dummy status.</summary>
     [JsonIgnore]
-    public bool GSADummy
+    public bool? GSADummy
     {
-      get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool)StructuralProperties["gsaDummy"]) : false;
+      get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool?)StructuralProperties["gsaDummy"]) : null;
       set => StructuralProperties["gsaDummy"] = value;
     }
 
@@ -747,7 +747,7 @@ namespace SpeckleStructuralClasses
     [JsonIgnore]
     public Structural2DElementType ElementType
     {
-      get => StructuralProperties.ContainsKey("elementType") ? (Structural2DElementType)Enum.Parse(typeof(Structural2DElementType), (StructuralProperties["elementType"] as string), true) : Structural2DElementType.Generic;
+      get => StructuralProperties.ContainsKey("elementType") ? (Structural2DElementType)Enum.Parse(typeof(Structural2DElementType), (StructuralProperties["elementType"] as string), true) : default;
       set => StructuralProperties["elementType"] = value.ToString();
     }
 
@@ -818,17 +818,17 @@ namespace SpeckleStructuralClasses
 
     /// <summary>GSA target mesh size.</summary>
     [JsonIgnore]
-    public double GSAMeshSize
+    public double? GSAMeshSize
     {
-      get => StructuralProperties.ContainsKey("gsaMeshSize") ? ((double)StructuralProperties["gsaMeshSize"]) : 0;
+      get => StructuralProperties.ContainsKey("gsaMeshSize") ? ((double?)StructuralProperties["gsaMeshSize"]) : null;
       set => StructuralProperties["gsaMeshSize"] = value;
     }
 
     /// <summary>GSA dummy status.</summary>
     [JsonIgnore]
-    public bool GSADummy
+    public bool? GSADummy
     {
-      get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool)StructuralProperties["gsaDummy"]) : false;
+      get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool?)StructuralProperties["gsaDummy"]) : null;
       set => StructuralProperties["gsaDummy"] = value;
     }
 

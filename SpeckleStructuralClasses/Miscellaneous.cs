@@ -15,6 +15,7 @@ namespace SpeckleStructuralClasses
 
   public enum StructuralBridgeCurvature
   {
+    NotSet,
     Straight,
     LeftCurve,
     RightCurve
@@ -22,6 +23,7 @@ namespace SpeckleStructuralClasses
 
   public enum StructuralBridgePathType
   {
+    NotSet,
     Lane,
     Footway,
     Track,
@@ -59,7 +61,7 @@ namespace SpeckleStructuralClasses
     }
 
     [JsonIgnore]
-    public int NumPoints
+    public int? NumPoints
     {
       get
       {
@@ -67,7 +69,7 @@ namespace SpeckleStructuralClasses
         {
           return numPoints;
         }
-        return 0;
+        return null;
       }
       set => StructuralProperties["numPoints"] = value;
     }
@@ -92,9 +94,9 @@ namespace SpeckleStructuralClasses
     }
 
     [JsonIgnore]
-    public double Width
+    public double? Width
     {
-      get => (StructuralProperties.ContainsKey("width") && double.TryParse(StructuralProperties["width"].ToString(), out double width)) ? width : 0;
+      get => (StructuralProperties.ContainsKey("width") && double.TryParse(StructuralProperties["width"].ToString(), out double width)) ? (double?) width : null;
       set => StructuralProperties["width"] = value;
     }
 
@@ -139,7 +141,7 @@ namespace SpeckleStructuralClasses
 
     /// <summary>Number of days in the stage</summary>
     [JsonProperty("stageDays", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public int StageDays { get; set; }
+    public int? StageDays { get; set; }
   }
 
   [Serializable]
@@ -227,14 +229,14 @@ namespace SpeckleStructuralClasses
     public override string Type { get => "StructuralBridgeAlignmentNode"; }
 
     [JsonProperty("chainage", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double Chainage { get; set; }
+    public double? Chainage { get; set; }
 
     [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     [JsonProperty("curvature", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
     public StructuralBridgeCurvature Curvature { get; set; }
 
     [JsonProperty("radius", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double Radius { get; set; }
+    public double? Radius { get; set; }
   }
 
   [Serializable]
@@ -253,10 +255,10 @@ namespace SpeckleStructuralClasses
     public List<double> Offsets { get; set; }
 
     [JsonProperty("gauge", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double Gauge { get; set; }
+    public double? Gauge { get; set; }
 
     [JsonProperty("leftRailFactor", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double LeftRailFactor { get; set; }
+    public double? LeftRailFactor { get; set; }
   }
 
   [Serializable]
@@ -265,7 +267,7 @@ namespace SpeckleStructuralClasses
     public override string Type { get => "StructuralBridgeVehicle"; }
 
     [JsonProperty("width", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double Width { get; set; }
+    public double? Width { get; set; }
 
     [JsonIgnore]
     public List<StructuralBridgeVehicleAxle> Axles
@@ -325,16 +327,16 @@ namespace SpeckleStructuralClasses
     public override string Type { get => "StructuralBridgeVehicleAxle"; }
 
     [JsonProperty("position", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double Position { get; set; }
+    public double? Position { get; set; }
 
     [JsonProperty("wheelOffset", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double WheelOffset { get; set; }
+    public double? WheelOffset { get; set; }
 
     [JsonProperty("leftWheelLoad", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double LeftWheelLoad { get; set; }
+    public double? LeftWheelLoad { get; set; }
 
     [JsonProperty("rightWheelLoad", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double RightWheelLoad { get; set; }
+    public double? RightWheelLoad { get; set; }
   }
 
   [Serializable]
@@ -375,7 +377,7 @@ namespace SpeckleStructuralClasses
 
     /// <summary>Influence effect factor to apply.</summary>
     [JsonProperty("factor", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double Factor { get; set; }
+    public double? Factor { get; set; }
 
     /// <summary>Axis of effect to be considered.</summary>
     [JsonProperty("axis", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
@@ -387,7 +389,7 @@ namespace SpeckleStructuralClasses
 
     /// <summary>GSA grouping of influence effects to combine effects.</summary>
     [JsonProperty("gsaEffectGroup", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public int GSAEffectGroup { get; set; }
+    public int? GSAEffectGroup { get; set; }
   }
 
   [Serializable]
@@ -406,11 +408,11 @@ namespace SpeckleStructuralClasses
 
     /// <summary>Position on the element in percentage (0 to 1) to calculate influence effect at.</summary>
     [JsonProperty("position", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double Position { get; set; }
+    public double? Position { get; set; }
 
     /// <summary>Influence effect factor to apply.</summary>
     [JsonProperty("factor", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double Factor { get; set; }
+    public double? Factor { get; set; }
 
     /// <summary>Directions of effect to be considered.</summary>
     [JsonProperty("directions", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
@@ -418,6 +420,6 @@ namespace SpeckleStructuralClasses
     
     /// <summary>GSA grouping of influence effects to combine effects.</summary>
     [JsonProperty("gsaEffectGroup", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public int GSAEffectGroup { get; set; }
+    public int? GSAEffectGroup { get; set; }
   }
 }

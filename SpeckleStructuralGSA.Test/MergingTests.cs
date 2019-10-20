@@ -4,22 +4,123 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using AutoMapper;
+//using AutoMapper;
 using SpeckleGSAInterfaces;
 using Moq;
 using SpeckleStructuralClasses;
 using SpeckleCore;
+using Omu.ValueInjecter;
+using System.Reflection;
+using Omu.ValueInjecter.Injections;
+using AutoMapper;
 
 namespace SpeckleStructuralGSA.Test
 {
+  public enum eTest
+  {
+    NotSet,
+    AVal,
+    BVal
+  }
+
   [TestFixture]
+
+  public class mTest
+  {
+    private double _secret;
+    public double? d { get => _secret; set { _secret = value.HasValue ? value.Value : _secret; } }
+
+    public string s { get; set; }
+
+    public eTest e1 { get; set; }
+
+    public eTest e2 { get; set; }
+  }
+
+  class IgnoreNullResolver : IMemberValueResolver<object, object, object, object>
+  {
+    public object Resolve(object source, object destination, object sourceMember, object destinationMember, ResolutionContext context)
+    {
+      if (sourceMember is Enum && sourceMember.Equals(GetDefaultValue(sourceMember.GetType())))
+      {
+        return destinationMember;
+      }
+      return sourceMember ?? destinationMember;
+    }
+
+    private object GetDefaultValue(Type t)
+    {
+      if (t.IsValueType)
+      {
+        return Activator.CreateInstance(t);
+      }
+      else
+      {
+        return null;
+      }
+    }
+  }
+
+  public class NoNullsInjection : LoopInjection
+  {
+    protected override void SetValue(object source, object target, PropertyInfo sp, PropertyInfo tp)
+    {
+      if (sp.GetValue(source) == null) return;
+      base.SetValue(source, target, sp, tp);
+    }
+  }
+
   public class MergingTests
   {
     [Test]
-    public void Merging()
+    public void MergeTestInjecter()
     {
+      var md = new mTest { d = 5 };
+      var ms = new mTest { s = "Test" };
+
+      var endObj = ms.InjectFrom<NoNullsInjection>(md);
+
+      /*
       var config = new MapperConfiguration(cfg =>
       {
+        cfg.CreateMap<mTest, mTest>()
+            .ForAllMembers(opt => opt.Condition((d, b) => d != null));
+      });
+
+      config.AssertConfigurationIsValid();
+
+      var mapper = new Mapper(config);
+
+      var testResult = mapper.Map(md, ms);
+      */
+    }
+
+    [Test]
+    public void MergeTestAutomapper()
+    {
+      var md = new mTest { d = 5, e1 = eTest.NotSet, e2 = eTest.AVal };
+      var ms = new mTest { s = "Test", e1 = eTest.BVal };
+
+      eTest e;
+
+      var config = new MapperConfiguration(cfg =>
+      {
+        cfg.CreateMap<mTest, mTest>();
+        cfg.ForAllPropertyMaps(pm => true, (pm, c) => c.ResolveUsing(new IgnoreNullResolver(), pm.SourceMember.Name));
+      });
+
+      config.AssertConfigurationIsValid();
+
+      var m = config.CreateMapper();
+
+      var testResult = m.Map(md, ms);
+    }
+
+    [Test]
+    public void Merging()
+    {
+      //var config = new MapperConfiguration(cfg =>
+      //{
         //cfg.CreateMap<List<double>, List<double>>().ConvertUsing<DoubleArrayTypeConverter>();
         //cfg.CreateMap<double, double?>().ConvertUsing<ZeroDoubleNullTypeConverter>();
         //cfg.CreateMap<double, double>().ForAllMembers()
@@ -29,9 +130,9 @@ namespace SpeckleStructuralGSA.Test
         //cfg.CreateMap<double, double>().ForAllMembers(opt => opt.PreCondition(src => (src > 0d)));
         //cfg.CreateMap<double, double>().ConvertUsing<ZeroDoubleTypeConverter>();
 
-        cfg.CreateMap<double, double>().BeforeMap((src, dest) => dest = -1);
+        //cfg.CreateMap<double, double>().BeforeMap((src, dest) => dest = -1);
 
-        cfg.CreateMap<StructuralVectorSix, StructuralVectorSix>();
+        //cfg.CreateMap<StructuralVectorSix, StructuralVectorSix>();
         //cfg.ForAllPropertyMaps(pm => pm.SourceType == typeof(double) && pm.DestinationType == typeof(double), (pm, c) => c.PreCondition(o => (double) o > 0d));
 
         //cfg.ForAllPropertyMaps(pm => pm.TypeMap.SourceType == typeof(double), (pm, c) => c.MapFrom(new IgnoreNullResolver(), pm.SourceMember.Name));
@@ -39,8 +140,10 @@ namespace SpeckleStructuralGSA.Test
         //cfg.CreateMap<StructuralSpringProperty, StructuralSpringProperty>().ForMember(dest => dest.ApplicationId, opt => opt.MapFrom(src => string.Join(" ", src.ApplicationId, "-Test")));
         //cfg.CreateMap<StructuralSpringProperty, StructuralSpringProperty>().ForAllMembers(o => o.Condition((src, dest, value) => (double)value != 0d));
         //cfg.CreateMap<StructuralSpringProperty, StructuralSpringProperty>().ForMember(d => d.DampingRatio, o => o.MapFrom<CustomerResolver>());
-      }
-      );
+      //}
+      //);
+    
+      /*
       config.AssertConfigurationIsValid();
       var mapper = new Mapper(config);
 
@@ -64,10 +167,11 @@ namespace SpeckleStructuralGSA.Test
       PrepareGwaToSpeckle<GSASpringProperty>(gwa2, "PROP_SPR.3", "gh/a");
 
       Conversions.ToSpeckle(new GSASpringProperty());
-
       var newToMerge = ((IGSASpeckleContainer)Initialiser.GSASenderObjects[typeof(GSASpringProperty)].First()).Value;
 
       var resultingObject = mapper.Map(newToMerge, existing);
+
+      */
 
       /*
         Mapper.Initialize(cfg =>
@@ -122,6 +226,7 @@ namespace SpeckleStructuralGSA.Test
     }
   }
 
+  /*
   class IgnoreNullResolver : IMemberValueResolver<object, object, object, object>
   {
     public object Resolve(object source, object destination, object sourceMember, object destinationMember, ResolutionContext context)
@@ -182,4 +287,5 @@ namespace SpeckleStructuralGSA.Test
       }
     }
   }
+  */
 }

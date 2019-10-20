@@ -240,7 +240,7 @@ namespace SpeckleStructuralGSA
 
       StructuralNode node = this.Value as StructuralNode;
 
-      if (node.Mass == 0)
+      if (!node.Mass.HasValue || node.Mass == 0)
         return;
 
       string keyword = typeof(GSA0DElement).GetGSAKeyword();
