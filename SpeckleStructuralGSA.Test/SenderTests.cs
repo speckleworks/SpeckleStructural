@@ -8,6 +8,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using SpeckleCore;
+using SpeckleGSAInterfaces;
+using SpeckleGSAProxy;
 
 namespace SpeckleStructuralGSA.Test
 {
@@ -24,14 +26,16 @@ namespace SpeckleStructuralGSA.Test
     [OneTimeSetUp]
     public void SetupTests()
     {
-      //Set up default values
-      Initialiser.GSACoincidentNodeAllowance = 0.1;
-      Initialiser.GSAResult1DNumPosition = 3;
-
       //This uses the installed SpeckleKits - when SpeckleStructural is built, the built files are copied into the 
       // %LocalAppData%\SpeckleKits directory, so therefore this project doesn't need to reference the projects within in this solution
       SpeckleInitializer.Initialize();
-      
+
+      gsaInterfacer = new GSAInterfacer
+      {
+        Indexer = new Indexer()
+      };
+      Initialiser.Interface = gsaInterfacer;
+      Initialiser.Settings = new Settings();
     }
 
     [TestCase("TxSpeckleObjectsDesignLayer.json", GSATargetLayer.Design, false, true, gsaFileNameWithResults)]
@@ -41,7 +45,7 @@ namespace SpeckleStructuralGSA.Test
     [TestCase("TxSpeckleObjectsNotEmbedded.json", GSATargetLayer.Analysis, false, false, gsaFileNameWithResults)]
     public void TransmissionTest(string inputJsonFileName, GSATargetLayer layer, bool resultsOnly, bool embedResults, string gsaFileName)
     {
-      OpenGsaFile(gsaFileName);
+      gsaInterfacer.OpenFile(Helper.ResolveFullPath(gsaFileName, TestDataDirectory));
 
       //Deserialise into Speckle Objects so that these can be compared in any order
 
@@ -76,7 +80,7 @@ namespace SpeckleStructuralGSA.Test
         expectedJsons.Remove(matchingExpected);
       }
 
-      CloseGsaFile();
+      gsaInterfacer.Close();
     }
   }
 }

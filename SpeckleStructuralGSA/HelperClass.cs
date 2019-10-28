@@ -1,14 +1,12 @@
 ﻿using SpeckleCore;
+using SpeckleCoreGeometryClasses;
+using SpeckleGSAInterfaces;
+using SpeckleStructuralClasses;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
 
 namespace SpeckleStructuralGSA
@@ -113,6 +111,28 @@ namespace SpeckleStructuralGSA
     public static string[] ListSplit(this string list, string delimiter)
     {
       return Regex.Split(list, delimiter + "(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+    }
+
+    /// <summary>
+    /// Extracts and return the group indicies in the list.
+    /// </summary>
+    /// <param name="list">List</param>
+    /// <returns>Array of group indices</returns>
+    public static int[] GetGroupsFromGSAList(string list)
+    {
+      var pieces = list.ListSplit(" ");
+
+      var groups = new List<int>();
+
+      foreach (var p in pieces)
+      {
+        if (p.Length > 0 && p[0] == 'G')
+        {
+          groups.Add(Convert.ToInt32(p.Substring(1)));
+        }
+      }
+
+      return groups.ToArray();
     }
     #endregion
 
@@ -325,18 +345,11 @@ namespace SpeckleStructuralGSA
     /// <returns>Attribute value</returns>
     public static object GetAttribute(this object t, string attribute)
     {
+      var attributeType = typeof(GSAObject);
       try
       {
-        if (t is Type)
-        {
-          GSAObject attObj = (GSAObject)Attribute.GetCustomAttribute((Type)t, typeof(GSAObject));
-          return typeof(GSAObject).GetProperty(attribute).GetValue(attObj);
-        }
-        else
-        {
-          GSAObject attObj = (GSAObject)Attribute.GetCustomAttribute(t.GetType(), typeof(GSAObject));
-          return typeof(GSAObject).GetProperty(attribute).GetValue(attObj);
-        }
+        var attObj = (t is Type) ? Attribute.GetCustomAttribute((Type)t, attributeType) : Attribute.GetCustomAttribute(t.GetType(), attributeType);
+        return attributeType.GetProperty(attribute).GetValue(attObj);
       }
       catch { return null; }
     }
@@ -522,5 +535,571 @@ namespace SpeckleStructuralGSA
       }
     }
     #endregion
+
+    #region MovedFromInterfacer
+    private const string SID_TAG = "speckle_app_id";
+
+    public static string GenerateSID(SpeckleObject obj)
+    {
+      var sid = "";
+
+      if (!string.IsNullOrEmpty(obj.ApplicationId))
+        sid += "{" + SID_TAG + ":" + obj.ApplicationId + "}";
+
+      return sid;
+    }
+
+    public static int SetAxis(StructuralAxis axis, string name = "")
+    {
+      string gwaAxisName = name ?? "";
+
+      if (axis.Xdir.Value.SequenceEqual(new double[] { 1, 0, 0 }) &&
+          axis.Ydir.Value.SequenceEqual(new double[] { 0, 1, 0 }) &&
+          axis.Normal.Value.SequenceEqual(new double[] { 0, 0, 1 }))
+        return 0;
+
+      var ls = new List<string>();
+
+      var res = Initialiser.Interface.Indexer.ResolveIndex("AXIS", "");
+
+      ls.Add("SET");
+      ls.Add("AXIS");
+      ls.Add(res.ToString());
+      ls.Add(gwaAxisName);
+      ls.Add("CART");
+
+      ls.Add("0");
+      ls.Add("0");
+      ls.Add("0");
+
+      ls.Add(axis.Xdir.Value[0].ToString());
+      ls.Add(axis.Xdir.Value[1].ToString());
+      ls.Add(axis.Xdir.Value[2].ToString());
+
+      ls.Add(axis.Ydir.Value[0].ToString());
+      ls.Add(axis.Ydir.Value[1].ToString());
+      ls.Add(axis.Ydir.Value[2].ToString());
+
+      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+
+      return res;
+    }
+
+    public static int SetAxis(SpeckleVector xVector, SpeckleVector xyVector, SpecklePoint origin, string name = "")
+    {
+      var res = Initialiser.Interface.Indexer.ResolveIndex("AXIS", "");
+
+      var ls = new List<string>()
+        {
+          "SET",
+          "AXIS",
+          res.ToString(),
+          name ?? "",
+          "CART",
+
+          origin.Value[0].ToString(),
+          origin.Value[1].ToString(),
+          origin.Value[2].ToString(),
+
+          xVector.Value[0].ToString(),
+          xVector.Value[1].ToString(),
+          xVector.Value[2].ToString(),
+
+          xyVector.Value[0].ToString(),
+          xyVector.Value[1].ToString(),
+          xyVector.Value[2].ToString(),
+        };
+
+      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+
+      return res;
+    }
+
+    /// <summary>
+    /// Calculates the local axis of a 1D entity.
+    /// </summary>
+    /// <param name="coor">Entity coordinates</param>
+    /// <param name="rotationAngle">Angle of rotation from default axis</param>
+    /// <param name="orientationNode">Node to orient axis to</param>
+    /// <returns>Axis</returns>
+    public static StructuralAxis Parse1DAxis(double[] coor, double rotationAngle = 0, double[] orientationNode = null)
+    {
+      Vector3D x, y, z;
+
+      x = new Vector3D(coor[3] - coor[0], coor[4] - coor[1], coor[5] - coor[2]);
+      x.Normalize();
+
+      if (orientationNode == null)
+      {
+        if (x.X == 0 && x.Y == 0)
+        {
+          //Column
+          y = new Vector3D(0, 1, 0);
+          z = Vector3D.CrossProduct(x, y);
+        }
+        else
+        {
+          //Non-Vertical
+          var Z = new Vector3D(0, 0, 1);
+          y = Vector3D.CrossProduct(Z, x);
+          y.Normalize();
+          z = Vector3D.CrossProduct(x, y);
+          z.Normalize();
+        }
+      }
+      else
+      {
+        var Yp = new Vector3D(orientationNode[0], orientationNode[1], orientationNode[2]);
+        z = Vector3D.CrossProduct(x, Yp);
+        z.Normalize();
+        y = Vector3D.CrossProduct(z, x);
+        y.Normalize();
+      }
+
+      //Rotation
+      var rotMat = HelperClass.RotationMatrix(x, rotationAngle.ToRadians());
+      y = Vector3D.Multiply(y, rotMat);
+      z = Vector3D.Multiply(z, rotMat);
+
+      return new StructuralAxis(
+          new StructuralVectorThree(new double[] { x.X, x.Y, x.Z }),
+          new StructuralVectorThree(new double[] { y.X, y.Y, y.Z }),
+          new StructuralVectorThree(new double[] { z.X, z.Y, z.Z })
+      );
+    }
+
+    /// <summary>
+    /// Maps a flat array of coordinates from the global Cartesian coordinate system to a local coordinate system.
+    /// </summary>
+    /// <param name="values">Flat array of coordinates</param>
+    /// <param name="axis">Local coordinate system</param>
+    /// <returns>Transformed array of coordinates</returns>
+    public static double[] MapPointsGlobal2Local(double[] values, StructuralAxis axis)
+    {
+      var newVals = new List<double>();
+
+      for (var i = 0; i < values.Length; i += 3)
+      {
+        var coor = values.Skip(i).Take(3).ToList();
+
+        double x = 0;
+        double y = 0;
+        double z = 0;
+
+        x += axis.Xdir.Value[0] * coor[0];
+        y += axis.Ydir.Value[0] * coor[0];
+        z += axis.Normal.Value[0] * coor[0];
+
+        x += axis.Xdir.Value[1] * coor[1];
+        y += axis.Ydir.Value[1] * coor[1];
+        z += axis.Normal.Value[1] * coor[1];
+
+        x += axis.Xdir.Value[2] * coor[2];
+        y += axis.Ydir.Value[2] * coor[2];
+        z += axis.Normal.Value[2] * coor[2];
+
+        newVals.Add(x);
+        newVals.Add(y);
+        newVals.Add(z);
+      }
+
+      return newVals.ToArray();
+    }
+
+    /// <summary>
+    /// Maps a flat array of coordinates from a local coordinate system to the global Cartesian coordinate system.
+    /// </summary>
+    /// <param name="values">Flat array of coordinates</param>
+    /// <param name="axis">Local coordinate system</param>
+    /// <returns>Transformed array of coordinates</returns>
+    public static double[] MapPointsLocal2Global(double[] values, StructuralAxis axis)
+    {
+      List<double> newVals = new List<double>();
+
+      for (int i = 0; i < values.Length; i += 3)
+      {
+        List<double> coor = values.Skip(i).Take(3).ToList();
+
+        double x = 0;
+        double y = 0;
+        double z = 0;
+
+        x += axis.Xdir.Value[0] * coor[0];
+        y += axis.Xdir.Value[1] * coor[0];
+        z += axis.Xdir.Value[2] * coor[0];
+
+        x += axis.Ydir.Value[0] * coor[1];
+        y += axis.Ydir.Value[1] * coor[1];
+        z += axis.Ydir.Value[2] * coor[1];
+
+        x += axis.Normal.Value[0] * coor[2];
+        y += axis.Normal.Value[1] * coor[2];
+        z += axis.Normal.Value[2] * coor[2];
+
+        newVals.Add(x);
+        newVals.Add(y);
+        newVals.Add(z);
+      }
+
+      return newVals.ToArray();
+    }
+
+    /// <summary>
+    /// Calculates the local axis of a 1D entity.
+    /// </summary>
+    /// <param name="coor">Entity coordinates</param>
+    /// <param name="zAxis">Z axis of the 1D entity</param>
+    /// <returns>Axis</returns>
+    public static StructuralAxis LocalAxisEntity1D(double[] coor, StructuralVectorThree zAxis)
+    {
+      Vector3D axisX = new Vector3D(coor[3] - coor[0], coor[4] - coor[1], coor[5] - coor[2]);
+      Vector3D axisZ = new Vector3D(zAxis.Value[0], zAxis.Value[1], zAxis.Value[2]);
+      Vector3D axisY = Vector3D.CrossProduct(axisZ, axisX);
+
+      StructuralAxis axis = new StructuralAxis(
+          new StructuralVectorThree(new double[] { axisX.X, axisX.Y, axisX.Z }),
+          new StructuralVectorThree(new double[] { axisY.X, axisY.Y, axisY.Z }),
+          new StructuralVectorThree(new double[] { axisZ.X, axisZ.Y, axisZ.Z })
+      );
+      axis.Normalize();
+      return axis;
+    }
+
+    /// <summary>
+    /// Calculates the local axis of a 2D entity.
+    /// </summary>
+    /// <param name="coor">Entity coordinates</param>
+    /// <param name="rotationAngle">Angle of rotation from default axis</param>
+    /// <param name="isLocalAxis">Is axis calculated from local coordinates?</param>
+    /// <returns>Axis</returns>
+    public static StructuralAxis Parse2DAxis(double[] coor, double rotationAngle = 0, bool isLocalAxis = false)
+    {
+      Vector3D x;
+      Vector3D y;
+      Vector3D z;
+
+      var nodes = new List<Vector3D>();
+
+      for (var i = 0; i < coor.Length; i += 3)
+        nodes.Add(new Vector3D(coor[i], coor[i + 1], coor[i + 2]));
+
+      if (isLocalAxis)
+      {
+        if (nodes.Count == 3)
+        {
+          x = Vector3D.Subtract(nodes[1], nodes[0]);
+          x.Normalize();
+          z = Vector3D.CrossProduct(x, Vector3D.Subtract(nodes[2], nodes[0]));
+          z.Normalize();
+          y = Vector3D.CrossProduct(z, x);
+          y.Normalize();
+        }
+        else if (nodes.Count == 4)
+        {
+          x = Vector3D.Subtract(nodes[2], nodes[0]);
+          x.Normalize();
+          z = Vector3D.CrossProduct(x, Vector3D.Subtract(nodes[3], nodes[1]));
+          z.Normalize();
+          y = Vector3D.CrossProduct(z, x);
+          y.Normalize();
+        }
+        else
+        {
+          // Default to QUAD method
+          x = Vector3D.Subtract(nodes[2], nodes[0]);
+          x.Normalize();
+          z = Vector3D.CrossProduct(x, Vector3D.Subtract(nodes[3], nodes[1]));
+          z.Normalize();
+          y = Vector3D.CrossProduct(z, x);
+          y.Normalize();
+        }
+      }
+      else
+      {
+        x = Vector3D.Subtract(nodes[1], nodes[0]);
+        x.Normalize();
+        z = Vector3D.CrossProduct(x, Vector3D.Subtract(nodes[2], nodes[0]));
+        z.Normalize();
+
+        x = new Vector3D(1, 0, 0);
+        x = Vector3D.Subtract(x, Vector3D.Multiply(Vector3D.DotProduct(x, z), z));
+
+        if (x.Length == 0)
+          x = new Vector3D(0, z.X > 0 ? -1 : 1, 0);
+
+        y = Vector3D.CrossProduct(z, x);
+
+        x.Normalize();
+        y.Normalize();
+      }
+
+      //Rotation
+      var rotMat = HelperClass.RotationMatrix(z, rotationAngle * (Math.PI / 180));
+      x = Vector3D.Multiply(x, rotMat);
+      y = Vector3D.Multiply(y, rotMat);
+
+      return new StructuralAxis(
+          new StructuralVectorThree(new double[] { x.X, x.Y, x.Z }),
+          new StructuralVectorThree(new double[] { y.X, y.Y, y.Z }),
+          new StructuralVectorThree(new double[] { z.X, z.Y, z.Z })
+      );
+    }
+
+    /// <summary>
+    /// Calculates the local axis of a point from a GSA node axis.
+    /// </summary>
+    /// <param name="axis">ID of GSA node axis</param>
+    /// <param name="gwaRecord">GWA record of AXIS if used</param>
+    /// <param name="evalAtCoor">Coordinates to evaluate axis at</param>
+    /// <returns>Axis</returns>
+    public static StructuralAxis Parse0DAxis(int axis, IGSAInterfacer interfacer, out string gwaRecord, double[] evalAtCoor = null)
+    {
+      Vector3D x;
+      Vector3D y;
+      Vector3D z;
+
+      gwaRecord = null;
+
+      switch (axis)
+      {
+        case 0:
+          // Global
+          return new StructuralAxis(
+              new StructuralVectorThree(new double[] { 1, 0, 0 }),
+              new StructuralVectorThree(new double[] { 0, 1, 0 }),
+              new StructuralVectorThree(new double[] { 0, 0, 1 })
+          );
+        case -11:
+          // X elevation
+          return new StructuralAxis(
+              new StructuralVectorThree(new double[] { 0, -1, 0 }),
+              new StructuralVectorThree(new double[] { 0, 0, 1 }),
+              new StructuralVectorThree(new double[] { -1, 0, 0 })
+          );
+        case -12:
+          // Y elevation
+          return new StructuralAxis(
+              new StructuralVectorThree(new double[] { 1, 0, 0 }),
+              new StructuralVectorThree(new double[] { 0, 0, 1 }),
+              new StructuralVectorThree(new double[] { 0, -1, 0 })
+          );
+        case -14:
+          // Vertical
+          return new StructuralAxis(
+              new StructuralVectorThree(new double[] { 0, 0, 1 }),
+              new StructuralVectorThree(new double[] { 1, 0, 0 }),
+              new StructuralVectorThree(new double[] { 0, 1, 0 })
+          );
+        case -13:
+          // Global cylindrical
+          x = new Vector3D(evalAtCoor[0], evalAtCoor[1], 0);
+          x.Normalize();
+          z = new Vector3D(0, 0, 1);
+          y = Vector3D.CrossProduct(z, x);
+
+          return new StructuralAxis(
+              new StructuralVectorThree(new double[] { x.X, x.Y, x.Z }),
+              new StructuralVectorThree(new double[] { y.X, y.Y, y.Z }),
+              new StructuralVectorThree(new double[] { z.X, z.Y, z.Z })
+          );
+        default:
+          string res = Initialiser.Interface.GetGWARecords("GET\tAXIS\t" + axis.ToString()).FirstOrDefault();
+          gwaRecord = res;
+
+          string[] pieces = res.Split(new char[] { '\t' });
+          if (pieces.Length < 13)
+          {
+            return new StructuralAxis(
+                new StructuralVectorThree(new double[] { 1, 0, 0 }),
+                new StructuralVectorThree(new double[] { 0, 1, 0 }),
+                new StructuralVectorThree(new double[] { 0, 0, 1 })
+            );
+          }
+          Vector3D origin = new Vector3D(Convert.ToDouble(pieces[4]), Convert.ToDouble(pieces[5]), Convert.ToDouble(pieces[6]));
+
+          Vector3D X = new Vector3D(Convert.ToDouble(pieces[7]), Convert.ToDouble(pieces[8]), Convert.ToDouble(pieces[9]));
+          X.Normalize();
+
+
+          Vector3D Yp = new Vector3D(Convert.ToDouble(pieces[10]), Convert.ToDouble(pieces[11]), Convert.ToDouble(pieces[12]));
+          Vector3D Z = Vector3D.CrossProduct(X, Yp);
+          Z.Normalize();
+
+          Vector3D Y = Vector3D.CrossProduct(Z, X);
+
+          Vector3D pos = new Vector3D(0, 0, 0);
+
+          if (evalAtCoor == null)
+            pieces[3] = "CART";
+          else
+          {
+            pos = new Vector3D(evalAtCoor[0] - origin.X, evalAtCoor[1] - origin.Y, evalAtCoor[2] - origin.Z);
+            if (pos.Length == 0)
+              pieces[3] = "CART";
+          }
+
+          switch (pieces[3])
+          {
+            case "CART":
+              return new StructuralAxis(
+                  new StructuralVectorThree(new double[] { X.X, X.Y, X.Z }),
+                  new StructuralVectorThree(new double[] { Y.X, Y.Y, Y.Z }),
+                  new StructuralVectorThree(new double[] { Z.X, Z.Y, Z.Z })
+              );
+            case "CYL":
+              x = new Vector3D(pos.X, pos.Y, 0);
+              x.Normalize();
+              z = Z;
+              y = Vector3D.CrossProduct(Z, x);
+              y.Normalize();
+
+              return new StructuralAxis(
+                  new StructuralVectorThree(new double[] { x.X, x.Y, x.Z }),
+                  new StructuralVectorThree(new double[] { y.X, y.Y, y.Z }),
+                  new StructuralVectorThree(new double[] { z.X, z.Y, z.Z })
+              );
+            case "SPH":
+              x = pos;
+              x.Normalize();
+              z = Vector3D.CrossProduct(Z, x);
+              z.Normalize();
+              y = Vector3D.CrossProduct(z, x);
+              z.Normalize();
+
+              return new StructuralAxis(
+                  new StructuralVectorThree(new double[] { x.X, x.Y, x.Z }),
+                  new StructuralVectorThree(new double[] { y.X, y.Y, y.Z }),
+                  new StructuralVectorThree(new double[] { z.X, z.Y, z.Z })
+              );
+            default:
+              return new StructuralAxis(
+                  new StructuralVectorThree(new double[] { 1, 0, 0 }),
+                  new StructuralVectorThree(new double[] { 0, 1, 0 }),
+                  new StructuralVectorThree(new double[] { 0, 0, 1 })
+              );
+          }
+      }
+    }
+
+    /// <summary>
+    /// Calculates rotation angle of 1D entity to align with axis.
+    /// </summary>
+    /// <param name="coor">Entity coordinates</param>
+    /// <param name="zAxis">Z axis of entity</param>
+    /// <returns>Rotation angle</returns>
+    public static double Get1DAngle(double[] coor, StructuralVectorThree zAxis)
+    {
+      return Get1DAngle(LocalAxisEntity1D(coor, zAxis));
+    }
+
+    /// <summary>
+    /// Calculates rotation angle of 1D entity to align with axis.
+    /// </summary>
+    /// <param name="axis">Axis of entity</param>
+    /// <returns>Rotation angle</returns>
+    public static double Get1DAngle(StructuralAxis axis)
+    {
+      var axisX = new Vector3D(axis.Xdir.Value[0], axis.Xdir.Value[1], axis.Xdir.Value[2]);
+      var axisY = new Vector3D(axis.Ydir.Value[0], axis.Ydir.Value[1], axis.Ydir.Value[2]);
+      var axisZ = new Vector3D(axis.Normal.Value[0], axis.Normal.Value[1], axis.Normal.Value[2]);
+
+      if (axisX.X == 0 & axisX.Y == 0)
+      {
+        // Column
+        var Yglobal = new Vector3D(0, 1, 0);
+
+        var angle = Math.Acos(Vector3D.DotProduct(Yglobal, axisY) / (Yglobal.Length * axisY.Length)).ToDegrees();
+        if (double.IsNaN(angle)) return 0;
+
+        var signVector = Vector3D.CrossProduct(Yglobal, axisY);
+        var sign = Vector3D.DotProduct(signVector, axisX);
+
+        return sign >= 0 ? angle : -angle;
+      }
+      else
+      {
+        var Zglobal = new Vector3D(0, 0, 1);
+        var Y0 = Vector3D.CrossProduct(Zglobal, axisX);
+        var angle = Math.Acos(Vector3D.DotProduct(Y0, axisY) / (Y0.Length * axisY.Length)).ToDegrees();
+        if (double.IsNaN(angle)) angle = 0;
+
+        var signVector = Vector3D.CrossProduct(Y0, axisY);
+        var sign = Vector3D.DotProduct(signVector, axisX);
+
+        return sign >= 0 ? angle : 360 - angle;
+      }
+    }
+
+    /// <summary>
+    /// Calculates rotation angle of 2D entity to align with axis
+    /// </summary>
+    /// <param name="coor">Entity coordinates</param>
+    /// <param name="axis">Axis of entity</param>
+    /// <returns>Rotation angle</returns>
+    public static double Get2DAngle(double[] coor, StructuralAxis axis)
+    {
+      var axisX = new Vector3D(axis.Xdir.Value[0], axis.Xdir.Value[1], axis.Xdir.Value[2]);
+      var axisY = new Vector3D(axis.Ydir.Value[0], axis.Ydir.Value[1], axis.Ydir.Value[2]);
+      var axisZ = new Vector3D(axis.Normal.Value[0], axis.Normal.Value[1], axis.Normal.Value[2]);
+
+      Vector3D x0;
+      Vector3D z0;
+
+      var nodes = new List<Vector3D>();
+
+      for (var i = 0; i < coor.Length; i += 3)
+        nodes.Add(new Vector3D(coor[i], coor[i + 1], coor[i + 2]));
+
+      // Get 0 angle axis in GLOBAL coordinates
+      x0 = Vector3D.Subtract(nodes[1], nodes[0]);
+      x0.Normalize();
+      z0 = Vector3D.CrossProduct(x0, Vector3D.Subtract(nodes[2], nodes[0]));
+      z0.Normalize();
+
+      x0 = new Vector3D(1, 0, 0);
+      x0 = Vector3D.Subtract(x0, Vector3D.Multiply(Vector3D.DotProduct(x0, z0), z0));
+
+      if (x0.Length == 0)
+        x0 = new Vector3D(0, z0.X > 0 ? -1 : 1, 0);
+
+      x0.Normalize();
+
+      // Find angle
+      var angle = Math.Acos(Vector3D.DotProduct(x0, axisX) / (x0.Length * axisX.Length)).ToDegrees();
+      if (double.IsNaN(angle)) return 0;
+
+      var signVector = Vector3D.CrossProduct(x0, axisX);
+      var sign = Vector3D.DotProduct(signVector, axisZ);
+
+      return sign >= 0 ? angle : -angle;
+    }
+
+    public static StructuralLoadTaskType GetLoadTaskType(string taskGwaCommand)
+    {
+      var taskPieces = taskGwaCommand.ListSplit("\t");
+      var taskType = StructuralLoadTaskType.LinearStatic;
+
+      if (taskPieces[4] == "GSS")
+      {
+        if (taskPieces[5] == "STATIC")
+          taskType = StructuralLoadTaskType.LinearStatic;
+        else if (taskPieces[5] == "MODAL")
+          taskType = StructuralLoadTaskType.Modal;
+      }
+      else if (taskPieces[4] == "GSRELAX")
+      {
+        if (taskPieces[5] == "BUCKLING_NL")
+          taskType = StructuralLoadTaskType.NonlinearStatic;
+      }
+
+      return taskType;
+    }
+
+    public static int NodeAt(IGSAInterfacer GSA, double x, double y, double z, double coincidentNodeAllowance, string applicationId = null)
+    {
+      return GSA.NodeAt(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).Name, x, y, z, Initialiser.Settings.CoincidentNodeAllowance, applicationId);
+    }
+    #endregion
   }
 }
+

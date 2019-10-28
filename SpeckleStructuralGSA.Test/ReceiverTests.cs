@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SpeckleCore;
+using SpeckleGSAInterfaces;
+using SpeckleGSAProxy;
 
 namespace SpeckleStructuralGSA.Test
 {
@@ -17,15 +19,18 @@ namespace SpeckleStructuralGSA.Test
     [OneTimeSetUp]
     public void SetupTests()
     {
-      //Set up default values
-      Initialiser.GSACoincidentNodeAllowance = 0.1;
-      Initialiser.GSAResult1DNumPosition = 3;
-
       //This uses the installed SpeckleKits - when SpeckleStructural is built, the built files are copied into the 
       // %LocalAppData%\SpeckleKits directory, so therefore this project doesn't need to reference the projects within in this solution
 
       //If this isn't called, then the GetObjectSubtypeBetter method in SpeckleCore will cause a {"Value cannot be null.\r\nParameter name: source"} message
       SpeckleInitializer.Initialize();
+
+      gsaInterfacer = new GSAInterfacer
+      {
+        Indexer = new Indexer()
+      };
+      Initialiser.Interface = gsaInterfacer;
+      Initialiser.Settings = new Settings();
     }
 
     //Reception test
@@ -42,9 +47,10 @@ namespace SpeckleStructuralGSA.Test
       var expectedGwaRecords = Helper.DeserialiseJson<List<GwaRecord>>(expectedJson);
 
       var mockGsaCom = SetupMockGsaCom();
-      Initialiser.GSA.InitializeReceiver(mockGsaCom.Object);
+      gsaInterfacer.OpenFile("", false, mockGsaCom.Object);
+      gsaInterfacer.InitializeReceiver();
 
-      var receiverProcessor = new ReceiverProcessor(TestDataDirectory, Initialiser.GSA);
+      var receiverProcessor = new ReceiverProcessor(TestDataDirectory, gsaInterfacer);
 
       //Run conversion to GWA keywords
       receiverProcessor.JsonSpeckleStreamsToGwaRecords(savedJsonFileNames, out var actualGwaRecords);

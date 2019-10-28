@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SpeckleCore;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralGSA.Test;
 
 namespace SpeckleStructuralGSA.TestPrep
@@ -21,6 +22,7 @@ namespace SpeckleStructuralGSA.TestPrep
       var TestDataDirectory = AppDomain.CurrentDomain.BaseDirectory.TrimEnd(new[] { '\\' }) + @"\..\..\..\SpeckleStructuralGSA.Test\TestData\";
 
       var receiverTestPrep = new ReceiverTestPrep(TestDataDirectory);
+      receiverTestPrep.SetupContext();
       if (!receiverTestPrep.SetUpReceptionTestData(ReceiverTests.savedJsonFileNames, ReceiverTests.expectedGwaPerIdsFileName, GSATargetLayer.Design))
       {
         Console.WriteLine("Error in preparing test data for the rx design layer test");

@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using SpeckleCore;
-using SpeckleCoreGeometryClasses;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
@@ -23,23 +20,23 @@ namespace SpeckleStructuralGSA
   {
     public static SpeckleObject ToSpeckle(this GSA1DElementResult dummyObject)
     {
-      if (Conversions.GSAElement1DResults.Count() == 0)
+      if (Initialiser.Settings.Element1DResults.Count() == 0)
         return new SpeckleNull();
 
-      if (Conversions.GSAEmbedResults && !GSASenderObjects.ContainsKey(typeof(GSA1DElement)))
+      if (Initialiser.Settings.EmbedResults && !Initialiser.GSASenderObjects.ContainsKey(typeof(GSA1DElement)))
         return new SpeckleNull();
 
-      if (Conversions.GSAEmbedResults)
+      if (Initialiser.Settings.EmbedResults)
       {
-        List<GSA1DElement> elements = GSASenderObjects[typeof(GSA1DElement)].Cast<GSA1DElement>().ToList();
+        var elements = Initialiser.GSASenderObjects[typeof(GSA1DElement)].Cast<GSA1DElement>().ToList();
 
-        List<IGSASpeckleContainer> entities = elements.Cast<IGSASpeckleContainer>().ToList();
+        var entities = elements.Cast<IGSASpeckleContainer>().ToList();
 
-        foreach (KeyValuePair<string, Tuple<int, int, List<string>>> kvp in Conversions.GSAElement1DResults)
+        foreach (var kvp in Initialiser.Settings.Element1DResults)
         {
-          foreach (string loadCase in GSAResultCases)
+          foreach (string loadCase in Initialiser.Settings.ResultCases)
           {
-            if (!GSA.CaseExist(loadCase))
+            if (!Initialiser.Interface.CaseExist(loadCase))
               continue;
 
             foreach (IGSASpeckleContainer entity in entities)
@@ -49,7 +46,8 @@ namespace SpeckleStructuralGSA
               if (entity.Value.Result == null)
                 entity.Value.Result = new Dictionary<string, object>();
 
-              var resultExport = GSA.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, GSAResultInLocalAxis ? "local" : "global", Conversions.GSAResult1DNumPosition);
+              var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis 
+                ? "local" : "global", Initialiser.Settings.Result1DNumPosition);
             
               if (resultExport == null)
                 continue;
@@ -68,14 +66,14 @@ namespace SpeckleStructuralGSA
         // Linear interpolate the line values
         foreach (IGSASpeckleContainer entity in entities)
         {
-          var dX = (entity.Value.Value[3] - entity.Value.Value[0]) / (Conversions.GSAResult1DNumPosition + 1);
-          var dY = (entity.Value.Value[4] - entity.Value.Value[1]) / (Conversions.GSAResult1DNumPosition + 1);
-          var dZ = (entity.Value.Value[5] - entity.Value.Value[2]) / (Conversions.GSAResult1DNumPosition + 1);
+          var dX = (entity.Value.Value[3] - entity.Value.Value[0]) / (Initialiser.Settings.Result1DNumPosition + 1);
+          var dY = (entity.Value.Value[4] - entity.Value.Value[1]) / (Initialiser.Settings.Result1DNumPosition + 1);
+          var dZ = (entity.Value.Value[5] - entity.Value.Value[2]) / (Initialiser.Settings.Result1DNumPosition + 1);
 
           var interpolatedVertices = new List<double>();
           interpolatedVertices.AddRange((entity.Value.Value as List<double>).Take(3));
         
-          for (int i = 1; i <= Conversions.GSAResult1DNumPosition; i++)
+          for (int i = 1; i <= Initialiser.Settings.Result1DNumPosition; i++)
           {
             interpolatedVertices.Add(interpolatedVertices[0] + dX * i);
             interpolatedVertices.Add(interpolatedVertices[1] + dY * i);
@@ -89,27 +87,27 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        GSASenderObjects[typeof(GSA1DElementResult)] = new List<object>();
+        Initialiser.GSASenderObjects[typeof(GSA1DElementResult)] = new List<object>();
 
-        List<GSA1DElementResult> results = new List<GSA1DElementResult>();
+        var results = new List<GSA1DElementResult>();
         
         string keyword = HelperClass.GetGSAKeyword(typeof(GSA1DElement));
 
-        foreach (KeyValuePair<string, Tuple<int, int, List<string>>> kvp in Conversions.GSAElement1DResults)
+        foreach (var kvp in Initialiser.Settings.Element1DResults)
         {
-          foreach (string loadCase in GSAResultCases)
+          foreach (string loadCase in Initialiser.Settings.ResultCases)
           {
-            if (!GSA.CaseExist(loadCase))
+            if (!Initialiser.Interface.CaseExist(loadCase))
               continue;
 
             int id = 1;
-            int highestIndex = (int)GSA.RunGWACommand("HIGHEST\t" + keyword);
+            int highestIndex = (int)Initialiser.Interface.RunGWACommand("HIGHEST\t" + keyword);
 
             while (id <= highestIndex)
             {
-              if ((int)GSA.RunGWACommand("EXIST\t" + keyword + "\t" + id.ToString()) == 1)
+              if ((int)Initialiser.Interface.RunGWACommand("EXIST\t" + keyword + "\t" + id.ToString()) == 1)
               {
-                string record = GSA.GetGWARecords("GET\t" + keyword + "\t" + id.ToString())[0];
+                string record = Initialiser.Interface.GetGWARecords("GET\t" + keyword + "\t" + id.ToString())[0];
 
                 string[] pPieces = record.ListSplit("\t");
                 if (pPieces[4].ParseElementNumNodes() != 2)
@@ -118,7 +116,7 @@ namespace SpeckleStructuralGSA
                   continue;
                 }
                 
-                var resultExport = GSA.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, GSAResultInLocalAxis ? "local" : "global", Conversions.GSAResult1DNumPosition);
+                var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global", Initialiser.Settings.Result1DNumPosition);
 
                 if (resultExport == null || resultExport.Count() == 0)
                 {
@@ -132,8 +130,8 @@ namespace SpeckleStructuralGSA
                   Structural1DElementResult newRes = new Structural1DElementResult()
                   {
                     Value = new Dictionary<string, object>(),
-                    TargetRef = GSA.GetSID(typeof(GSA1DElement).GetGSAKeyword(), id),
-                    IsGlobal = !GSAResultInLocalAxis,
+                    TargetRef = Initialiser.Interface.GetSID(typeof(GSA1DElement).GetGSAKeyword(), id),
+                    IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
                   };
                   newRes.Value[kvp.Key] = resultExport;
 
@@ -151,7 +149,7 @@ namespace SpeckleStructuralGSA
           }
         }
 
-        GSASenderObjects[typeof(GSA1DElementResult)].AddRange(results);
+        Initialiser.GSASenderObjects[typeof(GSA1DElementResult)].AddRange(results);
       }
 
       return new SpeckleObject();
