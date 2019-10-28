@@ -15,7 +15,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new Structural2DLoadPanel();
 
-    public void ParseGWACommand(IGSAInterfacer GSA)
+    public void ParseGWACommand()
     {
       if (this.GWACommand == null)
         return;
@@ -119,7 +119,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAInterfacer GSA)
+    public void SetGWACommand()
     {
       if (this.Value == null)
         return;
@@ -132,16 +132,16 @@ namespace SpeckleStructuralGSA
       string keyword = typeof(GSAGridAreaLoad).GetGSAKeyword();
 
       //There are no GSA types for these yet so use empty strings for the type names for the index
-      int polylineIndex = GSA.Indexer.ResolveIndex("POLYLINE.1", "", load.ApplicationId);
-      int gridSurfaceIndex = GSA.Indexer.ResolveIndex("GRID_SURFACE.1", "", load.ApplicationId);
-      int gridPlaneIndex = GSA.Indexer.ResolveIndex("GRID_PLANE.4", "", load.ApplicationId);
+      int polylineIndex = Initialiser.Indexer.ResolveIndex("POLYLINE.1", "", load.ApplicationId);
+      int gridSurfaceIndex = Initialiser.Indexer.ResolveIndex("GRID_SURFACE.1", "", load.ApplicationId);
+      int gridPlaneIndex = Initialiser.Indexer.ResolveIndex("GRID_PLANE.4", "", load.ApplicationId);
 
       int loadCaseIndex = 0;
       try
       {
-        loadCaseIndex = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).Name, load.LoadCaseRef).Value;
+        loadCaseIndex = Initialiser.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).Name, load.LoadCaseRef).Value;
       }
-      //catch { loadCaseIndex = GSA.Indexer.ResolveIndex(typeof(GSALoadCase), load.LoadCaseRef); }
+      //catch { loadCaseIndex = Initialiser.Indexer.ResolveIndex(typeof(GSALoadCase), load.LoadCaseRef); }
       catch { }
 
       //StructuralAxis axis = HelperClass.Parse2DAxis(load.Value.ToArray());
@@ -167,7 +167,7 @@ namespace SpeckleStructuralGSA
       {
         if (load.Loading.Value[i] == 0) continue;
 
-        var index = GSA.Indexer.ResolveIndex(typeof(GSAGridAreaLoad).GetGSAKeyword(), typeof(GSAGridAreaLoad).Name);
+        var index = Initialiser.Indexer.ResolveIndex(typeof(GSAGridAreaLoad).GetGSAKeyword(), typeof(GSAGridAreaLoad).Name);
 
         ls.Clear();
 
@@ -224,7 +224,7 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this Structural2DLoadPanel load)
     {
-      new GSAGridAreaLoad() { Value = load }.SetGWACommand(Initialiser.Interface);
+      new GSAGridAreaLoad() { Value = load }.SetGWACommand();
       return true;
     }
 

@@ -15,7 +15,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralBridgePath();
 
-    public void ParseGWACommand(IGSAInterfacer GSA)
+    public void ParseGWACommand()
     {
       if (this.GWACommand == null)
         return;
@@ -27,7 +27,7 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Initialiser.Interface.GetSID(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Initialiser.Indexer.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
 
       //TO DO
@@ -35,7 +35,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAInterfacer GSA)
+    public void SetGWACommand()
     {
       if (this.Value == null)
         return;
@@ -46,8 +46,8 @@ namespace SpeckleStructuralGSA
 
       string keyword = destType.GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(keyword, destType.Name, path.ApplicationId);
-      int alignmentIndex = GSA.Indexer.LookupIndex(typeof(GSABridgeAlignment).GetGSAKeyword(), typeof(GSABridgeAlignment).Name, path.AlignmentRef) ?? 1;
+      int index = Initialiser.Indexer.ResolveIndex(keyword, destType.Name, path.ApplicationId);
+      int alignmentIndex = Initialiser.Indexer.LookupIndex(typeof(GSABridgeAlignment).GetGSAKeyword(), typeof(GSABridgeAlignment).Name, path.AlignmentRef) ?? 1;
 
       var left = path.Offsets.First();
       var right = (path.PathType == StructuralBridgePathType.Track || path.PathType == StructuralBridgePathType.Vehicle) ? path.Gauge : path.Offsets.Last();
@@ -87,7 +87,7 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this StructuralBridgePath path)
     {
-      new GSABridgePath() { Value = path }.SetGWACommand(Initialiser.Interface);
+      new GSABridgePath() { Value = path }.SetGWACommand();
 
       return true;
     }

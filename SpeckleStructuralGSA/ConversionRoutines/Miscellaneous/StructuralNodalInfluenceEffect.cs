@@ -15,7 +15,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralNodalInfluenceEffect();
 
-    public void ParseGWACommand(IGSAInterfacer GSA, List<GSANode> nodes)
+    public void ParseGWACommand(List<GSANode> nodes)
     {
       if (this.GWACommand == null)
         return;
@@ -102,7 +102,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAInterfacer GSA)
+    public void SetGWACommand()
     {
       if (this.Value == null)
         return;
@@ -111,9 +111,9 @@ namespace SpeckleStructuralGSA
       
       string keyword = typeof(GSANodalInfluenceEffect).GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(typeof(GSANodalInfluenceEffect).GetGSAKeyword(), typeof(GSANodalInfluenceEffect).Name, infl.ApplicationId);
+      int index = Initialiser.Indexer.ResolveIndex(typeof(GSANodalInfluenceEffect).GetGSAKeyword(), typeof(GSANodalInfluenceEffect).Name, infl.ApplicationId);
 
-      int? nodeRef = GSA.Indexer.LookupIndex(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).Name, infl.NodeRef);
+      int? nodeRef = Initialiser.Indexer.LookupIndex(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).Name, infl.NodeRef);
 
       if (!nodeRef.HasValue)
         return;
@@ -155,7 +155,7 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this StructuralNodalInfluenceEffect infl)
     {
-      new GSANodalInfluenceEffect() { Value = infl }.SetGWACommand(Initialiser.Interface);
+      new GSANodalInfluenceEffect() { Value = infl }.SetGWACommand();
 
       return true;
     }

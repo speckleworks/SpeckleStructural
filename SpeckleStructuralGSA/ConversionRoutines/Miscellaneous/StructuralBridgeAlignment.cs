@@ -15,7 +15,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralBridgeAlignment();
 
-    public void ParseGWACommand(IGSAInterfacer GSA)
+    public void ParseGWACommand()
     {
       if (this.GWACommand == null)
         return;
@@ -27,7 +27,7 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Initialiser.Interface.GetSID(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Initialiser.Indexer.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
 
       //TO DO
@@ -35,7 +35,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAInterfacer GSA)
+    public void SetGWACommand()
     {
       if (this.Value == null)
         return;
@@ -46,10 +46,10 @@ namespace SpeckleStructuralGSA
 
       string keyword = destType.GetGSAKeyword();
 
-      int gridSurfaceIndex = GSA.Indexer.ResolveIndex("GRID_SURFACE.1", "", alignment.ApplicationId);
-      int gridPlaneIndex = GSA.Indexer.ResolveIndex("GRID_PLANE.4", "", alignment.ApplicationId);
+      int gridSurfaceIndex = Initialiser.Indexer.ResolveIndex("GRID_SURFACE.1", "", alignment.ApplicationId);
+      int gridPlaneIndex = Initialiser.Indexer.ResolveIndex("GRID_PLANE.4", "", alignment.ApplicationId);
 
-      int index = GSA.Indexer.ResolveIndex(keyword, destType.Name, alignment.ApplicationId);
+      int index = Initialiser.Indexer.ResolveIndex(keyword, destType.Name, alignment.ApplicationId);
 
       var sid = HelperClass.GenerateSID(alignment);
 
@@ -114,7 +114,7 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this StructuralBridgeAlignment alignment)
     {
-      new GSABridgeAlignment() { Value = alignment }.SetGWACommand(Initialiser.Interface);
+      new GSABridgeAlignment() { Value = alignment }.SetGWACommand();
 
       return true;
     }

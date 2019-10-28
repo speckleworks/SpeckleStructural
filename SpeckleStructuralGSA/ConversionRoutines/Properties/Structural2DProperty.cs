@@ -17,7 +17,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new Structural2DProperty();
 
-    public void ParseGWACommand(IGSAInterfacer GSA, List<GSAMaterialSteel> steels, List<GSAMaterialConcrete> concretes)
+    public void ParseGWACommand(List<GSAMaterialSteel> steels, List<GSAMaterialConcrete> concretes)
     {
       if (this.GWACommand == null)
         return;
@@ -28,7 +28,7 @@ namespace SpeckleStructuralGSA
 
       int counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Initialiser.Interface.GetSID(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Initialiser.Indexer.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; // Color
       counter++; // Type
@@ -80,7 +80,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAInterfacer GSA)
+    public void SetGWACommand()
     {
       if (this.Value == null)
         return;
@@ -89,11 +89,11 @@ namespace SpeckleStructuralGSA
 
       string keyword = typeof(GSA2DProperty).GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(typeof(GSA2DProperty).GetGSAKeyword(), typeof(GSA2DProperty).Name, prop.ApplicationId);
+      int index = Initialiser.Indexer.ResolveIndex(typeof(GSA2DProperty).GetGSAKeyword(), typeof(GSA2DProperty).Name, prop.ApplicationId);
       int materialRef = 0;
       string materialType = "UNDEF";
 
-      var res = GSA.Indexer.LookupIndex(typeof(GSAMaterialSteel).GetGSAKeyword(), typeof(GSAMaterialSteel).Name, prop.MaterialRef);
+      var res = Initialiser.Indexer.LookupIndex(typeof(GSAMaterialSteel).GetGSAKeyword(), typeof(GSAMaterialSteel).Name, prop.MaterialRef);
       if (res.HasValue)
       {
         materialRef = res.Value;
@@ -101,7 +101,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        res = GSA.Indexer.LookupIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), typeof(GSAMaterialConcrete).Name, prop.MaterialRef);
+        res = Initialiser.Indexer.LookupIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), typeof(GSAMaterialConcrete).Name, prop.MaterialRef);
         if (res.HasValue)
         {
           materialRef = res.Value;
@@ -154,7 +154,7 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this Structural2DProperty prop)
     {
-      new GSA2DProperty() { Value = prop }.SetGWACommand(Initialiser.Interface);
+      new GSA2DProperty() { Value = prop }.SetGWACommand();
 
       return true;
     }

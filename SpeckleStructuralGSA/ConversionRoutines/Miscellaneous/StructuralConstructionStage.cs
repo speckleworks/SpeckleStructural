@@ -15,7 +15,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralConstructionStage();
 
-    public void ParseGWACommand(IGSAInterfacer GSA, List<GSA1DElement> e1Ds, List<GSA2DElement> e2Ds, List<GSA1DMember> m1Ds, List<GSA2DMember> m2Ds)
+    public void ParseGWACommand(List<GSA1DElement> e1Ds, List<GSA2DElement> e2Ds, List<GSA1DMember> m1Ds, List<GSA2DMember> m2Ds)
     {
       if (this.GWACommand == null)
         return;
@@ -27,7 +27,7 @@ namespace SpeckleStructuralGSA
       int counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Initialiser.Interface.GetSID(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Initialiser.Indexer.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++];
 
       counter++; //Skip colour
@@ -74,7 +74,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAInterfacer GSA)
+    public void SetGWACommand()
     {
       if (this.Value == null)
         return;
@@ -83,7 +83,7 @@ namespace SpeckleStructuralGSA
 
       string keyword = typeof(GSAConstructionStage).GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(typeof(GSAConstructionStage).GetGSAKeyword(), typeof(GSAConstructionStage).Name, stageDef.ApplicationId);
+      int index = Initialiser.Indexer.ResolveIndex(typeof(GSAConstructionStage).GetGSAKeyword(), typeof(GSAConstructionStage).Name, stageDef.ApplicationId);
       
       var targetString = " ";
 
@@ -91,10 +91,10 @@ namespace SpeckleStructuralGSA
       {
         if (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
         {
-          var e1DIndices = GSA.Indexer.LookupIndices(typeof(GSA1DElement).GetGSAKeyword(), typeof(GSA1DElement).Name, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-          var e1DPolyIndices = GSA.Indexer.LookupIndices(typeof(GSA1DElementPolyline).GetGSAKeyword(), typeof(GSA1DElementPolyline).Name, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-          var e2DIndices = GSA.Indexer.LookupIndices(typeof(GSA2DElement).GetGSAKeyword(), typeof(GSA2DElement).Name, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-          var e2DMeshIndices = GSA.Indexer.LookupIndices(typeof(GSA2DElementMesh).GetGSAKeyword(), typeof(GSA2DElementMesh).Name, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var e1DIndices = Initialiser.Indexer.LookupIndices(typeof(GSA1DElement).GetGSAKeyword(), typeof(GSA1DElement).Name, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var e1DPolyIndices = Initialiser.Indexer.LookupIndices(typeof(GSA1DElementPolyline).GetGSAKeyword(), typeof(GSA1DElementPolyline).Name, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var e2DIndices = Initialiser.Indexer.LookupIndices(typeof(GSA2DElement).GetGSAKeyword(), typeof(GSA2DElement).Name, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var e2DMeshIndices = Initialiser.Indexer.LookupIndices(typeof(GSA2DElementMesh).GetGSAKeyword(), typeof(GSA2DElementMesh).Name, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
 
           targetString = string.Join(" ",
             e1DIndices.Select(x => x.ToString())
@@ -105,9 +105,9 @@ namespace SpeckleStructuralGSA
         }
         else if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
         {
-          var m1DIndices = GSA.Indexer.LookupIndices(typeof(GSA1DMember).GetGSAKeyword(), typeof(GSA1DMember).Name, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-          var m1DPolyIndices = GSA.Indexer.LookupIndices(typeof(GSA1DElementPolyline).GetGSAKeyword(), typeof(GSA1DElementPolyline).Name, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-          var m2DIndices = GSA.Indexer.LookupIndices(typeof(GSA2DMember).GetGSAKeyword(), typeof(GSA2DMember).Name, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var m1DIndices = Initialiser.Indexer.LookupIndices(typeof(GSA1DMember).GetGSAKeyword(), typeof(GSA1DMember).Name, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var m1DPolyIndices = Initialiser.Indexer.LookupIndices(typeof(GSA1DElementPolyline).GetGSAKeyword(), typeof(GSA1DElementPolyline).Name, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var m2DIndices = Initialiser.Indexer.LookupIndices(typeof(GSA2DMember).GetGSAKeyword(), typeof(GSA2DMember).Name, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
 
           targetString = string.Join(" ",
             m1DIndices.Select(x => "G" + x.ToString())
@@ -142,7 +142,7 @@ namespace SpeckleStructuralGSA
     {
       var gsaStageDefinition = new GSAConstructionStage() { Value = stage };
 
-      gsaStageDefinition.SetGWACommand(Initialiser.Interface);
+      gsaStageDefinition.SetGWACommand();
 
       return true;
     }

@@ -102,7 +102,7 @@ namespace SpeckleStructuralGSA
                   StructuralNodeResult newRes = new StructuralNodeResult()
                   {
                     Value = new Dictionary<string, object>(),
-                    TargetRef = Initialiser.Interface.GetSID(typeof(GSANode).GetGSAKeyword(), id),
+                    TargetRef = Initialiser.Indexer.GetApplicationId(typeof(GSANode).GetGSAKeyword(), id),
                     IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
                   };
                   newRes.Value[kvp.Key] = resultExport;

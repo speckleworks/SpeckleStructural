@@ -15,7 +15,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralGravityLoading();
 
-    public void ParseGWACommand(IGSAInterfacer GSA)
+    public void ParseGWACommand()
     {
       if (this.GWACommand == null)
         return;
@@ -29,7 +29,7 @@ namespace SpeckleStructuralGSA
 
       counter++; // Skip elements - assumed to always be "all" at this point int time
 
-      obj.LoadCaseRef = Initialiser.Interface.GetSID(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
+      obj.LoadCaseRef = Initialiser.Indexer.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
 
       var vector = new double[3];
       for (var i = 0; i < 3; i++)
@@ -40,7 +40,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAInterfacer GSA)
+    public void SetGWACommand()
     {
       if (this.Value == null)
         return;
@@ -55,13 +55,13 @@ namespace SpeckleStructuralGSA
       int loadCaseIndex = 0;
       try
       {
-        loadCaseIndex = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).Name, load.LoadCaseRef).Value;
+        loadCaseIndex = Initialiser.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).Name, load.LoadCaseRef).Value;
       }
       catch {
-        loadCaseIndex = GSA.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).Name, load.LoadCaseRef);
+        loadCaseIndex = Initialiser.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).Name, load.LoadCaseRef);
       }
 
-      var index = GSA.Indexer.ResolveIndex(typeof(GSAGravityLoading).GetGSAKeyword(), typeof(GSAGravityLoading).Name);
+      var index = Initialiser.Indexer.ResolveIndex(typeof(GSAGravityLoading).GetGSAKeyword(), typeof(GSAGravityLoading).Name);
 
       var ls = new List<string>
         {
@@ -85,7 +85,7 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this StructuralGravityLoading load)
     {
-      new GSAGravityLoading() { Value = load }.SetGWACommand(Initialiser.Interface);
+      new GSAGravityLoading() { Value = load }.SetGWACommand();
 
       return true;
     }

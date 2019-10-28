@@ -19,7 +19,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralNode();
 
-    public void ParseGWACommand(IGSAInterfacer GSA)
+    public void ParseGWACommand()
     {
       if (this.GWACommand == null)
         return;
@@ -30,7 +30,7 @@ namespace SpeckleStructuralGSA
 
       int counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Initialiser.Interface.GetSID(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Initialiser.Indexer.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; // Color
       obj.Value = new List<double>();
@@ -93,7 +93,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAInterfacer GSA)
+    public void SetGWACommand()
     {
       if (this.Value == null)
         return;
@@ -209,7 +209,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralNode();
 
-    public void ParseGWACommand(IGSAInterfacer GSA)
+    public void ParseGWACommand()
     {
       if (this.GWACommand == null)
         return;
@@ -227,13 +227,13 @@ namespace SpeckleStructuralGSA
       obj.Mass = mass;
       counter++; // group
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Initialiser.Interface.GetSID(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Initialiser.Indexer.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       // Rest is unimportant for 0D element
 
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAInterfacer GSA)
+    public void SetGWACommand()
     {
       if (this.Value == null)
         return;
@@ -244,9 +244,9 @@ namespace SpeckleStructuralGSA
         return;
 
       string keyword = typeof(GSA0DElement).GetGSAKeyword();
-      int index = GSA.Indexer.ResolveIndex(typeof(GSA0DElement).GetGSAKeyword(), typeof(GSA0DElement).Name, node.ApplicationId);
-      int propIndex = GSA.Indexer.ResolveIndex("PROP_MASS.2", "", node.ApplicationId);
-      int nodeRef = GSA.Indexer.ResolveIndex(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).Name, node.ApplicationId);
+      int index = Initialiser.Indexer.ResolveIndex(typeof(GSA0DElement).GetGSAKeyword(), typeof(GSA0DElement).Name, node.ApplicationId);
+      int propIndex = Initialiser.Indexer.ResolveIndex("PROP_MASS.2", "", node.ApplicationId);
+      int nodeRef = Initialiser.Indexer.ResolveIndex(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).Name, node.ApplicationId);
 
       List<string> ls = new List<string>();
 
@@ -322,8 +322,8 @@ namespace SpeckleStructuralGSA
 
     public static bool ToNative(this StructuralNode node)
     {
-      new GSANode() { Value = node }.SetGWACommand(Initialiser.Interface);
-      new GSA0DElement() { Value = node }.SetGWACommand(Initialiser.Interface);
+      new GSANode() { Value = node }.SetGWACommand();
+      new GSA0DElement() { Value = node }.SetGWACommand();
 
       return true;
     }

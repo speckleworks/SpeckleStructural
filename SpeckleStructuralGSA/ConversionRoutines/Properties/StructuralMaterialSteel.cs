@@ -15,7 +15,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralMaterialSteel();
 
-    public void ParseGWACommand(IGSAInterfacer GSA)
+    public void ParseGWACommand()
     {
       if (this.GWACommand == null)
         return;
@@ -26,7 +26,7 @@ namespace SpeckleStructuralGSA
 
       int counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Initialiser.Interface.GetSID(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Initialiser.Indexer.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       counter++; // MAT.8
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; // Unlocked
@@ -49,7 +49,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAInterfacer GSA)
+    public void SetGWACommand()
     {
       if (this.Value == null)
         return;
@@ -58,7 +58,7 @@ namespace SpeckleStructuralGSA
 
       string keyword = typeof(GSAMaterialSteel).GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(typeof(GSAMaterialSteel).GetGSAKeyword(), typeof(GSAMaterialSteel).Name, mat.ApplicationId);
+      int index = Initialiser.Indexer.ResolveIndex(typeof(GSAMaterialSteel).GetGSAKeyword(), typeof(GSAMaterialSteel).Name, mat.ApplicationId);
 
       // TODO: This function barely works.
       List<string> ls = new List<string>();
@@ -117,7 +117,7 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this StructuralMaterialSteel mat)
     {
-      new GSAMaterialSteel() { Value = mat }.SetGWACommand(Initialiser.Interface);
+      new GSAMaterialSteel() { Value = mat }.SetGWACommand();
 
       return true;
     }

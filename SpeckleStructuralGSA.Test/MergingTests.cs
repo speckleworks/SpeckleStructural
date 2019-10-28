@@ -10,6 +10,7 @@ using SpeckleStructuralClasses;
 using SpeckleCore;
 using System.Reflection;
 using AutoMapper;
+using SpeckleUtil;
 
 namespace SpeckleStructuralGSA.Test
 {
@@ -41,6 +42,44 @@ namespace SpeckleStructuralGSA.Test
       Assert.AreEqual(eTest.AVal, testResult.e2);
       Assert.AreEqual("Test", testResult.s);
     }
+
+    [Test]
+    public void MergeTestGSA_WithMerger()
+    {
+      var ls1 = new object[] { "PROP_SPR.3:{speckle_app_id:gh/a}", 1, "LSPxGeneral", "NO_RGB", "GLOBAL", "GENERAL", 0, 16, 0, 17, 0, 18, 0, 19, 0, 20, 0, 21, 0.21 };
+      var gwa1 = string.Join("\t", ls1.Select(l => l.ToString()));
+
+      PrepareInterfacerForGwaToSpeckle<GSASpringProperty>(gwa1, "PROP_SPR.3", "gh/a");
+
+      //Call the ToSpeckle method, which just adds to the GSASenderObjects collection
+      Conversions.ToSpeckle(new GSASpringProperty());
+      var existing = (StructuralSpringProperty)((IGSASpeckleContainer)Initialiser.GSASenderObjects[typeof(GSASpringProperty)].First()).Value;
+
+      var newToMerge = new StructuralSpringProperty() { DampingRatio = 1.5 };
+
+      var speckleTypes = SpeckleUtil.Helper.GetLoadedSpeckleTypes();
+
+      var mappableTypes = new List<Type>();
+      var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetTypes().Any(t => typeof(ISpeckleInitializer).IsAssignableFrom(t))).ToList();
+      var relevantAssemblies =  assemblies.Where(a => a.FullName.Contains("GSA"));
+      foreach (var assembly in relevantAssemblies)
+      {
+        foreach (var t in speckleTypes)
+        {
+          var methods = SpeckleUtil.Helper.GetExtensionMethods(assembly, t, "ToNative");
+          if (methods != null && methods.Count() > 0)
+          {
+            mappableTypes.Add(t);
+          }
+        }
+      }
+
+      var merger = new SpeckleObjectMerger();
+      merger.Initialise(mappableTypes);
+
+      var resultingObject = merger.Merge(newToMerge, existing);
+    }
+
 
     [Test]
     public void MergeTestGSA()

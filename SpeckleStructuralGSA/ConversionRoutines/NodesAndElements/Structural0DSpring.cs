@@ -22,7 +22,7 @@ namespace SpeckleStructuralGSA
     public dynamic Value { get; set; } = new Structural0DSpring();
 
     //Sending
-    public void ParseGWACommand(IGSAInterfacer GSA, List<GSANode> nodes)
+    public void ParseGWACommand(List<GSANode> nodes)
     {
       if (this.GWACommand == null)
         return;
@@ -62,7 +62,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAInterfacer GSA, int group = 0)
+    public void SetGWACommand(IGSAProxy GSA, int group = 0)
     {
       if (this.Value == null)
         return;
@@ -71,11 +71,11 @@ namespace SpeckleStructuralGSA
 
       string keyword = typeof(GSA0DSpring).GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(keyword, typeof(GSA0DSpring).Name, spring.ApplicationId);
+      int index = Initialiser.Indexer.ResolveIndex(keyword, typeof(GSA0DSpring).Name, spring.ApplicationId);
       int propRef = 0;
       try
       {
-        propRef = GSA.Indexer.LookupIndex(typeof(GSASpringProperty).GetGSAKeyword(), typeof(GSASpringProperty).Name, spring.PropertyRef).Value;
+        propRef = Initialiser.Indexer.LookupIndex(typeof(GSASpringProperty).GetGSAKeyword(), typeof(GSASpringProperty).Name, spring.PropertyRef).Value;
       }
       catch { }
 
@@ -120,9 +120,22 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this Structural0DSpring spring)
     {
-      int group = Initialiser.Interface.Indexer.ResolveIndex(typeof(GSA0DSpring).GetGSAKeyword(), typeof(GSA0DSpring).Name, spring.ApplicationId);
-      new GSA0DSpring() { Value = spring }.SetGWACommand(Initialiser.Interface, group);
+      /*
+      var objToProcess = spring;
+      //Check if this application appears in the cache at all
+      if (!string.IsNullOrEmpty(spring.ApplicationId) && !Initialiser.Interface.ExistsInModel(spring.ApplicationId))
+      {
+        //If so but the type doesn't appear alongside it as one that was loaded, then load it now by calling ToSpeckle with a dummy version of the GSA corresponding type
+        if (Initialiser.Interface.GetCachedSpeckleObject(typeof(Structural0DSpring), spring.ApplicationId, out Structural0DSpring existing))
+        {
+          //Merge objects to form the resulting one
+          objToProcess = (Structural0DSpring) Initialiser.Merger.Merge(spring, existing);
+        }
+      }
+      */
 
+      int group = Initialiser.Indexer.ResolveIndex(typeof(GSA0DSpring).GetGSAKeyword(), typeof(GSA0DSpring).Name, spring.ApplicationId);
+      new GSA0DSpring() { Value = spring }.SetGWACommand(Initialiser.Interface, group);
       return true;
     }
 

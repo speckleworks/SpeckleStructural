@@ -15,7 +15,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralLoadTask();
 
-    public void ParseGWACommand(IGSAInterfacer GSA)
+    public void ParseGWACommand()
     {
       if (this.GWACommand == null)
         return;
@@ -27,7 +27,7 @@ namespace SpeckleStructuralGSA
       int counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Initialiser.Interface.GetSID(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Initialiser.Indexer.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++];
 
       //Find task type
@@ -51,7 +51,7 @@ namespace SpeckleStructuralGSA
           switch (t.Item1[0])
           {
             case 'L':
-              obj.LoadCaseRefs.Add(Initialiser.Interface.GetSID(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(t.Item1.Substring(1))));
+              obj.LoadCaseRefs.Add(Initialiser.Indexer.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(t.Item1.Substring(1))));
               obj.LoadFactors.Add(t.Item2);
               break;
           }
@@ -64,7 +64,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAInterfacer GSA)
+    public void SetGWACommand()
     {
       if (this.Value == null)
         return;
@@ -73,8 +73,8 @@ namespace SpeckleStructuralGSA
 
       string keyword = typeof(GSALoadTask).GetGSAKeyword();
 
-      int taskIndex = GSA.Indexer.ResolveIndex("TASK.1", "", loadTask.ApplicationId);
-      int index = GSA.Indexer.ResolveIndex(typeof(GSALoadTask).GetGSAKeyword(), typeof(GSALoadTask).Name, loadTask.ApplicationId);
+      int taskIndex = Initialiser.Indexer.ResolveIndex("TASK.1", "", loadTask.ApplicationId);
+      int index = Initialiser.Indexer.ResolveIndex(typeof(GSALoadTask).GetGSAKeyword(), typeof(GSALoadTask).Name, loadTask.ApplicationId);
 
       List<string> ls = new List<string>();
 
@@ -217,7 +217,7 @@ namespace SpeckleStructuralGSA
         List<string> subLs = new List<string>();
         for (int i = 0; i < loadTask.LoadCaseRefs.Count(); i++)
         {
-          int? loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).Name, loadTask.LoadCaseRefs[i]);
+          int? loadCaseRef = Initialiser.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).Name, loadTask.LoadCaseRefs[i]);
 
           if (loadCaseRef.HasValue)
           {
@@ -237,7 +237,7 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this StructuralLoadTask loadTask)
     {
-      new GSALoadTask() { Value = loadTask }.SetGWACommand(Initialiser.Interface);
+      new GSALoadTask() { Value = loadTask }.SetGWACommand();
 
       return true;
     }

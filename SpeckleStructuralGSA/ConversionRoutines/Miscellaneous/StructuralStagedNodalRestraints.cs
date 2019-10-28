@@ -15,7 +15,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralStagedNodalRestraints();
 
-    public void ParseGWACommand(IGSAInterfacer GSA, List<GSANode> nodes, List<GSAConstructionStage> stages)
+    public void ParseGWACommand(List<GSANode> nodes, List<GSAConstructionStage> stages)
     {
       if (this.GWACommand == null)
         return;
@@ -54,7 +54,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAInterfacer GSA)
+    public void SetGWACommand()
     {
       if (this.Value == null)
         return;
@@ -65,19 +65,19 @@ namespace SpeckleStructuralGSA
 			string keyword = destinationType.GetGSAKeyword();
       var subkeywords = destinationType.GetSubGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(keyword, destinationType.Name, obj.ApplicationId);
+      int index = Initialiser.Indexer.ResolveIndex(keyword, destinationType.Name, obj.ApplicationId);
 
       var nodesStr = "none"; //default value
       if (obj.NodeRefs != null && obj.NodeRefs.Count() >= 1)
       {
-        var nodeIndices = GSA.Indexer.LookupIndices(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).Name, obj.NodeRefs);
+        var nodeIndices = Initialiser.Indexer.LookupIndices(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).Name, obj.NodeRefs);
         nodesStr = string.Join(" ", nodeIndices);
       }
 
       var stageDefStr = "all"; //default value
       if (obj.ConstructionStageRefs != null && obj.ConstructionStageRefs.Count() >= 1)
       {
-        var stageDefIndices = GSA.Indexer.LookupIndices(typeof(GSAConstructionStage).GetGSAKeyword(), typeof(GSAConstructionStage).Name, obj.ConstructionStageRefs);
+        var stageDefIndices = Initialiser.Indexer.LookupIndices(typeof(GSAConstructionStage).GetGSAKeyword(), typeof(GSAConstructionStage).Name, obj.ConstructionStageRefs);
         stageDefStr = string.Join(" ", stageDefIndices);
       }
 
@@ -103,7 +103,7 @@ namespace SpeckleStructuralGSA
     {
       var gsaGeneralisedNodeRestraints = new GSAStructuralStagedNodalRestraints() { Value = restraint };
 
-      gsaGeneralisedNodeRestraints.SetGWACommand(Initialiser.Interface);
+      gsaGeneralisedNodeRestraints.SetGWACommand();
 
       return true;
     }

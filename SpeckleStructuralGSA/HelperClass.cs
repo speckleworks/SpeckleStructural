@@ -560,7 +560,7 @@ namespace SpeckleStructuralGSA
 
       var ls = new List<string>();
 
-      var res = Initialiser.Interface.Indexer.ResolveIndex("AXIS", "");
+      var res = Initialiser.Indexer.ResolveIndex("AXIS", "");
 
       ls.Add("SET");
       ls.Add("AXIS");
@@ -587,7 +587,7 @@ namespace SpeckleStructuralGSA
 
     public static int SetAxis(SpeckleVector xVector, SpeckleVector xyVector, SpecklePoint origin, string name = "")
     {
-      var res = Initialiser.Interface.Indexer.ResolveIndex("AXIS", "");
+      var res = Initialiser.Indexer.ResolveIndex("AXIS", "");
 
       var ls = new List<string>()
         {
@@ -852,7 +852,7 @@ namespace SpeckleStructuralGSA
     /// <param name="gwaRecord">GWA record of AXIS if used</param>
     /// <param name="evalAtCoor">Coordinates to evaluate axis at</param>
     /// <returns>Axis</returns>
-    public static StructuralAxis Parse0DAxis(int axis, IGSAInterfacer interfacer, out string gwaRecord, double[] evalAtCoor = null)
+    public static StructuralAxis Parse0DAxis(int axis, IGSAProxy interfacer, out string gwaRecord, double[] evalAtCoor = null)
     {
       Vector3D x;
       Vector3D y;

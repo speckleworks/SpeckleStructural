@@ -122,7 +122,7 @@ namespace SpeckleStructuralGSA
                   Structural2DElementResult newRes = new Structural2DElementResult()
                   {
                     Value = new Dictionary<string, object>(),
-                    TargetRef = Initialiser.Interface.GetSID(typeof(GSA2DElement).GetGSAKeyword(), id),
+                    TargetRef = Initialiser.Indexer.GetApplicationId(typeof(GSA2DElement).GetGSAKeyword(), id),
                     IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
                   };
                   newRes.Value[kvp.Key + "_face"] = faceDictionary;

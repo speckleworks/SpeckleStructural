@@ -17,7 +17,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new Structural1DElementPolyline();
 
-    public void ParseGWACommand(IGSAInterfacer GSA, List<GSA1DElement> elements)
+    public void ParseGWACommand(List<GSA1DElement> elements)
     {
       if (elements.Count() < 1)
         return;
@@ -25,7 +25,7 @@ namespace SpeckleStructuralGSA
       var elementsListCopy = new List<GSA1DElement>(elements);
 
       Structural1DElementPolyline obj = new Structural1DElementPolyline();
-      obj.ApplicationId = Initialiser.Interface.GetSID(typeof(GSA1DElementPolyline).GetGSAKeyword(), GSAId);
+      obj.ApplicationId = Initialiser.Indexer.GetApplicationId(typeof(GSA1DElementPolyline).GetGSAKeyword(), GSAId);
 
       obj.Value = new List<double>();
       obj.ElementApplicationId = new List<string>();
@@ -173,14 +173,14 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAInterfacer GSA)
+    public void SetGWACommand()
     {
       if (this.Value == null)
         return;
 
       Structural1DElementPolyline obj = this.Value as Structural1DElementPolyline;
 
-      int group = GSA.Indexer.ResolveIndex(typeof(GSA1DElementPolyline).GetGSAKeyword(), typeof(GSA1DElementPolyline).Name, obj.ApplicationId);
+      int group = Initialiser.Indexer.ResolveIndex(typeof(GSA1DElementPolyline).GetGSAKeyword(), typeof(GSA1DElementPolyline).Name, obj.ApplicationId);
 
       Structural1DElement[] elements = obj.Explode();
 
@@ -212,7 +212,7 @@ namespace SpeckleStructuralGSA
 
     public static bool ToNative(this Structural1DElementPolyline poly)
     {
-      new GSA1DElementPolyline() { Value = poly }.SetGWACommand(Initialiser.Interface);
+      new GSA1DElementPolyline() { Value = poly }.SetGWACommand();
 
       return true;
     }

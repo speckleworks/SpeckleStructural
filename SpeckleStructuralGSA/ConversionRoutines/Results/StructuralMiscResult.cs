@@ -63,7 +63,7 @@ namespace SpeckleStructuralGSA
                 ResultSource = loadCase
               };
               if (id != 0)
-                newRes.TargetRef = Initialiser.Interface.GetSID(kvp.Value.Item1, id);
+                newRes.TargetRef = Initialiser.Indexer.GetApplicationId(kvp.Value.Item1, id);
               newRes.GenerateHash();
               results.Add(new GSAMiscResult() { Value = newRes });
             }

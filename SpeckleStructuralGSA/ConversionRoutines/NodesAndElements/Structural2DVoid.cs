@@ -15,7 +15,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new Structural2DVoid();
 
-    public void ParseGWACommand(IGSAInterfacer GSA, List<GSANode> nodes)
+    public void ParseGWACommand(List<GSANode> nodes)
     {
       if (this.GWACommand == null)
         return;
@@ -26,7 +26,7 @@ namespace SpeckleStructuralGSA
 
       int counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Initialiser.Interface.GetSID(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Initialiser.Indexer.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       var color = pieces[counter++].ParseGSAColor();
 
@@ -54,7 +54,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAInterfacer GSA)
+    public void SetGWACommand()
     {
       if (this.Value == null)
         return;
@@ -63,7 +63,7 @@ namespace SpeckleStructuralGSA
 
       string keyword = typeof(GSA2DVoid).GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(keyword, typeof(GSA2DVoid).Name, v.ApplicationId);
+      int index = Initialiser.Indexer.ResolveIndex(keyword, typeof(GSA2DVoid).Name, v.ApplicationId);
 
       List<string> ls = new List<string>();
 
@@ -116,7 +116,7 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this Structural2DVoid v)
     {
-      new GSA2DVoid() { Value = v }.SetGWACommand(Initialiser.Interface);
+      new GSA2DVoid() { Value = v }.SetGWACommand();
 
       return true;
     }

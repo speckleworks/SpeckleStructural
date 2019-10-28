@@ -17,7 +17,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new Structural0DLoad();
 
-    public void ParseGWACommand(IGSAInterfacer GSA, List<GSANode> nodes)
+    public void ParseGWACommand(List<GSANode> nodes)
     {
       if (this.GWACommand == null)
         return;
@@ -43,7 +43,8 @@ namespace SpeckleStructuralGSA
           n.ForceSend = true;
       }
 
-      obj.LoadCaseRef = Initialiser.Interface.GetSID(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
+      //obj.LoadCaseRef = Initialiser.Indexer.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
+      obj.LoadCaseRef = Initialiser.Indexer.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
 
       string axis = pieces[counter++];
       this.Axis = axis == "GLOBAL" ? 0 : Convert.ToInt32(axis);
@@ -78,7 +79,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAInterfacer GSA)
+    public void SetGWACommand()
     {
       if (this.Value == null)
         return;
@@ -90,14 +91,14 @@ namespace SpeckleStructuralGSA
 
       string keyword = typeof(GSA0DLoad).GetGSAKeyword();
 
-      var nodeRefs = GSA.Indexer.LookupIndices(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).Name, load.NodeRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+      var nodeRefs = Initialiser.Indexer.LookupIndices(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).Name, load.NodeRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
       int loadCaseRef = 0;
       try
       {
-        loadCaseRef = GSA.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).Name, load.LoadCaseRef).Value;
+        loadCaseRef = Initialiser.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).Name, load.LoadCaseRef).Value;
       }
       catch {
-        loadCaseRef = GSA.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).Name, load.LoadCaseRef);
+        loadCaseRef = Initialiser.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).Name, load.LoadCaseRef);
       }
 
       string[] direction = new string[6] { "X", "Y", "Z", "XX", "YY", "ZZ" };
@@ -108,7 +109,7 @@ namespace SpeckleStructuralGSA
 
         if (load.Loading.Value[i] == 0) continue;
 
-        var index = GSA.Indexer.ResolveIndex(typeof(GSA0DLoad).GetGSAKeyword(), typeof(GSA0DLoad).Name);
+        var index = Initialiser.Indexer.ResolveIndex(typeof(GSA0DLoad).GetGSAKeyword(), typeof(GSA0DLoad).Name);
 
         ls.Add("SET_AT");
         ls.Add(index.ToString());
@@ -129,7 +130,7 @@ namespace SpeckleStructuralGSA
   {
     public static bool ToNative(this Structural0DLoad load)
     {
-      new GSA0DLoad() { Value = load }.SetGWACommand(Initialiser.Interface);
+      new GSA0DLoad() { Value = load }.SetGWACommand();
 
       return true;
     }
@@ -167,7 +168,7 @@ namespace SpeckleStructuralGSA
         // Placeholder load object to get list of nodes and load values
         // Need to transform to axis so one load definition may be transformed to many
         GSA0DLoad initLoad = new GSA0DLoad() { GWACommand = p };
-        initLoad.ParseGWACommand(Initialiser.Interface, nodes);
+        initLoad.ParseGWACommand(nodes);
 
         // Raise node flag to make sure it gets sent
         foreach (GSANode n in nodes.Where(n => initLoad.Value.NodeRefs.Contains(n.Value.ApplicationId)))

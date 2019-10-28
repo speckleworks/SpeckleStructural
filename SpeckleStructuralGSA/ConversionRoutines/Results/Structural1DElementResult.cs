@@ -130,7 +130,7 @@ namespace SpeckleStructuralGSA
                   Structural1DElementResult newRes = new Structural1DElementResult()
                   {
                     Value = new Dictionary<string, object>(),
-                    TargetRef = Initialiser.Interface.GetSID(typeof(GSA1DElement).GetGSAKeyword(), id),
+                    TargetRef = Initialiser.Indexer.GetApplicationId(typeof(GSA1DElement).GetGSAKeyword(), id),
                     IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
                   };
                   newRes.Value[kvp.Key] = resultExport;
