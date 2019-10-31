@@ -22,17 +22,17 @@ namespace SpeckleStructuralGSA
       if (this.GWACommand == null)
         return;
 
-      Structural2DElement obj = new Structural2DElement();
+      var obj = new Structural2DElement();
 
-      string[] pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit("\t");
 
-      int counter = 1; // Skip identifier
+      var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
       obj.ApplicationId = Initialiser.Indexer.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       var color = pieces[counter++].ParseGSAColor();
 
-      string type = pieces[counter++];
+      var type = pieces[counter++];
       if (color != null)
         obj.Colors = Enumerable.Repeat(color.HexToArgbColor().Value, type.ParseElementNumNodes()).ToList();
       else
@@ -46,10 +46,10 @@ namespace SpeckleStructuralGSA
       obj.Vertices = new List<double>();
       obj.Faces = new List<int>() { type.ParseElementNumNodes() - 3 };
 
-      for (int i = 0; i < type.ParseElementNumNodes(); i++)
+      for (var i = 0; i < type.ParseElementNumNodes(); i++)
       {
-        string key = pieces[counter++];
-        GSANode node = nodes.Where(n => n.GSAId.ToString() == key).FirstOrDefault();
+        var key = pieces[counter++];
+        var node = nodes.Where(n => n.GSAId.ToString() == key).FirstOrDefault();
         obj.Vertices.AddRange(node.Value.Value);
         obj.Faces.Add(i);
         this.SubGWACommand.Add(node.GWACommand);
@@ -57,7 +57,7 @@ namespace SpeckleStructuralGSA
 
       counter++; // Orientation node
 
-      GSA2DProperty prop = props.Where(p => p.Value.ApplicationId == obj.PropertyRef).FirstOrDefault();
+      var prop = props.Where(p => p.Value.ApplicationId == obj.PropertyRef).FirstOrDefault();
       obj.Axis = HelperClass.Parse2DAxis(obj.Vertices.ToArray(),
           Convert.ToDouble(pieces[counter++]),
           prop == null ? false : (prop as GSA2DProperty).IsAxisLocal);
@@ -66,8 +66,8 @@ namespace SpeckleStructuralGSA
 
       if (pieces[counter++] != "NO_RLS")
       {
-        string start = pieces[counter++];
-        string end = pieces[counter++];
+        var start = pieces[counter++];
+        var end = pieces[counter++];
 
         counter += start.Split('K').Length - 1 + end.Split('K').Length - 1;
       }
@@ -76,7 +76,7 @@ namespace SpeckleStructuralGSA
       counter++; //Ofsset x-end
       counter++; //Ofsset y
 
-      var (offset, offsetRec) = Initialiser.Interface.GetGSATotal2DElementOffset(propertyGSAId, Convert.ToDouble(pieces[counter++]));
+      Initialiser.Interface.GetGSATotal2DElementOffset(propertyGSAId, Convert.ToDouble(pieces[counter++]), out var offset, out var offsetRec);
       this.SubGWACommand.Add(offsetRec);
 
       obj.Offset = offset;
@@ -89,39 +89,42 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAProxy GSA, int group = 0)
+    public string SetGWACommand(int group = 0)
     {
       if (this.Value == null)
-        return;
+      { 
+        return "";
+        }
 
-      Structural2DElement mesh = this.Value as Structural2DElement;
+      var mesh = this.Value as Structural2DElement;
 
-      string keyword = typeof(GSA2DElement).GetGSAKeyword();
+      var keyword = typeof(GSA2DElement).GetGSAKeyword();
 
-      int index = Initialiser.Indexer.ResolveIndex(typeof(GSA2DElement).GetGSAKeyword(), typeof(GSA2DElement).Name, mesh.ApplicationId);
-      int propRef = 0;
+      var index = Initialiser.Indexer.ResolveIndex(typeof(GSA2DElement).GetGSAKeyword(), typeof(GSA2DElement).Name, mesh.ApplicationId);
+      var propRef = 0;
       try
       {
         propRef = Initialiser.Indexer.LookupIndex(typeof(GSA2DProperty).GetGSAKeyword(), typeof(GSA2DProperty).Name, mesh.PropertyRef).Value;
       }
       catch { }
 
-      List<string> ls = new List<string>();
-
-      ls.Add("SET");
-      ls.Add(keyword + ":" + HelperClass.GenerateSID(mesh));
-      ls.Add(index.ToString());
-      ls.Add(mesh.Name == null || mesh.Name == "" ? " " : mesh.Name);
-      ls.Add(mesh.Colors == null || mesh.Colors.Count() < 1 ? "NO_RGB" : mesh.Colors[0].ArgbToHexColor().ToString());
-      ls.Add(mesh.Vertices.Count() / 3 == 3 ? "TRI3" : "QUAD4");
-      ls.Add(propRef.ToString());
-      ls.Add(group.ToString()); // Group
-      int numVertices = mesh.Faces[0] + 3;
-      List<double> coor = new List<double>();
-      for (int i = 1; i < mesh.Faces.Count(); i++)
+      var ls = new List<string>
+      {
+        "SET",
+        keyword + ":" + HelperClass.GenerateSID(mesh),
+        index.ToString(),
+        mesh.Name == null || mesh.Name == "" ? " " : mesh.Name,
+        mesh.Colors == null || mesh.Colors.Count() < 1 ? "NO_RGB" : mesh.Colors[0].ArgbToHexColor().ToString(),
+        mesh.Vertices.Count() / 3 == 3 ? "TRI3" : "QUAD4",
+        propRef.ToString(),
+        group.ToString() // Group
+      };
+      var numVertices = mesh.Faces[0] + 3;
+      var coor = new List<double>();
+      for (var i = 1; i < mesh.Faces.Count(); i++)
       {
         coor.AddRange(mesh.Vertices.Skip(mesh.Faces[i] * 3).Take(3));
-        ls.Add(HelperClass.NodeAt(GSA, mesh.Vertices[mesh.Faces[i] * 3], mesh.Vertices[mesh.Faces[i] * 3 + 1], mesh.Vertices[mesh.Faces[i] * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString());
+        ls.Add(HelperClass.NodeAt(mesh.Vertices[mesh.Faces[i] * 3], mesh.Vertices[mesh.Faces[i] * 3 + 1], mesh.Vertices[mesh.Faces[i] * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString());
       }
       ls.Add("0"); //Orientation node
       try
@@ -139,7 +142,7 @@ namespace SpeckleStructuralGSA
       //ls.Add("NORMAL"); // Action // TODO: EL.4 SUPPORT
       ls.Add((mesh.GSADummy.HasValue & mesh.GSADummy.Value) ? "DUMMY" : "");
 
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      return (string.Join("\t", ls));
     }
 
   }
@@ -159,17 +162,17 @@ namespace SpeckleStructuralGSA
       if (this.GWACommand == null)
         return;
 
-      Structural2DElementMesh obj = new Structural2DElementMesh();
+      var obj = new Structural2DElementMesh();
 
-      string[] pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit("\t");
 
-      int counter = 1; // Skip identifier
+      var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
       obj.ApplicationId = Initialiser.Indexer.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       var color = pieces[counter++].ParseGSAColor();
 
-      string type = pieces[counter++];
+      var type = pieces[counter++];
       if (type == "SLAB")
         obj.ElementType = Structural2DElementType.Slab;
       else if (type == "WALL")
@@ -181,16 +184,16 @@ namespace SpeckleStructuralGSA
       obj.PropertyRef = Initialiser.Indexer.GetApplicationId(typeof(GSA2DProperty).GetGSAKeyword(), propertyGSAId);
       this.Group = Convert.ToInt32(pieces[counter++]); // Keep group for load targetting
 
-      List<double> coordinates = new List<double>();
-      string[] nodeRefs = pieces[counter++].ListSplit(" ");
-      for (int i = 0; i < nodeRefs.Length; i++)
+      var coordinates = new List<double>();
+      var nodeRefs = pieces[counter++].ListSplit(" ");
+      for (var i = 0; i < nodeRefs.Length; i++)
       {
-        GSANode node = nodes.Where(n => n.GSAId.ToString() == nodeRefs[i]).FirstOrDefault();
+        var node = nodes.Where(n => n.GSAId.ToString() == nodeRefs[i]).FirstOrDefault();
         coordinates.AddRange(node.Value.Value);
         this.SubGWACommand.Add(node.GWACommand);
       }
 
-      Structural2DElementMesh temp = new Structural2DElementMesh(
+      var temp = new Structural2DElementMesh(
           coordinates.ToArray(),
           color.HexToArgbColor(),
           obj.ElementType, obj.PropertyRef,
@@ -201,8 +204,8 @@ namespace SpeckleStructuralGSA
       obj.Faces = temp.Faces;
       obj.Colors = temp.Colors;
 
-      int numFaces = 0;
-      for (int i = 0; i < obj.Faces.Count(); i++)
+      var numFaces = 0;
+      for (var i = 0; i < obj.Faces.Count(); i++)
       {
         numFaces++;
         i += obj.Faces[i] + 3;
@@ -210,7 +213,7 @@ namespace SpeckleStructuralGSA
 
       counter++; // Orientation node
 
-      GSA2DProperty prop = props.Where(p => p.Value.ApplicationId == obj.PropertyRef).FirstOrDefault();
+      var prop = props.Where(p => p.Value.ApplicationId == obj.PropertyRef).FirstOrDefault();
       var axis = HelperClass.Parse2DAxis(coordinates.ToArray(),
           Convert.ToDouble(pieces[counter++]),
           prop == null ? false : (prop as GSA2DProperty).IsAxisLocal);
@@ -221,7 +224,7 @@ namespace SpeckleStructuralGSA
       // Skip to offsets at second to last
       counter = pieces.Length - 2;
 
-      var (offset, offsetRec) = Initialiser.Interface.GetGSATotal2DElementOffset(propertyGSAId, Convert.ToDouble(pieces[counter++]));
+      Initialiser.Interface.GetGSATotal2DElementOffset(propertyGSAId, Convert.ToDouble(pieces[counter++]), out var offset, out var offsetRec);
       this.SubGWACommand.Add(offsetRec);
 
       obj.Offset = Enumerable.Repeat(offset, numFaces).ToList();
@@ -229,30 +232,33 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAProxy GSA, int group = 0)
+    public string SetGWACommand(int group = 0)
     {
       if (this.Value == null)
-        return;
+        return "";
 
-      Structural2DElementMesh mesh = this.Value as Structural2DElementMesh;
+      var mesh = this.Value as Structural2DElementMesh;
 
-      string keyword = typeof(GSA2DMember).GetGSAKeyword();
+      var keyword = typeof(GSA2DMember).GetGSAKeyword();
 
-      int index = Initialiser.Indexer.ResolveIndex(typeof(GSA2DMember).GetGSAKeyword(), typeof(GSA2DMember).Name, mesh.ApplicationId);
-      int propRef = 0;
+      var index = Initialiser.Indexer.ResolveIndex(typeof(GSA2DMember).GetGSAKeyword(), typeof(GSA2DMember).Name, mesh.ApplicationId);
+      var propRef = 0;
       try
       {
         propRef = Initialiser.Indexer.LookupIndex(typeof(GSA2DProperty).GetGSAKeyword(), typeof(GSA2DProperty).Name, mesh.PropertyRef).Value;
       }
       catch { }
 
-      List<string> ls = new List<string>();
+      var gwaCommands = new List<string>();
 
-      ls.Add("SET");
-      ls.Add(keyword + ":" + HelperClass.GenerateSID(mesh));
-      ls.Add(index.ToString());
-      ls.Add(mesh.Name == null || mesh.Name == "" ? " " : mesh.Name);
-      ls.Add(mesh.Colors == null || mesh.Colors.Count() < 1 ? "NO_RGB" : mesh.Colors[0].ArgbToHexColor().ToString());
+      var ls = new List<string>
+      {
+        "SET",
+        keyword + ":" + HelperClass.GenerateSID(mesh),
+        index.ToString(),
+        mesh.Name == null || mesh.Name == "" ? " " : mesh.Name,
+        mesh.Colors == null || mesh.Colors.Count() < 1 ? "NO_RGB" : mesh.Colors[0].ArgbToHexColor().ToString()
+      };
       if (mesh.ElementType == Structural2DElementType.Slab)
         ls.Add("SLAB");
       else if (mesh.ElementType == Structural2DElementType.Wall)
@@ -261,16 +267,18 @@ namespace SpeckleStructuralGSA
         ls.Add("2D_GENERIC");
       ls.Add(propRef.ToString());
       ls.Add(group != 0 ? group.ToString() : index.ToString()); // TODO: This allows for targeting of elements from members group
-      string topo = "";
-      int prevNodeIndex = -1;
-      List<int[]> connectivities = mesh.Edges();
-      List<double> coor = new List<double>();
-      foreach (int c in connectivities[0])
+      var topo = "";
+      var prevNodeIndex = -1;
+      var connectivities = mesh.Edges();
+      var coor = new List<double>();
+      foreach (var c in connectivities[0])
       {
         coor.AddRange(mesh.Vertices.Skip(c * 3).Take(3));
-        var currIndex = HelperClass.NodeAt(GSA, mesh.Vertices[c * 3], mesh.Vertices[c * 3 + 1], mesh.Vertices[c * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance);
+        var currIndex = HelperClass.NodeAt(mesh.Vertices[c * 3], mesh.Vertices[c * 3 + 1], mesh.Vertices[c * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance);
         if (prevNodeIndex != currIndex)
+        {
           topo += currIndex.ToString() + " ";
+        }
         prevNodeIndex = currIndex;
       }
       ls.Add(topo);
@@ -293,10 +301,10 @@ namespace SpeckleStructuralGSA
       ls.Add(mesh.Offset != null ? mesh.Offset.First().ToString() : "0"); // Offset z
       ls.Add("ALL"); // Exposure
 
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      gwaCommands.Add(string.Join("\t", ls));
 
       // Add voids
-      foreach (int[] conn in connectivities.Skip(1))
+      foreach (var conn in connectivities.Skip(1))
       {
         ls.Clear();
 
@@ -313,10 +321,10 @@ namespace SpeckleStructuralGSA
         topo = "";
         prevNodeIndex = -1;
         coor.Clear();
-        foreach (int c in conn)
+        foreach (var c in conn)
         {
           coor.AddRange(mesh.Vertices.Skip(c * 3).Take(3));
-          var currIndex = HelperClass.NodeAt(GSA, mesh.Vertices[c * 3], mesh.Vertices[c * 3 + 1], mesh.Vertices[c * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance);
+          var currIndex = HelperClass.NodeAt(mesh.Vertices[c * 3], mesh.Vertices[c * 3 + 1], mesh.Vertices[c * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance);
           if (prevNodeIndex != currIndex)
             topo += currIndex.ToString() + " ";
           prevNodeIndex = currIndex;
@@ -337,42 +345,41 @@ namespace SpeckleStructuralGSA
         ls.Add("0"); // Offset z
         ls.Add("ALL"); // Exposure
 
-        Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+        gwaCommands.Add(string.Join("\t", ls));
       }
-
+      return string.Join("\n", gwaCommands);
     }
   }
   
   public static partial class Conversions
   {
-    public static bool ToNative(this Structural2DElement mesh)
+    public static string ToNative(this Structural2DElement mesh)
     {
-      if (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
-        new GSA2DElement() { Value = mesh }.SetGWACommand();
-      else if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
-        new GSA2DMember() { Value = mesh }.SetGWACommand();
-
-      return true;
+      return (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis) ? new GSA2DElement() { Value = mesh }.SetGWACommand() : new GSA2DMember() { Value = mesh }.SetGWACommand();
     }
 
     public static SpeckleObject ToSpeckle(this GSA2DElement dummyObject)
     {
+      var newLines = ToSpeckleBase<GSA2DElement>();
+      newLines.AddRange(ToSpeckleBase<GSA2DElementMesh>());
+
+      var elements = new List<GSA2DElement>();
+      var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
+      var props = Initialiser.GSASenderObjects[typeof(GSA2DProperty)].Cast<GSA2DProperty>().ToList();
+
+      /*
       if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSA2DElement)))
         Initialiser.GSASenderObjects[typeof(GSA2DElement)] = new List<object>();
 
       if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSA2DElementMesh)))
         Initialiser.GSASenderObjects[typeof(GSA2DElementMesh)] = new List<object>();
 
-      List<GSA2DElement> elements = new List<GSA2DElement>();
-      List<GSANode> nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
-      List<GSA2DProperty> props = Initialiser.GSASenderObjects[typeof(GSA2DProperty)].Cast<GSA2DProperty>().ToList();
-
-      string keyword = typeof(GSA2DElement).GetGSAKeyword();
-      string[] subKeywords = typeof(GSA2DElement).GetSubGSAKeyword();
+      var keyword = typeof(GSA2DElement).GetGSAKeyword();
+      var subKeywords = typeof(GSA2DElement).GetSubGSAKeyword();
 
       string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
       List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
-      foreach (string k in subKeywords)
+      foreach (var k in subKeywords)
         deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
 
       // Remove deleted lines
@@ -381,21 +388,22 @@ namespace SpeckleStructuralGSA
         kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
 
       // Filter only new lines
-      string[] prevLines = Initialiser.GSASenderObjects[typeof(GSA2DElement)]
+      var prevLines = Initialiser.GSASenderObjects[typeof(GSA2DElement)]
         .Select(l => (l as IGSASpeckleContainer).GWACommand)
         .Concat(Initialiser.GSASenderObjects[typeof(GSA2DElementMesh)].SelectMany(l => (l as IGSASpeckleContainer).SubGWACommand))
         .ToArray();
-      string[] newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
+      var newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
+      */
 
-      foreach (string p in newLines)
+      foreach (var p in newLines)
       {
-        string[] pPieces = p.ListSplit("\t");
+        var pPieces = p.ListSplit("\t");
         if (pPieces[4].ParseElementNumNodes() == 3 | pPieces[4].ParseElementNumNodes() == 4)
         {
           try
           {
-            GSA2DElement element = new GSA2DElement() { GWACommand = p };
-            element.ParseGWACommand(Initialiser.Interface, nodes, props);
+            var element = new GSA2DElement() { GWACommand = p };
+            element.ParseGWACommand(nodes, props);
             elements.Add(element);
           }
           catch { }
@@ -404,40 +412,20 @@ namespace SpeckleStructuralGSA
 
       Initialiser.GSASenderObjects[typeof(GSA2DElement)].AddRange(elements);
 
-      if (elements.Count() == 0 && deletedLines.Count() == 0) return new SpeckleNull();
-
-      return new SpeckleObject();
+      return (elements.Count() == 0) ? new SpeckleNull() :  new SpeckleObject();
     }
 
     public static SpeckleObject ToSpeckle(this GSA2DMember dummyObject)
     {
-      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSA2DMember)))
-        Initialiser.GSASenderObjects[typeof(GSA2DMember)] = new List<object>();
+      var newLines = ToSpeckleBase<GSA2DMember>();
 
-      List<GSA2DMember> members = new List<GSA2DMember>();
-      List<GSANode> nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
-      List<GSA2DProperty> props = Initialiser.GSASenderObjects[typeof(GSA2DProperty)].Cast<GSA2DProperty>().ToList();
+      var members = new List<GSA2DMember>();
+      var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
+      var props = Initialiser.GSASenderObjects[typeof(GSA2DProperty)].Cast<GSA2DProperty>().ToList();
 
-      string keyword = typeof(GSA2DMember).GetGSAKeyword();
-      string[] subKeywords = typeof(GSA2DMember).GetSubGSAKeyword();
-
-      string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
-      List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
-      foreach (string k in subKeywords)
-        deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
-
-      // Remove deleted lines
-      Initialiser.GSASenderObjects[typeof(GSA2DMember)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (var kvp in Initialiser.GSASenderObjects)
-        kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
-
-      // Filter only new lines
-      string[] prevLines = Initialiser.GSASenderObjects[typeof(GSA2DMember)].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
-      string[] newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
-
-      foreach (string p in newLines)
+      foreach (var p in newLines)
       {
-        string[] pPieces = p.ListSplit("\t");
+        var pPieces = p.ListSplit("\t");
         if (pPieces[4].MemberIs2D())
         {
           // Check if dummy
@@ -445,8 +433,8 @@ namespace SpeckleStructuralGSA
           {
             try
             {
-              GSA2DMember member = new GSA2DMember() { GWACommand = p };
-              member.ParseGWACommand(Initialiser.Interface, nodes, props);
+              var member = new GSA2DMember() { GWACommand = p };
+              member.ParseGWACommand(nodes, props);
               members.Add(member);
             }
             catch { }
@@ -456,9 +444,7 @@ namespace SpeckleStructuralGSA
 
       Initialiser.GSASenderObjects[typeof(GSA2DMember)].AddRange(members);
 
-      if (members.Count() > 0 || deletedLines.Count() > 0) return new SpeckleObject();
-
-      return new SpeckleNull();
+      return (members.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

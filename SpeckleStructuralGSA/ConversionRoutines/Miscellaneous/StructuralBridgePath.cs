@@ -35,10 +35,10 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand()
+    public string SetGWACommand()
     {
       if (this.Value == null)
-        return;
+        return "";
 
       Type destType = typeof(GSABridgePath);
 
@@ -66,7 +66,7 @@ namespace SpeckleStructuralGSA
           path.LeftRailFactor.ToString()
       };
 
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      return (string.Join("\t", ls));
     }
 
     private string PathTypeToGWAString(StructuralBridgePathType pathType)
@@ -123,7 +123,7 @@ namespace SpeckleStructuralGSA
       {
         GSABridgePath path = new GSABridgePath() { GWACommand = p };
         //Pass in ALL the nodes and members - the Parse_ method will search through them
-        path.ParseGWACommand(Initialiser.Interface);
+        path.ParseGWACommand();
         paths.Add(path);
       }
 

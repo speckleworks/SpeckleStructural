@@ -15,19 +15,19 @@ namespace SpeckleStructuralRevit
       return null;
     }
 
-    public static List<SpeckleObject> ToSpeckle(this Autodesk.Revit.DB.Structure.AreaLoad myAreaLoad)
+    public static List<SpeckleObject> ToSpeckle(this AreaLoad myAreaLoad)
     {
-      List<double[]> polylines = new List<double[]>();
+      var polylines = new List<double[]>();
       
       var loops = myAreaLoad.GetLoops();
-      foreach (CurveLoop loop in loops)
+      foreach (var loop in loops)
       {
-        List<double> coor = new List<double>();
-        foreach (Curve curve in loop)
+        var coor = new List<double>();
+        foreach (var curve in loop)
         {
           var points = curve.Tessellate();
 
-          foreach (XYZ p in points.Skip(1))
+          foreach (var p in points.Skip(1))
           {
             coor.Add(p.X / Scale);
             coor.Add(p.Y / Scale);
@@ -51,27 +51,27 @@ namespace SpeckleStructuralRevit
       {
         var hostTransform = myAreaLoad.HostElement.GetLocalCoordinateSystem();
 
-        XYZ b0 = hostTransform.get_Basis(0);
-        XYZ b1 = hostTransform.get_Basis(1);
-        XYZ b2 = hostTransform.get_Basis(2);
+        var b0 = hostTransform.get_Basis(0);
+        var b1 = hostTransform.get_Basis(1);
+        var b2 = hostTransform.get_Basis(2);
 
-        double fx = forces.Value[0] * b0.X + forces.Value[1] * b1.X + forces.Value[2] * b2.X;
-        double fy = forces.Value[0] * b0.Y + forces.Value[1] * b1.Y + forces.Value[2] * b2.Y;
-        double fz = forces.Value[0] * b0.Z + forces.Value[1] * b1.Z + forces.Value[2] * b2.Z;
+        var fx = forces.Value[0] * b0.X + forces.Value[1] * b1.X + forces.Value[2] * b2.X;
+        var fy = forces.Value[0] * b0.Y + forces.Value[1] * b1.Y + forces.Value[2] * b2.Y;
+        var fz = forces.Value[0] * b0.Z + forces.Value[1] * b1.Z + forces.Value[2] * b2.Z;
 
         forces = new StructuralVectorThree(new double[] { fx, fy, fz });
       }
       else if (myAreaLoad.OrientTo == LoadOrientTo.WorkPlane)
       {
-        var workPlane = ((Autodesk.Revit.DB.SketchPlane)Doc.GetElement(myAreaLoad.WorkPlaneId)).GetPlane();
+        var workPlane = ((SketchPlane)Doc.GetElement(myAreaLoad.WorkPlaneId)).GetPlane();
         
-        XYZ b0 = workPlane.XVec;
-        XYZ b1 = workPlane.YVec;
-        XYZ b2 = workPlane.Normal;
+        var b0 = workPlane.XVec;
+        var b1 = workPlane.YVec;
+        var b2 = workPlane.Normal;
 
-        double fx = forces.Value[0] * b0.X + forces.Value[1] * b1.X + forces.Value[2] * b2.X;
-        double fy = forces.Value[0] * b0.Y + forces.Value[1] * b1.Y + forces.Value[2] * b2.Y;
-        double fz = forces.Value[0] * b0.Z + forces.Value[1] * b1.Z + forces.Value[2] * b2.Z;
+        var fx = forces.Value[0] * b0.X + forces.Value[1] * b1.X + forces.Value[2] * b2.X;
+        var fy = forces.Value[0] * b0.Y + forces.Value[1] * b1.Y + forces.Value[2] * b2.Y;
+        var fz = forces.Value[0] * b0.Z + forces.Value[1] * b1.Z + forces.Value[2] * b2.Z;
 
         forces = new StructuralVectorThree(new double[] { fx, fy, fz });
       }
@@ -101,10 +101,10 @@ namespace SpeckleStructuralRevit
           break;
       }
 
-      List<SpeckleObject> myLoads = new List<SpeckleObject>();
+      var myLoads = new List<SpeckleObject>();
 
-      int counter = 0;
-      foreach (double[] vals in polylines)
+      var counter = 0;
+      foreach (var vals in polylines)
       {
         var myLoad = new Structural2DLoadPanel();
         myLoad.Name = myAreaLoad.Name;

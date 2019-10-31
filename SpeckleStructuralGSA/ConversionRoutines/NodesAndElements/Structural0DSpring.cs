@@ -34,11 +34,11 @@ namespace SpeckleStructuralGSA
       int counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = GSA.GetSID(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Initialiser.Indexer.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; // Colour
       counter++; // Type
-      obj.PropertyRef = GSA.GetSID(typeof(GSASpringProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
+      obj.PropertyRef = Initialiser.Indexer.GetApplicationId(typeof(GSASpringProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
       counter++; // Group
 
       obj.Value = new List<double>();
@@ -62,10 +62,10 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAProxy GSA, int group = 0)
+    public string SetGWACommand(IGSAProxy GSA, int group = 0)
     {
       if (this.Value == null)
-        return;
+        return "";
 
       var spring = this.Value as Structural0DSpring;
 
@@ -110,7 +110,7 @@ namespace SpeckleStructuralGSA
       //ls.Add("NORMAL"); // Action // TODO: EL.4 SUPPORT
       ls.Add((spring.Dummy.HasValue && spring.Dummy.Value) ? "DUMMY" : "");
 
-      GSA.RunGWACommand(string.Join("\t", ls));
+      return (string.Join("\t", ls));
     }
   }
 
@@ -177,7 +177,7 @@ namespace SpeckleStructuralGSA
         if (pPieces[4] == "GRD_SPRING")
         {
           GSA0DSpring spring = new GSA0DSpring() { GWACommand = p };
-          spring.ParseGWACommand(Initialiser.Interface, nodes);
+          spring.ParseGWACommand(nodes);
           springs.Add(spring);
         }
       }

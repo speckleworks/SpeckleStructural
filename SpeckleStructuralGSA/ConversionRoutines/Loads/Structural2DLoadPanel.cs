@@ -66,7 +66,7 @@ namespace SpeckleStructuralGSA
       var loadCaseIndex = Convert.ToInt32(pieces[counter++]);
       if (loadCaseIndex > 0)
       {
-        obj.LoadCaseRef = GSA.GetSID(typeof(GSALoadCase).GetGSAKeyword(), loadCaseIndex);
+        obj.LoadCaseRef = Initialiser.Indexer.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), loadCaseIndex);
       }
 
       int loadAxisId = 0;
@@ -119,15 +119,15 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand()
+    public string SetGWACommand()
     {
       if (this.Value == null)
-        return;
+        return "";
 
       Structural2DLoadPanel load = this.Value as Structural2DLoadPanel;
 
       if (load.Loading == null)
-        return;
+        return "";
 
       string keyword = typeof(GSAGridAreaLoad).GetGSAKeyword();
 
@@ -163,6 +163,8 @@ namespace SpeckleStructuralGSA
 
       string[] direction = new string[3] { "X", "Y", "Z" };
 
+      var gwaCommands = new List<string>();
+
       for (int i = 0; i < load.Loading.Value.Count(); i++)
       {
         if (load.Loading.Value[i] == 0) continue;
@@ -187,7 +189,7 @@ namespace SpeckleStructuralGSA
         ls.Add(direction[i]);
         ls.Add(load.Loading.Value[i].ToString());
 
-        Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+        gwaCommands.Add(string.Join("\t", ls));
       }
 
       ls.Clear();
@@ -202,7 +204,7 @@ namespace SpeckleStructuralGSA
       ls.Add("0.01"); // Tolerance
       ls.Add("ONE"); // Span option
       ls.Add("0"); // Span angle
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      gwaCommands.Add(string.Join("\t", ls));
 
       ls.Clear();
       ls.Add("SET");
@@ -216,7 +218,9 @@ namespace SpeckleStructuralGSA
       ls.Add(elevation.ToString());
       ls.Add("0"); // Elevation above
       ls.Add("0"); // Elevation below
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      gwaCommands.Add(string.Join("\t", ls));
+
+      return string.Join("\n", gwaCommands);
     }
   }
 
@@ -255,7 +259,7 @@ namespace SpeckleStructuralGSA
       foreach (string p in newLines)
       {
         GSAGridAreaLoad load = new GSAGridAreaLoad() { GWACommand = p };
-        load.ParseGWACommand(Initialiser.Interface);
+        load.ParseGWACommand();
         loads.Add(load);
       }
 

@@ -40,15 +40,15 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand()
+    public string SetGWACommand()
     {
       if (this.Value == null)
-        return;
+        return "";
 
       StructuralGravityLoading load = this.Value as StructuralGravityLoading;
 
       if (load.GravityFactors == null)
-        return;
+        return "";
 
       string keyword = typeof(GSAGravityLoading).GetGSAKeyword();
 
@@ -76,7 +76,7 @@ namespace SpeckleStructuralGSA
           load.GravityFactors.Value[2].ToString(),
         };
 
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      return (string.Join("\t", ls));
     }
   }
 
@@ -119,7 +119,7 @@ namespace SpeckleStructuralGSA
       foreach (string p in newLines)
       {
         GSAGravityLoading load = new GSAGravityLoading() { GWACommand = p };
-        load.ParseGWACommand(Initialiser.Interface);
+        load.ParseGWACommand();
         loads.Add(load);
       }
 

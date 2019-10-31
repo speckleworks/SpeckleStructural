@@ -136,7 +136,7 @@ namespace SpeckleStructuralRevit
               var unitType = (string) parameters[ "__unitType::" + kvp.Key ];
               var sourceUnitString = UnitDictionary[ unitType ];
               DisplayUnitType sourceUnit;
-              Enum.TryParse<DisplayUnitType>( sourceUnitString, out sourceUnit );
+              Enum.TryParse( sourceUnitString, out sourceUnit );
 
               var convertedValue = UnitUtils.ConvertToInternalUnits( Convert.ToDouble( kvp.Value ), sourceUnit );
 
@@ -223,7 +223,7 @@ namespace SpeckleStructuralRevit
     /// <returns></returns>
     public static List<Curve> GetSegmentList( object crv )
     {
-      List<Curve> myCurves = new List<Curve>();
+      var myCurves = new List<Curve>();
       switch( crv )
       {
         case SpeckleLine line:
@@ -245,13 +245,13 @@ namespace SpeckleStructuralRevit
         }
         else
         {
-          List<SpecklePoint> pts = new List<SpecklePoint>();
-          for( int i = 0; i < poly.Value.Count; i += 3 )
+          var pts = new List<SpecklePoint>();
+          for( var i = 0; i < poly.Value.Count; i += 3 )
           {
             pts.Add( new SpecklePoint( poly.Value[ i ], poly.Value[ i + 1 ], poly.Value[ i + 2 ] ) );
           }
 
-          for( int i = 1; i < pts.Count; i++ )
+          for( var i = 1; i < pts.Count; i++ )
           {
             var speckleLine = new SpeckleLine( new double[ ] { pts[ i - 1 ].Value[ 0 ], pts[ i - 1 ].Value[ 1 ], pts[ i - 1 ].Value[ 2 ], pts[ i ].Value[ 0 ], pts[ i ].Value[ 1 ], pts[ i ].Value[ 2 ] } );
 

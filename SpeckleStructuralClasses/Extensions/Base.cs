@@ -36,7 +36,7 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      for (int i = 0; i < this.Value.Count(); i++)
+      for (var i = 0; i < this.Value.Count(); i++)
         this.Value[i] *= factor;
 
       this.Properties = ScaleProperties(this.Properties, factor);
@@ -128,7 +128,7 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      for (int i = 0; i < this.Value.Count(); i++)
+      for (var i = 0; i < this.Value.Count(); i++)
         this.Value[i] *= factor;
 
       this.Properties = ScaleProperties(this.Properties, factor);
@@ -273,10 +273,10 @@ namespace SpeckleStructuralClasses
     {
       if (angle == 0) return;
 
-      Matrix3D rotationMatrix = RotationMatrix(new Vector3D(Xdir.Value[0], Xdir.Value[1], Xdir.Value[2]), angle);
+      var rotationMatrix = RotationMatrix(new Vector3D(Xdir.Value[0], Xdir.Value[1], Xdir.Value[2]), angle);
 
-      Vector3D Y = Vector3D.Multiply(new Vector3D(Ydir.Value[0], Ydir.Value[1], Ydir.Value[2]), rotationMatrix);
-      Vector3D Z = Vector3D.Multiply(new Vector3D(Normal.Value[0], Normal.Value[1], Normal.Value[2]), rotationMatrix);
+      var Y = Vector3D.Multiply(new Vector3D(Ydir.Value[0], Ydir.Value[1], Ydir.Value[2]), rotationMatrix);
+      var Z = Vector3D.Multiply(new Vector3D(Normal.Value[0], Normal.Value[1], Normal.Value[2]), rotationMatrix);
 
       Ydir = new SpeckleVector(Y.X, Y.Y, Y.Z);
       Normal = new SpeckleVector(Z.X, Z.Y, Z.Z);
@@ -286,10 +286,10 @@ namespace SpeckleStructuralClasses
     {
       if (angle == 0) return;
 
-      Matrix3D rotationMatrix = RotationMatrix(new Vector3D(Ydir.Value[0], Ydir.Value[1], Ydir.Value[2]), angle);
+      var rotationMatrix = RotationMatrix(new Vector3D(Ydir.Value[0], Ydir.Value[1], Ydir.Value[2]), angle);
 
-      Vector3D X = Vector3D.Multiply(new Vector3D(Xdir.Value[0], Xdir.Value[1], Xdir.Value[2]), rotationMatrix);
-      Vector3D Z = Vector3D.Multiply(new Vector3D(Normal.Value[0], Normal.Value[1], Normal.Value[2]), rotationMatrix);
+      var X = Vector3D.Multiply(new Vector3D(Xdir.Value[0], Xdir.Value[1], Xdir.Value[2]), rotationMatrix);
+      var Z = Vector3D.Multiply(new Vector3D(Normal.Value[0], Normal.Value[1], Normal.Value[2]), rotationMatrix);
 
       Xdir = new SpeckleVector(X.X, X.Y, X.Z);
       Normal = new SpeckleVector(Z.X, Z.Y, Z.Z);
@@ -299,10 +299,10 @@ namespace SpeckleStructuralClasses
     {
       if (angle == 0) return;
 
-      Matrix3D rotationMatrix = RotationMatrix(new Vector3D(Normal.Value[0], Normal.Value[1], Normal.Value[2]), angle);
+      var rotationMatrix = RotationMatrix(new Vector3D(Normal.Value[0], Normal.Value[1], Normal.Value[2]), angle);
 
-      Vector3D X = Vector3D.Multiply(new Vector3D(Xdir.Value[0], Xdir.Value[1], Xdir.Value[2]), rotationMatrix);
-      Vector3D Y = Vector3D.Multiply(new Vector3D(Ydir.Value[0], Ydir.Value[1], Ydir.Value[2]), rotationMatrix);
+      var X = Vector3D.Multiply(new Vector3D(Xdir.Value[0], Xdir.Value[1], Xdir.Value[2]), rotationMatrix);
+      var Y = Vector3D.Multiply(new Vector3D(Ydir.Value[0], Ydir.Value[1], Ydir.Value[2]), rotationMatrix);
 
       Xdir = new SpeckleVector(X.X, X.Y, X.Z);
       Ydir = new SpeckleVector(Y.X, Y.Y, Y.Z);
@@ -310,8 +310,8 @@ namespace SpeckleStructuralClasses
 
     private static Matrix3D RotationMatrix(Vector3D zUnitVector, double angle)
     {
-      double cos = Math.Cos(angle);
-      double sin = Math.Sin(angle);
+      var cos = Math.Cos(angle);
+      var sin = Math.Sin(angle);
 
       // TRANSPOSED MATRIX TO ACCOMODATE MULTIPLY FUNCTION
       return new Matrix3D(

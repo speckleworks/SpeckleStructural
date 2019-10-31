@@ -14,9 +14,10 @@ namespace SpeckleStructuralGSA.Test
   {
     private List<SpeckleObject> receivedObjects;
 
-    public ReceiverProcessor(string directory, GSAInterfacer gsaInterfacer, GSATargetLayer layer = GSATargetLayer.Design) : base (directory)
+    public ReceiverProcessor(string directory, GSAProxy gsaInterfacer, GSACache gsaCache, GSATargetLayer layer = GSATargetLayer.Design) : base (directory)
     {
       GSAInterfacer = gsaInterfacer;
+      GSACache = gsaCache;
       Initialiser.Settings.TargetLayer = layer;
       ConstructTypeCastPriority(ioDirection.Receive, false);
     }
@@ -27,17 +28,11 @@ namespace SpeckleStructuralGSA.Test
 
       receivedObjects = JsonSpeckleStreamsToSpeckleObjects(savedJsonFileNames);
 
-      GSAInterfacer.Indexer.SetBaseline();
-
-      GSAInterfacer.PreReceiving();
-
       ScaleObjects();
-
-      GSAInterfacer.Indexer.ResetToBaseline();
 
       ConvertSpeckleObjectsToGsaInterfacerCache();
 
-      var gwaCommands = GSAInterfacer.GetSetCache();
+      var gwaCommands = GSACache.GetGwaSetCommands();
       foreach (var gwaC in gwaCommands)
       {
         gwaRecords.Add(new GwaRecord(ExtractApplicationId(gwaC), gwaC));
@@ -56,7 +51,7 @@ namespace SpeckleStructuralGSA.Test
     {
       //Status.ChangeStatus("Scaling objects");
       var scaleFactor = (1.0).ConvertUnit("mm", "m");
-      foreach (SpeckleObject o in receivedObjects)
+      foreach (var o in receivedObjects)
       {
         try
         {
@@ -79,12 +74,33 @@ namespace SpeckleStructuralGSA.Test
         foreach (var t in currentBatch)
         {
           var dummyObject = Activator.CreateInstance(t);
-
+          var keyword = "";
+          try
+          {
+            keyword = dummyObject.GetAttribute("GSAKeyword").ToString();
+          }
+          catch { }
           var valueType = t.GetProperty("Value").GetValue(dummyObject).GetType();
-          var targetObjects = receivedObjects.Where(o => o.GetType() == valueType);
-          Converter.Deserialise(targetObjects);
+          var targetObjects = receivedObjects.Where(o => o.GetType() == valueType).ToList();
 
-          receivedObjects.RemoveAll(x => targetObjects.Any(o => x == o));
+          for (int i = 0; i < targetObjects.Count(); i++)
+          {
+            var applicationId = targetObjects[i].ApplicationId;
+            var deserialiseReturn = ((string)Converter.Deserialise(targetObjects[i]));
+            var gwaCommands = deserialiseReturn.Split(new[] { '\n' }).Where(c => c.Length > 0).ToList();
+
+            for (int j = 0; j < gwaCommands.Count(); j++)
+            {
+              ProcessDeserialiseReturnObject(gwaCommands[j], out keyword, out int index, out string gwa, out GwaSetCommandType gwaSetCommandType);
+              var itemApplicationId = gwaCommands[j].ExtractApplicationId();
+
+              GSAInterfacer.SetGWA(gwaCommands[j]);
+
+              //Only cache the object against, the top-level GWA command, not the sub-commands
+              GSACache.Upsert(keyword, index, gwa, itemApplicationId, (itemApplicationId == applicationId) ? targetObjects[i] : null);
+            }
+          }
+
 
           traversedTypes.Add(t);
         }
@@ -92,6 +108,16 @@ namespace SpeckleStructuralGSA.Test
 
       // Write leftover
       Converter.Deserialise(receivedObjects);
+    }
+
+    public List<string> GetKeywords()
+    {
+      return TypePrerequisites.Select(i => i.Key.GetGSAKeyword()).Distinct().ToList();
+    }
+
+    public List<string> GetSpeckleTypes()
+    {
+      return TypePrerequisites.Select(i => i.Key.ToSpeckleTypeName()).Distinct().ToList();
     }
 
     private string ExtractApplicationId(string gwaCommand)

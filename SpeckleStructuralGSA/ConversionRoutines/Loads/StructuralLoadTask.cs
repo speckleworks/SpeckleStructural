@@ -64,10 +64,10 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand()
+    public string SetGWACommand()
     {
       if (this.Value == null)
-        return;
+        return "";
 
       StructuralLoadTask loadTask = this.Value as StructuralLoadTask;
 
@@ -201,7 +201,7 @@ namespace SpeckleStructuralGSA
           ls.Add("1");
           break;
       }
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      return (string.Join("\t", ls));
 
       // Set ANAL
       ls.Clear();
@@ -229,7 +229,7 @@ namespace SpeckleStructuralGSA
         }
         ls.Add(string.Join(" + ", subLs));
       }
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      return (string.Join("\t", ls));
     }
   }
 
@@ -269,7 +269,7 @@ namespace SpeckleStructuralGSA
       foreach (string p in newLines)
       {
         GSALoadTask task = new GSALoadTask() { GWACommand = p };
-        task.ParseGWACommand(Initialiser.Interface);
+        task.ParseGWACommand();
         loadTasks.Add(task);
       }
 

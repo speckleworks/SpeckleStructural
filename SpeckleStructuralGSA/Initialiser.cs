@@ -11,9 +11,6 @@ namespace SpeckleStructuralGSA
     public static IGSASettings Settings { get; set; }
     public static IGSAProxy Interface { get; set; }
     public static IGSACacheForKit Indexer { get; set; }
-
-    //public static ISpeckleObjectMerger Merger { get; set; }
-
     public static Dictionary<Type, List<object>> GSASenderObjects { get; set; } = new Dictionary<Type, List<object>>();
     
   }

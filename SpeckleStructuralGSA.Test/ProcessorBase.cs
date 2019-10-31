@@ -14,7 +14,8 @@ namespace SpeckleStructuralGSA.Test
     protected List<KeyValuePair<Type, List<Type>>> TypeCastPriority = new List<KeyValuePair<Type, List<Type>>>();
     protected string TestDataDirectory;
 
-    protected GSAInterfacer GSAInterfacer;
+    protected GSAProxy GSAInterfacer;
+    protected GSACache GSACache;
 
     //This should match the private member in GSAInterfacer
     protected const string SID_TAG = "speckle_app_id";
@@ -81,7 +82,7 @@ namespace SpeckleStructuralGSA.Test
         {
           if (t.GetAttribute("Stream", attributeType) != null)
             if (resultsOnly && t.GetAttribute("Stream", attributeType) as string != "results")
-              foreach (KeyValuePair<Type, List<Type>> kvp in TypePrerequisites)
+              foreach (var kvp in TypePrerequisites)
                 kvp.Value.Remove(t);
         }
       }
@@ -89,6 +90,44 @@ namespace SpeckleStructuralGSA.Test
       // Generate which GSA object to cast for each type
       TypeCastPriority = TypePrerequisites.ToList();
       TypeCastPriority.Sort((x, y) => x.Value.Count().CompareTo(y.Value.Count()));
+    }
+
+    protected void ProcessDeserialiseReturnObject(object deserialiseReturnObject, out string keyword, out int index, out string gwa, out GwaSetCommandType gwaSetCommandType)
+    {
+      index = 0;
+      keyword = "";
+      gwa = "";
+      gwaSetCommandType = GwaSetCommandType.Set;
+
+      if (!(deserialiseReturnObject is string))
+      {
+        return;
+      }
+
+      var fullGwa = (string)deserialiseReturnObject;
+
+      var pieces = fullGwa.ListSplit("\t").ToList();
+      if (pieces.Count() < 2)
+      {
+        return;
+      }
+
+      if (pieces[0].StartsWith("set_at", StringComparison.InvariantCultureIgnoreCase))
+      {
+        gwaSetCommandType = GwaSetCommandType.SetAt;
+        pieces.Remove(pieces[0]);
+      }
+      else if (pieces[0].StartsWith("set", StringComparison.InvariantCultureIgnoreCase))
+      {
+        gwaSetCommandType = GwaSetCommandType.Set;
+        pieces.Remove(pieces[0]);
+      }
+
+      gwa = string.Join("\t", pieces);
+      gwa.ExtractKeywordApplicationId(out keyword, out int? foundIndex, out string applicationId, out string gwaWithoutSet);
+      int.TryParse(pieces[1], out index);
+
+      return;
     }
   }
 }

@@ -65,7 +65,7 @@ namespace SpeckleStructuralClasses
     {
       get
       {
-        if (StructuralProperties.ContainsKey("numPoints") && int.TryParse(StructuralProperties["numPoints"].ToString(), out int numPoints))
+        if (StructuralProperties.ContainsKey("numPoints") && int.TryParse(StructuralProperties["numPoints"].ToString(), out var numPoints))
         {
           return numPoints;
         }
@@ -96,7 +96,7 @@ namespace SpeckleStructuralClasses
     [JsonIgnore]
     public double? Width
     {
-      get => (StructuralProperties.ContainsKey("width") && double.TryParse(StructuralProperties["width"].ToString(), out double width)) ? (double?) width : null;
+      get => (StructuralProperties.ContainsKey("width") && double.TryParse(StructuralProperties["width"].ToString(), out var width)) ? (double?) width : null;
       set => StructuralProperties["width"] = value;
     }
 

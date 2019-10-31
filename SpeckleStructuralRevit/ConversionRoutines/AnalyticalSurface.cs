@@ -15,9 +15,9 @@ namespace SpeckleStructuralRevit
       return null;
     }
 
-    public static List<SpeckleObject> ToSpeckle(this Autodesk.Revit.DB.Structure.AnalyticalModelSurface mySurface)
+    public static List<SpeckleObject> ToSpeckle(this AnalyticalModelSurface mySurface)
     {
-      List<SpeckleObject> returnObjects = new List<SpeckleObject>();
+      var returnObjects = new List<SpeckleObject>();
 
       if (!mySurface.IsEnabled())
         return new List<SpeckleObject>();
@@ -25,23 +25,23 @@ namespace SpeckleStructuralRevit
       // Get the family
       var myRevitElement = Doc.GetElement(mySurface.GetElementId());
 
-      Structural2DElementType type = Structural2DElementType.Generic;
-      if (myRevitElement is Autodesk.Revit.DB.Floor)
+      var type = Structural2DElementType.Generic;
+      if (myRevitElement is Floor)
         type = Structural2DElementType.Slab;
-      else if (myRevitElement is Autodesk.Revit.DB.Wall)
+      else if (myRevitElement is Wall)
         type = Structural2DElementType.Wall;
 
       // Voids first
 
       var voidLoops = mySurface.GetLoops(AnalyticalLoopType.Void);
-      foreach (CurveLoop loop in voidLoops)
+      foreach (var loop in voidLoops)
       {
-        List<double> coor = new List<double>();
-        foreach (Curve curve in loop)
+        var coor = new List<double>();
+        foreach (var curve in loop)
         {
           var points = curve.Tessellate();
           
-          foreach (XYZ p in points.Skip(1))
+          foreach (var p in points.Skip(1))
           {
             coor.Add(p.X / Scale);
             coor.Add(p.Y / Scale);
@@ -52,17 +52,17 @@ namespace SpeckleStructuralRevit
         returnObjects.Add(new Structural2DVoid(coor.ToArray(), null));
       }
 
-      List<double[]> polylines = new List<double[]>();
+      var polylines = new List<double[]>();
 
       var loops = mySurface.GetLoops(AnalyticalLoopType.External);
-      foreach (CurveLoop loop in loops)
+      foreach (var loop in loops)
       {
-        List<double> coor = new List<double>();
-        foreach (Curve curve in loop)
+        var coor = new List<double>();
+        foreach (var curve in loop)
         {
           var points = curve.Tessellate();
 
-          foreach (XYZ p in points.Skip(1))
+          foreach (var p in points.Skip(1))
           {
             coor.Add(p.X / Scale);
             coor.Add(p.Y / Scale);
@@ -89,14 +89,14 @@ namespace SpeckleStructuralRevit
         mySection.Name = Doc.GetElement(myRevitElement.GetTypeId()).Name;
         mySection.ApplicationId = Doc.GetElement(myRevitElement.GetTypeId()).UniqueId;
 
-        if (myRevitElement is Autodesk.Revit.DB.Floor)
+        if (myRevitElement is Floor)
         {
-          var myFloor = myRevitElement as Autodesk.Revit.DB.Floor;
+          var myFloor = myRevitElement as Floor;
           mySection.Thickness = myFloor.get_Parameter(BuiltInParameter.FLOOR_ATTR_THICKNESS_PARAM).AsDouble() / Scale;
         }
-        else if (myRevitElement is Autodesk.Revit.DB.Wall)
+        else if (myRevitElement is Wall)
         {
-          var myWall = myRevitElement as Autodesk.Revit.DB.Wall;
+          var myWall = myRevitElement as Wall;
           mySection.Thickness = myWall.WallType.Width / Scale;
         }
 
@@ -106,22 +106,22 @@ namespace SpeckleStructuralRevit
           Material myMat = null;
           StructuralAsset matAsset = null;
 
-          if (myRevitElement is Autodesk.Revit.DB.Floor)
+          if (myRevitElement is Floor)
           {
-            var myFloor = myRevitElement as Autodesk.Revit.DB.Floor;
+            var myFloor = myRevitElement as Floor;
             myMat = Doc.GetElement(myFloor.FloorType.StructuralMaterialId) as Material;
           }
-          else if (myRevitElement is Autodesk.Revit.DB.Wall)
+          else if (myRevitElement is Wall)
           {
-            var myWall = myRevitElement as Autodesk.Revit.DB.Wall;
+            var myWall = myRevitElement as Wall;
             myMat = Doc.GetElement(myWall.WallType.get_Parameter(BuiltInParameter.STRUCTURAL_MATERIAL_PARAM).AsElementId()) as Material;
           }
 
           SpeckleObject myMaterial = null;
 
-          matAsset = ((Autodesk.Revit.DB.PropertySetElement)Doc.GetElement(myMat.StructuralAssetId)).GetStructuralAsset();
+          matAsset = ((PropertySetElement)Doc.GetElement(myMat.StructuralAssetId)).GetStructuralAsset();
 
-          string matType = myMat.MaterialClass;
+          var matType = myMat.MaterialClass;
 
           switch (matType)
           {
@@ -176,13 +176,13 @@ namespace SpeckleStructuralRevit
       }
       catch { }
 
-      int counter = 0;
-      foreach(double[] coor in polylines)
+      var counter = 0;
+      foreach(var coor in polylines)
       {
         var dummyMesh = new Structural2DElementMesh(coor, null, type, null, null, null);
         
-        int numFaces = 0;
-        for (int i = 0; i < dummyMesh.Faces.Count(); i++)
+        var numFaces = 0;
+        for (var i = 0; i < dummyMesh.Faces.Count(); i++)
         {
           numFaces++;
           i += dummyMesh.Faces[i] + 3;

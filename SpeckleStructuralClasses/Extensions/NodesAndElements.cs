@@ -27,7 +27,7 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      for (int i = 0; i < this.Value.Count(); i++)
+      for (var i = 0; i < this.Value.Count(); i++)
         this.Value[i] *= factor;
 
       this.Properties = ScaleProperties(this.Properties, factor);
@@ -58,11 +58,11 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      for (int i = 0; i < this.Value.Count(); i++)
+      for (var i = 0; i < this.Value.Count(); i++)
         this.Value[i] *= factor;
 
       if (Offset != null)
-        for (int i = 0; i < this.Offset.Count(); i++)
+        for (var i = 0; i < this.Offset.Count(); i++)
           this.Offset[i].Scale(factor);
 
       this.Properties = ScaleProperties(this.Properties, factor);
@@ -107,7 +107,7 @@ namespace SpeckleStructuralClasses
       this.EndRelease = new List<StructuralVectorBoolSix>();
       this.Offset = new List<StructuralVectorThree>();
 
-      foreach (Structural1DElement element in elements)
+      foreach (var element in elements)
       {
         if (this.ElementType != element.ElementType)
           throw new Exception("Different ElementTypes.");
@@ -131,11 +131,11 @@ namespace SpeckleStructuralClasses
 
     public Structural1DElement[] Explode()
     {
-      List<Structural1DElement> elements = new List<Structural1DElement>();
+      var elements = new List<Structural1DElement>();
 
-      for (int i = 0; i < Value.Count() / 3 - 1; i++)
+      for (var i = 0; i < Value.Count() / 3 - 1; i++)
       {
-        Structural1DElement element = new Structural1DElement(
+        var element = new Structural1DElement(
             Value.Skip(i * 3).Take(6).ToArray(),
             ElementType,
             PropertyRef,
@@ -154,11 +154,11 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      for (int i = 0; i < this.Value.Count(); i++)
+      for (var i = 0; i < this.Value.Count(); i++)
         this.Value[i] *= factor;
 
       if (this.Offset != null)
-        for (int i = 0; i < this.Offset.Count(); i++)
+        for (var i = 0; i < this.Offset.Count(); i++)
           this.Offset[i].Scale(factor);
 
       this.Properties = ScaleProperties(this.Properties, factor);
@@ -192,7 +192,7 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      for (int i = 0; i < this.Vertices.Count(); i++)
+      for (var i = 0; i < this.Vertices.Count(); i++)
         this.Vertices[i] *= factor;
 
       this.Offset *= factor;
@@ -235,13 +235,13 @@ namespace SpeckleStructuralClasses
       this.Vertices = edgeVertices.ToList();
 
       // Perform mesh making
-      List<List<int>> faces = SplitMesh(
+      var faces = SplitMesh(
           edgeVertices,
           (Enumerable.Range(0, edgeVertices.Count() / 3).ToArray()));
 
       this.Faces = new List<int>();
 
-      foreach (List<int> face in faces)
+      foreach (var face in faces)
       {
         this.Faces.Add(face.Count() - 3);
         this.Faces.AddRange(face);
@@ -267,17 +267,17 @@ namespace SpeckleStructuralClasses
 
     public Structural2DElement[] Explode()
     {
-      List<Structural2DElement> elements = new List<Structural2DElement>();
+      var elements = new List<Structural2DElement>();
 
-      int faceCounter = 0;
+      var faceCounter = 0;
 
-      for (int i = 0; i < Faces.Count(); i++)
+      for (var i = 0; i < Faces.Count(); i++)
       {
-        List<double> vertices = new List<double>();
-        List<int> colors = new List<int>();
+        var vertices = new List<double>();
+        var colors = new List<int>();
 
-        int numVertices = Faces[i++] + 3;
-        for (int j = 0; j < numVertices; j++)
+        var numVertices = Faces[i++] + 3;
+        for (var j = 0; j < numVertices; j++)
         {
           if (Colors != null && Colors.Count() > Faces[i])
           {
@@ -287,7 +287,7 @@ namespace SpeckleStructuralClasses
         }
         i--;
 
-        Structural2DElement element = new Structural2DElement(
+        var element = new Structural2DElement(
             vertices.ToArray(),
             (new List<int>() { numVertices - 3 }).Concat(Enumerable.Range(0, numVertices)).ToArray(),
             colors.Count() == vertices.Count() / 3 ? colors.ToArray() : new int[0],
@@ -309,28 +309,28 @@ namespace SpeckleStructuralClasses
 
     public List<int[]> Edges()
     {
-      List<int[]> edgeConnectivities = new List<int[]>();
+      var edgeConnectivities = new List<int[]>();
 
       // Get face connectivities and close loop
-      List<int[]> faceConnnectivities = new List<int[]>();
-      for (int i = 0; i < Faces.Count(); i++)
+      var faceConnnectivities = new List<int[]>();
+      for (var i = 0; i < Faces.Count(); i++)
       {
-        int numVertices = Faces[i] + 3;
+        var numVertices = Faces[i] + 3;
         i++;
         faceConnnectivities.Add(Faces.Skip(i).Take(numVertices).Concat(Faces.Skip(i).Take(1)).ToArray());
         i += numVertices - 1;
       }
 
       // Get distinct edges
-      List<Tuple<int, int, string, string, double>> edges = new List<Tuple<int, int, string, string, double>>();
+      var edges = new List<Tuple<int, int, string, string, double>>();
 
-      foreach (int[] conn in faceConnnectivities)
+      foreach (var conn in faceConnnectivities)
       {
-        for (int i = 0; i < conn.Length - 1; i++)
+        for (var i = 0; i < conn.Length - 1; i++)
         {
-          string c1 = string.Join(",", this.Vertices.Skip(conn[i] * 3).Take(3).Select(x => Math.Round(x, 4).ToString()));
-          string c2 = string.Join(",", this.Vertices.Skip(conn[i + 1] * 3).Take(3).Select(x => Math.Round(x, 4).ToString()));
-          double length = Math.Pow(this.Vertices.Skip(conn[i] * 3).Take(1).First() - this.Vertices.Skip(conn[i + 1] * 3).Take(1).First(), 2) +
+          var c1 = string.Join(",", this.Vertices.Skip(conn[i] * 3).Take(3).Select(x => Math.Round(x, 4).ToString()));
+          var c2 = string.Join(",", this.Vertices.Skip(conn[i + 1] * 3).Take(3).Select(x => Math.Round(x, 4).ToString()));
+          var length = Math.Pow(this.Vertices.Skip(conn[i] * 3).Take(1).First() - this.Vertices.Skip(conn[i + 1] * 3).Take(1).First(), 2) +
             Math.Pow(this.Vertices.Skip(conn[i] * 3 + 1).Take(1).First() - this.Vertices.Skip(conn[i + 1] * 3 + 1).Take(1).First(), 2) +
             Math.Pow(this.Vertices.Skip(conn[i] * 3 + 2).Take(1).First() - this.Vertices.Skip(conn[i + 1] * 3 + 2).Take(1).First(), 2);
           length = Math.Sqrt(length);
@@ -351,11 +351,11 @@ namespace SpeckleStructuralClasses
       }
 
       // Reorder the edges
-      List<double> lengthsOfEdges = new List<double>();
+      var lengthsOfEdges = new List<double>();
       double currentLength = 0;
 
-      List<int> currentLoop = new List<int>();
-      List<string> flatCoor = new List<string>();
+      var currentLoop = new List<int>();
+      var flatCoor = new List<string>();
       currentLoop.Add(edges[0].Item1);
       currentLoop.Add(edges[0].Item2);
       flatCoor.Add(edges[0].Item3);
@@ -365,9 +365,9 @@ namespace SpeckleStructuralClasses
 
       while (edges.Count > 0)
       {
-        string commonVertex = flatCoor.Last();
+        var commonVertex = flatCoor.Last();
 
-        List<Tuple<int, int, string, string, double>> nextEdge = edges.Where(e => e.Item3 == commonVertex | e.Item4 == commonVertex).ToList();
+        var nextEdge = edges.Where(e => e.Item3 == commonVertex | e.Item4 == commonVertex).ToList();
 
         if (nextEdge.Count > 0)
         {
@@ -414,7 +414,7 @@ namespace SpeckleStructuralClasses
 
       var sortedEdgeConnectivities = new List<int[]>();
 
-      foreach (int i in ordered)
+      foreach (var i in ordered)
         sortedEdgeConnectivities.Add(edgeConnectivities[i]);
 
       return sortedEdgeConnectivities;
@@ -422,11 +422,11 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      for (int i = 0; i < this.Vertices.Count(); i++)
+      for (var i = 0; i < this.Vertices.Count(); i++)
         this.Vertices[i] *= factor;
 
       if (this.Offset != null)
-        for (int i = 0; i < this.Offset.Count(); i++)
+        for (var i = 0; i < this.Offset.Count(); i++)
           this.Offset[i] *= factor;
 
       this.Properties = ScaleProperties(this.Properties, factor);
@@ -440,7 +440,7 @@ namespace SpeckleStructuralClasses
       if (mesh.Length <= 3) return new List<List<int>>() { mesh.ToList() };
 
       // Need to ensure same area!
-      double currArea = IntegrateHasher(coordinates, mesh);
+      var currArea = IntegrateHasher(coordinates, mesh);
 
       // Assume area doesn't twist on itself
       if (currArea < 0)
@@ -449,26 +449,26 @@ namespace SpeckleStructuralClasses
         currArea *= -1;
       }
 
-      int indexToCut = 0;
-      int numCut = 3;
-      double bestCost = currArea * 10; // TODO: figure out a better way
-      List<int> newFace1 = new List<int>();
-      List<int> newFace2 = new List<int>();
+      var indexToCut = 0;
+      var numCut = 3;
+      var bestCost = currArea * 10; // TODO: figure out a better way
+      var newFace1 = new List<int>();
+      var newFace2 = new List<int>();
 
       do
       {
-        List<int> face1 = mesh.Take(numCut).ToList();
-        List<int> face2 = mesh.Skip(numCut - 1).ToList();
+        var face1 = mesh.Take(numCut).ToList();
+        var face2 = mesh.Skip(numCut - 1).ToList();
         face2.Add(mesh[0]);
 
-        double cost1 = IntegrateHasher(coordinates, face1.ToArray());
-        double cost2 = IntegrateHasher(coordinates, face2.ToArray());
+        var cost1 = IntegrateHasher(coordinates, face1.ToArray());
+        var cost2 = IntegrateHasher(coordinates, face2.ToArray());
 
         if (cost1 > 0 & cost2 > 0)
         {
           // Check to make sure that the new region does not encompass the other's points
-          bool flag = false;
-          for (int i = 1; i < face2.Count() - 1; i++)
+          var flag = false;
+          for (var i = 1; i < face2.Count() - 1; i++)
           {
             if (InTri(coordinates, face1.ToArray(), face2[i]))
             {
@@ -479,7 +479,7 @@ namespace SpeckleStructuralClasses
 
           if (!flag)
           {
-            double cost = Math.Abs(cost1 + cost2 - currArea);
+            var cost = Math.Abs(cost1 + cost2 - currArea);
             if (bestCost > cost)
             {
               // Track best solution
@@ -498,7 +498,7 @@ namespace SpeckleStructuralClasses
 
       } while (bestCost > 1e-10);
 
-      List<List<int>> returnVals = new List<List<int>>();
+      var returnVals = new List<List<int>>();
       if (newFace1.Count() > 0)
         returnVals.AddRange(SplitMesh(coordinates, newFace1.ToArray()));
       if (newFace2.Count() > 0)
@@ -509,11 +509,11 @@ namespace SpeckleStructuralClasses
     private static double IntegrateHasher(double[] coordinates, int[] vertices)
     {
       // Get coordinates
-      List<double> x = new List<double>();
-      List<double> y = new List<double>();
-      List<double> z = new List<double>();
+      var x = new List<double>();
+      var y = new List<double>();
+      var z = new List<double>();
 
-      foreach (int e in vertices)
+      foreach (var e in vertices)
       {
         x.Add(coordinates[e * 3]);
         y.Add(coordinates[e * 3 + 1]);
@@ -527,21 +527,21 @@ namespace SpeckleStructuralClasses
 
       //Integrate
       double area1 = 0;
-      for (int i = 0; i < x.Count() - 1; i++)
+      for (var i = 0; i < x.Count() - 1; i++)
         area1 += x[i] * y[i + 1] - y[i] * x[i + 1];
 
       if (Math.Abs(area1) > 1e-16) return area1;
 
       //Integrate
       double area2 = 0;
-      for (int i = 0; i < x.Count() - 1; i++)
+      for (var i = 0; i < x.Count() - 1; i++)
         area2 += x[i] * z[i + 1] - z[i] * x[i + 1];
 
       if (Math.Abs(area2) > 1e-16) return area2;
 
       //Integrate
       double area3 = 0;
-      for (int i = 0; i < y.Count() - 1; i++)
+      for (var i = 0; i < y.Count() - 1; i++)
         area3 += y[i] * z[i + 1] - z[i] * y[i + 1];
 
       if (Math.Abs(area3) > 1e-16) return area3;
@@ -552,19 +552,19 @@ namespace SpeckleStructuralClasses
     public static bool InTri(double[] coordinates, int[] tri, int point)
     {
       // Get coordinates
-      Point3D p0 = new Point3D(coordinates[tri[0] * 3], coordinates[tri[0] * 3 + 1], coordinates[tri[0] * 3 + 2]);
-      Point3D p1 = new Point3D(coordinates[tri[1] * 3], coordinates[tri[1] * 3 + 1], coordinates[tri[1] * 3 + 2]);
-      Point3D p2 = new Point3D(coordinates[tri[2] * 3], coordinates[tri[2] * 3 + 1], coordinates[tri[2] * 3 + 2]);
-      Point3D p = new Point3D(coordinates[point * 3], coordinates[point * 3 + 1], coordinates[point * 3 + 2]);
+      var p0 = new Point3D(coordinates[tri[0] * 3], coordinates[tri[0] * 3 + 1], coordinates[tri[0] * 3 + 2]);
+      var p1 = new Point3D(coordinates[tri[1] * 3], coordinates[tri[1] * 3 + 1], coordinates[tri[1] * 3 + 2]);
+      var p2 = new Point3D(coordinates[tri[2] * 3], coordinates[tri[2] * 3 + 1], coordinates[tri[2] * 3 + 2]);
+      var p = new Point3D(coordinates[point * 3], coordinates[point * 3 + 1], coordinates[point * 3 + 2]);
 
-      Vector3D u = Point3D.Subtract(p1, p0);
-      Vector3D v = Point3D.Subtract(p2, p0);
-      Vector3D n = Vector3D.CrossProduct(u, v);
-      Vector3D w = Point3D.Subtract(p, p0);
+      var u = Point3D.Subtract(p1, p0);
+      var v = Point3D.Subtract(p2, p0);
+      var n = Vector3D.CrossProduct(u, v);
+      var w = Point3D.Subtract(p, p0);
 
-      double gamma = Vector3D.DotProduct(Vector3D.CrossProduct(u, w), n) / (n.Length * n.Length);
-      double beta = Vector3D.DotProduct(Vector3D.CrossProduct(w, v), n) / (n.Length * n.Length);
-      double alpha = 1 - gamma - beta;
+      var gamma = Vector3D.DotProduct(Vector3D.CrossProduct(u, w), n) / (n.Length * n.Length);
+      var beta = Vector3D.DotProduct(Vector3D.CrossProduct(w, v), n) / (n.Length * n.Length);
+      var alpha = 1 - gamma - beta;
 
       if (alpha >= 0 & beta >= 0 & gamma >= 0 & alpha <= 1 & beta <= 1 & gamma <= 1)
         return true;
@@ -603,13 +603,13 @@ namespace SpeckleStructuralClasses
       this.Vertices = edgeVertices.ToList();
 
       // Perform mesh making
-      List<List<int>> faces = SplitMesh(
+      var faces = SplitMesh(
           edgeVertices,
           (Enumerable.Range(0, edgeVertices.Count() / 3).ToArray()));
 
       this.Faces = new List<int>();
 
-      foreach (List<int> face in faces)
+      foreach (var face in faces)
       {
         this.Faces.Add(face.Count() - 3);
         this.Faces.AddRange(face);
@@ -629,28 +629,28 @@ namespace SpeckleStructuralClasses
 
     public List<int[]> Edges()
     {
-      List<int[]> edgeConnectivities = new List<int[]>();
+      var edgeConnectivities = new List<int[]>();
 
       // Get face connectivities and close loop
-      List<int[]> faceConnnectivities = new List<int[]>();
-      for (int i = 0; i < Faces.Count(); i++)
+      var faceConnnectivities = new List<int[]>();
+      for (var i = 0; i < Faces.Count(); i++)
       {
-        int numVertices = Faces[i] + 3;
+        var numVertices = Faces[i] + 3;
         i++;
         faceConnnectivities.Add(Faces.Skip(i).Take(numVertices).Concat(Faces.Skip(i).Take(1)).ToArray());
         i += numVertices - 1;
       }
 
       // Get distinct edges
-      List<Tuple<int, int, string, string, double>> edges = new List<Tuple<int, int, string, string, double>>();
+      var edges = new List<Tuple<int, int, string, string, double>>();
 
-      foreach (int[] conn in faceConnnectivities)
+      foreach (var conn in faceConnnectivities)
       {
-        for (int i = 0; i < conn.Length - 1; i++)
+        for (var i = 0; i < conn.Length - 1; i++)
         {
-          string c1 = string.Join(",", this.Vertices.Skip(conn[i] * 3).Take(3).Select(x => Math.Round(x, 4).ToString()));
-          string c2 = string.Join(",", this.Vertices.Skip(conn[i + 1] * 3).Take(3).Select(x => Math.Round(x, 4).ToString()));
-          double length = Math.Pow(this.Vertices.Skip(conn[i] * 3).Take(1).First() - this.Vertices.Skip(conn[i + 1] * 3).Take(1).First(), 2) +
+          var c1 = string.Join(",", this.Vertices.Skip(conn[i] * 3).Take(3).Select(x => Math.Round(x, 4).ToString()));
+          var c2 = string.Join(",", this.Vertices.Skip(conn[i + 1] * 3).Take(3).Select(x => Math.Round(x, 4).ToString()));
+          var length = Math.Pow(this.Vertices.Skip(conn[i] * 3).Take(1).First() - this.Vertices.Skip(conn[i + 1] * 3).Take(1).First(), 2) +
             Math.Pow(this.Vertices.Skip(conn[i] * 3 + 1).Take(1).First() - this.Vertices.Skip(conn[i + 1] * 3 + 1).Take(1).First(), 2) +
             Math.Pow(this.Vertices.Skip(conn[i] * 3 + 2).Take(1).First() - this.Vertices.Skip(conn[i + 1] * 3 + 2).Take(1).First(), 2);
           length = Math.Sqrt(length);
@@ -671,11 +671,11 @@ namespace SpeckleStructuralClasses
       }
 
       // Reorder the edges
-      List<double> lengthsOfEdges = new List<double>();
+      var lengthsOfEdges = new List<double>();
       double currentLength = 0;
 
-      List<int> currentLoop = new List<int>();
-      List<string> flatCoor = new List<string>();
+      var currentLoop = new List<int>();
+      var flatCoor = new List<string>();
       currentLoop.Add(edges[0].Item1);
       currentLoop.Add(edges[0].Item2);
       flatCoor.Add(edges[0].Item3);
@@ -685,9 +685,9 @@ namespace SpeckleStructuralClasses
 
       while (edges.Count > 0)
       {
-        string commonVertex = flatCoor.Last();
+        var commonVertex = flatCoor.Last();
 
-        List<Tuple<int, int, string, string, double>> nextEdge = edges.Where(e => e.Item3 == commonVertex | e.Item4 == commonVertex).ToList();
+        var nextEdge = edges.Where(e => e.Item3 == commonVertex | e.Item4 == commonVertex).ToList();
 
         if (nextEdge.Count > 0)
         {
@@ -734,7 +734,7 @@ namespace SpeckleStructuralClasses
 
       var sortedEdgeConnectivities = new List<int[]>();
 
-      foreach (int i in ordered)
+      foreach (var i in ordered)
         sortedEdgeConnectivities.Add(edgeConnectivities[i]);
 
       return sortedEdgeConnectivities;
@@ -742,7 +742,7 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      for (int i = 0; i < this.Vertices.Count(); i++)
+      for (var i = 0; i < this.Vertices.Count(); i++)
         this.Vertices[i] *= factor;
 
       this.Properties = ScaleProperties(this.Properties, factor);
@@ -756,7 +756,7 @@ namespace SpeckleStructuralClasses
       if (mesh.Length <= 3) return new List<List<int>>() { mesh.ToList() };
 
       // Need to ensure same area!
-      double currArea = IntegrateHasher(coordinates, mesh);
+      var currArea = IntegrateHasher(coordinates, mesh);
 
       // Assume area doesn't twist on itself
       if (currArea < 0)
@@ -765,26 +765,26 @@ namespace SpeckleStructuralClasses
         currArea *= -1;
       }
 
-      int indexToCut = 0;
-      int numCut = 3;
-      double bestCost = currArea * 10; // TODO: figure out a better way
-      List<int> newFace1 = new List<int>();
-      List<int> newFace2 = new List<int>();
+      var indexToCut = 0;
+      var numCut = 3;
+      var bestCost = currArea * 10; // TODO: figure out a better way
+      var newFace1 = new List<int>();
+      var newFace2 = new List<int>();
 
       do
       {
-        List<int> face1 = mesh.Take(numCut).ToList();
-        List<int> face2 = mesh.Skip(numCut - 1).ToList();
+        var face1 = mesh.Take(numCut).ToList();
+        var face2 = mesh.Skip(numCut - 1).ToList();
         face2.Add(mesh[0]);
 
-        double cost1 = IntegrateHasher(coordinates, face1.ToArray());
-        double cost2 = IntegrateHasher(coordinates, face2.ToArray());
+        var cost1 = IntegrateHasher(coordinates, face1.ToArray());
+        var cost2 = IntegrateHasher(coordinates, face2.ToArray());
 
         if (cost1 > 0 & cost2 > 0)
         {
           // Check to make sure that the new region does not encompass the other's points
-          bool flag = false;
-          for (int i = 1; i < face2.Count() - 1; i++)
+          var flag = false;
+          for (var i = 1; i < face2.Count() - 1; i++)
           {
             if (InTri(coordinates, face1.ToArray(), face2[i]))
             {
@@ -795,7 +795,7 @@ namespace SpeckleStructuralClasses
 
           if (!flag)
           {
-            double cost = Math.Abs(cost1 + cost2 - currArea);
+            var cost = Math.Abs(cost1 + cost2 - currArea);
             if (bestCost > cost)
             {
               // Track best solution
@@ -814,7 +814,7 @@ namespace SpeckleStructuralClasses
 
       } while (bestCost > 1e-10);
 
-      List<List<int>> returnVals = new List<List<int>>();
+      var returnVals = new List<List<int>>();
       if (newFace1.Count() > 0)
         returnVals.AddRange(SplitMesh(coordinates, newFace1.ToArray()));
       if (newFace2.Count() > 0)
@@ -825,11 +825,11 @@ namespace SpeckleStructuralClasses
     private static double IntegrateHasher(double[] coordinates, int[] vertices)
     {
       // Get coordinates
-      List<double> x = new List<double>();
-      List<double> y = new List<double>();
-      List<double> z = new List<double>();
+      var x = new List<double>();
+      var y = new List<double>();
+      var z = new List<double>();
 
-      foreach (int e in vertices)
+      foreach (var e in vertices)
       {
         x.Add(coordinates[e * 3]);
         y.Add(coordinates[e * 3 + 1]);
@@ -843,21 +843,21 @@ namespace SpeckleStructuralClasses
 
       //Integrate
       double area1 = 0;
-      for (int i = 0; i < x.Count() - 1; i++)
+      for (var i = 0; i < x.Count() - 1; i++)
         area1 += x[i] * y[i + 1] - y[i] * x[i + 1];
 
       if (Math.Abs(area1) > 1e-16) return area1;
 
       //Integrate
       double area2 = 0;
-      for (int i = 0; i < x.Count() - 1; i++)
+      for (var i = 0; i < x.Count() - 1; i++)
         area2 += x[i] * z[i + 1] - z[i] * y[i + 1];
 
       if (Math.Abs(area2) > 1e-16) return area2;
 
       //Integrate
       double area3 = 0;
-      for (int i = 0; i < y.Count() - 1; i++)
+      for (var i = 0; i < y.Count() - 1; i++)
         area3 += y[i] * z[i + 1] - z[i] * y[i + 1];
 
       if (Math.Abs(area3) > 1e-16) return area3;
@@ -868,19 +868,19 @@ namespace SpeckleStructuralClasses
     public static bool InTri(double[] coordinates, int[] tri, int point)
     {
       // Get coordinates
-      Point3D p0 = new Point3D(coordinates[tri[0] * 3], coordinates[tri[0] * 3 + 1], coordinates[tri[0] * 3 + 2]);
-      Point3D p1 = new Point3D(coordinates[tri[1] * 3], coordinates[tri[1] * 3 + 1], coordinates[tri[1] * 3 + 2]);
-      Point3D p2 = new Point3D(coordinates[tri[2] * 3], coordinates[tri[2] * 3 + 1], coordinates[tri[2] * 3 + 2]);
-      Point3D p = new Point3D(coordinates[point * 3], coordinates[point * 3 + 1], coordinates[point * 3 + 2]);
+      var p0 = new Point3D(coordinates[tri[0] * 3], coordinates[tri[0] * 3 + 1], coordinates[tri[0] * 3 + 2]);
+      var p1 = new Point3D(coordinates[tri[1] * 3], coordinates[tri[1] * 3 + 1], coordinates[tri[1] * 3 + 2]);
+      var p2 = new Point3D(coordinates[tri[2] * 3], coordinates[tri[2] * 3 + 1], coordinates[tri[2] * 3 + 2]);
+      var p = new Point3D(coordinates[point * 3], coordinates[point * 3 + 1], coordinates[point * 3 + 2]);
 
-      Vector3D u = Point3D.Subtract(p1, p0);
-      Vector3D v = Point3D.Subtract(p2, p0);
-      Vector3D n = Vector3D.CrossProduct(u, v);
-      Vector3D w = Point3D.Subtract(p, p0);
+      var u = Point3D.Subtract(p1, p0);
+      var v = Point3D.Subtract(p2, p0);
+      var n = Vector3D.CrossProduct(u, v);
+      var w = Point3D.Subtract(p, p0);
 
-      double gamma = Vector3D.DotProduct(Vector3D.CrossProduct(u, w), n) / (n.Length * n.Length);
-      double beta = Vector3D.DotProduct(Vector3D.CrossProduct(w, v), n) / (n.Length * n.Length);
-      double alpha = 1 - gamma - beta;
+      var gamma = Vector3D.DotProduct(Vector3D.CrossProduct(u, w), n) / (n.Length * n.Length);
+      var beta = Vector3D.DotProduct(Vector3D.CrossProduct(w, v), n) / (n.Length * n.Length);
+      var alpha = 1 - gamma - beta;
 
       if (alpha >= 0 & beta >= 0 & gamma >= 0 & alpha <= 1 & beta <= 1 & gamma <= 1)
         return true;

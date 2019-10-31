@@ -15,11 +15,14 @@ namespace SpeckleStructuralGSA.Test
   {
     protected IComAuto comAuto;
 
-    protected GSAInterfacer gsaInterfacer;
+    protected GSAProxy gsaInterfacer;
+    protected GSACache gsaCache;
 
     protected JsonSerializerSettings jsonSettings = new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore };
     protected string jsonDecSearch = @"(\d*\.\d\d\d\d\d\d\d\d)\d*";
     protected string TestDataDirectory;
+
+    protected int NodeIndex = 0;
 
     protected TestBase(string directory)
     {
@@ -31,7 +34,8 @@ namespace SpeckleStructuralGSA.Test
       var mockGsaCom = new Mock<IComAuto>();
 
       //So far only these methods are actually called
-      mockGsaCom.Setup(x => x.Gen_NodeAt(It.IsAny<double>(), It.IsAny<double>(), It.IsAny<double>(), It.IsAny<double>())).Returns((double x, double y, double z, double coin) => 1);
+      //The new cache is stricter about duplicates so just generate a new index every time so no duplicate entries with same index and different GWAs are tried to be cached
+      mockGsaCom.Setup(x => x.Gen_NodeAt(It.IsAny<double>(), It.IsAny<double>(), It.IsAny<double>(), It.IsAny<double>())).Returns((double x, double y, double z, double coin) => { NodeIndex++; return NodeIndex; });
       mockGsaCom.Setup(x => x.GwaCommand(It.IsAny<string>())).Returns((string x) => { return x.Contains("GET") ? (object)"" : (object)1; });
       mockGsaCom.Setup(x => x.VersionString()).Returns("Test\t1");
       mockGsaCom.Setup(x => x.LogFeatureUsage(It.IsAny<string>()));
@@ -40,13 +44,13 @@ namespace SpeckleStructuralGSA.Test
 
     protected List<SpeckleObject> ModelToSpeckleObjects(GSATargetLayer layer, bool resultsOnly, bool embedResults, string[] cases = null, string[] resultsToSend = null)
     {
-      gsaInterfacer.FullClearCache();
+      gsaCache.Clear();
 
       //Clear out all sender objects that might be there from the last test preparation
       Initialiser.GSASenderObjects = new Dictionary<Type, List<object>>();
 
       //Compile all GWA commands with application IDs
-      var senderProcessor = new SenderProcessor(TestDataDirectory, gsaInterfacer, layer, resultsOnly, embedResults, cases, resultsToSend);
+      var senderProcessor = new SenderProcessor(TestDataDirectory, gsaInterfacer, gsaCache, layer, resultsOnly, embedResults, cases, resultsToSend);
 
       senderProcessor.GsaInstanceToSpeckleObjects(out var speckleObjects);
 

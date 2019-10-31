@@ -35,10 +35,10 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand()
+    public string SetGWACommand()
     {
       if (this.Value == null)
-        return;
+        return "";
 
       Type destType = typeof(GSABridgeVehicle);
 
@@ -70,7 +70,7 @@ namespace SpeckleStructuralGSA
           axle.RightWheelLoad.ToString() });
       }
 
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      return (string.Join("\t", ls));
     }
   }
 
@@ -114,7 +114,7 @@ namespace SpeckleStructuralGSA
       {
         GSABridgeVehicle alignment = new GSABridgeVehicle() { GWACommand = p };
         //Pass in ALL the nodes and members - the Parse_ method will search through them
-        alignment.ParseGWACommand(Initialiser.Interface);
+        alignment.ParseGWACommand();
         alignments.Add(alignment);
       }
 

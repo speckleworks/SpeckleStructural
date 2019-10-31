@@ -46,10 +46,12 @@ namespace SpeckleStructuralGSA
       //this.Value = obj;
     }
 
-    public void SetGWACommand()
+    public string SetGWACommand()
     {
       if (this.Value == null)
-        return;
+        return "";
+
+      var gwaCommands = new List<string>();
 
       StructuralLoadTaskBuckling loadTask = this.Value as StructuralLoadTaskBuckling;
 
@@ -91,7 +93,9 @@ namespace SpeckleStructuralGSA
           "1"
         };
       var command = string.Join("\t", ls);
-      Initialiser.Interface.RunGWACommand(command);
+
+      gwaCommands.Add(command);
+      //Initialiser.Interface.RunGWACommand(command);
 
       for (var i = 0; i < loadTask.NumModes; i++)
       {
@@ -107,9 +111,13 @@ namespace SpeckleStructuralGSA
           "M" + (i + 1) //desc
         });
         command = string.Join("\t", ls);
-        Initialiser.Interface.RunGWACommand(command);
+        //Initialiser.Interface.RunGWACommand(command);
+        gwaCommands.Add(command);
       }
+
+      return string.Join("\n", gwaCommands);
     }
+    
   }
 
   public static partial class Conversions
@@ -150,7 +158,7 @@ namespace SpeckleStructuralGSA
       //    foreach (string p in newLines)
       //    {
       //      GSALoadTaskBuckling task = new GSALoadTaskBuckling() { GWACommand = p };
-      //      task.ParseGWACommand(Initialiser.Interface);
+      //      task.ParseGWACommand();
       //      loadTasks.Add(task);
       //    }
 

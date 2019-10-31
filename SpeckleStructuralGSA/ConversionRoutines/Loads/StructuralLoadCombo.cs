@@ -71,10 +71,10 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand()
+    public string SetGWACommand()
     {
       if (this.Value == null)
-        return;
+        return "";
 
       StructuralLoadCombo loadCombo = this.Value as StructuralLoadCombo;
 
@@ -135,7 +135,7 @@ namespace SpeckleStructuralGSA
           break;
       }
 
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      return (string.Join("\t", ls));
     }
   }
 
@@ -175,7 +175,7 @@ namespace SpeckleStructuralGSA
       foreach (string p in newLines)
       {
         GSALoadCombo combo = new GSALoadCombo() { GWACommand = p };
-        combo.ParseGWACommand(Initialiser.Interface);
+        combo.ParseGWACommand();
         loadCombos.Add(combo);
       }
 

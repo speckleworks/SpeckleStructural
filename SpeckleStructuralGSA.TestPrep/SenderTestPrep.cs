@@ -11,6 +11,7 @@ namespace SpeckleStructuralGSA.TestPrep
 
     public void SetupContext(string gsaFileName)
     {
+      /*
       gsaInterfacer = new GSAInterfacer
       {
         Indexer = new Indexer()
@@ -18,6 +19,7 @@ namespace SpeckleStructuralGSA.TestPrep
       Initialiser.Interface = gsaInterfacer;
       Initialiser.Settings = new Settings();
       gsaInterfacer.OpenFile(Helper.ResolveFullPath(gsaFileName, TestDataDirectory));
+      */
     }
 
     public bool SetUpTransmissionTestData(string outputJsonFileName, GSATargetLayer layer,

@@ -34,7 +34,7 @@ namespace SpeckleStructuralGSA
         restraints[i] = pieces[counter++] == "1";
       obj.Restraint = new StructuralVectorBoolSix(restraints);
       
-      int[] targetNodeRefs = GSA.ConvertGSAList(pieces[counter++], SpeckleGSAInterfaces.GSAEntity.NODE);
+      int[] targetNodeRefs = Initialiser.Interface.ConvertGSAList(pieces[counter++], SpeckleGSAInterfaces.GSAEntity.NODE);
 
       if (nodes != null)
       {
@@ -54,10 +54,10 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand()
+    public string SetGWACommand()
     {
       if (this.Value == null)
-        return;
+        return "";
 
       StructuralStagedNodalRestraints obj = this.Value as StructuralStagedNodalRestraints;
 			var destinationType = typeof(GSAStructuralStagedNodalRestraints);
@@ -93,7 +93,7 @@ namespace SpeckleStructuralGSA
 			ls.Add(nodesStr);
 			ls.Add(stageDefStr);
 
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      return (string.Join("\t", ls));
     }
   }
 

@@ -30,22 +30,22 @@ namespace SpeckleStructuralGSA
       obj.ApplicationId = Initialiser.Indexer.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; //Skip colour
-      string gsaAxis = pieces[counter++];
+      var gsaAxis = pieces[counter++];
 
       if (gsaAxis == "GLOBAL")
-        obj.Axis = HelperClass.Parse0DAxis(0, Initialiser.Interface, out string gwaRec);
+        obj.Axis = HelperClass.Parse0DAxis(0, Initialiser.Interface, out var gwaRec);
       else if (gsaAxis == "VERTICAL")
-        obj.Axis = HelperClass.Parse0DAxis(-14, Initialiser.Interface, out string gwaRec);
+        obj.Axis = HelperClass.Parse0DAxis(-14, Initialiser.Interface, out var gwaRec);
       else
       {
-        obj.Axis = HelperClass.Parse0DAxis(Convert.ToInt32(gsaAxis), Initialiser.Interface, out string gwaRec);
+        obj.Axis = HelperClass.Parse0DAxis(Convert.ToInt32(gsaAxis), Initialiser.Interface, out var gwaRec);
         this.SubGWACommand.Add(gwaRec);
       }
 
       var springPropertyType = pieces[counter++];
 
       var stiffnesses = new double[6];
-      double dampingRatio = 0;
+      var dampingRatio = 0d;
       switch (springPropertyType.ToLower())
       {
         case "axial":
@@ -112,20 +112,23 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand()
+    public string SetGWACommand()
     {
       if (this.Value == null)
-        return;
+        return "";
 
-      Type destType = typeof(GSASpringProperty);
+      var destType = typeof(GSASpringProperty);
 
-      StructuralSpringProperty springProp = this.Value as StructuralSpringProperty;
+      var springProp = this.Value as StructuralSpringProperty;
 
-      string keyword = destType.GetGSAKeyword();
+      var keyword = destType.GetGSAKeyword();
 
-      int index = Initialiser.Indexer.ResolveIndex(keyword, destType.Name, springProp.ApplicationId);
+      var index = Initialiser.Indexer.ResolveIndex(keyword, springProp.Type, springProp.ApplicationId);
 
-      string axisRef = "GLOBAL";
+      var gwaAxisCommand = "";
+      var gwaCommands = new List<string>();
+
+      var axisRef = "GLOBAL";
 
       if (springProp.Axis == null)
       {
@@ -145,12 +148,13 @@ namespace SpeckleStructuralGSA
         else
           try
           {
-            axisRef = HelperClass.SetAxis(springProp.Axis, springProp.Name).ToString();
+            HelperClass.SetAxis(springProp.Axis, out var axisIndex, out gwaAxisCommand, springProp.Name);
+            gwaCommands.Add(gwaAxisCommand);
           }
           catch { axisRef = "GLOBAL"; }
       }
 
-      List<string> ls = new List<string>
+      var ls = new List<string>
       {
         "SET",
         keyword + ":" + HelperClass.GenerateSID(springProp),
@@ -160,9 +164,11 @@ namespace SpeckleStructuralGSA
         axisRef
       };
 
-      ls.AddRange(SpringTypeCommandPieces(springProp.SpringType, springProp.Stiffness, springProp.DampingRatio));
+      ls.AddRange(SpringTypeCommandPieces(springProp.SpringType, springProp.Stiffness, springProp.DampingRatio ?? 0));
 
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      gwaCommands.Add(string.Join("\t", ls));
+
+      return string.Join("\n", gwaCommands);
     }
 
     private List<string> SpringTypeCommandPieces(StructuralSpringPropertyType structuralSpringPropertyType, StructuralVectorSix stiffness, double dampingRatio)
@@ -214,59 +220,32 @@ namespace SpeckleStructuralGSA
 
   public static partial class Conversions
   {
-    public static bool ToNative(this StructuralSpringProperty prop)
+    public static string ToNative(this StructuralSpringProperty prop)
     {
-      if (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
-        new GSASpringProperty() { Value = prop }.SetGWACommand();
-      else if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
-        new GSASpringProperty() { Value = prop }.SetGWACommand();
-
-      return true;
+      return new GSASpringProperty() { Value = prop }.SetGWACommand();
     }
 
     public static SpeckleObject ToSpeckle(this GSASpringProperty dummyObject)
     {
-      Type objType = dummyObject.GetType();
-
-      if (!Initialiser.GSASenderObjects.ContainsKey(objType))
-        Initialiser.GSASenderObjects[objType] = new List<object>();
+      var newLines = ToSpeckleBase<GSASpringProperty>();
 
       //Get all relevant GSA entities in this entire model
       var springProperties = new List<GSASpringProperty>();
 
-      string keyword = objType.GetGSAKeyword();
-      string[] subKeywords = objType.GetSubGSAKeyword();
-
-      string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
-      List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
-      foreach (string k in subKeywords)
-        deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
-
-      // Remove deleted lines
-      Initialiser.GSASenderObjects[objType].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (var kvp in Initialiser.GSASenderObjects)
-        kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
-
-      // Filter only new lines
-      string[] prevLines = Initialiser.GSASenderObjects[objType].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
-      string[] newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
-
-      foreach (string p in newLines)
+      foreach (var p in newLines)
       {
         try
         {
           var springProperty = new GSASpringProperty() { GWACommand = p };
-          springProperty.ParseGWACommand(Initialiser.Interface);
+          springProperty.ParseGWACommand();
           springProperties.Add(springProperty);
         }
         catch { }
       }
 
-      Initialiser.GSASenderObjects[objType].AddRange(springProperties);
+      Initialiser.GSASenderObjects[typeof(GSASpringProperty)].AddRange(springProperties);
 
-      if (springProperties.Count() > 0 || deletedLines.Count() > 0) return new SpeckleObject();
-
-      return new SpeckleNull();
+      return (springProperties.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

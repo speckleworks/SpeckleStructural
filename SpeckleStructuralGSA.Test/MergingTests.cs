@@ -11,6 +11,7 @@ using SpeckleCore;
 using System.Reflection;
 using AutoMapper;
 using SpeckleUtil;
+using SpeckleCoreGeometryClasses;
 
 namespace SpeckleStructuralGSA.Test
 {
@@ -18,11 +19,32 @@ namespace SpeckleStructuralGSA.Test
   public class MergingTests
   {
     [Test]
+    public void MergeTestAutomapperForStackOverlow()
+    {
+      var newObj = new cTest { dList = new List<double>() { 4, 5, 6 } };
+      var existingObj = new cTest { dList = new List<double> { 1, 2, 3 } };
+
+      var config = new MapperConfiguration(cfg =>
+      {
+        cfg.CreateMap<cTest, cTest>();
+        cfg.ForAllPropertyMaps(pm => true, (pm, c) => c.ResolveUsing(new ValueResolver(), pm.SourceMember.Name));
+      });
+
+      config.AssertConfigurationIsValid();
+
+      var m = config.CreateMapper();
+
+      var testResult = m.Map(newObj, existingObj);
+
+      Assert.AreEqual(new List<double>() { 4, 5, 6 }, testResult.dList);
+    }
+
+    [Test]
     public void MergeTestAutomapper()
     {
-      var newObj = new mTest { d = 5, e1 = eTest.NotSet, e2 = eTest.AVal };
+      var newObj = new mTest { d = 5, e1 = eTest.NotSet, e2 = eTest.AVal, dArr = new List<double>() };
       var existingStiffness = new StructuralVectorSix(new double[] { 10, 20, 30, 40, 50, 60 });
-      var existingObj = new mTest { s = "Test", e1 = eTest.BVal, dArr = new double[] { 1, 2, 3 }, v = existingStiffness };
+      var existingObj = new mTest { s = "Test", e1 = eTest.BVal, dArr = new List<double> { 1, 2, 3 }, v = existingStiffness };
 
       var config = new MapperConfiguration(cfg =>
       {        
@@ -41,6 +63,26 @@ namespace SpeckleStructuralGSA.Test
       Assert.AreEqual(eTest.BVal, testResult.e1);
       Assert.AreEqual(eTest.AVal, testResult.e2);
       Assert.AreEqual("Test", testResult.s);
+    }
+
+    [Test]
+    public void MergeTestAutoMapperBaseTypes()
+    {
+      var newObj = new StructuralNode { Value = new List<double> { 1, 2, 3 } };
+      var existingObj = new StructuralNode { Value = new List<double> { 4, 5, 6 } };
+
+      var config = new MapperConfiguration(cfg =>
+      {
+        cfg.CreateMap<StructuralNode, StructuralNode>();
+        cfg.CreateMap<SpecklePoint, SpecklePoint>();
+        cfg.ForAllPropertyMaps(pm => true, (pm, c) => c.ResolveUsing(new IgnoreNullResolver(), pm.SourceMember.Name));
+      });
+
+      config.AssertConfigurationIsValid();
+
+      var m = config.CreateMapper();
+
+      var testResult = m.Map(newObj, existingObj);
     }
 
     [Test]
@@ -208,7 +250,7 @@ namespace SpeckleStructuralGSA.Test
       {
         { testType, new List<object>() }
       };
-      Initialiser.Interface = mockGsaInterfacer.Object;
+      //Initialiser.Interface = mockGsaInterfacer.Object;
     }
   }
 
@@ -229,16 +271,24 @@ namespace SpeckleStructuralGSA.Test
 
     public eTest e2 { get; set; }
 
-    public double[] dArr { get; set; }
+    public List<double> dArr { get; set; }
 
     public StructuralVectorSix v { get; set; }
   }
+
+  
 
   public class IgnoreNullResolver : IMemberValueResolver<object, object, object, object>
   {
     public object Resolve(object source, object destination, object sourceMember, object destinationMember, ResolutionContext context)
     {
-      if (sourceMember is Enum && sourceMember.Equals(GetDefaultValue(sourceMember.GetType())))
+      if ((sourceMember is Enum && sourceMember.Equals(GetDefaultValue(sourceMember.GetType())))
+        || (sourceMember is Array && ((Array)sourceMember).Length == 0))
+      {
+        return destinationMember;
+      }
+      var collection = sourceMember as System.Collections.ICollection;
+      if (collection != null && collection.Count == 0)
       {
         return destinationMember;
       }
@@ -255,6 +305,24 @@ namespace SpeckleStructuralGSA.Test
       {
         return null;
       }
+    }
+  }
+  //For Stack Overlow
+  public class cTest
+  {
+    public List<double> dList { get; set; }
+  }
+
+  public class ValueResolver : IMemberValueResolver<object, object, object, object>
+  {
+    public object Resolve(object source, object destination, object sourceMember, object destinationMember, ResolutionContext context)
+    {
+      var collection = sourceMember as System.Collections.ICollection;
+      if (collection != null && collection.Count == 0)
+      {
+        return destinationMember;
+      }
+      return sourceMember ?? destinationMember;
     }
   }
 }

@@ -174,7 +174,9 @@ namespace SpeckleStructuralClasses
   [Serializable]
   public partial class StructuralSpringProperty : SpeckleObject, IStructural
   {
-    public override string Type { get => base.Type + "/StructuralSpringProperty"; }
+    private string speckleType => "/" + this.GetType().Name;
+
+    public override string Type { get => base.Type.Replace(speckleType, "") + speckleType; } //The replacement is to avoid a peculiarity with merging using Automapper
 
     [JsonIgnore]
     private Dictionary<string, object> StructuralProperties
@@ -201,9 +203,9 @@ namespace SpeckleStructuralClasses
 
     /// <summary>Application ID of StructuralSpringProperty.</summary>
     [JsonIgnore]
-    public double DampingRatio
+    public double? DampingRatio
     {
-      get => StructuralProperties.ContainsKey("dampingRatio") ? (double)StructuralProperties["dampingRatio"] : 0;
+      get => StructuralProperties.ContainsKey("dampingRatio") ? (double?)StructuralProperties["dampingRatio"] : null;
       set => StructuralProperties["dampingRatio"] = value;
     }
 

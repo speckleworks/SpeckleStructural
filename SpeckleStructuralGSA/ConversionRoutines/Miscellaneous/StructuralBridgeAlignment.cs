@@ -35,10 +35,10 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand()
+    public string SetGWACommand()
     {
       if (this.Value == null)
-        return;
+        return "";
 
       Type destType = typeof(GSABridgeAlignment);
 
@@ -52,6 +52,8 @@ namespace SpeckleStructuralGSA
       int index = Initialiser.Indexer.ResolveIndex(keyword, destType.Name, alignment.ApplicationId);
 
       var sid = HelperClass.GenerateSID(alignment);
+      
+      var gwaCommands = new List<string>();
 
       var ls = new List<string>();
 
@@ -67,7 +69,8 @@ namespace SpeckleStructuralGSA
         "0", // Elevation above
         "0" }); // Elevation below
 
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      gwaCommands.Add(string.Join("\t", ls));
+
       ls.Clear();
       ls.Add("SET");
       ls.Add("GRID_SURFACE.1" + ":" + sid);
@@ -79,7 +82,7 @@ namespace SpeckleStructuralGSA
       ls.Add("0.01"); // Tolerance
       ls.Add("ONE"); // Span option
       ls.Add("0"); // Span angle
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      gwaCommands.Add(string.Join("\t", ls));
 
 
       ls.Clear();
@@ -106,7 +109,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      return string.Join("\n", gwaCommands);
     }
   }
 
@@ -150,7 +153,7 @@ namespace SpeckleStructuralGSA
       {
         GSABridgeAlignment alignment = new GSABridgeAlignment() { GWACommand = p };
         //Pass in ALL the nodes and members - the Parse_ method will search through them
-        alignment.ParseGWACommand(Initialiser.Interface);
+        alignment.ParseGWACommand();
         alignments.Add(alignment);
       }
 

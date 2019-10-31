@@ -34,16 +34,16 @@ namespace SpeckleStructuralRevit
       }
       if ( null == opt )
         opt = new Options();
-      List<Solid> solids = new List<Solid>();
+      var solids = new List<Solid>();
       GeometryElement gElem = null;
       try
       {
-        if ( useOriginGeom4FamilyInstance && elem is Autodesk.Revit.DB.FamilyInstance )
+        if ( useOriginGeom4FamilyInstance && elem is FamilyInstance)
         {
           // we transform the geometry to instance coordinate to reflect actual geometry 
-          Autodesk.Revit.DB.FamilyInstance fInst = elem as Autodesk.Revit.DB.FamilyInstance;
+          var fInst = elem as FamilyInstance;
           gElem = fInst.GetOriginalGeometry( opt );
-          Transform trf = fInst.GetTransform();
+          var trf = fInst.GetTransform();
           if ( !trf.IsIdentity )
             gElem = gElem.GetTransformed( trf );
         }
@@ -53,7 +53,7 @@ namespace SpeckleStructuralRevit
         {
           return null;
         }
-        IEnumerator<GeometryObject> gIter = gElem.GetEnumerator();
+        var gIter = gElem.GetEnumerator();
         gIter.Reset();
         while ( gIter.MoveNext() )
         {
@@ -63,7 +63,7 @@ namespace SpeckleStructuralRevit
       catch ( Exception ex )
       {
         // In Revit, sometime get the geometry will failed.
-        string error = ex.Message;
+        var error = ex.Message;
       }
       return solids;
     }
@@ -75,16 +75,16 @@ namespace SpeckleStructuralRevit
     /// <returns></returns>
     public static List<Solid> GetSolids( GeometryObject gObj )
     {
-      List<Solid> solids = new List<Solid>();
+      var solids = new List<Solid>();
       if ( gObj is Solid ) // already solid
       {
-        Solid solid = gObj as Solid;
+        var solid = gObj as Solid;
         if ( solid.Faces.Size > 0 && Math.Abs( solid.Volume ) > 0 ) // skip invalid solid
           solids.Add( gObj as Solid );
       }
       else if ( gObj is GeometryInstance ) // find solids from GeometryInstance
       {
-        IEnumerator<GeometryObject> gIter2 = ( gObj as GeometryInstance ).GetInstanceGeometry().GetEnumerator();
+        var gIter2 = ( gObj as GeometryInstance ).GetInstanceGeometry().GetEnumerator();
         gIter2.Reset();
         while ( gIter2.MoveNext() )
         {
@@ -93,7 +93,7 @@ namespace SpeckleStructuralRevit
       }
       else if ( gObj is GeometryElement ) // find solids from GeometryElement
       {
-        IEnumerator<GeometryObject> gIter2 = ( gObj as GeometryElement ).GetEnumerator();
+        var gIter2 = ( gObj as GeometryElement ).GetEnumerator();
         gIter2.Reset();
         while ( gIter2.MoveNext() )
         {
@@ -129,7 +129,7 @@ namespace SpeckleStructuralRevit
             vertexArr.AddRange( new double[ ] { point.X / Scale, point.Y / Scale, point.Z / Scale } );
           }
 
-          for ( int i = 0; i < m.NumTriangles; i++ )
+          for ( var i = 0; i < m.NumTriangles; i++ )
           {
             var triangle = m.get_Triangle( i );
 

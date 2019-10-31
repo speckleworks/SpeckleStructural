@@ -29,7 +29,7 @@ namespace SpeckleStructuralGSA
       int counter = 1; // Skip identifier
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
 
-      int[] targetNodeRefs = GSA.ConvertGSAList(pieces[counter++], SpeckleGSAInterfaces.GSAEntity.NODE);
+      int[] targetNodeRefs = Initialiser.Interface.ConvertGSAList(pieces[counter++], SpeckleGSAInterfaces.GSAEntity.NODE);
 
       if (nodes != null)
       {
@@ -79,15 +79,15 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand()
+    public string SetGWACommand()
     {
       if (this.Value == null)
-        return;
+        return "";
 
       Structural0DLoad load = this.Value as Structural0DLoad;
 
       if (load.Loading == null)
-        return;
+        return "";
 
       string keyword = typeof(GSA0DLoad).GetGSAKeyword();
 
@@ -102,6 +102,8 @@ namespace SpeckleStructuralGSA
       }
 
       string[] direction = new string[6] { "X", "Y", "Z", "XX", "YY", "ZZ" };
+
+      var gwaCommands = new List<string>();
 
       for (int i = 0; i < load.Loading.Value.Count(); i++)
       {
@@ -121,8 +123,9 @@ namespace SpeckleStructuralGSA
         ls.Add(direction[i]);
         ls.Add(load.Loading.Value[i].ToString());
 
-        Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+        gwaCommands.Add(string.Join("\t", ls));
       }
+      return string.Join("\n", gwaCommands);
     }
   }
 
@@ -172,7 +175,9 @@ namespace SpeckleStructuralGSA
 
         // Raise node flag to make sure it gets sent
         foreach (GSANode n in nodes.Where(n => initLoad.Value.NodeRefs.Contains(n.Value.ApplicationId)))
+        {
           n.ForceSend = true;
+        }
 
         // Create load for each node applied
         foreach (string nRef in initLoad.Value.NodeRefs)

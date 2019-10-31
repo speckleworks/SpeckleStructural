@@ -20,11 +20,11 @@ namespace SpeckleStructuralGSA
       if (this.GWACommand == null)
         return;
 
-      StructuralMaterialConcrete obj = new StructuralMaterialConcrete();
+      var obj = new StructuralMaterialConcrete();
 
-      string[] pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit("\t");
 
-      int counter = 1; // Skip identifier
+      var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
       obj.ApplicationId = Initialiser.Indexer.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       counter++; // MAT.8
@@ -51,134 +51,115 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand()
+    public string SetGWACommand()
     {
       if (this.Value == null)
-        return;
+        return "";
 
-      StructuralMaterialConcrete mat = this.Value as StructuralMaterialConcrete;
+      var mat = this.Value as StructuralMaterialConcrete;
 
-      string keyword = typeof(GSAMaterialConcrete).GetGSAKeyword();
+      var keyword = typeof(GSAMaterialConcrete).GetGSAKeyword();
 
-      int index = Initialiser.Indexer.ResolveIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), typeof(GSAMaterialConcrete).Name, mat.ApplicationId);
+      var index = Initialiser.Indexer.ResolveIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), typeof(GSAMaterialConcrete).Name, mat.ApplicationId);
 
       // TODO: This function barely works.
-      List<string> ls = new List<string>();
+      var ls = new List<string>
+      {
+        "SET",
+        "MAT_CONCRETE.16" + ":" + HelperClass.GenerateSID(mat),
+        index.ToString(),
+        "MAT.8",
+        mat.Name == null || mat.Name == "" ? " " : mat.Name,
+        "YES", // Unlocked
+        mat.YoungsModulus.ToString(), // E
+        mat.PoissonsRatio.ToString(), // nu
+        mat.ShearModulus.ToString(), // G
+        mat.Density.ToString(), // rho
+        mat.CoeffThermalExpansion.ToString(), // alpha
+        "MAT_ANAL.1",
+        "0", // TODO: What is this?
+        "Concrete",
+        "-268435456", // TODO: What is this?
+        "MAT_ELAS_ISO",
+        "6", // TODO: What is this?
+        mat.YoungsModulus.ToString(), // E
+        mat.PoissonsRatio.ToString(), // nu
+        mat.Density.ToString(), // rho
+        mat.CoeffThermalExpansion.ToString(), // alpha
+        mat.ShearModulus.ToString(), // G
+        "0", // TODO: What is this?
+        "0", // TODO: What is this?
+        "0", // TODO: What is this?
+        "0", // TODO: What is this?
+        "0", // TODO: What is this?
+        "0", // TODO: What is this?
+        "0", // TODO: What is this?
+        "0", // Ultimate strain
+        "MAT_CURVE_PARAM.2",
+        "",
+        "UNDEF",
+        "1", // Material factor on strength
+        "1", // Material factor on elastic modulus
+        "MAT_CURVE_PARAM.2",
+        "",
+        "UNDEF",
+        "1", // Material factor on strength
+        "1", // Material factor on elastic modulus
+        "0", // Cost
+        "CYLINDER", // Strength type
+        "N", // Cement class
+        mat.CompressiveStrength.ToString(), // Concrete strength
+        "0", //ls.Add("27912500"); // Uncracked strength
+        "0", //ls.Add("17500000"); // Cracked strength
+        "0", //ls.Add("2366431"); // Tensile strength
+        "0", //ls.Add("2366431"); // Peak strength for curves
+        "0", // TODO: What is this?
+        "1", // Ratio of initial elastic modulus to secant modulus
+        "2", // Parabolic coefficient
+        "1", // Modifier on elastic stiffness
+        "0.00218389285990043", // SLS strain at peak stress
+        "0.0035", // SLS max strain
+        "0.00041125", // ULS strain at plateau stress
+        mat.MaxStrain.ToString(), // ULS max compressive strain
+        "0.0035", // TODO: What is this?
+        "0.002", // Plateau strain
+        "0.0035", // Max axial strain
+        "NO", // Lightweight?
+        mat.AggragateSize.ToString(), // Aggragate size
+        "0", // TODO: What is this?
+        "0", // TODO: What is this?
+        "1", // TODO: What is this?
+        "0.8825", // Constant stress depth
+        "0", // TODO: What is this?
+        "0", // TODO: What is this?
+        "0", // TODO: What is this?
+        "0", // TODO: What is this?
+        "0" // TODO: What is this?
+      };
 
-      ls.Add("SET");
-      ls.Add("MAT_CONCRETE.16" + ":" + HelperClass.GenerateSID(mat));
-      ls.Add(index.ToString());
-      ls.Add("MAT.8");
-      ls.Add(mat.Name == null || mat.Name == "" ? " " : mat.Name);
-      ls.Add("YES"); // Unlocked
-      ls.Add(mat.YoungsModulus.ToString()); // E
-      ls.Add(mat.PoissonsRatio.ToString()); // nu
-      ls.Add(mat.ShearModulus.ToString()); // G
-      ls.Add(mat.Density.ToString()); // rho
-      ls.Add(mat.CoeffThermalExpansion.ToString()); // alpha
-      ls.Add("MAT_ANAL.1");
-      ls.Add("0"); // TODO: What is this?
-      ls.Add("Concrete");
-      ls.Add("-268435456"); // TODO: What is this?
-      ls.Add("MAT_ELAS_ISO");
-      ls.Add("6"); // TODO: What is this?
-      ls.Add(mat.YoungsModulus.ToString()); // E
-      ls.Add(mat.PoissonsRatio.ToString()); // nu
-      ls.Add(mat.Density.ToString()); // rho
-      ls.Add(mat.CoeffThermalExpansion.ToString()); // alpha
-      ls.Add(mat.ShearModulus.ToString()); // G
-      ls.Add("0"); // TODO: What is this?
-      ls.Add("0"); // TODO: What is this?
-      ls.Add("0"); // TODO: What is this?
-      ls.Add("0"); // TODO: What is this?
-      ls.Add("0"); // TODO: What is this?
-      ls.Add("0"); // TODO: What is this?
-      ls.Add("0"); // TODO: What is this?
-      ls.Add("0"); // Ultimate strain
-      ls.Add("MAT_CURVE_PARAM.2");
-      ls.Add("");
-      ls.Add("UNDEF");
-      ls.Add("1"); // Material factor on strength
-      ls.Add("1"); // Material factor on elastic modulus
-      ls.Add("MAT_CURVE_PARAM.2");
-      ls.Add("");
-      ls.Add("UNDEF");
-      ls.Add("1"); // Material factor on strength
-      ls.Add("1"); // Material factor on elastic modulus
-      ls.Add("0"); // Cost
-      ls.Add("CYLINDER"); // Strength type
-      ls.Add("N"); // Cement class
-      ls.Add(mat.CompressiveStrength.ToString()); // Concrete strength
-      ls.Add("0"); //ls.Add("27912500"); // Uncracked strength
-      ls.Add("0"); //ls.Add("17500000"); // Cracked strength
-      ls.Add("0"); //ls.Add("2366431"); // Tensile strength
-      ls.Add("0"); //ls.Add("2366431"); // Peak strength for curves
-      ls.Add("0"); // TODO: What is this?
-      ls.Add("1"); // Ratio of initial elastic modulus to secant modulus
-      ls.Add("2"); // Parabolic coefficient
-      ls.Add("1"); // Modifier on elastic stiffness
-      ls.Add("0.00218389285990043"); // SLS strain at peak stress
-      ls.Add("0.0035"); // SLS max strain
-      ls.Add("0.00041125"); // ULS strain at plateau stress
-      ls.Add(mat.MaxStrain.ToString()); // ULS max compressive strain
-      ls.Add("0.0035"); // TODO: What is this?
-      ls.Add("0.002"); // Plateau strain
-      ls.Add("0.0035"); // Max axial strain
-      ls.Add("NO"); // Lightweight?
-      ls.Add(mat.AggragateSize.ToString()); // Aggragate size
-      ls.Add("0"); // TODO: What is this?
-      ls.Add("0"); // TODO: What is this?
-      ls.Add("1"); // TODO: What is this?
-      ls.Add("0.8825"); // Constant stress depth
-      ls.Add("0"); // TODO: What is this?
-      ls.Add("0"); // TODO: What is this?
-      ls.Add("0"); // TODO: What is this?
-      ls.Add("0"); // TODO: What is this?
-      ls.Add("0"); // TODO: What is this?
-
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      return (string.Join("\t", ls));
     }
   }
 
   public static partial class Conversions
   {
-    public static bool ToNative(this StructuralMaterialConcrete mat)
+    public static string ToNative(this StructuralMaterialConcrete mat)
     {
-      new GSAMaterialConcrete() { Value = mat }.SetGWACommand();
-
-      return true;
+      return new GSAMaterialConcrete() { Value = mat }.SetGWACommand();
     }
 
     public static SpeckleObject ToSpeckle(this GSAMaterialConcrete dummyObject)
     {
-      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSAMaterialConcrete)))
-        Initialiser.GSASenderObjects[typeof(GSAMaterialConcrete)] = new List<object>();
+      var newLines = ToSpeckleBase<GSAMaterialConcrete>();
 
-      List<GSAMaterialConcrete> materials = new List<GSAMaterialConcrete>();
+      var materials = new List<GSAMaterialConcrete>();
 
-      string keyword = typeof(GSAMaterialConcrete).GetGSAKeyword();
-      string[] subKeywords = typeof(GSAMaterialConcrete).GetSubGSAKeyword();
-
-      string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
-      List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
-      foreach (string k in subKeywords)
-        deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
-
-      // Remove deleted lines
-      Initialiser.GSASenderObjects[typeof(GSAMaterialConcrete)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (var kvp in Initialiser.GSASenderObjects)
-        kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
-
-      // Filter only new lines
-      string[] prevLines = Initialiser.GSASenderObjects[typeof(GSAMaterialConcrete)].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
-      string[] newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
-
-      foreach (string p in newLines)
+      foreach (var p in newLines)
       {
         try
         {
-          GSAMaterialConcrete mat = new GSAMaterialConcrete() { GWACommand = p };
-          mat.ParseGWACommand(Initialiser.Interface);
+          var mat = new GSAMaterialConcrete() { GWACommand = p };
+          mat.ParseGWACommand();
           materials.Add(mat);
         }
         catch { }
@@ -186,9 +167,7 @@ namespace SpeckleStructuralGSA
 
       Initialiser.GSASenderObjects[typeof(GSAMaterialConcrete)].AddRange(materials);
 
-      if (materials.Count() > 0 || deletedLines.Count() > 0) return new SpeckleObject();
-
-      return new SpeckleNull();
+      return (materials.Count() > 0 ) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

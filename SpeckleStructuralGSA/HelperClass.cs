@@ -76,8 +76,8 @@ namespace SpeckleStructuralGSA
     /// <returns>Rotation matrix</returns>
     public static Matrix3D RotationMatrix(Vector3D zUnitVector, double angle)
     {
-      double cos = Math.Cos(angle);
-      double sin = Math.Sin(angle);
+      var cos = Math.Cos(angle);
+      var sin = Math.Sin(angle);
 
       // TRANSPOSED MATRIX TO ACCOMODATE MULTIPLY FUNCTION
       return new Matrix3D(
@@ -149,11 +149,11 @@ namespace SpeckleStructuralGSA
 
       if (str.Contains("RGB"))
       {
-        string rgbString = str.Split(new char[] { '(', ')' })[1];
+        var rgbString = str.Split(new char[] { '(', ')' })[1];
         if (rgbString.Contains(","))
         {
-          string[] rgbValues = rgbString.Split(',');
-          int hexVal = Convert.ToInt32(rgbValues[0])
+          var rgbValues = rgbString.Split(',');
+          var hexVal = Convert.ToInt32(rgbValues[0])
               + Convert.ToInt32(rgbValues[1]) * 256
               + Convert.ToInt32(rgbValues[2]) * 256 * 256;
           return hexVal;
@@ -166,11 +166,11 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      string colStr = str.Replace('_', ' ').ToLower();
+      var colStr = str.Replace('_', ' ').ToLower();
       colStr = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(colStr);
       colStr = Regex.Replace(colStr, " ", "");
 
-      Color col = Color.FromKnownColor((KnownColor)Enum.Parse(typeof(KnownColor), colStr));
+      var col = Color.FromKnownColor((KnownColor)Enum.Parse(typeof(KnownColor), colStr));
       return col.R + col.G * 256 + col.B * 256 * 256;
     }
 
@@ -197,7 +197,7 @@ namespace SpeckleStructuralGSA
     /// <returns>Hex color</returns>
     public static int ArgbToHexColor(this int color)
     {
-      Color col = Color.FromArgb(color);
+      var col = Color.FromArgb(color);
       return col.R + col.G * 256 + col.B * 256 * 256;
     }
     #endregion
@@ -308,7 +308,7 @@ namespace SpeckleStructuralGSA
     /// <returns>True if string contails only digits</returns>
     public static bool IsDigits(this string str)
     {
-      foreach (char c in str)
+      foreach (var c in str)
         if (c < '0' || c > '9')
           return false;
 
@@ -397,11 +397,11 @@ namespace SpeckleStructuralGSA
     /// <returns>Flat array of coordinates</returns>
     public static double[] ParsePolylineDesc(string desc)
     {
-      List<double> coordinates = new List<double>();
+      var coordinates = new List<double>();
 
       foreach (Match m in Regex.Matches(desc, @"(?<=\()(.+?)(?=\))"))
       {
-        string[] pieces = m.Value.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+        var pieces = m.Value.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
         try
         {
@@ -421,20 +421,20 @@ namespace SpeckleStructuralGSA
     /// <returns></returns>
     public static List<Tuple<string, double>> ParseLoadDescription(string list, double currentMultiplier = 1)
     {
-      List<Tuple<string, double>> ret = new List<Tuple<string, double>>();
+      var ret = new List<Tuple<string, double>>();
 
       list = list.Replace(" ", "");
 
       double multiplier = 1;
-      bool negative = false;
+      var negative = false;
 
-      for (int pos = 0; pos < list.Count(); pos++)
+      for (var pos = 0; pos < list.Count(); pos++)
       {
-        char currChar = list[pos];
+        var currChar = list[pos];
 
         if (currChar >= '0' && currChar <= '9')
         {
-          string mult = "";
+          var mult = "";
           mult += currChar.ToString();
 
           pos++;
@@ -446,7 +446,7 @@ namespace SpeckleStructuralGSA
         }
         else if (currChar >= 'A' && currChar <= 'Z')
         {
-          string loadDesc = "";
+          var loadDesc = "";
           loadDesc += currChar.ToString();
 
           pos++;
@@ -454,7 +454,7 @@ namespace SpeckleStructuralGSA
             loadDesc += list[pos++].ToString();
           pos--;
 
-          double actualFactor = multiplier == 0 ? 1 : multiplier;
+          var actualFactor = multiplier == 0 ? 1 : multiplier;
           actualFactor *= currentMultiplier;
           actualFactor = negative ? -1 * actualFactor : actualFactor;
 
@@ -469,12 +469,12 @@ namespace SpeckleStructuralGSA
         {
           if (list[++pos] == 'o')
           {
-            Tuple<string, double> prevDesc = ret.Last();
+            var prevDesc = ret.Last();
 
-            string type = prevDesc.Item1[0].ToString();
-            int start = Convert.ToInt32(prevDesc.Item1.Substring(1)) + 1;
+            var type = prevDesc.Item1[0].ToString();
+            var start = Convert.ToInt32(prevDesc.Item1.Substring(1)) + 1;
 
-            string endDesc = "";
+            var endDesc = "";
 
             pos++;
             pos++;
@@ -482,15 +482,15 @@ namespace SpeckleStructuralGSA
               endDesc += list[pos++].ToString();
             pos--;
 
-            int end = Convert.ToInt32(endDesc);
+            var end = Convert.ToInt32(endDesc);
 
-            for (int i = start; i <= end; i++)
+            for (var i = start; i <= end; i++)
               ret.Add(new Tuple<string, double>(type + i.ToString(), prevDesc.Item2));
           }
         }
         else if (currChar == '(')
         {
-          double actualFactor = multiplier == 0 ? 1 : multiplier;
+          var actualFactor = multiplier == 0 ? 1 : multiplier;
           actualFactor *= currentMultiplier;
           actualFactor = negative ? -1 * actualFactor : actualFactor;
 
@@ -549,51 +549,59 @@ namespace SpeckleStructuralGSA
       return sid;
     }
 
-    public static int SetAxis(StructuralAxis axis, string name = "")
+    public static void SetAxis(StructuralAxis axis, out int index, out string gwa, string name = "")
     {
-      string gwaAxisName = name ?? "";
+      var gwaAxisName = name ?? "";
+      index = 0;
+      gwa = "";
 
-      if (axis.Xdir.Value.SequenceEqual(new double[] { 1, 0, 0 }) &&
+      if (axis == null 
+        || (axis.Xdir.Value.SequenceEqual(new double[] { 1, 0, 0 }) &&
           axis.Ydir.Value.SequenceEqual(new double[] { 0, 1, 0 }) &&
-          axis.Normal.Value.SequenceEqual(new double[] { 0, 0, 1 }))
-        return 0;
-
-      var ls = new List<string>();
-
+          axis.Normal.Value.SequenceEqual(new double[] { 0, 0, 1 })))
+      {
+        return;
+      }
       var res = Initialiser.Indexer.ResolveIndex("AXIS", "");
 
-      ls.Add("SET");
-      ls.Add("AXIS");
-      ls.Add(res.ToString());
-      ls.Add(gwaAxisName);
-      ls.Add("CART");
+      var ls = new List<string>
+      {
+        "SET",
+        "AXIS",
+        res.ToString(),
+        gwaAxisName,
+        "CART",
 
-      ls.Add("0");
-      ls.Add("0");
-      ls.Add("0");
+        "0",
+        "0",
+        "0",
 
-      ls.Add(axis.Xdir.Value[0].ToString());
-      ls.Add(axis.Xdir.Value[1].ToString());
-      ls.Add(axis.Xdir.Value[2].ToString());
+        axis.Xdir.Value[0].ToString(),
+        axis.Xdir.Value[1].ToString(),
+        axis.Xdir.Value[2].ToString(),
 
-      ls.Add(axis.Ydir.Value[0].ToString());
-      ls.Add(axis.Ydir.Value[1].ToString());
-      ls.Add(axis.Ydir.Value[2].ToString());
+        axis.Ydir.Value[0].ToString(),
+        axis.Ydir.Value[1].ToString(),
+        axis.Ydir.Value[2].ToString()
+      };
 
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      gwa = string.Join("\t", ls);
 
-      return res;
+      index = res;
     }
 
-    public static int SetAxis(SpeckleVector xVector, SpeckleVector xyVector, SpecklePoint origin, string name = "")
+    public static void SetAxis(SpeckleVector xVector, SpeckleVector xyVector, SpecklePoint origin, out int index, out string gwaCommand, string name = "")
     {
-      var res = Initialiser.Indexer.ResolveIndex("AXIS", "");
+      gwaCommand = "";
+      index = Initialiser.Indexer.ResolveIndex("AXIS", "");
+
+      var gwaCommands = new List<string>();
 
       var ls = new List<string>()
         {
           "SET",
           "AXIS",
-          res.ToString(),
+          index.ToString(),
           name ?? "",
           "CART",
 
@@ -610,9 +618,7 @@ namespace SpeckleStructuralGSA
           xyVector.Value[2].ToString(),
         };
 
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
-
-      return res;
+      gwaCommand = (string.Join("\t", ls));
     }
 
     /// <summary>
@@ -714,11 +720,11 @@ namespace SpeckleStructuralGSA
     /// <returns>Transformed array of coordinates</returns>
     public static double[] MapPointsLocal2Global(double[] values, StructuralAxis axis)
     {
-      List<double> newVals = new List<double>();
+      var newVals = new List<double>();
 
-      for (int i = 0; i < values.Length; i += 3)
+      for (var i = 0; i < values.Length; i += 3)
       {
-        List<double> coor = values.Skip(i).Take(3).ToList();
+        var coor = values.Skip(i).Take(3).ToList();
 
         double x = 0;
         double y = 0;
@@ -752,11 +758,11 @@ namespace SpeckleStructuralGSA
     /// <returns>Axis</returns>
     public static StructuralAxis LocalAxisEntity1D(double[] coor, StructuralVectorThree zAxis)
     {
-      Vector3D axisX = new Vector3D(coor[3] - coor[0], coor[4] - coor[1], coor[5] - coor[2]);
-      Vector3D axisZ = new Vector3D(zAxis.Value[0], zAxis.Value[1], zAxis.Value[2]);
-      Vector3D axisY = Vector3D.CrossProduct(axisZ, axisX);
+      var axisX = new Vector3D(coor[3] - coor[0], coor[4] - coor[1], coor[5] - coor[2]);
+      var axisZ = new Vector3D(zAxis.Value[0], zAxis.Value[1], zAxis.Value[2]);
+      var axisY = Vector3D.CrossProduct(axisZ, axisX);
 
-      StructuralAxis axis = new StructuralAxis(
+      var axis = new StructuralAxis(
           new StructuralVectorThree(new double[] { axisX.X, axisX.Y, axisX.Z }),
           new StructuralVectorThree(new double[] { axisY.X, axisY.Y, axisY.Z }),
           new StructuralVectorThree(new double[] { axisZ.X, axisZ.Y, axisZ.Z })
@@ -903,10 +909,11 @@ namespace SpeckleStructuralGSA
               new StructuralVectorThree(new double[] { z.X, z.Y, z.Z })
           );
         default:
-          string res = Initialiser.Interface.GetGWARecords("GET\tAXIS\t" + axis.ToString()).FirstOrDefault();
+          //string res = Initialiser.Interface.GetGWARecords("GET\tAXIS\t" + axis.ToString()).FirstOrDefault();
+          var res = Initialiser.Indexer.GetGwa("AXIS", axis).First();
           gwaRecord = res;
 
-          string[] pieces = res.Split(new char[] { '\t' });
+          var pieces = res.Split(new char[] { '\t' });
           if (pieces.Length < 13)
           {
             return new StructuralAxis(
@@ -915,19 +922,19 @@ namespace SpeckleStructuralGSA
                 new StructuralVectorThree(new double[] { 0, 0, 1 })
             );
           }
-          Vector3D origin = new Vector3D(Convert.ToDouble(pieces[4]), Convert.ToDouble(pieces[5]), Convert.ToDouble(pieces[6]));
+          var origin = new Vector3D(Convert.ToDouble(pieces[4]), Convert.ToDouble(pieces[5]), Convert.ToDouble(pieces[6]));
 
-          Vector3D X = new Vector3D(Convert.ToDouble(pieces[7]), Convert.ToDouble(pieces[8]), Convert.ToDouble(pieces[9]));
+          var X = new Vector3D(Convert.ToDouble(pieces[7]), Convert.ToDouble(pieces[8]), Convert.ToDouble(pieces[9]));
           X.Normalize();
 
 
-          Vector3D Yp = new Vector3D(Convert.ToDouble(pieces[10]), Convert.ToDouble(pieces[11]), Convert.ToDouble(pieces[12]));
-          Vector3D Z = Vector3D.CrossProduct(X, Yp);
+          var Yp = new Vector3D(Convert.ToDouble(pieces[10]), Convert.ToDouble(pieces[11]), Convert.ToDouble(pieces[12]));
+          var Z = Vector3D.CrossProduct(X, Yp);
           Z.Normalize();
 
-          Vector3D Y = Vector3D.CrossProduct(Z, X);
+          var Y = Vector3D.CrossProduct(Z, X);
 
-          Vector3D pos = new Vector3D(0, 0, 0);
+          var pos = new Vector3D(0, 0, 0);
 
           if (evalAtCoor == null)
             pieces[3] = "CART";
@@ -1095,10 +1102,22 @@ namespace SpeckleStructuralGSA
       return taskType;
     }
 
-    public static int NodeAt(IGSAInterfacer GSA, double x, double y, double z, double coincidentNodeAllowance, string applicationId = null)
+    
+    public static int NodeAt(double x, double y, double z, double coincidentNodeAllowance, string applicationId = null)
     {
-      return GSA.NodeAt(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).Name, x, y, z, Initialiser.Settings.CoincidentNodeAllowance, applicationId);
+      var index = Initialiser.Interface.NodeAt(x, y, z, coincidentNodeAllowance);
+      
+      if (applicationId != null)
+      {
+        //Only needs to be added to the cache if there is an application ID
+        var gwa = Initialiser.Interface.GetGwaForNode(index);
+        gwa = Initialiser.Interface.SetApplicationId(gwa, applicationId);
+        Initialiser.Indexer.Upsert(gwa);
+      }
+
+      return index;
     }
+    
     #endregion
   }
 }

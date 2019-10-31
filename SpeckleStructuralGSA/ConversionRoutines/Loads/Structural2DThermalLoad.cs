@@ -34,7 +34,7 @@ namespace SpeckleStructuralGSA
 
       if (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
       {
-        var elementId = GSA.ConvertGSAList(elementList, SpeckleGSAInterfaces.GSAEntity.ELEMENT);
+        var elementId = Initialiser.Interface.ConvertGSAList(elementList, SpeckleGSAInterfaces.GSAEntity.ELEMENT);
         foreach (int id in elementId)
         {
           IGSASpeckleContainer elem = e2Ds.Where(e => e.GSAId == id).FirstOrDefault();
@@ -87,10 +87,10 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand()
+    public string SetGWACommand()
     {
       if (this.Value == null)
-        return;
+        return "";
 
       Structural2DThermalLoad loading = this.Value as Structural2DThermalLoad;
 
@@ -146,7 +146,7 @@ namespace SpeckleStructuralGSA
         ls.Add(loading.BottomTemperature.ToString());
       }
 
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      return (string.Join("\t", ls));
     }
   }
 

@@ -14,7 +14,7 @@ namespace SpeckleStructuralRevit
       return null;
     }
 
-    public static List<SpeckleObject> ToSpeckle(this Autodesk.Revit.DB.Structure.LineLoad myLineLoad)
+    public static List<SpeckleObject> ToSpeckle(this LineLoad myLineLoad)
     {
       var myLoad = new Structural1DLoadLine();
 
@@ -24,7 +24,7 @@ namespace SpeckleStructuralRevit
 
       myLoad.Value = new List<double>();
 
-      foreach (XYZ p in points)
+      foreach (var p in points)
       {
         myLoad.Value.Add(p.X / Scale);
         myLoad.Value.Add(p.Y / Scale);
@@ -44,33 +44,33 @@ namespace SpeckleStructuralRevit
       {
         var hostTransform = myLineLoad.HostElement.GetLocalCoordinateSystem();
 
-        XYZ b0 = hostTransform.get_Basis(0);
-        XYZ b1 = hostTransform.get_Basis(1);
-        XYZ b2 = hostTransform.get_Basis(2);
+        var b0 = hostTransform.get_Basis(0);
+        var b1 = hostTransform.get_Basis(1);
+        var b2 = hostTransform.get_Basis(2);
 
-        double fx = forces.Value[0] * b0.X + forces.Value[1] * b1.X + forces.Value[2] * b2.X;
-        double fy = forces.Value[0] * b0.Y + forces.Value[1] * b1.Y + forces.Value[2] * b2.Y;
-        double fz = forces.Value[0] * b0.Z + forces.Value[1] * b1.Z + forces.Value[2] * b2.Z;
-        double mx = forces.Value[3] * b0.X + forces.Value[4] * b1.X + forces.Value[5] * b2.X;
-        double my = forces.Value[3] * b0.Y + forces.Value[4] * b1.Y + forces.Value[5] * b2.Y;
-        double mz = forces.Value[3] * b0.Z + forces.Value[4] * b1.Z + forces.Value[5] * b2.Z;
+        var fx = forces.Value[0] * b0.X + forces.Value[1] * b1.X + forces.Value[2] * b2.X;
+        var fy = forces.Value[0] * b0.Y + forces.Value[1] * b1.Y + forces.Value[2] * b2.Y;
+        var fz = forces.Value[0] * b0.Z + forces.Value[1] * b1.Z + forces.Value[2] * b2.Z;
+        var mx = forces.Value[3] * b0.X + forces.Value[4] * b1.X + forces.Value[5] * b2.X;
+        var my = forces.Value[3] * b0.Y + forces.Value[4] * b1.Y + forces.Value[5] * b2.Y;
+        var mz = forces.Value[3] * b0.Z + forces.Value[4] * b1.Z + forces.Value[5] * b2.Z;
 
         forces = new StructuralVectorSix(new double[] { fx, fy, fz, mx, my, mz });
       }
       else if (myLineLoad.OrientTo == LoadOrientTo.WorkPlane)
       {
-        var workPlane = ((Autodesk.Revit.DB.SketchPlane)Doc.GetElement(myLineLoad.WorkPlaneId)).GetPlane();
+        var workPlane = ((SketchPlane)Doc.GetElement(myLineLoad.WorkPlaneId)).GetPlane();
         
-        XYZ b0 = workPlane.XVec;
-        XYZ b1 = workPlane.YVec;
-        XYZ b2 = workPlane.Normal;
+        var b0 = workPlane.XVec;
+        var b1 = workPlane.YVec;
+        var b2 = workPlane.Normal;
 
-        double fx = forces.Value[0] * b0.X + forces.Value[1] * b1.X + forces.Value[2] * b2.X;
-        double fy = forces.Value[0] * b0.Y + forces.Value[1] * b1.Y + forces.Value[2] * b2.Y;
-        double fz = forces.Value[0] * b0.Z + forces.Value[1] * b1.Z + forces.Value[2] * b2.Z;
-        double mx = forces.Value[3] * b0.X + forces.Value[4] * b1.X + forces.Value[5] * b2.X;
-        double my = forces.Value[3] * b0.Y + forces.Value[4] * b1.Y + forces.Value[5] * b2.Y;
-        double mz = forces.Value[3] * b0.Z + forces.Value[4] * b1.Z + forces.Value[5] * b2.Z;
+        var fx = forces.Value[0] * b0.X + forces.Value[1] * b1.X + forces.Value[2] * b2.X;
+        var fy = forces.Value[0] * b0.Y + forces.Value[1] * b1.Y + forces.Value[2] * b2.Y;
+        var fz = forces.Value[0] * b0.Z + forces.Value[1] * b1.Z + forces.Value[2] * b2.Z;
+        var mx = forces.Value[3] * b0.X + forces.Value[4] * b1.X + forces.Value[5] * b2.X;
+        var my = forces.Value[3] * b0.Y + forces.Value[4] * b1.Y + forces.Value[5] * b2.Y;
+        var mz = forces.Value[3] * b0.Z + forces.Value[4] * b1.Z + forces.Value[5] * b2.Z;
 
         forces = new StructuralVectorSix(new double[] { fx, fy, fz, mx, my, mz });
       }

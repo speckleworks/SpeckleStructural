@@ -32,14 +32,14 @@ namespace SpeckleStructuralGSA
 
         foreach (var kvp in Initialiser.Settings.Element2DResults)
         {
-          foreach (string loadCase in Initialiser.Settings.ResultCases)
+          foreach (var loadCase in Initialiser.Settings.ResultCases)
           {
             if (!Initialiser.Interface.CaseExist(loadCase))
               continue;
 
-            foreach (GSA2DElement element in elements)
+            foreach (var element in elements)
             {
-              int id = element.GSAId;
+              var id = element.GSAId;
 
               if (element.Value.Result == null)
                 element.Value.Result = new Dictionary<string, object>();
@@ -73,73 +73,73 @@ namespace SpeckleStructuralGSA
       {
         Initialiser.GSASenderObjects[typeof(GSA2DElementResult)] = new List<object>();
 
-        List<GSA2DElementResult> results = new List<GSA2DElementResult>();
+        var results = new List<GSA2DElementResult>();
 
-        string keyword = HelperClass.GetGSAKeyword(typeof(GSA2DElement));
+        var keyword = HelperClass.GetGSAKeyword(typeof(GSA2DElement));
 
         foreach (var kvp in Initialiser.Settings.Element2DResults)
         {
-          foreach (string loadCase in Initialiser.Settings.ResultCases)
+          foreach (var loadCase in Initialiser.Settings.ResultCases)
           {
             if (!Initialiser.Interface.CaseExist(loadCase))
               continue;
 
-            int id = 1;
-            int highestIndex = (int)Initialiser.Interface.RunGWACommand("HIGHEST\t" + keyword);
+            var gwa = Initialiser.Indexer.GetGwa(keyword);
 
-            while (id <= highestIndex)
+            for (var i = 0; i < gwa.Count(); i++)
             {
-              if ((int)Initialiser.Interface.RunGWACommand("EXIST\t" + keyword + "\t" + id.ToString()) == 1)
+              var record = gwa[i];
+
+              var pPieces = record.ListSplit("\t");
+              if (pPieces[4].ParseElementNumNodes() != 3 && pPieces[4].ParseElementNumNodes() != 4)
               {
-                string record = Initialiser.Interface.GetGWARecords("GET\t" + keyword + "\t" + id.ToString())[0];
-
-                string[] pPieces = record.ListSplit("\t");
-                if (pPieces[4].ParseElementNumNodes() != 3 && pPieces[4].ParseElementNumNodes() != 4)
-                {
-                  id++;
-                  continue;
-                }
-
-                var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
-
-                if (resultExport == null)
-                {
-                  id++;
-                  continue;
-                }
-
-                // Let's split the dictionary into xxx_face and xxx_vertex
-                var faceDictionary = resultExport.ToDictionary(
-                  x => x.Key,
-                  x => new List<double>() { (x.Value as List<double>).Last() } as object);
-                var vertexDictionary = resultExport.ToDictionary(
-                  x => x.Key,
-                  x => (x.Value as List<double>).Take((x.Value as List<double>).Count - 1).ToList() as object);
-                
-                var existingRes = results.FirstOrDefault(x => x.Value.TargetRef == id.ToString());
-                if (existingRes == null)
-                {
-                  Structural2DElementResult newRes = new Structural2DElementResult()
-                  {
-                    Value = new Dictionary<string, object>(),
-                    TargetRef = Initialiser.Indexer.GetApplicationId(typeof(GSA2DElement).GetGSAKeyword(), id),
-                    IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
-                  };
-                  newRes.Value[kvp.Key + "_face"] = faceDictionary;
-                  newRes.Value[kvp.Key + "_vertex"] = vertexDictionary;
-
-                  newRes.GenerateHash();
-
-                  results.Add(new GSA2DElementResult() { Value = newRes });
-                }
-                else
-                {
-                  existingRes.Value.Value[kvp.Key + "_face"] = faceDictionary;
-                  existingRes.Value.Value[kvp.Key + "_vertex"] = vertexDictionary;
-                }
+                continue;
               }
-              id++;
+
+              if (!int.TryParse(pPieces[1], out var id))
+              {
+                //Could not extract index
+                continue;
+              }
+
+              var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
+
+              if (resultExport == null)
+              {
+                continue;
+              }
+
+              // Let's split the dictionary into xxx_face and xxx_vertex
+              var faceDictionary = resultExport.ToDictionary(
+                x => x.Key,
+                x => new List<double>() { (x.Value as List<double>).Last() } as object);
+              var vertexDictionary = resultExport.ToDictionary(
+                x => x.Key,
+                x => (x.Value as List<double>).Take((x.Value as List<double>).Count - 1).ToList() as object);
+
+              var existingRes = results.FirstOrDefault(x => x.Value.TargetRef == id.ToString());
+              if (existingRes == null)
+              {
+                var newRes = new Structural2DElementResult()
+                {
+                  Value = new Dictionary<string, object>(),
+                  TargetRef = Initialiser.Indexer.GetApplicationId(typeof(GSA2DElement).GetGSAKeyword(), id),
+                  IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
+                };
+                newRes.Value[kvp.Key + "_face"] = faceDictionary;
+                newRes.Value[kvp.Key + "_vertex"] = vertexDictionary;
+
+                newRes.GenerateHash();
+
+                results.Add(new GSA2DElementResult() { Value = newRes });
+              }
+              else
+              {
+                existingRes.Value.Value[kvp.Key + "_face"] = faceDictionary;
+                existingRes.Value.Value[kvp.Key + "_vertex"] = vertexDictionary;
+              }
             }
+
           }
         }
 

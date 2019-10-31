@@ -29,11 +29,10 @@ namespace SpeckleStructuralGSA.Test
       //This uses the installed SpeckleKits - when SpeckleStructural is built, the built files are copied into the 
       // %LocalAppData%\SpeckleKits directory, so therefore this project doesn't need to reference the projects within in this solution
       SpeckleInitializer.Initialize();
+      gsaInterfacer = new GSAProxy();
+      gsaCache = new GSACache();
 
-      gsaInterfacer = new GSAInterfacer
-      {
-        Indexer = new Indexer()
-      };
+      Initialiser.Indexer = gsaCache;
       Initialiser.Interface = gsaInterfacer;
       Initialiser.Settings = new Settings();
     }
