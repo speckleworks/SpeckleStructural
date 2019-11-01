@@ -63,9 +63,9 @@ namespace SpeckleStructuralGSA.Test
       foreach (var keyword in keywords)
       {
         var expectedGwaRecordsForKeyword = new List<GwaRecord>();
-        for (int i = 0; i < expectedGwaRecords.Count(); i++)
+        for (var i = 0; i < expectedGwaRecords.Count(); i++)
         {
-          expectedGwaRecords[i].GwaCommand.ExtractKeywordApplicationId(out string recordKeyword, out int? foundIndex, out string applicationId, out string gwaWithoutSet);
+          expectedGwaRecords[i].GwaCommand.ExtractKeywordApplicationId(out var recordKeyword, out var foundIndex, out var applicationId, out var gwaWithoutSet);
           if (recordKeyword.Equals(keyword, StringComparison.InvariantCultureIgnoreCase))
           {
             expectedGwaRecordsForKeyword.Add(expectedGwaRecords[i]);
@@ -73,9 +73,9 @@ namespace SpeckleStructuralGSA.Test
         }
 
         var actualGwaRecordsForKeyword = new List<GwaRecord>();
-        for (int i = 0; i < actualGwaRecords.Count(); i++)
+        for (var i = 0; i < actualGwaRecords.Count(); i++)
         {
-          actualGwaRecords[i].GwaCommand.ExtractKeywordApplicationId(out string recordKeyword, out int? foundIndex, out string applicationId, out string gwaWithoutSet);
+          actualGwaRecords[i].GwaCommand.ExtractKeywordApplicationId(out var recordKeyword, out var foundIndex, out var applicationId, out var gwaWithoutSet);
           if (recordKeyword.Equals(keyword, StringComparison.InvariantCultureIgnoreCase))
           {
             actualGwaRecordsForKeyword.Add(actualGwaRecords[i]);

@@ -53,16 +53,16 @@ namespace SpeckleStructuralGSA
 
       var gwaCommands = new List<string>();
 
-      StructuralLoadTaskBuckling loadTask = this.Value as StructuralLoadTaskBuckling;
+      var loadTask = this.Value as StructuralLoadTaskBuckling;
 
-      string keyword = typeof(GSALoadTaskBuckling).GetGSAKeyword();
-      string subkeyword = typeof(GSALoadTaskBuckling).GetSubGSAKeyword().First();
+      var keyword = typeof(GSALoadTaskBuckling).GetGSAKeyword();
+      var subkeyword = typeof(GSALoadTaskBuckling).GetSubGSAKeyword().First();
 
-      int taskIndex = Initialiser.Indexer.ResolveIndex("TASK.1", "", loadTask.ApplicationId);
-      int? comboIndex = Initialiser.Indexer.LookupIndex(typeof(GSALoadCombo).GetGSAKeyword(), typeof(GSALoadCombo).Name, loadTask.ResultCaseRef);
-      int? stageIndex = Initialiser.Indexer.LookupIndex(typeof(GSAConstructionStage).GetGSAKeyword(), typeof(GSAConstructionStage).Name, loadTask.StageDefinitionRef);
+      var taskIndex = Initialiser.Indexer.ResolveIndex("TASK.1", "", loadTask.ApplicationId);
+      var comboIndex = Initialiser.Indexer.LookupIndex(typeof(GSALoadCombo).GetGSAKeyword(), typeof(GSALoadCombo).Name, loadTask.ResultCaseRef);
+      var stageIndex = Initialiser.Indexer.LookupIndex(typeof(GSAConstructionStage).GetGSAKeyword(), typeof(GSAConstructionStage).Name, loadTask.StageDefinitionRef);
 
-      List<string> ls = new List<string>
+      var ls = new List<string>
         {
           "SET",
           subkeyword,
@@ -99,7 +99,7 @@ namespace SpeckleStructuralGSA
 
       for (var i = 0; i < loadTask.NumModes; i++)
       {
-        int caseIndex = Initialiser.Indexer.ResolveIndex(keyword, typeof(GSALoadTaskBuckling).Name);
+        var caseIndex = Initialiser.Indexer.ResolveIndex(keyword, typeof(GSALoadTaskBuckling).Name);
         // Set ANAL
         ls.Clear();
         ls.AddRange(new[] {
@@ -122,11 +122,9 @@ namespace SpeckleStructuralGSA
 
   public static partial class Conversions
   {
-    public static bool ToNative(this StructuralLoadTaskBuckling loadTask)
+    public static string ToNative(this StructuralLoadTaskBuckling loadTask)
     {
-      new GSALoadTaskBuckling() { Value = loadTask }.SetGWACommand();
-
-      return true;
+      return new GSALoadTaskBuckling() { Value = loadTask }.SetGWACommand();
     }
 
     // TODO: Same keyword as StructuralLoadTask so will conflict. Need a way to differentiate between.

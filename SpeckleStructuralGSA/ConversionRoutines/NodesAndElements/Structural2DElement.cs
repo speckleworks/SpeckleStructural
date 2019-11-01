@@ -241,11 +241,11 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA2DMember).GetGSAKeyword();
 
-      var index = Initialiser.Indexer.ResolveIndex(typeof(GSA2DMember).GetGSAKeyword(), typeof(GSA2DMember).Name, mesh.ApplicationId);
+      var index = Initialiser.Indexer.ResolveIndex(typeof(GSA2DMember).GetGSAKeyword(), typeof(GSA2DMember).ToSpeckleTypeName(), mesh.ApplicationId);
       var propRef = 0;
       try
       {
-        propRef = Initialiser.Indexer.LookupIndex(typeof(GSA2DProperty).GetGSAKeyword(), typeof(GSA2DProperty).Name, mesh.PropertyRef).Value;
+        propRef = Initialiser.Indexer.LookupIndex(typeof(GSA2DProperty).GetGSAKeyword(), typeof(GSA2DProperty).ToSpeckleTypeName(), mesh.PropertyRef).Value;
       }
       catch { }
 
@@ -308,7 +308,7 @@ namespace SpeckleStructuralGSA
       {
         ls.Clear();
 
-        index = Initialiser.Indexer.ResolveIndex(typeof(GSA2DVoid).GetGSAKeyword(), typeof(GSA2DVoid).Name);
+        index = Initialiser.Indexer.ResolveIndex(typeof(GSA2DVoid).GetGSAKeyword(), typeof(GSA2DVoid).ToSpeckleTypeName());
 
         ls.Add("SET");
         ls.Add(keyword + ":" + HelperClass.GenerateSID(mesh));

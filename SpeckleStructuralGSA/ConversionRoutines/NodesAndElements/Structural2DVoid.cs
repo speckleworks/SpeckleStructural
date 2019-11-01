@@ -63,7 +63,7 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA2DVoid).GetGSAKeyword();
 
-      var index = Initialiser.Indexer.ResolveIndex(keyword, typeof(GSA2DVoid).Name, v.ApplicationId);
+      var index = Initialiser.Indexer.ResolveIndex(keyword, typeof(GSA2DVoid).ToSpeckleTypeName(), v.ApplicationId);
 
       var ls = new List<string>
       {

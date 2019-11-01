@@ -83,15 +83,15 @@ namespace SpeckleStructuralGSA.Test
           var valueType = t.GetProperty("Value").GetValue(dummyObject).GetType();
           var targetObjects = receivedObjects.Where(o => o.GetType() == valueType).ToList();
 
-          for (int i = 0; i < targetObjects.Count(); i++)
+          for (var i = 0; i < targetObjects.Count(); i++)
           {
             var applicationId = targetObjects[i].ApplicationId;
             var deserialiseReturn = ((string)Converter.Deserialise(targetObjects[i]));
             var gwaCommands = deserialiseReturn.Split(new[] { '\n' }).Where(c => c.Length > 0).ToList();
 
-            for (int j = 0; j < gwaCommands.Count(); j++)
+            for (var j = 0; j < gwaCommands.Count(); j++)
             {
-              ProcessDeserialiseReturnObject(gwaCommands[j], out keyword, out int index, out string gwa, out GwaSetCommandType gwaSetCommandType);
+              ProcessDeserialiseReturnObject(gwaCommands[j], out keyword, out var index, out var gwa, out var gwaSetCommandType);
               var itemApplicationId = gwaCommands[j].ExtractApplicationId();
 
               GSAInterfacer.SetGWA(gwaCommands[j]);

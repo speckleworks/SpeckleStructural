@@ -115,17 +115,20 @@ namespace SpeckleStructuralGSA.Test
       if (pieces[0].StartsWith("set_at", StringComparison.InvariantCultureIgnoreCase))
       {
         gwaSetCommandType = GwaSetCommandType.SetAt;
+        int.TryParse(pieces[1], out index);
+        pieces.Remove(pieces[1]);
         pieces.Remove(pieces[0]);
       }
       else if (pieces[0].StartsWith("set", StringComparison.InvariantCultureIgnoreCase))
       {
         gwaSetCommandType = GwaSetCommandType.Set;
         pieces.Remove(pieces[0]);
+        int.TryParse(pieces[1], out index);
       }
 
       gwa = string.Join("\t", pieces);
-      gwa.ExtractKeywordApplicationId(out keyword, out int? foundIndex, out string applicationId, out string gwaWithoutSet);
-      int.TryParse(pieces[1], out index);
+      gwa.ExtractKeywordApplicationId(out keyword, out var foundIndex, out var applicationId, out var gwaWithoutSet);
+      
 
       return;
     }

@@ -29,9 +29,9 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural0DSpring();
 
-      string[] pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit("\t");
 
-      int counter = 1; // Skip identifier
+      var counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
       obj.ApplicationId = Initialiser.Indexer.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
@@ -42,16 +42,16 @@ namespace SpeckleStructuralGSA
       counter++; // Group
 
       obj.Value = new List<double>();
-      for (int i = 0; i < 2; i++)
+      for (var i = 0; i < 2; i++)
       {
-        string key = pieces[counter++];
-        GSANode node = nodes.Where(n => n.GSAId == Convert.ToInt32(key)).FirstOrDefault();
+        var key = pieces[counter++];
+        var node = nodes.Where(n => n.GSAId == Convert.ToInt32(key)).FirstOrDefault();
         obj.Value.AddRange(node.Value.Value);
         this.SubGWACommand.Add(node.GWACommand);
       }
 
-      string orientationNodeRef = pieces[counter++];
-      double rotationAngle = Convert.ToDouble(pieces[counter++]);
+      var orientationNodeRef = pieces[counter++];
+      var rotationAngle = Convert.ToDouble(pieces[counter++]);
 
       //counter++; // Action // TODO: EL.4 SUPPORT
       counter++; // Dummy
@@ -69,10 +69,10 @@ namespace SpeckleStructuralGSA
 
       var spring = this.Value as Structural0DSpring;
 
-      string keyword = typeof(GSA0DSpring).GetGSAKeyword();
+      var keyword = typeof(GSA0DSpring).GetGSAKeyword();
 
-      int index = Initialiser.Indexer.ResolveIndex(keyword, typeof(GSA0DSpring).Name, spring.ApplicationId);
-      int propRef = 0;
+      var index = Initialiser.Indexer.ResolveIndex(keyword, typeof(GSA0DSpring).Name, spring.ApplicationId);
+      var propRef = 0;
       try
       {
         propRef = Initialiser.Indexer.LookupIndex(typeof(GSASpringProperty).GetGSAKeyword(), typeof(GSASpringProperty).Name, spring.PropertyRef).Value;
@@ -93,9 +93,9 @@ namespace SpeckleStructuralGSA
       };
 
       //Topology
-      for (int i = 0; i < spring.Value.Count(); i += 3)
+      for (var i = 0; i < spring.Value.Count(); i += 3)
       {
-        ls.Add(HelperClass.NodeAt(GSA, spring.Value[i], spring.Value[i + 1], spring.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString());
+        ls.Add(HelperClass.NodeAt(spring.Value[i], spring.Value[i + 1], spring.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString());
       }
 
       ls.Add("0"); // Orientation Node
@@ -118,7 +118,7 @@ namespace SpeckleStructuralGSA
 
   public static partial class Conversions
   {
-    public static bool ToNative(this Structural0DSpring spring)
+    public static string ToNative(this Structural0DSpring spring)
     {
       /*
       var objToProcess = spring;
@@ -134,49 +134,26 @@ namespace SpeckleStructuralGSA
       }
       */
 
-      int group = Initialiser.Indexer.ResolveIndex(typeof(GSA0DSpring).GetGSAKeyword(), typeof(GSA0DSpring).Name, spring.ApplicationId);
-      new GSA0DSpring() { Value = spring }.SetGWACommand(Initialiser.Interface, group);
-      return true;
+      var group = Initialiser.Indexer.ResolveIndex(typeof(GSA0DSpring).GetGSAKeyword(), typeof(GSA0DSpring).Name, spring.ApplicationId);
+      return new GSA0DSpring() { Value = spring }.SetGWACommand(Initialiser.Interface, group);
     }
 
     //Sending to Speckle, search through a
     public static SpeckleObject ToSpeckle(this GSA0DSpring dummyObject)
     {
-      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSA0DSpring)))
-        Initialiser.GSASenderObjects[typeof(GSA0DSpring)] = new List<object>();
+      var newLines = ToSpeckleBase<GSA0DSpring>();
+      newLines.AddRange(ToSpeckleBase<GSANode>());
 
-      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSANode)))
-        Initialiser.GSASenderObjects[typeof(GSANode)] = new List<object>();
+      var springs = new List<GSA0DSpring>();
 
-      List<GSA0DSpring> springs = new List<GSA0DSpring>();
-      List<GSANode> nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
+      var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
 
-      string keyword = typeof(GSA0DSpring).GetGSAKeyword();
-      string[] subKeywords = typeof(GSA0DSpring).GetSubGSAKeyword();
-
-      string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
-      List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
-      foreach (string k in subKeywords)
-        deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
-
-      // Remove deleted lines
-      Initialiser.GSASenderObjects[typeof(GSA0DSpring)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (KeyValuePair<Type, List<object>> kvp in Initialiser.GSASenderObjects)
-        kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
-
-      // Filter only new lines
-      string[] prevLines = Initialiser.GSASenderObjects[typeof(GSA0DSpring)]
-        .Select(l => (l as IGSASpeckleContainer).GWACommand)
-        .Concat(Initialiser.GSASenderObjects[typeof(GSANode)].SelectMany(l => (l as IGSASpeckleContainer).SubGWACommand))
-        .ToArray();
-      string[] newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
-
-      foreach (string p in newLines)
+      foreach (var p in newLines)
       {
-        string[] pPieces = p.ListSplit("\t");
+        var pPieces = p.ListSplit("\t");
         if (pPieces[4] == "GRD_SPRING")
         {
-          GSA0DSpring spring = new GSA0DSpring() { GWACommand = p };
+          var spring = new GSA0DSpring() { GWACommand = p };
           spring.ParseGWACommand(nodes);
           springs.Add(spring);
         }
@@ -184,9 +161,7 @@ namespace SpeckleStructuralGSA
 
       Initialiser.GSASenderObjects[typeof(GSA0DSpring)].AddRange(springs);
 
-      if (springs.Count() > 0 || deletedLines.Count() > 0) return new SpeckleObject();
-
-      return new SpeckleNull();
+      return (springs.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }
