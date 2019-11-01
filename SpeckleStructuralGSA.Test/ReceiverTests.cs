@@ -55,8 +55,7 @@ namespace SpeckleStructuralGSA.Test
       Assert.IsNotNull(actualGwaRecords);
       Assert.IsNotEmpty(actualGwaRecords);
 
-      var speckleTypes = receiverProcessor.GetSpeckleTypes();
-      var keywords = receiverProcessor.GetKeywords();
+      var keywords = receiverProcessor.GetTypeCastPriority(ioDirection.Receive, GSATargetLayer.Design, false).Select(i => i.Key.GetGSAKeyword()).Distinct().ToList();
 
       //Log outcome to file
 

@@ -27,10 +27,13 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Initialiser.Indexer.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
 
-      //TO DO
+      //TO DO: change these defaults for the real thing
+      obj.PathType = StructuralBridgePathType.Lane;
+      obj.Gauge = 0;
+      obj.LeftRailFactor = 0;
 
       this.Value = obj;
     }

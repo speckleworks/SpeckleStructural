@@ -56,7 +56,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      obj.LoadCaseRef = Initialiser.Indexer.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
+      obj.LoadCaseRef = HelperClass.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
 
       var axis = pieces[counter++];
       this.Axis = axis == "GLOBAL" ? 0 : -1;// Convert.ToInt32(axis); // TODO: Assume local if not global
@@ -134,28 +134,25 @@ namespace SpeckleStructuralGSA
 
       for (var i = 0; i < load.Loading.Value.Count(); i++)
       {
-        var ls = new List<string>();
-
         if (load.Loading.Value[i] == 0) continue;
 
         var index = Initialiser.Indexer.ResolveIndex(typeof(GSA2DLoad).GetGSAKeyword(), typeof(GSA2DLoad).ToSpeckleTypeName());
-        ls.Add("SET_AT");
-        ls.Add(index.ToString());
-        //ls.Add(keyword + ":" + HelperClass.GenerateSID(load));
-        ls.Add(keyword + ":" + HelperClass.GenerateSID(load));
-        ls.Add(load.Name == null || load.Name == "" ? " " : load.Name);
-        // TODO: This is a hack.
-        ls.Add(string.Join(
-            " ",
-            elementRefs.Select(x => x.ToString())
-                .Concat(groupRefs.Select(x => "G" + x.ToString()))
-        ));
-        ls.Add(loadCaseRef.ToString());
-        ls.Add("GLOBAL"); // Axis
-        ls.Add("CONS"); // Type
-        ls.Add("NO"); // Projected
-        ls.Add(direction[i]);
-        ls.Add(load.Loading.Value[i].ToString());
+
+        var ls = new List<string>
+        {
+          "SET_AT",
+          index.ToString(),
+          keyword + ":" + HelperClass.GenerateSID(load),
+          load.Name == null || load.Name == "" ? " " : load.Name,
+          // TODO: This is a hack.
+          string.Join(" ", elementRefs.Select(x => x.ToString()).Concat(groupRefs.Select(x => "G" + x.ToString()))),
+          loadCaseRef.ToString(),
+          "GLOBAL", // Axis
+          "CONS", // Type
+          "NO", // Projected
+          direction[i],
+          load.Loading.Value[i].ToString()
+        };
 
         gwaCommands.Add(string.Join("\t", ls));
       }

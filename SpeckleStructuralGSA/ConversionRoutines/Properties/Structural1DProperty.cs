@@ -29,7 +29,7 @@ namespace SpeckleStructuralGSA
 
       var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Initialiser.Indexer.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; // Color
       var materialType = pieces[counter++];
@@ -680,7 +680,6 @@ namespace SpeckleStructuralGSA
 
     public static SpeckleObject ToSpeckle(this GSA1DProperty dummyObject)
     {
-      var prevLines = Initialiser.GSASenderObjects[typeof(GSA1DProperty)].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
       var newLines = ToSpeckleBase<GSA1DProperty>();
 
       var props = new List<GSA1DProperty>();

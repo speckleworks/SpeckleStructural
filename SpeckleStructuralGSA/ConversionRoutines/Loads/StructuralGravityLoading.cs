@@ -29,7 +29,7 @@ namespace SpeckleStructuralGSA
 
       counter++; // Skip elements - assumed to always be "all" at this point int time
 
-      obj.LoadCaseRef = Initialiser.Indexer.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
+      obj.LoadCaseRef = HelperClass.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
 
       var vector = new double[3];
       for (var i = 0; i < 3; i++)

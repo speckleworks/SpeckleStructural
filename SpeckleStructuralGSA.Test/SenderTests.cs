@@ -53,6 +53,7 @@ namespace SpeckleStructuralGSA.Test
       //This uses the installed SpeckleKits - when SpeckleStructural is built, the built files are copied into the 
       // %LocalAppData%\SpeckleKits directory, so therefore this project doesn't need to reference the projects within in this solution
       var expectedObjects = JsonConvert.DeserializeObject<List<SpeckleObject>>(expectedFullJson, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+
       expectedObjects = expectedObjects.OrderBy(a => a.ApplicationId).ToList();
 
       var actualObjects = ModelToSpeckleObjects(layer, resultsOnly, embedResults, loadCases, resultTypes);

@@ -28,7 +28,7 @@ namespace SpeckleStructuralGSA
 
       var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Initialiser.Indexer.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       var color = pieces[counter++].ParseGSAColor();
 
@@ -40,7 +40,7 @@ namespace SpeckleStructuralGSA
 
       obj.ElementType = Structural2DElementType.Generic;
       var propertyGSAId = Convert.ToInt32(pieces[counter++]);
-      obj.PropertyRef = Initialiser.Indexer.GetApplicationId(typeof(GSA2DProperty).GetGSAKeyword(), propertyGSAId);
+      obj.PropertyRef = HelperClass.GetApplicationId(typeof(GSA2DProperty).GetGSAKeyword(), propertyGSAId);
       counter++; // Group
 
       obj.Vertices = new List<double>();
@@ -168,7 +168,7 @@ namespace SpeckleStructuralGSA
 
       var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Initialiser.Indexer.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       var color = pieces[counter++].ParseGSAColor();
 
@@ -181,7 +181,7 @@ namespace SpeckleStructuralGSA
         obj.ElementType = Structural2DElementType.Generic;
 
       var propertyGSAId = Convert.ToInt32(pieces[counter++]);
-      obj.PropertyRef = Initialiser.Indexer.GetApplicationId(typeof(GSA2DProperty).GetGSAKeyword(), propertyGSAId);
+      obj.PropertyRef = HelperClass.GetApplicationId(typeof(GSA2DProperty).GetGSAKeyword(), propertyGSAId);
       this.Group = Convert.ToInt32(pieces[counter++]); // Keep group for load targetting
 
       var coordinates = new List<double>();

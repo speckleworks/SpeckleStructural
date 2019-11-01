@@ -62,7 +62,7 @@ namespace SpeckleStructuralGSA
 
       obj.Value = HelperClass.MapPointsLocal2Global(polyVals, axis).ToList();
 
-      obj.LoadCaseRef = Initialiser.Indexer.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
+      obj.LoadCaseRef = HelperClass.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
 
       var loadAxisId = 0;
       var loadAxisData = pieces[counter++];

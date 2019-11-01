@@ -92,6 +92,7 @@ namespace SpeckleStructuralGSA
         var results = new List<GSA1DElementResult>();
 
         var keyword = HelperClass.GetGSAKeyword(typeof(GSA1DElement));
+        var gwa = Initialiser.Indexer.GetGwa(keyword);
 
         foreach (var kvp in Initialiser.Settings.Element1DResults)
         {
@@ -99,8 +100,6 @@ namespace SpeckleStructuralGSA
           {
             if (!Initialiser.Interface.CaseExist(loadCase))
               continue;
-
-            var gwa = Initialiser.Indexer.GetGwa(keyword);
 
             for (var i = 0; i < gwa.Count(); i++)
             {
@@ -131,7 +130,7 @@ namespace SpeckleStructuralGSA
                 var newRes = new Structural1DElementResult()
                 {
                   Value = new Dictionary<string, object>(),
-                  TargetRef = Initialiser.Indexer.GetApplicationId(typeof(GSA1DElement).GetGSAKeyword(), id),
+                  TargetRef = HelperClass.GetApplicationId(typeof(GSA1DElement).GetGSAKeyword(), id),
                   IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
                 };
                 newRes.Value[kvp.Key] = resultExport;

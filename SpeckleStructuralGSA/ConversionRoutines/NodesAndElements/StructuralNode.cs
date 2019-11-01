@@ -30,7 +30,7 @@ namespace SpeckleStructuralGSA
 
       var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Initialiser.Indexer.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; // Color
       obj.Value = new List<double>
@@ -248,7 +248,7 @@ namespace SpeckleStructuralGSA
       obj.Mass = mass;
       counter++; // group
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Initialiser.Indexer.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       // Rest is unimportant for 0D element
 
       this.Value = obj;
@@ -373,10 +373,10 @@ namespace SpeckleStructuralGSA
 
     public static SpeckleObject ToSpeckle(this GSA0DElement dummyObject)
     {
-      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSANode)))
+      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSA0DElement)))
         return new SpeckleNull();
 
-      var newLines = ToSpeckleBase<GSANode>();
+      var newLines = ToSpeckleBase<GSA0DElement>();
 
       var changed = false;
 

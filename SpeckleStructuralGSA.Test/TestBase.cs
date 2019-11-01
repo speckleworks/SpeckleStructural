@@ -50,9 +50,23 @@ namespace SpeckleStructuralGSA.Test
       Initialiser.GSASenderObjects = new Dictionary<Type, List<object>>();
 
       //Compile all GWA commands with application IDs
-      var senderProcessor = new SenderProcessor(TestDataDirectory, gsaInterfacer, gsaCache, layer, resultsOnly, embedResults, cases, resultsToSend);
+      var senderProcessor = new SenderProcessor(TestDataDirectory, gsaInterfacer, gsaCache, layer, embedResults, cases, resultsToSend);
 
-      senderProcessor.GsaInstanceToSpeckleObjects(out var speckleObjects);
+      //var keywords = senderProcessor.GetTypeCastPriority(ioDirection.Receive, GSATargetLayer.Analysis, false).Select(i => i.Key.GetGSAKeyword()).Distinct().ToList();
+      var keywords = senderProcessor.GetKeywords(layer);
+      var data = gsaInterfacer.GetGWAData(keywords);
+      for (int i = 0; i < data.Count(); i++)
+      {
+        // <keyword, index, Application ID, GWA command (without SET or SET_AT), Set|Set At> tuples
+        var keyword = data[i].Item1;
+        var index = data[i].Item2;
+        var applicationId = data[i].Item3;
+        var gwa = data[i].Item4;
+        var gwaSetCommandType = data[i].Item5;
+        gsaCache.Upsert(keyword, index, gwa, applicationId, currentSession: false, gwaSetCommandType: gwaSetCommandType);
+      }
+
+      senderProcessor.GsaInstanceToSpeckleObjects(layer, out var speckleObjects, resultsOnly);
 
       return speckleObjects;
     }

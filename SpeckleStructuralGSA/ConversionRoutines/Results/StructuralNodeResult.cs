@@ -75,7 +75,7 @@ namespace SpeckleStructuralGSA
 
         var keyword = HelperClass.GetGSAKeyword(typeof(GSANode));
 
-        var indices = Initialiser.Indexer.LookupIndices(keyword, typeof(GSANode).ToSpeckleTypeName()).Where(i => i.HasValue).Select(i => i.Value).ToList();
+        var indices = Initialiser.Indexer.LookupIndices(keyword).Where(i => i.HasValue).Select(i => i.Value).ToList();
 
         foreach (var kvp in Initialiser.Settings.NodalResults)
         {
@@ -108,7 +108,7 @@ namespace SpeckleStructuralGSA
                   var newRes = new StructuralNodeResult()
                   {
                     Value = new Dictionary<string, object>(),
-                    TargetRef = Initialiser.Indexer.GetApplicationId(typeof(GSANode).GetGSAKeyword(), id),
+                    TargetRef = HelperClass.GetApplicationId(typeof(GSANode).GetGSAKeyword(), id),
                     IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
                   };
                   newRes.Value[kvp.Key] = resultExport;

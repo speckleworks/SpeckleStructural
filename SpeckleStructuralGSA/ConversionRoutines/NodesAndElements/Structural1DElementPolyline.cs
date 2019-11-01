@@ -25,7 +25,7 @@ namespace SpeckleStructuralGSA
       var elementsListCopy = new List<GSA1DElement>(elements);
 
       var obj = new Structural1DElementPolyline();
-      obj.ApplicationId = Initialiser.Indexer.GetApplicationId(typeof(GSA1DElementPolyline).GetGSAKeyword(), GSAId);
+      obj.ApplicationId = HelperClass.GetApplicationId(typeof(GSA1DElementPolyline).GetGSAKeyword(), GSAId);
 
       obj.Value = new List<double>();
       obj.ElementApplicationId = new List<string>();

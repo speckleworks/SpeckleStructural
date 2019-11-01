@@ -31,11 +31,12 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Initialiser.Indexer.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; // Colour
       counter++; // Type
-      obj.PropertyRef = Initialiser.Indexer.GetApplicationId(typeof(GSA1DProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
+      obj.PropertyRef = HelperClass.GetApplicationId(typeof(GSA1DProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
       counter++; // Group
 
       obj.Value = new List<double>();
@@ -255,7 +256,7 @@ namespace SpeckleStructuralGSA
 
       var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Initialiser.Indexer.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; // Color
 
@@ -269,7 +270,7 @@ namespace SpeckleStructuralGSA
       else
         obj.ElementType = Structural1DElementType.Generic;
 
-      obj.PropertyRef = Initialiser.Indexer.GetApplicationId(typeof(GSA1DProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
+      obj.PropertyRef = HelperClass.GetApplicationId(typeof(GSA1DProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
       this.Group = Convert.ToInt32(pieces[counter++]); // Keep group for load targetting
 
       obj.Value = new List<double>();
@@ -505,7 +506,7 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA1DElement dummyObject)
     {
       var newLines = ToSpeckleBase<GSA1DElement>();
-      newLines.AddRange(ToSpeckleBase<GSA1DElementPolyline>());
+      //newLines.AddRange(ToSpeckleBase<GSA1DElementPolyline>());
 
       var elements = new List<GSA1DElement>();
       var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();

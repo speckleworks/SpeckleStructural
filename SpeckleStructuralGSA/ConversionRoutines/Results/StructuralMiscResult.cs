@@ -27,7 +27,7 @@ namespace SpeckleStructuralGSA
 
       var results = new List<GSAMiscResult>();
 
-      var indices = Initialiser.Indexer.LookupIndices(typeof(GSAAssembly).GetGSAKeyword(), typeof(GSAAssembly).ToSpeckleTypeName()).Where(i => i.HasValue).Select(i => i.Value).ToList();
+      var indices = Initialiser.Indexer.LookupIndices(typeof(GSAAssembly).GetGSAKeyword()).Where(i => i.HasValue).Select(i => i.Value).ToList();
 
       foreach (var kvp in Initialiser.Settings.MiscResults)
       {
@@ -65,7 +65,7 @@ namespace SpeckleStructuralGSA
 
               if (id != 0)
               {
-                newRes.TargetRef = Initialiser.Indexer.GetApplicationId(kvp.Value.Item1, id);
+                newRes.TargetRef = HelperClass.GetApplicationId(kvp.Value.Item1, id);
               }
               newRes.GenerateHash();
               results.Add(new GSAMiscResult() { Value = newRes });

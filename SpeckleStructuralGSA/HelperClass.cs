@@ -1102,7 +1102,12 @@ namespace SpeckleStructuralGSA
       return taskType;
     }
 
-    
+    public static string GetApplicationId(string keyword, int id)
+    {
+      var savedApplicationId = Initialiser.Indexer.GetApplicationId(keyword, id);
+      return (string.IsNullOrEmpty(savedApplicationId)) ? ("gsa/" + keyword + "_" + id.ToString()) : savedApplicationId;
+    }
+
     public static int NodeAt(double x, double y, double z, double coincidentNodeAllowance, string applicationId = null)
     {
       var index = Initialiser.Interface.NodeAt(x, y, z, coincidentNodeAllowance);

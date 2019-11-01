@@ -67,7 +67,7 @@ namespace SpeckleStructuralGSA
       var loadCaseIndex = Convert.ToInt32(pieces[counter++]);
       if (loadCaseIndex > 0)
       {
-        obj.LoadCaseRef = Initialiser.Indexer.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), loadCaseIndex);
+        obj.LoadCaseRef = HelperClass.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), loadCaseIndex);
       }
 
       var loadAxisId = 0;
