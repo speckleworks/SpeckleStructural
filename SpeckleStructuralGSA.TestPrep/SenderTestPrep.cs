@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using SpeckleGSAInterfaces;
-using SpeckleGSAProxy;
 using SpeckleStructuralGSA.Test;
 
 namespace SpeckleStructuralGSA.TestPrep

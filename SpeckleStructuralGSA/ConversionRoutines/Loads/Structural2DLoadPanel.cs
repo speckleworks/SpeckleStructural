@@ -212,6 +212,10 @@ namespace SpeckleStructuralGSA
 
       ls.Clear();
       HelperClass.SetAxis(axis, out int planeAxisIndex, out string planeAxisGwa, load.Name);
+      if (planeAxisGwa.Length > 0)
+      {
+        gwaCommands.Add(planeAxisGwa);
+      }
 
       ls.AddRange(new[] {
         "SET",

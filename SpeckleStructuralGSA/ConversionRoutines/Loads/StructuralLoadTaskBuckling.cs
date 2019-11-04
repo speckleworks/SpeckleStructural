@@ -59,8 +59,8 @@ namespace SpeckleStructuralGSA
       var subkeyword = typeof(GSALoadTaskBuckling).GetSubGSAKeyword().First();
 
       var taskIndex = Initialiser.Indexer.ResolveIndex("TASK.1", "", loadTask.ApplicationId);
-      var comboIndex = Initialiser.Indexer.LookupIndex(typeof(GSALoadCombo).GetGSAKeyword(), typeof(GSALoadCombo).Name, loadTask.ResultCaseRef);
-      var stageIndex = Initialiser.Indexer.LookupIndex(typeof(GSAConstructionStage).GetGSAKeyword(), typeof(GSAConstructionStage).Name, loadTask.StageDefinitionRef);
+      var comboIndex = Initialiser.Indexer.LookupIndex(typeof(GSALoadCombo).GetGSAKeyword(), typeof(GSALoadCombo).ToSpeckleTypeName(), loadTask.ResultCaseRef);
+      var stageIndex = Initialiser.Indexer.LookupIndex(typeof(GSAConstructionStage).GetGSAKeyword(), typeof(GSAConstructionStage).ToSpeckleTypeName(), loadTask.StageDefinitionRef);
 
       var ls = new List<string>
         {

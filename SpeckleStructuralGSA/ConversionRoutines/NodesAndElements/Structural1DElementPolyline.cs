@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
 using SpeckleGSAInterfaces;
@@ -180,7 +179,7 @@ namespace SpeckleStructuralGSA
 
       var obj = this.Value as Structural1DElementPolyline;
 
-      var group = Initialiser.Indexer.ResolveIndex(typeof(GSA1DElementPolyline).GetGSAKeyword(), typeof(GSA1DElementPolyline).Name, obj.ApplicationId);
+      var group = Initialiser.Indexer.ResolveIndex(typeof(GSA1DElementPolyline).GetGSAKeyword(), typeof(GSA1DElementPolyline).ToSpeckleTypeName(), obj.ApplicationId);
 
       var elements = obj.Explode();
 

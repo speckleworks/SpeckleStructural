@@ -149,7 +149,10 @@ namespace SpeckleStructuralGSA
           try
           {
             HelperClass.SetAxis(springProp.Axis, out var axisIndex, out gwaAxisCommand, springProp.Name);
-            gwaCommands.Add(gwaAxisCommand);
+            if (gwaAxisCommand.Length > 0)
+            {
+              gwaCommands.Add(gwaAxisCommand);
+            }
           }
           catch { axisRef = "GLOBAL"; }
       }

@@ -85,7 +85,7 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSAConstructionStage).GetGSAKeyword();
 
-      var index = Initialiser.Indexer.ResolveIndex(typeof(GSAConstructionStage).GetGSAKeyword(), typeof(GSAConstructionStage).Name, stageDef.ApplicationId);
+      var index = Initialiser.Indexer.ResolveIndex(typeof(GSAConstructionStage).GetGSAKeyword(), typeof(GSAConstructionStage).ToSpeckleTypeName(), stageDef.ApplicationId);
       
       var targetString = " ";
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
-using SpeckleUtil;
 
 namespace SpeckleStructuralGSA
 {

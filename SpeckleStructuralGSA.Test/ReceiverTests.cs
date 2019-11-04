@@ -46,7 +46,7 @@ namespace SpeckleStructuralGSA.Test
       var expectedGwaRecords = Helper.DeserialiseJson<List<GwaRecord>>(expectedJson);
 
       var mockGsaCom = SetupMockGsaCom();
-      ((GSAProxy)gsaInterfacer).OpenFile("", false, mockGsaCom.Object);
+      gsaInterfacer.OpenFile("", false, mockGsaCom.Object);
 
       var receiverProcessor = new ReceiverProcessor(TestDataDirectory, gsaInterfacer, gsaCache);
 

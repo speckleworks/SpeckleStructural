@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using SpeckleGSAInterfaces;
 using Moq;
@@ -12,12 +10,19 @@ using System.Reflection;
 using AutoMapper;
 using SpeckleUtil;
 using SpeckleCoreGeometryClasses;
+using SpeckleGSAProxy;
 
 namespace SpeckleStructuralGSA.Test
 {
   [TestFixture]
   public class MergingTests
   {
+    [SetUp]
+    public void SetupMergeTests()
+    {
+      Initialiser.Indexer = new GSACache();
+      Initialiser.Settings = new Settings();
+    }
     [Test]
     public void MergeTestAutomapperForStackOverlow()
     {
@@ -93,7 +98,7 @@ namespace SpeckleStructuralGSA.Test
 
       PrepareInterfacerForGwaToSpeckle<GSASpringProperty>(gwa1, "PROP_SPR.3", "gh/a");
 
-      //Call the ToSpeckle method, which just adds to the GSASenderObjects collection
+      //Call the ToSpeckle method, which just adds to the GSASenderObjects collection-
       Conversions.ToSpeckle(new GSASpringProperty());
       var existing = (StructuralSpringProperty)((IGSASpeckleContainer)Initialiser.GSASenderObjects[typeof(GSASpringProperty)].First()).Value;
 
@@ -224,33 +229,13 @@ namespace SpeckleStructuralGSA.Test
     {
       var testType = typeof(T);
 
-      var mockGsaInterfacer = new Mock<IGSAInterfacer>();
-      mockGsaInterfacer.Setup(x => x.GetGWARecords(It.IsAny<string>())).Returns((string x) =>
-          {
-            if (x.ToLower().StartsWith("get_all\tprop_spr"))
-            {
-              return new[] { gwaCommand };
-            }
-            return new[] { "" };
-          }
-        );
-      mockGsaInterfacer.Setup(x => x.GetSID(It.IsAny<string>(), It.IsAny<int>())).Returns((string x, int y) =>
-          {
-            var xLower = x.ToLower();
-            if (xLower.StartsWith("prop_spr"))
-            {
-              if (y == 1) return "gh/a";
-            }
-            return "";
-          }
-        );
-      mockGsaInterfacer.Setup(x => x.GetDeletedGWARecords(It.IsAny<string>())).Returns((string x) => { return new[] { "" }; });
+      var mockGsaInterfacer = new Mock<IGSAProxy>();
 
+      ((IGSACache)Initialiser.Indexer).Upsert(keyword, 1, gwaCommand, sid);
       Initialiser.GSASenderObjects = new Dictionary<Type, List<object>>
       {
         { testType, new List<object>() }
       };
-      //Initialiser.Interface = mockGsaInterfacer.Object;
     }
   }
 

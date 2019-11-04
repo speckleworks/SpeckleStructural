@@ -136,10 +136,10 @@ namespace SpeckleStructuralGSA
       var loadCaseRef = 0;
       try
       {
-        loadCaseRef = Initialiser.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).Name, load.LoadCaseRef).Value;
+        loadCaseRef = Initialiser.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).ToSpeckleTypeName(), load.LoadCaseRef).Value;
       }
       catch {
-        loadCaseRef = Initialiser.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).Name, load.LoadCaseRef);
+        loadCaseRef = Initialiser.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).ToSpeckleTypeName(), load.LoadCaseRef);
       }
 
       //var axis = GSA.Parse1DAxis(load.Value.ToArray());
@@ -208,7 +208,13 @@ namespace SpeckleStructuralGSA
       gwaCommands.Add(string.Join("\t", ls));
 
       ls.Clear();
+
       HelperClass.SetAxis(axis, out int planeAxisIndex, out string planeAxisGwa, load.Name);
+      if (planeAxisGwa.Length > 0)
+      {
+        gwaCommands.Add(planeAxisGwa);
+      }
+
       ls.AddRange( new[] {
         "SET",
         "GRID_PLANE.4",

@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using SpeckleCore;
-using SpeckleCoreGeometryClasses;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("EL.4", new string[] { "NODE.2" }, "elements", true, false, new Type[] { typeof(GSA0DSpring) }, new Type[] { typeof(GSA1DProperty) })]
+  [GSAObject("EL.4", new string[] { "NODE.2" }, "elements", true, false, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSA1DProperty) })]
   public class GSA0DSpring : IGSASpeckleContainer
   {
     public string Member;
@@ -71,11 +67,11 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA0DSpring).GetGSAKeyword();
 
-      var index = Initialiser.Indexer.ResolveIndex(keyword, typeof(GSA0DSpring).Name, spring.ApplicationId);
+      var index = Initialiser.Indexer.ResolveIndex(keyword, typeof(GSA0DSpring).ToSpeckleTypeName(), spring.ApplicationId);
       var propRef = 0;
       try
       {
-        propRef = Initialiser.Indexer.LookupIndex(typeof(GSASpringProperty).GetGSAKeyword(), typeof(GSASpringProperty).Name, spring.PropertyRef).Value;
+        propRef = Initialiser.Indexer.LookupIndex(typeof(GSASpringProperty).GetGSAKeyword(), typeof(GSASpringProperty).ToSpeckleTypeName(), spring.PropertyRef).Value;
       }
       catch { }
 
@@ -134,7 +130,7 @@ namespace SpeckleStructuralGSA
       }
       */
 
-      var group = Initialiser.Indexer.ResolveIndex(typeof(GSA0DSpring).GetGSAKeyword(), typeof(GSA0DSpring).Name, spring.ApplicationId);
+      var group = Initialiser.Indexer.ResolveIndex(typeof(GSA0DSpring).GetGSAKeyword(), typeof(GSA0DSpring).ToSpeckleTypeName(), spring.ApplicationId);
       return new GSA0DSpring() { Value = spring }.SetGWACommand(Initialiser.Interface, group);
     }
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
 using SpeckleGSAInterfaces;
@@ -129,11 +128,11 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA1DElement).GetGSAKeyword();
 
-      var index = Initialiser.Indexer.ResolveIndex(typeof(GSA1DElement).GetGSAKeyword(), typeof(GSA1DElement).Name, element.ApplicationId);
+      var index = Initialiser.Indexer.ResolveIndex(typeof(GSA1DElement).GetGSAKeyword(), typeof(GSA1DElement).ToSpeckleTypeName(), element.ApplicationId);
       var propRef = 0;
       try
       {
-        propRef = Initialiser.Indexer.LookupIndex(typeof(GSA1DProperty).GetGSAKeyword(), typeof(GSA1DProperty).Name, element.PropertyRef).Value;
+        propRef = Initialiser.Indexer.LookupIndex(typeof(GSA1DProperty).GetGSAKeyword(), typeof(GSA1DProperty).ToSpeckleTypeName(), element.PropertyRef).Value;
       }
       catch { }
 
@@ -332,13 +331,13 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA1DMember).GetGSAKeyword();
 
-      var index = Initialiser.Indexer.ResolveIndex(typeof(GSA1DMember).GetGSAKeyword(), typeof(GSA1DMember).Name, member.ApplicationId);
+      var index = Initialiser.Indexer.ResolveIndex(typeof(GSA1DMember).GetGSAKeyword(), typeof(GSA1DMember).ToSpeckleTypeName(), member.ApplicationId);
       var propRef = 0;
       try
       {
         propRef = (member.ElementType == Structural1DElementType.Spring)
-          ? Initialiser.Indexer.LookupIndex(typeof(GSASpringProperty).GetGSAKeyword(), typeof(GSASpringProperty).Name, member.PropertyRef).Value
-          : Initialiser.Indexer.LookupIndex(typeof(GSA1DProperty).GetGSAKeyword(), typeof(GSA1DProperty).Name, member.PropertyRef).Value;
+          ? Initialiser.Indexer.LookupIndex(typeof(GSASpringProperty).GetGSAKeyword(), typeof(GSASpringProperty).ToSpeckleTypeName(), member.PropertyRef).Value
+          : Initialiser.Indexer.LookupIndex(typeof(GSA1DProperty).GetGSAKeyword(), typeof(GSA1DProperty).ToSpeckleTypeName(), member.PropertyRef).Value;
       }
       catch { }
 
