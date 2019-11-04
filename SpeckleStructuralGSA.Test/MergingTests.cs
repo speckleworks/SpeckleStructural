@@ -91,6 +91,30 @@ namespace SpeckleStructuralGSA.Test
     }
 
     [Test]
+    public void MergeTestAutoMapperNode()
+    {
+      var newObj = new StructuralNode { Value = new List<double> { 1, 2, 3 } };
+      var existingObj = new StructuralNode { Value = new List<double> { 4, 5, 6 }, Stiffness = new StructuralVectorSix(10, 11, 12, 13, 14, 15) };
+
+      var m = SetupGSAMerger();
+
+      var exceptionThrown = false;
+      try
+      {
+        var testResult = m.Map(newObj, existingObj);
+      }
+      catch(Exception ex)
+      {
+        exceptionThrown = true;
+      }
+
+      Assert.IsFalse(exceptionThrown);
+      Assert.IsNotNull(existingObj.Stiffness);
+      Assert.IsTrue(existingObj.Stiffness.Value.SequenceEqual(new List<double> { 10, 11, 12, 13, 14, 15 }));
+      Assert.IsTrue(existingObj.Value.SequenceEqual(new List<double> { 1, 2, 3 }));
+    }
+
+    [Test]
     public void MergeTestGSA_WithMerger()
     {
       var ls1 = new object[] { "PROP_SPR.3:{speckle_app_id:gh/a}", 1, "LSPxGeneral", "NO_RGB", "GLOBAL", "GENERAL", 0, 16, 0, 17, 0, 18, 0, 19, 0, 20, 0, 21, 0.21 };
@@ -106,7 +130,7 @@ namespace SpeckleStructuralGSA.Test
 
       var speckleTypes = SpeckleUtil.Helper.GetLoadedSpeckleTypes();
 
-      var mappableTypes = new List<Type>();
+      var mappingTypes = new List<Type>();
       var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetTypes().Any(t => typeof(ISpeckleInitializer).IsAssignableFrom(t))).ToList();
       var relevantAssemblies =  assemblies.Where(a => a.FullName.Contains("GSA"));
       foreach (var assembly in relevantAssemblies)
@@ -116,17 +140,24 @@ namespace SpeckleStructuralGSA.Test
           var methods = SpeckleUtil.Helper.GetExtensionMethods(assembly, t, "ToNative");
           if (methods != null && methods.Count() > 0)
           {
-            mappableTypes.Add(t);
+            mappingTypes.Add(t);
+          }
+
+          if (t.BaseType != null)
+          {
+            if (!mappingTypes.Contains(t.BaseType))
+            {
+              mappingTypes.Add(t.BaseType);
+            }
           }
         }
       }
 
       var merger = new SpeckleObjectMerger();
-      merger.Initialise(mappableTypes);
+      merger.Initialise(mappingTypes);
 
       var resultingObject = merger.Merge(newToMerge, existing);
     }
-
 
     [Test]
     public void MergeTestGSA()
@@ -142,6 +173,13 @@ namespace SpeckleStructuralGSA.Test
 
       var newToMerge = new StructuralSpringProperty() { DampingRatio = 1.5 };
 
+      var m = SetupGSAMerger();
+
+      var resultingObject = m.Map(newToMerge, existing);
+    }
+
+    private IMapper SetupGSAMerger()
+    {
       //Find all structural types which have a ToNative static method
       var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetTypes().Any(t => typeof(ISpeckleInitializer).IsAssignableFrom(t))).ToList();
       var speckleTypes = new List<Type>();
@@ -163,9 +201,17 @@ namespace SpeckleStructuralGSA.Test
         foreach (var t in speckleTypes)
         {
           var methods = GetExtensionMethods(assembly, t, "ToNative");
-          if (methods != null && methods.Count() > 0)
+          if (methods != null && methods.Count() > 0 && !mappableTypes.Contains(t))
           {
             mappableTypes.Add(t);
+          }
+
+          if (t.BaseType != null)
+          {
+            if (!mappableTypes.Contains(t.BaseType))
+            {
+              mappableTypes.Add(t.BaseType);
+            }
           }
         }
       }
@@ -184,7 +230,7 @@ namespace SpeckleStructuralGSA.Test
 
       var m = config.CreateMapper();
 
-      var resultingObject = m.Map(newToMerge, existing);
+      return m;
     }
 
     private static IEnumerable<MethodInfo> GetExtensionMethods(Assembly assembly, Type extendedType, string methodName)
@@ -213,16 +259,6 @@ namespace SpeckleStructuralGSA.Test
       }
 
       return returnMethodInfos;
-      
-      var query = from type in assembly.GetTypes()
-                  where type.IsSealed && !type.IsGenericType && !type.IsNested
-                  from method in type.GetMethods(BindingFlags.Static
-                    | BindingFlags.Public | BindingFlags.NonPublic)
-                  where method.IsDefined(typeof(System.Runtime.CompilerServices.ExtensionAttribute), false)
-                  where method.GetParameters()[0].ParameterType == extendedType
-                  where method.Name == methodName
-                  select method;
-      return query;
     }
 
     private void PrepareInterfacerForGwaToSpeckle<T>(string gwaCommand, string keyword, string sid)
@@ -267,16 +303,10 @@ namespace SpeckleStructuralGSA.Test
   {
     public object Resolve(object source, object destination, object sourceMember, object destinationMember, ResolutionContext context)
     {
-      if ((sourceMember is Enum && sourceMember.Equals(GetDefaultValue(sourceMember.GetType())))
-        || (sourceMember is Array && ((Array)sourceMember).Length == 0))
+      if (sourceMember is Enum && sourceMember.Equals(GetDefaultValue(sourceMember.GetType())))
       {
         return destinationMember;
-      }
-      var collection = sourceMember as System.Collections.ICollection;
-      if (collection != null && collection.Count == 0)
-      {
-        return destinationMember;
-      }
+      }      
       return sourceMember ?? destinationMember;
     }
 
