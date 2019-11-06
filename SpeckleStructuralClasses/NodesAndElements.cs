@@ -8,6 +8,7 @@ namespace SpeckleStructuralClasses
 {
   public enum Structural1DElementType
   {
+    NotSet,
     Generic,
     Column,
     Beam,
@@ -18,6 +19,7 @@ namespace SpeckleStructuralClasses
 
   public enum Structural2DElementType
   {
+    NotSet,
     Generic,
     Slab,
     Wall
@@ -64,7 +66,7 @@ namespace SpeckleStructuralClasses
     public StructuralAxis Axis
     {
       get => StructuralProperties.ContainsKey("axis") ? (StructuralProperties["axis"] as StructuralAxis) : null;
-      set => StructuralProperties["axis"] = value;
+      set { if (value != null) StructuralProperties["axis"] = value; }
     }
 
     /// <summary>A list of the X, Y, Z, Rx, Ry, and Rz restraints.</summary>
@@ -72,7 +74,7 @@ namespace SpeckleStructuralClasses
     public StructuralVectorBoolSix Restraint
     {
       get => StructuralProperties.ContainsKey("restraint") ? (StructuralProperties["restraint"] as StructuralVectorBoolSix) : null;
-      set => StructuralProperties["restraint"] = value;
+      set { if (value != null) StructuralProperties["restraint"] = value; }
     }
 
     /// <summary>A list of the X, Y, Z, Rx, Ry, and Rz stiffnesses.</summary>
@@ -80,7 +82,7 @@ namespace SpeckleStructuralClasses
     public StructuralVectorSix Stiffness
     {
       get => StructuralProperties.ContainsKey("stiffness") ? (StructuralProperties["stiffness"] as StructuralVectorSix) : null;
-      set => StructuralProperties["stiffness"] = value;
+      set { if (value != null) StructuralProperties["stiffness"] = value; }
     }
 
     /// <summary>Mass of the node.</summary>
@@ -88,7 +90,7 @@ namespace SpeckleStructuralClasses
     public double? Mass
     {
       get => StructuralProperties.ContainsKey("mass") ? ((double?)StructuralProperties["mass"]) : null;
-      set => StructuralProperties["mass"] = value;
+      set { if (value != null) StructuralProperties["mass"] = value; }
     }
 
     /// <summary>Analysis results.</summary>
@@ -96,7 +98,7 @@ namespace SpeckleStructuralClasses
     public Dictionary<string, object> Result
     {
       get => StructuralProperties.ContainsKey("result") ? (StructuralProperties["result"] as Dictionary<string, object>) : null;
-      set => StructuralProperties["result"] = value;
+      set { if (value != null) StructuralProperties["result"] = value; }
     }
 
     /// <summary>GSA local mesh size around node.</summary>
@@ -104,7 +106,7 @@ namespace SpeckleStructuralClasses
     public double? GSALocalMeshSize
     {
       get => StructuralProperties.ContainsKey("gsaLocalMeshSize") ? ((double)StructuralProperties["gsaLocalMeshSize"]) : 0;
-      set => StructuralProperties["gsaLocalMeshSize"] = value;
+      set { if (value != null) StructuralProperties["gsaLocalMeshSize"] = value; }
     }
   }
 
@@ -149,7 +151,7 @@ namespace SpeckleStructuralClasses
     public Structural1DElementType ElementType
     {
       get => StructuralProperties.ContainsKey("elementType") ? (Structural1DElementType)Enum.Parse(typeof(Structural1DElementType), (StructuralProperties["elementType"] as string), true) : Structural1DElementType.Generic;
-      set => StructuralProperties["elementType"] = value.ToString();
+      set { if (value != Structural1DElementType.NotSet) StructuralProperties["elementType"] = value.ToString(); }
     }
 
     /// <summary>Application ID of Structural1DProperty.</summary>
@@ -157,7 +159,7 @@ namespace SpeckleStructuralClasses
     public string PropertyRef
     {
       get => StructuralProperties.ContainsKey("propertyRef") ? (StructuralProperties["propertyRef"] as string) : null;
-      set => StructuralProperties["propertyRef"] = value;
+      set { if (value != null) StructuralProperties["propertyRef"] = value; }
     }
 
     /// <summary>Local axis of 1D element.</summary>
@@ -165,7 +167,7 @@ namespace SpeckleStructuralClasses
     public StructuralVectorThree ZAxis
     {
       get => StructuralProperties.ContainsKey("zAxis") ? (StructuralProperties["zAxis"] as StructuralVectorThree) : null;
-      set => StructuralProperties["zAxis"] = value;
+      set { if (value != null) StructuralProperties["zAxis"] = value; }
     }
 
     /// <summary>List of X, Y, Z, Rx, Ry, and Rz releases on each end.</summary>
@@ -193,7 +195,7 @@ namespace SpeckleStructuralClasses
         else
           return null;
       }
-      set => StructuralProperties["endRelease"] = value;
+      set { if (value != null) StructuralProperties["endRelease"] = value; }
     }
 
     /// <summary>List of X, Y, and, Z offsets on each end.</summary>
@@ -221,7 +223,7 @@ namespace SpeckleStructuralClasses
         else
           return null;
       }
-      set => StructuralProperties["offset"] = value;
+      set { if (value != null) StructuralProperties["offset"] = value; }
     }
 
     /// <summary>GSA target mesh size.</summary>
@@ -229,7 +231,7 @@ namespace SpeckleStructuralClasses
     public double? GSAMeshSize
     {
       get => StructuralProperties.ContainsKey("gsaMeshSize") ? ((double?)StructuralProperties["gsaMeshSize"]) : null;
-      set => StructuralProperties["gsaMeshSize"] = value;
+      set { if (value != null) StructuralProperties["gsaMeshSize"] = value; }
     }
 
     /// <summary>GSA dummy status.</summary>
@@ -237,7 +239,7 @@ namespace SpeckleStructuralClasses
     public bool? GSADummy
     {
       get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool?)StructuralProperties["gsaDummy"]) : null;
-      set => StructuralProperties["gsaDummy"] = value;
+      set { if (value != null) StructuralProperties["gsaDummy"] = value; }
     }
 
     /// <summary>Vertex location of results.</summary>
@@ -266,7 +268,7 @@ namespace SpeckleStructuralClasses
         else
           return null;
       }
-      set => StructuralProperties["resultVertices"] = value;
+      set { if (value != null) StructuralProperties["resultVertices"] = value; }
     }
 
     /// <summary>Analysis results.</summary>
@@ -274,7 +276,7 @@ namespace SpeckleStructuralClasses
     public Dictionary<string, object> Result
     {
       get => StructuralProperties.ContainsKey("result") ? (StructuralProperties["result"] as Dictionary<string, object>) : null;
-      set => StructuralProperties["result"] = value;
+      set { if (value != null) StructuralProperties["result"] = value; }
     }
   }
 
@@ -319,7 +321,7 @@ namespace SpeckleStructuralClasses
     public string PropertyRef
     {
       get => StructuralProperties.ContainsKey("propertyRef") ? (StructuralProperties["propertyRef"] as string) : null;
-      set => StructuralProperties["propertyRef"] = value;
+      set { if (value != null) StructuralProperties["propertyRef"] = value; }
     }
 
     /// <summary>GSA dummy status.</summary>
@@ -327,7 +329,7 @@ namespace SpeckleStructuralClasses
     public bool? Dummy
     {
       get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool?)StructuralProperties["gsaDummy"]) : null;
-      set => StructuralProperties["gsaDummy"] = value;
+      set { if (value != null) StructuralProperties["gsaDummy"] = value; }
     }
 
     /// <summary>Analysis results.</summary>
@@ -335,7 +337,7 @@ namespace SpeckleStructuralClasses
     public Dictionary<string, object> Result
     {
       get => StructuralProperties.ContainsKey("result") ? (StructuralProperties["result"] as Dictionary<string, object>) : null;
-      set => StructuralProperties["result"] = value;
+      set { if (value != null) StructuralProperties["result"] = value; }
     }
   }
 
@@ -393,7 +395,7 @@ namespace SpeckleStructuralClasses
         else
           return null;
       }
-      set => StructuralProperties["elementApplicationId"] = value;
+      set { if (value != null) StructuralProperties["elementApplicationId"] = value; }
     }
 
     /// <summary>Base SpecklePolyline.</summary>
@@ -414,7 +416,7 @@ namespace SpeckleStructuralClasses
     public Structural1DElementType ElementType
     {
       get => StructuralProperties.ContainsKey("elementType") ? (Structural1DElementType)Enum.Parse(typeof(Structural1DElementType), (StructuralProperties["elementType"] as string), true) : default;
-      set => StructuralProperties["elementType"] = value.ToString();
+      set { if (value != Structural1DElementType.NotSet) StructuralProperties["elementType"] = value.ToString(); }
     }
 
     /// <summary>Application ID of Structural1DProperty.</summary>
@@ -422,7 +424,7 @@ namespace SpeckleStructuralClasses
     public string PropertyRef
     {
       get => StructuralProperties.ContainsKey("propertyRef") ? (StructuralProperties["propertyRef"] as string) : null;
-      set => StructuralProperties["propertyRef"] = value;
+      set { if (value != null) StructuralProperties["propertyRef"] = value; }
     }
 
     /// <summary>Local Z axis of 1D elements.</summary>
@@ -451,7 +453,7 @@ namespace SpeckleStructuralClasses
         else
           return null;
       }
-      set => StructuralProperties["zAxis"] = value;
+      set { if (value != null) StructuralProperties["zAxis"] = value; }
     }
 
     /// <summary>List of X, Y, Z, Rx, Ry, and Rz releases of each node.</summary>
@@ -480,7 +482,7 @@ namespace SpeckleStructuralClasses
         else
           return null;
       }
-      set => StructuralProperties["endRelease"] = value;
+      set { if (value != null) StructuralProperties["endRelease"] = value; }
     }
 
     /// <summary>List of X, Y, Z, Rx, Ry, and Rz offsets of each node.</summary>
@@ -509,7 +511,7 @@ namespace SpeckleStructuralClasses
         else
           return null;
       }
-      set => StructuralProperties["offset"] = value;
+      set { if (value != null) StructuralProperties["offset"] = value; }
     }
 
     /// <summary>GSA target mesh size.</summary>
@@ -517,7 +519,7 @@ namespace SpeckleStructuralClasses
     public double? GSAMeshSize
     {
       get => StructuralProperties.ContainsKey("gsaMeshSize") ? ((double?)StructuralProperties["gsaMeshSize"]) : null;
-      set => StructuralProperties["gsaMeshSize"] = value;
+      set { if (value != null) StructuralProperties["gsaMeshSize"] = value; }
     }
 
     /// <summary>GSA dummy status.</summary>
@@ -525,7 +527,7 @@ namespace SpeckleStructuralClasses
     public bool? GSADummy
     {
       get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool?)StructuralProperties["gsaDummy"]) : null;
-      set => StructuralProperties["gsaDummy"] = value;
+      set { if (value != null) StructuralProperties["gsaDummy"] = value; }
     }
 
     /// <summary>Vertex location of results.</summary>
@@ -554,7 +556,7 @@ namespace SpeckleStructuralClasses
         else
           return null;
       }
-      set => StructuralProperties["resultVertices"] = value;
+      set { if (value != null) StructuralProperties["resultVertices"] = value; }
     }
 
     /// <summary>Analysis results.</summary>
@@ -562,7 +564,7 @@ namespace SpeckleStructuralClasses
     public Dictionary<string, object> Result
     {
       get => StructuralProperties.ContainsKey("result") ? (StructuralProperties["result"] as Dictionary<string, object>) : null;
-      set => StructuralProperties["result"] = value;
+      set { if (value != null) StructuralProperties["result"] = value; }
     }
   }
 
@@ -613,7 +615,7 @@ namespace SpeckleStructuralClasses
     public Structural2DElementType ElementType
     {
       get => StructuralProperties.ContainsKey("elementType") ? (Structural2DElementType)Enum.Parse(typeof(Structural2DElementType), (StructuralProperties["elementType"] as string), true) : default;
-      set => StructuralProperties["elementType"] = value.ToString();
+      set { if (value != Structural2DElementType.NotSet) StructuralProperties["elementType"] = value.ToString(); }
     }
 
     /// <summary>Application ID of Structural2DProperty.</summary>
@@ -621,7 +623,7 @@ namespace SpeckleStructuralClasses
     public string PropertyRef
     {
       get => StructuralProperties.ContainsKey("propertyRef") ? (StructuralProperties["propertyRef"] as string) : null;
-      set => StructuralProperties["propertyRef"] = value;
+      set { if (value != null) StructuralProperties["propertyRef"] = value; }
     }
 
     /// <summary>Local axis of 2D element.</summary>
@@ -629,7 +631,7 @@ namespace SpeckleStructuralClasses
     public StructuralAxis Axis
     {
       get => StructuralProperties.ContainsKey("axis") ? (StructuralProperties["axis"] as StructuralAxis) : null;
-      set => StructuralProperties["axis"] = value;
+      set { if (value != null) StructuralProperties["axis"] = value; }
     }
 
     /// <summary>Offset of 2D element.</summary>
@@ -637,7 +639,7 @@ namespace SpeckleStructuralClasses
     public double? Offset
     {
       get => StructuralProperties.ContainsKey("offset") ? ((double?)StructuralProperties["offset"]) : null;
-      set => StructuralProperties["offset"] = value;
+      set { if (value != null) StructuralProperties["offset"] = value; }
     }
 
     /// <summary>GSA target mesh size.</summary>
@@ -645,14 +647,14 @@ namespace SpeckleStructuralClasses
     public double? GSAMeshSize
     {
       get => StructuralProperties.ContainsKey("gsaMeshSize") ? ((double?)StructuralProperties["gsaMeshSize"]) : null;
-      set => StructuralProperties["gsaMeshSize"] = value;
+      set { if (value != null) StructuralProperties["gsaMeshSize"] = value; }
     }
 
     [JsonIgnore]
     public bool? GSAAutoOffsets
     {
       get => StructuralProperties.ContainsKey("gsaAutoOffsets") ? ((bool?)StructuralProperties["gsaAutoOffsets"]) : null;
-      set => StructuralProperties["gsaAutoOffsets"] = value;
+      set { if (value != null) StructuralProperties["gsaAutoOffsets"] = value; }
     }
 
     /// <summary>GSA dummy status.</summary>
@@ -660,7 +662,7 @@ namespace SpeckleStructuralClasses
     public bool? GSADummy
     {
       get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool?)StructuralProperties["gsaDummy"]) : null;
-      set => StructuralProperties["gsaDummy"] = value;
+      set { if (value != null) StructuralProperties["gsaDummy"] = value; }
     }
 
     /// <summary>Analysis results.</summary>
@@ -668,7 +670,7 @@ namespace SpeckleStructuralClasses
     public Dictionary<string, object> Result
     {
       get => StructuralProperties.ContainsKey("result") ? (StructuralProperties["result"] as Dictionary<string, object>) : null;
-      set => StructuralProperties["result"] = value;
+      set { if (value != null) StructuralProperties["result"] = value; }
     }
   }
 
@@ -726,7 +728,7 @@ namespace SpeckleStructuralClasses
         else
           return null;
       }
-      set => StructuralProperties["elementApplicationId"] = value;
+      set { if (value != null) StructuralProperties["elementApplicationId"] = value; }
     }
 
     /// <summary>Base SpeckleMesh.</summary>
@@ -748,7 +750,7 @@ namespace SpeckleStructuralClasses
     public Structural2DElementType ElementType
     {
       get => StructuralProperties.ContainsKey("elementType") ? (Structural2DElementType)Enum.Parse(typeof(Structural2DElementType), (StructuralProperties["elementType"] as string), true) : default;
-      set => StructuralProperties["elementType"] = value.ToString();
+      set { if (value != Structural2DElementType.NotSet) StructuralProperties["elementType"] = value.ToString(); }
     }
 
     /// <summary>Application ID of Structural2DProperty.</summary>
@@ -756,7 +758,7 @@ namespace SpeckleStructuralClasses
     public string PropertyRef
     {
       get => StructuralProperties.ContainsKey("propertyRef") ? (StructuralProperties["propertyRef"] as string) : null;
-      set => StructuralProperties["propertyRef"] = value;
+      set { if (value != null) StructuralProperties["propertyRef"] = value; }
     }
 
     /// <summary>Local axis of each 2D element.</summary>
@@ -784,7 +786,7 @@ namespace SpeckleStructuralClasses
         else
           return null;
       }
-      set => StructuralProperties["axis"] = value;
+      set { if (value != null) StructuralProperties["axis"] = value; }
     }
 
     /// <summary>Offset of easch 2D element.</summary>
@@ -813,7 +815,7 @@ namespace SpeckleStructuralClasses
         else
           return null;
       }
-      set => StructuralProperties["offset"] = value;
+      set { if (value != null) StructuralProperties["offset"] = value; }
     }
 
     /// <summary>GSA target mesh size.</summary>
@@ -821,7 +823,7 @@ namespace SpeckleStructuralClasses
     public double? GSAMeshSize
     {
       get => StructuralProperties.ContainsKey("gsaMeshSize") ? ((double?)StructuralProperties["gsaMeshSize"]) : null;
-      set => StructuralProperties["gsaMeshSize"] = value;
+      set { if (value != null) StructuralProperties["gsaMeshSize"] = value; }
     }
 
     /// <summary>GSA dummy status.</summary>
@@ -829,7 +831,7 @@ namespace SpeckleStructuralClasses
     public bool? GSADummy
     {
       get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool?)StructuralProperties["gsaDummy"]) : null;
-      set => StructuralProperties["gsaDummy"] = value;
+      set { if (value != null) StructuralProperties["gsaDummy"] = value; }
     }
 
     /// <summary>Analysis results.</summary>
@@ -837,7 +839,7 @@ namespace SpeckleStructuralClasses
     public Dictionary<string, object> Result
     {
       get => StructuralProperties.ContainsKey("result") ? (StructuralProperties["result"] as Dictionary<string, object>) : null;
-      set => StructuralProperties["result"] = value;
+      set { if (value != null) StructuralProperties["result"] = value; }
     }
   }
 

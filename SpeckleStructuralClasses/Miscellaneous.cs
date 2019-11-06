@@ -71,7 +71,7 @@ namespace SpeckleStructuralClasses
         }
         return null;
       }
-      set => StructuralProperties["numPoints"] = value;
+      set { if (value != null) StructuralProperties["numPoints"] = value; }
     }
 
     /// <summary>Base SpeckleLine.</summary>
@@ -90,14 +90,14 @@ namespace SpeckleStructuralClasses
     public SpecklePoint OrientationPoint
     {
       get => StructuralProperties.ContainsKey("orientationPoint") ? (StructuralProperties["orientationPoint"] as SpecklePoint) : null;
-      set => StructuralProperties["orientationPoint"] = value;
+      set { if (value != null) StructuralProperties["orientationPoint"] = value; }
     }
 
     [JsonIgnore]
     public double? Width
     {
       get => (StructuralProperties.ContainsKey("width") && double.TryParse(StructuralProperties["width"].ToString(), out var width)) ? (double?) width : null;
-      set => StructuralProperties["width"] = value;
+      set { if (value != null) StructuralProperties["width"] = value; }
     }
 
     /// <summary>Application ID of StructuralLoadCase.</summary>
@@ -126,7 +126,7 @@ namespace SpeckleStructuralClasses
         else
           return null;
       }
-      set => StructuralProperties["elementRefs"] = value;
+      set { if (value != null) StructuralProperties["elementRefs"] = value; }
     }
   }
 
@@ -196,7 +196,7 @@ namespace SpeckleStructuralClasses
         else
           return null;
       }
-      set => StructuralProperties["nodes"] = value;
+      set { if (value != null) StructuralProperties["nodes"] = value; }
     }
 
     [JsonIgnore]
@@ -294,7 +294,7 @@ namespace SpeckleStructuralClasses
         else
           return null;
       }
-      set => StructuralProperties["axles"] = value;
+      set { if (value != null) StructuralProperties["axles"] = value; }
     }
 
     [JsonIgnore]

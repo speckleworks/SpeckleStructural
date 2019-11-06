@@ -47,9 +47,8 @@ namespace SpeckleStructuralGSA.Test
     [Test]
     public void MergeTestAutomapper()
     {
-      var newObj = new mTest { d = 5, e1 = eTest.NotSet, e2 = eTest.AVal, dArr = new List<double>() };
-      var existingStiffness = new StructuralVectorSix(new double[] { 10, 20, 30, 40, 50, 60 });
-      var existingObj = new mTest { s = "Test", e1 = eTest.BVal, dArr = new List<double> { 1, 2, 3 }, v = existingStiffness };
+      var newObj = new mTest { d = 5, e1 = eTest.NotSet, e2 = eTest.AVal, dArr = new List<double>(), v = new StructuralVectorSix(new double[] { 10, 20, 30, 40, 50, 60 } ) };
+      var existingObj = new mTest { s = "Test", e1 = eTest.BVal, dArr = new List<double> { 1, 2, 3 }};
 
       var config = new MapperConfiguration(cfg =>
       {        
@@ -79,7 +78,7 @@ namespace SpeckleStructuralGSA.Test
       var config = new MapperConfiguration(cfg =>
       {
         cfg.CreateMap<StructuralNode, StructuralNode>();
-        cfg.CreateMap<SpecklePoint, SpecklePoint>();
+        //cfg.CreateMap<SpecklePoint, SpecklePoint>();
         cfg.ForAllPropertyMaps(pm => true, (pm, c) => c.ResolveUsing(new IgnoreNullResolver(), pm.SourceMember.Name));
       });
 
@@ -88,13 +87,15 @@ namespace SpeckleStructuralGSA.Test
       var m = config.CreateMapper();
 
       var testResult = m.Map(newObj, existingObj);
+
+      Assert.IsTrue(existingObj.Value.SequenceEqual(new List<double> { 1, 2, 3 }));
     }
 
     [Test]
     public void MergeTestAutoMapperNode()
     {
-      var newObj = new StructuralNode { Value = new List<double> { 1, 2, 3 } };
-      var existingObj = new StructuralNode { Value = new List<double> { 4, 5, 6 }, Stiffness = new StructuralVectorSix(10, 11, 12, 13, 14, 15) };
+      var newObj = new StructuralNode { Value = new List<double> { 1, 2, 3 }, Stiffness = new StructuralVectorSix(10, 11, 12, 13, 14, 15) };
+      var existingObj = new StructuralNode { Value = new List<double> { 4, 5, 6 } };
 
       var m = SetupGSAMerger();
 
@@ -204,13 +205,13 @@ namespace SpeckleStructuralGSA.Test
           if (methods != null && methods.Count() > 0 && !mappableTypes.Contains(t))
           {
             mappableTypes.Add(t);
-          }
 
-          if (t.BaseType != null)
-          {
-            if (!mappableTypes.Contains(t.BaseType))
+            if (t.BaseType != null && t.BaseType != typeof(SpeckleObject))
             {
-              mappableTypes.Add(t.BaseType);
+              if (!mappableTypes.Contains(t.BaseType))
+              {
+                mappableTypes.Add(t.BaseType);
+              }
             }
           }
         }

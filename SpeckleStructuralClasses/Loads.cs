@@ -217,7 +217,7 @@ namespace SpeckleStructuralClasses
     public StructuralVectorSix Loading
     {
       get => StructuralProperties.ContainsKey("loading") ? (StructuralProperties["loading"] as StructuralVectorSix) : null;
-      set => StructuralProperties["loading"] = value;
+      set { if (value != null) StructuralProperties["loading"] = value; }
     }
 
     /// <summary>Application ID of StructuralLoadCase.</summary>
@@ -225,7 +225,7 @@ namespace SpeckleStructuralClasses
     public string LoadCaseRef
     {
       get => StructuralProperties.ContainsKey("loadCaseRef") ? (StructuralProperties["loadCaseRef"] as string) : null;
-      set => StructuralProperties["loadCaseRef"] = value;
+      set { if (value != null) StructuralProperties["loadCaseRef"] = value; }
     }
   }
 
@@ -293,7 +293,7 @@ namespace SpeckleStructuralClasses
     public StructuralVectorThree Loading
     {
       get => StructuralProperties.ContainsKey("loading") ? (StructuralProperties["loading"] as StructuralVectorThree) : null;
-      set => StructuralProperties["loading"] = value;
+      set { if (value != null) StructuralProperties["loading"] = value; }
     }
 
     /// <summary>Application ID of StructuralLoadCase.</summary>
@@ -301,7 +301,7 @@ namespace SpeckleStructuralClasses
     public string LoadCaseRef
     {
       get => StructuralProperties.ContainsKey("loadCaseRef") ? (StructuralProperties["loadCaseRef"] as string) : null;
-      set => StructuralProperties["loadCaseRef"] = value;
+      set { if (value != null) StructuralProperties["loadCaseRef"] = value; }
     }
   }
 
