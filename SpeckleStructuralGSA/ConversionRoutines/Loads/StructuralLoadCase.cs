@@ -106,7 +106,7 @@ namespace SpeckleStructuralGSA
           ls.Add("LC_VAR_TEMP");
           break;
         default:
-          ls.Add("UNDEF");
+          ls.Add("LC_UNDEF");
           break;
       }
       ls.Add("1"); // Source

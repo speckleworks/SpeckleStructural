@@ -5925,6 +5925,1318 @@
     "properties": {}
   },
   {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -300.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "fca7d9e7e4e06650e93590f080c21a6c",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_282",
+      "gsa/NODE.2_283",
+      "gsa/NODE.2_284",
+      "gsa/NODE.2_285",
+      "gsa/NODE.2_286",
+      "gsa/NODE.2_287",
+      "gsa/NODE.2_288",
+      "gsa/NODE.2_289",
+      "gsa/NODE.2_290",
+      "gsa/NODE.2_291",
+      "gsa/NODE.2_292",
+      "gsa/NODE.2_293",
+      "gsa/NODE.2_294",
+      "gsa/NODE.2_295",
+      "gsa/NODE.2_296",
+      "gsa/NODE.2_297",
+      "gsa/NODE.2_298",
+      "gsa/NODE.2_299",
+      "gsa/NODE.2_301",
+      "gsa/NODE.2_302",
+      "gsa/NODE.2_303",
+      "gsa/NODE.2_304",
+      "gsa/NODE.2_305",
+      "gsa/NODE.2_306",
+      "gsa/NODE.2_307",
+      "gsa/NODE.2_308",
+      "gsa/NODE.2_309",
+      "gsa/NODE.2_310",
+      "gsa/NODE.2_311",
+      "gsa/NODE.2_312",
+      "gsa/NODE.2_313",
+      "gsa/NODE.2_314",
+      "gsa/NODE.2_315",
+      "gsa/NODE.2_316",
+      "gsa/NODE.2_317",
+      "gsa/NODE.2_318",
+      "gsa/NODE.2_319",
+      "gsa/NODE.2_320",
+      "gsa/NODE.2_321",
+      "gsa/NODE.2_322",
+      "gsa/NODE.2_323",
+      "gsa/NODE.2_324",
+      "gsa/NODE.2_325",
+      "gsa/NODE.2_326",
+      "gsa/NODE.2_327",
+      "gsa/NODE.2_328",
+      "gsa/NODE.2_329",
+      "gsa/NODE.2_330",
+      "gsa/NODE.2_331",
+      "gsa/NODE.2_332",
+      "gsa/NODE.2_333",
+      "gsa/NODE.2_334",
+      "gsa/NODE.2_335",
+      "gsa/NODE.2_336",
+      "gsa/NODE.2_337",
+      "gsa/NODE.2_338",
+      "gsa/NODE.2_339",
+      "gsa/NODE.2_340",
+      "gsa/NODE.2_464"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_3",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -168.96,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "9bd0afac6d162489bf5e363e4ecaca82",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_222"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -169.9199844,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "75e50d5fca9770ac5ef2a5c250eb3680",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_223"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -170.2799844,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "acc069f2b56feba36f1726bcc964ab49",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_224"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -170.0399844,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "1be0a3a3f200a9339b2232078d18cc36",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_225"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -169.8,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "6b87175ce0b60169c800015f61663b1f",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_226"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -169.08,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "d942cafb5b7806012e2701dd66e1980c",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_227"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -170.16,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "ddc5ee36f238e1175fad5f2c6b933e1d",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_229"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -157.6799844,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "4acd82af5c788cacea7f9946248f9a99",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_230"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -165.8399844,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "5853d88d7f1cf3da692d763c136db5ce",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_231"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -127.0799922,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "68875c012194a3f607505eda0815fecb",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_232"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -203.9999844,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "f143eecd05c90b289d4dfa1adf55e8fc",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_233"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -158.7599844,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "a2d280623c8ec079a02c6cb9a533d442",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_234"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -317.88,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "acb806c5ba60106d27356960f883cb4d",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_235"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -176.9999844,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "0f479c73d8815eb4088ceda1cbdcebea",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_236"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -315.9599688,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "5e786a7f4d0e3b5ed3323fcf11abe547",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_237"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -350.16,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "8f1369bc9cad8a4eef17300997f7d724",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_238"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -305.88,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "177e1d9aa67d91151e5fa3a874ee6a3f",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_239"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -168.1199844,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "e5e4cd03c18423384db3ee749f9eecee",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_240"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -224.52,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "f71afaacbc718ae839083e270bad0b0c",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_241"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -278.64,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "b047756ed294f4f928c4d06c38eb545c",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_242"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -150.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "8c36619483923f20aac3ee37c74a01c9",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_243"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -155.0399844,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "ef84d5cc8bb45516aa92da03b67057a4",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_244"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -151.08,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "de952ca55aea17ff1a468c0c3265c3a0",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_245"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -194.6399844,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "bb1b03b0ab635fdd801fa9697bd6c85a",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_246"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -186.4799844,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "e414648591e757490e031a48558476a4",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_247"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -192.6,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "9981ec2b939310bd58c994bab7b7bd6e",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_248"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -219.3599844,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "20ea71ae4d1b7f9300a79ea0975f2080",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_249"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -211.8,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "cfc3ab5ae041628059e69354de10562c",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_250"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -218.16,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "bcef2a81b30a2c75ffa7eb6399c42245",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_251"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -199.1999844,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "3e80e8ae5d708d9f6663d533e9689151",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_252"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -161.2799844,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "affe122344596f16c901ce127ea5606a",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_253"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -168.96,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "9bd0afac6d162489bf5e363e4ecaca82",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_254"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -1119.719875,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "2fc86c6a480c0393fc191911dbd9b343",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_255"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -1133.52,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "ae7c852ae7f3eb3b2cacd55e08aaae40",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_257"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -1327.199875,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "db2d2c545b4a4477b9eac23e556607af",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_258"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -1334.4,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "9400ca995584cadae2debf6b7103f643",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_259"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -370.44,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "841d0fbe2abd990fbdedcb8e2e1c95f1",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_260"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -1757.999875,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "3bed50f477c3ffe2d77034bf903eaa82",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_261"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -646.44,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "0eb50a095cf42d6fb86b8600e5c55beb",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_262"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -341.16,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "f322ff0a0db0436b024d307cf5217aa0",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_263"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -352.2,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "b7149704937796104f20d1a216e078a9",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_264"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -345.3599688,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "77f676746e484f3dfedf5e24f88b3c6a",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_265"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -320.04,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "4bec16199f898acb7dcf2b7fec757822",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_266"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -313.0799688,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "9d78e2a5afd768f9cea00c8c48b6592e",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_267"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -300.48,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "1c19020a9b4a307290910a122f1bcef8",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_268"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -217.8,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "d965ca9e06f19b03a7ae1025f3341eb4",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_269"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -362.2799688,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "f1e9aebf5687675d44d59a3e1279a35b",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_270"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -162.24,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "11aa22c4410e0cc83a730772151f585d",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_271"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -170.88,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "0de6bfc363c8849493e6705db64cbd3c",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_273"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -67.884,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "87ac2721cc21097dc922bb3df5f461cd",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_275"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -67.944,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "941cfe0fdd87d9bd0a0fc0f7a6fb6c7c",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_276"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -67.956,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "af430501f34cf78adf963f3d663b8264",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_277"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -68.27999219,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "654dce7223e1afcf7a7ade5178df1b10",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_278"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -484.92,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "8f675d7b9a576a2e1334e5fcbbd96955",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_280"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -68.112,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "c33d99363e6df46cf377fdd4ab9ffbee",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_281"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Structural0DLoad",
+    "loading": {
+      "type": "StructuralVectorSix",
+      "value": [
+        0.0,
+        0.0,
+        -726.96,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hash": "8f5878d51fe07d8e4630c2202032f01c",
+      "properties": {}
+    },
+    "nodeRefs": [
+      "gsa/NODE.2_475"
+    ],
+    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+    "name": "",
+    "properties": {}
+  },
+  {
     "type": "StructuralGravityLoading",
     "gravityFactors": {
       "type": "Vector/StructuralVectorThree",
@@ -5938,6 +7250,58 @@
     },
     "loadCaseRef": "gsa/LOAD_TITLE.2_1",
     "name": "",
+    "properties": {}
+  },
+  {
+    "type": "StructuralLoadTask",
+    "taskType": "LinearStatic",
+    "loadCaseRefs": [
+      "gsa/LOAD_TITLE.2_1"
+    ],
+    "loadFactors": [
+      1.0
+    ],
+    "applicationId": "gsa/ANAL.1_1",
+    "name": "SW",
+    "properties": {}
+  },
+  {
+    "type": "StructuralLoadTask",
+    "taskType": "LinearStatic",
+    "loadCaseRefs": [
+      "gsa/LOAD_TITLE.2_2"
+    ],
+    "loadFactors": [
+      1.0
+    ],
+    "applicationId": "gsa/ANAL.1_2",
+    "name": "ULS_FACADE POINT LOADS",
+    "properties": {}
+  },
+  {
+    "type": "StructuralLoadTask",
+    "taskType": "LinearStatic",
+    "loadCaseRefs": [
+      "gsa/LOAD_TITLE.2_3"
+    ],
+    "loadFactors": [
+      1.0
+    ],
+    "applicationId": "gsa/ANAL.1_3",
+    "name": "ULS_PORTE-CACHERE",
+    "properties": {}
+  },
+  {
+    "type": "StructuralLoadTask",
+    "taskType": "LinearStatic",
+    "loadCaseRefs": [
+      "gsa/LOAD_TITLE.2_5"
+    ],
+    "loadFactors": [
+      1.0
+    ],
+    "applicationId": "gsa/ANAL.1_5",
+    "name": "SYSTEM TEST",
     "properties": {}
   },
   {
@@ -11936,1370 +13300,6 @@
         ]
       }
     }
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -300.0,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "fca7d9e7e4e06650e93590f080c21a6c",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_282",
-      "gsa/NODE.2_283",
-      "gsa/NODE.2_284",
-      "gsa/NODE.2_285",
-      "gsa/NODE.2_286",
-      "gsa/NODE.2_287",
-      "gsa/NODE.2_288",
-      "gsa/NODE.2_289",
-      "gsa/NODE.2_290",
-      "gsa/NODE.2_291",
-      "gsa/NODE.2_292",
-      "gsa/NODE.2_293",
-      "gsa/NODE.2_294",
-      "gsa/NODE.2_295",
-      "gsa/NODE.2_296",
-      "gsa/NODE.2_297",
-      "gsa/NODE.2_298",
-      "gsa/NODE.2_299",
-      "gsa/NODE.2_301",
-      "gsa/NODE.2_302",
-      "gsa/NODE.2_303",
-      "gsa/NODE.2_304",
-      "gsa/NODE.2_305",
-      "gsa/NODE.2_306",
-      "gsa/NODE.2_307",
-      "gsa/NODE.2_308",
-      "gsa/NODE.2_309",
-      "gsa/NODE.2_310",
-      "gsa/NODE.2_311",
-      "gsa/NODE.2_312",
-      "gsa/NODE.2_313",
-      "gsa/NODE.2_314",
-      "gsa/NODE.2_315",
-      "gsa/NODE.2_316",
-      "gsa/NODE.2_317",
-      "gsa/NODE.2_318",
-      "gsa/NODE.2_319",
-      "gsa/NODE.2_320",
-      "gsa/NODE.2_321",
-      "gsa/NODE.2_322",
-      "gsa/NODE.2_323",
-      "gsa/NODE.2_324",
-      "gsa/NODE.2_325",
-      "gsa/NODE.2_326",
-      "gsa/NODE.2_327",
-      "gsa/NODE.2_328",
-      "gsa/NODE.2_329",
-      "gsa/NODE.2_330",
-      "gsa/NODE.2_331",
-      "gsa/NODE.2_332",
-      "gsa/NODE.2_333",
-      "gsa/NODE.2_334",
-      "gsa/NODE.2_335",
-      "gsa/NODE.2_336",
-      "gsa/NODE.2_337",
-      "gsa/NODE.2_338",
-      "gsa/NODE.2_339",
-      "gsa/NODE.2_340",
-      "gsa/NODE.2_464"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_3",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -168.96,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "9bd0afac6d162489bf5e363e4ecaca82",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_222"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -169.919984375,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "3da41d6b3918823f506d77f06e9b6eb1",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_223"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -170.279984375,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "ec15fe8aedc9eb5f06c9f7c8468bc924",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_224"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -170.039984375,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "555b5ef07fc5314c2d299ac170dc7589",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_225"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -169.8,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "6b87175ce0b60169c800015f61663b1f",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_226"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -169.08,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "d942cafb5b7806012e2701dd66e1980c",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_227"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -170.16,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "ddc5ee36f238e1175fad5f2c6b933e1d",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_229"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -157.679984375,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "79e063142ce1f68c3018f59a0e94c8eb",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_230"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -165.839984375,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "a45601557d629445f7d7e403b8402cc6",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_231"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -127.079992187,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "2158fd89b8d54cfa2144a3ace2cbb861",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_232"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -203.999984375,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "0ffd8cb706853a26738a004291298e8e",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_233"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -158.759984375,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "3ff3201ce9f4a5715303d1b745edc7f8",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_234"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -317.88,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "acb806c5ba60106d27356960f883cb4d",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_235"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -176.999984375,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "a7047afbd4069f08422f5b2ec9d257fe",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_236"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -315.95996875,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "3278afb484d3fcfe9b5fccf43fbbbfe7",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_237"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -350.16,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "8f1369bc9cad8a4eef17300997f7d724",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_238"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -305.88,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "177e1d9aa67d91151e5fa3a874ee6a3f",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_239"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -168.119984375,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "126d2d0f9b5057c509d17fd17f974161",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_240"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -224.52,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "f71afaacbc718ae839083e270bad0b0c",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_241"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -278.64,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "b047756ed294f4f928c4d06c38eb545c",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_242"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -150.0,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "8c36619483923f20aac3ee37c74a01c9",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_243"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -155.039984375,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "a9539eeb7acf44d3d23511375c9fa690",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_244"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -151.08,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "de952ca55aea17ff1a468c0c3265c3a0",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_245"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -194.639984375,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "1d2f4f2291589d8ce52145fb6fd2977e",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_246"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -186.479984375,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "a9fcc06c784664dbc09287ff44bd7cbb",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_247"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -192.6,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "9981ec2b939310bd58c994bab7b7bd6e",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_248"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -219.359984375,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "7cf26f2461f19001b261c0d096e1e8a6",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_249"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -211.8,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "cfc3ab5ae041628059e69354de10562c",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_250"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -218.16,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "bcef2a81b30a2c75ffa7eb6399c42245",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_251"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -199.199984375,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "ec08105cb3682587b982f29b9048fb1e",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_252"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -161.279984375,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "957bd606f51a06bad9b667572e1d182f",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_253"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -168.96,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "9bd0afac6d162489bf5e363e4ecaca82",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_254"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -1119.719875,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "2fc86c6a480c0393fc191911dbd9b343",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_255"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -1133.52,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "ae7c852ae7f3eb3b2cacd55e08aaae40",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_257"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -1327.199875,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "db2d2c545b4a4477b9eac23e556607af",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_258"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -1334.4,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "9400ca995584cadae2debf6b7103f643",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_259"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -370.44,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "841d0fbe2abd990fbdedcb8e2e1c95f1",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_260"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -1757.999875,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "3bed50f477c3ffe2d77034bf903eaa82",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_261"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -646.44,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "0eb50a095cf42d6fb86b8600e5c55beb",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_262"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -341.16,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "f322ff0a0db0436b024d307cf5217aa0",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_263"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -352.2,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "b7149704937796104f20d1a216e078a9",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_264"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -345.35996875,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "8fcfb6a4652a4c7a49fdc7139f693eeb",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_265"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -320.04,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "4bec16199f898acb7dcf2b7fec757822",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_266"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -313.07996875,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "ed78a463acb72bef4af571de1580e674",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_267"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -300.48,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "1c19020a9b4a307290910a122f1bcef8",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_268"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -217.8,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "d965ca9e06f19b03a7ae1025f3341eb4",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_269"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -362.27996875,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "09345a99da3c08fb81e43939bc8209f1",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_270"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -162.24,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "11aa22c4410e0cc83a730772151f585d",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_271"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -170.88,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "0de6bfc363c8849493e6705db64cbd3c",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_273"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -67.884,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "87ac2721cc21097dc922bb3df5f461cd",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_275"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -67.944,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "941cfe0fdd87d9bd0a0fc0f7a6fb6c7c",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_276"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -67.956,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "af430501f34cf78adf963f3d663b8264",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_277"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -68.2799921875,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "c0dd611728902bb26e332ffed1c33fbf",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_278"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -484.92,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "8f675d7b9a576a2e1334e5fcbbd96955",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_280"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -68.112,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "c33d99363e6df46cf377fdd4ab9ffbee",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_281"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "Structural0DLoad",
-    "loading": {
-      "type": "StructuralVectorSix",
-      "value": [
-        0.0,
-        0.0,
-        -726.96,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "hash": "8f5878d51fe07d8e4630c2202032f01c",
-      "properties": {}
-    },
-    "nodeRefs": [
-      "gsa/NODE.2_475"
-    ],
-    "loadCaseRef": "gsa/LOAD_TITLE.2_2",
-    "name": "",
-    "properties": {}
-  },
-  {
-    "type": "StructuralLoadTask",
-    "taskType": "LinearStatic",
-    "loadCaseRefs": [
-      "gsa/LOAD_TITLE.2_1"
-    ],
-    "loadFactors": [
-      1.0
-    ],
-    "applicationId": "gsa/ANAL.1_1",
-    "name": "SW",
-    "properties": {}
-  },
-  {
-    "type": "StructuralLoadTask",
-    "taskType": "LinearStatic",
-    "loadCaseRefs": [
-      "gsa/LOAD_TITLE.2_2"
-    ],
-    "loadFactors": [
-      1.0
-    ],
-    "applicationId": "gsa/ANAL.1_2",
-    "name": "ULS_FACADE POINT LOADS",
-    "properties": {}
-  },
-  {
-    "type": "StructuralLoadTask",
-    "taskType": "LinearStatic",
-    "loadCaseRefs": [
-      "gsa/LOAD_TITLE.2_3"
-    ],
-    "loadFactors": [
-      1.0
-    ],
-    "applicationId": "gsa/ANAL.1_3",
-    "name": "ULS_PORTE-CACHERE",
-    "properties": {}
-  },
-  {
-    "type": "StructuralLoadTask",
-    "taskType": "LinearStatic",
-    "loadCaseRefs": [
-      "gsa/LOAD_TITLE.2_5"
-    ],
-    "loadFactors": [
-      1.0
-    ],
-    "applicationId": "gsa/ANAL.1_5",
-    "name": "SYSTEM TEST",
-    "properties": {}
   },
   {
     "type": "Structural1DProperty",

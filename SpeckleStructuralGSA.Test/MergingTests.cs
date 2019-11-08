@@ -78,7 +78,7 @@ namespace SpeckleStructuralGSA.Test
       var config = new MapperConfiguration(cfg =>
       {
         cfg.CreateMap<StructuralNode, StructuralNode>();
-        //cfg.CreateMap<SpecklePoint, SpecklePoint>();
+        cfg.CreateMap<SpecklePoint, SpecklePoint>();
         cfg.ForAllPropertyMaps(pm => true, (pm, c) => c.ResolveUsing(new IgnoreNullResolver(), pm.SourceMember.Name));
       });
 

@@ -44,8 +44,6 @@ namespace SpeckleStructuralClasses
     /// <summary>Type of load the case contains.</summary>
     [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     [JsonProperty("caseType", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-
-    [JsonIgnore]
     public StructuralLoadCaseType CaseType { get; set; }
   }
 

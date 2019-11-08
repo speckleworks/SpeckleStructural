@@ -19,7 +19,9 @@ namespace SpeckleStructuralGSA.Test
     protected GSACache gsaCache;
 
     protected JsonSerializerSettings jsonSettings = new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore };
-    protected string jsonDecSearch = @"(\d*\.\d\d\d\d\d\d\d\d)\d*";
+    protected string jsonDecSearch = @"(\d*\.\d\d\d\d\d\d)\d*";
+    protected string jsonHashSearch = @"""hash"":\s*""[^""]+?""";
+    protected string jsonHashReplace = @"""hash"":""""";
     protected string TestDataDirectory;
 
     protected int NodeIndex = 0;
@@ -63,7 +65,7 @@ namespace SpeckleStructuralGSA.Test
         var applicationId = data[i].Item3;
         var gwa = data[i].Item4;
         var gwaSetCommandType = data[i].Item5;
-        gsaCache.Upsert(keyword, index, gwa, applicationId, currentSession: false, gwaSetCommandType: gwaSetCommandType);
+        gsaCache.Upsert(keyword, index, gwa, applicationId, gwaSetCommandType: gwaSetCommandType);
       }
 
       senderProcessor.GsaInstanceToSpeckleObjects(layer, out var speckleObjects, resultsOnly);

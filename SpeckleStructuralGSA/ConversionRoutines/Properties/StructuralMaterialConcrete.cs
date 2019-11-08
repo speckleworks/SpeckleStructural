@@ -24,7 +24,11 @@ namespace SpeckleStructuralGSA
 
       var pieces = this.GWACommand.ListSplit("\t");
 
+      int commandVersion = 16;
+      int.TryParse(pieces[0].Split(new[] { '.' }).Last(), out commandVersion);
+
       var counter = 1; // Skip identifier
+      
       this.GSAId = Convert.ToInt32(pieces[counter++]);
       obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       counter++; // MAT.8
@@ -36,17 +40,13 @@ namespace SpeckleStructuralGSA
       obj.Density = Convert.ToDouble(pieces[counter++]);
       obj.CoeffThermalExpansion = Convert.ToDouble(pieces[counter++]);
 
-      // Skip to last 27th to last
-      counter = pieces.Count() - 27;
-      obj.CompressiveStrength = Convert.ToDouble(pieces[counter++]);
+      obj.CompressiveStrength = Convert.ToDouble(pieces[42]);
 
-      // Skip to last 15th to last
-      counter = pieces.Count() - 15;
-      obj.MaxStrain = Convert.ToDouble(pieces[counter++]);
+      counter = (commandVersion == 16) ? 54 : 53;
+      obj.MaxStrain = Convert.ToDouble(pieces[counter]);
 
-      // Skip to last 10th to last
-      counter = pieces.Count() - 10;
-      obj.AggragateSize = Convert.ToDouble(pieces[counter++]);
+      counter = (commandVersion == 16) ? 59 : 58;
+      obj.AggragateSize = Convert.ToDouble(pieces[counter]);
 
       this.Value = obj;
     }
