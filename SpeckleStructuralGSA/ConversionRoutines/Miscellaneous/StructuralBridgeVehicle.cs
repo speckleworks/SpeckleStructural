@@ -15,7 +15,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralBridgeVehicle();
 
-    public void ParseGWACommand(IGSAInterfacer GSA)
+    public void ParseGWACommand()
     {
       if (this.GWACommand == null)
         return;
@@ -27,26 +27,27 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Initialiser.Interface.GetSID(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
 
-      //TO DO
+      //TO DO : replace these defaults with the real thing
+      obj.Width = 0;
 
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAInterfacer GSA)
+    public string SetGWACommand()
     {
       if (this.Value == null)
-        return;
+        return "";
 
-      Type destType = typeof(GSABridgeVehicle);
+      var destType = typeof(GSABridgeVehicle);
 
-      StructuralBridgeVehicle vehicle = this.Value as StructuralBridgeVehicle;
+      var vehicle = this.Value as StructuralBridgeVehicle;
 
-      string keyword = destType.GetGSAKeyword();
+      var keyword = destType.GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(keyword, destType.Name, vehicle.ApplicationId);
+      var index = Initialiser.Indexer.ResolveIndex(keyword, destType.Name, vehicle.ApplicationId);
 
       //The width parameter is intentionally not being used here as the meaning doesn't map to the y coordinate parameter of the ASSEMBLY keyword
       //It is therefore to be ignored here for GSA purposes.
@@ -70,59 +71,35 @@ namespace SpeckleStructuralGSA
           axle.RightWheelLoad.ToString() });
       }
 
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      return (string.Join("\t", ls));
     }
   }
 
   public static partial class Conversions
   {
-    public static bool ToNative(this StructuralBridgeVehicle assembly)
+    public static string ToNative(this StructuralBridgeVehicle assembly)
     {
-      new GSABridgeVehicle() { Value = assembly }.SetGWACommand(Initialiser.Interface);
-
-      return true;
+      return new GSABridgeVehicle() { Value = assembly }.SetGWACommand();
     }
 
     public static SpeckleObject ToSpeckle(this GSABridgeVehicle dummyObject)
     {
-      var objType = dummyObject.GetType();
-
-      if (!Initialiser.GSASenderObjects.ContainsKey(objType))
-        Initialiser.GSASenderObjects[objType] = new List<object>();
+      var newLines = ToSpeckleBase<GSABridgeVehicle>();
 
       //Get all relevant GSA entities in this entire model
       var alignments = new List<GSABridgeVehicle>();
 
-      string keyword = objType.GetGSAKeyword();
-      string[] subKeywords = objType.GetSubGSAKeyword();
-
-      string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
-      List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
-      foreach (string k in subKeywords)
-        deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
-
-      // Remove deleted lines
-      Initialiser.GSASenderObjects[objType].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (var kvp in Initialiser.GSASenderObjects)
-        kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
-
-      // Filter only new lines
-      string[] prevLines = Initialiser.GSASenderObjects[objType].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
-      string[] newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
-
-      foreach (string p in newLines)
+      foreach (var p in newLines)
       {
-        GSABridgeVehicle alignment = new GSABridgeVehicle() { GWACommand = p };
+        var alignment = new GSABridgeVehicle() { GWACommand = p };
         //Pass in ALL the nodes and members - the Parse_ method will search through them
-        alignment.ParseGWACommand(Initialiser.Interface);
+        alignment.ParseGWACommand();
         alignments.Add(alignment);
       }
 
-      Initialiser.GSASenderObjects[objType].AddRange(alignments);
+      Initialiser.GSASenderObjects[typeof(GSABridgeVehicle)].AddRange(alignments);
 
-      if (alignments.Count() > 0 || deletedLines.Count() > 0) return new SpeckleObject();
-
-      return new SpeckleNull();
+      return (alignments.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

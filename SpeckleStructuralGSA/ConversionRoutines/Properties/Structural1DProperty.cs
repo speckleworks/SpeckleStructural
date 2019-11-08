@@ -18,27 +18,27 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new Structural1DProperty();
 
-    public void ParseGWACommand(IGSAInterfacer GSA, string GSAUnits, List<GSAMaterialSteel> steels, List<GSAMaterialConcrete> concretes)
+    public void ParseGWACommand(string GSAUnits, List<GSAMaterialSteel> steels, List<GSAMaterialConcrete> concretes)
     {
       if (this.GWACommand == null)
         return;
 
-      Structural1DProperty obj = new Structural1DProperty();
+      var obj = new Structural1DProperty();
 
-      string[] pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit("\t");
 
-      int counter = 1; // Skip identifier
+      var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Initialiser.Interface.GetSID(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; // Color
-      string materialType = pieces[counter++];
-      string materialGrade = pieces[counter++];
+      var materialType = pieces[counter++];
+      var materialGrade = pieces[counter++];
       if (materialType == "STEEL")
       {
         if (steels != null)
         {
-          GSAMaterialSteel matchingMaterial = steels.Where(m => m.GSAId.ToString() == materialGrade).FirstOrDefault();
+          var matchingMaterial = steels.Where(m => m.GSAId.ToString() == materialGrade).FirstOrDefault();
           obj.MaterialRef = matchingMaterial == null ? null : matchingMaterial.Value.ApplicationId;
           if (matchingMaterial != null)
             this.SubGWACommand.Add(matchingMaterial.GWACommand);
@@ -48,7 +48,7 @@ namespace SpeckleStructuralGSA
       {
         if (concretes != null)
         {
-          GSAMaterialConcrete matchingMaterial = concretes.Where(m => m.GSAId.ToString() == materialGrade).FirstOrDefault();
+          var matchingMaterial = concretes.Where(m => m.GSAId.ToString() == materialGrade).FirstOrDefault();
           obj.MaterialRef = matchingMaterial == null ? null : matchingMaterial.Value.ApplicationId;
           if (matchingMaterial != null)
             this.SubGWACommand.Add(matchingMaterial.GWACommand);
@@ -56,7 +56,7 @@ namespace SpeckleStructuralGSA
       }
 
       counter++; // Analysis material
-      string shapeDesc = pieces[counter++];
+      var shapeDesc = pieces[counter++];
       counter++; // Cost
 
       obj = SetDesc(obj, shapeDesc, GSAUnits);
@@ -64,23 +64,23 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAInterfacer GSA, string GSAUnits)
+    public string SetGWACommand(string GSAUnits)
     {
       if (this.Value == null)
-        return;
+        return "";
 
-      Structural1DProperty prop = this.Value as Structural1DProperty;
+      var prop = this.Value as Structural1DProperty;
 
       if (prop.Profile == null)
-        return;
+        return "";
 
-      string keyword = typeof(GSA1DProperty).GetGSAKeyword();
+      var keyword = typeof(GSA1DProperty).GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(typeof(GSA1DProperty).GetGSAKeyword(), typeof(GSA1DProperty).Name, prop.ApplicationId);
-      int materialRef = 0;
-      string materialType = "UNDEF";
+      var index = Initialiser.Indexer.ResolveIndex(typeof(GSA1DProperty).GetGSAKeyword(), typeof(GSA1DProperty).ToSpeckleTypeName(), prop.ApplicationId);
+      var materialRef = 0;
+      var materialType = "UNDEF";
 
-      var res = GSA.Indexer.LookupIndex(typeof(GSAMaterialSteel).GetGSAKeyword(), typeof(GSAMaterialSteel).Name, prop.MaterialRef);
+      var res = Initialiser.Indexer.LookupIndex(typeof(GSAMaterialSteel).GetGSAKeyword(), typeof(GSAMaterialSteel).ToSpeckleTypeName(), prop.MaterialRef);
       if (res.HasValue)
       {
         materialRef = res.Value;
@@ -88,7 +88,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        res = GSA.Indexer.LookupIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), typeof(GSAMaterialConcrete).Name, prop.MaterialRef);
+        res = Initialiser.Indexer.LookupIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), typeof(GSAMaterialConcrete).ToSpeckleTypeName(), prop.MaterialRef);
         if (res.HasValue)
         {
           materialRef = res.Value;
@@ -96,25 +96,26 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      List<string> ls = new List<string>();
+      var ls = new List<string>
+      {
+        "SET",
+        keyword + ":" + HelperClass.GenerateSID(prop),
+        index.ToString(),
+        prop.Name == null || prop.Name == "" ? " " : prop.Name,
+        "NO_RGB",
+        materialType,
+        materialRef.ToString(),
+        "0", // Analysis material
+        GetGSADesc(prop, GSAUnits),
+        "0" // Cost
+      };
 
-      ls.Add("SET");
-      ls.Add(keyword + ":" + HelperClass.GenerateSID(prop));
-      ls.Add(index.ToString());
-      ls.Add(prop.Name == null || prop.Name == "" ? " " : prop.Name);
-      ls.Add("NO_RGB");
-      ls.Add(materialType);
-      ls.Add(materialRef.ToString());
-      ls.Add("0"); // Analysis material
-      ls.Add(GetGSADesc(prop, GSAUnits));
-      ls.Add("0"); // Cost
-
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      return (string.Join("\t", ls));
     }
 
     private Structural1DProperty SetDesc(Structural1DProperty prop, string desc, string gsaUnit)
     {
-      string[] pieces = desc.ListSplit("%");
+      var pieces = desc.ListSplit("%");
 
       switch (pieces[0])
       {
@@ -123,7 +124,7 @@ namespace SpeckleStructuralGSA
         case "GEO":
           return SetGeometryDesc(prop, desc, gsaUnit);
         case "CAT":
-          string transformed = TransformCategorySection(desc);
+          var transformed = TransformCategorySection(desc);
           if (transformed == null)
             return prop;
           prop.CatalogueName = pieces[2];
@@ -135,18 +136,18 @@ namespace SpeckleStructuralGSA
 
     private Structural1DProperty SetStandardDesc(Structural1DProperty prop, string desc, string gsaUnit)
     {
-      string[] pieces = desc.ListSplit("%");
+      var pieces = desc.ListSplit("%");
 
-      string unit = Regex.Match(pieces[1], @"(?<=\()(.+)(?=\))").Value;
+      var unit = Regex.Match(pieces[1], @"(?<=\()(.+)(?=\))").Value;
       if (unit == "") unit = "mm";
 
-      string type = pieces[1].Split(new char[] { '(' })[0];
+      var type = pieces[1].Split(new char[] { '(' })[0];
 
       if (type == "R")
       {
         // Rectangle
-        double height = Convert.ToDouble(pieces[2]).ConvertUnit(unit, gsaUnit);
-        double width = Convert.ToDouble(pieces[3]).ConvertUnit(unit, gsaUnit);
+        var height = Convert.ToDouble(pieces[2]).ConvertUnit(unit, gsaUnit);
+        var width = Convert.ToDouble(pieces[3]).ConvertUnit(unit, gsaUnit);
         prop.Profile = new SpecklePolyline(new double[] {
                     width /2, height/2 , 0,
                     -width/2, height/2 , 0,
@@ -159,9 +160,9 @@ namespace SpeckleStructuralGSA
       else if (type == "RHS")
       {
         // Hollow Rectangle
-        double height = Convert.ToDouble(pieces[2]).ConvertUnit(unit, gsaUnit);
-        double width = Convert.ToDouble(pieces[3]).ConvertUnit(unit, gsaUnit);
-        double t1 = Convert.ToDouble(pieces[4]).ConvertUnit(unit, gsaUnit);
+        var height = Convert.ToDouble(pieces[2]).ConvertUnit(unit, gsaUnit);
+        var width = Convert.ToDouble(pieces[3]).ConvertUnit(unit, gsaUnit);
+        var t1 = Convert.ToDouble(pieces[4]).ConvertUnit(unit, gsaUnit);
         double t2 = 0;
         try
         { 
@@ -181,7 +182,7 @@ namespace SpeckleStructuralGSA
       else if (type == "C")
       {
         // Circle
-        double diameter = Convert.ToDouble(pieces[2]).ConvertUnit(unit, gsaUnit);
+        var diameter = Convert.ToDouble(pieces[2]).ConvertUnit(unit, gsaUnit);
         prop.Profile = new SpeckleCircle(
             new SpecklePlane(new SpecklePoint(0, 0, 0),
                 new SpeckleVector(0, 0, 1),
@@ -194,8 +195,8 @@ namespace SpeckleStructuralGSA
       else if (type == "CHS")
       {
         // Hollow Circle
-        double diameter = Convert.ToDouble(pieces[2]).ConvertUnit(unit, gsaUnit);
-        double t = Convert.ToDouble(pieces[3]).ConvertUnit(unit, gsaUnit);
+        var diameter = Convert.ToDouble(pieces[2]).ConvertUnit(unit, gsaUnit);
+        var t = Convert.ToDouble(pieces[3]).ConvertUnit(unit, gsaUnit);
         prop.Profile = new SpeckleCircle(
             new SpecklePlane(new SpecklePoint(0, 0, 0),
                 new SpeckleVector(0, 0, 1),
@@ -209,10 +210,10 @@ namespace SpeckleStructuralGSA
       else if (type == "I")
       {
         // I Section
-        double depth = Convert.ToDouble(pieces[2]).ConvertUnit(unit, gsaUnit);
-        double width = Convert.ToDouble(pieces[3]).ConvertUnit(unit, gsaUnit);
-        double webThickness = Convert.ToDouble(pieces[4]).ConvertUnit(unit, gsaUnit);
-        double flangeThickness = Convert.ToDouble(pieces[5]).ConvertUnit(unit, gsaUnit);
+        var depth = Convert.ToDouble(pieces[2]).ConvertUnit(unit, gsaUnit);
+        var width = Convert.ToDouble(pieces[3]).ConvertUnit(unit, gsaUnit);
+        var webThickness = Convert.ToDouble(pieces[4]).ConvertUnit(unit, gsaUnit);
+        var flangeThickness = Convert.ToDouble(pieces[5]).ConvertUnit(unit, gsaUnit);
 
         prop.Profile = new SpecklePolyline(new double[] {
                     webThickness/2, depth/2 - flangeThickness, 0,
@@ -234,10 +235,10 @@ namespace SpeckleStructuralGSA
       else if (type == "T")
       {
         // T Section
-        double depth = Convert.ToDouble(pieces[2]).ConvertUnit(unit, gsaUnit);
-        double width = Convert.ToDouble(pieces[3]).ConvertUnit(unit, gsaUnit);
-        double webThickness = Convert.ToDouble(pieces[4]).ConvertUnit(unit, gsaUnit);
-        double flangeThickness = Convert.ToDouble(pieces[5]).ConvertUnit(unit, gsaUnit);
+        var depth = Convert.ToDouble(pieces[2]).ConvertUnit(unit, gsaUnit);
+        var width = Convert.ToDouble(pieces[3]).ConvertUnit(unit, gsaUnit);
+        var webThickness = Convert.ToDouble(pieces[4]).ConvertUnit(unit, gsaUnit);
+        var flangeThickness = Convert.ToDouble(pieces[5]).ConvertUnit(unit, gsaUnit);
 
         prop.Profile = new SpecklePolyline(new double[] {
                     webThickness/2, - flangeThickness, 0,
@@ -255,10 +256,10 @@ namespace SpeckleStructuralGSA
       else if (type == "CH")
       {
         // Channel Section
-        double depth = Convert.ToDouble(pieces[2]).ConvertUnit(unit, gsaUnit);
-        double width = Convert.ToDouble(pieces[3]).ConvertUnit(unit, gsaUnit);
-        double webThickness = Convert.ToDouble(pieces[4]).ConvertUnit(unit, gsaUnit);
-        double flangeThickness = Convert.ToDouble(pieces[5]).ConvertUnit(unit, gsaUnit);
+        var depth = Convert.ToDouble(pieces[2]).ConvertUnit(unit, gsaUnit);
+        var width = Convert.ToDouble(pieces[3]).ConvertUnit(unit, gsaUnit);
+        var webThickness = Convert.ToDouble(pieces[4]).ConvertUnit(unit, gsaUnit);
+        var flangeThickness = Convert.ToDouble(pieces[5]).ConvertUnit(unit, gsaUnit);
 
         prop.Profile = new SpecklePolyline(new double[] {
                     webThickness, depth/2 - flangeThickness, 0,
@@ -276,10 +277,10 @@ namespace SpeckleStructuralGSA
       else if (type == "A")
       {
         // Angle Section
-        double depth = Convert.ToDouble(pieces[2]).ConvertUnit(unit, gsaUnit);
-        double width = Convert.ToDouble(pieces[3]).ConvertUnit(unit, gsaUnit);
-        double webThickness = Convert.ToDouble(pieces[4]).ConvertUnit(unit, gsaUnit);
-        double flangeThickness = Convert.ToDouble(pieces[5]).ConvertUnit(unit, gsaUnit);
+        var depth = Convert.ToDouble(pieces[2]).ConvertUnit(unit, gsaUnit);
+        var width = Convert.ToDouble(pieces[3]).ConvertUnit(unit, gsaUnit);
+        var webThickness = Convert.ToDouble(pieces[4]).ConvertUnit(unit, gsaUnit);
+        var flangeThickness = Convert.ToDouble(pieces[5]).ConvertUnit(unit, gsaUnit);
 
         prop.Profile = new SpecklePolyline(new double[] {
                     0, 0, 0,
@@ -295,9 +296,9 @@ namespace SpeckleStructuralGSA
       else if (type == "TR")
       {
         // Taper Section
-        double depth = Convert.ToDouble(pieces[2]).ConvertUnit(unit, gsaUnit);
-        double topWidth = Convert.ToDouble(pieces[3]).ConvertUnit(unit, gsaUnit);
-        double bottomWidth = Convert.ToDouble(pieces[4]).ConvertUnit(unit, gsaUnit);
+        var depth = Convert.ToDouble(pieces[2]).ConvertUnit(unit, gsaUnit);
+        var topWidth = Convert.ToDouble(pieces[3]).ConvertUnit(unit, gsaUnit);
+        var bottomWidth = Convert.ToDouble(pieces[4]).ConvertUnit(unit, gsaUnit);
         prop.Profile = new SpecklePolyline(new double[] {
                     topWidth /2, depth/2 , 0,
                     -topWidth/2, depth/2 , 0,
@@ -310,14 +311,14 @@ namespace SpeckleStructuralGSA
       else if (type == "E")
       {
         // Ellipse Section
-        double depth = Convert.ToDouble(pieces[2]).ConvertUnit(unit, gsaUnit);
-        double width = Convert.ToDouble(pieces[3]).ConvertUnit(unit, gsaUnit);
-        int index = Convert.ToInt32(pieces[4]);
+        var depth = Convert.ToDouble(pieces[2]).ConvertUnit(unit, gsaUnit);
+        var width = Convert.ToDouble(pieces[3]).ConvertUnit(unit, gsaUnit);
+        var index = Convert.ToInt32(pieces[4]);
 
-        List<double> coor = new List<double>();
-        for (int i = 0; i < 360; i += 10)
+        var coor = new List<double>();
+        for (var i = 0; i < 360; i += 10)
         {
-          double radius =
+          var radius =
               depth * width / Math.Pow(
                   Math.Pow(depth * Math.Cos(i.ToRadians()), index)
                   + Math.Pow(width * Math.Sin(i.ToRadians()), index),
@@ -335,14 +336,14 @@ namespace SpeckleStructuralGSA
       else if (type == "OVAL")
       {
         // Oval Section
-        double depth = Convert.ToDouble(pieces[2]).ConvertUnit(unit, gsaUnit);
-        double width = Convert.ToDouble(pieces[3]).ConvertUnit(unit, gsaUnit);
-        double thickness = Convert.ToDouble(pieces[4]).ConvertUnit(unit, gsaUnit);
+        var depth = Convert.ToDouble(pieces[2]).ConvertUnit(unit, gsaUnit);
+        var width = Convert.ToDouble(pieces[3]).ConvertUnit(unit, gsaUnit);
+        var thickness = Convert.ToDouble(pieces[4]).ConvertUnit(unit, gsaUnit);
 
-        List<double> coor = new List<double>();
-        for (int i = 0; i < 360; i += 10)
+        var coor = new List<double>();
+        for (var i = 0; i < 360; i += 10)
         {
-          double radius =
+          var radius =
               depth * width / Math.Pow(
                   Math.Pow(depth * Math.Cos(i.ToRadians()), 2)
                   + Math.Pow(width * Math.Sin(i.ToRadians()), 2),
@@ -368,24 +369,24 @@ namespace SpeckleStructuralGSA
 
     private Structural1DProperty SetGeometryDesc(Structural1DProperty prop, string desc, string gsaUnit)
     {
-      string[] pieces = desc.ListSplit("%");
+      var pieces = desc.ListSplit("%");
 
-      string unit = Regex.Match(pieces[1], @"(?<=()(.*?)(?=))").Value;
+      var unit = Regex.Match(pieces[1], @"(?<=()(.*?)(?=))").Value;
       if (unit == "") unit = "mm";
 
-      string type = pieces[1].Split(new char[] { '(' })[0];
+      var type = pieces[1].Split(new char[] { '(' })[0];
 
       if (type == "P")
       {
         // Perimeter Section
-        List<double> coor = new List<double>();
+        var coor = new List<double>();
 
-        MatchCollection points = Regex.Matches(desc, @"(?<=\()(.*?)(?=\))");
+        var points = Regex.Matches(desc, @"(?<=\()(.*?)(?=\))");
         foreach (Match point in points)
         {
           try
           {
-            string[] n = point.Value.Split(new char[] { '|' });
+            var n = point.Value.Split(new char[] { '|' });
 
             coor.Add(Convert.ToDouble(n[0]).ConvertUnit(unit, gsaUnit));
             coor.Add(Convert.ToDouble(n[1]).ConvertUnit(unit, gsaUnit));
@@ -421,7 +422,7 @@ namespace SpeckleStructuralGSA
 
       if (prop.Profile is SpeckleCircle)
       {
-        SpeckleCircle profile = prop.Profile as SpeckleCircle;
+        var profile = prop.Profile as SpeckleCircle;
 
         if (prop.Hollow)
           return "STD%CHS(" + gsaUnit + ")%" + (profile.Radius * 2).ToString() + "%" + prop.Thickness.ToString();
@@ -431,8 +432,8 @@ namespace SpeckleStructuralGSA
 
       if (prop.Profile is SpecklePolyline)
       {
-        List<double> X = (prop.Profile as SpecklePolyline).Value.Where((x, i) => i % 3 == 0).ToList();
-        List<double> Y = (prop.Profile as SpecklePolyline).Value.Where((x, i) => i % 3 == 1).ToList();
+        var X = (prop.Profile as SpecklePolyline).Value.Where((x, i) => i % 3 == 0).ToList();
+        var Y = (prop.Profile as SpecklePolyline).Value.Where((x, i) => i % 3 == 1).ToList();
         if (prop.Shape == Structural1DPropertyShape.Circular)
         {
           if (prop.Hollow)
@@ -449,36 +450,36 @@ namespace SpeckleStructuralGSA
         }
         else if (prop.Shape == Structural1DPropertyShape.I)
         {
-          List<double> xDist = X.Distinct().ToList();
-          List<double> yDist = Y.Distinct().ToList();
+          var xDist = X.Distinct().ToList();
+          var yDist = Y.Distinct().ToList();
 
           xDist.Sort();
           yDist.Sort();
 
           if (xDist.Count() == 4 && yDist.Count() == 4)
           {
-            double width = xDist.Max() - xDist.Min();
-            double depth = yDist.Max() - yDist.Min();
-            double T = yDist[3] - yDist[2];
-            double t = xDist[2] - xDist[1];
+            var width = xDist.Max() - xDist.Min();
+            var depth = yDist.Max() - yDist.Min();
+            var T = yDist[3] - yDist[2];
+            var t = xDist[2] - xDist[1];
 
             return "STD%I(" + gsaUnit + ")%" + depth.ToString() + "%" + width.ToString() + "%" + T.ToString() + "%" + t.ToString();
           }
         }
         else if (prop.Shape == Structural1DPropertyShape.T)
         {
-          List<double> xDist = X.Distinct().ToList();
-          List<double> yDist = Y.Distinct().ToList();
+          var xDist = X.Distinct().ToList();
+          var yDist = Y.Distinct().ToList();
 
           xDist.Sort();
           yDist.Sort();
 
           if (xDist.Count() == 4 && yDist.Count() == 3)
           {
-            double width = xDist.Max() - xDist.Min();
-            double depth = yDist.Max() - yDist.Min();
-            double T = yDist[2] - yDist[1];
-            double t = xDist[2] - xDist[1];
+            var width = xDist.Max() - xDist.Min();
+            var depth = yDist.Max() - yDist.Min();
+            var T = yDist[2] - yDist[1];
+            var t = xDist[2] - xDist[1];
 
             return "STD%T(" + gsaUnit + ")%" + depth.ToString() + "%" + width.ToString() + "%" + T.ToString() + "%" + t.ToString();
           }
@@ -489,17 +490,18 @@ namespace SpeckleStructuralGSA
 
         if (X.Count() < 3 || Y.Count() < 3) return "";
 
-        List<string> ls = new List<string>();
-
-        ls.Add("GEO");
+        var ls = new List<string>
+        {
+          "GEO"
+        };
         if (gsaUnit == "mm")
           ls.Add("P");
         else
           ls.Add("P(" + gsaUnit + ")");
 
-        for (int i = 0; i < X.Count(); i++)
+        for (var i = 0; i < X.Count(); i++)
         {
-          string point = ((i == 0) ? "M" : "L") + "(" + X[i].ToString() + "|" + Y[i].ToString() + ")";
+          var point = ((i == 0) ? "M" : "L") + "(" + X[i].ToString() + "|" + Y[i].ToString() + ")";
 
           ls.Add(point);
         }
@@ -511,9 +513,9 @@ namespace SpeckleStructuralGSA
             X = (propVoid as SpecklePolyline).Value.Where((x, i) => i % 3 == 0).ToList();
             Y = (propVoid as SpecklePolyline).Value.Where((x, i) => i % 3 == 1).ToList();
 
-            for (int i = 0; i < X.Count(); i++)
+            for (var i = 0; i < X.Count(); i++)
             {
-              string point = ((i == 0) ? "M" : "L") + "(" + X[i].ToString() + "|" + Y[i].ToString() + ")";
+              var point = ((i == 0) ? "M" : "L") + "(" + X[i].ToString() + "|" + Y[i].ToString() + ")";
 
               ls.Add(point);
             }
@@ -533,15 +535,15 @@ namespace SpeckleStructuralGSA
     /// <returns>Generic section description</returns>
     public string TransformCategorySection(string description)
     {
-      string[] pieces = description.ListSplit("%");
+      var pieces = description.ListSplit("%");
 
-      string DbPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ProgramFiles) + @"\Oasys\GSA 10.0\sectlib.db3";
+      var DbPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ProgramFiles) + @"\Oasys\GSA 10.0\sectlib.db3";
 
       try
       {
-        using (SQLiteConnection conn = new SQLiteConnection(DbPath, SQLiteOpenFlags.ReadOnly))
+        using (var conn = new SQLiteConnection(DbPath, SQLiteOpenFlags.ReadOnly))
         {
-          string query_type = "SELECT TYPE_NUM, TYPE_ABR" +
+          var query_type = "SELECT TYPE_NUM, TYPE_ABR" +
               " FROM Types" +
               " WHERE TYPE_ABR = ?";
 
@@ -550,15 +552,15 @@ namespace SpeckleStructuralGSA
           if (type.Count() == 0)
             return null;
 
-          int typeCounter = 0;
+          var typeCounter = 0;
 
           GSASection s = null;
 
           while (typeCounter < type.Count())
           { 
-            int typeNum = type.ToList()[typeCounter].TYPE_NUM;
+            var typeNum = type.ToList()[typeCounter].TYPE_NUM;
 
-            string query_sect = "SELECT SECT_NAME, SECT_SHAPE, SECT_TYPE_NUM, SECT_DEPTH_DIAM, SECT_WIDTH, SECT_WEB_THICK, SECT_FLG_THICK" +
+            var query_sect = "SELECT SECT_NAME, SECT_SHAPE, SECT_TYPE_NUM, SECT_DEPTH_DIAM, SECT_WIDTH, SECT_WEB_THICK, SECT_FLG_THICK" +
                 " FROM Sect" +
                 " WHERE SECT_TYPE_NUM = ? AND lower(SECT_NAME) = lower(?)";
 
@@ -616,13 +618,13 @@ namespace SpeckleStructuralGSA
     /// <returns>GSA section description or null if error.</returns>
     public string GetGSACategorySection(string name)
     {
-      string DbPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ProgramFiles) + @"\Oasys\GSA 10.0\sectlib.db3";
+      var DbPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ProgramFiles) + @"\Oasys\GSA 10.0\sectlib.db3";
 
       try
       {
-        using (SQLiteConnection conn = new SQLiteConnection(DbPath, SQLiteOpenFlags.ReadOnly))
+        using (var conn = new SQLiteConnection(DbPath, SQLiteOpenFlags.ReadOnly))
         {
-          string query_sect = "SELECT SECT_NAME, SECT_SHAPE, SECT_TYPE_NUM, SECT_DEPTH_DIAM, SECT_WIDTH, SECT_WEB_THICK, SECT_FLG_THICK" +
+          var query_sect = "SELECT SECT_NAME, SECT_SHAPE, SECT_TYPE_NUM, SECT_DEPTH_DIAM, SECT_WIDTH, SECT_WEB_THICK, SECT_FLG_THICK" +
               " FROM Sect" +
               " WHERE lower(SECT_NAME) = lower(?)" +
               " ORDER BY SECT_DATE_ADDED DESC LIMIT 1";
@@ -632,9 +634,9 @@ namespace SpeckleStructuralGSA
           if (sect.Count() == 0)
             return null;
 
-          int typeNum = sect.ToList()[0].SECT_TYPE_NUM;
+          var typeNum = sect.ToList()[0].SECT_TYPE_NUM;
 
-          string query_type = "SELECT TYPE_NUM, TYPE_ABR" +
+          var query_type = "SELECT TYPE_NUM, TYPE_ABR" +
               " FROM Types" +
               " WHERE TYPE_NUM = ?";
 
@@ -671,45 +673,25 @@ namespace SpeckleStructuralGSA
 
   public static partial class Conversions
   {
-    public static bool ToNative(this Structural1DProperty prop)
+    public static string ToNative(this Structural1DProperty prop)
     {
-      new GSA1DProperty() { Value = prop }.SetGWACommand(Initialiser.Interface, Initialiser.Settings.Units);
-
-      return true;
+      return new GSA1DProperty() { Value = prop }.SetGWACommand(Initialiser.Settings.Units);
     }
 
     public static SpeckleObject ToSpeckle(this GSA1DProperty dummyObject)
     {
-      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSA1DProperty)))
-        Initialiser.GSASenderObjects[typeof(GSA1DProperty)] = new List<object>();
+      var newLines = ToSpeckleBase<GSA1DProperty>();
 
-      List<GSA1DProperty> props = new List<GSA1DProperty>();
-      List<GSAMaterialSteel> steels = Initialiser.GSASenderObjects[typeof(GSAMaterialSteel)].Cast<GSAMaterialSteel>().ToList();
-      List<GSAMaterialConcrete> concretes = Initialiser.GSASenderObjects[typeof(GSAMaterialConcrete)].Cast<GSAMaterialConcrete>().ToList();
+      var props = new List<GSA1DProperty>();
+      var steels = Initialiser.GSASenderObjects[typeof(GSAMaterialSteel)].Cast<GSAMaterialSteel>().ToList();
+      var concretes = Initialiser.GSASenderObjects[typeof(GSAMaterialConcrete)].Cast<GSAMaterialConcrete>().ToList();
 
-      string keyword = typeof(GSA1DProperty).GetGSAKeyword();
-      string[] subKeywords = typeof(GSA1DProperty).GetSubGSAKeyword();
-
-      string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
-      List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
-      foreach (string k in subKeywords)
-        deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
-
-      // Remove deleted lines
-      Initialiser.GSASenderObjects[typeof(GSA1DProperty)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (var kvp in Initialiser.GSASenderObjects)
-        kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
-
-      // Filter only new lines
-      string[] prevLines = Initialiser.GSASenderObjects[typeof(GSA1DProperty)].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
-      string[] newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
-
-      foreach (string p in newLines)
+      foreach (var p in newLines)
       {
         try
         {
-          GSA1DProperty prop = new GSA1DProperty() { GWACommand = p };
-          prop.ParseGWACommand(Initialiser.Interface, Initialiser.Settings.Units, steels, concretes);
+          var prop = new GSA1DProperty() { GWACommand = p };
+          prop.ParseGWACommand(Initialiser.Settings.Units, steels, concretes);
           props.Add(prop);
         }
         catch { }
@@ -717,9 +699,7 @@ namespace SpeckleStructuralGSA
 
       Initialiser.GSASenderObjects[typeof(GSA1DProperty)].AddRange(props);
 
-      if (props.Count() > 0 || deletedLines.Count() > 0) return new SpeckleObject();
-
-      return new SpeckleNull();
+      return (props.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

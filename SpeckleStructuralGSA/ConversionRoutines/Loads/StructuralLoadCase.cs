@@ -15,22 +15,22 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralLoadCase();
 
-    public void ParseGWACommand(IGSAInterfacer GSA)
+    public void ParseGWACommand()
     {
       if (this.GWACommand == null)
         return;
 
-      StructuralLoadCase obj = new StructuralLoadCase();
+      var obj = new StructuralLoadCase();
 
-      string[] pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit("\t");
 
-      int counter = 1; // Skip identifier
+      var counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Initialiser.Interface.GetSID(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++];
 
-      string type = pieces[counter++];
+      var type = pieces[counter++];
       switch (type)
       {
         case "DEAD":
@@ -64,23 +64,24 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAInterfacer GSA)
+    public string SetGWACommand()
     {
       if (this.Value == null)
-        return;
+        return "";
 
-      StructuralLoadCase loadCase = this.Value as StructuralLoadCase;
+      var loadCase = this.Value as StructuralLoadCase;
 
-      string keyword = typeof(GSALoadCase).GetGSAKeyword();
+      var keyword = typeof(GSALoadCase).GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).Name, loadCase.ApplicationId);
+      var index = Initialiser.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).ToSpeckleTypeName(), loadCase.ApplicationId);
 
-      List<string> ls = new List<string>();
-
-      ls.Add("SET");
-      ls.Add(keyword + ":" + HelperClass.GenerateSID(loadCase));
-      ls.Add(index.ToString());
-      ls.Add(loadCase.Name == null || loadCase.Name == "" ? " " : loadCase.Name);
+      var ls = new List<string>
+      {
+        "SET",
+        keyword + ":" + HelperClass.GenerateSID(loadCase),
+        index.ToString(),
+        loadCase.Name == null || loadCase.Name == "" ? " " : loadCase.Name
+      };
       switch (loadCase.CaseType)
       {
         case StructuralLoadCaseType.Dead:
@@ -105,7 +106,7 @@ namespace SpeckleStructuralGSA
           ls.Add("LC_VAR_TEMP");
           break;
         default:
-          ls.Add("UNDEF");
+          ls.Add("LC_UNDEF");
           break;
       }
       ls.Add("1"); // Source
@@ -113,55 +114,33 @@ namespace SpeckleStructuralGSA
       ls.Add("NONE"); // Direction
       ls.Add("INC_BOTH"); // Include
 
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      return (string.Join("\t", ls));
     }
   }
 
   public static partial class Conversions
   {
-    public static bool ToNative(this StructuralLoadCase load)
+    public static string ToNative(this StructuralLoadCase load)
     {
-      new GSALoadCase() { Value = load }.SetGWACommand(Initialiser.Interface);
-
-      return true;
+      return new GSALoadCase() { Value = load }.SetGWACommand();
     }
 
     public static SpeckleObject ToSpeckle(this GSALoadCase dummyObject)
     {
-      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSALoadCase)))
-        Initialiser.GSASenderObjects[typeof(GSALoadCase)] = new List<object>();
+      var newLines = ToSpeckleBase<GSALoadCase>();
 
-      List<GSALoadCase> loadCases = new List<GSALoadCase>();
+      var loadCases = new List<GSALoadCase>();
 
-      string keyword = typeof(GSALoadCase).GetGSAKeyword();
-      string[] subKeywords = typeof(GSALoadCase).GetSubGSAKeyword();
-
-      string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
-      List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
-      foreach (string k in subKeywords)
-        deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
-
-      // Remove deleted lines
-      Initialiser.GSASenderObjects[typeof(GSALoadCase)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (var kvp in Initialiser.GSASenderObjects)
-        kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
-
-      // Filter only new lines
-      string[] prevLines = Initialiser.GSASenderObjects[typeof(GSALoadCase)].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
-      string[] newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
-
-      foreach (string p in newLines)
+      foreach (var p in newLines)
       {
-        GSALoadCase loadCase = new GSALoadCase() { GWACommand = p };
-        loadCase.ParseGWACommand(Initialiser.Interface);
+        var loadCase = new GSALoadCase() { GWACommand = p };
+        loadCase.ParseGWACommand();
         loadCases.Add(loadCase);
       }
 
       Initialiser.GSASenderObjects[typeof(GSALoadCase)].AddRange(loadCases);
 
-      if (loadCases.Count() > 0 || deletedLines.Count() > 0) return new SpeckleObject();
-
-      return new SpeckleNull();
+      return (loadCases.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

@@ -17,15 +17,15 @@ namespace SpeckleStructuralRevit
       return null;
     }
 
-    public static List<SpeckleObject> ToSpeckle(this Autodesk.Revit.DB.Structure.AnalyticalModelStick myStick)
+    public static List<SpeckleObject> ToSpeckle(this AnalyticalModelStick myStick)
     {
-      List<SpeckleObject> returnObjects = new List<SpeckleObject>();
+      var returnObjects = new List<SpeckleObject>();
 
       if (!myStick.IsEnabled())
         return new List<SpeckleObject>();
 
       // Get the family
-      var myFamily = (Autodesk.Revit.DB.FamilyInstance)Doc.GetElement(myStick.GetElementId());
+      var myFamily = (FamilyInstance)Doc.GetElement(myStick.GetElementId());
 
       var myElement = new Structural1DElementPolyline();
 
@@ -35,7 +35,7 @@ namespace SpeckleStructuralRevit
       curves.AddRange(myStick.GetCurves(AnalyticalCurveType.ActiveCurves));
       curves.AddRange(myStick.GetCurves(AnalyticalCurveType.RigidLinkTail));
 
-      foreach (Curve curve in curves)
+      foreach (var curve in curves)
       {
         var points = curve.Tessellate();
 
@@ -49,7 +49,7 @@ namespace SpeckleStructuralRevit
           myElement.Value.Add(points[0].Z / Scale);   
         }
 
-        foreach (XYZ p in points.Skip(1))
+        foreach (var p in points.Skip(1))
         {
           myElement.Value.Add(p.X / Scale);
           myElement.Value.Add(p.Y / Scale);
@@ -59,7 +59,7 @@ namespace SpeckleStructuralRevit
 
       myElement.ResultVertices = new List<double>(myElement.Value);
 
-      int vertexCount = myElement.Value.Count / 3;
+      var vertexCount = myElement.Value.Count / 3;
 
       var coordinateSystem = myStick.GetLocalCoordinateSystem();
       if (coordinateSystem != null)
@@ -262,7 +262,7 @@ namespace SpeckleStructuralRevit
 
           myProfile.Value = new List<double>();
 
-          for (int i = 0; i < profile.Curves.Size; i++)
+          for (var i = 0; i < profile.Curves.Size; i++)
           {
             var sectionCurves = SpeckleCore.Converter.Serialise(profile.Curves.get_Item(i));
 
@@ -322,10 +322,10 @@ namespace SpeckleStructuralRevit
         {
           var matType = myFamily.StructuralMaterialType;
           
-          var structMat = (Autodesk.Revit.DB.Material)Doc.GetElement(myFamily.StructuralMaterialId);
+          var structMat = (Material)Doc.GetElement(myFamily.StructuralMaterialId);
           if (structMat == null)
-            structMat = (Autodesk.Revit.DB.Material)Doc.GetElement(myFamily.Symbol.get_Parameter(BuiltInParameter.STRUCTURAL_MATERIAL_PARAM).AsElementId());
-          var matAsset = ((Autodesk.Revit.DB.PropertySetElement)Doc.GetElement(structMat.StructuralAssetId)).GetStructuralAsset();
+            structMat = (Material)Doc.GetElement(myFamily.Symbol.get_Parameter(BuiltInParameter.STRUCTURAL_MATERIAL_PARAM).AsElementId());
+          var matAsset = ((PropertySetElement)Doc.GetElement(structMat.StructuralAssetId)).GetStructuralAsset();
 
           SpeckleObject myMaterial = null;
 

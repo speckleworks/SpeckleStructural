@@ -15,9 +15,9 @@ namespace SpeckleStructuralRevit
       return null;
     }
 
-    public static List<SpeckleObject> ToSpeckle(this Autodesk.Revit.DB.Structure.BoundaryConditions myRestraint)
+    public static List<SpeckleObject> ToSpeckle(this BoundaryConditions myRestraint)
     {
-      List<XYZ> points = new List<XYZ>();
+      var points = new List<XYZ>();
 
       var restraintType = myRestraint.GetBoundaryConditionsType();
 
@@ -35,9 +35,9 @@ namespace SpeckleStructuralRevit
       else if (restraintType == BoundaryConditionsType.Area)
       {
         var loops = myRestraint.GetLoops();
-        foreach (CurveLoop loop in loops)
+        foreach (var loop in loops)
         {
-          foreach (Curve curve in loop)
+          foreach (var curve in loop)
           {
             points.Add(curve.GetEndPoint(0));
             points.Add(curve.GetEndPoint(1));
@@ -74,7 +74,7 @@ namespace SpeckleStructuralRevit
         BuiltInParameter.BOUNDARY_RESTRAINT_ROT_Z,
       };
 
-      for (int i = 0; i < 6; i++)
+      for (var i = 0; i < 6; i++)
       { 
         switch (myRestraint.get_Parameter(listOfParams[i]).AsInteger())
         {
@@ -92,9 +92,9 @@ namespace SpeckleStructuralRevit
       restraint.GenerateHash();
       stiffness.GenerateHash();
 
-      List<SpeckleObject> myNodes = new List<SpeckleObject>();
+      var myNodes = new List<SpeckleObject>();
 
-      foreach(XYZ point in points)
+      foreach(var point in points)
       {
         var myPoint = (SpeckleCoreGeometryClasses.SpecklePoint)SpeckleCore.Converter.Serialise(point);
         var myNode = new StructuralNode();

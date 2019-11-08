@@ -15,7 +15,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralSpringProperty();
 
-    public void ParseGWACommand(IGSAInterfacer GSA)
+    public void ParseGWACommand()
     {
       if (this.GWACommand == null)
         return;
@@ -27,27 +27,27 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Initialiser.Interface.GetSID(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; //Skip colour
-      string gsaAxis = pieces[counter++];
+      var gsaAxis = pieces[counter++];
 
       if (gsaAxis == "GLOBAL")
-        obj.Axis = HelperClass.Parse0DAxis(0, Initialiser.Interface, out string gwaRec);
+        obj.Axis = HelperClass.Parse0DAxis(0, Initialiser.Interface, out var gwaRec);
       else if (gsaAxis == "VERTICAL")
-        obj.Axis = HelperClass.Parse0DAxis(-14, Initialiser.Interface, out string gwaRec);
+        obj.Axis = HelperClass.Parse0DAxis(-14, Initialiser.Interface, out var gwaRec);
       else
       {
-        obj.Axis = HelperClass.Parse0DAxis(Convert.ToInt32(gsaAxis), Initialiser.Interface, out string gwaRec);
+        obj.Axis = HelperClass.Parse0DAxis(Convert.ToInt32(gsaAxis), Initialiser.Interface, out var gwaRec);
         this.SubGWACommand.Add(gwaRec);
       }
 
       var springPropertyType = pieces[counter++];
 
       var stiffnesses = new double[6];
-      double dampingRatio = 0;
+      var dampingRatio = 0d;
       switch (springPropertyType.ToLower())
-      {        
+      {
         case "axial":
           obj.SpringType = StructuralSpringPropertyType.Axial;
           double.TryParse(pieces[counter++], out stiffnesses[0]);
@@ -92,7 +92,7 @@ namespace SpeckleStructuralGSA
           obj.SpringType = StructuralSpringPropertyType.General;
           counter--;
           for (var i = 0; i < 6; i++)
-          {            
+          {
             double.TryParse(pieces[counter += 2], out stiffnesses[i]);
           }
           counter++;
@@ -102,7 +102,7 @@ namespace SpeckleStructuralGSA
         default:
           return;
       };
-      
+
       obj.Stiffness = new StructuralVectorSix(stiffnesses);
 
       double.TryParse(pieces[counter++], out dampingRatio);
@@ -112,38 +112,52 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAInterfacer GSA)
+    public string SetGWACommand()
     {
       if (this.Value == null)
-        return;
+        return "";
 
-      Type destType = typeof(GSASpringProperty);
+      var destType = typeof(GSASpringProperty);
 
-      StructuralSpringProperty springProp = this.Value as StructuralSpringProperty;
+      var springProp = this.Value as StructuralSpringProperty;
 
-      string keyword = destType.GetGSAKeyword();
+      var keyword = destType.GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(keyword, destType.Name, springProp.ApplicationId);
+      var index = Initialiser.Indexer.ResolveIndex(keyword, springProp.Type, springProp.ApplicationId);
 
-      string axisRef = "GLOBAL";
+      var gwaAxisCommand = "";
+      var gwaCommands = new List<string>();
 
-      if (springProp.Axis.Xdir.Value.SequenceEqual(new double[] { 1, 0, 0 }) &&
-        springProp.Axis.Ydir.Value.SequenceEqual(new double[] { 0, 1, 0 }) &&
-        springProp.Axis.Normal.Value.SequenceEqual(new double[] { 0, 0, 1 }))
+      var axisRef = "GLOBAL";
+
+      if (springProp.Axis == null)
+      {
+        //Default value
         axisRef = "GLOBAL";
-      else if (springProp.Axis.Xdir.Value.SequenceEqual(new double[] { 0, 0, 1 }) &&
-        springProp.Axis.Ydir.Value.SequenceEqual(new double[] { 1, 0, 0 }) &&
-        springProp.Axis.Normal.Value.SequenceEqual(new double[] { 0, 1, 0 }))
-        axisRef = "VERTICAL";
+      }
       else
-        try
-        {
-          axisRef = HelperClass.SetAxis(springProp.Axis, springProp.Name).ToString();
-        }
-        catch { axisRef = "GLOBAL"; }
+      {
+        if (springProp.Axis.Xdir.Value.SequenceEqual(new double[] { 1, 0, 0 }) &&
+          springProp.Axis.Ydir.Value.SequenceEqual(new double[] { 0, 1, 0 }) &&
+          springProp.Axis.Normal.Value.SequenceEqual(new double[] { 0, 0, 1 }))
+          axisRef = "GLOBAL";
+        else if (springProp.Axis.Xdir.Value.SequenceEqual(new double[] { 0, 0, 1 }) &&
+          springProp.Axis.Ydir.Value.SequenceEqual(new double[] { 1, 0, 0 }) &&
+          springProp.Axis.Normal.Value.SequenceEqual(new double[] { 0, 1, 0 }))
+          axisRef = "VERTICAL";
+        else
+          try
+          {
+            HelperClass.SetAxis(springProp.Axis, out var axisIndex, out gwaAxisCommand, springProp.Name);
+            if (gwaAxisCommand.Length > 0)
+            {
+              gwaCommands.Add(gwaAxisCommand);
+            }
+          }
+          catch { axisRef = "GLOBAL"; }
+      }
 
-
-      List<string> ls = new List<string>
+      var ls = new List<string>
       {
         "SET",
         keyword + ":" + HelperClass.GenerateSID(springProp),
@@ -153,112 +167,88 @@ namespace SpeckleStructuralGSA
         axisRef
       };
 
-      ls.AddRange(SpringTypeCommandPieces(springProp.SpringType, springProp.Stiffness, springProp.DampingRatio));
+      ls.AddRange(SpringTypeCommandPieces(springProp.SpringType, springProp.Stiffness, springProp.DampingRatio ?? 0));
 
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      gwaCommands.Add(string.Join("\t", ls));
+
+      return string.Join("\n", gwaCommands);
     }
 
     private List<string> SpringTypeCommandPieces(StructuralSpringPropertyType structuralSpringPropertyType, StructuralVectorSix stiffness, double dampingRatio)
     {
       var dampingRatioStr = dampingRatio.ToString();
 
+      var stiffnessToUse = (stiffness == null) ? new StructuralVectorSix(new double[] { 0, 0, 0, 0, 0, 0 }) : stiffness;
+
       switch (structuralSpringPropertyType)
       {
         case StructuralSpringPropertyType.Torsional:
-          return new List<string> { "TORSIONAL", stiffness.Value[3].ToString(), dampingRatioStr }; //xx stiffness only
+          return new List<string> { "TORSIONAL", stiffnessToUse.Value[3].ToString(), dampingRatioStr }; //xx stiffness only
 
         case StructuralSpringPropertyType.Tension:
-          return new List<string> { "TENSION", stiffness.Value[0].ToString(), dampingRatioStr };
+          return new List<string> { "TENSION", stiffnessToUse.Value[0].ToString(), dampingRatioStr };
 
         case StructuralSpringPropertyType.Compression:
-          return new List<string> { "COMPRESSION", stiffness.Value[0].ToString(), dampingRatioStr };
+          return new List<string> { "COMPRESSION", stiffnessToUse.Value[0].ToString(), dampingRatioStr };
 
         //Pasting GWA commands for CONNECT doesn't seem to work yet in GSA
         //case StructuralSpringPropertyType.Connector:
         //  return new List<string> { "CONNECT", "0", dampingRatioStr }; // Not sure what the argument after CONNECT is
 
         case StructuralSpringPropertyType.Lockup:
-          return new List<string> { "LOCKUP", stiffness.Value[0].ToString(), dampingRatioStr, "0", "0" }; // Not sure what the last two arguments are
+          return new List<string> { "LOCKUP", stiffnessToUse.Value[0].ToString(), dampingRatioStr, "0", "0" }; // Not sure what the last two arguments are
 
         case StructuralSpringPropertyType.Gap:
-          return new List<string> { "GAP", stiffness.Value[0].ToString(), dampingRatioStr };
+          return new List<string> { "GAP", stiffnessToUse.Value[0].ToString(), dampingRatioStr };
 
         case StructuralSpringPropertyType.Axial:
-          return new List<string> { "AXIAL", stiffness.Value[0].ToString(), dampingRatioStr };
+          return new List<string> { "AXIAL", stiffnessToUse.Value[0].ToString(), dampingRatioStr };
 
         case StructuralSpringPropertyType.Friction:
           //Coeff of friction (2nd-last) isn't supported yet
-          return new List<string> { "FRICTION", stiffness.Value[0].ToString(), stiffness.Value[1].ToString(), stiffness.Value[2].ToString(), "0", dampingRatioStr }; 
+          return new List<string> { "FRICTION", stiffnessToUse.Value[0].ToString(), stiffness.Value[1].ToString(), stiffnessToUse.Value[2].ToString(), "0", dampingRatioStr };
 
-        default: //General
+        default:
           var ls = new List<string>() { "GENERAL" };
           for (var i = 0; i < 6; i++)
           {
             ls.Add("0"); //Curve
-            ls.Add(stiffness.Value[i].ToString());
+            ls.Add((stiffnessToUse == null) ? "0" : stiffnessToUse.Value[i].ToString());
           }
           ls.Add(dampingRatioStr);
           return ls;
       }
     }
-
   }
 
   public static partial class Conversions
   {
-    public static bool ToNative(this StructuralSpringProperty prop)
+    public static string ToNative(this StructuralSpringProperty prop)
     {
-      if (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
-        new GSASpringProperty() { Value = prop }.SetGWACommand(Initialiser.Interface);
-      else if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
-        new GSASpringProperty() { Value = prop }.SetGWACommand(Initialiser.Interface);
-
-      return true;
+      return new GSASpringProperty() { Value = prop }.SetGWACommand();
     }
 
     public static SpeckleObject ToSpeckle(this GSASpringProperty dummyObject)
     {
-      Type objType = dummyObject.GetType();
-
-      if (!Initialiser.GSASenderObjects.ContainsKey(objType))
-        Initialiser.GSASenderObjects[objType] = new List<object>();
+      var newLines = ToSpeckleBase<GSASpringProperty>();
 
       //Get all relevant GSA entities in this entire model
       var springProperties = new List<GSASpringProperty>();
 
-      string keyword = objType.GetGSAKeyword();
-      string[] subKeywords = objType.GetSubGSAKeyword();
-
-      string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
-      List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
-      foreach (string k in subKeywords)
-        deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
-
-      // Remove deleted lines
-      Initialiser.GSASenderObjects[objType].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (var kvp in Initialiser.GSASenderObjects)
-        kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
-
-      // Filter only new lines
-      string[] prevLines = Initialiser.GSASenderObjects[objType].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
-      string[] newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
-
-      foreach (string p in newLines)
+      foreach (var p in newLines)
       {
         try
         {
           var springProperty = new GSASpringProperty() { GWACommand = p };
-          springProperty.ParseGWACommand(Initialiser.Interface);
+          springProperty.ParseGWACommand();
           springProperties.Add(springProperty);
         }
         catch { }
       }
 
-      Initialiser.GSASenderObjects[objType].AddRange(springProperties);
+      Initialiser.GSASenderObjects[typeof(GSASpringProperty)].AddRange(springProperties);
 
-      if (springProperties.Count() > 0 || deletedLines.Count() > 0) return new SpeckleObject();
-
-      return new SpeckleNull();
+      return (springProperties.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

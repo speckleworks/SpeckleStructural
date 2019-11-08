@@ -11,12 +11,10 @@ namespace SpeckleStructuralGSA.Test
 {
   public class SenderProcessor : ProcessorBase
   {
-    public SenderProcessor(string directory, GSAInterfacer gsaInterfacer, GSATargetLayer layer, bool resultOnly, bool embedResults, string[] cases = null, string[] resultsToSend = null) : base(directory)
+    public SenderProcessor(string directory, GSAProxy gsaInterfacer, GSACache gsaCache, GSATargetLayer layer, bool embedResults, string[] cases = null, string[] resultsToSend = null) : base(directory)
     {
       GSAInterfacer = gsaInterfacer;
       Initialiser.Settings.TargetLayer = layer;
-
-      ConstructTypeCastPriority(ioDirection.Send, resultOnly);
 
       Initialiser.Settings.EmbedResults = embedResults;
       if (cases != null)
@@ -41,8 +39,10 @@ namespace SpeckleStructuralGSA.Test
       }
     }
 
-    public void GsaInstanceToSpeckleObjects(out List<SpeckleObject> speckleObjects)
+    public void GsaInstanceToSpeckleObjects(GSATargetLayer layer, out List<SpeckleObject> speckleObjects, bool resultOnly)
     {
+      var TypePrerequisites = GetTypeCastPriority(ioDirection.Send, layer, resultOnly);
+
       var gwaCacheRecords = new Dictionary<string, object>();
       speckleObjects = new List<SpeckleObject>();
 

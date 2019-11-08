@@ -15,7 +15,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralBridgePath();
 
-    public void ParseGWACommand(IGSAInterfacer GSA)
+    public void ParseGWACommand()
     {
       if (this.GWACommand == null)
         return;
@@ -27,27 +27,30 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Initialiser.Interface.GetSID(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
 
-      //TO DO
+      //TO DO: change these defaults for the real thing
+      obj.PathType = StructuralBridgePathType.Lane;
+      obj.Gauge = 0;
+      obj.LeftRailFactor = 0;
 
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAInterfacer GSA)
+    public string SetGWACommand()
     {
       if (this.Value == null)
-        return;
+        return "";
 
-      Type destType = typeof(GSABridgePath);
+      var destType = typeof(GSABridgePath);
 
       var path = this.Value as StructuralBridgePath;
 
-      string keyword = destType.GetGSAKeyword();
+      var keyword = destType.GetGSAKeyword();
 
-      int index = GSA.Indexer.ResolveIndex(keyword, destType.Name, path.ApplicationId);
-      int alignmentIndex = GSA.Indexer.LookupIndex(typeof(GSABridgeAlignment).GetGSAKeyword(), typeof(GSABridgeAlignment).Name, path.AlignmentRef) ?? 1;
+      var index = Initialiser.Indexer.ResolveIndex(keyword, destType.Name, path.ApplicationId);
+      var alignmentIndex = Initialiser.Indexer.LookupIndex(typeof(GSABridgeAlignment).GetGSAKeyword(), typeof(GSABridgeAlignment).ToSpeckleTypeName(), path.AlignmentRef) ?? 1;
 
       var left = path.Offsets.First();
       var right = (path.PathType == StructuralBridgePathType.Track || path.PathType == StructuralBridgePathType.Vehicle) ? path.Gauge : path.Offsets.Last();
@@ -66,7 +69,7 @@ namespace SpeckleStructuralGSA
           path.LeftRailFactor.ToString()
       };
 
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      return (string.Join("\t", ls));
     }
 
     private string PathTypeToGWAString(StructuralBridgePathType pathType)
@@ -85,53 +88,27 @@ namespace SpeckleStructuralGSA
 
   public static partial class Conversions
   {
-    public static bool ToNative(this StructuralBridgePath path)
+    public static string ToNative(this StructuralBridgePath path)
     {
-      new GSABridgePath() { Value = path }.SetGWACommand(Initialiser.Interface);
-
-      return true;
+      return new GSABridgePath() { Value = path }.SetGWACommand();
     }
 
     public static SpeckleObject ToSpeckle(this GSABridgePath dummyObject)
     {
-      var objType = dummyObject.GetType();
-
-      if (!Initialiser.GSASenderObjects.ContainsKey(objType))
-        Initialiser.GSASenderObjects[objType] = new List<object>();
-
-      //Get all relevant GSA entities in this entire model
+      var newLines = ToSpeckleBase<GSABridgePath>();
       var paths = new List<GSABridgePath>();
 
-      string keyword = objType.GetGSAKeyword();
-      string[] subKeywords = objType.GetSubGSAKeyword();
-
-      string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
-      List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
-      foreach (string k in subKeywords)
-        deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
-
-      // Remove deleted lines
-      Initialiser.GSASenderObjects[objType].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (var kvp in Initialiser.GSASenderObjects)
-        kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
-
-      // Filter only new lines
-      string[] prevLines = Initialiser.GSASenderObjects[objType].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
-      string[] newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
-
-      foreach (string p in newLines)
+      foreach (var p in newLines)
       {
-        GSABridgePath path = new GSABridgePath() { GWACommand = p };
+        var path = new GSABridgePath() { GWACommand = p };
         //Pass in ALL the nodes and members - the Parse_ method will search through them
-        path.ParseGWACommand(Initialiser.Interface);
+        path.ParseGWACommand();
         paths.Add(path);
       }
 
-      Initialiser.GSASenderObjects[objType].AddRange(paths);
+      Initialiser.GSASenderObjects[typeof(GSABridgePath)].AddRange(paths);
 
-      if (paths.Count() > 0 || deletedLines.Count() > 0) return new SpeckleObject();
-
-      return new SpeckleNull();
+      return (paths.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

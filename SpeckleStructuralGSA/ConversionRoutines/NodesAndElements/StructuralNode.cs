@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
 using SpeckleGSAInterfaces;
@@ -19,30 +18,32 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralNode();
 
-    public void ParseGWACommand(IGSAInterfacer GSA)
+    public void ParseGWACommand()
     {
       if (this.GWACommand == null)
         return;
 
-      StructuralNode obj = new StructuralNode();
+      var obj = new StructuralNode();
 
-      string[] pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit("\t");
 
-      int counter = 1; // Skip identifier
+      var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Initialiser.Interface.GetSID(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; // Color
-      obj.Value = new List<double>();
-      obj.Value.Add(Convert.ToDouble(pieces[counter++]));
-      obj.Value.Add(Convert.ToDouble(pieces[counter++]));
-      obj.Value.Add(Convert.ToDouble(pieces[counter++]));
+      obj.Value = new List<double>
+      {
+        Convert.ToDouble(pieces[counter++]),
+        Convert.ToDouble(pieces[counter++]),
+        Convert.ToDouble(pieces[counter++])
+      };
 
       //counter += 3; // TODO: Skip unknown fields in NODE.3
 
       while (counter < pieces.Length)
       {
-        string s = pieces[counter++];
+        var s = pieces[counter++];
 
         switch (s)
         {
@@ -59,13 +60,13 @@ namespace SpeckleStructuralGSA
             break;
           case "REST":
             obj.Restraint = new StructuralVectorBoolSix(new bool[6]);
-            for (int i = 0; i < 6; i++)
+            for (var i = 0; i < 6; i++)
               obj.Restraint.Value[i] = pieces[counter++] == "0" ? false : true;
             this.ForceSend = true;
             break;
           case "STIFF":
             obj.Stiffness = new StructuralVectorSix(new double[6]);
-            for (int i = 0; i < 6; i++)
+            for (var i = 0; i < 6; i++)
               obj.Stiffness.Value[i] = Convert.ToDouble(pieces[counter++]);
             this.ForceSend = true;
             break;
@@ -93,111 +94,130 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAInterfacer GSA)
+    public string SetGWACommand()
     {
       if (this.Value == null)
-        return;
+        return "";
 
-      StructuralNode node = this.Value as StructuralNode;
+      var node = this.Value as StructuralNode;
 
-      string keyword = typeof(GSANode).GetGSAKeyword();
+      var keyword = typeof(GSANode).GetGSAKeyword();
 
-      int index = HelperClass.NodeAt(GSA, node.Value[0], node.Value[1], node.Value[2], Initialiser.Settings.CoincidentNodeAllowance, node.ApplicationId);
+      var index = HelperClass.NodeAt(node.Value[0], node.Value[1], node.Value[2], Initialiser.Settings.CoincidentNodeAllowance);
 
-      List<string> ls = new List<string>();
+      var ls = new List<string>
+      {
+        "SET",
+        keyword + ":" + HelperClass.GenerateSID(node),
+        index.ToString(),
+        node.Name == null || node.Name == "" ? " " : node.Name,
+        "NO_RGB",
+        string.Join("\t", node.Value.ToArray()),
 
-      ls.Add("SET");
-      ls.Add(keyword + ":" + HelperClass.GenerateSID(node));
-      ls.Add(index.ToString());
-      ls.Add(node.Name == null || node.Name == "" ? " " : node.Name);
-      ls.Add("NO_RGB");
-      ls.Add(string.Join("\t", node.Value.ToArray()));
+        //ls.Add("0"); // TODO: Skip unknown fields in NODE.3
+        //ls.Add("0"); // TODO: Skip unknown fields in NODE.3
+        //ls.Add("0"); // TODO: Skip unknown fields in NODE.3
 
-      //ls.Add("0"); // TODO: Skip unknown fields in NODE.3
-      //ls.Add("0"); // TODO: Skip unknown fields in NODE.3
-      //ls.Add("0"); // TODO: Skip unknown fields in NODE.3
+        "NO_GRID"
+      };
 
-      ls.Add("NO_GRID");
 
+      var gwaCommands = new List<string>();
+      var axisGwa = "";
       try
       {
-        ls.Add(HelperClass.SetAxis(node.Axis, node.Name).ToString());
+        HelperClass.SetAxis(node.Axis, out var axisIndex, out axisGwa, node.Name);
+        if (axisGwa.Length > 0)
+        {
+          gwaCommands.Add(axisGwa);
+        }
+
+        ls.Add(axisIndex.ToString());
       }
       catch { ls.Add("0"); }
 
       try
       {
-        List<string> subLs = new List<string>();
-
         if (node.Restraint == null || !node.Restraint.Value.Any(x => x))
-          subLs.Add("NO_REST");
+        {
+          ls.Add("NO_REST");
+        }
         else
         {
-          subLs.Add("REST");
-          subLs.Add(node.Restraint.Value[0] ? "1" : "0");
-          subLs.Add(node.Restraint.Value[1] ? "1" : "0");
-          subLs.Add(node.Restraint.Value[2] ? "1" : "0");
-          subLs.Add(node.Restraint.Value[3] ? "1" : "0");
-          subLs.Add(node.Restraint.Value[4] ? "1" : "0");
-          subLs.Add(node.Restraint.Value[5] ? "1" : "0");
+          var subLs = new List<string>
+          {
+            "REST",
+            node.Restraint.Value[0] ? "1" : "0",
+            node.Restraint.Value[1] ? "1" : "0",
+            node.Restraint.Value[2] ? "1" : "0",
+            node.Restraint.Value[3] ? "1" : "0",
+            node.Restraint.Value[4] ? "1" : "0",
+            node.Restraint.Value[5] ? "1" : "0"
+          };
+          ls.AddRange(subLs);
         }
 
-        ls.AddRange(subLs);
+        
 
       }
       catch { ls.Add("NO_REST"); }
 
       try
       {
-        List<string> subLs = new List<string>();
-
         if (node.Stiffness == null || !node.Stiffness.Value.Any(x => x == 0))
-          subLs.Add("NO_STIFF");
+        {
+          ls.Add("NO_STIFF");
+        }
         else
         {
-          subLs.Add("STIFF");
-          subLs.Add(node.Stiffness.Value[0].ToString());
-          subLs.Add(node.Stiffness.Value[1].ToString());
-          subLs.Add(node.Stiffness.Value[2].ToString());
-          subLs.Add(node.Stiffness.Value[3].ToString());
-          subLs.Add(node.Stiffness.Value[4].ToString());
-          subLs.Add(node.Stiffness.Value[5].ToString());
+          var subLs = new List<string>
+          {
+            "STIFF",
+            node.Stiffness.Value[0].ToString(),
+            node.Stiffness.Value[1].ToString(),
+            node.Stiffness.Value[2].ToString(),
+            node.Stiffness.Value[3].ToString(),
+            node.Stiffness.Value[4].ToString(),
+            node.Stiffness.Value[5].ToString()
+          };
+          ls.AddRange(subLs);
         }
-
-        ls.AddRange(subLs);
       }
       catch { ls.Add("NO_STIFF"); }
 
       try
       {
-        List<string> subLs = new List<string>();
-
         if (node.GSALocalMeshSize == 0)
         {
           ls.Add("NO_MESH");
         }
         else
         {
-          subLs.Add("MESH");
-          subLs.Add(node.GSALocalMeshSize.ToString());
-          subLs.Add("0"); // Radius
-          subLs.Add("NO"); // Tie to mesh
-          subLs.Add("NO"); // column rigidity will be generated
-          subLs.Add("0"); // Column property number
-          subLs.Add("0"); //Column orientation node
-          subLs.Add("0"); //Column orientation angle
-          subLs.Add("1"); //Column dimension factor
-          subLs.Add("0"); //Column slab thickness factor
-        }
+          var subLs = new List<string>
+          {
+            "MESH",
+            node.GSALocalMeshSize.ToString(),
+            "0", // Radius
+            "NO", // Tie to mesh
+            "NO", // column rigidity will be generated
+            "0", // Column property number
+            "0", //Column orientation node
+            "0", //Column orientation angle
+            "1", //Column dimension factor
+            "0" //Column slab thickness factor
+          };
 
-        ls.AddRange(subLs);
+          ls.AddRange(subLs);
+        }
       }
       catch (Exception)
       {
         ls.Add("NO_MESH");
       }
 
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      gwaCommands.Add(string.Join("\t", ls));
+
+      return string.Join("\n", gwaCommands);
     }
   }
 
@@ -209,96 +229,103 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralNode();
 
-    public void ParseGWACommand(IGSAInterfacer GSA)
+    public void ParseGWACommand()
     {
       if (this.GWACommand == null)
         return;
 
-      StructuralNode obj = new StructuralNode();
+      var obj = new StructuralNode();
 
-      string[] pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit("\t");
 
-      int counter = 1; // Skip identifier
+      var counter = 1; // Skip identifier
       counter++; // Reference
       counter++; // Name
       counter++; // Color
       counter++; // Type
-      var mass = GetGSAMass(GSA, Convert.ToInt32(pieces[counter++]));
+      var mass = GetGSAMass(Convert.ToInt32(pieces[counter++]));
       obj.Mass = mass;
       counter++; // group
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Initialiser.Interface.GetSID(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       // Rest is unimportant for 0D element
 
       this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAInterfacer GSA)
+    public string SetGWACommand()
     {
       if (this.Value == null)
-        return;
+        return "";
 
-      StructuralNode node = this.Value as StructuralNode;
+      var node = this.Value as StructuralNode;
 
-      if (node.Mass == 0)
-        return;
+      if (!node.Mass.HasValue || node.Mass == 0)
+        return "";
 
-      string keyword = typeof(GSA0DElement).GetGSAKeyword();
-      int index = GSA.Indexer.ResolveIndex(typeof(GSA0DElement).GetGSAKeyword(), typeof(GSA0DElement).Name, node.ApplicationId);
-      int propIndex = GSA.Indexer.ResolveIndex("PROP_MASS.2", "", node.ApplicationId);
-      int nodeRef = GSA.Indexer.ResolveIndex(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).Name, node.ApplicationId);
+      var keyword = typeof(GSA0DElement).GetGSAKeyword();
+      var index = Initialiser.Indexer.ResolveIndex(typeof(GSA0DElement).GetGSAKeyword(), typeof(GSA0DElement).ToSpeckleTypeName(), node.ApplicationId);
+      var propIndex = Initialiser.Indexer.ResolveIndex("PROP_MASS.2", "", node.ApplicationId);
+      var nodeIndex = Initialiser.Indexer.ResolveIndex(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).ToSpeckleTypeName(), node.ApplicationId);
 
-      List<string> ls = new List<string>();
+      var gwaCommands = new List<string>();
 
-      ls.Add("SET");
-      ls.Add(keyword + ":" + HelperClass.GenerateSID(node));
-      ls.Add(index.ToString());
-      ls.Add(node.Name == null || node.Name == "" ? " " : node.Name);
-      ls.Add("NO_RGB");
-      ls.Add("MASS");
-      ls.Add(propIndex.ToString());
-      ls.Add("0"); // Group
-      ls.Add(nodeRef.ToString());
-      ls.Add("0"); // Orient Node
-      ls.Add("0"); // Beta
-      ls.Add("NO_RLS"); // Release
-      ls.Add("0"); // Offset x-start
-      ls.Add("0"); // Offset y-start
-      ls.Add("0"); // Offset y
-      ls.Add("0"); // Offset z
-      ls.Add(""); //Dummy
+      var ls = new List<string>
+      {
+        "SET",
+        keyword + ":" + HelperClass.GenerateSID(node),
+        index.ToString(),
+        node.Name == null || node.Name == "" ? " " : node.Name,
+        "NO_RGB",
+        "MASS",
+        propIndex.ToString(),
+        "0", // Group
+        nodeIndex.ToString(),
+        "0", // Orient Node
+        "0", // Beta
+        "NO_RLS", // Release
+        "0", // Offset x-start
+        "0", // Offset y-start
+        "0", // Offset y
+        "0", // Offset z
+        "" //Dummy
+      };
 
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      gwaCommands.Add(string.Join("\t", ls));
 
-      ls.Clear();
-      ls.Add("SET");
-      ls.Add("PROP_MASS.2" + ":" + HelperClass.GenerateSID(node));
-      ls.Add(propIndex.ToString());
-      ls.Add("");
-      ls.Add("NO_RGB");
-      ls.Add("GLOBAL");
-      ls.Add(node.Mass.ToString());
-      ls.Add("0");
-      ls.Add("0");
-      ls.Add("0");
-      ls.Add("0");
-      ls.Add("0");
-      ls.Add("0");
+      ls = new List<string>
+      {
+        "SET",
+        "PROP_MASS.2" + ":" + HelperClass.GenerateSID(node),
+        propIndex.ToString(),
+        "",
+        "NO_RGB",
+        "GLOBAL",
+        node.Mass.ToString(),
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
 
-      ls.Add("MOD");
-      ls.Add("100%");
-      ls.Add("100%");
-      ls.Add("100%");
+        "MOD",
+        "100%",
+        "100%",
+        "100%"
+      };
 
-      Initialiser.Interface.RunGWACommand(string.Join("\t", ls));
+      gwaCommands.Add(string.Join("\t", ls));
+
+      return string.Join("\n", gwaCommands);
     }
 
-    private double GetGSAMass(IGSAInterfacer GSA, int propertyRef)
+    private double GetGSAMass(int propertyIndex)
     {
-      string res = Initialiser.Interface.GetGWARecords("GET\tPROP_MASS.2\t" + propertyRef.ToString()).FirstOrDefault();
-      string[] pieces = res.ListSplit("\t");
+      var gwa = Initialiser.Indexer.GetGwa("PROP_MASS.2", propertyIndex).FirstOrDefault();
+      var pieces = gwa.ListSplit("\t");
 
-      this.SubGWACommand.Add(res);
+      this.SubGWACommand.Add(gwa);
 
       return Convert.ToDouble(pieces[5]);
     }
@@ -306,13 +333,13 @@ namespace SpeckleStructuralGSA
   
   public static partial class Conversions
   {
-    public static bool ToNative(this SpecklePoint inputObject)
+    public static string ToNative(this SpecklePoint inputObject)
     {
-      StructuralNode convertedObject = new StructuralNode();
+      var convertedObject = new StructuralNode();
 
-      foreach (PropertyInfo p in convertedObject.GetType().GetProperties().Where(p => p.CanWrite))
+      foreach (var p in convertedObject.GetType().GetProperties().Where(p => p.CanWrite))
       {
-        PropertyInfo inputProperty = inputObject.GetType().GetProperty(p.Name);
+        var inputProperty = inputObject.GetType().GetProperty(p.Name);
         if (inputProperty != null)
           p.SetValue(convertedObject, inputProperty.GetValue(inputObject));
       }
@@ -320,69 +347,49 @@ namespace SpeckleStructuralGSA
       return convertedObject.ToNative();
     }
 
-    public static bool ToNative(this StructuralNode node)
+    public static string ToNative(this StructuralNode node)
     {
-      new GSANode() { Value = node }.SetGWACommand(Initialiser.Interface);
-      new GSA0DElement() { Value = node }.SetGWACommand(Initialiser.Interface);
-
-      return true;
+      return string.Join("\n", new[] { new GSANode() { Value = node }.SetGWACommand(), new GSA0DElement() { Value = node }.SetGWACommand() });
     }
 
     public static SpeckleObject ToSpeckle(this GSANode dummyObject)
     {
-      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSANode)))
-        Initialiser.GSASenderObjects[typeof(GSANode)] = new List<object>();
+      var newLines = ToSpeckleBase<GSANode>();
 
-      List<GSANode> nodes = new List<GSANode>();
+      var nodes = new List<GSANode>();
 
-      string keyword = typeof(GSANode).GetGSAKeyword();
-      string[] subKeywords = typeof(GSANode).GetSubGSAKeyword();
-
-      string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
-      List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
-      foreach (string k in subKeywords)
-        deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
-
-      // Remove deleted lines
-      Initialiser.GSASenderObjects[typeof(GSANode)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (var kvp in Initialiser.GSASenderObjects)
-        kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
-
-      // Filter only new lines
-      string[] prevLines = Initialiser.GSASenderObjects[typeof(GSANode)].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
-      string[] newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
-
-      foreach (string p in newLines)
+      foreach (var p in newLines)
       {
-        GSANode node = new GSANode { GWACommand = p };
-        node.ParseGWACommand(Initialiser.Interface);
+        var node = new GSANode { GWACommand = p };
+        node.ParseGWACommand();
         nodes.Add(node);
       }
 
       Initialiser.GSASenderObjects[typeof(GSANode)].AddRange(nodes);
 
-      if (nodes.Count() > 0 || deletedLines.Count() > 0) return new SpeckleObject();
-
-      return new SpeckleNull();
+      return (nodes.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
 
     public static SpeckleObject ToSpeckle(this GSA0DElement dummyObject)
     {
-      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSANode)))
+      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSA0DElement)))
         return new SpeckleNull();
 
-      List<GSANode> nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
+      var newLines = ToSpeckleBase<GSA0DElement>();
 
-      string keyword = typeof(GSA0DElement).GetGSAKeyword();
-      string[] subKeywords = typeof(GSA0DElement).GetSubGSAKeyword();
+      var changed = false;
+
+      var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
+
+      /*
+      var keyword = typeof(GSA0DElement).GetGSAKeyword();
+      var subKeywords = typeof(GSA0DElement).GetSubGSAKeyword();
 
       // Read lines here
       string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
       List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
-      foreach (string k in subKeywords)
+      foreach (var k in subKeywords)
         deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
-
-      bool changed = false;
 
       // Remove deleted lines
       foreach (var kvp in Initialiser.GSASenderObjects)
@@ -396,20 +403,21 @@ namespace SpeckleStructuralGSA
         }
 
       // Filter only new lines
-      string[] prevLines = Initialiser.GSASenderObjects[typeof(GSANode)].SelectMany(l => (l as IGSASpeckleContainer).SubGWACommand).ToArray();
-      string[] newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
+      var prevLines = Initialiser.GSASenderObjects[typeof(GSANode)].SelectMany(l => (l as IGSASpeckleContainer).SubGWACommand).ToArray();
+      var newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
+      */
 
-      foreach (string p in newLines)
+      foreach (var p in newLines)
       {
-        string[] pPieces = p.ListSplit("\t");
+        var pPieces = p.ListSplit("\t");
         if (pPieces[4].ParseElementNumNodes() == 1)
         {
           try
           {
-            GSA0DElement massNode = new GSA0DElement() { GWACommand = p };
-            massNode.ParseGWACommand(Initialiser.Interface);
+            var massNode = new GSA0DElement() { GWACommand = p };
+            massNode.ParseGWACommand();
 
-            GSANode match = nodes
+            var match = nodes
                 .Where(n => n.Value.ApplicationId == massNode.Value.ApplicationId)
                 .First();
 
@@ -427,8 +435,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      if (changed) return new SpeckleObject();
-      return new SpeckleNull();
+      return (changed) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

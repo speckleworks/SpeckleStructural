@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Interop.Gsa_10_0;
-using Moq;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
@@ -29,11 +26,10 @@ namespace SpeckleStructuralGSA.Test
       //This uses the installed SpeckleKits - when SpeckleStructural is built, the built files are copied into the 
       // %LocalAppData%\SpeckleKits directory, so therefore this project doesn't need to reference the projects within in this solution
       SpeckleInitializer.Initialize();
+      gsaInterfacer = new GSAProxy();
+      gsaCache = new GSACache();
 
-      gsaInterfacer = new GSAInterfacer
-      {
-        Indexer = new Indexer()
-      };
+      Initialiser.Indexer = gsaCache;
       Initialiser.Interface = gsaInterfacer;
       Initialiser.Settings = new Settings();
     }
@@ -54,6 +50,7 @@ namespace SpeckleStructuralGSA.Test
       //This uses the installed SpeckleKits - when SpeckleStructural is built, the built files are copied into the 
       // %LocalAppData%\SpeckleKits directory, so therefore this project doesn't need to reference the projects within in this solution
       var expectedObjects = JsonConvert.DeserializeObject<List<SpeckleObject>>(expectedFullJson, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+
       expectedObjects = expectedObjects.OrderBy(a => a.ApplicationId).ToList();
 
       var actualObjects = ModelToSpeckleObjects(layer, resultsOnly, embedResults, loadCases, resultTypes);
@@ -61,26 +58,41 @@ namespace SpeckleStructuralGSA.Test
 
       actualObjects = actualObjects.OrderBy(a => a.ApplicationId).ToList();
 
-      Assert.AreEqual(expectedObjects.Count(), actualObjects.Count());
-      Assert.AreEqual(expectedObjects.Count(), expectedObjects.Count());
+      //Assert.AreEqual(expectedObjects.Count(), actualObjects.Count());
 
       var expectedJsons = expectedObjects.Select(e => Regex.Replace(JsonConvert.SerializeObject(e, jsonSettings), jsonDecSearch, "$1")).ToList();
+      expectedJsons = expectedJsons.Select(e => Regex.Replace(e, jsonHashSearch, jsonHashReplace)).ToList();
 
+      var unmatching = new List<Tuple<string, string, List<string>>>();
       //Compare each object
       foreach (var actualObject in actualObjects)
       {
         var actualJson = JsonConvert.SerializeObject(actualObject, jsonSettings);
 
         actualJson = Regex.Replace(actualJson, jsonDecSearch, "$1");
+        actualJson = Regex.Replace(actualJson, jsonHashSearch, jsonHashReplace);
 
         var matchingExpected = expectedJsons.FirstOrDefault(e => JsonCompareAreEqual(e, actualJson));
 
-        Assert.NotNull(matchingExpected, "Expected and actual JSON representations for " + string.Join(" ", new[] { actualObject.ApplicationId, actualObject.Name, actualObject.Type, actualObject.Hash }));
-
-        expectedJsons.Remove(matchingExpected);
+        if (matchingExpected == null)
+        {
+          var nearestMatching = new List<string>();
+          if (!string.IsNullOrEmpty(actualObject.ApplicationId))
+          {
+            nearestMatching.AddRange(expectedJsons.Where(e => e.Contains(actualObject.ApplicationId)));
+          }
+          
+          unmatching.Add(new Tuple<string, string, List<string>>(actualObject.ApplicationId, actualJson, nearestMatching));
+        }        
+        else
+        {
+          expectedJsons.Remove(matchingExpected);
+        }
       }
 
       gsaInterfacer.Close();
+
+      Assert.IsEmpty(unmatching, unmatching.Count().ToString() + " unmatched objects");
     }
   }
 }

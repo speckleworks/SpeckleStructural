@@ -30,6 +30,7 @@ namespace SpeckleStructuralClasses
 
   public enum StructuralSpringPropertyType
   {
+    NotSet,
     General,
     Axial,
     Torsional,
@@ -174,7 +175,9 @@ namespace SpeckleStructuralClasses
   [Serializable]
   public partial class StructuralSpringProperty : SpeckleObject, IStructural
   {
-    public override string Type { get => base.Type + "/StructuralSpringProperty"; }
+    private string speckleType => "/" + this.GetType().Name;
+
+    public override string Type { get => base.Type.Replace(speckleType, "") + speckleType; } //The replacement is to avoid a peculiarity with merging using Automapper
 
     [JsonIgnore]
     private Dictionary<string, object> StructuralProperties
@@ -201,10 +204,10 @@ namespace SpeckleStructuralClasses
 
     /// <summary>Application ID of StructuralSpringProperty.</summary>
     [JsonIgnore]
-    public double DampingRatio
+    public double? DampingRatio
     {
-      get => StructuralProperties.ContainsKey("dampingRatio") ? (double)StructuralProperties["dampingRatio"] : 0;
-      set => StructuralProperties["dampingRatio"] = value;
+      get => StructuralProperties.ContainsKey("dampingRatio") ? (double?)StructuralProperties["dampingRatio"] : null;
+      set { if (value != null) StructuralProperties["dampingRatio"] = value; }
     }
 
     /// <summary>Application ID of StructuralSpringProperty.</summary>
@@ -214,7 +217,7 @@ namespace SpeckleStructuralClasses
       get => StructuralProperties.ContainsKey("springType")
         ? (StructuralSpringPropertyType)Enum.Parse(typeof(StructuralSpringPropertyType), (StructuralProperties["springType"] as string), true)
         : StructuralSpringPropertyType.General;
-      set => StructuralProperties["springType"] = value.ToString();
+      set { if (value != StructuralSpringPropertyType.NotSet) StructuralProperties["springType"] = value.ToString(); }
     }
 
     /// <summary>Local axis of the spring.</summary>
@@ -222,7 +225,7 @@ namespace SpeckleStructuralClasses
     public StructuralAxis Axis
     {
       get => StructuralProperties.ContainsKey("axis") ? (StructuralProperties["axis"] as StructuralAxis) : null;
-      set => StructuralProperties["axis"] = value;
+      set { if (value != null) StructuralProperties["axis"] = value; }
     }
 
     /// <summary>X, Y, Z, XX, YY, ZZ stiffnesses.</summary>
@@ -230,7 +233,7 @@ namespace SpeckleStructuralClasses
     public StructuralVectorSix Stiffness
     {
       get => StructuralProperties.ContainsKey("stiffness") ? (StructuralProperties["stiffness"] as StructuralVectorSix) : null;
-      set => StructuralProperties["stiffness"] = value;
+      set { if (value != null) StructuralProperties["stiffness"] = value; }
     }
   }
 }

@@ -25,28 +25,28 @@ namespace SpeckleStructuralGSA
       if (Initialiser.Settings.MiscResults.Count() == 0)
         return new SpeckleNull();
 
-      List<GSAMiscResult> results = new List<GSAMiscResult>();
+      var results = new List<GSAMiscResult>();
+
+      var indices = Initialiser.Indexer.LookupIndices(typeof(GSAAssembly).GetGSAKeyword()).Where(i => i.HasValue).Select(i => i.Value).ToList();
 
       foreach (var kvp in Initialiser.Settings.MiscResults)
       {
-        foreach (string loadCase in Initialiser.Settings.ResultCases)
+        foreach (var loadCase in Initialiser.Settings.ResultCases)
         {
-          if (!Initialiser.Interface.CaseExist(loadCase))
-            continue;
+          if (!Initialiser.Interface.CaseExist(loadCase)) continue;
 
-          int id = 0;
-          int highestIndex = 0;
+          var gwa = Initialiser.Indexer.GetGwa("");
 
-          if (!string.IsNullOrEmpty(kvp.Value.Item1))
+          var id = 0;
+
+          for (var i = 0; i < indices.Count(); i++)
           {
-            highestIndex = (int)Initialiser.Interface.RunGWACommand("HIGHEST\t" + kvp.Value.Item1);
-            id = 1;
-          }
+            id = indices[i];
 
-          while (id <= highestIndex)
-          {
-            if (id == 0 || (int)Initialiser.Interface.RunGWACommand("EXIST\t" + kvp.Value.Item1 + "\t" + id.ToString()) == 1)
-            {
+          //while (id <= highestIndex)
+          //{
+            //if (id == 0 || (int)Initialiser.Interface.RunGWACommand("EXIST\t" + kvp.Value.Item1 + "\t" + id.ToString()) == 1)
+            //{
               var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item2, kvp.Value.Item3, kvp.Value.Item4, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
 
               if (resultExport == null || resultExport.Count() == 0)
@@ -62,12 +62,15 @@ namespace SpeckleStructuralGSA
                 Value = resultExport,
                 ResultSource = loadCase
               };
+
               if (id != 0)
-                newRes.TargetRef = Initialiser.Interface.GetSID(kvp.Value.Item1, id);
+              {
+                newRes.TargetRef = HelperClass.GetApplicationId(kvp.Value.Item1, id);
+              }
               newRes.GenerateHash();
               results.Add(new GSAMiscResult() { Value = newRes });
-            }
-            id++;
+            //}
+            //id++;
           }
         }
       }
