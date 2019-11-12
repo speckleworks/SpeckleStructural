@@ -562,12 +562,12 @@ namespace SpeckleStructuralGSA
       {
         return;
       }
-      var res = Initialiser.Indexer.ResolveIndex("AXIS", "");
+      var res = Initialiser.Indexer.ResolveIndex("AXIS.1", "");
 
       var ls = new List<string>
       {
         "SET",
-        "AXIS",
+        "AXIS.1",
         res.ToString(),
         gwaAxisName,
         "CART",
@@ -593,14 +593,14 @@ namespace SpeckleStructuralGSA
     public static void SetAxis(SpeckleVector xVector, SpeckleVector xyVector, SpecklePoint origin, out int index, out string gwaCommand, string name = "")
     {
       gwaCommand = "";
-      index = Initialiser.Indexer.ResolveIndex("AXIS", "");
+      index = Initialiser.Indexer.ResolveIndex("AXIS.1", "");
 
       var gwaCommands = new List<string>();
 
       var ls = new List<string>()
         {
           "SET",
-          "AXIS",
+          "AXIS.1",
           index.ToString(),
           name ?? "",
           "CART",
@@ -910,7 +910,7 @@ namespace SpeckleStructuralGSA
           );
         default:
           //string res = Initialiser.Interface.GetGWARecords("GET\tAXIS\t" + axis.ToString()).FirstOrDefault();
-          var res = Initialiser.Indexer.GetGwa("AXIS", axis).First();
+          var res = Initialiser.Indexer.GetGwa("AXIS.1", axis).First();
           gwaRecord = res;
 
           var pieces = res.Split(new char[] { '\t' });

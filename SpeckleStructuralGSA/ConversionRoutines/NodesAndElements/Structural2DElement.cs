@@ -360,46 +360,23 @@ namespace SpeckleStructuralGSA
 
     public static SpeckleObject ToSpeckle(this GSA2DElement dummyObject)
     {
-      var newLines = ToSpeckleBase<GSA2DElement>();
+      var newElementLines = ToSpeckleBase<GSA2DElement>();
       var newMeshLines = ToSpeckleBase<GSA2DElementMesh>();
+      var newLines = new List<Tuple<int, string>>();
+      foreach (var k in newElementLines.Keys)
+      {
+        newLines.Add(new Tuple<int, string>(k, newElementLines[k]));
+      }
       foreach (var k in newMeshLines.Keys)
       {
-        newLines.Add(k, newMeshLines[k]);
+        newLines.Add(new Tuple<int, string>(k, newMeshLines[k]));
       }
 
       var elements = new List<GSA2DElement>();
       var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
       var props = Initialiser.GSASenderObjects[typeof(GSA2DProperty)].Cast<GSA2DProperty>().ToList();
 
-      /*
-      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSA2DElement)))
-        Initialiser.GSASenderObjects[typeof(GSA2DElement)] = new List<object>();
-
-      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSA2DElementMesh)))
-        Initialiser.GSASenderObjects[typeof(GSA2DElementMesh)] = new List<object>();
-
-      var keyword = typeof(GSA2DElement).GetGSAKeyword();
-      var subKeywords = typeof(GSA2DElement).GetSubGSAKeyword();
-
-      string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
-      List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
-      foreach (var k in subKeywords)
-        deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
-
-      // Remove deleted lines
-      Initialiser.GSASenderObjects[typeof(GSA2DElement)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (var kvp in Initialiser.GSASenderObjects)
-        kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
-
-      // Filter only new lines
-      var prevLines = Initialiser.GSASenderObjects[typeof(GSA2DElement)]
-        .Select(l => (l as IGSASpeckleContainer).GWACommand)
-        .Concat(Initialiser.GSASenderObjects[typeof(GSA2DElementMesh)].SelectMany(l => (l as IGSASpeckleContainer).SubGWACommand))
-        .ToArray();
-      var newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
-      */
-
-      foreach (var p in newLines.Values)
+      foreach (var p in newLines.Select(nl => nl.Item2))
       {
         var pPieces = p.ListSplit("\t");
         if (pPieces[4].ParseElementNumNodes() == 3 | pPieces[4].ParseElementNumNodes() == 4)
