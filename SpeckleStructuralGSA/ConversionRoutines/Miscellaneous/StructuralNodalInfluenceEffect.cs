@@ -111,9 +111,9 @@ namespace SpeckleStructuralGSA
       
       var keyword = typeof(GSANodalInfluenceEffect).GetGSAKeyword();
 
-      var index = Initialiser.Indexer.ResolveIndex(typeof(GSANodalInfluenceEffect).GetGSAKeyword(), typeof(GSANodalInfluenceEffect).ToSpeckleTypeName(), infl.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(typeof(GSANodalInfluenceEffect).GetGSAKeyword(), typeof(GSANodalInfluenceEffect).ToSpeckleTypeName(), infl.ApplicationId);
 
-      var nodeRef = Initialiser.Indexer.LookupIndex(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).ToSpeckleTypeName(), infl.NodeRef);
+      var nodeRef = Initialiser.Cache.LookupIndex(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).ToSpeckleTypeName(), infl.NodeRef);
 
       if (!nodeRef.HasValue)
         return "";

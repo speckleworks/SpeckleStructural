@@ -123,7 +123,7 @@ namespace SpeckleStructuralGSA
 
       var keyword = destType.GetGSAKeyword();
 
-      var index = Initialiser.Indexer.ResolveIndex(keyword, springProp.Type, springProp.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(keyword, springProp.Type, springProp.ApplicationId);
 
       var gwaAxisCommand = "";
       var gwaCommands = new List<string>();

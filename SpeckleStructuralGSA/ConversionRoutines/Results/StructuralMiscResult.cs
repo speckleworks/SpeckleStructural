@@ -27,7 +27,7 @@ namespace SpeckleStructuralGSA
 
       var results = new List<GSAMiscResult>();
 
-      var indices = Initialiser.Indexer.LookupIndices(typeof(GSAAssembly).GetGSAKeyword()).Where(i => i.HasValue).Select(i => i.Value).ToList();
+      var indices = Initialiser.Cache.LookupIndices(typeof(GSAAssembly).GetGSAKeyword()).Where(i => i.HasValue).Select(i => i.Value).ToList();
 
       foreach (var kvp in Initialiser.Settings.MiscResults)
       {
@@ -35,7 +35,7 @@ namespace SpeckleStructuralGSA
         {
           if (!Initialiser.Interface.CaseExist(loadCase)) continue;
 
-          var gwa = Initialiser.Indexer.GetGwa("");
+          var gwa = Initialiser.Cache.GetGwa("");
 
           var id = 0;
 

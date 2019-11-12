@@ -32,7 +32,7 @@ namespace SpeckleStructuralGSA
 
       //Find task type
       int.TryParse(pieces[counter++], out int taskRef);
-      var taskRec = Initialiser.Indexer.GetGwa("TASK.1", taskRef).First();
+      var taskRec = Initialiser.Cache.GetGwa("TASK.1", taskRef).First();
       obj.TaskType = HelperClass.GetLoadTaskType(taskRec);
       this.SubGWACommand.Add(taskRec);
 
@@ -73,8 +73,8 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSALoadTask).GetGSAKeyword();
 
-      var taskIndex = Initialiser.Indexer.ResolveIndex("TASK.1", "", loadTask.ApplicationId);
-      var index = Initialiser.Indexer.ResolveIndex(typeof(GSALoadTask).GetGSAKeyword(), typeof(GSALoadTask).ToSpeckleTypeName(), loadTask.ApplicationId);
+      var taskIndex = Initialiser.Cache.ResolveIndex("TASK.1", "", loadTask.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(typeof(GSALoadTask).GetGSAKeyword(), typeof(GSALoadTask).ToSpeckleTypeName(), loadTask.ApplicationId);
 
       var gwaCommands = new List<string>();
 
@@ -220,7 +220,7 @@ namespace SpeckleStructuralGSA
         var subLs = new List<string>();
         for (var i = 0; i < loadTask.LoadCaseRefs.Count(); i++)
         {
-          var loadCaseRef = Initialiser.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).ToSpeckleTypeName(), loadTask.LoadCaseRefs[i]);
+          var loadCaseRef = Initialiser.Cache.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).ToSpeckleTypeName(), loadTask.LoadCaseRefs[i]);
 
           if (loadCaseRef.HasValue)
           {

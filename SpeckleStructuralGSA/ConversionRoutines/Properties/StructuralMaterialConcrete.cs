@@ -60,7 +60,7 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSAMaterialConcrete).GetGSAKeyword();
 
-      var index = Initialiser.Indexer.ResolveIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), typeof(GSAMaterialConcrete).ToSpeckleTypeName(), mat.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), typeof(GSAMaterialConcrete).ToSpeckleTypeName(), mat.ApplicationId);
 
       // TODO: This function barely works.
       var ls = new List<string>

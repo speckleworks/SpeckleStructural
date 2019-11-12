@@ -58,9 +58,9 @@ namespace SpeckleStructuralGSA
       var keyword = typeof(GSALoadTaskBuckling).GetGSAKeyword();
       var subkeyword = typeof(GSALoadTaskBuckling).GetSubGSAKeyword().First();
 
-      var taskIndex = Initialiser.Indexer.ResolveIndex("TASK.1", "", loadTask.ApplicationId);
-      var comboIndex = Initialiser.Indexer.LookupIndex(typeof(GSALoadCombo).GetGSAKeyword(), typeof(GSALoadCombo).ToSpeckleTypeName(), loadTask.ResultCaseRef);
-      var stageIndex = Initialiser.Indexer.LookupIndex(typeof(GSAConstructionStage).GetGSAKeyword(), typeof(GSAConstructionStage).ToSpeckleTypeName(), loadTask.StageDefinitionRef);
+      var taskIndex = Initialiser.Cache.ResolveIndex("TASK.1", "", loadTask.ApplicationId);
+      var comboIndex = Initialiser.Cache.LookupIndex(typeof(GSALoadCombo).GetGSAKeyword(), typeof(GSALoadCombo).ToSpeckleTypeName(), loadTask.ResultCaseRef);
+      var stageIndex = Initialiser.Cache.LookupIndex(typeof(GSAConstructionStage).GetGSAKeyword(), typeof(GSAConstructionStage).ToSpeckleTypeName(), loadTask.StageDefinitionRef);
 
       var ls = new List<string>
         {
@@ -99,7 +99,7 @@ namespace SpeckleStructuralGSA
 
       for (var i = 0; i < loadTask.NumModes; i++)
       {
-        var caseIndex = Initialiser.Indexer.ResolveIndex(keyword, typeof(GSALoadTaskBuckling).Name);
+        var caseIndex = Initialiser.Cache.ResolveIndex(keyword, typeof(GSALoadTaskBuckling).Name);
         // Set ANAL
         ls.Clear();
         ls.AddRange(new[] {

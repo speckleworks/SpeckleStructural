@@ -20,7 +20,7 @@ namespace SpeckleStructuralGSA.Test
     [SetUp]
     public void SetupMergeTests()
     {
-      Initialiser.Indexer = new GSACache();
+      Initialiser.Cache = new GSACache();
       Initialiser.Settings = new Settings();
     }
     [Test]
@@ -268,7 +268,7 @@ namespace SpeckleStructuralGSA.Test
 
       var mockGsaInterfacer = new Mock<IGSAProxy>();
 
-      ((IGSACache)Initialiser.Indexer).Upsert(keyword, 1, gwaCommand, sid);
+      ((IGSACache)Initialiser.Cache).Upsert(keyword, 1, gwaCommand, sid);
       Initialiser.GSASenderObjects = new Dictionary<Type, List<object>>
       {
         { testType, new List<object>() }

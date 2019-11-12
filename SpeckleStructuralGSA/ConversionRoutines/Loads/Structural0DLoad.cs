@@ -90,14 +90,14 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA0DLoad).GetGSAKeyword();
 
-      var nodeRefs = Initialiser.Indexer.LookupIndices(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).ToSpeckleTypeName(), load.NodeRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+      var nodeRefs = Initialiser.Cache.LookupIndices(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).ToSpeckleTypeName(), load.NodeRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
       var loadCaseRef = 0;
       try
       {
-        loadCaseRef = Initialiser.Indexer.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).ToSpeckleTypeName(), load.LoadCaseRef).Value;
+        loadCaseRef = Initialiser.Cache.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).ToSpeckleTypeName(), load.LoadCaseRef).Value;
       }
       catch {
-        loadCaseRef = Initialiser.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).ToSpeckleTypeName(), load.LoadCaseRef);
+        loadCaseRef = Initialiser.Cache.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).ToSpeckleTypeName(), load.LoadCaseRef);
       }
 
       var direction = new string[6] { "X", "Y", "Z", "XX", "YY", "ZZ" };
@@ -110,7 +110,7 @@ namespace SpeckleStructuralGSA
 
         if (load.Loading.Value[i] == 0) continue;
 
-        var index = Initialiser.Indexer.ResolveIndex(typeof(GSA0DLoad).GetGSAKeyword(), typeof(GSA0DLoad).Name);
+        var index = Initialiser.Cache.ResolveIndex(typeof(GSA0DLoad).GetGSAKeyword(), typeof(GSA0DLoad).Name);
 
         ls.Add("SET_AT");
         ls.Add(index.ToString());

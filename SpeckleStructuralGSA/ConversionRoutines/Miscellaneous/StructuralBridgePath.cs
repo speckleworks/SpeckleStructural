@@ -49,8 +49,8 @@ namespace SpeckleStructuralGSA
 
       var keyword = destType.GetGSAKeyword();
 
-      var index = Initialiser.Indexer.ResolveIndex(keyword, destType.Name, path.ApplicationId);
-      var alignmentIndex = Initialiser.Indexer.LookupIndex(typeof(GSABridgeAlignment).GetGSAKeyword(), typeof(GSABridgeAlignment).ToSpeckleTypeName(), path.AlignmentRef) ?? 1;
+      var index = Initialiser.Cache.ResolveIndex(keyword, destType.Name, path.ApplicationId);
+      var alignmentIndex = Initialiser.Cache.LookupIndex(typeof(GSABridgeAlignment).GetGSAKeyword(), typeof(GSABridgeAlignment).ToSpeckleTypeName(), path.AlignmentRef) ?? 1;
 
       var left = path.Offsets.First();
       var right = (path.PathType == StructuralBridgePathType.Track || path.PathType == StructuralBridgePathType.Vehicle) ? path.Gauge : path.Offsets.Last();

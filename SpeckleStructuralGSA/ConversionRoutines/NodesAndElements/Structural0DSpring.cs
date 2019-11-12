@@ -67,11 +67,11 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA0DSpring).GetGSAKeyword();
 
-      var index = Initialiser.Indexer.ResolveIndex(keyword, typeof(GSA0DSpring).ToSpeckleTypeName(), spring.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(keyword, typeof(GSA0DSpring).ToSpeckleTypeName(), spring.ApplicationId);
       var propRef = 0;
       try
       {
-        propRef = Initialiser.Indexer.LookupIndex(typeof(GSASpringProperty).GetGSAKeyword(), typeof(GSASpringProperty).ToSpeckleTypeName(), spring.PropertyRef).Value;
+        propRef = Initialiser.Cache.LookupIndex(typeof(GSASpringProperty).GetGSAKeyword(), typeof(GSASpringProperty).ToSpeckleTypeName(), spring.PropertyRef).Value;
       }
       catch { }
 
@@ -130,7 +130,7 @@ namespace SpeckleStructuralGSA
       }
       */
 
-      var group = Initialiser.Indexer.ResolveIndex(typeof(GSA0DSpring).GetGSAKeyword(), typeof(GSA0DSpring).ToSpeckleTypeName(), spring.ApplicationId);
+      var group = Initialiser.Cache.ResolveIndex(typeof(GSA0DSpring).GetGSAKeyword(), typeof(GSA0DSpring).ToSpeckleTypeName(), spring.ApplicationId);
       return new GSA0DSpring() { Value = spring }.SetGWACommand(Initialiser.Interface, group);
     }
 
