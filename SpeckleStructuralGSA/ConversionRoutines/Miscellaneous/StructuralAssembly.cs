@@ -238,7 +238,7 @@ namespace SpeckleStructuralGSA
       var newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
       */
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         try
         {

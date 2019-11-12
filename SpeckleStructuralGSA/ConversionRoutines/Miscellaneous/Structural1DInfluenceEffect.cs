@@ -170,7 +170,7 @@ namespace SpeckleStructuralGSA
 
       var infls = new List<GSA1DInfluenceEffect>();      
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         try
         {

@@ -173,7 +173,7 @@ namespace SpeckleStructuralGSA
       var infls = new List<GSANodalInfluenceEffect>();
       var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         try
         {

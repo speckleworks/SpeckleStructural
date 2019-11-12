@@ -89,7 +89,7 @@ namespace SpeckleStructuralGSA
       //Get all relevant GSA entities in this entire model
       var alignments = new List<GSABridgeVehicle>();
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         var alignment = new GSABridgeVehicle() { GWACommand = p };
         //Pass in ALL the nodes and members - the Parse_ method will search through them

@@ -98,7 +98,7 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSABridgePath>();
       var paths = new List<GSABridgePath>();
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         var path = new GSABridgePath() { GWACommand = p };
         //Pass in ALL the nodes and members - the Parse_ method will search through them

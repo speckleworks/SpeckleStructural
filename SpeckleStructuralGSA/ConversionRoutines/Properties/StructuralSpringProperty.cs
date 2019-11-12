@@ -235,7 +235,7 @@ namespace SpeckleStructuralGSA
       //Get all relevant GSA entities in this entire model
       var springProperties = new List<GSASpringProperty>();
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         try
         {

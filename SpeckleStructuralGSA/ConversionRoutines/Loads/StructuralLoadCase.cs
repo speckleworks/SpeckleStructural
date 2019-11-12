@@ -131,7 +131,7 @@ namespace SpeckleStructuralGSA
 
       var loadCases = new List<GSALoadCase>();
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         var loadCase = new GSALoadCase() { GWACommand = p };
         loadCase.ParseGWACommand();

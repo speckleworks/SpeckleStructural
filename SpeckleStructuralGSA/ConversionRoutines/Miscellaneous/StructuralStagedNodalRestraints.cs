@@ -27,7 +27,7 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
       
       obj.Name = pieces[counter++];
-
+      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       //Restraints
       var restraints = new bool[6];
       for (var i = 0; i < 6; i++)
@@ -113,11 +113,11 @@ namespace SpeckleStructuralGSA
       var stageDefs = Initialiser.GSASenderObjects[typeof(GSAConstructionStage)].Cast<GSAConstructionStage>().ToList();
       var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
 
-      foreach (var p in newLines)
+      foreach (var k in newLines.Keys)
       {
         try
         {
-          var genNodeRestraint = new GSAStructuralStagedNodalRestraints() { GWACommand = p };
+          var genNodeRestraint = new GSAStructuralStagedNodalRestraints() { GSAId = k, GWACommand = newLines[k] };
           genNodeRestraint.ParseGWACommand(nodes, stageDefs);
           genNodeRestraints.Add(genNodeRestraint);
         }

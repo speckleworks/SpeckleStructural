@@ -144,7 +144,7 @@ namespace SpeckleStructuralGSA
       var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
 
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         var loadSubList = new List<GSA0DLoad>();
 

@@ -175,7 +175,7 @@ namespace SpeckleStructuralGSA
         m2Ds = Initialiser.GSASenderObjects[typeof(GSA2DMember)].Cast<GSA2DMember>().ToList();
       }
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         try
         {

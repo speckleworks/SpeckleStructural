@@ -224,7 +224,7 @@ namespace SpeckleStructuralGSA
       var elements = Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis ? Initialiser.GSASenderObjects[typeof(GSA1DElement)].Cast<GSA1DElement>().ToList() : new List<GSA1DElement>();
       var members = Initialiser.Settings.TargetLayer == GSATargetLayer.Design ? Initialiser.GSASenderObjects[typeof(GSA1DMember)].Cast<GSA1DMember>().ToList() : new List<GSA1DMember>();
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         var loadSubList = new List<GSA1DLoad>();
 
@@ -291,9 +291,11 @@ namespace SpeckleStructuralGSA
           // Create load for each element applied
           foreach (string nRef in initLoad.Value.ElementRefs)
           {
-            var load = new GSA1DLoad();
-            load.GWACommand = initLoad.GWACommand;
-            load.SubGWACommand = new List<string>(initLoad.SubGWACommand);
+            var load = new GSA1DLoad
+            {
+              GWACommand = initLoad.GWACommand,
+              SubGWACommand = new List<string>(initLoad.SubGWACommand)
+            };
             load.Value.Name = initLoad.Value.Name;
             load.Value.LoadCaseRef = initLoad.Value.LoadCaseRef;
 

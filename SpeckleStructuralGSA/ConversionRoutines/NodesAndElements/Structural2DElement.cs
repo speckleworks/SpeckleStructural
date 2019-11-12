@@ -298,7 +298,7 @@ namespace SpeckleStructuralGSA
       ls.Add("0"); // TODO: What is this?
       ls.Add((mesh.GSADummy.HasValue && mesh.GSADummy.Value) ? "DUMMY" : "ACTIVE");
       ls.Add("NO"); // Internal auto offset
-      ls.Add(mesh.Offset != null ? mesh.Offset.First().ToString() : "0"); // Offset z
+      ls.Add((mesh.Offset != null && mesh.Offset.Count() > 0) ? mesh.Offset.First().ToString() : "0"); // Offset z
       ls.Add("ALL"); // Exposure
 
       gwaCommands.Add(string.Join("\t", ls));
@@ -361,7 +361,11 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA2DElement dummyObject)
     {
       var newLines = ToSpeckleBase<GSA2DElement>();
-      newLines.AddRange(ToSpeckleBase<GSA2DElementMesh>());
+      var newMeshLines = ToSpeckleBase<GSA2DElementMesh>();
+      foreach (var k in newMeshLines.Keys)
+      {
+        newLines.Add(k, newMeshLines[k]);
+      }
 
       var elements = new List<GSA2DElement>();
       var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
@@ -395,7 +399,7 @@ namespace SpeckleStructuralGSA
       var newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
       */
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         var pPieces = p.ListSplit("\t");
         if (pPieces[4].ParseElementNumNodes() == 3 | pPieces[4].ParseElementNumNodes() == 4)
@@ -423,7 +427,7 @@ namespace SpeckleStructuralGSA
       var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
       var props = Initialiser.GSASenderObjects[typeof(GSA2DProperty)].Cast<GSA2DProperty>().ToList();
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         var pPieces = p.ListSplit("\t");
         if (pPieces[4].MemberIs2D())

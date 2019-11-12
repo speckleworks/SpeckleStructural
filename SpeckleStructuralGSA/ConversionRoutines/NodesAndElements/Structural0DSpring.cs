@@ -138,13 +138,17 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA0DSpring dummyObject)
     {
       var newLines = ToSpeckleBase<GSA0DSpring>();
-      newLines.AddRange(ToSpeckleBase<GSANode>());
+      var newNodeLines = ToSpeckleBase<GSANode>();
+      foreach (var k in newNodeLines.Keys)
+      {
+        newLines.Add(k, newNodeLines[k]);
+      }
 
       var springs = new List<GSA0DSpring>();
 
       var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         var pPieces = p.ListSplit("\t");
         if (pPieces[4] == "GRD_SPRING")

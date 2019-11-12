@@ -167,7 +167,7 @@ namespace SpeckleStructuralGSA
       var steels = Initialiser.GSASenderObjects[typeof(GSAMaterialSteel)].Cast<GSAMaterialSteel>().ToList();
       var concretes = Initialiser.GSASenderObjects[typeof(GSAMaterialConcrete)].Cast<GSAMaterialConcrete>().ToList();
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         try
         {

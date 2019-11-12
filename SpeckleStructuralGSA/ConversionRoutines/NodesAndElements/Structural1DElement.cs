@@ -541,7 +541,7 @@ namespace SpeckleStructuralGSA
       var newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
       */
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         var pPieces = p.ListSplit("\t");
         if (pPieces[4].ParseElementNumNodes() == 2 && pPieces[4] == "BEAM")
@@ -568,7 +568,7 @@ namespace SpeckleStructuralGSA
       var members = new List<GSA1DMember>();
       var newLines = ToSpeckleBase<GSA1DMember>();
       
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         var pPieces = p.ListSplit("\t");
         if (pPieces[4].MemberIs1D())

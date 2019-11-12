@@ -250,7 +250,7 @@ namespace SpeckleStructuralGSA
 
       var loadTasks = new List<GSALoadTask>();
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         var task = new GSALoadTask() { GWACommand = p };
         task.ParseGWACommand();

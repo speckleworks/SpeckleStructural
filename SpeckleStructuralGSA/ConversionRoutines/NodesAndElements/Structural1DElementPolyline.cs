@@ -23,18 +23,20 @@ namespace SpeckleStructuralGSA
 
       var elementsListCopy = new List<GSA1DElement>(elements);
 
-      var obj = new Structural1DElementPolyline();
-      obj.ApplicationId = HelperClass.GetApplicationId(typeof(GSA1DElementPolyline).GetGSAKeyword(), GSAId);
+      var obj = new Structural1DElementPolyline
+      {
+        ApplicationId = HelperClass.GetApplicationId(typeof(GSA1DElementPolyline).GetGSAKeyword(), GSAId),
 
-      obj.Value = new List<double>();
-      obj.ElementApplicationId = new List<string>();
+        Value = new List<double>(),
+        ElementApplicationId = new List<string>(),
 
-      obj.ElementType = elementsListCopy.First().Value.ElementType;
-      obj.PropertyRef = elementsListCopy.First().Value.PropertyRef;
-      obj.ZAxis = new List<StructuralVectorThree>();
-      obj.EndRelease = new List<StructuralVectorBoolSix>();
-      obj.Offset = new List<StructuralVectorThree>();
-      obj.ResultVertices = new List<double>();
+        ElementType = elementsListCopy.First().Value.ElementType,
+        PropertyRef = elementsListCopy.First().Value.PropertyRef,
+        ZAxis = new List<StructuralVectorThree>(),
+        EndRelease = new List<StructuralVectorBoolSix>(),
+        Offset = new List<StructuralVectorThree>(),
+        ResultVertices = new List<double>()
+      };
 
       if (Initialiser.Settings.Element1DResults.Count > 0 && Initialiser.Settings.EmbedResults)
         obj.Result = new Dictionary<string, object>();

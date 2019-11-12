@@ -127,7 +127,7 @@ namespace SpeckleStructuralGSA
 
       var materials = new List<GSAMaterialSteel>();
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         try
         {

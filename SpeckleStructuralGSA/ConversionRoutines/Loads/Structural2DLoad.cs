@@ -176,29 +176,7 @@ namespace SpeckleStructuralGSA
       var elements = (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis) ? Initialiser.GSASenderObjects[typeof(GSA2DElement)].Cast<GSA2DElement>().ToList() : new List<GSA2DElement>();
       var members = (Initialiser.Settings.TargetLayer == GSATargetLayer.Design) ? Initialiser.GSASenderObjects[typeof(GSA2DMember)].Cast<GSA2DMember>().ToList() : new List<GSA2DMember>();
 
-      /*
-      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSA2DLoad)))
-        Initialiser.GSASenderObjects[typeof(GSA2DLoad)] = new List<object>();
-
-      string keyword = typeof(GSA2DLoad).GetGSAKeyword();
-      string[] subKeywords = typeof(GSA2DLoad).GetSubGSAKeyword();
-
-      string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
-      List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
-      foreach (string k in subKeywords)
-        deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
-
-      // Remove deleted lines
-      Initialiser.GSASenderObjects[typeof(GSA2DLoad)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (var kvp in Initialiser.GSASenderObjects)
-        kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
-
-      // Filter only new lines
-      string[] prevLines = Initialiser.GSASenderObjects[typeof(GSA2DLoad)].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
-      string[] newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
-      */
-
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         var loadSubList = new List<GSA2DLoad>();
 
@@ -212,9 +190,11 @@ namespace SpeckleStructuralGSA
           // Create load for each element applied
           foreach (string nRef in initLoad.Value.ElementRefs)
           {
-            var load = new GSA2DLoad();
-            load.GWACommand = initLoad.GWACommand;
-            load.SubGWACommand = new List<string>(initLoad.SubGWACommand);
+            var load = new GSA2DLoad
+            {
+              GWACommand = initLoad.GWACommand,
+              SubGWACommand = new List<string>(initLoad.SubGWACommand)
+            };
             load.Value.Name = initLoad.Value.Name;
             load.Value.LoadCaseRef = initLoad.Value.LoadCaseRef;
 
@@ -247,9 +227,11 @@ namespace SpeckleStructuralGSA
           // Create load for each element applied
           foreach (string nRef in initLoad.Value.ElementRefs)
           {
-            var load = new GSA2DLoad();
-            load.GWACommand = initLoad.GWACommand;
-            load.SubGWACommand = new List<string>(initLoad.SubGWACommand);
+            var load = new GSA2DLoad
+            {
+              GWACommand = initLoad.GWACommand,
+              SubGWACommand = new List<string>(initLoad.SubGWACommand),
+            };
             load.Value.Name = initLoad.Value.Name;
             load.Value.LoadCaseRef = initLoad.Value.LoadCaseRef;
 

@@ -94,7 +94,7 @@ namespace SpeckleStructuralGSA
 
       var loads = new List<GSAGravityLoading>();
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         var load = new GSAGravityLoading() { GWACommand = p };
         load.ParseGWACommand();

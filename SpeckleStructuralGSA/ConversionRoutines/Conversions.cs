@@ -7,7 +7,7 @@ namespace SpeckleStructuralGSA
 {
   public static partial class Conversions
   {
-    private static List<string> ToSpeckleBase<T>()
+    private static Dictionary<int, string> ToSpeckleBase<T>()
     {
       var objType = typeof(T);
       var keyword = objType.GetGSAKeyword();
@@ -22,7 +22,7 @@ namespace SpeckleStructuralGSA
       return Initialiser.Indexer.GetGwaToSerialise(keyword);
     }
 
-    private static void ToSpeckleBase<T,S>(out List<string> newLines)
+    private static void ToSpeckleBase<T,S>(out Dictionary<int, string> newLines)
     {
       var objType = typeof(T);
       var keyword = objType.GetGSAKeyword();

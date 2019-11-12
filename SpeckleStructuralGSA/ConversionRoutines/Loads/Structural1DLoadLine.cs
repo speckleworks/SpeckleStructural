@@ -244,7 +244,7 @@ namespace SpeckleStructuralGSA
 
       var loads = new List<GSAGridLineLoad>();
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         var load = new GSAGridLineLoad() { GWACommand = p };
         load.ParseGWACommand();

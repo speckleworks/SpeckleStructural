@@ -7,7 +7,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("MAT_CONCRETE.16", new string[] { }, "properties", true, true, new Type[] { }, new Type[] { })]
+  [GSAObject("MAT_CONCRETE.17", new string[] { }, "properties", true, true, new Type[] { }, new Type[] { })]
   public class GSAMaterialConcrete : IGSASpeckleContainer
   {
     public int GSAId { get; set; }
@@ -66,7 +66,7 @@ namespace SpeckleStructuralGSA
       var ls = new List<string>
       {
         "SET",
-        "MAT_CONCRETE.16" + ":" + HelperClass.GenerateSID(mat),
+        "MAT_CONCRETE.17" + ":" + HelperClass.GenerateSID(mat),
         index.ToString(),
         "MAT.8",
         mat.Name == null || mat.Name == "" ? " " : mat.Name,
@@ -116,7 +116,6 @@ namespace SpeckleStructuralGSA
         "0", // TODO: What is this?
         "1", // Ratio of initial elastic modulus to secant modulus
         "2", // Parabolic coefficient
-        "1", // Modifier on elastic stiffness
         "0.00218389285990043", // SLS strain at peak stress
         "0.0035", // SLS max strain
         "0.00041125", // ULS strain at plateau stress
@@ -126,7 +125,6 @@ namespace SpeckleStructuralGSA
         "0.0035", // Max axial strain
         "NO", // Lightweight?
         mat.AggragateSize.ToString(), // Aggragate size
-        "0", // TODO: What is this?
         "0", // TODO: What is this?
         "1", // TODO: What is this?
         "0.8825", // Constant stress depth
@@ -154,7 +152,7 @@ namespace SpeckleStructuralGSA
 
       var materials = new List<GSAMaterialConcrete>();
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         try
         {

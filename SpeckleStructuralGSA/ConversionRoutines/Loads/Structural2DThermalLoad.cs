@@ -27,6 +27,7 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
       
       obj.Name = pieces[counter++];
+      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
 
       var elementList = pieces[counter++];
 
@@ -174,9 +175,9 @@ namespace SpeckleStructuralGSA
         m2Ds = Initialiser.GSASenderObjects[typeof(GSA2DMember)].Cast<GSA2DMember>().ToList();
       }
 
-      foreach (var p in newLines)
+      foreach (var k in newLines.Keys)
       {
-        var load= new GSA2DThermalLoading() { GWACommand = p };
+        var load = new GSA2DThermalLoading() { GSAId = k, GWACommand = newLines[k] };
         load.ParseGWACommand(e2Ds, m2Ds);
         loads.Add(load);
       }
