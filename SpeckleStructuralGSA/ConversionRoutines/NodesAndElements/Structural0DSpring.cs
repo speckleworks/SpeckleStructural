@@ -38,14 +38,17 @@ namespace SpeckleStructuralGSA
       counter++; // Group
 
       obj.Value = new List<double>();
-      for (var i = 0; i < 2; i++)
-      {
-        var key = pieces[counter++];
-        var node = nodes.Where(n => n.GSAId == Convert.ToInt32(key)).FirstOrDefault();
-        obj.Value.AddRange(node.Value.Value);
-        this.SubGWACommand.Add(node.GWACommand);
-      }
 
+      var key = pieces[counter++];
+      if (int.TryParse(key, out int nodeIndex))
+      {
+        if (nodeIndex > 0)
+        {
+          var node = nodes.Where(n => n.GSAId == Convert.ToInt32(key)).FirstOrDefault();
+          obj.Value.AddRange(node.Value.Value);
+          this.SubGWACommand.Add(node.GWACommand);
+        }
+      }
       var orientationNodeRef = pieces[counter++];
       var rotationAngle = Convert.ToDouble(pieces[counter++]);
 
@@ -53,8 +56,9 @@ namespace SpeckleStructuralGSA
       counter++; // Dummy
 
       if (counter < pieces.Length)
+      {
         Member = pieces[counter++];
-
+      }
       this.Value = obj;
     }
 
@@ -67,11 +71,11 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA0DSpring).GetGSAKeyword();
 
-      var index = Initialiser.Indexer.ResolveIndex(keyword, typeof(GSA0DSpring).ToSpeckleTypeName(), spring.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(keyword, typeof(GSA0DSpring).ToSpeckleTypeName(), spring.ApplicationId);
       var propRef = 0;
       try
       {
-        propRef = Initialiser.Indexer.LookupIndex(typeof(GSASpringProperty).GetGSAKeyword(), typeof(GSASpringProperty).ToSpeckleTypeName(), spring.PropertyRef).Value;
+        propRef = Initialiser.Cache.LookupIndex(typeof(GSASpringProperty).GetGSAKeyword(), typeof(GSASpringProperty).ToSpeckleTypeName(), spring.PropertyRef).Value;
       }
       catch { }
 
@@ -130,21 +134,30 @@ namespace SpeckleStructuralGSA
       }
       */
 
-      var group = Initialiser.Indexer.ResolveIndex(typeof(GSA0DSpring).GetGSAKeyword(), typeof(GSA0DSpring).ToSpeckleTypeName(), spring.ApplicationId);
+      var group = Initialiser.Cache.ResolveIndex(typeof(GSA0DSpring).GetGSAKeyword(), typeof(GSA0DSpring).ToSpeckleTypeName(), spring.ApplicationId);
       return new GSA0DSpring() { Value = spring }.SetGWACommand(Initialiser.Interface, group);
     }
 
     //Sending to Speckle, search through a
     public static SpeckleObject ToSpeckle(this GSA0DSpring dummyObject)
     {
-      var newLines = ToSpeckleBase<GSA0DSpring>();
-      newLines.AddRange(ToSpeckleBase<GSANode>());
+      var newSpringLines = ToSpeckleBase<GSA0DSpring>();
+      var newNodeLines = ToSpeckleBase<GSANode>();
+      var newLines = new List<Tuple<int, string>>();
+      foreach (var k in newSpringLines.Keys)
+      {
+        newLines.Add(new Tuple<int, string>(k, newSpringLines[k]));
+      }
+      foreach (var k in newNodeLines.Keys)
+      {
+        newLines.Add(new Tuple<int, string>(k, newNodeLines[k]));
+      }
 
       var springs = new List<GSA0DSpring>();
 
       var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Select(nl => nl.Item2))
       {
         var pPieces = p.ListSplit("\t");
         if (pPieces[4] == "GRD_SPRING")

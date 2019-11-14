@@ -22,17 +22,19 @@ namespace SpeckleStructuralGSA
       if (elements.Count() < 1)
         return;
 
-      var obj = new Structural2DElementMesh();
-      obj.ApplicationId = HelperClass.GetApplicationId(typeof(GSA2DElementMesh).GetGSAKeyword(), GSAId);
+      var obj = new Structural2DElementMesh
+      {
+        ApplicationId = HelperClass.GetApplicationId(typeof(GSA2DElementMesh).GetGSAKeyword(), GSAId),
 
-      obj.Vertices = new List<double>();
-      obj.Faces = new List<int>();
-      obj.ElementApplicationId = new List<string>();
+        Vertices = new List<double>(),
+        Faces = new List<int>(),
+        ElementApplicationId = new List<string>(),
 
-      obj.ElementType = elements.First().Value.ElementType;
-      obj.PropertyRef = elements.First().Value.PropertyRef;
-      obj.Axis = new List<StructuralAxis>();
-      obj.Offset = new List<double>();
+        ElementType = elements.First().Value.ElementType,
+        PropertyRef = elements.First().Value.PropertyRef,
+        Axis = new List<StructuralAxis>(),
+        Offset = new List<double>()
+      };
 
       if (Initialiser.Settings.Element2DResults.Count > 0 && Initialiser.Settings.EmbedResults)
         obj.Result = new Dictionary<string, object>();
@@ -106,7 +108,7 @@ namespace SpeckleStructuralGSA
 
       var obj = this.Value as Structural2DElementMesh;
 
-      var group = Initialiser.Indexer.ResolveIndex(typeof(GSA2DElementMesh).GetGSAKeyword(), typeof(GSA2DElementMesh).ToSpeckleTypeName(), obj.ApplicationId);
+      var group = Initialiser.Cache.ResolveIndex(typeof(GSA2DElementMesh).GetGSAKeyword(), typeof(GSA2DElementMesh).ToSpeckleTypeName(), obj.ApplicationId);
 
       var elements = obj.Explode();
 

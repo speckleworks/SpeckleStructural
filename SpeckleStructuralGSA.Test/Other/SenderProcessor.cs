@@ -41,7 +41,7 @@ namespace SpeckleStructuralGSA.Test
 
     public void GsaInstanceToSpeckleObjects(GSATargetLayer layer, out List<SpeckleObject> speckleObjects, bool resultOnly)
     {
-      var TypePrerequisites = GetTypeCastPriority(ioDirection.Send, layer, resultOnly);
+      var TypePrerequisites = Helper.GetTypeCastPriority(ioDirection.Send, layer, resultOnly);
 
       var gwaCacheRecords = new Dictionary<string, object>();
       speckleObjects = new List<SpeckleObject>();

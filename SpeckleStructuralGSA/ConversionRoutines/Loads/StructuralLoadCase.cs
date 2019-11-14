@@ -73,7 +73,7 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSALoadCase).GetGSAKeyword();
 
-      var index = Initialiser.Indexer.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).ToSpeckleTypeName(), loadCase.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).ToSpeckleTypeName(), loadCase.ApplicationId);
 
       var ls = new List<string>
       {
@@ -131,7 +131,7 @@ namespace SpeckleStructuralGSA
 
       var loadCases = new List<GSALoadCase>();
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         var loadCase = new GSALoadCase() { GWACommand = p };
         loadCase.ParseGWACommand();

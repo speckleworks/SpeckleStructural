@@ -218,7 +218,8 @@ namespace SpeckleStructuralClasses
       this.ElementType = elementType;
       this.PropertyRef = propertyRef;
       this.Axis = axis.ToList();
-      this.Offset = offset.ToList();
+      if (offset != null && offset.Count() > 0)
+        this.Offset = offset.ToList();
       this.GSAMeshSize = meshSize;
       this.ApplicationId = applicationId;
       this.TextureCoordinates = null;
@@ -256,7 +257,7 @@ namespace SpeckleStructuralClasses
       this.PropertyRef = propertyRef;
       if (axis != null)
         this.Axis = axis.ToList();
-      if (offset != null)
+      if (offset != null && offset.Count() > 0)
         this.Offset = offset.ToList();
       this.ApplicationId = applicationId;
 
@@ -425,7 +426,7 @@ namespace SpeckleStructuralClasses
       for (var i = 0; i < this.Vertices.Count(); i++)
         this.Vertices[i] *= factor;
 
-      if (this.Offset != null)
+      if (this.Offset != null && this.Offset.Count() > 0)
         for (var i = 0; i < this.Offset.Count(); i++)
           this.Offset[i] *= factor;
 

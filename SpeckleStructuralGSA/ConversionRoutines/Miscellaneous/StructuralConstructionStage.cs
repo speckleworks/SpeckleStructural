@@ -85,7 +85,7 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSAConstructionStage).GetGSAKeyword();
 
-      var index = Initialiser.Indexer.ResolveIndex(typeof(GSAConstructionStage).GetGSAKeyword(), typeof(GSAConstructionStage).ToSpeckleTypeName(), stageDef.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(typeof(GSAConstructionStage).GetGSAKeyword(), typeof(GSAConstructionStage).ToSpeckleTypeName(), stageDef.ApplicationId);
       
       var targetString = " ";
 
@@ -99,10 +99,10 @@ namespace SpeckleStructuralGSA
           var speckle2DElementType = typeof(GSA2DElement).ToSpeckleTypeName();
           var speckle2DElementMeshType = typeof(GSA2DElementMesh).ToSpeckleTypeName();
 
-          var e1DIndices = Initialiser.Indexer.LookupIndices(typeof(GSA1DElement).GetGSAKeyword(), speckle1DElementType, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-          var e1DPolyIndices = Initialiser.Indexer.LookupIndices(typeof(GSA1DElementPolyline).GetGSAKeyword(), speckle1DElementPolylineType, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-          var e2DIndices = Initialiser.Indexer.LookupIndices(typeof(GSA2DElement).GetGSAKeyword(), speckle2DElementType, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-          var e2DMeshIndices = Initialiser.Indexer.LookupIndices(typeof(GSA2DElementMesh).GetGSAKeyword(), speckle2DElementMeshType, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var e1DIndices = Initialiser.Cache.LookupIndices(typeof(GSA1DElement).GetGSAKeyword(), speckle1DElementType, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var e1DPolyIndices = Initialiser.Cache.LookupIndices(typeof(GSA1DElementPolyline).GetGSAKeyword(), speckle1DElementPolylineType, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var e2DIndices = Initialiser.Cache.LookupIndices(typeof(GSA2DElement).GetGSAKeyword(), speckle2DElementType, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var e2DMeshIndices = Initialiser.Cache.LookupIndices(typeof(GSA2DElementMesh).GetGSAKeyword(), speckle2DElementMeshType, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
 
           targetString = string.Join(" ",
             e1DIndices.Select(x => x.ToString())
@@ -116,9 +116,9 @@ namespace SpeckleStructuralGSA
           var speckle1DMemberType = typeof(GSA1DMember).ToSpeckleTypeName();
           var speckle2DMemberType = typeof(GSA2DMember).ToSpeckleTypeName();
 
-          var m1DIndices = Initialiser.Indexer.LookupIndices(typeof(GSA1DMember).GetGSAKeyword(), speckle1DMemberType, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-          var m1DPolyIndices = Initialiser.Indexer.LookupIndices(typeof(GSA1DElementPolyline).GetGSAKeyword(), speckle1DElementPolylineType, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-          var m2DIndices = Initialiser.Indexer.LookupIndices(typeof(GSA2DMember).GetGSAKeyword(), speckle2DMemberType, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var m1DIndices = Initialiser.Cache.LookupIndices(typeof(GSA1DMember).GetGSAKeyword(), speckle1DMemberType, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var m1DPolyIndices = Initialiser.Cache.LookupIndices(typeof(GSA1DElementPolyline).GetGSAKeyword(), speckle1DElementPolylineType, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var m2DIndices = Initialiser.Cache.LookupIndices(typeof(GSA2DMember).GetGSAKeyword(), speckle2DMemberType, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
 
           targetString = string.Join(" ",
             m1DIndices.Select(x => "G" + x.ToString())
@@ -175,7 +175,7 @@ namespace SpeckleStructuralGSA
         m2Ds = Initialiser.GSASenderObjects[typeof(GSA2DMember)].Cast<GSA2DMember>().ToList();
       }
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         try
         {

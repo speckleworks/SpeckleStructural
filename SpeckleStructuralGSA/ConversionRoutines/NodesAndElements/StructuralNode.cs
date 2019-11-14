@@ -8,7 +8,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("NODE.2", new string[] { "AXIS" }, "nodes", true, true, new Type[] { }, new Type[] { typeof(GSA1DElement), typeof(GSA1DMember), typeof(GSA2DElement), typeof(GSA2DMember) })]
+  [GSAObject("NODE.2", new string[] { "AXIS.1" }, "nodes", true, true, new Type[] { }, new Type[] { typeof(GSA1DElement), typeof(GSA1DMember), typeof(GSA2DElement), typeof(GSA2DMember) })]
   public class GSANode : IGSASpeckleContainer
   {
     public bool ForceSend; // This is to filter only "important" nodes
@@ -264,9 +264,9 @@ namespace SpeckleStructuralGSA
         return "";
 
       var keyword = typeof(GSA0DElement).GetGSAKeyword();
-      var index = Initialiser.Indexer.ResolveIndex(typeof(GSA0DElement).GetGSAKeyword(), typeof(GSA0DElement).ToSpeckleTypeName(), node.ApplicationId);
-      var propIndex = Initialiser.Indexer.ResolveIndex("PROP_MASS.2", "", node.ApplicationId);
-      var nodeIndex = Initialiser.Indexer.ResolveIndex(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).ToSpeckleTypeName(), node.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(typeof(GSA0DElement).GetGSAKeyword(), typeof(GSA0DElement).ToSpeckleTypeName(), node.ApplicationId);
+      var propIndex = Initialiser.Cache.ResolveIndex("PROP_MASS.2", "", node.ApplicationId);
+      var nodeIndex = Initialiser.Cache.ResolveIndex(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).ToSpeckleTypeName(), node.ApplicationId);
 
       var gwaCommands = new List<string>();
 
@@ -322,7 +322,7 @@ namespace SpeckleStructuralGSA
 
     private double GetGSAMass(int propertyIndex)
     {
-      var gwa = Initialiser.Indexer.GetGwa("PROP_MASS.2", propertyIndex).FirstOrDefault();
+      var gwa = Initialiser.Cache.GetGwa("PROP_MASS.2", propertyIndex).FirstOrDefault();
       var pieces = gwa.ListSplit("\t");
 
       this.SubGWACommand.Add(gwa);
@@ -358,7 +358,7 @@ namespace SpeckleStructuralGSA
 
       var nodes = new List<GSANode>();
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         var node = new GSANode { GWACommand = p };
         node.ParseGWACommand();
@@ -381,33 +381,7 @@ namespace SpeckleStructuralGSA
 
       var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
 
-      /*
-      var keyword = typeof(GSA0DElement).GetGSAKeyword();
-      var subKeywords = typeof(GSA0DElement).GetSubGSAKeyword();
-
-      // Read lines here
-      string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
-      List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
-      foreach (var k in subKeywords)
-        deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
-
-      // Remove deleted lines
-      foreach (var kvp in Initialiser.GSASenderObjects)
-        foreach (IGSASpeckleContainer o in kvp.Value.Where(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x))))
-        {
-          o.Value.Mass = 0;
-          o.SubGWACommand.RemoveAll(s => lines.Contains(s));
-          o.SubGWACommand.RemoveAll(s => deletedLines.Contains(s));
-
-          changed = true;
-        }
-
-      // Filter only new lines
-      var prevLines = Initialiser.GSASenderObjects[typeof(GSANode)].SelectMany(l => (l as IGSASpeckleContainer).SubGWACommand).ToArray();
-      var newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
-      */
-
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         var pPieces = p.ListSplit("\t");
         if (pPieces[4].ParseElementNumNodes() == 1)

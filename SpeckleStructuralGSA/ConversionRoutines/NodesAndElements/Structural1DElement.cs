@@ -128,11 +128,11 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA1DElement).GetGSAKeyword();
 
-      var index = Initialiser.Indexer.ResolveIndex(typeof(GSA1DElement).GetGSAKeyword(), typeof(GSA1DElement).ToSpeckleTypeName(), element.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(typeof(GSA1DElement).GetGSAKeyword(), typeof(GSA1DElement).ToSpeckleTypeName(), element.ApplicationId);
       var propRef = 0;
       try
       {
-        propRef = Initialiser.Indexer.LookupIndex(typeof(GSA1DProperty).GetGSAKeyword(), typeof(GSA1DProperty).ToSpeckleTypeName(), element.PropertyRef).Value;
+        propRef = Initialiser.Cache.LookupIndex(typeof(GSA1DProperty).GetGSAKeyword(), typeof(GSA1DProperty).ToSpeckleTypeName(), element.PropertyRef).Value;
       }
       catch { }
 
@@ -331,13 +331,13 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA1DMember).GetGSAKeyword();
 
-      var index = Initialiser.Indexer.ResolveIndex(typeof(GSA1DMember).GetGSAKeyword(), typeof(GSA1DMember).ToSpeckleTypeName(), member.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(typeof(GSA1DMember).GetGSAKeyword(), typeof(GSA1DMember).ToSpeckleTypeName(), member.ApplicationId);
       var propRef = 0;
       try
       {
         propRef = (member.ElementType == Structural1DElementType.Spring)
-          ? Initialiser.Indexer.LookupIndex(typeof(GSASpringProperty).GetGSAKeyword(), typeof(GSASpringProperty).ToSpeckleTypeName(), member.PropertyRef).Value
-          : Initialiser.Indexer.LookupIndex(typeof(GSA1DProperty).GetGSAKeyword(), typeof(GSA1DProperty).ToSpeckleTypeName(), member.PropertyRef).Value;
+          ? Initialiser.Cache.LookupIndex(typeof(GSASpringProperty).GetGSAKeyword(), typeof(GSASpringProperty).ToSpeckleTypeName(), member.PropertyRef).Value
+          : Initialiser.Cache.LookupIndex(typeof(GSA1DProperty).GetGSAKeyword(), typeof(GSA1DProperty).ToSpeckleTypeName(), member.PropertyRef).Value;
       }
       catch { }
 
@@ -505,43 +505,11 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA1DElement dummyObject)
     {
       var newLines = ToSpeckleBase<GSA1DElement>();
-      //newLines.AddRange(ToSpeckleBase<GSA1DElementPolyline>());
 
       var elements = new List<GSA1DElement>();
       var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
-      /*
-      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSA1DElement)))
-        Initialiser.GSASenderObjects[typeof(GSA1DElement)] = new List<object>();
 
-      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSA1DElementPolyline)))
-        Initialiser.GSASenderObjects[typeof(GSA1DElementPolyline)] = new List<object>();
-
-     
-
-      var keyword = typeof(GSA1DElement).GetGSAKeyword();
-      var subKeywords = typeof(GSA1DElement).GetSubGSAKeyword();
-
-
-
-      string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
-      List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
-      foreach (var k in subKeywords)
-        deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
-
-      // Remove deleted lines
-      Initialiser.GSASenderObjects[typeof(GSA1DElement)].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (var kvp in Initialiser.GSASenderObjects)
-        kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
-
-      // Filter only new lines
-      var prevLines = Initialiser.GSASenderObjects[typeof(GSA1DElement)]
-        .Select(l => (l as IGSASpeckleContainer).GWACommand)
-        .Concat(Initialiser.GSASenderObjects[typeof(GSA1DElementPolyline)].SelectMany(l => (l as IGSASpeckleContainer).SubGWACommand))
-        .ToArray();
-      var newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
-      */
-
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         var pPieces = p.ListSplit("\t");
         if (pPieces[4].ParseElementNumNodes() == 2 && pPieces[4] == "BEAM")
@@ -568,7 +536,7 @@ namespace SpeckleStructuralGSA
       var members = new List<GSA1DMember>();
       var newLines = ToSpeckleBase<GSA1DMember>();
       
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         var pPieces = p.ListSplit("\t");
         if (pPieces[4].MemberIs1D())

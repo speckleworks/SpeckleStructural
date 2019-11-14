@@ -562,12 +562,12 @@ namespace SpeckleStructuralGSA
       {
         return;
       }
-      var res = Initialiser.Indexer.ResolveIndex("AXIS", "");
+      var res = Initialiser.Cache.ResolveIndex("AXIS.1", "");
 
       var ls = new List<string>
       {
         "SET",
-        "AXIS",
+        "AXIS.1",
         res.ToString(),
         gwaAxisName,
         "CART",
@@ -593,14 +593,14 @@ namespace SpeckleStructuralGSA
     public static void SetAxis(SpeckleVector xVector, SpeckleVector xyVector, SpecklePoint origin, out int index, out string gwaCommand, string name = "")
     {
       gwaCommand = "";
-      index = Initialiser.Indexer.ResolveIndex("AXIS", "");
+      index = Initialiser.Cache.ResolveIndex("AXIS.1", "");
 
       var gwaCommands = new List<string>();
 
       var ls = new List<string>()
         {
           "SET",
-          "AXIS",
+          "AXIS.1",
           index.ToString(),
           name ?? "",
           "CART",
@@ -910,7 +910,7 @@ namespace SpeckleStructuralGSA
           );
         default:
           //string res = Initialiser.Interface.GetGWARecords("GET\tAXIS\t" + axis.ToString()).FirstOrDefault();
-          var res = Initialiser.Indexer.GetGwa("AXIS", axis).First();
+          var res = Initialiser.Cache.GetGwa("AXIS.1", axis).First();
           gwaRecord = res;
 
           var pieces = res.Split(new char[] { '\t' });
@@ -1104,7 +1104,7 @@ namespace SpeckleStructuralGSA
 
     public static string GetApplicationId(string keyword, int id)
     {
-      var savedApplicationId = Initialiser.Indexer.GetApplicationId(keyword, id);
+      var savedApplicationId = Initialiser.Cache.GetApplicationId(keyword, id);
       return (string.IsNullOrEmpty(savedApplicationId)) ? ("gsa/" + keyword + "_" + id.ToString()) : savedApplicationId;
     }
 
@@ -1117,12 +1117,59 @@ namespace SpeckleStructuralGSA
         //Only needs to be added to the cache if there is an application ID
         var gwa = Initialiser.Interface.GetGwaForNode(index);
         gwa = Initialiser.Interface.SetApplicationId(gwa, applicationId);
-        Initialiser.Indexer.Upsert(gwa);
+        Initialiser.Cache.Upsert("NODE.2", index, gwa, applicationId, GwaSetCommandType.Set);
       }
 
       return index;
     }
-    
+
+    public static void GetGridPlaneData(int gridPlaneIndex, out int gridPlaneAxisIndex, out double gridPlaneElevation, out string gwa)
+    {
+      var gwas = Initialiser.Cache.GetGwa("GRID_PLANE.4", gridPlaneIndex);
+      if (gwas == null || gwas.Count() == 0)
+      {
+        gridPlaneAxisIndex = 0;
+        gridPlaneElevation = 0;
+        gwa = "";
+        return;
+      }
+      gwa = gwas.First();
+      var pieces = gwa.ListSplit("\t");
+      gridPlaneAxisIndex = Convert.ToInt32(pieces[4]);
+      gridPlaneElevation = Convert.ToDouble(pieces[5]);
+      return;
+    }
+
+    public static void GetGridPlaneRef(int gridSurfaceIndex, out int gridPlaneIndex, out string gwa)
+    {
+      var gwas = Initialiser.Cache.GetGwa("GRID_SURFACE.1", gridSurfaceIndex);
+      if (gwas == null || gwas.Count() == 0)
+      {
+        gridPlaneIndex = 0;
+        gwa = "";
+        return;
+      }
+      gwa = gwas.First();
+      var pieces = gwa.ListSplit("\t");
+      gridPlaneIndex = Convert.ToInt32(pieces[3]);
+    }
+
+    public static void GetPolylineDesc(int polylineIndex, out string desc, out string gwa)
+    {
+      var gwas = Initialiser.Cache.GetGwa("tPOLYLINE.1", polylineIndex);
+      if (gwas == null || gwas.Count() == 0)
+      {
+        desc = "";
+        gwa = "";
+        return;
+      }
+      gwa = gwas.First();
+
+      var pieces = gwa.ListSplit("\t");
+
+      desc = pieces[6];
+    }
+
     #endregion
   }
 }

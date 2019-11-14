@@ -39,8 +39,12 @@ namespace SpeckleStructuralGSA
       for (var i = 0; i < nodeRefs.Length; i++)
       {
         var node = nodes.Where(n => n.GSAId.ToString() == nodeRefs[i]).FirstOrDefault();
-        coordinates.AddRange(node.Value);
-        this.SubGWACommand.Add(node.GWACommand);
+        var speckleNodeObj = node.Value;
+        if (speckleNodeObj != null)
+        {
+          coordinates.AddRange(speckleNodeObj.Value);
+          this.SubGWACommand.Add(node.GWACommand);
+        }
       }
 
       var temp = new Structural2DVoid(
@@ -63,7 +67,7 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA2DVoid).GetGSAKeyword();
 
-      var index = Initialiser.Indexer.ResolveIndex(keyword, typeof(GSA2DVoid).ToSpeckleTypeName(), v.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(keyword, typeof(GSA2DVoid).ToSpeckleTypeName(), v.ApplicationId);
 
       var ls = new List<string>
       {
@@ -127,10 +131,10 @@ namespace SpeckleStructuralGSA
       var voids = new List<GSA2DVoid>();
       var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         var pPieces = p.ListSplit("\t");
-        if (pPieces[4].MemberIs2D())
+        if (!pPieces[4].MemberIs2D())
         {
           // Check if void
           if (pPieces[4] == "2D_VOID_CUTTER")

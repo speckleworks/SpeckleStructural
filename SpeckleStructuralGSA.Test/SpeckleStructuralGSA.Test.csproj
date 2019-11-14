@@ -202,19 +202,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enums.cs" />
-    <Compile Include="GwaRecord.cs" />
-    <Compile Include="Helper.cs" />
-    <Compile Include="MergingTests.cs" />
-    <Compile Include="ProcessorBase.cs" />
-    <Compile Include="ReceiverProcessor.cs" />
-    <Compile Include="Result.cs" />
-    <Compile Include="SenderProcessor.cs" />
-    <Compile Include="ReceiverTests.cs" />
-    <Compile Include="SenderTests.cs" />
+    <Compile Include="Other\Enums.cs" />
+    <Compile Include="Other\GwaRecord.cs" />
+    <Compile Include="Other\Helper.cs" />
+    <Compile Include="Tests\MergingTests.cs" />
+    <Compile Include="Base\ProcessorBase.cs" />
+    <Compile Include="Other\ReceiverProcessor.cs" />
+    <Compile Include="Other\Result.cs" />
+    <Compile Include="Other\SenderProcessor.cs" />
+    <Compile Include="Tests\ReceiverTests.cs" />
+    <Compile Include="Tests\SenderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="TestBase.cs" />
+    <Compile Include="Other\Settings.cs" />
+    <Compile Include="Base\TestBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

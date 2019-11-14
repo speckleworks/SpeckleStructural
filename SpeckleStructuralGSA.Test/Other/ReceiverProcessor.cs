@@ -63,7 +63,7 @@ namespace SpeckleStructuralGSA.Test
       // Write objects
       var currentBatch = new List<Type>();
       var traversedTypes = new List<Type>();
-      var TypePrerequisites = GetTypeCastPriority(ioDirection.Receive, GSATargetLayer.Design, false);
+      var TypePrerequisites = Helper.GetTypeCastPriority(ioDirection.Receive, GSATargetLayer.Design, false);
       do
       {
         currentBatch = TypePrerequisites.Where(i => i.Value.Count(x => !traversedTypes.Contains(x)) == 0).Select(i => i.Key).ToList();

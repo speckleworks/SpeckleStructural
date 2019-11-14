@@ -75,7 +75,7 @@ namespace SpeckleStructuralGSA
 
         var keyword = HelperClass.GetGSAKeyword(typeof(GSANode));
 
-        var indices = Initialiser.Indexer.LookupIndices(keyword).Where(i => i.HasValue).Select(i => i.Value).ToList();
+        var indices = Initialiser.Cache.LookupIndices(keyword).Where(i => i.HasValue).Select(i => i.Value).ToList();
 
         foreach (var kvp in Initialiser.Settings.NodalResults)
         {

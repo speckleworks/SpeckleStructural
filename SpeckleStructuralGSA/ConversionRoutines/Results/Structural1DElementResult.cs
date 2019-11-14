@@ -92,7 +92,7 @@ namespace SpeckleStructuralGSA
         var results = new List<GSA1DElementResult>();
 
         var keyword = HelperClass.GetGSAKeyword(typeof(GSA1DElement));
-        var gwa = Initialiser.Indexer.GetGwa(keyword);
+        var gwa = Initialiser.Cache.GetGwa(keyword);
 
         foreach (var kvp in Initialiser.Settings.Element1DResults)
         {

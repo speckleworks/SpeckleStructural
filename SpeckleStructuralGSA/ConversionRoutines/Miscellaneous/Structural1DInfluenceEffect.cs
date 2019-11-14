@@ -112,9 +112,9 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA1DInfluenceEffect).GetGSAKeyword();
 
-      var index = Initialiser.Indexer.ResolveIndex(typeof(GSA1DInfluenceEffect).GetGSAKeyword(), typeof(GSA1DInfluenceEffect).ToSpeckleTypeName(), infl.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(typeof(GSA1DInfluenceEffect).GetGSAKeyword(), typeof(GSA1DInfluenceEffect).ToSpeckleTypeName(), infl.ApplicationId);
 
-      var elementRef = Initialiser.Indexer.LookupIndex(typeof(GSA1DElement).GetGSAKeyword(), typeof(GSA1DElement).ToSpeckleTypeName(), infl.ElementRef);
+      var elementRef = Initialiser.Cache.LookupIndex(typeof(GSA1DElement).GetGSAKeyword(), typeof(GSA1DElement).ToSpeckleTypeName(), infl.ElementRef);
 
       if (!elementRef.HasValue)
         return "";
@@ -170,7 +170,7 @@ namespace SpeckleStructuralGSA
 
       var infls = new List<GSA1DInfluenceEffect>();      
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         try
         {

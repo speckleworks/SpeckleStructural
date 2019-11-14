@@ -29,7 +29,7 @@ namespace SpeckleStructuralGSA.Test
       gsaInterfacer = new GSAProxy();
       gsaCache = new GSACache();
 
-      Initialiser.Indexer = gsaCache;
+      Initialiser.Cache = gsaCache;
       Initialiser.Interface = gsaInterfacer;
       Initialiser.Settings = new Settings();
     }

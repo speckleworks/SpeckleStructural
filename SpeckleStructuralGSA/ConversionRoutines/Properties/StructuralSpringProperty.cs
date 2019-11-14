@@ -123,7 +123,7 @@ namespace SpeckleStructuralGSA
 
       var keyword = destType.GetGSAKeyword();
 
-      var index = Initialiser.Indexer.ResolveIndex(keyword, springProp.Type, springProp.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(keyword, springProp.Type, springProp.ApplicationId);
 
       var gwaAxisCommand = "";
       var gwaCommands = new List<string>();
@@ -235,7 +235,7 @@ namespace SpeckleStructuralGSA
       //Get all relevant GSA entities in this entire model
       var springProperties = new List<GSASpringProperty>();
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         try
         {

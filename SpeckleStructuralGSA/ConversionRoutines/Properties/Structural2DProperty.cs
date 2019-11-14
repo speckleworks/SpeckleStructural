@@ -89,11 +89,11 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA2DProperty).GetGSAKeyword();
 
-      var index = Initialiser.Indexer.ResolveIndex(typeof(GSA2DProperty).GetGSAKeyword(), typeof(GSA2DProperty).ToSpeckleTypeName(), prop.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(typeof(GSA2DProperty).GetGSAKeyword(), typeof(GSA2DProperty).ToSpeckleTypeName(), prop.ApplicationId);
       var materialRef = 0;
       var materialType = "UNDEF";
 
-      var res = Initialiser.Indexer.LookupIndex(typeof(GSAMaterialSteel).GetGSAKeyword(), typeof(GSAMaterialSteel).ToSpeckleTypeName(), prop.MaterialRef);
+      var res = Initialiser.Cache.LookupIndex(typeof(GSAMaterialSteel).GetGSAKeyword(), typeof(GSAMaterialSteel).ToSpeckleTypeName(), prop.MaterialRef);
       if (res.HasValue)
       {
         materialRef = res.Value;
@@ -101,7 +101,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        res = Initialiser.Indexer.LookupIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), typeof(GSAMaterialConcrete).ToSpeckleTypeName(), prop.MaterialRef);
+        res = Initialiser.Cache.LookupIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), typeof(GSAMaterialConcrete).ToSpeckleTypeName(), prop.MaterialRef);
         if (res.HasValue)
         {
           materialRef = res.Value;
@@ -167,7 +167,7 @@ namespace SpeckleStructuralGSA
       var steels = Initialiser.GSASenderObjects[typeof(GSAMaterialSteel)].Cast<GSAMaterialSteel>().ToList();
       var concretes = Initialiser.GSASenderObjects[typeof(GSAMaterialConcrete)].Cast<GSAMaterialConcrete>().ToList();
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         try
         {

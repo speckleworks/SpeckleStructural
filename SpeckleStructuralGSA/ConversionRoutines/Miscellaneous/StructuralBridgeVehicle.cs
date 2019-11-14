@@ -47,7 +47,7 @@ namespace SpeckleStructuralGSA
 
       var keyword = destType.GetGSAKeyword();
 
-      var index = Initialiser.Indexer.ResolveIndex(keyword, destType.Name, vehicle.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(keyword, destType.Name, vehicle.ApplicationId);
 
       //The width parameter is intentionally not being used here as the meaning doesn't map to the y coordinate parameter of the ASSEMBLY keyword
       //It is therefore to be ignored here for GSA purposes.
@@ -89,7 +89,7 @@ namespace SpeckleStructuralGSA
       //Get all relevant GSA entities in this entire model
       var alignments = new List<GSABridgeVehicle>();
 
-      foreach (var p in newLines)
+      foreach (var p in newLines.Values)
       {
         var alignment = new GSABridgeVehicle() { GWACommand = p };
         //Pass in ALL the nodes and members - the Parse_ method will search through them

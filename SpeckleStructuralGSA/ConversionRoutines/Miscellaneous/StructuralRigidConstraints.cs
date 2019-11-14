@@ -27,7 +27,7 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
 
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
-
+      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       var masterNodeRef = Convert.ToInt32(pieces[counter++]);
       var masterNode = nodes.Where(n => n.GSAId == masterNodeRef);
       if (masterNode.Count() > 0)
@@ -115,12 +115,12 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSARigidConstraints).GetGSAKeyword();
 
-      var index = Initialiser.Indexer.ResolveIndex(keyword, typeof(GSARigidConstraints).ToSpeckleTypeName(), constraint.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(keyword, typeof(GSARigidConstraints).ToSpeckleTypeName(), constraint.ApplicationId);
       
-      var slaveNodeIndices = Initialiser.Indexer.LookupIndices(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).ToSpeckleTypeName(), constraint.NodeRefs).Where(x => x.HasValue).Select(x => x.Value.ToString()).ToList();
+      var slaveNodeIndices = Initialiser.Cache.LookupIndices(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).ToSpeckleTypeName(), constraint.NodeRefs).Where(x => x.HasValue).Select(x => x.Value.ToString()).ToList();
       var slaveNodeIndicesSummary = slaveNodeIndices.Count > 0 ? string.Join(" ", slaveNodeIndices) : "none";
-      var masterNodeIndex = Initialiser.Indexer.LookupIndex(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).ToSpeckleTypeName(), constraint.MasterNodeRef);
-      var stageDefRefs = Initialiser.Indexer.LookupIndices(typeof(GSAConstructionStage).GetGSAKeyword(), typeof(GSAConstructionStage).ToSpeckleTypeName(), constraint.ConstructionStageRefs).Where(x => x.HasValue).Select(x => x.Value.ToString()).ToList();
+      var masterNodeIndex = Initialiser.Cache.LookupIndex(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).ToSpeckleTypeName(), constraint.MasterNodeRef);
+      var stageDefRefs = Initialiser.Cache.LookupIndices(typeof(GSAConstructionStage).GetGSAKeyword(), typeof(GSAConstructionStage).ToSpeckleTypeName(), constraint.ConstructionStageRefs).Where(x => x.HasValue).Select(x => x.Value.ToString()).ToList();
 
       var subLs = new List<string>();
       if (constraint.Constraint.Value[0])
@@ -194,11 +194,11 @@ namespace SpeckleStructuralGSA
       var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
       var stages = Initialiser.GSASenderObjects[typeof(GSAConstructionStage)].Cast<GSAConstructionStage>().ToList();
 
-      foreach (var p in newLines)
+      foreach (var k in newLines.Keys)
       {
         try
         {
-          var constraint = new GSARigidConstraints() { GWACommand = p };
+          var constraint = new GSARigidConstraints() { GSAId = k,  GWACommand = newLines[k] };
           constraint.ParseGWACommand(nodes, stages);
           constraints.Add(constraint);
         }
