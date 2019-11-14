@@ -38,14 +38,17 @@ namespace SpeckleStructuralGSA
       counter++; // Group
 
       obj.Value = new List<double>();
-      for (var i = 0; i < 2; i++)
-      {
-        var key = pieces[counter++];
-        var node = nodes.Where(n => n.GSAId == Convert.ToInt32(key)).FirstOrDefault();
-        obj.Value.AddRange(node.Value.Value);
-        this.SubGWACommand.Add(node.GWACommand);
-      }
 
+      var key = pieces[counter++];
+      if (int.TryParse(key, out int nodeIndex))
+      {
+        if (nodeIndex > 0)
+        {
+          var node = nodes.Where(n => n.GSAId == Convert.ToInt32(key)).FirstOrDefault();
+          obj.Value.AddRange(node.Value.Value);
+          this.SubGWACommand.Add(node.GWACommand);
+        }
+      }
       var orientationNodeRef = pieces[counter++];
       var rotationAngle = Convert.ToDouble(pieces[counter++]);
 
@@ -53,8 +56,9 @@ namespace SpeckleStructuralGSA
       counter++; // Dummy
 
       if (counter < pieces.Length)
+      {
         Member = pieces[counter++];
-
+      }
       this.Value = obj;
     }
 
