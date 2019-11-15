@@ -424,7 +424,7 @@ namespace SpeckleStructuralGSA
       {
         var profile = prop.Profile as SpeckleCircle;
 
-        if (prop.Hollow)
+        if (prop.Hollow.HasValue && prop.Hollow.Value)
           return "STD%CHS(" + gsaUnit + ")%" + (profile.Radius * 2).ToString() + "%" + prop.Thickness.ToString();
         else
           return "STD%C(" + gsaUnit + ")%" + (profile.Radius * 2).ToString();
@@ -436,14 +436,14 @@ namespace SpeckleStructuralGSA
         var Y = (prop.Profile as SpecklePolyline).Value.Where((x, i) => i % 3 == 1).ToList();
         if (prop.Shape == Structural1DPropertyShape.Circular)
         {
-          if (prop.Hollow)
+          if (prop.Hollow.HasValue && prop.Hollow.Value)
             return "STD%CHS(" + gsaUnit + ")%" + (X.Max() - X.Min()).ToString() + "%" + prop.Thickness.ToString();
           else
             return "STD%C(" + gsaUnit + ")%" + (X.Max() - X.Min()).ToString();
         }
         else if (prop.Shape == Structural1DPropertyShape.Rectangular)
         {
-          if (prop.Hollow)
+          if (prop.Hollow.HasValue && prop.Hollow.Value)
             return "STD%RHS(" + gsaUnit + ")%" + (Y.Max() - Y.Min()).ToString() + "%" + (X.Max() - X.Min()).ToString() + "%" + prop.Thickness.ToString() + "%" + prop.Thickness.ToString();
           else
             return "STD%R(" + gsaUnit + ")%" + (Y.Max() - Y.Min()).ToString() + "%" + (X.Max() - X.Min()).ToString();

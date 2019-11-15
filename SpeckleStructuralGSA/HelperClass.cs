@@ -544,7 +544,10 @@ namespace SpeckleStructuralGSA
       var sid = "";
 
       if (!string.IsNullOrEmpty(obj.ApplicationId))
-        sid += "{" + SID_TAG + ":" + obj.ApplicationId + "}";
+      {
+        //Application ID can't have spaces as they are lost as soon as it's written to the GSA instance
+        sid += "{" + SID_TAG + ":" + obj.ApplicationId.Replace(" ","") + "}";
+      }
 
       return sid;
     }

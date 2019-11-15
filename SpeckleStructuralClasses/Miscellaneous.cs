@@ -35,7 +35,7 @@ namespace SpeckleStructuralClasses
   [Serializable]
   public partial class StructuralAssembly : SpeckleLine, IStructural
   {
-    public override string Type { get => base.Type + "/StructuralAssembly"; }
+    public override string Type { get { var speckleType = "/" + this.GetType().Name; return base.Type.Replace(speckleType, "") + speckleType; } } //The replacement is to avoid a peculiarity with merging using Automapper
 
     [JsonIgnore]
     private Dictionary<string, object> StructuralProperties

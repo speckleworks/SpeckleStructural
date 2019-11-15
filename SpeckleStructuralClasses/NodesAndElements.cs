@@ -28,7 +28,7 @@ namespace SpeckleStructuralClasses
   [Serializable]
   public partial class StructuralNode : SpecklePoint, IStructural
   {
-    public override string Type { get => base.Type + "/StructuralNode"; }
+    public override string Type { get { var speckleType = "/" + this.GetType().Name; return base.Type.Replace(speckleType, "") + speckleType; } } //The replacement is to avoid a peculiarity with merging using Automapper
 
     [JsonIgnore]
     private Dictionary<string, object> StructuralProperties
@@ -113,7 +113,7 @@ namespace SpeckleStructuralClasses
   [Serializable]
   public partial class Structural1DElement : SpeckleLine, IStructural
   {
-    public override string Type { get => base.Type + "/Structural1DElement"; }
+    public override string Type { get { var speckleType = "/" + this.GetType().Name; return base.Type.Replace(speckleType, "") + speckleType; } } //The replacement is to avoid a peculiarity with merging using Automapper
 
     [JsonIgnore]
     private Dictionary<string, object> StructuralProperties
@@ -283,7 +283,7 @@ namespace SpeckleStructuralClasses
   [Serializable]
   public partial class Structural0DSpring : SpecklePoint, IStructural
   {
-    public override string Type { get => base.Type + "/Structural0DSpring"; }
+    public override string Type { get { var speckleType = "/" + this.GetType().Name; return base.Type.Replace(speckleType, "") + speckleType; } } //The replacement is to avoid a peculiarity with merging using Automapper
 
     [JsonIgnore]
     private Dictionary<string, object> StructuralProperties
@@ -344,7 +344,7 @@ namespace SpeckleStructuralClasses
   [Serializable]
   public partial class Structural1DElementPolyline : SpecklePolyline, IStructural
   {
-    public override string Type { get => base.Type + "/Structural1DElementPolyline"; }
+    public override string Type { get { var speckleType = "/" + this.GetType().Name; return base.Type.Replace(speckleType, "") + speckleType; } } //The replacement is to avoid a peculiarity with merging using Automapper
 
     [JsonIgnore]
     private Dictionary<string, object> StructuralProperties
@@ -571,7 +571,7 @@ namespace SpeckleStructuralClasses
   [Serializable]
   public partial class Structural2DElement : SpeckleMesh, IStructural
   {
-    public override string Type { get => base.Type + "/Structural2DElement"; }
+    public override string Type { get { var speckleType = "/" + this.GetType().Name; return base.Type.Replace(speckleType, "") + speckleType; } } //The replacement is to avoid a peculiarity with merging using Automapper
 
     [JsonIgnore]
     private Dictionary<string, object> StructuralProperties
@@ -677,7 +677,7 @@ namespace SpeckleStructuralClasses
   [Serializable]
   public partial class Structural2DElementMesh : SpeckleMesh, IStructural
   {
-    public override string Type { get => base.Type + "/Structural2DElementMesh"; }
+    public override string Type { get { var speckleType = "/" + this.GetType().Name; return base.Type.Replace(speckleType, "") + speckleType; } } //The replacement is to avoid a peculiarity with merging using Automapper
 
     [JsonIgnore]
     private Dictionary<string, object> StructuralProperties
@@ -846,7 +846,7 @@ namespace SpeckleStructuralClasses
   [Serializable]
   public partial class Structural2DVoid : SpeckleMesh, IStructural
   {
-    public override string Type { get => base.Type + "/Structural2DVoid"; }
+    public override string Type { get { var speckleType = "/" + this.GetType().Name; return base.Type.Replace(speckleType, "") + speckleType; } } //The replacement is to avoid a peculiarity with merging using Automapper
 
     [JsonIgnore]
     private Dictionary<string, object> StructuralProperties
