@@ -7,6 +7,7 @@ namespace SpeckleStructuralClasses
 {
   public enum StructuralMaterialType
   {
+    NotSet,
     Generic,
     Steel,
     Concrete
@@ -14,6 +15,7 @@ namespace SpeckleStructuralClasses
 
   public enum Structural1DPropertyShape
   {
+    NotSet,
     Generic,
     Circular,
     Rectangular,
@@ -23,6 +25,7 @@ namespace SpeckleStructuralClasses
 
   public enum Structural2DPropertyReferenceSurface
   {
+    NotSet,
     Top,
     Middle,
     Bottom,
@@ -50,35 +53,35 @@ namespace SpeckleStructuralClasses
 
     /// <summary>Young's modulus (E) of material.</summary>
     [JsonProperty("youngsModulus", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double YoungsModulus { get; set; }
+    public double? YoungsModulus { get; set; }
 
     /// <summary>Shear modulus (G) of material.</summary>
     [JsonProperty("shearModulus", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double ShearModulus { get; set; }
+    public double? ShearModulus { get; set; }
 
     /// <summary>Poission's ratio (ν) of material.</summary>
     [JsonProperty("poissonsRatio", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double PoissonsRatio { get; set; }
+    public double? PoissonsRatio { get; set; }
 
     /// <summary>Density (ρ) of material.</summary>
     [JsonProperty("density", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double Density { get; set; }
+    public double? Density { get; set; }
 
     /// <summary>Coefficient of thermal expansion (α) of material.</summary>
     [JsonProperty("coeffThermalExpansion", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double CoeffThermalExpansion { get; set; }
+    public double? CoeffThermalExpansion { get; set; }
 
     /// <summary>Compressive strength.</summary>
     [JsonProperty("compressiveStrength", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double CompressiveStrength { get; set; }
+    public double? CompressiveStrength { get; set; }
 
     /// <summary>Max strain at failure.</summary>
     [JsonProperty("maxStrain", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double MaxStrain { get; set; }
+    public double? MaxStrain { get; set; }
 
     /// <summary>Aggragate size.</summary>
     [JsonProperty("aggragateSize", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double AggragateSize { get; set; }
+    public double? AggragateSize { get; set; }
   }
 
   [Serializable]
@@ -88,35 +91,35 @@ namespace SpeckleStructuralClasses
 
     /// <summary>Young's modulus (E) of material.</summary>
     [JsonProperty("youngsModulus", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double YoungsModulus { get; set; }
+    public double? YoungsModulus { get; set; }
 
     /// <summary>Shear modulus (G) of material.</summary>
     [JsonProperty("shearModulus", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double ShearModulus { get; set; }
+    public double? ShearModulus { get; set; }
 
     /// <summary>Poission's ratio (ν) of material.</summary>
     [JsonProperty("poissonsRatio", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double PoissonsRatio { get; set; }
+    public double? PoissonsRatio { get; set; }
 
     /// <summary>Density (ρ) of material.</summary>
     [JsonProperty("density", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double Density { get; set; }
+    public double? Density { get; set; }
 
     /// <summary>Coefficient of thermal expansion (α) of material.</summary>
     [JsonProperty("coeffThermalExpansion", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double CoeffThermalExpansion { get; set; }
+    public double? CoeffThermalExpansion { get; set; }
 
     /// <summary>Yield strength.</summary>
     [JsonProperty("yieldStrength", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double YieldStrength { get; set; }
+    public double? YieldStrength { get; set; }
 
     /// <summary>Ultimate strength.</summary>
     [JsonProperty("ultimateStrength", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double UltimateStrength { get; set; }
+    public double? UltimateStrength { get; set; }
 
     /// <summary>Max strain at failure.</summary>
     [JsonProperty("maxStrain", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double MaxStrain { get; set; }
+    public double? MaxStrain { get; set; }
   }
 
   [Serializable]
@@ -139,11 +142,11 @@ namespace SpeckleStructuralClasses
 
     /// <summary>Is the section filled or hollow?</summary>
     [JsonProperty("hollow", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public bool Hollow { get; set; }
+    public bool? Hollow { get; set; }
 
     /// <summary>Thickness of the section if hollow.</summary>
     [JsonProperty("thickness", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double Thickness { get; set; }
+    public double? Thickness { get; set; }
 
     /// <summary>Catalogue section name which will take precedence over the profile.</summary>
     [JsonProperty("catalogueName", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
@@ -161,7 +164,7 @@ namespace SpeckleStructuralClasses
 
     /// <summary>Thickness of the 2D element.</summary>
     [JsonProperty("thickness", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double Thickness { get; set; }
+    public double? Thickness { get; set; }
 
     /// <summary>Application ID of StructuralMaterial.</summary>
     [JsonProperty("materialRef", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
