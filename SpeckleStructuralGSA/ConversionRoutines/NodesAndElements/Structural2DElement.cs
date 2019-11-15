@@ -281,7 +281,7 @@ namespace SpeckleStructuralGSA
         }
         prevNodeIndex = currIndex;
       }
-      ls.Add(topo);
+      ls.Add(topo.Trim());
       ls.Add("0"); // Orientation node
       try
       {
