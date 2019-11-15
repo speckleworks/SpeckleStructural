@@ -173,7 +173,7 @@ namespace SpeckleStructuralClasses
   [Serializable]
   public partial class Structural1DLoadLine : SpeckleLine, IStructural
   {
-    public override string Type { get => base.Type + "/Structural1DLoadLine"; }
+    public override string Type { get { var speckleType = "/" + this.GetType().Name; return base.Type.Replace(speckleType, "") + speckleType; } } //The replacement is to avoid a peculiarity with merging using Automapper
 
     [JsonIgnore]
     private Dictionary<string, object> StructuralProperties
@@ -248,7 +248,7 @@ namespace SpeckleStructuralClasses
   [Serializable]
   public partial class Structural2DLoadPanel : SpecklePolyline, IStructural
   {
-    public override string Type { get => base.Type + "/Structural2DLoadPanel"; }
+    public override string Type { get { var speckleType = "/" + this.GetType().Name; return base.Type.Replace(speckleType, "") + speckleType; } } //The replacement is to avoid a peculiarity with merging using Automapper
 
     [JsonIgnore]
     private Dictionary<string, object> StructuralProperties

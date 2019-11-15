@@ -175,9 +175,7 @@ namespace SpeckleStructuralClasses
   [Serializable]
   public partial class StructuralSpringProperty : SpeckleObject, IStructural
   {
-    private string speckleType => "/" + this.GetType().Name;
-
-    public override string Type { get => base.Type.Replace(speckleType, "") + speckleType; } //The replacement is to avoid a peculiarity with merging using Automapper
+    public override string Type { get => "StructuralSpringProperty"; } 
 
     [JsonIgnore]
     private Dictionary<string, object> StructuralProperties

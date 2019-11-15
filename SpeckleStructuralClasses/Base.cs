@@ -11,7 +11,7 @@ namespace SpeckleStructuralClasses
   [Serializable]
   public partial class StructuralVectorThree : SpeckleVector, IStructural
   {
-    public override string Type { get => base.Type + "/StructuralVectorThree"; }
+    public override string Type { get { var speckleType = "/" + this.GetType().Name; return base.Type.Replace(speckleType, "") + speckleType; } } //The replacement is to avoid a peculiarity with merging using Automapper
 
     [JsonIgnore]
     public SpeckleVector baseVector
@@ -54,7 +54,7 @@ namespace SpeckleStructuralClasses
   [Serializable]
   public partial class StructuralAxis : SpecklePlane, IStructural
   {
-    public override string Type { get => base.Type + "/StructuralAxis"; }
+    public override string Type { get { var speckleType = "/" + this.GetType().Name; return base.Type.Replace(speckleType, "") + speckleType; } } //The replacement is to avoid a peculiarity with merging using Automapper
 
     /// <summary>Base SpecklePlane.</summary>
     [JsonIgnore]
