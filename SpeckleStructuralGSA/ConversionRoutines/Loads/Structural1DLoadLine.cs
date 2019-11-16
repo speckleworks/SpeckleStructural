@@ -128,17 +128,17 @@ namespace SpeckleStructuralGSA
       var keyword = typeof(GSAGridLineLoad).GetGSAKeyword();
 
       //There are no GSA types for these yet, so use empty strings for the type names
-      var polylineIndex = Initialiser.Cache.ResolveIndex("POLYLINE.1", "", load.ApplicationId);
-      var gridSurfaceIndex = Initialiser.Cache.ResolveIndex("GRID_SURFACE.1", "", load.ApplicationId);
-      var gridPlaneIndex = Initialiser.Cache.ResolveIndex("GRID_PLANE.4", "", load.ApplicationId);
+      var polylineIndex = Initialiser.Cache.ResolveIndex("POLYLINE.1", load.ApplicationId);
+      var gridSurfaceIndex = Initialiser.Cache.ResolveIndex("GRID_SURFACE.1", load.ApplicationId);
+      var gridPlaneIndex = Initialiser.Cache.ResolveIndex("GRID_PLANE.4", load.ApplicationId);
 
       var loadCaseRef = 0;
       try
       {
-        loadCaseRef = Initialiser.Cache.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).ToSpeckleTypeName(), load.LoadCaseRef).Value;
+        loadCaseRef = Initialiser.Cache.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef).Value;
       }
       catch {
-        loadCaseRef = Initialiser.Cache.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).ToSpeckleTypeName(), load.LoadCaseRef);
+        loadCaseRef = Initialiser.Cache.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef);
       }
 
       //var axis = GSA.Parse1DAxis(load.Value.ToArray());

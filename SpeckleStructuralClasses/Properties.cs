@@ -171,6 +171,7 @@ namespace SpeckleStructuralClasses
     public string MaterialRef { get; set; }
 
     /// <summary>Reference surface for property.</summary>
+    /// [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     [JsonProperty("referenceSurface", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
     public Structural2DPropertyReferenceSurface ReferenceSurface { get; set; }
   }

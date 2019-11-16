@@ -90,14 +90,14 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA0DLoad).GetGSAKeyword();
 
-      var nodeRefs = Initialiser.Cache.LookupIndices(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).ToSpeckleTypeName(), load.NodeRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+      var nodeRefs = Initialiser.Cache.LookupIndices(typeof(GSANode).GetGSAKeyword(), load.NodeRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
       var loadCaseRef = 0;
       try
       {
-        loadCaseRef = Initialiser.Cache.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).ToSpeckleTypeName(), load.LoadCaseRef).Value;
+        loadCaseRef = Initialiser.Cache.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef).Value;
       }
       catch {
-        loadCaseRef = Initialiser.Cache.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).ToSpeckleTypeName(), load.LoadCaseRef);
+        loadCaseRef = Initialiser.Cache.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef);
       }
 
       var direction = new string[6] { "X", "Y", "Z", "XX", "YY", "ZZ" };

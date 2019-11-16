@@ -65,19 +65,19 @@ namespace SpeckleStructuralGSA
 			var keyword = destinationType.GetGSAKeyword();
       var subkeywords = destinationType.GetSubGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(keyword, destinationType.Name, obj.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(keyword, obj.ApplicationId);
 
       var nodesStr = "none"; //default value
       if (obj.NodeRefs != null && obj.NodeRefs.Count() >= 1)
       {
-        var nodeIndices = Initialiser.Cache.LookupIndices(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).ToSpeckleTypeName(), obj.NodeRefs);
+        var nodeIndices = Initialiser.Cache.LookupIndices(typeof(GSANode).GetGSAKeyword(), obj.NodeRefs);
         nodesStr = string.Join(" ", nodeIndices);
       }
 
       var stageDefStr = "all"; //default value
       if (obj.ConstructionStageRefs != null && obj.ConstructionStageRefs.Count() >= 1)
       {
-        var stageDefIndices = Initialiser.Cache.LookupIndices(typeof(GSAConstructionStage).GetGSAKeyword(), typeof(GSAConstructionStage).ToSpeckleTypeName(), obj.ConstructionStageRefs);
+        var stageDefIndices = Initialiser.Cache.LookupIndices(typeof(GSAConstructionStage).GetGSAKeyword(), obj.ConstructionStageRefs);
         stageDefStr = string.Join(" ", stageDefIndices);
       }
 

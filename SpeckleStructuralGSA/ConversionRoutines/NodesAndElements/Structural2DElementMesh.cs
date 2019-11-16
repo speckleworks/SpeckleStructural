@@ -108,7 +108,7 @@ namespace SpeckleStructuralGSA
 
       var obj = this.Value as Structural2DElementMesh;
 
-      var group = Initialiser.Cache.ResolveIndex(typeof(GSA2DElementMesh).GetGSAKeyword(), typeof(GSA2DElementMesh).ToSpeckleTypeName(), obj.ApplicationId);
+      var group = Initialiser.Cache.ResolveIndex(typeof(GSA2DElementMesh).GetGSAKeyword(), obj.ApplicationId);
 
       var elements = obj.Explode();
 

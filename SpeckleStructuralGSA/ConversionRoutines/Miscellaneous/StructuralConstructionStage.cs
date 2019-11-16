@@ -85,7 +85,7 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSAConstructionStage).GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(typeof(GSAConstructionStage).GetGSAKeyword(), typeof(GSAConstructionStage).ToSpeckleTypeName(), stageDef.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(typeof(GSAConstructionStage).GetGSAKeyword(), stageDef.ApplicationId);
       
       var targetString = " ";
 
@@ -95,36 +95,29 @@ namespace SpeckleStructuralGSA
 
         if (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
         {
-          var speckle1DElementType = typeof(GSA1DElement).ToSpeckleTypeName();
-          var speckle2DElementType = typeof(GSA2DElement).ToSpeckleTypeName();
-          var speckle2DElementMeshType = typeof(GSA2DElementMesh).ToSpeckleTypeName();
+          var e1DIndices = Initialiser.Cache.LookupIndices(typeof(GSA1DElement).GetGSAKeyword(), stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var e1DPolyIndices = Initialiser.Cache.LookupIndices(typeof(GSA1DElementPolyline).GetGSAKeyword(), stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var e2DIndices = Initialiser.Cache.LookupIndices(typeof(GSA2DElement).GetGSAKeyword(), stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var e2DMeshIndices = Initialiser.Cache.LookupIndices(typeof(GSA2DElementMesh).GetGSAKeyword(), stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
 
-          var e1DIndices = Initialiser.Cache.LookupIndices(typeof(GSA1DElement).GetGSAKeyword(), speckle1DElementType, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-          var e1DPolyIndices = Initialiser.Cache.LookupIndices(typeof(GSA1DElementPolyline).GetGSAKeyword(), speckle1DElementPolylineType, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-          var e2DIndices = Initialiser.Cache.LookupIndices(typeof(GSA2DElement).GetGSAKeyword(), speckle2DElementType, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-          var e2DMeshIndices = Initialiser.Cache.LookupIndices(typeof(GSA2DElementMesh).GetGSAKeyword(), speckle2DElementMeshType, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var indices = new List<int>(e1DIndices);
+          indices.AddRange(e1DPolyIndices);
+          indices.AddRange(e2DIndices);
+          indices.AddRange(e2DMeshIndices);
+          indices = indices.Distinct().ToList();
 
-          targetString = string.Join(" ",
-            e1DIndices.Select(x => x.ToString())
-            .Concat(e1DPolyIndices.Select(x => "G" + x.ToString()))
-            .Concat(e2DIndices.Select(x => x.ToString()))
-            .Concat(e2DMeshIndices.Select(x => "G" + x.ToString()))
-          );
+          targetString = string.Join(" ", indices.Select(x => x.ToString()));
         }
         else if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
         {
-          var speckle1DMemberType = typeof(GSA1DMember).ToSpeckleTypeName();
-          var speckle2DMemberType = typeof(GSA2DMember).ToSpeckleTypeName();
+          var m1DIndices = Initialiser.Cache.LookupIndices(typeof(GSA1DMember).GetGSAKeyword(), stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var m2DIndices = Initialiser.Cache.LookupIndices(typeof(GSA2DMember).GetGSAKeyword(), stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
 
-          var m1DIndices = Initialiser.Cache.LookupIndices(typeof(GSA1DMember).GetGSAKeyword(), speckle1DMemberType, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-          var m1DPolyIndices = Initialiser.Cache.LookupIndices(typeof(GSA1DElementPolyline).GetGSAKeyword(), speckle1DElementPolylineType, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-          var m2DIndices = Initialiser.Cache.LookupIndices(typeof(GSA2DMember).GetGSAKeyword(), speckle2DMemberType, stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var indices = new List<int>(m1DIndices);
+          indices.AddRange(m2DIndices);
+          indices = indices.Distinct().ToList();
 
-          targetString = string.Join(" ",
-            m1DIndices.Select(x => "G" + x.ToString())
-            .Concat(m1DPolyIndices.Select(x => "G" + x.ToString()))
-            .Concat(m2DIndices.Select(x => "G" + x.ToString()))
-          );
+          targetString = string.Join(" ", indices.Select(i => "G" + i.ToString()));
         }
       }
 

@@ -100,11 +100,11 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA2DElement).GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(typeof(GSA2DElement).GetGSAKeyword(), typeof(GSA2DElement).ToSpeckleTypeName(), mesh.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(typeof(GSA2DElement).GetGSAKeyword(), mesh.ApplicationId);
       var propRef = 0;
       try
       {
-        propRef = Initialiser.Cache.LookupIndex(typeof(GSA2DProperty).GetGSAKeyword(), typeof(GSA2DProperty).ToSpeckleTypeName(), mesh.PropertyRef).Value;
+        propRef = Initialiser.Cache.LookupIndex(typeof(GSA2DProperty).GetGSAKeyword(), mesh.PropertyRef).Value;
       }
       catch { }
 
@@ -241,11 +241,11 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA2DMember).GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(typeof(GSA2DMember).GetGSAKeyword(), typeof(GSA2DMember).ToSpeckleTypeName(), mesh.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(typeof(GSA2DMember).GetGSAKeyword(), mesh.ApplicationId);
       var propRef = 0;
       try
       {
-        propRef = Initialiser.Cache.LookupIndex(typeof(GSA2DProperty).GetGSAKeyword(), typeof(GSA2DProperty).ToSpeckleTypeName(), mesh.PropertyRef).Value;
+        propRef = Initialiser.Cache.LookupIndex(typeof(GSA2DProperty).GetGSAKeyword(), mesh.PropertyRef).Value;
       }
       catch { }
 

@@ -55,13 +55,13 @@ namespace SpeckleStructuralGSA
       var loadCaseIndex = 0;
       try
       {
-        loadCaseIndex = Initialiser.Cache.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).ToSpeckleTypeName(), load.LoadCaseRef).Value;
+        loadCaseIndex = Initialiser.Cache.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef).Value;
       }
       catch {
-        loadCaseIndex = Initialiser.Cache.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).ToSpeckleTypeName(), load.LoadCaseRef);
+        loadCaseIndex = Initialiser.Cache.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef);
       }
 
-      var index = Initialiser.Cache.ResolveIndex(typeof(GSAGravityLoading).GetGSAKeyword(), typeof(GSAGravityLoading).ToSpeckleTypeName());
+      var index = Initialiser.Cache.ResolveIndex(typeof(GSAGravityLoading).GetGSAKeyword());
 
       var ls = new List<string>
         {
