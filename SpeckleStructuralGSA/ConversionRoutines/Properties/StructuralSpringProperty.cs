@@ -140,11 +140,15 @@ namespace SpeckleStructuralGSA
         if (springProp.Axis.Xdir.Value.SequenceEqual(new double[] { 1, 0, 0 }) &&
           springProp.Axis.Ydir.Value.SequenceEqual(new double[] { 0, 1, 0 }) &&
           springProp.Axis.Normal.Value.SequenceEqual(new double[] { 0, 0, 1 }))
+        {
           axisRef = "GLOBAL";
+        }
         else if (springProp.Axis.Xdir.Value.SequenceEqual(new double[] { 0, 0, 1 }) &&
           springProp.Axis.Ydir.Value.SequenceEqual(new double[] { 1, 0, 0 }) &&
           springProp.Axis.Normal.Value.SequenceEqual(new double[] { 0, 1, 0 }))
+        {
           axisRef = "VERTICAL";
+        }
         else
           try
           {

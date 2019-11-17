@@ -110,7 +110,7 @@ namespace SpeckleStructuralGSA
 
         if (load.Loading.Value[i] == 0) continue;
 
-        var index = Initialiser.Cache.ResolveIndex(typeof(GSA0DLoad).GetGSAKeyword(), typeof(GSA0DLoad).Name);
+        var index = Initialiser.Cache.ResolveIndex(typeof(GSA0DLoad).GetGSAKeyword());
 
         ls.Add("SET_AT");
         ls.Add(index.ToString());

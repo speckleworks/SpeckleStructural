@@ -91,8 +91,6 @@ namespace SpeckleStructuralGSA
 
       if (stageDef.ElementRefs != null && stageDef.ElementRefs.Count() > 0)
       {
-        var speckle1DElementPolylineType = typeof(GSA1DElementPolyline).ToSpeckleTypeName();
-
         if (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
         {
           var e1DIndices = Initialiser.Cache.LookupIndices(typeof(GSA1DElement).GetGSAKeyword(), stageDef.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();

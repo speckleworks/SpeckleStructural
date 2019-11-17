@@ -308,7 +308,7 @@ namespace SpeckleStructuralGSA
       {
         ls.Clear();
 
-        index = Initialiser.Cache.ResolveIndex(typeof(GSA2DVoid).GetGSAKeyword(), typeof(GSA2DVoid).ToSpeckleTypeName());
+        index = Initialiser.Cache.ResolveIndex(typeof(GSA2DVoid).GetGSAKeyword());
 
         ls.Add("SET");
         ls.Add(keyword + ":" + HelperClass.GenerateSID(mesh));

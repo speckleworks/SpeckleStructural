@@ -99,7 +99,7 @@ namespace SpeckleStructuralGSA
 
       for (var i = 0; i < loadTask.NumModes; i++)
       {
-        var caseIndex = Initialiser.Cache.ResolveIndex(keyword, typeof(GSALoadTaskBuckling).Name);
+        var caseIndex = Initialiser.Cache.ResolveIndex(keyword);
         // Set ANAL
         ls.Clear();
         ls.AddRange(new[] {

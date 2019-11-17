@@ -114,8 +114,6 @@ namespace SpeckleStructuralGSA
     }
   }
 
-
-
   public static partial class Conversions
   {
     public static string ToNative(this Structural0DSpring spring)

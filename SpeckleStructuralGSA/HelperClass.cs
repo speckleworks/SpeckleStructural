@@ -565,7 +565,7 @@ namespace SpeckleStructuralGSA
       {
         return;
       }
-      var res = Initialiser.Cache.ResolveIndex("AXIS.1", "");
+      var res = Initialiser.Cache.ResolveIndex("AXIS.1");
 
       var ls = new List<string>
       {
@@ -596,7 +596,7 @@ namespace SpeckleStructuralGSA
     public static void SetAxis(SpeckleVector xVector, SpeckleVector xyVector, SpecklePoint origin, out int index, out string gwaCommand, string name = "")
     {
       gwaCommand = "";
-      index = Initialiser.Cache.ResolveIndex("AXIS.1", "");
+      index = Initialiser.Cache.ResolveIndex("AXIS.1");
 
       var gwaCommands = new List<string>();
 

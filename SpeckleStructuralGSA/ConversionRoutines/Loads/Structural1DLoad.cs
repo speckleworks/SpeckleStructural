@@ -184,18 +184,14 @@ namespace SpeckleStructuralGSA
 
         if (load.Loading.Value[i] == 0) continue;
 
-        var index = Initialiser.Cache.ResolveIndex(typeof(GSA1DLoad).GetGSAKeyword(), typeof(GSA1DLoad).Name);
+        var index = Initialiser.Cache.ResolveIndex(typeof(GSA1DLoad).GetGSAKeyword());
 
         ls.Add("SET_AT");
         ls.Add(index.ToString());
         ls.Add("LOAD_BEAM_UDL" + ":" + HelperClass.GenerateSID(load)); // TODO: Only writes to UDL load
         ls.Add(load.Name == null || load.Name == "" ? " " : load.Name);
         // TODO: This is a hack.
-        ls.Add(string.Join(
-            " ",
-            elementRefs.Select(x => x.ToString())
-                .Concat(groupRefs.Select(x => "G" + x.ToString()))
-        ));
+        ls.Add(string.Join(" ", elementRefs.Select(x => x.ToString()).Concat(groupRefs.Select(x => "G" + x.ToString()))));
         ls.Add(loadCaseRef.ToString());
         ls.Add("GLOBAL"); // Axis
         ls.Add("NO"); // Projected

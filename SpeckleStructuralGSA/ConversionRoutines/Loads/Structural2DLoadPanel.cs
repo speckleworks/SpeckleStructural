@@ -170,7 +170,7 @@ namespace SpeckleStructuralGSA
       {
         if (load.Loading.Value[i] == 0) continue;
 
-        var index = Initialiser.Cache.ResolveIndex(typeof(GSAGridAreaLoad).GetGSAKeyword(), typeof(GSAGridAreaLoad).Name);
+        var index = Initialiser.Cache.ResolveIndex(typeof(GSAGridAreaLoad).GetGSAKeyword());
 
         ls.Clear();
         var subLs = new List<string>();
