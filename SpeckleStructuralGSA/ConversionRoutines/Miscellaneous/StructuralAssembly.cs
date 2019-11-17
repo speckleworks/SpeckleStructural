@@ -111,39 +111,37 @@ namespace SpeckleStructuralGSA
 
       var keyword = destType.GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(keyword, destType.Name, assembly.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(keyword, assembly.ApplicationId);
 
       var targetString = " ";
 
       if (assembly.ElementRefs != null && assembly.ElementRefs.Count() > 0)
       {
-        var polylineIndices = Initialiser.Cache.LookupIndices(typeof(GSA1DElementPolyline).GetGSAKeyword(), typeof(GSA1DElementPolyline).ToSpeckleTypeName(), assembly.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+        var polylineIndices = Initialiser.Cache.LookupIndices(typeof(GSA1DElementPolyline).GetGSAKeyword(), assembly.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
         if (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
         {
-          var e1DIndices = Initialiser.Cache.LookupIndices(typeof(GSA1DElement).GetGSAKeyword(), typeof(GSA1DElement).ToSpeckleTypeName(), assembly.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-          var e1DPolyIndices = polylineIndices;
-          var e2DIndices = Initialiser.Cache.LookupIndices(typeof(GSA2DElement).GetGSAKeyword(), typeof(GSA2DElement).ToSpeckleTypeName(), assembly.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-          var e2DMeshIndices = Initialiser.Cache.LookupIndices(typeof(GSA2DElementMesh).GetGSAKeyword(), typeof(GSA2DElementMesh).ToSpeckleTypeName(), assembly.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var e1DIndices = Initialiser.Cache.LookupIndices(typeof(GSA1DElement).GetGSAKeyword(), assembly.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var e2DIndices = Initialiser.Cache.LookupIndices(typeof(GSA2DElement).GetGSAKeyword(), assembly.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var e2DMeshIndices = Initialiser.Cache.LookupIndices(typeof(GSA2DElementMesh).GetGSAKeyword(), assembly.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
 
-          targetString = string.Join(" ",
-            e1DIndices.Select(x => x.ToString())
-            .Concat(e1DPolyIndices.Select(x => "G" + x.ToString()))
-            .Concat(e2DIndices.Select(x => x.ToString()))
-            .Concat(e2DMeshIndices.Select(x => "G" + x.ToString()))
-          );
+          var indices = new List<int>(e1DIndices);
+          indices.AddRange(e2DIndices);
+          indices.AddRange(e2DMeshIndices);
+          indices = indices.Distinct().ToList();
+
+          targetString = string.Join(" ", indices.Select(x => x.ToString()));
         }
         else if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
         {
-          var m1DIndices = Initialiser.Cache.LookupIndices(typeof(GSA1DMember).GetGSAKeyword(), typeof(GSA1DMember).ToSpeckleTypeName(), assembly.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-          var m1DPolyIndices = polylineIndices;
-          var m2DIndices = Initialiser.Cache.LookupIndices(typeof(GSA2DMember).GetGSAKeyword(), typeof(GSA2DMember).ToSpeckleTypeName(), assembly.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var m1DIndices = Initialiser.Cache.LookupIndices(typeof(GSA1DMember).GetGSAKeyword(), assembly.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var m2DIndices = Initialiser.Cache.LookupIndices(typeof(GSA2DMember).GetGSAKeyword(), assembly.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+
+          var indices = new List<int>(m1DIndices);
+          indices.AddRange(m2DIndices);
+          indices = indices.Distinct().ToList();
 
           // TODO: Once assemblies can properly target members, this should target members explicitly
-          targetString = string.Join(" ",
-            m1DIndices.Select(x => "G" + x.ToString())
-            .Concat(m1DPolyIndices.Select(x => "G" + x.ToString()))
-            .Concat(m2DIndices.Select(x => "G" + x.ToString()))
-          );
+          targetString = string.Join(" ", indices.Select(i => "G" + i.ToString()));
         }
       }
 
@@ -213,30 +211,6 @@ namespace SpeckleStructuralGSA
         m1Ds = Initialiser.GSASenderObjects[typeof(GSA1DMember)].Cast<GSA1DMember>().ToList();
         m2Ds = Initialiser.GSASenderObjects[typeof(GSA2DMember)].Cast<GSA2DMember>().ToList();
       }
-
-      /*
-      var objType = dummyObject.GetType();
-
-      if (!Initialiser.GSASenderObjects.ContainsKey(objType))
-
-        Initialiser.GSASenderObjects[objType] = new List<object>();
-      var keyword = objType.GetGSAKeyword();
-      var subKeywords = objType.GetSubGSAKeyword();
-
-      string[] lines = Initialiser.Interface.GetGWARecords("GET_ALL\t" + keyword);
-      List<string> deletedLines = Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + keyword).ToList();
-      foreach (var k in subKeywords)
-        deletedLines.AddRange(Initialiser.Interface.GetDeletedGWARecords("GET_ALL\t" + k));
-
-      // Remove deleted lines
-      Initialiser.GSASenderObjects[objType].RemoveAll(l => deletedLines.Contains((l as IGSASpeckleContainer).GWACommand));
-      foreach (var kvp in Initialiser.GSASenderObjects)
-        kvp.Value.RemoveAll(l => (l as IGSASpeckleContainer).SubGWACommand.Any(x => deletedLines.Contains(x)));
-
-      // Filter only new lines
-      var prevLines = Initialiser.GSASenderObjects[objType].Select(l => (l as IGSASpeckleContainer).GWACommand).ToArray();
-      var newLines = lines.Where(l => !prevLines.Contains(l)).ToArray();
-      */
 
       foreach (var p in newLines.Values)
       {

@@ -13324,7 +13324,6 @@
     },
     "shape": "Rectangular",
     "hollow": false,
-    "thickness": 0.0,
     "applicationId": "gsa/PROP_SEC.3_1",
     "name": "Existing beams",
     "properties": {}
@@ -13352,7 +13351,6 @@
     },
     "shape": "Rectangular",
     "hollow": false,
-    "thickness": 0.0,
     "applicationId": "gsa/PROP_SEC.3_2",
     "name": "Bidging beam",
     "properties": {}

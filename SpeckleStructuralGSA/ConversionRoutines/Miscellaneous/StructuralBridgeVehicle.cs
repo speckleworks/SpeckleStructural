@@ -47,7 +47,7 @@ namespace SpeckleStructuralGSA
 
       var keyword = destType.GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(keyword, destType.Name, vehicle.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(keyword, vehicle.ApplicationId);
 
       //The width parameter is intentionally not being used here as the meaning doesn't map to the y coordinate parameter of the ASSEMBLY keyword
       //It is therefore to be ignored here for GSA purposes.

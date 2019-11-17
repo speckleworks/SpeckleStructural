@@ -1196,7 +1196,7 @@
     "properties": {}
   },
   {
-    "type": "Object/StructuralSpringProperty",
+    "type": "StructuralSpringProperty",
     "applicationId": "gh/0e14ea030d377c1860dc6b72453e58fc",
     "name": "LSP-General",
     "properties": {
@@ -1209,7 +1209,7 @@
     }
   },
   {
-    "type": "Object/StructuralSpringProperty",
+    "type": "StructuralSpringProperty",
     "applicationId": "gh/34a7311a137096403bbe0296bbed53b7",
     "name": "LSP-Axial",
     "properties": {
@@ -1222,7 +1222,7 @@
     }
   },
   {
-    "type": "Object/StructuralSpringProperty",
+    "type": "StructuralSpringProperty",
     "applicationId": "gh/d3acde535f3ecd3a9d384929810714dc",
     "name": "LSP-Torsional",
     "properties": {
@@ -1235,7 +1235,7 @@
     }
   },
   {
-    "type": "Object/StructuralSpringProperty",
+    "type": "StructuralSpringProperty",
     "applicationId": "gh/150a6a79e8ecbc0f7efb4fa822d67558",
     "name": "LSP-Compression",
     "properties": {
@@ -1248,7 +1248,7 @@
     }
   },
   {
-    "type": "Object/StructuralSpringProperty",
+    "type": "StructuralSpringProperty",
     "applicationId": "gh/ee71ea28e5836bad65af7cdde55f37ec",
     "name": "LSP-Tension",
     "properties": {
@@ -1261,7 +1261,7 @@
     }
   },
   {
-    "type": "Object/StructuralSpringProperty",
+    "type": "StructuralSpringProperty",
     "applicationId": "gh/6854f7b9522dd1c5d13cf369b726cef1",
     "name": "LSP-Lockup",
     "properties": {
@@ -1274,7 +1274,7 @@
     }
   },
   {
-    "type": "Object/StructuralSpringProperty",
+    "type": "StructuralSpringProperty",
     "applicationId": "gh/75e517bb9ccbecdd6b844a57a73f2edb",
     "name": "LSP-Gap",
     "properties": {
@@ -1287,7 +1287,7 @@
     }
   },
   {
-    "type": "Object/StructuralSpringProperty",
+    "type": "StructuralSpringProperty",
     "applicationId": "gh/a2f49ec8a94bdebe19c1433d95294955",
     "name": "LSP-Friction",
     "properties": {
@@ -2813,7 +2813,6 @@
     },
     "shape": "Generic",
     "hollow": false,
-    "thickness": 0.0,
     "materialRef": "gsa/MAT_CONCRETE.17_1",
     "applicationId": "columnProp",
     "name": "Column property",
@@ -2823,7 +2822,7 @@
     "type": "Structural2DProperty",
     "thickness": 0.3,
     "materialRef": "gsa/MAT_CONCRETE.17_1",
-    "referenceSurface": 1,
+    "referenceSurface": 2,
     "applicationId": "slabProp",
     "name": "Slab property",
     "properties": {}
@@ -3327,7 +3326,7 @@
     "constructionStageRefs": [
       "Stage2"
     ],
-    "applicationId": "Stage 1",
+    "applicationId": "Stage1",
     "name": "",
     "properties": {}
   }

@@ -43,34 +43,28 @@ namespace SpeckleStructuralGSA
           {
             id = indices[i];
 
-          //while (id <= highestIndex)
-          //{
-            //if (id == 0 || (int)Initialiser.Interface.RunGWACommand("EXIST\t" + kvp.Value.Item1 + "\t" + id.ToString()) == 1)
-            //{
-              var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item2, kvp.Value.Item3, kvp.Value.Item4, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
+            var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item2, kvp.Value.Item3, kvp.Value.Item4, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
 
-              if (resultExport == null || resultExport.Count() == 0)
-              {
-                id++;
-                continue;
-              }
+            if (resultExport == null || resultExport.Count() == 0)
+            {
+              id++;
+              continue;
+            }
 
-              var newRes = new StructuralMiscResult
-              {
-                Description = kvp.Key,
-                IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
-                Value = resultExport,
-                ResultSource = loadCase
-              };
+            var newRes = new StructuralMiscResult
+            {
+              Description = kvp.Key,
+              IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
+              Value = resultExport,
+              ResultSource = loadCase
+            };
 
-              if (id != 0)
-              {
-                newRes.TargetRef = HelperClass.GetApplicationId(kvp.Value.Item1, id);
-              }
-              newRes.GenerateHash();
-              results.Add(new GSAMiscResult() { Value = newRes });
-            //}
-            //id++;
+            if (id != 0)
+            {
+              newRes.TargetRef = HelperClass.GetApplicationId(kvp.Value.Item1, id);
+            }
+            newRes.GenerateHash();
+            results.Add(new GSAMiscResult() { Value = newRes });
           }
         }
       }

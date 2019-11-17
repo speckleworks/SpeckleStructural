@@ -115,12 +115,12 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSARigidConstraints).GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(keyword, typeof(GSARigidConstraints).ToSpeckleTypeName(), constraint.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(keyword, constraint.ApplicationId);
       
-      var slaveNodeIndices = Initialiser.Cache.LookupIndices(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).ToSpeckleTypeName(), constraint.NodeRefs).Where(x => x.HasValue).Select(x => x.Value.ToString()).ToList();
+      var slaveNodeIndices = Initialiser.Cache.LookupIndices(typeof(GSANode).GetGSAKeyword(), constraint.NodeRefs).Where(x => x.HasValue).Select(x => x.Value.ToString()).ToList();
       var slaveNodeIndicesSummary = slaveNodeIndices.Count > 0 ? string.Join(" ", slaveNodeIndices) : "none";
-      var masterNodeIndex = Initialiser.Cache.LookupIndex(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).ToSpeckleTypeName(), constraint.MasterNodeRef);
-      var stageDefRefs = Initialiser.Cache.LookupIndices(typeof(GSAConstructionStage).GetGSAKeyword(), typeof(GSAConstructionStage).ToSpeckleTypeName(), constraint.ConstructionStageRefs).Where(x => x.HasValue).Select(x => x.Value.ToString()).ToList();
+      var masterNodeIndex = Initialiser.Cache.LookupIndex(typeof(GSANode).GetGSAKeyword(), constraint.MasterNodeRef);
+      var stageDefRefs = Initialiser.Cache.LookupIndices(typeof(GSAConstructionStage).GetGSAKeyword(), constraint.ConstructionStageRefs).Where(x => x.HasValue).Select(x => x.Value.ToString()).ToList();
 
       var subLs = new List<string>();
       if (constraint.Constraint.Value[0])

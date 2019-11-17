@@ -264,9 +264,9 @@ namespace SpeckleStructuralGSA
         return "";
 
       var keyword = typeof(GSA0DElement).GetGSAKeyword();
-      var index = Initialiser.Cache.ResolveIndex(typeof(GSA0DElement).GetGSAKeyword(), typeof(GSA0DElement).ToSpeckleTypeName(), node.ApplicationId);
-      var propIndex = Initialiser.Cache.ResolveIndex("PROP_MASS.2", "", node.ApplicationId);
-      var nodeIndex = Initialiser.Cache.ResolveIndex(typeof(GSANode).GetGSAKeyword(), typeof(GSANode).ToSpeckleTypeName(), node.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(typeof(GSA0DElement).GetGSAKeyword(), node.ApplicationId);
+      var propIndex = Initialiser.Cache.ResolveIndex("PROP_MASS.2", node.ApplicationId);
+      var nodeIndex = Initialiser.Cache.ResolveIndex(typeof(GSANode).GetGSAKeyword(), node.ApplicationId);
 
       var gwaCommands = new List<string>();
 

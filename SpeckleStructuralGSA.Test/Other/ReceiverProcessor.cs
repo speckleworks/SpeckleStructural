@@ -72,18 +72,16 @@ namespace SpeckleStructuralGSA.Test
         foreach (var t in currentBatch)
         {
           var dummyObject = Activator.CreateInstance(t);
-          var keyword = "";
-          try
-          {
-            keyword = dummyObject.GetAttribute("GSAKeyword").ToString();
-          }
-          catch { }
+          var keyword = dummyObject.GetAttribute("GSAKeyword").ToString();
           var valueType = t.GetProperty("Value").GetValue(dummyObject).GetType();
+          var speckleTypeName = ((SpeckleObject)((IGSASpeckleContainer)dummyObject).Value).Type;
           var targetObjects = receivedObjects.Where(o => o.GetType() == valueType).ToList();
 
           for (var i = 0; i < targetObjects.Count(); i++)
           {
             var applicationId = targetObjects[i].ApplicationId;
+
+            //DESERIALISE
             var deserialiseReturn = ((string)Converter.Deserialise(targetObjects[i]));
             var gwaCommands = deserialiseReturn.Split(new[] { '\n' }).Where(c => c.Length > 0).ToList();
 

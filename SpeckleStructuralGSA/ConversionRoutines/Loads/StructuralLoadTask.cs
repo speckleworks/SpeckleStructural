@@ -73,8 +73,8 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSALoadTask).GetGSAKeyword();
 
-      var taskIndex = Initialiser.Cache.ResolveIndex("TASK.1", "", loadTask.ApplicationId);
-      var index = Initialiser.Cache.ResolveIndex(typeof(GSALoadTask).GetGSAKeyword(), typeof(GSALoadTask).ToSpeckleTypeName(), loadTask.ApplicationId);
+      var taskIndex = Initialiser.Cache.ResolveIndex("TASK.1", loadTask.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(typeof(GSALoadTask).GetGSAKeyword(), loadTask.ApplicationId);
 
       var gwaCommands = new List<string>();
 
@@ -220,7 +220,7 @@ namespace SpeckleStructuralGSA
         var subLs = new List<string>();
         for (var i = 0; i < loadTask.LoadCaseRefs.Count(); i++)
         {
-          var loadCaseRef = Initialiser.Cache.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), typeof(GSALoadCase).ToSpeckleTypeName(), loadTask.LoadCaseRefs[i]);
+          var loadCaseRef = Initialiser.Cache.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), loadTask.LoadCaseRefs[i]);
 
           if (loadCaseRef.HasValue)
           {

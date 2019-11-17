@@ -71,11 +71,11 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA0DSpring).GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(keyword, typeof(GSA0DSpring).ToSpeckleTypeName(), spring.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(keyword, spring.ApplicationId);
       var propRef = 0;
       try
       {
-        propRef = Initialiser.Cache.LookupIndex(typeof(GSASpringProperty).GetGSAKeyword(), typeof(GSASpringProperty).ToSpeckleTypeName(), spring.PropertyRef).Value;
+        propRef = Initialiser.Cache.LookupIndex(typeof(GSASpringProperty).GetGSAKeyword(), spring.PropertyRef).Value;
       }
       catch { }
 
@@ -114,27 +114,11 @@ namespace SpeckleStructuralGSA
     }
   }
 
-
-
   public static partial class Conversions
   {
     public static string ToNative(this Structural0DSpring spring)
     {
-      /*
-      var objToProcess = spring;
-      //Check if this application appears in the cache at all
-      if (!string.IsNullOrEmpty(spring.ApplicationId) && !Initialiser.Interface.ExistsInModel(spring.ApplicationId))
-      {
-        //If so but the type doesn't appear alongside it as one that was loaded, then load it now by calling ToSpeckle with a dummy version of the GSA corresponding type
-        if (Initialiser.Interface.GetCachedSpeckleObject(typeof(Structural0DSpring), spring.ApplicationId, out Structural0DSpring existing))
-        {
-          //Merge objects to form the resulting one
-          objToProcess = (Structural0DSpring) Initialiser.Merger.Merge(spring, existing);
-        }
-      }
-      */
-
-      var group = Initialiser.Cache.ResolveIndex(typeof(GSA0DSpring).GetGSAKeyword(), typeof(GSA0DSpring).ToSpeckleTypeName(), spring.ApplicationId);
+      var group = Initialiser.Cache.ResolveIndex(typeof(GSA0DSpring).GetGSAKeyword(), spring.ApplicationId);
       return new GSA0DSpring() { Value = spring }.SetGWACommand(Initialiser.Interface, group);
     }
 
