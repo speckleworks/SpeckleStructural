@@ -218,7 +218,7 @@ namespace SpeckleStructuralClasses
     {
       get => StructuralProperties.ContainsKey("springType")
         ? (StructuralSpringPropertyType)Enum.Parse(typeof(StructuralSpringPropertyType), (StructuralProperties["springType"] as string), true)
-        : StructuralSpringPropertyType.General;
+        : StructuralSpringPropertyType.NotSet;
       set { if (value != StructuralSpringPropertyType.NotSet) StructuralProperties["springType"] = value.ToString(); }
     }
 

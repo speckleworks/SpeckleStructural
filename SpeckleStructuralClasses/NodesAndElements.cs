@@ -415,7 +415,7 @@ namespace SpeckleStructuralClasses
     [JsonIgnore]
     public Structural1DElementType ElementType
     {
-      get => StructuralProperties.ContainsKey("elementType") ? (Structural1DElementType)Enum.Parse(typeof(Structural1DElementType), (StructuralProperties["elementType"] as string), true) : default;
+      get => StructuralProperties.ContainsKey("elementType") ? (Structural1DElementType)Enum.Parse(typeof(Structural1DElementType), (StructuralProperties["elementType"] as string), true) : Structural1DElementType.NotSet;
       set { if (value != Structural1DElementType.NotSet) StructuralProperties["elementType"] = value.ToString(); }
     }
 
@@ -614,7 +614,7 @@ namespace SpeckleStructuralClasses
     [JsonIgnore]
     public Structural2DElementType ElementType
     {
-      get => StructuralProperties.ContainsKey("elementType") ? (Structural2DElementType)Enum.Parse(typeof(Structural2DElementType), (StructuralProperties["elementType"] as string), true) : default;
+      get => StructuralProperties.ContainsKey("elementType") ? (Structural2DElementType)Enum.Parse(typeof(Structural2DElementType), (StructuralProperties["elementType"] as string), true) : Structural2DElementType.NotSet;
       set { if (value != Structural2DElementType.NotSet) StructuralProperties["elementType"] = value.ToString(); }
     }
 
@@ -749,7 +749,9 @@ namespace SpeckleStructuralClasses
     [JsonIgnore]
     public Structural2DElementType ElementType
     {
-      get => StructuralProperties.ContainsKey("elementType") ? (Structural2DElementType)Enum.Parse(typeof(Structural2DElementType), (StructuralProperties["elementType"] as string), true) : default;
+      get => StructuralProperties.ContainsKey("elementType") 
+        ? (Structural2DElementType)Enum.Parse(typeof(Structural2DElementType), (StructuralProperties["elementType"] as string), true) 
+        : Structural2DElementType.NotSet;
       set { if (value != Structural2DElementType.NotSet) StructuralProperties["elementType"] = value.ToString(); }
     }
 
