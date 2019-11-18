@@ -159,6 +159,9 @@
     <Reference Include="SpeckleGSAProxy">
       <HintPath>.\SpeckleGSAProxy.dll</HintPath>
     </Reference>
+    <Reference Include="SpeckleUtil">
+      <HintPath>..\..\SpeckleGSA\Resource\SpeckleUtil.dll</HintPath>
+    </Reference>
     <Reference Include="SQLite-net, Version=1.5.231.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\sqlite-net-pcl.1.5.231\lib\netstandard1.1\SQLite-net.dll</HintPath>
     </Reference>
@@ -232,10 +235,6 @@
     <ProjectReference Include="..\SpeckleStructural\SpeckleStructural.csproj">
       <Project>{f7980709-1e82-44b6-b3f8-0450a1fe6dc3}</Project>
       <Name>SpeckleStructural</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SpeckleUtil\SpeckleUtil.csproj">
-      <Project>{39832f20-9576-483f-a0e9-50ddb0a3989b}</Project>
-      <Name>SpeckleUtil</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
