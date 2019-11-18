@@ -8,6 +8,7 @@ namespace SpeckleStructuralClasses
 {
   public enum StructuralLoadCaseType
   {
+    NotSet,
     Generic,
     Dead,
     Soil,
@@ -21,6 +22,7 @@ namespace SpeckleStructuralClasses
 
   public enum StructuralLoadTaskType
   {
+    NotSet,
     LinearStatic,
     NonlinearStatic,
     Modal,
@@ -29,6 +31,7 @@ namespace SpeckleStructuralClasses
 
   public enum StructuralLoadComboType
   {
+    NotSet,
     Envelope,
     LinearAdd
   }
@@ -75,11 +78,11 @@ namespace SpeckleStructuralClasses
 
     /// <summary>Number of modes.</summary>
     [JsonProperty("numModes", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public int NumModes { get; set; }
+    public int? NumModes { get; set; }
 
     /// <summary>Maximum number of iterations.</summary>
     [JsonProperty("maxNumIterations", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public int MaxNumIterations { get; set; }
+    public int? MaxNumIterations { get; set; }
 
     /// <summary>Name of the combination case.</summary>
     [JsonProperty("resultCaseRef", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
@@ -170,7 +173,7 @@ namespace SpeckleStructuralClasses
   [Serializable]
   public partial class Structural1DLoadLine : SpeckleLine, IStructural
   {
-    public override string Type { get => base.Type + "/Structural1DLoadLine"; }
+    public override string Type { get { var speckleType = "/" + this.GetType().Name; return base.Type.Replace(speckleType, "") + speckleType; } } //The replacement is to avoid a peculiarity with merging using Automapper
 
     [JsonIgnore]
     private Dictionary<string, object> StructuralProperties
@@ -212,7 +215,7 @@ namespace SpeckleStructuralClasses
     public StructuralVectorSix Loading
     {
       get => StructuralProperties.ContainsKey("loading") ? (StructuralProperties["loading"] as StructuralVectorSix) : null;
-      set => StructuralProperties["loading"] = value;
+      set { if (value != null) StructuralProperties["loading"] = value; }
     }
 
     /// <summary>Application ID of StructuralLoadCase.</summary>
@@ -220,7 +223,7 @@ namespace SpeckleStructuralClasses
     public string LoadCaseRef
     {
       get => StructuralProperties.ContainsKey("loadCaseRef") ? (StructuralProperties["loadCaseRef"] as string) : null;
-      set => StructuralProperties["loadCaseRef"] = value;
+      set { if (value != null) StructuralProperties["loadCaseRef"] = value; }
     }
   }
 
@@ -245,7 +248,7 @@ namespace SpeckleStructuralClasses
   [Serializable]
   public partial class Structural2DLoadPanel : SpecklePolyline, IStructural
   {
-    public override string Type { get => base.Type + "/Structural2DLoadPanel"; }
+    public override string Type { get { var speckleType = "/" + this.GetType().Name; return base.Type.Replace(speckleType, "") + speckleType; } } //The replacement is to avoid a peculiarity with merging using Automapper
 
     [JsonIgnore]
     private Dictionary<string, object> StructuralProperties
@@ -288,7 +291,7 @@ namespace SpeckleStructuralClasses
     public StructuralVectorThree Loading
     {
       get => StructuralProperties.ContainsKey("loading") ? (StructuralProperties["loading"] as StructuralVectorThree) : null;
-      set => StructuralProperties["loading"] = value;
+      set { if (value != null) StructuralProperties["loading"] = value; }
     }
 
     /// <summary>Application ID of StructuralLoadCase.</summary>
@@ -296,7 +299,7 @@ namespace SpeckleStructuralClasses
     public string LoadCaseRef
     {
       get => StructuralProperties.ContainsKey("loadCaseRef") ? (StructuralProperties["loadCaseRef"] as string) : null;
-      set => StructuralProperties["loadCaseRef"] = value;
+      set { if (value != null) StructuralProperties["loadCaseRef"] = value; }
     }
   }
 
@@ -307,11 +310,11 @@ namespace SpeckleStructuralClasses
 
     /// <summary>Temperature at the top surface of the element.</summary>
     [JsonProperty("topTemperature", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double TopTemperature { get; set; }
+    public double? TopTemperature { get; set; }
 
     /// <summary>Temperature at the bottom surface of the element.</summary>
     [JsonProperty("bottomTemperature", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public double BottomTemperature { get; set; }
+    public double? BottomTemperature { get; set; }
 
     /// <summary>Application ID of StructuralLoadCase.</summary>
     [JsonProperty("loadCaseRef", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]

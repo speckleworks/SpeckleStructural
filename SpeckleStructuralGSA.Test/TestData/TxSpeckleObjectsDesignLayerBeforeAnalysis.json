@@ -1,5 +1,76 @@
 [
   {
+    "type": "Polyline/Structural2DLoadPanel",
+    "value": [
+      14.7561,
+      -24.6719,
+      11.58,
+      -24.8439,
+      -24.6719,
+      11.58,
+      -24.8439,
+      2.5272,
+      11.58,
+      14.7561,
+      -4.87193,
+      11.58
+    ],
+    "closed": true,
+    "name": "Live load panel",
+    "properties": {
+      "structural": {
+        "loadCaseRef": "LC1",
+        "loading": {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,-4.800000191],"hash":"833566cfca293e9baf03342b92bbf3cb","properties":{}}
+      }
+    }
+  },
+  {
+    "type": "Polyline/Structural2DLoadPanel",
+    "value": [
+      44.4561,
+      -4.87193,
+      17.37,
+      54.3561,
+      74.3281,
+      17.37,
+      74.1561,
+      67.7348,
+      17.37,
+      74.1561,
+      -4.87193,
+      17.37
+    ],
+    "closed": true,
+    "name": "Dead load panel",
+    "properties": {
+      "structural": {
+        "loadCaseRef": "LC2",
+        "loading": {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,-1.200000048],"hash":"820d05942290454973d51b2795d44db6","properties":{}}
+      }
+    }
+  },
+  {
+    "type": "StructuralLoadCase",
+    "caseType": "Live",
+    "applicationId": "LC1",
+    "name": "Live load case",
+    "properties": {}
+  },
+  {
+    "type": "StructuralLoadCase",
+    "caseType": "Generic",
+    "applicationId": "LC2",
+    "name": "Dead load case",
+    "properties": {}
+  },
+  {
+    "type": "StructuralLoadCase",
+    "caseType": "Thermal",
+    "applicationId": "LC3",
+    "name": "Thermal load case",
+    "properties": {}
+  },
+  {
     "type": "StructuralBridgeAlignment",
     "applicationId": "AL1",
     "name": "Alignment One",
@@ -31,199 +102,10 @@
     "properties": {}
   },
   {
-    "type": "Object/StructuralSpringProperty",
-    "applicationId": "gh/0e14ea030d377c1860dc6b72453e58fc",
-    "name": "LSP-General",
-    "properties": {
-      "structural": {
-        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"2cc0b389f8c5e2877e9ac6ac45b72cc2","properties":{}},
-        "springType": "General",
-        "stiffness": {"type":"StructuralVectorSix","value":[12.0,15.0,20.0,25.0,30.0,38.0],"hash":"ae836cd82b24e2d7fb085a6d2abfd17e","properties":{}},
-        "dampingRatio": 0.21
-      }
-    }
-  },
-  {
-    "type": "Object/StructuralSpringProperty",
-    "applicationId": "gh/34a7311a137096403bbe0296bbed53b7",
-    "name": "LSP-Axial",
-    "properties": {
-      "structural": {
-        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"2cc0b389f8c5e2877e9ac6ac45b72cc2","properties":{}},
-        "springType": "Axial",
-        "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
-        "dampingRatio": 0.21
-      }
-    }
-  },
-  {
-    "type": "Object/StructuralSpringProperty",
-    "applicationId": "gh/d3acde535f3ecd3a9d384929810714dc",
-    "name": "LSP-Torsional",
-    "properties": {
-      "structural": {
-        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"2cc0b389f8c5e2877e9ac6ac45b72cc2","properties":{}},
-        "springType": "Torsional",
-        "stiffness": {"type":"StructuralVectorSix","value":[0.0,0.0,0.0,25.0,0.0,0.0],"hash":"98d1640829ffe5e2dffe3ba3ed4b7659","properties":{}},
-        "dampingRatio": 0.21
-      }
-    }
-  },
-  {
-    "type": "Object/StructuralSpringProperty",
-    "applicationId": "gh/150a6a79e8ecbc0f7efb4fa822d67558",
-    "name": "LSP-Compression",
-    "properties": {
-      "structural": {
-        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"2cc0b389f8c5e2877e9ac6ac45b72cc2","properties":{}},
-        "springType": "Compression",
-        "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
-        "dampingRatio": 0.21
-      }
-    }
-  },
-  {
-    "type": "Object/StructuralSpringProperty",
-    "applicationId": "gh/ee71ea28e5836bad65af7cdde55f37ec",
-    "name": "LSP-Tension",
-    "properties": {
-      "structural": {
-        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"2cc0b389f8c5e2877e9ac6ac45b72cc2","properties":{}},
-        "springType": "Tension",
-        "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
-        "dampingRatio": 0.21
-      }
-    }
-  },
-  {
-    "type": "Object/StructuralSpringProperty",
-    "applicationId": "gh/6854f7b9522dd1c5d13cf369b726cef1",
-    "name": "LSP-Lockup",
-    "properties": {
-      "structural": {
-        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"2cc0b389f8c5e2877e9ac6ac45b72cc2","properties":{}},
-        "springType": "Lockup",
-        "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
-        "dampingRatio": 0.21
-      }
-    }
-  },
-  {
-    "type": "Object/StructuralSpringProperty",
-    "applicationId": "gh/75e517bb9ccbecdd6b844a57a73f2edb",
-    "name": "LSP-Gap",
-    "properties": {
-      "structural": {
-        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"2cc0b389f8c5e2877e9ac6ac45b72cc2","properties":{}},
-        "springType": "Gap",
-        "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
-        "dampingRatio": 0.21
-      }
-    }
-  },
-  {
-    "type": "Object/StructuralSpringProperty",
-    "applicationId": "gh/a2f49ec8a94bdebe19c1433d95294955",
-    "name": "LSP-Friction",
-    "properties": {
-      "structural": {
-        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"2cc0b389f8c5e2877e9ac6ac45b72cc2","properties":{}},
-        "springType": "Friction",
-        "stiffness": {"type":"StructuralVectorSix","value":[12.0,15.0,20.0,0.0,0.0,0.0],"hash":"859fa9f418bc114832e1f243fb3f8c61","properties":{}},
-        "dampingRatio": 0.21
-      }
-    }
-  },
-  {
-    "type": "Polyline/Structural2DLoadPanel",
-    "value": [
-      14.7561,
-      -24.6719,
-      11.58,
-      -24.8439,
-      -24.6719,
-      11.58,
-      -24.8439,
-      2.5272,
-      11.58,
-      14.7561,
-      -4.87193,
-      11.58
-    ],
-    "closed": true,
-    "name": "Live load panel",
-    "properties": {
-      "structural": {
-        "loadCaseRef": "LC1",
-        "loading": {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,-4.80000019073],"hash":"9ddd218125d3c53ae30695262e76d1d3","properties":{}}
-      }
-    }
-  },
-  {
-    "type": "Polyline/Structural2DLoadPanel",
-    "value": [
-      44.4561,
-      -4.87193,
-      17.37,
-      54.3561,
-      74.3281,
-      17.37,
-      74.1561,
-      67.7348,
-      17.37,
-      74.1561,
-      -4.87193,
-      17.37
-    ],
-    "closed": true,
-    "name": "Dead load panel",
-    "properties": {
-      "structural": {
-        "loadCaseRef": "LC2",
-        "loading": {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,-1.20000004768],"hash":"61c99049acb76e0d79afd7d883596f57","properties":{}}
-      }
-    }
-  },
-  {
-    "type": "StructuralLoadCase",
-    "caseType": "Live",
-    "applicationId": "LC1",
-    "name": "Live load case",
-    "properties": {}
-  },
-  {
-    "type": "StructuralLoadCase",
-    "caseType": "Generic",
-    "applicationId": "LC2",
-    "name": "Dead load case",
-    "properties": {}
-  },
-  {
-    "type": "StructuralLoadCase",
-    "caseType": "Thermal",
-    "applicationId": "LC3",
-    "name": "Thermal load case",
-    "properties": {}
-  },
-  {
-    "type": "StructuralMaterialConcrete",
-    "youngsModulus": 28000000000.0,
-    "shearModulus": 11666666666.7,
-    "poissonsRatio": 0.2,
-    "density": 2400.0,
-    "coeffThermalExpansion": 1E-05,
-    "compressiveStrength": 40000000.0,
-    "maxStrain": 0.003,
-    "aggragateSize": 0.02,
-    "applicationId": "gsa/MAT_CONCRETE.16_1",
-    "name": "Concrete",
-    "properties": {}
-  },
-  {
     "type": "Point/StructuralNode",
     "value": [
-      -0.801002258301,
-      37.556640625,
+      -0.8010022583,
+      37.55664063,
       5.79
     ],
     "applicationId": "gsa/NODE.2_1",
@@ -233,8 +115,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      28.8989980469,
-      37.556640625,
+      28.89899805,
+      37.55664063,
       5.79
     ],
     "applicationId": "gsa/NODE.2_2",
@@ -244,8 +126,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      48.6989960938,
-      57.356640625,
+      48.69899609,
+      57.35664063,
       5.79
     ],
     "applicationId": "gsa/NODE.2_3",
@@ -255,8 +137,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      48.6989960938,
-      7.85664160156,
+      48.69899609,
+      7.856641602,
       5.79
     ],
     "applicationId": "gsa/NODE.2_4",
@@ -266,8 +148,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      18.9989980469,
-      7.85664160156,
+      18.99899805,
+      7.856641602,
       5.79
     ],
     "applicationId": "gsa/NODE.2_5",
@@ -277,8 +159,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      18.9989980469,
-      -2.04335827637,
+      18.99899805,
+      -2.043358276,
       5.79
     ],
     "applicationId": "gsa/NODE.2_6",
@@ -288,8 +170,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      -0.801002258301,
-      -2.04335827637,
+      -0.8010022583,
+      -2.043358276,
       5.79
     ],
     "applicationId": "gsa/NODE.2_7",
@@ -299,8 +181,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      -0.801002258301,
-      37.556640625,
+      -0.8010022583,
+      37.55664063,
       11.58
     ],
     "applicationId": "gsa/NODE.2_8",
@@ -310,8 +192,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      28.8989980469,
-      37.556640625,
+      28.89899805,
+      37.55664063,
       11.58
     ],
     "applicationId": "gsa/NODE.2_9",
@@ -321,8 +203,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      48.6989960938,
-      57.356640625,
+      48.69899609,
+      57.35664063,
       11.58
     ],
     "applicationId": "gsa/NODE.2_10",
@@ -332,8 +214,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      48.6989960938,
-      7.85664160156,
+      48.69899609,
+      7.856641602,
       11.58
     ],
     "applicationId": "gsa/NODE.2_11",
@@ -343,8 +225,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      18.9989980469,
-      7.85664160156,
+      18.99899805,
+      7.856641602,
       11.58
     ],
     "applicationId": "gsa/NODE.2_12",
@@ -354,8 +236,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      18.9989980469,
-      -2.04335827637,
+      18.99899805,
+      -2.043358276,
       11.58
     ],
     "applicationId": "gsa/NODE.2_13",
@@ -365,8 +247,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      -0.801002258301,
-      -2.04335827637,
+      -0.8010022583,
+      -2.043358276,
       11.58
     ],
     "applicationId": "gsa/NODE.2_14",
@@ -376,8 +258,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      -0.801002258301,
-      37.556640625,
+      -0.8010022583,
+      37.55664063,
       17.37
     ],
     "applicationId": "gsa/NODE.2_15",
@@ -387,8 +269,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      28.8989980469,
-      37.556640625,
+      28.89899805,
+      37.55664063,
       17.37
     ],
     "applicationId": "gsa/NODE.2_16",
@@ -398,8 +280,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      48.6989960938,
-      57.356640625,
+      48.69899609,
+      57.35664063,
       17.37
     ],
     "applicationId": "gsa/NODE.2_17",
@@ -409,8 +291,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      48.6989960938,
-      7.85664160156,
+      48.69899609,
+      7.856641602,
       17.37
     ],
     "applicationId": "gsa/NODE.2_18",
@@ -420,8 +302,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      18.9989980469,
-      7.85664160156,
+      18.99899805,
+      7.856641602,
       17.37
     ],
     "applicationId": "gsa/NODE.2_19",
@@ -431,8 +313,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      18.9989980469,
-      -2.04335827637,
+      18.99899805,
+      -2.043358276,
       17.37
     ],
     "applicationId": "gsa/NODE.2_20",
@@ -442,8 +324,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      -0.801002258301,
-      -2.04335827637,
+      -0.8010022583,
+      -2.043358276,
       17.37
     ],
     "applicationId": "gsa/NODE.2_21",
@@ -453,8 +335,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      12.1428574219,
-      31.4285722656,
+      12.14285742,
+      31.42857227,
       23.551
     ],
     "applicationId": "gsa/NODE.2_22",
@@ -464,8 +346,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      27.1428574219,
-      31.4285722656,
+      27.14285742,
+      31.42857227,
       23.551
     ],
     "applicationId": "gsa/NODE.2_23",
@@ -475,8 +357,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      37.1428554688,
-      41.4285703125,
+      37.14285547,
+      41.42857031,
       23.551
     ],
     "applicationId": "gsa/NODE.2_24",
@@ -486,8 +368,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      37.1428554688,
-      16.4285722656,
+      37.14285547,
+      16.42857227,
       23.551
     ],
     "applicationId": "gsa/NODE.2_25",
@@ -497,8 +379,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      22.1428574219,
-      16.4285722656,
+      22.14285742,
+      16.42857227,
       23.551
     ],
     "applicationId": "gsa/NODE.2_26",
@@ -508,8 +390,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      22.1428574219,
-      11.4285712891,
+      22.14285742,
+      11.42857129,
       23.551
     ],
     "applicationId": "gsa/NODE.2_27",
@@ -519,8 +401,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      12.1428574219,
-      11.4285712891,
+      12.14285742,
+      11.42857129,
       23.551
     ],
     "applicationId": "gsa/NODE.2_28",
@@ -530,8 +412,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      12.1428574219,
-      31.4285722656,
+      12.14285742,
+      31.42857227,
       29.732
     ],
     "applicationId": "gsa/NODE.2_29",
@@ -541,8 +423,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      27.1428574219,
-      31.4285722656,
+      27.14285742,
+      31.42857227,
       29.732
     ],
     "applicationId": "gsa/NODE.2_30",
@@ -552,8 +434,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      37.1428554688,
-      41.4285703125,
+      37.14285547,
+      41.42857031,
       29.732
     ],
     "applicationId": "gsa/NODE.2_31",
@@ -563,8 +445,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      37.1428554688,
-      16.4285722656,
+      37.14285547,
+      16.42857227,
       29.732
     ],
     "applicationId": "gsa/NODE.2_32",
@@ -574,8 +456,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      22.1428574219,
-      16.4285722656,
+      22.14285742,
+      16.42857227,
       29.732
     ],
     "applicationId": "gsa/NODE.2_33",
@@ -585,8 +467,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      22.1428574219,
-      11.4285712891,
+      22.14285742,
+      11.42857129,
       29.732
     ],
     "applicationId": "gsa/NODE.2_34",
@@ -596,8 +478,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      12.1428574219,
-      11.4285712891,
+      12.14285742,
+      11.42857129,
       29.732
     ],
     "applicationId": "gsa/NODE.2_35",
@@ -607,8 +489,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      -24.843859375,
-      54.5280703125,
+      -24.84385938,
+      54.52807031,
       5.79
     ],
     "applicationId": "gsa/NODE.2_36",
@@ -618,8 +500,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      34.556140625,
-      54.5280703125,
+      34.55614063,
+      54.52807031,
       5.79
     ],
     "applicationId": "gsa/NODE.2_37",
@@ -629,8 +511,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      74.156140625,
-      94.1280703125,
+      74.15614063,
+      94.12807031,
       5.79
     ],
     "applicationId": "gsa/NODE.2_38",
@@ -640,8 +522,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      74.156140625,
-      -4.8719296875,
+      74.15614063,
+      -4.871929688,
       5.79
     ],
     "applicationId": "gsa/NODE.2_39",
@@ -651,8 +533,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      14.756140625,
-      -4.8719296875,
+      14.75614063,
+      -4.871929688,
       5.79
     ],
     "applicationId": "gsa/NODE.2_40",
@@ -662,8 +544,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      14.756140625,
-      -24.6719296875,
+      14.75614063,
+      -24.67192969,
       5.79
     ],
     "applicationId": "gsa/NODE.2_41",
@@ -673,8 +555,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      -24.843859375,
-      -24.6719296875,
+      -24.84385938,
+      -24.67192969,
       5.79
     ],
     "applicationId": "gsa/NODE.2_42",
@@ -684,8 +566,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      -24.843859375,
-      54.5280703125,
+      -24.84385938,
+      54.52807031,
       11.58
     ],
     "applicationId": "gsa/NODE.2_43",
@@ -695,8 +577,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      34.556140625,
-      54.5280703125,
+      34.55614063,
+      54.52807031,
       11.58
     ],
     "applicationId": "gsa/NODE.2_44",
@@ -706,8 +588,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      74.156140625,
-      94.1280703125,
+      74.15614063,
+      94.12807031,
       11.58
     ],
     "applicationId": "gsa/NODE.2_45",
@@ -717,8 +599,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      74.156140625,
-      -4.8719296875,
+      74.15614063,
+      -4.871929688,
       11.58
     ],
     "applicationId": "gsa/NODE.2_46",
@@ -728,8 +610,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      14.756140625,
-      -4.8719296875,
+      14.75614063,
+      -4.871929688,
       11.58
     ],
     "applicationId": "gsa/NODE.2_47",
@@ -739,8 +621,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      14.756140625,
-      -24.6719296875,
+      14.75614063,
+      -24.67192969,
       11.58
     ],
     "applicationId": "gsa/NODE.2_48",
@@ -750,8 +632,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      -24.843859375,
-      -24.6719296875,
+      -24.84385938,
+      -24.67192969,
       11.58
     ],
     "applicationId": "gsa/NODE.2_49",
@@ -761,8 +643,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      -24.843859375,
-      54.5280703125,
+      -24.84385938,
+      54.52807031,
       17.37
     ],
     "applicationId": "gsa/NODE.2_50",
@@ -772,8 +654,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      34.556140625,
-      54.5280703125,
+      34.55614063,
+      54.52807031,
       17.37
     ],
     "applicationId": "gsa/NODE.2_51",
@@ -783,8 +665,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      74.156140625,
-      94.1280703125,
+      74.15614063,
+      94.12807031,
       17.37
     ],
     "applicationId": "gsa/NODE.2_52",
@@ -794,8 +676,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      74.156140625,
-      -4.8719296875,
+      74.15614063,
+      -4.871929688,
       17.37
     ],
     "applicationId": "gsa/NODE.2_53",
@@ -805,8 +687,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      14.756140625,
-      -4.8719296875,
+      14.75614063,
+      -4.871929688,
       17.37
     ],
     "applicationId": "gsa/NODE.2_54",
@@ -816,8 +698,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      14.756140625,
-      -24.6719296875,
+      14.75614063,
+      -24.67192969,
       17.37
     ],
     "applicationId": "gsa/NODE.2_55",
@@ -827,8 +709,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      -24.843859375,
-      -24.6719296875,
+      -24.84385938,
+      -24.67192969,
       17.37
     ],
     "applicationId": "gsa/NODE.2_56",
@@ -992,8 +874,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      14.7561403509,
-      -4.87192982456,
+      14.75614035,
+      -4.871929825,
       0.0
     ],
     "applicationId": "gh/ad4558d6e5a0784fe711195b15dbb60d",
@@ -1019,8 +901,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      74.1561403509,
-      -4.87192982456,
+      74.15614035,
+      -4.871929825,
       0.0
     ],
     "applicationId": "gh/460a05faac77730b25727b360f7d0cec",
@@ -1046,8 +928,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      74.1561403509,
-      94.1280701754,
+      74.15614035,
+      94.12807018,
       0.0
     ],
     "applicationId": "gh/e9901628ee704568be982cf978f99ebb",
@@ -1073,8 +955,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      34.5561403509,
-      54.5280701754,
+      34.55614035,
+      54.52807018,
       0.0
     ],
     "applicationId": "gh/fbcd9cadcbb666d66ffe391c8ef78fa8",
@@ -1100,8 +982,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      -24.8438596491,
-      54.5280701754,
+      -24.84385965,
+      54.52807018,
       0.0
     ],
     "applicationId": "gh/f16de03fe77b08cc3c9dceb84920aff8",
@@ -1127,8 +1009,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      -24.8438596491,
-      -24.6719298246,
+      -24.84385965,
+      -24.67192982,
       0.0
     ],
     "applicationId": "gh/aad3349332e757ba1c6bc306b2a56957",
@@ -1154,8 +1036,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      14.7561403509,
-      -24.6719298246,
+      14.75614035,
+      -24.67192982,
       0.0
     ],
     "applicationId": "gh/81377a0b1382a79b6833ab88c0a0e311",
@@ -1181,8 +1063,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      14.7561403509,
-      -4.87192982456,
+      14.75614035,
+      -4.871929825,
       -0.2
     ],
     "applicationId": "gsa/NODE.2_85",
@@ -1192,8 +1074,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      74.1561403509,
-      -4.87192982456,
+      74.15614035,
+      -4.871929825,
       -0.2
     ],
     "applicationId": "gsa/NODE.2_86",
@@ -1203,8 +1085,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      74.1561403509,
-      94.1280701754,
+      74.15614035,
+      94.12807018,
       -0.2
     ],
     "applicationId": "gsa/NODE.2_87",
@@ -1214,8 +1096,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      34.5561403509,
-      54.5280701754,
+      34.55614035,
+      54.52807018,
       -0.2
     ],
     "applicationId": "gsa/NODE.2_88",
@@ -1225,8 +1107,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      -24.8438596491,
-      54.5280701754,
+      -24.84385965,
+      54.52807018,
       -0.2
     ],
     "applicationId": "gsa/NODE.2_89",
@@ -1236,8 +1118,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      -24.8438596491,
-      -24.6719298246,
+      -24.84385965,
+      -24.67192982,
       -0.2
     ],
     "applicationId": "gsa/NODE.2_90",
@@ -1247,8 +1129,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      14.7561403509,
-      -24.6719298246,
+      14.75614035,
+      -24.67192982,
       -0.2
     ],
     "applicationId": "gsa/NODE.2_91",
@@ -1258,8 +1140,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      54.356140625,
-      74.3280703125,
+      54.35614063,
+      74.32807031,
       11.58
     ],
     "applicationId": "gsa/NODE.2_92",
@@ -1269,8 +1151,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      57.579323381,
-      -4.8719296875,
+      57.57932338,
+      -4.871929688,
       11.58
     ],
     "applicationId": "gsa/NODE.2_93",
@@ -1280,8 +1162,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      74.156140625,
-      16.6269829927,
+      74.15614063,
+      16.62698299,
       11.58
     ],
     "applicationId": "gsa/NODE.2_94",
@@ -1291,8 +1173,8 @@
   {
     "type": "Point/StructuralNode",
     "value": [
-      48.6989960938,
-      23.117369336,
+      48.69899609,
+      23.11736934,
       11.58
     ],
     "applicationId": "gsa/NODE.2_95",
@@ -1300,22 +1182,165 @@
     "properties": {}
   },
   {
-    "type": "Structural2DProperty",
-    "thickness": 0.3,
-    "materialRef": "gsa/MAT_CONCRETE.16_1",
-    "referenceSurface": 1,
-    "applicationId": "slabProp",
-    "name": "Slab property",
+    "type": "StructuralMaterialConcrete",
+    "youngsModulus": 28000000000.0,
+    "shearModulus": 11666666670.0,
+    "poissonsRatio": 0.2,
+    "density": 2400.0,
+    "coeffThermalExpansion": 1E-05,
+    "compressiveStrength": 40000000.0,
+    "maxStrain": 0.003,
+    "aggragateSize": 0.02,
+    "applicationId": "gsa/MAT_CONCRETE.17_1",
+    "name": "Concrete",
+    "properties": {}
+  },
+  {
+    "type": "StructuralSpringProperty",
+    "applicationId": "gh/0e14ea030d377c1860dc6b72453e58fc",
+    "name": "LSP-General",
+    "properties": {
+      "structural": {
+        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"2cc0b389f8c5e2877e9ac6ac45b72cc2","properties":{}},
+        "springType": "General",
+        "stiffness": {"type":"StructuralVectorSix","value":[12.0,15.0,20.0,25.0,30.0,38.0],"hash":"ae836cd82b24e2d7fb085a6d2abfd17e","properties":{}},
+        "dampingRatio": 0.21
+      }
+    }
+  },
+  {
+    "type": "StructuralSpringProperty",
+    "applicationId": "gh/34a7311a137096403bbe0296bbed53b7",
+    "name": "LSP-Axial",
+    "properties": {
+      "structural": {
+        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"2cc0b389f8c5e2877e9ac6ac45b72cc2","properties":{}},
+        "springType": "Axial",
+        "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
+        "dampingRatio": 0.21
+      }
+    }
+  },
+  {
+    "type": "StructuralSpringProperty",
+    "applicationId": "gh/d3acde535f3ecd3a9d384929810714dc",
+    "name": "LSP-Torsional",
+    "properties": {
+      "structural": {
+        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"2cc0b389f8c5e2877e9ac6ac45b72cc2","properties":{}},
+        "springType": "Torsional",
+        "stiffness": {"type":"StructuralVectorSix","value":[0.0,0.0,0.0,25.0,0.0,0.0],"hash":"98d1640829ffe5e2dffe3ba3ed4b7659","properties":{}},
+        "dampingRatio": 0.21
+      }
+    }
+  },
+  {
+    "type": "StructuralSpringProperty",
+    "applicationId": "gh/150a6a79e8ecbc0f7efb4fa822d67558",
+    "name": "LSP-Compression",
+    "properties": {
+      "structural": {
+        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"2cc0b389f8c5e2877e9ac6ac45b72cc2","properties":{}},
+        "springType": "Compression",
+        "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
+        "dampingRatio": 0.21
+      }
+    }
+  },
+  {
+    "type": "StructuralSpringProperty",
+    "applicationId": "gh/ee71ea28e5836bad65af7cdde55f37ec",
+    "name": "LSP-Tension",
+    "properties": {
+      "structural": {
+        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"2cc0b389f8c5e2877e9ac6ac45b72cc2","properties":{}},
+        "springType": "Tension",
+        "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
+        "dampingRatio": 0.21
+      }
+    }
+  },
+  {
+    "type": "StructuralSpringProperty",
+    "applicationId": "gh/6854f7b9522dd1c5d13cf369b726cef1",
+    "name": "LSP-Lockup",
+    "properties": {
+      "structural": {
+        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"2cc0b389f8c5e2877e9ac6ac45b72cc2","properties":{}},
+        "springType": "Lockup",
+        "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
+        "dampingRatio": 0.21
+      }
+    }
+  },
+  {
+    "type": "StructuralSpringProperty",
+    "applicationId": "gh/75e517bb9ccbecdd6b844a57a73f2edb",
+    "name": "LSP-Gap",
+    "properties": {
+      "structural": {
+        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"2cc0b389f8c5e2877e9ac6ac45b72cc2","properties":{}},
+        "springType": "Gap",
+        "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
+        "dampingRatio": 0.21
+      }
+    }
+  },
+  {
+    "type": "StructuralSpringProperty",
+    "applicationId": "gh/a2f49ec8a94bdebe19c1433d95294955",
+    "name": "LSP-Friction",
+    "properties": {
+      "structural": {
+        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"2cc0b389f8c5e2877e9ac6ac45b72cc2","properties":{}},
+        "springType": "Friction",
+        "stiffness": {"type":"StructuralVectorSix","value":[12.0,15.0,20.0,0.0,0.0,0.0],"hash":"859fa9f418bc114832e1f243fb3f8c61","properties":{}},
+        "dampingRatio": 0.21
+      }
+    }
+  },
+  {
+    "type": "StructuralLoadTask",
+    "taskType": "LinearStatic",
+    "loadCaseRefs": [
+      "LC1",
+      "LC2",
+      "LC3"
+    ],
+    "loadFactors": [
+      1.1,
+      1.0,
+      1.0
+    ],
+    "applicationId": "gsa/ANAL.1_1",
+    "name": "Load task 1",
+    "properties": {}
+  },
+  {
+    "type": "StructuralLoadTask",
+    "taskType": "LinearStatic",
+    "loadCaseRefs": [
+      "LC1",
+      "LC2",
+      "LC3"
+    ],
+    "loadFactors": [
+      1.1,
+      1.0,
+      1.0
+    ],
+    "applicationId": "gsa/ANAL.1_2",
+    "name": "Load task 2",
     "properties": {}
   },
   {
     "type": "Line/Structural1DElement",
     "value": [
-      14.756140625,
-      -4.8719296875,
+      14.75614063,
+      -4.871929688,
       5.79,
-      14.7561403509,
-      -4.87192982456,
+      14.75614035,
+      -4.871929825,
       0.0
     ],
     "applicationId": "gh/71aeda7ba88bbbc6dc8f8966d24045bc",
@@ -1324,7 +1349,7 @@
       "structural": {
         "elementType": "Column",
         "propertyRef": "columnProp",
-        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.89441413824080518,-0.44723970006580921,5.292877169618029E-08],"hash":"810f9ee8ba737aa0aacf23f688615b7a","properties":{}},
+        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.89824366892044138,-0.43949779435662856,5.383755183056371E-08],"hash":"6fd5624f76e9bb5206a886c35465ca36","properties":{}},
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
@@ -1339,11 +1364,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      14.756140625,
-      -4.8719296875,
+      14.75614063,
+      -4.871929688,
       11.58,
-      14.756140625,
-      -4.8719296875,
+      14.75614063,
+      -4.871929688,
       5.79
     ],
     "applicationId": "gh/467503d3bf98b641d3fb7d507c365e53",
@@ -1367,11 +1392,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      14.756140625,
-      -4.8719296875,
+      14.75614063,
+      -4.871929688,
       17.37,
-      14.756140625,
-      -4.8719296875,
+      14.75614063,
+      -4.871929688,
       11.58
     ],
     "applicationId": "gh/5971550242e77e8b899d33d8f65a9681",
@@ -1451,11 +1476,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      74.156140625,
-      -4.8719296875,
+      74.15614063,
+      -4.871929688,
       5.79,
-      74.1561403509,
-      -4.87192982456,
+      74.15614035,
+      -4.871929825,
       0.0
     ],
     "applicationId": "gh/9ee222aeacd6a783edd7996781351117",
@@ -1464,7 +1489,7 @@
       "structural": {
         "elementType": "Column",
         "propertyRef": "columnProp",
-        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.89441414055964374,-0.44723969542847031,5.2928772244988124E-08],"hash":"de39a177de31ba2843ec455bdc3e8be0","properties":{}},
+        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.89824366561825952,-0.43949780110561376,5.383755100382732E-08],"hash":"1253f48892d560ca3c39317ff9d70ed2","properties":{}},
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
@@ -1479,11 +1504,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      74.156140625,
-      -4.8719296875,
+      74.15614063,
+      -4.871929688,
       11.58,
-      74.156140625,
-      -4.8719296875,
+      74.15614063,
+      -4.871929688,
       5.79
     ],
     "applicationId": "gh/154de130d058e883b9f30eed45a72895",
@@ -1507,11 +1532,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      74.156140625,
-      -4.8719296875,
+      74.15614063,
+      -4.871929688,
       17.37,
-      74.156140625,
-      -4.8719296875,
+      74.15614063,
+      -4.871929688,
       11.58
     ],
     "applicationId": "gh/43cfc7591b81b59602d4cc46ee20d226",
@@ -1591,11 +1616,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      74.156140625,
-      94.1280703125,
+      74.15614063,
+      94.12807031,
       5.79,
-      74.1561403509,
-      94.1280701754,
+      74.15614035,
+      94.12807018,
       0.0
     ],
     "applicationId": "gh/37d3376f7550f4d01c5ae2b44eeffd93",
@@ -1604,7 +1629,7 @@
       "structural": {
         "elementType": "Column",
         "propertyRef": "columnProp",
-        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.8943619222378324,-0.44734410921688295,5.2931862550594216E-08],"hash":"9add60a92d4c2c21ec1e558cb1b2140a","properties":{}},
+        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.90700896021304511,-0.42111132268468854,5.3317267285020938E-08],"hash":"08054313bb4bfbafe5f4d28fa74364bf","properties":{}},
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
@@ -1619,11 +1644,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      74.156140625,
-      94.1280703125,
+      74.15614063,
+      94.12807031,
       11.58,
-      74.156140625,
-      94.1280703125,
+      74.15614063,
+      94.12807031,
       5.79
     ],
     "applicationId": "gh/98777989964c2c0822154abc9ad1a7b5",
@@ -1647,11 +1672,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      74.156140625,
-      94.1280703125,
+      74.15614063,
+      94.12807031,
       17.37,
-      74.156140625,
-      94.1280703125,
+      74.15614063,
+      94.12807031,
       11.58
     ],
     "applicationId": "gh/5389b96a589a41cd85610ca769831649",
@@ -1731,11 +1756,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      34.556140625,
-      54.5280703125,
+      34.55614063,
+      54.52807031,
       5.79,
-      34.5561403509,
-      54.5280701754,
+      34.55614035,
+      54.52807018,
       0.0
     ],
     "applicationId": "gh/79e56706e96ae448c95f28548e2e8521",
@@ -1744,7 +1769,7 @@
       "structural": {
         "elementType": "Column",
         "propertyRef": "columnProp",
-        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.89436192687402039,-0.44734409994788882,5.2931860904066636E-08],"hash":"5d66ac933e11ccf2c5352d35d1210ca9","properties":{}},
+        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.9070089730859946,-0.42111129495833588,5.3317267881309455E-08],"hash":"1cf0e6a553eb66b10d8d95e518a2f013","properties":{}},
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
@@ -1759,11 +1784,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      34.556140625,
-      54.5280703125,
+      34.55614063,
+      54.52807031,
       11.58,
-      34.556140625,
-      54.5280703125,
+      34.55614063,
+      54.52807031,
       5.79
     ],
     "applicationId": "gh/30b8049b34cc22b6add3f3565129b6f9",
@@ -1787,11 +1812,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      34.556140625,
-      54.5280703125,
+      34.55614063,
+      54.52807031,
       17.37,
-      34.556140625,
-      54.5280703125,
+      34.55614063,
+      54.52807031,
       11.58
     ],
     "applicationId": "gh/da62f5ea397543274e1f71c0f04e9f0e",
@@ -1871,11 +1896,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      -24.843859375,
-      54.5280703125,
+      -24.84385938,
+      54.52807031,
       5.79,
-      -24.8438596491,
-      54.5280701754,
+      -24.84385965,
+      54.52807018,
       0.0
     ],
     "applicationId": "gh/2f568fb93557d7e1c5accf5fdaf8b158",
@@ -1884,7 +1909,7 @@
       "structural": {
         "elementType": "Column",
         "propertyRef": "columnProp",
-        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.89436192919380608,-0.44734409531000885,5.2931861452842421E-08],"hash":"bbe64b056cd82dcab223b204941fa545","properties":{}},
+        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.90100167267678077,-0.43381561271309793,5.1755868307090149E-08],"hash":"bc84e0ef5095c1bf17ed0a4bc150252a","properties":{}},
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
@@ -1899,11 +1924,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      -24.843859375,
-      54.5280703125,
+      -24.84385938,
+      54.52807031,
       11.58,
-      -24.843859375,
-      54.5280703125,
+      -24.84385938,
+      54.52807031,
       5.79
     ],
     "applicationId": "gh/61c3aac7cd02baa986a8e6bea2a5a71c",
@@ -1927,11 +1952,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      -24.843859375,
-      54.5280703125,
+      -24.84385938,
+      54.52807031,
       17.37,
-      -24.843859375,
-      54.5280703125,
+      -24.84385938,
+      54.52807031,
       11.58
     ],
     "applicationId": "gh/36a426efd9c31c0ce970a9d7543010de",
@@ -2011,11 +2036,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      -24.843859375,
-      -24.6719296875,
+      -24.84385938,
+      -24.67192969,
       5.79,
-      -24.8438596491,
-      -24.6719298246,
+      -24.84385965,
+      -24.67192982,
       0.0
     ],
     "applicationId": "gh/1e3d7853e300b8fa54294c3badb3b424",
@@ -2024,7 +2049,7 @@
       "structural": {
         "elementType": "Column",
         "propertyRef": "columnProp",
-        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.89436192455592634,-0.447344104582386,5.2931861727330422E-08],"hash":"f9987c8cd2c2be6f15d029370f789337","properties":{}},
+        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.9010016680428149,-0.43381562233748844,5.1755868573277141E-08],"hash":"8644ee15ea17786cb4e0e8a094863723","properties":{}},
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
@@ -2039,11 +2064,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      -24.843859375,
-      -24.6719296875,
+      -24.84385938,
+      -24.67192969,
       11.58,
-      -24.843859375,
-      -24.6719296875,
+      -24.84385938,
+      -24.67192969,
       5.79
     ],
     "applicationId": "gh/7a6723674cbd08c5a5cc9eabfc2958ea",
@@ -2067,11 +2092,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      -24.843859375,
-      -24.6719296875,
+      -24.84385938,
+      -24.67192969,
       17.37,
-      -24.843859375,
-      -24.6719296875,
+      -24.84385938,
+      -24.67192969,
       11.58
     ],
     "applicationId": "gh/f6b828cfbbe6dfa459744822105192c4",
@@ -2151,11 +2176,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      14.756140625,
-      -24.6719296875,
+      14.75614063,
+      -24.67192969,
       5.79,
-      14.7561403509,
-      -24.6719298246,
+      14.75614035,
+      -24.67192982,
       0.0
     ],
     "applicationId": "gh/65f4e171aed320cb78cfe8a585045bb6",
@@ -2164,7 +2189,7 @@
       "structural": {
         "elementType": "Column",
         "propertyRef": "columnProp",
-        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.89436192455592634,-0.447344104582386,5.2931861727330422E-08],"hash":"f9987c8cd2c2be6f15d029370f789337","properties":{}},
+        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.90700896766993677,-0.42111130662369162,5.3317267861433165E-08],"hash":"ff60b176c12ebc5a0ff977f4d07d1873","properties":{}},
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
@@ -2179,11 +2204,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      14.756140625,
-      -24.6719296875,
+      14.75614063,
+      -24.67192969,
       11.58,
-      14.756140625,
-      -24.6719296875,
+      14.75614063,
+      -24.67192969,
       5.79
     ],
     "applicationId": "gh/2a555bdfd01233946d31ddd4b072aaf7",
@@ -2207,11 +2232,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      14.756140625,
-      -24.6719296875,
+      14.75614063,
+      -24.67192969,
       17.37,
-      14.756140625,
-      -24.6719296875,
+      14.75614063,
+      -24.67192969,
       11.58
     ],
     "applicationId": "gh/6e7446596bc26cd0f0fd9c7f78d99a98",
@@ -2291,11 +2316,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      14.7561403509,
-      -4.87192982456,
+      14.75614035,
+      -4.871929825,
       0.0,
-      14.7561403509,
-      -4.87192982456,
+      14.75614035,
+      -4.871929825,
       -0.2
     ],
     "applicationId": "gh/8efda07519fcff8dd8decf9e8a6ffd3d",
@@ -2319,11 +2344,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      74.1561403509,
-      -4.87192982456,
+      74.15614035,
+      -4.871929825,
       0.0,
-      74.1561403509,
-      -4.87192982456,
+      74.15614035,
+      -4.871929825,
       -0.2
     ],
     "applicationId": "gh/a87a35fc075e58ba61cadddbbb977a0d",
@@ -2347,11 +2372,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      74.1561403509,
-      94.1280701754,
+      74.15614035,
+      94.12807018,
       0.0,
-      74.1561403509,
-      94.1280701754,
+      74.15614035,
+      94.12807018,
       -0.2
     ],
     "applicationId": "gh/53af7827399f8a69f031816fe3fac8cb",
@@ -2375,11 +2400,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      34.5561403509,
-      54.5280701754,
+      34.55614035,
+      54.52807018,
       0.0,
-      34.5561403509,
-      54.5280701754,
+      34.55614035,
+      54.52807018,
       -0.2
     ],
     "applicationId": "gh/7b21c139611881188a9ecc3797314553",
@@ -2403,11 +2428,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      -24.8438596491,
-      54.5280701754,
+      -24.84385965,
+      54.52807018,
       0.0,
-      -24.8438596491,
-      54.5280701754,
+      -24.84385965,
+      54.52807018,
       -0.2
     ],
     "applicationId": "gh/0a8854d9654552f7f9720f4f88c37967",
@@ -2431,11 +2456,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      -24.8438596491,
-      -24.6719298246,
+      -24.84385965,
+      -24.67192982,
       0.0,
-      -24.8438596491,
-      -24.6719298246,
+      -24.84385965,
+      -24.67192982,
       -0.2
     ],
     "applicationId": "gh/8fd30e5038124907d4b05e0c96aead3e",
@@ -2459,11 +2484,11 @@
   {
     "type": "Line/Structural1DElement",
     "value": [
-      14.7561403509,
-      -24.6719298246,
+      14.75614035,
+      -24.67192982,
       0.0,
-      14.7561403509,
-      -24.6719298246,
+      14.75614035,
+      -24.67192982,
       -0.2
     ],
     "applicationId": "gh/75406fbe353c2a80c2b1a0539eaa56f4",
@@ -2485,37 +2510,263 @@
     }
   },
   {
-    "type": "StructuralLoadTask",
-    "taskType": "LinearStatic",
-    "loadCaseRefs": [
-      "LC1",
-      "LC2",
-      "LC3"
+    "type": "Mesh/Structural2DVoid",
+    "vertices": [
+      -0.8010022583,
+      37.55664063,
+      5.79,
+      28.89899805,
+      37.55664063,
+      5.79,
+      48.69899609,
+      57.35664063,
+      5.79,
+      48.69899609,
+      7.856641602,
+      5.79,
+      18.99899805,
+      7.856641602,
+      5.79,
+      18.99899805,
+      -2.043358276,
+      5.79,
+      -0.8010022583,
+      -2.043358276,
+      5.79
     ],
-    "loadFactors": [
-      1.1,
-      1.0,
-      1.0
+    "faces": [
+      0,
+      6,
+      5,
+      4,
+      0,
+      4,
+      3,
+      2,
+      0,
+      1,
+      0,
+      6,
+      0,
+      6,
+      4,
+      2,
+      0,
+      2,
+      1,
+      6
     ],
-    "applicationId": "gsa/ANAL.1_1",
-    "name": "Load task 1",
+    "colors": [],
+    "applicationId": "gh/8471296211afb5f5eebbffa4e899dbec",
+    "name": "",
     "properties": {}
   },
   {
-    "type": "StructuralLoadTask",
-    "taskType": "LinearStatic",
-    "loadCaseRefs": [
-      "LC1",
-      "LC2",
-      "LC3"
+    "type": "Mesh/Structural2DVoid",
+    "vertices": [
+      -0.8010022583,
+      37.55664063,
+      11.58,
+      28.89899805,
+      37.55664063,
+      11.58,
+      48.69899609,
+      57.35664063,
+      11.58,
+      48.69899609,
+      7.856641602,
+      11.58,
+      18.99899805,
+      7.856641602,
+      11.58,
+      18.99899805,
+      -2.043358276,
+      11.58,
+      -0.8010022583,
+      -2.043358276,
+      11.58
     ],
-    "loadFactors": [
-      1.1,
-      1.0,
-      1.0
+    "faces": [
+      0,
+      6,
+      5,
+      4,
+      0,
+      4,
+      3,
+      2,
+      0,
+      1,
+      0,
+      6,
+      0,
+      6,
+      4,
+      2,
+      0,
+      2,
+      1,
+      6
     ],
-    "applicationId": "gsa/ANAL.1_2",
-    "name": "Load task 2",
+    "colors": [],
+    "applicationId": "gh/ff7c29fdcbfb53eed7b95b268e72cc35",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Mesh/Structural2DVoid",
+    "vertices": [
+      -0.8010022583,
+      37.55664063,
+      17.37,
+      28.89899805,
+      37.55664063,
+      17.37,
+      48.69899609,
+      57.35664063,
+      17.37,
+      48.69899609,
+      7.856641602,
+      17.37,
+      18.99899805,
+      7.856641602,
+      17.37,
+      18.99899805,
+      -2.043358276,
+      17.37,
+      -0.8010022583,
+      -2.043358276,
+      17.37
+    ],
+    "faces": [
+      0,
+      6,
+      5,
+      4,
+      0,
+      4,
+      3,
+      2,
+      0,
+      1,
+      0,
+      6,
+      0,
+      6,
+      4,
+      2,
+      0,
+      2,
+      1,
+      6
+    ],
+    "colors": [],
+    "applicationId": "gh/51e8d0bc5b67257aea4d3f733dc153a2",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Mesh/Structural2DVoid",
+    "vertices": [
+      12.14285742,
+      31.42857227,
+      23.551,
+      27.14285742,
+      31.42857227,
+      23.551,
+      37.14285547,
+      41.42857031,
+      23.551,
+      37.14285547,
+      16.42857227,
+      23.551,
+      22.14285742,
+      16.42857227,
+      23.551,
+      22.14285742,
+      11.42857129,
+      23.551,
+      12.14285742,
+      11.42857129,
+      23.551
+    ],
+    "faces": [
+      0,
+      6,
+      5,
+      4,
+      0,
+      4,
+      3,
+      2,
+      0,
+      1,
+      0,
+      6,
+      0,
+      6,
+      4,
+      2,
+      0,
+      2,
+      1,
+      6
+    ],
+    "colors": [],
+    "applicationId": "gh/42d2b51094c7c16a565d883dd5dd7a59",
+    "name": "",
+    "properties": {}
+  },
+  {
+    "type": "Mesh/Structural2DVoid",
+    "vertices": [
+      12.14285742,
+      31.42857227,
+      29.732,
+      27.14285742,
+      31.42857227,
+      29.732,
+      37.14285547,
+      41.42857031,
+      29.732,
+      37.14285547,
+      16.42857227,
+      29.732,
+      22.14285742,
+      16.42857227,
+      29.732,
+      22.14285742,
+      11.42857129,
+      29.732,
+      12.14285742,
+      11.42857129,
+      29.732
+    ],
+    "faces": [
+      0,
+      6,
+      5,
+      4,
+      0,
+      4,
+      3,
+      2,
+      0,
+      1,
+      0,
+      6,
+      0,
+      6,
+      4,
+      2,
+      0,
+      2,
+      1,
+      6
+    ],
+    "colors": [],
+    "applicationId": "gh/a461ec766c5e867d96a5036dc53c811a",
+    "name": "",
     "properties": {}
   },
   {
@@ -2562,35 +2813,60 @@
     },
     "shape": "Generic",
     "hollow": false,
-    "thickness": 0.0,
-    "materialRef": "gsa/MAT_CONCRETE.16_1",
+    "materialRef": "gsa/MAT_CONCRETE.17_1",
     "applicationId": "columnProp",
     "name": "Column property",
     "properties": {}
   },
   {
+    "type": "Structural2DProperty",
+    "thickness": 0.3,
+    "materialRef": "gsa/MAT_CONCRETE.17_1",
+    "referenceSurface": 2,
+    "applicationId": "slabProp",
+    "name": "Slab property",
+    "properties": {}
+  },
+  {
+    "type": "StructuralLoadCombo",
+    "comboType": "LinearAdd",
+    "loadTaskRefs": [
+      "gsa/ANAL.1_1",
+      "gsa/ANAL.1_2"
+    ],
+    "loadTaskFactors": [
+      1.5,
+      1.25
+    ],
+    "loadComboRefs": [],
+    "loadComboFactors": [],
+    "applicationId": "ComboOne",
+    "name": "Combo One",
+    "properties": {}
+  },
+  {
     "type": "Mesh/Structural2DElementMesh",
     "vertices": [
-      -24.843859375,
-      54.5280703125,
+      -24.84385938,
+      54.52807031,
       5.79,
-      34.556140625,
-      54.5280703125,
+      34.55614063,
+      54.52807031,
       5.79,
-      74.156140625,
-      94.1280703125,
+      74.15614063,
+      94.12807031,
       5.79,
-      74.156140625,
-      -4.8719296875,
+      74.15614063,
+      -4.871929688,
       5.79,
-      14.756140625,
-      -4.8719296875,
+      14.75614063,
+      -4.871929688,
       5.79,
-      14.756140625,
-      -24.6719296875,
+      14.75614063,
+      -24.67192969,
       5.79,
-      -24.843859375,
-      -24.6719296875,
+      -24.84385938,
+      -24.67192969,
       5.79
     ],
     "faces": [
@@ -2642,26 +2918,26 @@
   {
     "type": "Mesh/Structural2DElementMesh",
     "vertices": [
-      -24.843859375,
-      54.5280703125,
+      -24.84385938,
+      54.52807031,
       11.58,
-      34.556140625,
-      54.5280703125,
+      34.55614063,
+      54.52807031,
       11.58,
-      74.156140625,
-      94.1280703125,
+      74.15614063,
+      94.12807031,
       11.58,
-      74.156140625,
-      -4.8719296875,
+      74.15614063,
+      -4.871929688,
       11.58,
-      14.756140625,
-      -4.8719296875,
+      14.75614063,
+      -4.871929688,
       11.58,
-      14.756140625,
-      -24.6719296875,
+      14.75614063,
+      -24.67192969,
       11.58,
-      -24.843859375,
-      -24.6719296875,
+      -24.84385938,
+      -24.67192969,
       11.58
     ],
     "faces": [
@@ -2713,26 +2989,26 @@
   {
     "type": "Mesh/Structural2DElementMesh",
     "vertices": [
-      -24.843859375,
-      54.5280703125,
+      -24.84385938,
+      54.52807031,
       17.37,
-      34.556140625,
-      54.5280703125,
+      34.55614063,
+      54.52807031,
       17.37,
-      74.156140625,
-      94.1280703125,
+      74.15614063,
+      94.12807031,
       17.37,
-      74.156140625,
-      -4.8719296875,
+      74.15614063,
+      -4.871929688,
       17.37,
-      14.756140625,
-      -4.8719296875,
+      14.75614063,
+      -4.871929688,
       17.37,
-      14.756140625,
-      -24.6719296875,
+      14.75614063,
+      -24.67192969,
       17.37,
-      -24.843859375,
-      -24.6719296875,
+      -24.84385938,
+      -24.67192969,
       17.37
     ],
     "faces": [
@@ -2924,23 +3200,6 @@
     }
   },
   {
-    "type": "StructuralLoadCombo",
-    "comboType": "LinearAdd",
-    "loadTaskRefs": [
-      "gsa/ANAL.1_1",
-      "gsa/ANAL.1_2"
-    ],
-    "loadTaskFactors": [
-      1.5,
-      1.25
-    ],
-    "loadComboRefs": [],
-    "loadComboFactors": [],
-    "applicationId": "ComboOne",
-    "name": "Combo One",
-    "properties": {}
-  },
-  {
     "type": "Structural2DThermalLoad",
     "topTemperature": 239.0,
     "bottomTemperature": 509.0,
@@ -2952,6 +3211,7 @@
       "Slab3",
       "Slab4"
     ],
+    "applicationId": "TL1",
     "name": "General",
     "properties": {}
   },
@@ -3040,6 +3300,7 @@
     "constructionStageRefs": [
       "Stage2"
     ],
+    "applicationId": "gh/247ea14c3351f46f84aa93ae4e31a1a9",
     "name": "",
     "properties": {}
   },
@@ -3065,6 +3326,7 @@
     "constructionStageRefs": [
       "Stage2"
     ],
+    "applicationId": "Stage1",
     "name": "",
     "properties": {}
   }

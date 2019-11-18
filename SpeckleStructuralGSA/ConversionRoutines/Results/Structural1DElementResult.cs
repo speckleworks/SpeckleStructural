@@ -34,21 +34,21 @@ namespace SpeckleStructuralGSA
 
         foreach (var kvp in Initialiser.Settings.Element1DResults)
         {
-          foreach (string loadCase in Initialiser.Settings.ResultCases)
+          foreach (var loadCase in Initialiser.Settings.ResultCases)
           {
             if (!Initialiser.Interface.CaseExist(loadCase))
               continue;
 
-            foreach (IGSASpeckleContainer entity in entities)
+            foreach (var entity in entities)
             {
-              int id = entity.GSAId;
+              var id = entity.GSAId;
 
               if (entity.Value.Result == null)
                 entity.Value.Result = new Dictionary<string, object>();
 
-              var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis 
+              var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis
                 ? "local" : "global", Initialiser.Settings.Result1DNumPosition);
-            
+
               if (resultExport == null)
                 continue;
 
@@ -64,7 +64,7 @@ namespace SpeckleStructuralGSA
         }
 
         // Linear interpolate the line values
-        foreach (IGSASpeckleContainer entity in entities)
+        foreach (var entity in entities)
         {
           var dX = (entity.Value.Value[3] - entity.Value.Value[0]) / (Initialiser.Settings.Result1DNumPosition + 1);
           var dY = (entity.Value.Value[4] - entity.Value.Value[1]) / (Initialiser.Settings.Result1DNumPosition + 1);
@@ -72,8 +72,8 @@ namespace SpeckleStructuralGSA
 
           var interpolatedVertices = new List<double>();
           interpolatedVertices.AddRange((entity.Value.Value as List<double>).Take(3));
-        
-          for (int i = 1; i <= Initialiser.Settings.Result1DNumPosition; i++)
+
+          for (var i = 1; i <= Initialiser.Settings.Result1DNumPosition; i++)
           {
             interpolatedVertices.Add(interpolatedVertices[0] + dX * i);
             interpolatedVertices.Add(interpolatedVertices[1] + dY * i);
@@ -90,61 +90,59 @@ namespace SpeckleStructuralGSA
         Initialiser.GSASenderObjects[typeof(GSA1DElementResult)] = new List<object>();
 
         var results = new List<GSA1DElementResult>();
-        
-        string keyword = HelperClass.GetGSAKeyword(typeof(GSA1DElement));
+
+        var keyword = HelperClass.GetGSAKeyword(typeof(GSA1DElement));
+        var gwa = Initialiser.Cache.GetGwa(keyword);
 
         foreach (var kvp in Initialiser.Settings.Element1DResults)
         {
-          foreach (string loadCase in Initialiser.Settings.ResultCases)
+          foreach (var loadCase in Initialiser.Settings.ResultCases)
           {
             if (!Initialiser.Interface.CaseExist(loadCase))
               continue;
 
-            int id = 1;
-            int highestIndex = (int)Initialiser.Interface.RunGWACommand("HIGHEST\t" + keyword);
-
-            while (id <= highestIndex)
+            for (var i = 0; i < gwa.Count(); i++)
             {
-              if ((int)Initialiser.Interface.RunGWACommand("EXIST\t" + keyword + "\t" + id.ToString()) == 1)
+              var record = gwa[i];
+
+              var pPieces = record.ListSplit("\t");
+              if (pPieces[4].ParseElementNumNodes() != 2)
               {
-                string record = Initialiser.Interface.GetGWARecords("GET\t" + keyword + "\t" + id.ToString())[0];
-
-                string[] pPieces = record.ListSplit("\t");
-                if (pPieces[4].ParseElementNumNodes() != 2)
-                {
-                  id++;
-                  continue;
-                }
-                
-                var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global", Initialiser.Settings.Result1DNumPosition);
-
-                if (resultExport == null || resultExport.Count() == 0)
-                {
-                  id++;
-                  continue;
-                }
-
-                var existingRes = results.FirstOrDefault(x => x.Value.TargetRef == id.ToString());
-                if (existingRes == null)
-                {
-                  Structural1DElementResult newRes = new Structural1DElementResult()
-                  {
-                    Value = new Dictionary<string, object>(),
-                    TargetRef = Initialiser.Interface.GetSID(typeof(GSA1DElement).GetGSAKeyword(), id),
-                    IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
-                  };
-                  newRes.Value[kvp.Key] = resultExport;
-
-                  newRes.GenerateHash();
-
-                  results.Add(new GSA1DElementResult() { Value = newRes });
-                }
-                else
-                {
-                  existingRes.Value.Value[kvp.Key] = resultExport;
-                }
+                continue;
               }
-              id++;
+
+              if (!int.TryParse(pPieces[1], out var id))
+              {
+                //Could not extract index
+                continue;
+              }
+
+              var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global", Initialiser.Settings.Result1DNumPosition);
+
+              if (resultExport == null || resultExport.Count() == 0)
+              {
+                continue;
+              }
+
+              var existingRes = results.FirstOrDefault(x => x.Value.TargetRef == id.ToString());
+              if (existingRes == null)
+              {
+                var newRes = new Structural1DElementResult()
+                {
+                  Value = new Dictionary<string, object>(),
+                  TargetRef = HelperClass.GetApplicationId(typeof(GSA1DElement).GetGSAKeyword(), id),
+                  IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
+                };
+                newRes.Value[kvp.Key] = resultExport;
+
+                newRes.GenerateHash();
+
+                results.Add(new GSA1DElementResult() { Value = newRes });
+              }
+              else
+              {
+                existingRes.Value.Value[kvp.Key] = resultExport;
+              }
             }
           }
         }

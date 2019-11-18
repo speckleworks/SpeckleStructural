@@ -8,6 +8,7 @@ namespace SpeckleStructuralClasses
 {
   public enum Structural1DElementType
   {
+    NotSet,
     Generic,
     Column,
     Beam,
@@ -18,6 +19,7 @@ namespace SpeckleStructuralClasses
 
   public enum Structural2DElementType
   {
+    NotSet,
     Generic,
     Slab,
     Wall
@@ -26,7 +28,7 @@ namespace SpeckleStructuralClasses
   [Serializable]
   public partial class StructuralNode : SpecklePoint, IStructural
   {
-    public override string Type { get => base.Type + "/StructuralNode"; }
+    public override string Type { get { var speckleType = "/" + this.GetType().Name; return base.Type.Replace(speckleType, "") + speckleType; } } //The replacement is to avoid a peculiarity with merging using Automapper
 
     [JsonIgnore]
     private Dictionary<string, object> StructuralProperties
@@ -64,7 +66,7 @@ namespace SpeckleStructuralClasses
     public StructuralAxis Axis
     {
       get => StructuralProperties.ContainsKey("axis") ? (StructuralProperties["axis"] as StructuralAxis) : null;
-      set => StructuralProperties["axis"] = value;
+      set { if (value != null) StructuralProperties["axis"] = value; }
     }
 
     /// <summary>A list of the X, Y, Z, Rx, Ry, and Rz restraints.</summary>
@@ -72,7 +74,7 @@ namespace SpeckleStructuralClasses
     public StructuralVectorBoolSix Restraint
     {
       get => StructuralProperties.ContainsKey("restraint") ? (StructuralProperties["restraint"] as StructuralVectorBoolSix) : null;
-      set => StructuralProperties["restraint"] = value;
+      set { if (value != null) StructuralProperties["restraint"] = value; }
     }
 
     /// <summary>A list of the X, Y, Z, Rx, Ry, and Rz stiffnesses.</summary>
@@ -80,15 +82,15 @@ namespace SpeckleStructuralClasses
     public StructuralVectorSix Stiffness
     {
       get => StructuralProperties.ContainsKey("stiffness") ? (StructuralProperties["stiffness"] as StructuralVectorSix) : null;
-      set => StructuralProperties["stiffness"] = value;
+      set { if (value != null) StructuralProperties["stiffness"] = value; }
     }
 
     /// <summary>Mass of the node.</summary>
     [JsonIgnore]
-    public double Mass
+    public double? Mass
     {
-      get => StructuralProperties.ContainsKey("mass") ? ((double)StructuralProperties["mass"]) : 0;
-      set => StructuralProperties["mass"] = value;
+      get => StructuralProperties.ContainsKey("mass") ? ((double?)StructuralProperties["mass"]) : null;
+      set { if (value != null) StructuralProperties["mass"] = value; }
     }
 
     /// <summary>Analysis results.</summary>
@@ -96,22 +98,22 @@ namespace SpeckleStructuralClasses
     public Dictionary<string, object> Result
     {
       get => StructuralProperties.ContainsKey("result") ? (StructuralProperties["result"] as Dictionary<string, object>) : null;
-      set => StructuralProperties["result"] = value;
+      set { if (value != null) StructuralProperties["result"] = value; }
     }
 
     /// <summary>GSA local mesh size around node.</summary>
     [JsonIgnore]
-    public double GSALocalMeshSize
+    public double? GSALocalMeshSize
     {
       get => StructuralProperties.ContainsKey("gsaLocalMeshSize") ? ((double)StructuralProperties["gsaLocalMeshSize"]) : 0;
-      set => StructuralProperties["gsaLocalMeshSize"] = value;
+      set { if (value != null) StructuralProperties["gsaLocalMeshSize"] = value; }
     }
   }
 
   [Serializable]
   public partial class Structural1DElement : SpeckleLine, IStructural
   {
-    public override string Type { get => base.Type + "/Structural1DElement"; }
+    public override string Type { get { var speckleType = "/" + this.GetType().Name; return base.Type.Replace(speckleType, "") + speckleType; } } //The replacement is to avoid a peculiarity with merging using Automapper
 
     [JsonIgnore]
     private Dictionary<string, object> StructuralProperties
@@ -149,7 +151,7 @@ namespace SpeckleStructuralClasses
     public Structural1DElementType ElementType
     {
       get => StructuralProperties.ContainsKey("elementType") ? (Structural1DElementType)Enum.Parse(typeof(Structural1DElementType), (StructuralProperties["elementType"] as string), true) : Structural1DElementType.Generic;
-      set => StructuralProperties["elementType"] = value.ToString();
+      set { if (value != Structural1DElementType.NotSet) StructuralProperties["elementType"] = value.ToString(); }
     }
 
     /// <summary>Application ID of Structural1DProperty.</summary>
@@ -157,7 +159,7 @@ namespace SpeckleStructuralClasses
     public string PropertyRef
     {
       get => StructuralProperties.ContainsKey("propertyRef") ? (StructuralProperties["propertyRef"] as string) : null;
-      set => StructuralProperties["propertyRef"] = value;
+      set { if (value != null) StructuralProperties["propertyRef"] = value; }
     }
 
     /// <summary>Local axis of 1D element.</summary>
@@ -165,7 +167,7 @@ namespace SpeckleStructuralClasses
     public StructuralVectorThree ZAxis
     {
       get => StructuralProperties.ContainsKey("zAxis") ? (StructuralProperties["zAxis"] as StructuralVectorThree) : null;
-      set => StructuralProperties["zAxis"] = value;
+      set { if (value != null) StructuralProperties["zAxis"] = value; }
     }
 
     /// <summary>List of X, Y, Z, Rx, Ry, and Rz releases on each end.</summary>
@@ -193,7 +195,7 @@ namespace SpeckleStructuralClasses
         else
           return null;
       }
-      set => StructuralProperties["endRelease"] = value;
+      set { if (value != null) StructuralProperties["endRelease"] = value; }
     }
 
     /// <summary>List of X, Y, and, Z offsets on each end.</summary>
@@ -221,23 +223,23 @@ namespace SpeckleStructuralClasses
         else
           return null;
       }
-      set => StructuralProperties["offset"] = value;
+      set { if (value != null) StructuralProperties["offset"] = value; }
     }
 
     /// <summary>GSA target mesh size.</summary>
     [JsonIgnore]
-    public double GSAMeshSize
+    public double? GSAMeshSize
     {
-      get => StructuralProperties.ContainsKey("gsaMeshSize") ? ((double)StructuralProperties["gsaMeshSize"]) : 0;
-      set => StructuralProperties["gsaMeshSize"] = value;
+      get => StructuralProperties.ContainsKey("gsaMeshSize") ? ((double?)StructuralProperties["gsaMeshSize"]) : null;
+      set { if (value != null) StructuralProperties["gsaMeshSize"] = value; }
     }
 
     /// <summary>GSA dummy status.</summary>
     [JsonIgnore]
-    public bool GSADummy
+    public bool? GSADummy
     {
-      get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool)StructuralProperties["gsaDummy"]) : false;
-      set => StructuralProperties["gsaDummy"] = value;
+      get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool?)StructuralProperties["gsaDummy"]) : null;
+      set { if (value != null) StructuralProperties["gsaDummy"] = value; }
     }
 
     /// <summary>Vertex location of results.</summary>
@@ -266,7 +268,7 @@ namespace SpeckleStructuralClasses
         else
           return null;
       }
-      set => StructuralProperties["resultVertices"] = value;
+      set { if (value != null) StructuralProperties["resultVertices"] = value; }
     }
 
     /// <summary>Analysis results.</summary>
@@ -274,14 +276,14 @@ namespace SpeckleStructuralClasses
     public Dictionary<string, object> Result
     {
       get => StructuralProperties.ContainsKey("result") ? (StructuralProperties["result"] as Dictionary<string, object>) : null;
-      set => StructuralProperties["result"] = value;
+      set { if (value != null) StructuralProperties["result"] = value; }
     }
   }
 
   [Serializable]
   public partial class Structural0DSpring : SpecklePoint, IStructural
   {
-    public override string Type { get => base.Type + "/Structural0DSpring"; }
+    public override string Type { get { var speckleType = "/" + this.GetType().Name; return base.Type.Replace(speckleType, "") + speckleType; } } //The replacement is to avoid a peculiarity with merging using Automapper
 
     [JsonIgnore]
     private Dictionary<string, object> StructuralProperties
@@ -319,15 +321,15 @@ namespace SpeckleStructuralClasses
     public string PropertyRef
     {
       get => StructuralProperties.ContainsKey("propertyRef") ? (StructuralProperties["propertyRef"] as string) : null;
-      set => StructuralProperties["propertyRef"] = value;
+      set { if (value != null) StructuralProperties["propertyRef"] = value; }
     }
 
     /// <summary>GSA dummy status.</summary>
     [JsonIgnore]
-    public bool Dummy
+    public bool? Dummy
     {
-      get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool)StructuralProperties["gsaDummy"]) : false;
-      set => StructuralProperties["gsaDummy"] = value;
+      get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool?)StructuralProperties["gsaDummy"]) : null;
+      set { if (value != null) StructuralProperties["gsaDummy"] = value; }
     }
 
     /// <summary>Analysis results.</summary>
@@ -335,14 +337,14 @@ namespace SpeckleStructuralClasses
     public Dictionary<string, object> Result
     {
       get => StructuralProperties.ContainsKey("result") ? (StructuralProperties["result"] as Dictionary<string, object>) : null;
-      set => StructuralProperties["result"] = value;
+      set { if (value != null) StructuralProperties["result"] = value; }
     }
   }
 
   [Serializable]
   public partial class Structural1DElementPolyline : SpecklePolyline, IStructural
   {
-    public override string Type { get => base.Type + "/Structural1DElementPolyline"; }
+    public override string Type { get { var speckleType = "/" + this.GetType().Name; return base.Type.Replace(speckleType, "") + speckleType; } } //The replacement is to avoid a peculiarity with merging using Automapper
 
     [JsonIgnore]
     private Dictionary<string, object> StructuralProperties
@@ -393,7 +395,7 @@ namespace SpeckleStructuralClasses
         else
           return null;
       }
-      set => StructuralProperties["elementApplicationId"] = value;
+      set { if (value != null) StructuralProperties["elementApplicationId"] = value; }
     }
 
     /// <summary>Base SpecklePolyline.</summary>
@@ -413,8 +415,8 @@ namespace SpeckleStructuralClasses
     [JsonIgnore]
     public Structural1DElementType ElementType
     {
-      get => StructuralProperties.ContainsKey("elementType") ? (Structural1DElementType)Enum.Parse(typeof(Structural1DElementType), (StructuralProperties["elementType"] as string), true) : Structural1DElementType.Generic;
-      set => StructuralProperties["elementType"] = value.ToString();
+      get => StructuralProperties.ContainsKey("elementType") ? (Structural1DElementType)Enum.Parse(typeof(Structural1DElementType), (StructuralProperties["elementType"] as string), true) : Structural1DElementType.NotSet;
+      set { if (value != Structural1DElementType.NotSet) StructuralProperties["elementType"] = value.ToString(); }
     }
 
     /// <summary>Application ID of Structural1DProperty.</summary>
@@ -422,7 +424,7 @@ namespace SpeckleStructuralClasses
     public string PropertyRef
     {
       get => StructuralProperties.ContainsKey("propertyRef") ? (StructuralProperties["propertyRef"] as string) : null;
-      set => StructuralProperties["propertyRef"] = value;
+      set { if (value != null) StructuralProperties["propertyRef"] = value; }
     }
 
     /// <summary>Local Z axis of 1D elements.</summary>
@@ -451,7 +453,7 @@ namespace SpeckleStructuralClasses
         else
           return null;
       }
-      set => StructuralProperties["zAxis"] = value;
+      set { if (value != null) StructuralProperties["zAxis"] = value; }
     }
 
     /// <summary>List of X, Y, Z, Rx, Ry, and Rz releases of each node.</summary>
@@ -480,7 +482,7 @@ namespace SpeckleStructuralClasses
         else
           return null;
       }
-      set => StructuralProperties["endRelease"] = value;
+      set { if (value != null) StructuralProperties["endRelease"] = value; }
     }
 
     /// <summary>List of X, Y, Z, Rx, Ry, and Rz offsets of each node.</summary>
@@ -509,23 +511,23 @@ namespace SpeckleStructuralClasses
         else
           return null;
       }
-      set => StructuralProperties["offset"] = value;
+      set { if (value != null) StructuralProperties["offset"] = value; }
     }
 
     /// <summary>GSA target mesh size.</summary>
     [JsonIgnore]
-    public double GSAMeshSize
+    public double? GSAMeshSize
     {
-      get => StructuralProperties.ContainsKey("gsaMeshSize") ? ((double)StructuralProperties["gsaMeshSize"]) : 0;
-      set => StructuralProperties["gsaMeshSize"] = value;
+      get => StructuralProperties.ContainsKey("gsaMeshSize") ? ((double?)StructuralProperties["gsaMeshSize"]) : null;
+      set { if (value != null) StructuralProperties["gsaMeshSize"] = value; }
     }
 
     /// <summary>GSA dummy status.</summary>
     [JsonIgnore]
-    public bool GSADummy
+    public bool? GSADummy
     {
-      get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool)StructuralProperties["gsaDummy"]) : false;
-      set => StructuralProperties["gsaDummy"] = value;
+      get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool?)StructuralProperties["gsaDummy"]) : null;
+      set { if (value != null) StructuralProperties["gsaDummy"] = value; }
     }
 
     /// <summary>Vertex location of results.</summary>
@@ -554,7 +556,7 @@ namespace SpeckleStructuralClasses
         else
           return null;
       }
-      set => StructuralProperties["resultVertices"] = value;
+      set { if (value != null) StructuralProperties["resultVertices"] = value; }
     }
 
     /// <summary>Analysis results.</summary>
@@ -562,14 +564,14 @@ namespace SpeckleStructuralClasses
     public Dictionary<string, object> Result
     {
       get => StructuralProperties.ContainsKey("result") ? (StructuralProperties["result"] as Dictionary<string, object>) : null;
-      set => StructuralProperties["result"] = value;
+      set { if (value != null) StructuralProperties["result"] = value; }
     }
   }
 
   [Serializable]
   public partial class Structural2DElement : SpeckleMesh, IStructural
   {
-    public override string Type { get => base.Type + "/Structural2DElement"; }
+    public override string Type { get { var speckleType = "/" + this.GetType().Name; return base.Type.Replace(speckleType, "") + speckleType; } } //The replacement is to avoid a peculiarity with merging using Automapper
 
     [JsonIgnore]
     private Dictionary<string, object> StructuralProperties
@@ -612,8 +614,8 @@ namespace SpeckleStructuralClasses
     [JsonIgnore]
     public Structural2DElementType ElementType
     {
-      get => StructuralProperties.ContainsKey("elementType") ? (Structural2DElementType)Enum.Parse(typeof(Structural2DElementType), (StructuralProperties["elementType"] as string), true) : Structural2DElementType.Generic;
-      set => StructuralProperties["elementType"] = value.ToString();
+      get => StructuralProperties.ContainsKey("elementType") ? (Structural2DElementType)Enum.Parse(typeof(Structural2DElementType), (StructuralProperties["elementType"] as string), true) : Structural2DElementType.NotSet;
+      set { if (value != Structural2DElementType.NotSet) StructuralProperties["elementType"] = value.ToString(); }
     }
 
     /// <summary>Application ID of Structural2DProperty.</summary>
@@ -621,7 +623,7 @@ namespace SpeckleStructuralClasses
     public string PropertyRef
     {
       get => StructuralProperties.ContainsKey("propertyRef") ? (StructuralProperties["propertyRef"] as string) : null;
-      set => StructuralProperties["propertyRef"] = value;
+      set { if (value != null) StructuralProperties["propertyRef"] = value; }
     }
 
     /// <summary>Local axis of 2D element.</summary>
@@ -629,38 +631,38 @@ namespace SpeckleStructuralClasses
     public StructuralAxis Axis
     {
       get => StructuralProperties.ContainsKey("axis") ? (StructuralProperties["axis"] as StructuralAxis) : null;
-      set => StructuralProperties["axis"] = value;
+      set { if (value != null) StructuralProperties["axis"] = value; }
     }
 
     /// <summary>Offset of 2D element.</summary>
     [JsonIgnore]
-    public double Offset
+    public double? Offset
     {
-      get => StructuralProperties.ContainsKey("offset") ? ((double)StructuralProperties["offset"]) : 0;
-      set => StructuralProperties["offset"] = value;
+      get => StructuralProperties.ContainsKey("offset") ? ((double?)StructuralProperties["offset"]) : null;
+      set { if (value != null) StructuralProperties["offset"] = value; }
     }
 
     /// <summary>GSA target mesh size.</summary>
     [JsonIgnore]
-    public double GSAMeshSize
+    public double? GSAMeshSize
     {
-      get => StructuralProperties.ContainsKey("gsaMeshSize") ? ((double)StructuralProperties["gsaMeshSize"]) : 0;
-      set => StructuralProperties["gsaMeshSize"] = value;
+      get => StructuralProperties.ContainsKey("gsaMeshSize") ? ((double?)StructuralProperties["gsaMeshSize"]) : null;
+      set { if (value != null) StructuralProperties["gsaMeshSize"] = value; }
     }
 
     [JsonIgnore]
-    public bool GSAAutoOffsets
+    public bool? GSAAutoOffsets
     {
-      get => StructuralProperties.ContainsKey("gsaAutoOffsets") ? ((bool)StructuralProperties["gsaAutoOffsets"]) : false;
-      set => StructuralProperties["gsaAutoOffsets"] = value;
+      get => StructuralProperties.ContainsKey("gsaAutoOffsets") ? ((bool?)StructuralProperties["gsaAutoOffsets"]) : null;
+      set { if (value != null) StructuralProperties["gsaAutoOffsets"] = value; }
     }
 
     /// <summary>GSA dummy status.</summary>
     [JsonIgnore]
-    public bool GSADummy
+    public bool? GSADummy
     {
-      get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool)StructuralProperties["gsaDummy"]) : false;
-      set => StructuralProperties["gsaDummy"] = value;
+      get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool?)StructuralProperties["gsaDummy"]) : null;
+      set { if (value != null) StructuralProperties["gsaDummy"] = value; }
     }
 
     /// <summary>Analysis results.</summary>
@@ -668,14 +670,14 @@ namespace SpeckleStructuralClasses
     public Dictionary<string, object> Result
     {
       get => StructuralProperties.ContainsKey("result") ? (StructuralProperties["result"] as Dictionary<string, object>) : null;
-      set => StructuralProperties["result"] = value;
+      set { if (value != null) StructuralProperties["result"] = value; }
     }
   }
 
   [Serializable]
   public partial class Structural2DElementMesh : SpeckleMesh, IStructural
   {
-    public override string Type { get => base.Type + "/Structural2DElementMesh"; }
+    public override string Type { get { var speckleType = "/" + this.GetType().Name; return base.Type.Replace(speckleType, "") + speckleType; } } //The replacement is to avoid a peculiarity with merging using Automapper
 
     [JsonIgnore]
     private Dictionary<string, object> StructuralProperties
@@ -726,7 +728,7 @@ namespace SpeckleStructuralClasses
         else
           return null;
       }
-      set => StructuralProperties["elementApplicationId"] = value;
+      set { if (value != null) StructuralProperties["elementApplicationId"] = value; }
     }
 
     /// <summary>Base SpeckleMesh.</summary>
@@ -747,8 +749,10 @@ namespace SpeckleStructuralClasses
     [JsonIgnore]
     public Structural2DElementType ElementType
     {
-      get => StructuralProperties.ContainsKey("elementType") ? (Structural2DElementType)Enum.Parse(typeof(Structural2DElementType), (StructuralProperties["elementType"] as string), true) : Structural2DElementType.Generic;
-      set => StructuralProperties["elementType"] = value.ToString();
+      get => StructuralProperties.ContainsKey("elementType") 
+        ? (Structural2DElementType)Enum.Parse(typeof(Structural2DElementType), (StructuralProperties["elementType"] as string), true) 
+        : Structural2DElementType.NotSet;
+      set { if (value != Structural2DElementType.NotSet) StructuralProperties["elementType"] = value.ToString(); }
     }
 
     /// <summary>Application ID of Structural2DProperty.</summary>
@@ -756,7 +760,7 @@ namespace SpeckleStructuralClasses
     public string PropertyRef
     {
       get => StructuralProperties.ContainsKey("propertyRef") ? (StructuralProperties["propertyRef"] as string) : null;
-      set => StructuralProperties["propertyRef"] = value;
+      set { if (value != null) StructuralProperties["propertyRef"] = value; }
     }
 
     /// <summary>Local axis of each 2D element.</summary>
@@ -784,7 +788,7 @@ namespace SpeckleStructuralClasses
         else
           return null;
       }
-      set => StructuralProperties["axis"] = value;
+      set { if (value != null) StructuralProperties["axis"] = value; }
     }
 
     /// <summary>Offset of easch 2D element.</summary>
@@ -813,23 +817,23 @@ namespace SpeckleStructuralClasses
         else
           return null;
       }
-      set => StructuralProperties["offset"] = value;
+      set { if (value != null) StructuralProperties["offset"] = value; }
     }
 
     /// <summary>GSA target mesh size.</summary>
     [JsonIgnore]
-    public double GSAMeshSize
+    public double? GSAMeshSize
     {
-      get => StructuralProperties.ContainsKey("gsaMeshSize") ? ((double)StructuralProperties["gsaMeshSize"]) : 0;
-      set => StructuralProperties["gsaMeshSize"] = value;
+      get => StructuralProperties.ContainsKey("gsaMeshSize") ? ((double?)StructuralProperties["gsaMeshSize"]) : null;
+      set { if (value != null) StructuralProperties["gsaMeshSize"] = value; }
     }
 
     /// <summary>GSA dummy status.</summary>
     [JsonIgnore]
-    public bool GSADummy
+    public bool? GSADummy
     {
-      get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool)StructuralProperties["gsaDummy"]) : false;
-      set => StructuralProperties["gsaDummy"] = value;
+      get => StructuralProperties.ContainsKey("gsaDummy") ? ((bool?)StructuralProperties["gsaDummy"]) : null;
+      set { if (value != null) StructuralProperties["gsaDummy"] = value; }
     }
 
     /// <summary>Analysis results.</summary>
@@ -837,14 +841,14 @@ namespace SpeckleStructuralClasses
     public Dictionary<string, object> Result
     {
       get => StructuralProperties.ContainsKey("result") ? (StructuralProperties["result"] as Dictionary<string, object>) : null;
-      set => StructuralProperties["result"] = value;
+      set { if (value != null) StructuralProperties["result"] = value; }
     }
   }
 
   [Serializable]
   public partial class Structural2DVoid : SpeckleMesh, IStructural
   {
-    public override string Type { get => base.Type + "/Structural2DVoid"; }
+    public override string Type { get { var speckleType = "/" + this.GetType().Name; return base.Type.Replace(speckleType, "") + speckleType; } } //The replacement is to avoid a peculiarity with merging using Automapper
 
     [JsonIgnore]
     private Dictionary<string, object> StructuralProperties

@@ -11,11 +11,10 @@ namespace SpeckleStructuralGSA.TestPrep
 
     public void SetupContext(string gsaFileName)
     {
-      gsaInterfacer = new GSAInterfacer
-      {
-        Indexer = new Indexer()
-      };
+      gsaInterfacer = new GSAProxy();
+      gsaCache = new GSACache();
       Initialiser.Interface = gsaInterfacer;
+      Initialiser.Cache = gsaCache;
       Initialiser.Settings = new Settings();
       gsaInterfacer.OpenFile(Helper.ResolveFullPath(gsaFileName, TestDataDirectory));
     }
