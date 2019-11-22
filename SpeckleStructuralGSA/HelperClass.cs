@@ -1107,11 +1107,12 @@ namespace SpeckleStructuralGSA
 
     public static string GetApplicationId(string keyword, int id)
     {
-      var savedApplicationId = Initialiser.Cache.GetApplicationId(keyword, id);
-      return (string.IsNullOrEmpty(savedApplicationId)) ? ("gsa/" + keyword + "_" + id.ToString()) : savedApplicationId;
+      //Fill with SID
+      var sid = Initialiser.Cache.GetSid(keyword, id);
+      return (string.IsNullOrEmpty(sid)) ? ("gsa/" + keyword + "_" + id.ToString()) : sid;
     }
 
-    public static int NodeAt(double x, double y, double z, double coincidentNodeAllowance, string applicationId = null)
+    public static int NodeAt(double x, double y, double z, double coincidentNodeAllowance, string applicationId = null, string streamId = null)
     {
       var index = Initialiser.Interface.NodeAt(x, y, z, coincidentNodeAllowance);
       
@@ -1119,7 +1120,7 @@ namespace SpeckleStructuralGSA
       {
         //Only needs to be added to the cache if there is an application ID
         var gwa = Initialiser.Interface.GetGwaForNode(index);
-        gwa = Initialiser.Interface.SetApplicationId(gwa, applicationId);
+        gwa = Initialiser.Interface.SetSid(gwa, (streamId ?? "") + "|" + applicationId);
         Initialiser.Cache.Upsert("NODE.2", index, gwa, applicationId, GwaSetCommandType.Set);
       }
 

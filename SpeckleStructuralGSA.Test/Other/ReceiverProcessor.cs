@@ -10,7 +10,7 @@ namespace SpeckleStructuralGSA.Test
   //Copied from the Receiver class in SpeckleGSA - this will be refactored to simplify and avoid dependency
   public class ReceiverProcessor : ProcessorBase
   {
-    private List<SpeckleObject> receivedObjects;
+    private List<Tuple<string, SpeckleObject>> receivedObjects;
 
     public ReceiverProcessor(string directory, GSAProxy gsaInterfacer, GSACache gsaCache, GSATargetLayer layer = GSATargetLayer.Design) : base (directory)
     {
@@ -38,7 +38,7 @@ namespace SpeckleStructuralGSA.Test
 
     #region private_methods    
 
-    private List<SpeckleObject> JsonSpeckleStreamsToSpeckleObjects(IEnumerable<string> savedJsonFileNames)
+    private List<Tuple<string,SpeckleObject>> JsonSpeckleStreamsToSpeckleObjects(IEnumerable<string> savedJsonFileNames)
     {
       //Read JSON files into objects
       return ExtractObjects(savedJsonFileNames.ToArray(), TestDataDirectory);
@@ -52,7 +52,7 @@ namespace SpeckleStructuralGSA.Test
       {
         try
         {
-          o.Scale(scaleFactor);
+          o.Item2.Scale(scaleFactor);
         }
         catch { }
       }
@@ -79,21 +79,22 @@ namespace SpeckleStructuralGSA.Test
 
           for (var i = 0; i < targetObjects.Count(); i++)
           {
-            var applicationId = targetObjects[i].ApplicationId;
+            var streamId = targetObjects[i].Item1;
+            var obj = targetObjects[i].Item2;
+            var sidValue = streamId + "|" + obj.ApplicationId;
 
             //DESERIALISE
-            var deserialiseReturn = ((string)Converter.Deserialise(targetObjects[i]));
+            var deserialiseReturn = ((string)Converter.Deserialise(obj));
             var gwaCommands = deserialiseReturn.Split(new[] { '\n' }).Where(c => c.Length > 0).ToList();
 
             for (var j = 0; j < gwaCommands.Count(); j++)
             {
-              ProcessDeserialiseReturnObject(gwaCommands[j], out keyword, out var index, out var gwa, out var gwaSetCommandType);
-              var itemApplicationId = gwaCommands[j].ExtractApplicationId();
+              gwaCommands[j].ExtractKeywordApplicationId(out keyword, out int? foundIndex, out string sid, out string gwaWithoutSet, out GwaSetCommandType? gwaSetCommandType);
 
               GSAInterfacer.SetGWA(gwaCommands[j]);
 
               //Only cache the object against, the top-level GWA command, not the sub-commands
-              GSACache.Upsert(keyword, index, gwa, itemApplicationId, (itemApplicationId == applicationId) ? targetObjects[i] : null);
+              GSACache.Upsert(keyword, foundIndex.Value, gwaWithoutSet, sid, (sid == sidValue) ? obj : null);
             }
           }
 
@@ -101,9 +102,6 @@ namespace SpeckleStructuralGSA.Test
           traversedTypes.Add(t);
         }
       } while (currentBatch.Count > 0);
-
-      // Write leftover
-      Converter.Deserialise(receivedObjects);
     }
 
     private string ExtractApplicationId(string gwaCommand)
@@ -116,20 +114,24 @@ namespace SpeckleStructuralGSA.Test
     }
 
 
-    public List<SpeckleObject> ExtractObjects(string fileName, string directory)
+    public List<Tuple<string, SpeckleObject>> ExtractObjects(string fileName, string directory)
     {
       return ExtractObjects(new string[] { fileName }, directory);
     }
 
-    public List<SpeckleObject> ExtractObjects(string[] fileNames, string directory)
+    public List<Tuple<string,SpeckleObject>> ExtractObjects(string[] fileNames, string directory)
     {
-      var speckleObjects = new List<SpeckleObject>();
+      var speckleObjects = new List<Tuple<string, SpeckleObject>>();
       foreach (var fileName in fileNames)
       {
         var json = Helper.ReadFile(fileName, directory);
+        var streamId = fileName.Split(new[] { '.' }).First();
 
         var response = ResponseObject.FromJson(json);
-        speckleObjects.AddRange(response.Resources);
+        for (int i = 0; i < response.Resources.Count(); i++)
+        {
+          speckleObjects.Add(new Tuple<string, SpeckleObject>(streamId, response.Resources[i]));
+        }
       }
       return speckleObjects;
     }

@@ -59,13 +59,10 @@ namespace SpeckleStructuralGSA.Test
       var data = gsaInterfacer.GetGWAData(keywords);
       for (int i = 0; i < data.Count(); i++)
       {
-        // <keyword, index, Application ID, GWA command (without SET or SET_AT), Set|Set At> tuples
-        var keyword = data[i].Item1;
-        var index = data[i].Item2;
-        var applicationId = data[i].Item3;
-        var gwa = data[i].Item4;
-        var gwaSetCommandType = data[i].Item5;
-        gsaCache.Upsert(keyword, index, gwa, applicationId, gwaSetCommandType: gwaSetCommandType);
+        //var applicationId = data[i].Item3;
+        //This needs to be revised as this logic is in the kit too
+        var sid = (string.IsNullOrEmpty(data[i].Sid)) ? ("gsa/" + data[i].Keyword + "_" + data[i].Index.ToString()) : data[i].Sid;
+        gsaCache.Upsert(data[i].Keyword, data[i].Index, data[i].GwaWithoutSet, sid, gwaSetCommandType: data[i].GwaSetType);
       }
 
       senderProcessor.GsaInstanceToSpeckleObjects(layer, out var speckleObjects, resultsOnly);
