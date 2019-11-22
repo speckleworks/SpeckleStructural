@@ -75,7 +75,7 @@ namespace SpeckleStructuralGSA.Test
           var keyword = dummyObject.GetAttribute("GSAKeyword").ToString();
           var valueType = t.GetProperty("Value").GetValue(dummyObject).GetType();
           var speckleTypeName = ((SpeckleObject)((IGSASpeckleContainer)dummyObject).Value).Type;
-          var targetObjects = receivedObjects.Where(o => o.GetType() == valueType).ToList();
+          var targetObjects = receivedObjects.Where(o => o.Item2.GetType() == valueType).ToList();
 
           for (var i = 0; i < targetObjects.Count(); i++)
           {

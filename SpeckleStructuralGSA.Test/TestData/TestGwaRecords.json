@@ -110,10 +110,10 @@
     "GwaCommand": "SET\tGRID_SURFACE.1\t3\tDead load panel\t3\t2\tall\t0.01\tONE\t0"
   },
   {
-    "GwaCommand": "SET\tAXIS.1\t1\tDead load panel\tCART\t0\t0\t0\t1\t0\t0\t0\t-1\t0"
+    "GwaCommand": "SET\tAXIS.1\t2\tDead load panel\tCART\t0\t0\t0\t1\t0\t0\t0\t-1\t0"
   },
   {
-    "GwaCommand": "SET\tGRID_PLANE.4\t3\tDead load panel\tGENERAL\t1\t-17.37\t0\t0"
+    "GwaCommand": "SET\tGRID_PLANE.4\t3\tDead load panel\tGENERAL\t2\t-17.37\t0\t0"
   },
   {
     "ApplicationId": "LT1",
