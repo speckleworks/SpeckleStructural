@@ -89,7 +89,7 @@ namespace SpeckleStructuralGSA.Test
 
             for (var j = 0; j < gwaCommands.Count(); j++)
             {
-              gwaCommands[j].ExtractKeywordApplicationId(out keyword, out int? foundIndex, out string sid, out string gwaWithoutSet, out GwaSetCommandType? gwaSetCommandType);
+              gwaCommands[j].ParseGeneralGwa(out keyword, out int? foundIndex, out string sid, out string gwaWithoutSet, out GwaSetCommandType? gwaSetCommandType);
 
               GSAInterfacer.SetGWA(gwaCommands[j]);
 

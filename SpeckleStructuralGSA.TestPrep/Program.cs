@@ -17,7 +17,6 @@ namespace SpeckleStructuralGSA.TestPrep
 
       var TestDataDirectory = AppDomain.CurrentDomain.BaseDirectory.TrimEnd(new[] { '\\' }) + @"\..\..\..\SpeckleStructuralGSA.Test\TestData\";
 
-      /*
       var receiverTestPrep = new ReceiverTestPrep(TestDataDirectory);
       receiverTestPrep.SetupContext();
       if (!receiverTestPrep.SetUpReceptionTestData(ReceiverTests.savedJsonFileNames, ReceiverTests.expectedGwaPerIdsFileName, GSATargetLayer.Design))
@@ -28,7 +27,6 @@ namespace SpeckleStructuralGSA.TestPrep
       {
         Console.WriteLine("Prepared reception test data for the rx design layer test");
       }
-      */
 
       var senderTestPrep = new SenderTestPrep(TestDataDirectory);
 
