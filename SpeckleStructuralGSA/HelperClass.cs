@@ -537,19 +537,10 @@ namespace SpeckleStructuralGSA
     #endregion
 
     #region MovedFromInterfacer
-    private const string SID_TAG = "speckle_app_id";
 
     public static string GenerateSID(SpeckleObject obj)
     {
-      var sid = "";
-
-      if (!string.IsNullOrEmpty(obj.ApplicationId))
-      {
-        //Application ID can't have spaces as they are lost as soon as it's written to the GSA instance
-        sid += "{" + SID_TAG + ":" + obj.ApplicationId.Replace(" ","") + "}";
-      }
-
-      return sid;
+      return Initialiser.Interface.FormatApplicationIdSidTag(obj.ApplicationId);
     }
 
     public static void SetAxis(StructuralAxis axis, out int index, out string gwa, string name = "")
@@ -1107,11 +1098,12 @@ namespace SpeckleStructuralGSA
 
     public static string GetApplicationId(string keyword, int id)
     {
-      var savedApplicationId = Initialiser.Cache.GetApplicationId(keyword, id);
-      return (string.IsNullOrEmpty(savedApplicationId)) ? ("gsa/" + keyword + "_" + id.ToString()) : savedApplicationId;
+      //Fill with SID
+      var applicationId = Initialiser.Cache.GetApplicationId(keyword, id);
+      return (string.IsNullOrEmpty(applicationId)) ? ("gsa/" + keyword + "_" + id.ToString()) : applicationId;
     }
 
-    public static int NodeAt(double x, double y, double z, double coincidentNodeAllowance, string applicationId = null)
+    public static int NodeAt(double x, double y, double z, double coincidentNodeAllowance, string applicationId = null, string streamId = null)
     {
       var index = Initialiser.Interface.NodeAt(x, y, z, coincidentNodeAllowance);
       
@@ -1119,8 +1111,8 @@ namespace SpeckleStructuralGSA
       {
         //Only needs to be added to the cache if there is an application ID
         var gwa = Initialiser.Interface.GetGwaForNode(index);
-        gwa = Initialiser.Interface.SetApplicationId(gwa, applicationId);
-        Initialiser.Cache.Upsert("NODE.2", index, gwa, applicationId, GwaSetCommandType.Set);
+        gwa = Initialiser.Interface.SetSid(gwa, streamId ?? "", applicationId);
+        Initialiser.Cache.Upsert("NODE.2", index, gwa, streamId, applicationId, GwaSetCommandType.Set);
       }
 
       return index;

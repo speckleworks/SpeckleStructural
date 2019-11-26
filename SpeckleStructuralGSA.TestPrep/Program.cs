@@ -28,7 +28,7 @@ namespace SpeckleStructuralGSA.TestPrep
         Console.WriteLine("Prepared reception test data for the rx design layer test");
       }
 
-     var senderTestPrep = new SenderTestPrep(TestDataDirectory);
+      var senderTestPrep = new SenderTestPrep(TestDataDirectory);
 
       //First the sender test for design layer data without any results being in the file
       senderTestPrep.SetupContext(SenderTests.gsaFileNameWithoutResults);

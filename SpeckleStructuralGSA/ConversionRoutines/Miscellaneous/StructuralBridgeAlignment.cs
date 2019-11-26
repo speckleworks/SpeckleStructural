@@ -47,8 +47,8 @@ namespace SpeckleStructuralGSA
 
       var keyword = destType.GetGSAKeyword();
 
-      var gridSurfaceIndex = Initialiser.Cache.ResolveIndex("GRID_SURFACE.1", alignment.ApplicationId);
-      var gridPlaneIndex = Initialiser.Cache.ResolveIndex("GRID_PLANE.4", alignment.ApplicationId);
+      var gridSurfaceIndex = Initialiser.Cache.ResolveIndex("GRID_SURFACE.1");
+      var gridPlaneIndex = Initialiser.Cache.ResolveIndex("GRID_PLANE.4");
 
       var index = Initialiser.Cache.ResolveIndex(keyword, alignment.ApplicationId);
 

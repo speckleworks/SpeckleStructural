@@ -110,10 +110,10 @@
     "GwaCommand": "SET\tGRID_SURFACE.1\t3\tDead load panel\t3\t2\tall\t0.01\tONE\t0"
   },
   {
-    "GwaCommand": "SET\tAXIS.1\t1\tDead load panel\tCART\t0\t0\t0\t1\t0\t0\t0\t-1\t0"
+    "GwaCommand": "SET\tAXIS.1\t2\tDead load panel\tCART\t0\t0\t0\t1\t0\t0\t0\t-1\t0"
   },
   {
-    "GwaCommand": "SET\tGRID_PLANE.4\t3\tDead load panel\tGENERAL\t1\t-17.37\t0\t0"
+    "GwaCommand": "SET\tGRID_PLANE.4\t3\tDead load panel\tGENERAL\t2\t-17.37\t0\t0"
   },
   {
     "ApplicationId": "LT1",
@@ -285,31 +285,31 @@
   },
   {
     "ApplicationId": "gh/bfdbe99cfde1f26362f14b144b0f3141",
-    "GwaCommand": "SET\tMEMB.7:{speckle_app_id:gh/bfdbe99cfde1f26362f14b144b0f3141}\t41\tNew spring 0\tNO_RGB\t1D_GENERIC\t0\t41\t106 107 \t0\t0\t0\tMESH\tSPRING\t0\t0\t0\t0\t0\tACTIVE\t2\t2\tAUTOMATIC\t0\t0\tMAN\tMAN\tNO\t0\t0\t0\t0\tALL"
+    "GwaCommand": "SET\tMEMB.7:{speckle_app_id:gh/bfdbe99cfde1f26362f14b144b0f3141}\t41\tNew spring 0\tNO_RGB\t1D_GENERIC\t1\t41\t106 107 \t0\t0\t0\tMESH\tSPRING\t0\t0\t0\t0\t0\tACTIVE\t2\t2\tAUTOMATIC\t0\t0\tMAN\tMAN\tNO\t0\t0\t0\t0\tALL"
   },
   {
     "ApplicationId": "gh/a6d0397fdad99d3455d5b125b2523a09",
-    "GwaCommand": "SET\tMEMB.7:{speckle_app_id:gh/a6d0397fdad99d3455d5b125b2523a09}\t42\tNew spring 1\tNO_RGB\t1D_GENERIC\t0\t42\t108 109 \t0\t0\t0\tMESH\tSPRING\t0\t0\t0\t0\t0\tACTIVE\t2\t2\tAUTOMATIC\t0\t0\tMAN\tMAN\tNO\t0\t0\t0\t0\tALL"
+    "GwaCommand": "SET\tMEMB.7:{speckle_app_id:gh/a6d0397fdad99d3455d5b125b2523a09}\t42\tNew spring 1\tNO_RGB\t1D_GENERIC\t1\t42\t108 109 \t0\t0\t0\tMESH\tSPRING\t0\t0\t0\t0\t0\tACTIVE\t2\t2\tAUTOMATIC\t0\t0\tMAN\tMAN\tNO\t0\t0\t0\t0\tALL"
   },
   {
     "ApplicationId": "gh/04812414ed54e44b3372e04b6ab20556",
-    "GwaCommand": "SET\tMEMB.7:{speckle_app_id:gh/04812414ed54e44b3372e04b6ab20556}\t43\tNew spring 2\tNO_RGB\t1D_GENERIC\t0\t43\t110 111 \t0\t0\t0\tMESH\tSPRING\t0\t0\t0\t0\t0\tACTIVE\t2\t2\tAUTOMATIC\t0\t0\tMAN\tMAN\tNO\t0\t0\t0\t0\tALL"
+    "GwaCommand": "SET\tMEMB.7:{speckle_app_id:gh/04812414ed54e44b3372e04b6ab20556}\t43\tNew spring 2\tNO_RGB\t1D_GENERIC\t1\t43\t110 111 \t0\t0\t0\tMESH\tSPRING\t0\t0\t0\t0\t0\tACTIVE\t2\t2\tAUTOMATIC\t0\t0\tMAN\tMAN\tNO\t0\t0\t0\t0\tALL"
   },
   {
     "ApplicationId": "gh/e1d3bfa1c104d2cbac83c00c5a5a91bf",
-    "GwaCommand": "SET\tMEMB.7:{speckle_app_id:gh/e1d3bfa1c104d2cbac83c00c5a5a91bf}\t44\tNew spring 3\tNO_RGB\t1D_GENERIC\t0\t44\t112 113 \t0\t0\t0\tMESH\tSPRING\t0\t0\t0\t0\t0\tACTIVE\t2\t2\tAUTOMATIC\t0\t0\tMAN\tMAN\tNO\t0\t0\t0\t0\tALL"
+    "GwaCommand": "SET\tMEMB.7:{speckle_app_id:gh/e1d3bfa1c104d2cbac83c00c5a5a91bf}\t44\tNew spring 3\tNO_RGB\t1D_GENERIC\t1\t44\t112 113 \t0\t0\t0\tMESH\tSPRING\t0\t0\t0\t0\t0\tACTIVE\t2\t2\tAUTOMATIC\t0\t0\tMAN\tMAN\tNO\t0\t0\t0\t0\tALL"
   },
   {
     "ApplicationId": "gh/fe78ca20d5fa53527e7bb7809138c819",
-    "GwaCommand": "SET\tMEMB.7:{speckle_app_id:gh/fe78ca20d5fa53527e7bb7809138c819}\t45\tNew spring 4\tNO_RGB\t1D_GENERIC\t0\t45\t114 115 \t0\t0\t0\tMESH\tSPRING\t0\t0\t0\t0\t0\tACTIVE\t2\t2\tAUTOMATIC\t0\t0\tMAN\tMAN\tNO\t0\t0\t0\t0\tALL"
+    "GwaCommand": "SET\tMEMB.7:{speckle_app_id:gh/fe78ca20d5fa53527e7bb7809138c819}\t45\tNew spring 4\tNO_RGB\t1D_GENERIC\t1\t45\t114 115 \t0\t0\t0\tMESH\tSPRING\t0\t0\t0\t0\t0\tACTIVE\t2\t2\tAUTOMATIC\t0\t0\tMAN\tMAN\tNO\t0\t0\t0\t0\tALL"
   },
   {
     "ApplicationId": "gh/77ee0b345f17f46ac0677947d0d1c70b",
-    "GwaCommand": "SET\tMEMB.7:{speckle_app_id:gh/77ee0b345f17f46ac0677947d0d1c70b}\t46\tNew spring 5\tNO_RGB\t1D_GENERIC\t0\t46\t116 117 \t0\t0\t0\tMESH\tSPRING\t0\t0\t0\t0\t0\tACTIVE\t2\t2\tAUTOMATIC\t0\t0\tMAN\tMAN\tNO\t0\t0\t0\t0\tALL"
+    "GwaCommand": "SET\tMEMB.7:{speckle_app_id:gh/77ee0b345f17f46ac0677947d0d1c70b}\t46\tNew spring 5\tNO_RGB\t1D_GENERIC\t1\t46\t116 117 \t0\t0\t0\tMESH\tSPRING\t0\t0\t0\t0\t0\tACTIVE\t2\t2\tAUTOMATIC\t0\t0\tMAN\tMAN\tNO\t0\t0\t0\t0\tALL"
   },
   {
     "ApplicationId": "gh/9718df1338e56a0746cfdbe383fd2a60",
-    "GwaCommand": "SET\tMEMB.7:{speckle_app_id:gh/9718df1338e56a0746cfdbe383fd2a60}\t47\tNew spring 6\tNO_RGB\t1D_GENERIC\t0\t47\t118 119 \t0\t0\t0\tMESH\tSPRING\t0\t0\t0\t0\t0\tACTIVE\t2\t2\tAUTOMATIC\t0\t0\tMAN\tMAN\tNO\t0\t0\t0\t0\tALL"
+    "GwaCommand": "SET\tMEMB.7:{speckle_app_id:gh/9718df1338e56a0746cfdbe383fd2a60}\t47\tNew spring 6\tNO_RGB\t1D_GENERIC\t1\t47\t118 119 \t0\t0\t0\tMESH\tSPRING\t0\t0\t0\t0\t0\tACTIVE\t2\t2\tAUTOMATIC\t0\t0\tMAN\tMAN\tNO\t0\t0\t0\t0\tALL"
   },
   {
     "ApplicationId": "Slab0",
