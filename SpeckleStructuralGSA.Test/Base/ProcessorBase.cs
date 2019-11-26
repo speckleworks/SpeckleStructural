@@ -18,7 +18,7 @@ namespace SpeckleStructuralGSA.Test
     protected GSACache GSACache;
 
     //This should match the private member in GSAInterfacer
-    protected const string SID_TAG = "speckle_app_id";
+    protected const string SID_APPID_TAG = "speckle_app_id";
 
     protected ProcessorBase(string directory)
     {
@@ -68,6 +68,7 @@ namespace SpeckleStructuralGSA.Test
       return keywords;
     }
 
+    /*
     protected void ProcessDeserialiseReturnObject(object deserialiseReturnObject, out string keyword, out int index, out string gwa, out GwaSetCommandType gwaSetCommandType)
     {
       index = 0;
@@ -103,10 +104,11 @@ namespace SpeckleStructuralGSA.Test
       }
 
       gwa = string.Join("\t", pieces);
-      gwa.ExtractKeywordApplicationId(out keyword, out var foundIndex, out var applicationId, out var gwaWithoutSet);
+      gwa.ExtractKeywordApplicationId(out keyword, out var foundIndex, out var sid, out var gwaWithoutSet, out var gwaSetCommandType);
       
 
       return;
     }
+    */
   }
 }

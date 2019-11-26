@@ -16,6 +16,7 @@
       11.58
     ],
     "closed": true,
+    "applicationId": "Live",
     "name": "Live load panel",
     "properties": {
       "structural": {
@@ -41,6 +42,7 @@
       17.37
     ],
     "closed": true,
+    "applicationId": "SDL",
     "name": "Dead load panel",
     "properties": {
       "structural": {
