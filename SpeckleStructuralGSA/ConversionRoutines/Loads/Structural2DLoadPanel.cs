@@ -134,9 +134,8 @@ namespace SpeckleStructuralGSA
       var keyword = typeof(GSAGridAreaLoad).GetGSAKeyword();
 
       //There are no GSA types for these yet so use empty strings for the type names for the index
-      var polylineIndex = Initialiser.Cache.ResolveIndex("POLYLINE.1", load.ApplicationId);
-      var gridSurfaceIndex = Initialiser.Cache.ResolveIndex("GRID_SURFACE.1", load.ApplicationId);
-      var gridPlaneIndex = Initialiser.Cache.ResolveIndex("GRID_PLANE.4", load.ApplicationId);
+      var gridSurfaceIndex = Initialiser.Cache.ResolveIndex("GRID_SURFACE.1");
+      var gridPlaneIndex = Initialiser.Cache.ResolveIndex("GRID_PLANE.4");
 
       var loadCaseIndex = 0;
       try

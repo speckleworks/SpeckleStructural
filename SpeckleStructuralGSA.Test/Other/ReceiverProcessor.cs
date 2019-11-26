@@ -81,7 +81,6 @@ namespace SpeckleStructuralGSA.Test
           {
             var streamId = targetObjects[i].Item1;
             var obj = targetObjects[i].Item2;
-            var sidValue = streamId + "|" + obj.ApplicationId;
 
             //DESERIALISE
             var deserialiseReturn = ((string)Converter.Deserialise(obj));
@@ -89,12 +88,12 @@ namespace SpeckleStructuralGSA.Test
 
             for (var j = 0; j < gwaCommands.Count(); j++)
             {
-              gwaCommands[j].ParseGeneralGwa(out keyword, out int? foundIndex, out string sid, out string gwaWithoutSet, out GwaSetCommandType? gwaSetCommandType);
+              Initialiser.Interface.ParseGeneralGwa(gwaCommands[j], out keyword, out int? foundIndex, out string foundStreamId, out string foundApplicationId, out string gwaWithoutSet, out GwaSetCommandType? gwaSetCommandType);
 
-              GSAInterfacer.SetGWA(gwaCommands[j]);
+              GSAInterfacer.SetGwa(gwaCommands[j]);
 
               //Only cache the object against, the top-level GWA command, not the sub-commands
-              GSACache.Upsert(keyword, foundIndex.Value, gwaWithoutSet, sid, (sid == sidValue) ? obj : null);
+              GSACache.Upsert(keyword, foundIndex.Value, gwaWithoutSet, applicationId: foundApplicationId, so: (foundApplicationId == obj.ApplicationId) ? obj : null);
             }
           }
 
@@ -106,11 +105,11 @@ namespace SpeckleStructuralGSA.Test
 
     private string ExtractApplicationId(string gwaCommand)
     {
-      if (!gwaCommand.Contains(SID_TAG))
+      if (!gwaCommand.Contains(SID_APPID_TAG))
       {
         return null;
       }
-      return gwaCommand.Split(new string[] { SID_TAG }, StringSplitOptions.None)[1].Substring(1).Split('}')[0];
+      return gwaCommand.Split(new string[] { SID_APPID_TAG }, StringSplitOptions.None)[1].Substring(1).Split('}')[0];
     }
 
 

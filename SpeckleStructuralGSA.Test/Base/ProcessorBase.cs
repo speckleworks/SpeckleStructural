@@ -18,7 +18,7 @@ namespace SpeckleStructuralGSA.Test
     protected GSACache GSACache;
 
     //This should match the private member in GSAInterfacer
-    protected const string SID_TAG = "speckle_app_id";
+    protected const string SID_APPID_TAG = "speckle_app_id";
 
     protected ProcessorBase(string directory)
     {
