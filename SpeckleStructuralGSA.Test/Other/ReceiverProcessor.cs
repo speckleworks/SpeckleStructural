@@ -32,7 +32,8 @@ namespace SpeckleStructuralGSA.Test
       var gwaCommands = GSACache.GetGwaSetCommands();
       foreach (var gwaC in gwaCommands)
       {
-        gwaRecords.Add(new GwaRecord(ExtractApplicationId(gwaC), gwaC));
+        GSAInterfacer.ParseGeneralGwa(gwaC, out var keyword, out int? index, out var streamId, out var applicationId, out var gwaWithoutSet, out GwaSetCommandType? gwaSetType);
+        gwaRecords.Add(new GwaRecord(string.IsNullOrEmpty(applicationId) ? null : applicationId, gwaC));
       }
     }
 
@@ -102,16 +103,6 @@ namespace SpeckleStructuralGSA.Test
         }
       } while (currentBatch.Count > 0);
     }
-
-    private string ExtractApplicationId(string gwaCommand)
-    {
-      if (!gwaCommand.Contains(SID_APPID_TAG))
-      {
-        return null;
-      }
-      return gwaCommand.Split(new string[] { SID_APPID_TAG }, StringSplitOptions.None)[1].Substring(1).Split('}')[0];
-    }
-
 
     public List<Tuple<string, SpeckleObject>> ExtractObjects(string fileName, string directory)
     {
