@@ -8,10 +8,6 @@ namespace SpeckleStructuralGSA.Test
 {
   public abstract class ProcessorBase
   {
-    //protected Dictionary<Type, List<Type>> TypePrerequisites = new Dictionary<Type, List<Type>>();
-
-    //Doesn't seem to need this:
-    //protected List<KeyValuePair<Type, List<Type>>> TypeCastPriority = new List<KeyValuePair<Type, List<Type>>>();
     protected string TestDataDirectory;
 
     protected GSAProxy GSAInterfacer;
@@ -67,48 +63,5 @@ namespace SpeckleStructuralGSA.Test
 
       return keywords;
     }
-
-    /*
-    protected void ProcessDeserialiseReturnObject(object deserialiseReturnObject, out string keyword, out int index, out string gwa, out GwaSetCommandType gwaSetCommandType)
-    {
-      index = 0;
-      keyword = "";
-      gwa = "";
-      gwaSetCommandType = GwaSetCommandType.Set;
-
-      if (!(deserialiseReturnObject is string))
-      {
-        return;
-      }
-
-      var fullGwa = (string)deserialiseReturnObject;
-
-      var pieces = fullGwa.ListSplit("\t").ToList();
-      if (pieces.Count() < 2)
-      {
-        return;
-      }
-
-      if (pieces[0].StartsWith("set_at", StringComparison.InvariantCultureIgnoreCase))
-      {
-        gwaSetCommandType = GwaSetCommandType.SetAt;
-        int.TryParse(pieces[1], out index);
-        pieces.Remove(pieces[1]);
-        pieces.Remove(pieces[0]);
-      }
-      else if (pieces[0].StartsWith("set", StringComparison.InvariantCultureIgnoreCase))
-      {
-        gwaSetCommandType = GwaSetCommandType.Set;
-        pieces.Remove(pieces[0]);
-        int.TryParse(pieces[1], out index);
-      }
-
-      gwa = string.Join("\t", pieces);
-      gwa.ExtractKeywordApplicationId(out keyword, out var foundIndex, out var sid, out var gwaWithoutSet, out var gwaSetCommandType);
-      
-
-      return;
-    }
-    */
   }
 }
