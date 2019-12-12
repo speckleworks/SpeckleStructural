@@ -40,12 +40,12 @@ namespace SpeckleStructuralGSA
       obj.Density = Convert.ToDouble(pieces[counter++]);
       obj.CoeffThermalExpansion = Convert.ToDouble(pieces[counter++]);
 
-      obj.CompressiveStrength = Convert.ToDouble(pieces[42]);
+      obj.CompressiveStrength = Convert.ToDouble(pieces[41]);
 
-      counter = (commandVersion == 16) ? 54 : 53;
+      counter = (commandVersion == 16) ? 54 : 52;
       obj.MaxStrain = Convert.ToDouble(pieces[counter]);
 
-      counter = (commandVersion == 16) ? 59 : 58;
+      counter = (commandVersion == 16) ? 59 : 57;
       obj.AggragateSize = Convert.ToDouble(pieces[counter]);
 
       this.Value = obj;
@@ -76,7 +76,6 @@ namespace SpeckleStructuralGSA
         mat.Density.ToString(), // rho
         mat.CoeffThermalExpansion.ToString(), // alpha
         "MAT_ANAL.1",
-        "0", // TODO: What is this?
         "Concrete",
         "-268435456", // TODO: What is this?
         "MAT_ELAS_ISO",
