@@ -11,10 +11,10 @@ namespace SpeckleStructuralGSA.TestPrep
 
     public void SetupContext()
     {
-      gsaInterfacer = new GSAInterfacer
-      {
-        Indexer = new Indexer()
-      };
+      gsaInterfacer = new GSAProxy();
+      gsaCache = new GSACache();
+
+      Initialiser.Cache = gsaCache;
       Initialiser.Interface = gsaInterfacer;
       Initialiser.Settings = new Settings();
     }
@@ -28,9 +28,8 @@ namespace SpeckleStructuralGSA.TestPrep
     {
       var mockGsaCom = SetupMockGsaCom();
       gsaInterfacer.OpenFile("", false, mockGsaCom.Object);
-      gsaInterfacer.InitializeReceiver();
 
-      var receiverProcessor = new ReceiverProcessor(TestDataDirectory, gsaInterfacer, layer);
+      var receiverProcessor = new ReceiverProcessor(TestDataDirectory, gsaInterfacer, gsaCache, layer);
 
       //Run conversion to GWA keywords
       receiverProcessor.JsonSpeckleStreamsToGwaRecords(savedJsonFileNames, out var gwaRecords);

@@ -33,17 +33,18 @@ namespace SpeckleStructuralGSA
 
         foreach (var kvp in Initialiser.Settings.NodalResults)
         {
-          foreach (string loadCase in Initialiser.Settings.ResultCases)
+          foreach (var loadCase in Initialiser.Settings.ResultCases)
           {
-            if (!Initialiser.Interface.CaseExist(loadCase))
-              continue;
+            if (!Initialiser.Interface.CaseExist(loadCase)) continue;
 
             foreach (var node in nodes)
             {
-              int id = node.GSAId;
+              var id = node.GSAId;
 
               if (node.Value.Result == null)
+              {
                 node.Value.Result = new Dictionary<string, object>();
+              }
 
               var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
 
@@ -72,22 +73,27 @@ namespace SpeckleStructuralGSA
 
         var results = new List<GSANodeResult>();
 
-        string keyword = HelperClass.GetGSAKeyword(typeof(GSANode));
+        var keyword = HelperClass.GetGSAKeyword(typeof(GSANode));
+
+        var indices = Initialiser.Cache.LookupIndices(keyword).Where(i => i.HasValue).Select(i => i.Value).ToList();
 
         foreach (var kvp in Initialiser.Settings.NodalResults)
         {
-          foreach (string loadCase in Initialiser.Settings.ResultCases)
+          foreach (var loadCase in Initialiser.Settings.ResultCases)
           {
-            if (!Initialiser.Interface.CaseExist(loadCase))
-              continue;
+            if (!Initialiser.Interface.CaseExist(loadCase)) continue;
 
-            int id = 1;
-            int highestIndex = (int)Initialiser.Interface.RunGWACommand("HIGHEST\t" + keyword);
-
-            while (id <= highestIndex)
+            for (var i = 0; i < indices.Count(); i++)
             {
-              if ((int)Initialiser.Interface.RunGWACommand("EXIST\t" + keyword + "\t" + id.ToString()) == 1)
-              {
+              var id = indices[i];
+
+            //var id = 1;
+            //var highestIndex = (int)Initialiser.Interface.RunGWACommand("HIGHEST\t" + keyword);
+
+            //while (id <= highestIndex)
+            //{
+              //if ((int)Initialiser.Interface.RunGWACommand("EXIST\t" + keyword + "\t" + id.ToString()) == 1)
+              //{
                 var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
 
                 if (resultExport == null || resultExport.Count() == 0)
@@ -99,10 +105,10 @@ namespace SpeckleStructuralGSA
                 var existingRes = results.FirstOrDefault(x => x.Value.TargetRef == id.ToString());
                 if (existingRes == null)
                 {
-                  StructuralNodeResult newRes = new StructuralNodeResult()
+                  var newRes = new StructuralNodeResult()
                   {
                     Value = new Dictionary<string, object>(),
-                    TargetRef = Initialiser.Interface.GetSID(typeof(GSANode).GetGSAKeyword(), id),
+                    TargetRef = HelperClass.GetApplicationId(typeof(GSANode).GetGSAKeyword(), id),
                     IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
                   };
                   newRes.Value[kvp.Key] = resultExport;
@@ -115,8 +121,8 @@ namespace SpeckleStructuralGSA
                 {
                   existingRes.Value.Value[kvp.Key] = resultExport;
                 }
-              }
-              id++;
+              //}
+              //id++;
             }
           }
         }

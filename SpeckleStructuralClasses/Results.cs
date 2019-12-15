@@ -20,7 +20,7 @@ namespace SpeckleStructuralClasses
 
     /// <summary>Results.</summary>
     [JsonProperty("value", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    [Newtonsoft.Json.JsonConverter(typeof(SpecklePropertiesConverter))]
+    [JsonConverter(typeof(SpecklePropertiesConverter))]
     public Dictionary<string, object> Value { get; set; }
   }
 
@@ -39,7 +39,7 @@ namespace SpeckleStructuralClasses
 
     /// <summary>Results.</summary>
     [JsonProperty("value", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    [Newtonsoft.Json.JsonConverter(typeof(SpecklePropertiesConverter))]
+    [JsonConverter(typeof(SpecklePropertiesConverter))]
     public Dictionary<string, object> Value { get; set; }
   }
 
@@ -58,7 +58,7 @@ namespace SpeckleStructuralClasses
 
     /// <summary>Results.</summary>
     [JsonProperty("value", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    [Newtonsoft.Json.JsonConverter(typeof(SpecklePropertiesConverter))]
+    [JsonConverter(typeof(SpecklePropertiesConverter))]
     public Dictionary<string, object> Value { get; set; }
   }
 
@@ -81,7 +81,7 @@ namespace SpeckleStructuralClasses
 
     /// <summary>Results.</summary>
     [JsonProperty("value", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    [Newtonsoft.Json.JsonConverter(typeof(SpecklePropertiesConverter))]
+    [JsonConverter(typeof(SpecklePropertiesConverter))]
     public Dictionary<string, object> Value { get; set; }
 
     /// <summary>String indicating source of result.</summary>

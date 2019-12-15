@@ -197,7 +197,7 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      for (int i = 0; i < this.Value.Count(); i++)
+      for (var i = 0; i < this.Value.Count(); i++)
         this.Value[i] *= factor;
 
       this.Properties = ScaleProperties(this.Properties, factor);
@@ -250,7 +250,7 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      for (int i = 0; i < this.Value.Count(); i++)
+      for (var i = 0; i < this.Value.Count(); i++)
         this.Value[i] *= factor;
 
       this.Properties = ScaleProperties(this.Properties, factor);

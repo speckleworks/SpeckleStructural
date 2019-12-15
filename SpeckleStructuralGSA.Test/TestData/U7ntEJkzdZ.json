@@ -122,7 +122,7 @@
 			"type": "Structural2DProperty",
 			"thickness": 300,
 			"materialRef": "concrete",
-			"referenceSurface": 1,
+			"referenceSurface": "Middle",
 			"owner": "5cc252a6f659bb2a09e03748",
 			"__v": 0,
 			"createdAt": "2019-08-02T10:11:03.601Z",

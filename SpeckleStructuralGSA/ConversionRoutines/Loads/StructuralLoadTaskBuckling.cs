@@ -15,7 +15,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralLoadTaskBuckling();
 
-    public void ParseGWACommand(IGSAInterfacer GSA)
+    public void ParseGWACommand()
     {
       //if (this.GWACommand == null)
       //  return;
@@ -27,7 +27,7 @@ namespace SpeckleStructuralGSA
       //int counter = 1; // Skip identifier
 
       //this.GSAId = Convert.ToInt32(pieces[counter++]);
-      //obj.ApplicationId = Initialiser.Interface.GetSID(this.GetGSAKeyword(), this.GSAId);
+      //obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       //obj.Name = pieces[counter++];
 
       ////Find task type
@@ -46,21 +46,23 @@ namespace SpeckleStructuralGSA
       //this.Value = obj;
     }
 
-    public void SetGWACommand(IGSAInterfacer GSA)
+    public string SetGWACommand()
     {
       if (this.Value == null)
-        return;
+        return "";
 
-      StructuralLoadTaskBuckling loadTask = this.Value as StructuralLoadTaskBuckling;
+      var gwaCommands = new List<string>();
 
-      string keyword = typeof(GSALoadTaskBuckling).GetGSAKeyword();
-      string subkeyword = typeof(GSALoadTaskBuckling).GetSubGSAKeyword().First();
+      var loadTask = this.Value as StructuralLoadTaskBuckling;
 
-      int taskIndex = GSA.Indexer.ResolveIndex("TASK.1", "", loadTask.ApplicationId);
-      int? comboIndex = GSA.Indexer.LookupIndex(typeof(GSALoadCombo).GetGSAKeyword(), typeof(GSALoadCombo).Name, loadTask.ResultCaseRef);
-      int? stageIndex = GSA.Indexer.LookupIndex(typeof(GSAConstructionStage).GetGSAKeyword(), typeof(GSAConstructionStage).Name, loadTask.StageDefinitionRef);
+      var keyword = typeof(GSALoadTaskBuckling).GetGSAKeyword();
+      var subkeyword = typeof(GSALoadTaskBuckling).GetSubGSAKeyword().First();
 
-      List<string> ls = new List<string>
+      var taskIndex = Initialiser.Cache.ResolveIndex("TASK.1", loadTask.ApplicationId);
+      var comboIndex = Initialiser.Cache.LookupIndex(typeof(GSALoadCombo).GetGSAKeyword(), loadTask.ResultCaseRef);
+      var stageIndex = Initialiser.Cache.LookupIndex(typeof(GSAConstructionStage).GetGSAKeyword(), loadTask.StageDefinitionRef);
+
+      var ls = new List<string>
         {
           "SET",
           subkeyword,
@@ -91,11 +93,13 @@ namespace SpeckleStructuralGSA
           "1"
         };
       var command = string.Join("\t", ls);
-      Initialiser.Interface.RunGWACommand(command);
+
+      gwaCommands.Add(command);
+      //Initialiser.Interface.RunGWACommand(command);
 
       for (var i = 0; i < loadTask.NumModes; i++)
       {
-        int caseIndex = GSA.Indexer.ResolveIndex(keyword, typeof(GSALoadTaskBuckling).Name);
+        var caseIndex = Initialiser.Cache.ResolveIndex(keyword);
         // Set ANAL
         ls.Clear();
         ls.AddRange(new[] {
@@ -107,18 +111,20 @@ namespace SpeckleStructuralGSA
           "M" + (i + 1) //desc
         });
         command = string.Join("\t", ls);
-        Initialiser.Interface.RunGWACommand(command);
+        //Initialiser.Interface.RunGWACommand(command);
+        gwaCommands.Add(command);
       }
+
+      return string.Join("\n", gwaCommands);
     }
+    
   }
 
   public static partial class Conversions
   {
-    public static bool ToNative(this StructuralLoadTaskBuckling loadTask)
+    public static string ToNative(this StructuralLoadTaskBuckling loadTask)
     {
-      new GSALoadTaskBuckling() { Value = loadTask }.SetGWACommand(Initialiser.Interface);
-
-      return true;
+      return new GSALoadTaskBuckling() { Value = loadTask }.SetGWACommand();
     }
 
     // TODO: Same keyword as StructuralLoadTask so will conflict. Need a way to differentiate between.
@@ -150,7 +156,7 @@ namespace SpeckleStructuralGSA
       //    foreach (string p in newLines)
       //    {
       //      GSALoadTaskBuckling task = new GSALoadTaskBuckling() { GWACommand = p };
-      //      task.ParseGWACommand(Initialiser.Interface);
+      //      task.ParseGWACommand();
       //      loadTasks.Add(task);
       //    }
 

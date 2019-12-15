@@ -26,11 +26,11 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      for (int i = 0; i < this.Value.Count(); i++)
+      for (var i = 0; i < this.Value.Count(); i++)
       {
         this.Value[i] *= factor;
       }
-      for (int i = 0; i < this.OrientationPoint.Value.Count(); i++)
+      for (var i = 0; i < this.OrientationPoint.Value.Count(); i++)
       {
         this.OrientationPoint.Value[i] *= factor;
       }
