@@ -336,8 +336,8 @@ namespace SpeckleStructuralClasses
             Math.Pow(this.Vertices.Skip(conn[i] * 3 + 2).Take(1).First() - this.Vertices.Skip(conn[i + 1] * 3 + 2).Take(1).First(), 2);
           length = Math.Sqrt(length);
 
-          if (edges.Any(e => (e.Item3 == c1 & e.Item4 == c2) |
-              (e.Item3 == c2 & e.Item4 == c1)))
+          if (edges.Any(e => (e.Item3 == c1 && e.Item4 == c2) |
+              (e.Item3 == c2 && e.Item4 == c1)))
           {
             edges.RemoveAll(x => (x.Item3 == c1 && x.Item4 == c2) || (x.Item3 == c2 && x.Item4 == c1));
           }
@@ -465,7 +465,7 @@ namespace SpeckleStructuralClasses
         var cost1 = IntegrateHasher(coordinates, face1.ToArray());
         var cost2 = IntegrateHasher(coordinates, face2.ToArray());
 
-        if (cost1 > 0 & cost2 > 0)
+        if (cost1 > 0 && cost2 > 0)
         {
           // Check to make sure that the new region does not encompass the other's points
           var flag = false;
@@ -567,7 +567,7 @@ namespace SpeckleStructuralClasses
       var beta = Vector3D.DotProduct(Vector3D.CrossProduct(w, v), n) / (n.Length * n.Length);
       var alpha = 1 - gamma - beta;
 
-      if (alpha >= 0 & beta >= 0 & gamma >= 0 & alpha <= 1 & beta <= 1 & gamma <= 1)
+      if (alpha >= 0 && beta >= 0 && gamma >= 0 && alpha <= 1 && beta <= 1 && gamma <= 1)
         return true;
       else
         return false;
@@ -656,8 +656,8 @@ namespace SpeckleStructuralClasses
             Math.Pow(this.Vertices.Skip(conn[i] * 3 + 2).Take(1).First() - this.Vertices.Skip(conn[i + 1] * 3 + 2).Take(1).First(), 2);
           length = Math.Sqrt(length);
 
-          if (edges.Any(e => (e.Item3 == c1 & e.Item4 == c2) |
-              (e.Item3 == c2 & e.Item4 == c1)))
+          if (edges.Any(e => (e.Item3 == c1 && e.Item4 == c2) |
+              (e.Item3 == c2 && e.Item4 == c1)))
           {
             edges.RemoveAll(x => (x.Item3 == c1 && x.Item4 == c2) || (x.Item3 == c2 && x.Item4 == c1));
           }
@@ -781,7 +781,7 @@ namespace SpeckleStructuralClasses
         var cost1 = IntegrateHasher(coordinates, face1.ToArray());
         var cost2 = IntegrateHasher(coordinates, face2.ToArray());
 
-        if (cost1 > 0 & cost2 > 0)
+        if (cost1 > 0 && cost2 > 0)
         {
           // Check to make sure that the new region does not encompass the other's points
           var flag = false;
