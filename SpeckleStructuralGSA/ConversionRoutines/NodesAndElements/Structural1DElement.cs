@@ -512,7 +512,8 @@ namespace SpeckleStructuralGSA
       foreach (var p in newLines.Values)
       {
         var pPieces = p.ListSplit("\t");
-        if (pPieces[4].ParseElementNumNodes() == 2 && pPieces[4] == "BEAM")
+
+        if (pPieces[4] == "BEAM" && pPieces[4].ParseElementNumNodes() == 2)
         {
           try
           {
@@ -539,7 +540,7 @@ namespace SpeckleStructuralGSA
       foreach (var p in newLines.Values)
       {
         var pPieces = p.ListSplit("\t");
-        if (pPieces[4].MemberIs1D())
+        if (pPieces[4].Is1DMember())
         {
           try
           {

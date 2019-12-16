@@ -134,7 +134,7 @@ namespace SpeckleStructuralGSA
       foreach (var p in newLines.Values)
       {
         var pPieces = p.ListSplit("\t");
-        if (!pPieces[4].MemberIs2D())
+        if (!pPieces[4].Is2DMember())
         {
           // Check if void
           if (pPieces[4] == "2D_VOID_CUTTER")

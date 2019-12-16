@@ -369,7 +369,7 @@ namespace SpeckleStructuralGSA
     /// </summary>
     /// <param name="type">GSA member type</param>
     /// <returns>True if member is 1D</returns>
-    public static bool MemberIs1D(this string type)
+    public static bool Is1DMember(this string type)
     {
       if (type == "1D_GENERIC" | type == "COLUMN" | type == "BEAM")
         return true;
@@ -382,7 +382,7 @@ namespace SpeckleStructuralGSA
     /// </summary>
     /// <param name="type">GSA member type</param>
     /// <returns>True if member is 2D</returns>
-    public static bool MemberIs2D(this string type)
+    public static bool Is2DMember(this string type)
     {
       if (type == "2D_GENERIC" | type == "SLAB" | type == "WALL")
         return true;

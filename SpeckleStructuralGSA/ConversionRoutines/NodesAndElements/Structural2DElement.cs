@@ -379,6 +379,11 @@ namespace SpeckleStructuralGSA
       foreach (var p in newLines.Select(nl => nl.Item2))
       {
         var pPieces = p.ListSplit("\t");
+        // Check if void or not an element
+        if (pPieces[4] == "2D_VOID_CUTTER" || pPieces[4].Is1DMember() || pPieces[4].Is2DMember())
+        {
+          continue;
+        }
         if (pPieces[4].ParseElementNumNodes() == 3 | pPieces[4].ParseElementNumNodes() == 4)
         {
           try
@@ -407,7 +412,7 @@ namespace SpeckleStructuralGSA
       foreach (var p in newLines.Values)
       {
         var pPieces = p.ListSplit("\t");
-        if (pPieces[4].MemberIs2D())
+        if (pPieces[4].Is2DMember())
         {
           // Check if dummy
           if (pPieces[pPieces.Length - 4] == "ACTIVE")
