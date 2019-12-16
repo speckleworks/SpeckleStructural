@@ -151,7 +151,9 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA2DElementMesh dummyObject)
     {
       if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSA2DElementMesh)))
+      {
         Initialiser.GSASenderObjects[typeof(GSA2DElementMesh)] = new List<object>();
+      }
 
       var meshes = new List<GSA2DElementMesh>();
 
