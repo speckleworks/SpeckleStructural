@@ -1004,7 +1004,7 @@ namespace SpeckleStructuralGSA
       var axisY = new Vector3D(axis.Ydir.Value[0], axis.Ydir.Value[1], axis.Ydir.Value[2]);
       var axisZ = new Vector3D(axis.Normal.Value[0], axis.Normal.Value[1], axis.Normal.Value[2]);
 
-      if (axisX.X == 0 & axisX.Y == 0)
+      if (axisX.X == 0 && axisX.Y == 0)
       {
         // Column
         var Yglobal = new Vector3D(0, 1, 0);

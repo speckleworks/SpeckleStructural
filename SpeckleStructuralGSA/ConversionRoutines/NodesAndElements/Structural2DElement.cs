@@ -140,7 +140,7 @@ namespace SpeckleStructuralGSA
       ls.Add(mesh.Offset.ToString());
 
       //ls.Add("NORMAL"); // Action // TODO: EL.4 SUPPORT
-      ls.Add((mesh.GSADummy.HasValue & mesh.GSADummy.Value) ? "DUMMY" : "");
+      ls.Add((mesh.GSADummy.HasValue && mesh.GSADummy.Value) ? "DUMMY" : "");
 
       return (string.Join("\t", ls));
     }
