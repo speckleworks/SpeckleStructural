@@ -147,7 +147,7 @@ namespace SpeckleStructuralGSA
           // TODO: This is a hack.
           string.Join(" ", elementRefs.Select(x => x.ToString()).Concat(groupRefs.Select(x => "G" + x.ToString()))),
           loadCaseRef.ToString(),
-          "GLOBAL", // Axis
+          load.AxisType == StructuralLoadAxisType.Local ? "LOCAL" : "GLOBAL", // Axis
           "CONS", // Type
           "NO", // Projected
           direction[i],

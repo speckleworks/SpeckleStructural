@@ -36,6 +36,13 @@ namespace SpeckleStructuralClasses
     LinearAdd
   }
 
+  public enum StructuralLoadAxisType
+  {
+    NotSet,
+    Global,
+    Local
+  }
+
   [Serializable]
   public partial class StructuralLoadCase : SpeckleObject, IStructural
   {
@@ -243,6 +250,10 @@ namespace SpeckleStructuralClasses
     /// <summary>Application ID of StructuralLoadCase.</summary>
     [JsonProperty("loadCaseRef", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
     public string LoadCaseRef { get; set; }
+
+    [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+    [JsonProperty("axisType", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public StructuralLoadAxisType AxisType { get; set; }
   }
 
   [Serializable]
