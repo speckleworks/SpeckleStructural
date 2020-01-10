@@ -61,6 +61,8 @@ namespace SpeckleStructuralGSA
       var axis = pieces[counter++];
       this.Axis = axis == "GLOBAL" ? 0 : -1;// Convert.ToInt32(axis); // TODO: Assume local if not global
 
+      obj.AxisType = (axis == "LOCAL") ? StructuralLoadAxisType.Local : StructuralLoadAxisType.Global;
+
       counter++; // Type. TODO: Skipping since we're taking the average
 
       this.Projected = pieces[counter++] == "YES";
@@ -147,7 +149,7 @@ namespace SpeckleStructuralGSA
           // TODO: This is a hack.
           string.Join(" ", elementRefs.Select(x => x.ToString()).Concat(groupRefs.Select(x => "G" + x.ToString()))),
           loadCaseRef.ToString(),
-          "GLOBAL", // Axis
+          load.AxisType == StructuralLoadAxisType.Local ? "LOCAL" : "GLOBAL", // Axis
           "CONS", // Type
           "NO", // Projected
           direction[i],
