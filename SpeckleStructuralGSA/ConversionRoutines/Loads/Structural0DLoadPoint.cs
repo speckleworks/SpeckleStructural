@@ -7,25 +7,33 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("LOAD_GRID_LINE.2", new string[] { "POLYLINE.1", "GRID_SURFACE.1", "GRID_PLANE.4", "AXIS.1" }, "loads", true, true, new Type[] { }, new Type[] { typeof(GSALoadCase) })]
-  public class GSAGridLineLoad : IGSASpeckleContainer
+  [GSAObject("LOAD_GRID_POINT.2", new string[] { "GRID_SURFACE.1", "AXIS.1" }, "loads", true, true, new Type[] { }, new Type[] { typeof(GSALoadCase) })]
+  public class GSAGridPointLoad : IGSASpeckleContainer
   {
     public int GSAId { get; set; }
     public string GWACommand { get; set; }
     public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural1DLoadLine();
+    public dynamic Value { get; set; } = new Structural0DLoadPoint();
 
     public void ParseGWACommand()
     {
       if (this.GWACommand == null)
         return;
 
-      var obj = new Structural1DLoadLine();
+      var obj = new Structural0DLoadPoint();
 
       var pieces = this.GWACommand.ListSplit("\t");
 
       var counter = 1; // Skip identifier
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
+
+      obj.Value = new List<double>
+      {
+        Convert.ToDouble(pieces[counter++]),
+        Convert.ToDouble(pieces[counter++]),
+        0
+      };
+
       HelperClass.GetGridPlaneRef(Convert.ToInt32(pieces[counter++]), out int gridPlaneRefRet, out string gridSurfaceRec);
       HelperClass.GetGridPlaneData(gridPlaneRefRet, out int gridPlaneAxis, out double gridPlaneElevation, out string gridPlaneRec);
       this.SubGWACommand.Add(gridSurfaceRec);
@@ -35,31 +43,6 @@ namespace SpeckleStructuralGSA
       var axis = HelperClass.Parse0DAxis(gridPlaneAxis, Initialiser.Interface, out gwaRec);
       if (gwaRec != null)
         this.SubGWACommand.Add(gwaRec);
-      double elevation = gridPlaneElevation;
-
-      var polylineDescription = "";
-
-      switch (pieces[counter++])
-      {
-        case "PLANE":
-          // TODO: Do not handle for now
-          return;
-        case "POLYREF":
-          var polylineRef = pieces[counter++];
-          string newRec = null;
-         HelperClass.GetPolylineDesc(Convert.ToInt32(polylineRef), out polylineDescription, out newRec);
-          this.SubGWACommand.Add(newRec);
-          break;
-        case "POLYGON":
-          polylineDescription = pieces[counter++];
-          break;
-      }
-      var polyVals = HelperClass.ParsePolylineDesc(polylineDescription);
-
-      for (var i = 2; i < polyVals.Length; i += 3)
-        polyVals[i] = elevation;
-
-      obj.Value = HelperClass.MapPointsLocal2Global(polyVals, axis).ToList();
 
       obj.LoadCaseRef = HelperClass.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
 
@@ -75,42 +58,26 @@ namespace SpeckleStructuralGSA
         if (gwaRec != null)
           this.SubGWACommand.Add(gwaRec);
       }
-      var projected = pieces[counter++] == "YES";
       var direction = pieces[counter++];
-      var firstValue = Convert.ToDouble(pieces[counter++]);
-      var secondValue = Convert.ToDouble(pieces[counter++]);
-      var averageValue = (firstValue + secondValue) / 2;
+      var loadingValue = Convert.ToDouble(pieces[counter++]);
 
-      obj.Loading = new StructuralVectorSix(new double[6]);
+      obj.Loading = new StructuralVectorThree(new double[3]);
       switch (direction.ToUpper())
       {
         case "X":
-          obj.Loading.Value[0] = averageValue;
+          obj.Loading.Value[0] = loadingValue;
           break;
         case "Y":
-          obj.Loading.Value[1] = averageValue;
+          obj.Loading.Value[1] = loadingValue;
           break;
         case "Z":
-          obj.Loading.Value[2] = averageValue;
+          obj.Loading.Value[2] = loadingValue;
           break;
         default:
           // TODO: Error case maybe?
           break;
       }
       obj.Loading.TransformOntoAxis(loadAxis);
-
-      if (projected)
-      {
-        var scale = (obj.Loading.Value[0] * axis.Normal.Value[0] +
-            obj.Loading.Value[1] * axis.Normal.Value[1] +
-            obj.Loading.Value[2] * axis.Normal.Value[2]) /
-            (axis.Normal.Value[0] * axis.Normal.Value[0] +
-            axis.Normal.Value[1] * axis.Normal.Value[1] +
-            axis.Normal.Value[2] * axis.Normal.Value[2]);
-
-        obj.Loading = new StructuralVectorSix(axis.Normal.Value[0], axis.Normal.Value[1], axis.Normal.Value[2], 0, 0, 0);
-        obj.Loading.Scale(scale);
-      }
 
       this.Value = obj;
     }
@@ -120,12 +87,12 @@ namespace SpeckleStructuralGSA
       if (this.Value == null)
         return "";
 
-      var load = this.Value as Structural1DLoadLine;
+      var load = this.Value as Structural0DLoadPoint;
 
       if (load.Loading == null)
         return "";
 
-      var keyword = typeof(GSAGridLineLoad).GetGSAKeyword();
+      var keyword = typeof(GSAGridPointLoad).GetGSAKeyword();
 
       //There are no GSA types for these yet, so use empty strings for the type names
       var gridSurfaceIndex = Initialiser.Cache.ResolveIndex("GRID_SURFACE.1");
@@ -136,7 +103,8 @@ namespace SpeckleStructuralGSA
       {
         loadCaseRef = Initialiser.Cache.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef).Value;
       }
-      catch {
+      catch
+      {
         loadCaseRef = Initialiser.Cache.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef);
       }
 
@@ -172,7 +140,7 @@ namespace SpeckleStructuralGSA
 
         ls.Clear();
 
-        var index = Initialiser.Cache.ResolveIndex(typeof(GSAGridLineLoad).GetGSAKeyword(), typeof(GSAGridLineLoad).Name);
+        var index = Initialiser.Cache.ResolveIndex(typeof(GSAGridPointLoad).GetGSAKeyword(), typeof(GSAGridPointLoad).Name);
 
         ls.AddRange(new[] {
           "SET_AT",
@@ -213,7 +181,7 @@ namespace SpeckleStructuralGSA
         gwaCommands.Add(planeAxisGwa);
       }
 
-      ls.AddRange( new[] {
+      ls.AddRange(new[] {
         "SET",
         "GRID_PLANE.4",
         gridPlaneIndex.ToString(),
@@ -231,42 +199,25 @@ namespace SpeckleStructuralGSA
 
   public static partial class Conversions
   {
-    public static string ToNative(this Structural1DLoadLine load)
+    public static string ToNative(this Structural0DLoadPoint load)
     {
-      return new GSAGridLineLoad() { Value = load }.SetGWACommand();
+      return new GSAGridPointLoad() { Value = load }.SetGWACommand();
     }
 
-    public static SpeckleObject ToSpeckle(this GSAGridLineLoad dummyObject)
+    public static SpeckleObject ToSpeckle(this GSAGridPointLoad dummyObject)
     {
-      var newLines = ToSpeckleBase<GSAGridLineLoad>();
+      var newLines = ToSpeckleBase<GSAGridPointLoad>();
 
-      var loads = new List<GSAGridLineLoad>();
+      var loads = new List<GSAGridPointLoad>();
 
       foreach (var p in newLines.Values)
       {
-        var load = new GSAGridLineLoad() { GWACommand = p };
+        var load = new GSAGridPointLoad() { GWACommand = p };
         load.ParseGWACommand();
-        
-        // Break them apart
-        for (var i = 0; i < load.Value.Value.Count - 3; i += 3)
-        {
-          var actualLoad = new GSAGridLineLoad() {
-            GWACommand = load.GWACommand,
-            SubGWACommand = new List<string>(load.SubGWACommand.ToArray()),
-            Value = new Structural1DLoadLine()
-            {
-              Name = load.Value.Name,
-              Value = (load.Value.Value as List<double>).Skip(i).Take(6).ToList(),
-              Loading = load.Value.Loading,
-              LoadCaseRef = load.Value.LoadCaseRef
-            }
-          };
-
-          loads.Add(actualLoad);
-        }
+        loads.Add(load);
       }
 
-      Initialiser.GSASenderObjects[typeof(GSAGridLineLoad)].AddRange(loads);
+      Initialiser.GSASenderObjects[typeof(GSAGridPointLoad)].AddRange(loads);
 
       return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
