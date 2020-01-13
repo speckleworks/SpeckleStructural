@@ -71,7 +71,7 @@ namespace SpeckleStructuralGSA
 
       var prop = this.Value as Structural1DProperty;
 
-      if (prop.Profile == null)
+      if (prop.Profile == null && string.IsNullOrEmpty(prop.CatalogueName))
         return "";
 
       var keyword = typeof(GSA1DProperty).GetGSAKeyword();
