@@ -13,25 +13,25 @@ namespace SpeckleStructuralClasses
     {
       if (properties != null)
       {
-        this.Properties = properties;
+        Properties = properties;
       }
-      this.Value = value.ToList();
-      this.Axis = axis;
-      this.Restraint = restraint;
-      this.Stiffness = stiffness;
-      this.Mass = mass;
-      this.ApplicationId = applicationId;
+      Value = value.ToList();
+      Axis = axis;
+      Restraint = restraint;
+      Stiffness = stiffness;
+      Mass = mass;
+      ApplicationId = applicationId;
 
       GenerateHash();
     }
 
     public override void Scale(double factor)
     {
-      for (var i = 0; i < this.Value.Count(); i++)
-        this.Value[i] *= factor;
+      for (var i = 0; i < Value.Count(); i++)
+        Value[i] *= factor;
 
-      this.Properties = ScaleProperties(this.Properties, factor);
-      this.GenerateHash();
+      Properties = ScaleProperties(Properties, factor);
+      GenerateHash();
     }
   }
 
@@ -43,30 +43,30 @@ namespace SpeckleStructuralClasses
     {
       if (properties != null)
       {
-        this.Properties = properties;
+        Properties = properties;
       }
-      this.Value = value.ToList();
-      this.ElementType = elementType;
-      this.PropertyRef = propertyRef;
-      this.ZAxis = zAxis;
-      this.EndRelease = endRelease == null ? null : endRelease.ToList();
-      this.Offset = offset == null ? null : offset.ToList();
-      this.ApplicationId = applicationId;
+      Value = value.ToList();
+      ElementType = elementType;
+      PropertyRef = propertyRef;
+      ZAxis = zAxis;
+      EndRelease = endRelease == null ? null : endRelease.ToList();
+      Offset = offset == null ? null : offset.ToList();
+      ApplicationId = applicationId;
 
       GenerateHash();
     }
 
     public override void Scale(double factor)
     {
-      for (var i = 0; i < this.Value.Count(); i++)
-        this.Value[i] *= factor;
+      for (var i = 0; i < Value.Count(); i++)
+        Value[i] *= factor;
 
       if (Offset != null)
-        for (var i = 0; i < this.Offset.Count(); i++)
-          this.Offset[i].Scale(factor);
+        for (var i = 0; i < Offset.Count(); i++)
+          Offset[i].Scale(factor);
 
-      this.Properties = ScaleProperties(this.Properties, factor);
-      this.GenerateHash();
+      Properties = ScaleProperties(Properties, factor);
+      GenerateHash();
     }
   }
 
@@ -78,15 +78,15 @@ namespace SpeckleStructuralClasses
     {
       if (properties != null)
       {
-        this.Properties = properties;
+        Properties = properties;
       }
-      this.Value = value.ToList();
-      this.ElementType = elementType;
-      this.PropertyRef = propertyRef;
-      this.ZAxis = zAxis == null ? null : zAxis.ToList();
-      this.EndRelease = endRelease == null ? null : endRelease.ToList();
-      this.Offset = offset == null ? null : offset.ToList();
-      this.ApplicationId = applicationId;
+      Value = value.ToList();
+      ElementType = elementType;
+      PropertyRef = propertyRef;
+      ZAxis = zAxis == null ? null : zAxis.ToList();
+      EndRelease = endRelease == null ? null : endRelease.ToList();
+      Offset = offset == null ? null : offset.ToList();
+      ApplicationId = applicationId;
 
       GenerateHash();
     }
@@ -98,33 +98,33 @@ namespace SpeckleStructuralClasses
 
       if (properties != null)
       {
-        this.Properties = properties;
+        Properties = properties;
       }
-      this.Value = new List<double>(elements[0].Value.Take(3).ToArray());
-      this.ElementType = elements[0].ElementType;
-      this.PropertyRef = elements[0].PropertyRef;
-      this.ZAxis = new List<StructuralVectorThree>();
-      this.EndRelease = new List<StructuralVectorBoolSix>();
-      this.Offset = new List<StructuralVectorThree>();
+      Value = new List<double>(elements[0].Value.Take(3).ToArray());
+      ElementType = elements[0].ElementType;
+      PropertyRef = elements[0].PropertyRef;
+      ZAxis = new List<StructuralVectorThree>();
+      EndRelease = new List<StructuralVectorBoolSix>();
+      Offset = new List<StructuralVectorThree>();
 
       foreach (var element in elements)
       {
-        if (this.ElementType != element.ElementType)
+        if (ElementType != element.ElementType)
           throw new Exception("Different ElementTypes.");
 
-        if (this.PropertyRef != element.PropertyRef)
+        if (PropertyRef != element.PropertyRef)
           throw new Exception("Different PropertyRef.");
 
-        if (!this.Value.Skip(this.Value.Count() - 3).Take(3).SequenceEqual(element.Value.Take(3)))
+        if (!Value.Skip(Value.Count() - 3).Take(3).SequenceEqual(element.Value.Take(3)))
           throw new Exception("Elements not continuous.");
 
-        this.Value.AddRange(element.Value.Skip(3).Take(3));
-        this.ZAxis.Add(element.ZAxis);
-        this.EndRelease.AddRange(element.EndRelease);
-        this.Offset.AddRange(element.Offset);
+        Value.AddRange(element.Value.Skip(3).Take(3));
+        ZAxis.Add(element.ZAxis);
+        EndRelease.AddRange(element.EndRelease);
+        Offset.AddRange(element.Offset);
       }
 
-      this.ApplicationId = applicationId;
+      ApplicationId = applicationId;
 
       GenerateHash();
     }
@@ -154,15 +154,15 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      for (var i = 0; i < this.Value.Count(); i++)
-        this.Value[i] *= factor;
+      for (var i = 0; i < Value.Count(); i++)
+        Value[i] *= factor;
 
-      if (this.Offset != null)
-        for (var i = 0; i < this.Offset.Count(); i++)
-          this.Offset[i].Scale(factor);
+      if (Offset != null)
+        for (var i = 0; i < Offset.Count(); i++)
+          Offset[i].Scale(factor);
 
-      this.Properties = ScaleProperties(this.Properties, factor);
-      this.GenerateHash();
+      Properties = ScaleProperties(Properties, factor);
+      GenerateHash();
     }
   }
 
@@ -174,31 +174,31 @@ namespace SpeckleStructuralClasses
     {
       if (properties != null)
       {
-        this.Properties = properties;
+        Properties = properties;
       }
-      this.Vertices = vertices.ToList();
-      this.Faces = faces.ToList();
-      this.Colors = colors == null ? null : colors.ToList();
-      this.ElementType = elementType;
-      this.PropertyRef = propertyRef;
-      this.Axis = axis;
-      this.Offset = offset;
-      this.ApplicationId = applicationId;
+      Vertices = vertices.ToList();
+      Faces = faces.ToList();
+      Colors = colors == null ? null : colors.ToList();
+      ElementType = elementType;
+      PropertyRef = propertyRef;
+      Axis = axis;
+      Offset = offset;
+      ApplicationId = applicationId;
 
-      this.TextureCoordinates = null;
+      TextureCoordinates = null;
 
       GenerateHash();
     }
 
     public override void Scale(double factor)
     {
-      for (var i = 0; i < this.Vertices.Count(); i++)
-        this.Vertices[i] *= factor;
+      for (var i = 0; i < Vertices.Count(); i++)
+        Vertices[i] *= factor;
 
-      this.Offset *= factor;
+      Offset *= factor;
 
-      this.Properties = ScaleProperties(this.Properties, factor);
-      this.GenerateHash();
+      Properties = ScaleProperties(Properties, factor);
+      GenerateHash();
     }
   }
 
@@ -210,19 +210,19 @@ namespace SpeckleStructuralClasses
     {
       if (properties != null)
       {
-        this.Properties = properties;
+        Properties = properties;
       }
-      this.Vertices = vertices.ToList();
-      this.Faces = faces.ToList();
-      this.Colors = colors == null ? null : colors.ToList();
-      this.ElementType = elementType;
-      this.PropertyRef = propertyRef;
-      this.Axis = axis.ToList();
+      Vertices = vertices.ToList();
+      Faces = faces.ToList();
+      Colors = colors == null ? null : colors.ToList();
+      ElementType = elementType;
+      PropertyRef = propertyRef;
+      Axis = axis.ToList();
       if (offset != null && offset.Count() > 0)
-        this.Offset = offset.ToList();
-      this.GSAMeshSize = meshSize;
-      this.ApplicationId = applicationId;
-      this.TextureCoordinates = null;
+        Offset = offset.ToList();
+      GSAMeshSize = meshSize;
+      ApplicationId = applicationId;
+      TextureCoordinates = null;
 
       GenerateHash();
     }
@@ -231,37 +231,37 @@ namespace SpeckleStructuralClasses
     {
       if (properties != null)
       {
-        this.Properties = properties;
+        Properties = properties;
       }
-      this.Vertices = edgeVertices.ToList();
+      Vertices = edgeVertices.ToList();
 
       // Perform mesh making
       var faces = SplitMesh(
           edgeVertices,
           (Enumerable.Range(0, edgeVertices.Count() / 3).ToArray()));
 
-      this.Faces = new List<int>();
+      Faces = new List<int>();
 
       foreach (var face in faces)
       {
-        this.Faces.Add(face.Count() - 3);
-        this.Faces.AddRange(face);
+        Faces.Add(face.Count() - 3);
+        Faces.AddRange(face);
       }
 
       if (color != null)
-        this.Colors = Enumerable.Repeat(color.Value, this.Vertices.Count() / 3).ToList();
+        Colors = Enumerable.Repeat(color.Value, Vertices.Count() / 3).ToList();
       else
-        this.Colors = new List<int>();
+        Colors = new List<int>();
 
-      this.ElementType = elementType;
-      this.PropertyRef = propertyRef;
+      ElementType = elementType;
+      PropertyRef = propertyRef;
       if (axis != null)
-        this.Axis = axis.ToList();
+        Axis = axis.ToList();
       if (offset != null && offset.Count() > 0)
-        this.Offset = offset.ToList();
-      this.ApplicationId = applicationId;
+        Offset = offset.ToList();
+      ApplicationId = applicationId;
 
-      this.TextureCoordinates = null;
+      TextureCoordinates = null;
 
       GenerateHash();
     }
@@ -329,11 +329,11 @@ namespace SpeckleStructuralClasses
       {
         for (var i = 0; i < conn.Length - 1; i++)
         {
-          var c1 = string.Join(",", this.Vertices.Skip(conn[i] * 3).Take(3).Select(x => Math.Round(x, 4).ToString()));
-          var c2 = string.Join(",", this.Vertices.Skip(conn[i + 1] * 3).Take(3).Select(x => Math.Round(x, 4).ToString()));
-          var length = Math.Pow(this.Vertices.Skip(conn[i] * 3).Take(1).First() - this.Vertices.Skip(conn[i + 1] * 3).Take(1).First(), 2) +
-            Math.Pow(this.Vertices.Skip(conn[i] * 3 + 1).Take(1).First() - this.Vertices.Skip(conn[i + 1] * 3 + 1).Take(1).First(), 2) +
-            Math.Pow(this.Vertices.Skip(conn[i] * 3 + 2).Take(1).First() - this.Vertices.Skip(conn[i + 1] * 3 + 2).Take(1).First(), 2);
+          var c1 = string.Join(",", Vertices.Skip(conn[i] * 3).Take(3).Select(x => Math.Round(x, 4).ToString()));
+          var c2 = string.Join(",", Vertices.Skip(conn[i + 1] * 3).Take(3).Select(x => Math.Round(x, 4).ToString()));
+          var length = Math.Pow(Vertices.Skip(conn[i] * 3).Take(1).First() - Vertices.Skip(conn[i + 1] * 3).Take(1).First(), 2) +
+            Math.Pow(Vertices.Skip(conn[i] * 3 + 1).Take(1).First() - Vertices.Skip(conn[i + 1] * 3 + 1).Take(1).First(), 2) +
+            Math.Pow(Vertices.Skip(conn[i] * 3 + 2).Take(1).First() - Vertices.Skip(conn[i + 1] * 3 + 2).Take(1).First(), 2);
           length = Math.Sqrt(length);
 
           if (edges.Any(e => (e.Item3 == c1 && e.Item4 == c2) |
@@ -423,15 +423,15 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      for (var i = 0; i < this.Vertices.Count(); i++)
-        this.Vertices[i] *= factor;
+      for (var i = 0; i < Vertices.Count(); i++)
+        Vertices[i] *= factor;
 
-      if (this.Offset != null && this.Offset.Count() > 0)
-        for (var i = 0; i < this.Offset.Count(); i++)
-          this.Offset[i] *= factor;
+      if (Offset != null && Offset.Count() > 0)
+        for (var i = 0; i < Offset.Count(); i++)
+          Offset[i] *= factor;
 
-      this.Properties = ScaleProperties(this.Properties, factor);
-      this.GenerateHash();
+      Properties = ScaleProperties(Properties, factor);
+      GenerateHash();
     }
 
     //TODO: These methods need to be disintegrated 
@@ -583,14 +583,14 @@ namespace SpeckleStructuralClasses
     {
       if (properties != null)
       {
-        this.Properties = properties;
+        Properties = properties;
       }
-      this.Vertices = vertices.ToList();
-      this.Faces = faces.ToList();
-      this.Colors = colors == null ? null : colors.ToList();
-      this.ApplicationId = applicationId;
+      Vertices = vertices.ToList();
+      Faces = faces.ToList();
+      Colors = colors == null ? null : colors.ToList();
+      ApplicationId = applicationId;
 
-      this.TextureCoordinates = null;
+      TextureCoordinates = null;
 
       GenerateHash();
     }
@@ -599,31 +599,31 @@ namespace SpeckleStructuralClasses
     {
       if (properties != null)
       {
-        this.Properties = properties;
+        Properties = properties;
       }
-      this.Vertices = edgeVertices.ToList();
+      Vertices = edgeVertices.ToList();
 
       // Perform mesh making
       var faces = SplitMesh(
           edgeVertices,
           (Enumerable.Range(0, edgeVertices.Count() / 3).ToArray()));
 
-      this.Faces = new List<int>();
+      Faces = new List<int>();
 
       foreach (var face in faces)
       {
-        this.Faces.Add(face.Count() - 3);
-        this.Faces.AddRange(face);
+        Faces.Add(face.Count() - 3);
+        Faces.AddRange(face);
       }
 
       if (color != null)
-        this.Colors = Enumerable.Repeat(color.Value, this.Vertices.Count() / 3).ToList();
+        Colors = Enumerable.Repeat(color.Value, Vertices.Count() / 3).ToList();
       else
-        this.Colors = new List<int>();
+        Colors = new List<int>();
 
-      this.ApplicationId = applicationId;
+      ApplicationId = applicationId;
 
-      this.TextureCoordinates = null;
+      TextureCoordinates = null;
 
       GenerateHash();
     }
@@ -649,11 +649,11 @@ namespace SpeckleStructuralClasses
       {
         for (var i = 0; i < conn.Length - 1; i++)
         {
-          var c1 = string.Join(",", this.Vertices.Skip(conn[i] * 3).Take(3).Select(x => Math.Round(x, 4).ToString()));
-          var c2 = string.Join(",", this.Vertices.Skip(conn[i + 1] * 3).Take(3).Select(x => Math.Round(x, 4).ToString()));
-          var length = Math.Pow(this.Vertices.Skip(conn[i] * 3).Take(1).First() - this.Vertices.Skip(conn[i + 1] * 3).Take(1).First(), 2) +
-            Math.Pow(this.Vertices.Skip(conn[i] * 3 + 1).Take(1).First() - this.Vertices.Skip(conn[i + 1] * 3 + 1).Take(1).First(), 2) +
-            Math.Pow(this.Vertices.Skip(conn[i] * 3 + 2).Take(1).First() - this.Vertices.Skip(conn[i + 1] * 3 + 2).Take(1).First(), 2);
+          var c1 = string.Join(",", Vertices.Skip(conn[i] * 3).Take(3).Select(x => Math.Round(x, 4).ToString()));
+          var c2 = string.Join(",", Vertices.Skip(conn[i + 1] * 3).Take(3).Select(x => Math.Round(x, 4).ToString()));
+          var length = Math.Pow(Vertices.Skip(conn[i] * 3).Take(1).First() - Vertices.Skip(conn[i + 1] * 3).Take(1).First(), 2) +
+            Math.Pow(Vertices.Skip(conn[i] * 3 + 1).Take(1).First() - Vertices.Skip(conn[i + 1] * 3 + 1).Take(1).First(), 2) +
+            Math.Pow(Vertices.Skip(conn[i] * 3 + 2).Take(1).First() - Vertices.Skip(conn[i + 1] * 3 + 2).Take(1).First(), 2);
           length = Math.Sqrt(length);
 
           if (edges.Any(e => (e.Item3 == c1 && e.Item4 == c2) |
@@ -743,11 +743,11 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      for (var i = 0; i < this.Vertices.Count(); i++)
-        this.Vertices[i] *= factor;
+      for (var i = 0; i < Vertices.Count(); i++)
+        Vertices[i] *= factor;
 
-      this.Properties = ScaleProperties(this.Properties, factor);
-      this.GenerateHash();
+      Properties = ScaleProperties(Properties, factor);
+      GenerateHash();
     }
 
     //TODO: These methods need to be disintegrated 
