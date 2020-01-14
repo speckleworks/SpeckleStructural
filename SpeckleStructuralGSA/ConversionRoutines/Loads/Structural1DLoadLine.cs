@@ -140,7 +140,6 @@ namespace SpeckleStructuralGSA
         loadCaseRef = Initialiser.Cache.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef);
       }
 
-      //var axis = GSA.Parse1DAxis(load.Value.ToArray());
       var axis = HelperClass.Parse1DAxis(load.Value.ToArray());
 
       // Calculate elevation
