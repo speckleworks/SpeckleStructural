@@ -75,7 +75,6 @@ namespace SpeckleStructuralGSA
         mat.Density.ToString(), // rho
         mat.CoeffThermalExpansion.ToString(), // alpha
         "MAT_ANAL.1",
-        "0", // TODO: What is this?
         "Steel",
         "-268435456", // TODO: What is this?
         "MAT_ELAS_ISO",
