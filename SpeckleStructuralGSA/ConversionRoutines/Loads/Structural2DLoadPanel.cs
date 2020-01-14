@@ -142,10 +142,8 @@ namespace SpeckleStructuralGSA
       {
         loadCaseIndex = Initialiser.Cache.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef).Value;
       }
-      //catch { loadCaseIndex = Initialiser.Indexer.ResolveIndex(typeof(GSALoadCase), load.LoadCaseRef); }
       catch { }
 
-      //StructuralAxis axis = HelperClass.Parse2DAxis(load.Value.ToArray());
       var axis = HelperClass.Parse2DAxis(load.Value.ToArray());
 
       // Calculate elevation
@@ -157,7 +155,6 @@ namespace SpeckleStructuralGSA
               axis.Normal.Value[2] * axis.Normal.Value[2]);
 
       // Transform coordinate to new axis
-      //double[] transformed = GSA.MapPointsGlobal2Local(load.Value.ToArray(), axis);
       var transformed = HelperClass.MapPointsGlobal2Local(load.Value.ToArray(), axis);
 
       var ls = new List<string>();
