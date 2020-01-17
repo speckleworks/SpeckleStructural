@@ -180,19 +180,26 @@ namespace SpeckleStructuralGSA
         return "";
 
       var obj = this.Value as Structural1DElementPolyline;
-
-      var group = Initialiser.Cache.ResolveIndex(typeof(GSA1DElementPolyline).GetGSAKeyword(), obj.ApplicationId);
-
       var elements = obj.Explode();
-
       var gwaCommands = new List<string>();
-      foreach (var element in elements)
-      {
-        gwaCommands.Add((Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis) 
-          ? new GSA1DElement() { Value = element }.SetGWACommand(group) 
-          : new GSA1DMember() { Value = element }.SetGWACommand(group));
-      }
 
+      if (elements.Count() == 1)
+      {
+        gwaCommands.Add((Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
+         ? new GSA1DElement() { Value = elements.First() }.SetGWACommand()
+         : new GSA1DMember() { Value = elements.First() }.SetGWACommand());
+      }
+      else
+      {
+        var group = Initialiser.Cache.ResolveIndex(typeof(GSA1DElementPolyline).GetGSAKeyword(), obj.ApplicationId);
+        
+        foreach (var element in elements)
+        {
+          gwaCommands.Add((Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
+            ? new GSA1DElement() { Value = element }.SetGWACommand(group)
+            : new GSA1DMember() { Value = element }.SetGWACommand(group));
+        }
+      }
       return string.Join("\n", gwaCommands);
     }
   }
