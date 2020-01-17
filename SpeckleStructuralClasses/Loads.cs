@@ -178,66 +178,6 @@ namespace SpeckleStructuralClasses
   }
 
   [Serializable]
-  public partial class Structural0DLoadPoint : SpecklePoint, IStructural
-  {
-    public override string Type { get { var speckleType = "/" + this.GetType().Name; return base.Type.Replace(speckleType, "") + speckleType; } } //The replacement is to avoid a peculiarity with merging using Automapper
-
-    [JsonIgnore]
-    private Dictionary<string, object> StructuralProperties
-    {
-      get
-      {
-        if (base.Properties == null)
-          base.Properties = new Dictionary<string, object>();
-
-        if (!base.Properties.ContainsKey("structural"))
-          base.Properties["structural"] = new Dictionary<string, object>();
-
-        return base.Properties["structural"] as Dictionary<string, object>;
-
-      }
-      set
-      {
-        if (base.Properties == null)
-          base.Properties = new Dictionary<string, object>();
-
-        base.Properties["structural"] = value;
-      }
-    }
-
-    /// <summary>Base SpeckleLine.</summary>
-    [JsonIgnore]
-    public SpecklePoint basePoint
-    {
-      get => this as SpecklePoint;
-      set
-      {
-        this.Value = value.Value;
-      }
-    }
-
-    /// <summary>x, y or z load.</summary>
-    [JsonIgnore]
-    public StructuralVectorThree Loading
-    {
-      get => StructuralProperties.ContainsKey("loading") ? (StructuralProperties["loading"] as StructuralVectorThree) : null;
-      set { if (value != null) StructuralProperties["loading"] = value; }
-    }
-
-    /// <summary>Application ID of StructuralLoadCase.</summary>
-    [JsonIgnore]
-    public string LoadCaseRef
-    {
-      get => StructuralProperties.ContainsKey("loadCaseRef") ? (StructuralProperties["loadCaseRef"] as string) : null;
-      set { if (value != null) StructuralProperties["loadCaseRef"] = value; }
-    }
-
-    [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    [JsonProperty("axisType", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public StructuralLoadAxisType AxisType { get; set; }
-  }
-
-  [Serializable]
   public partial class Structural1DLoadLine : SpeckleLine, IStructural
   {
     public override string Type { get { var speckleType = "/" + this.GetType().Name; return base.Type.Replace(speckleType, "") + speckleType; } } //The replacement is to avoid a peculiarity with merging using Automapper

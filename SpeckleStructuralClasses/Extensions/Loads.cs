@@ -152,30 +152,6 @@ namespace SpeckleStructuralClasses
     }
   }
 
-  public partial class Structural0DLoadPoint
-  {
-    public Structural0DLoadPoint() { }
-
-    public Structural0DLoadPoint(StructuralVectorThree loading, string loadCaseRef, string applicationId = null, Dictionary<string, object> properties = null)
-    {
-      this.Loading = loading;
-      this.LoadCaseRef = loadCaseRef;
-      this.ApplicationId = applicationId;
-      if (properties != null)
-      {
-        this.Properties = properties;
-      }
-
-      GenerateHash();
-    }
-
-    public override void Scale(double factor)
-    {
-      this.Properties = ScaleProperties(this.Properties, factor);
-      this.GenerateHash();
-    }
-  }
-
   public partial class Structural1DLoad
   {
     public Structural1DLoad() { }

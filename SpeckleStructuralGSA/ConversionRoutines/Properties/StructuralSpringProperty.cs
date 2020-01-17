@@ -156,6 +156,7 @@ namespace SpeckleStructuralGSA
             if (gwaAxisCommand.Length > 0)
             {
               gwaCommands.Add(gwaAxisCommand);
+              axisRef = axisIndex.ToString();
             }
           }
           catch { axisRef = "GLOBAL"; }
