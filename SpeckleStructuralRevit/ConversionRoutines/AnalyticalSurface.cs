@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure;
@@ -9,6 +10,7 @@ namespace SpeckleStructuralRevit
 {
   public static partial class Conversions
   {
+    private static int coordinate_rounding = 4;
     //TODO
     public static Element ToNative(this Structural2DElementMesh myMesh)
     {
@@ -34,6 +36,7 @@ namespace SpeckleStructuralRevit
       // Voids first
 
       var voidLoops = mySurface.GetLoops(AnalyticalLoopType.Void);
+      var counter = 0;
       foreach (var loop in voidLoops)
       {
         var coor = new List<double>();
@@ -47,9 +50,13 @@ namespace SpeckleStructuralRevit
             coor.Add(p.Y / Scale);
             coor.Add(p.Z / Scale);
           }
+          for (var i = 0; i < coor.Count(); i++)
+          {
+            coor[i] = Math.Round(coor[i], coordinate_rounding);
+          }
         }
         
-        returnObjects.Add(new Structural2DVoid(coor.ToArray(), null));
+        returnObjects.Add(new Structural2DVoid(coor.ToArray(), null, applicationId: mySurface.UniqueId + "_void" + (counter++).ToString()));
       }
 
       var polylines = new List<double[]>();
@@ -68,6 +75,10 @@ namespace SpeckleStructuralRevit
             coor.Add(p.Y / Scale);
             coor.Add(p.Z / Scale);
           }
+          for (var i = 0; i < coor.Count(); i++)
+          {
+            coor[i] = Math.Round(coor[i], coordinate_rounding);
+          }
         }
 
         polylines.Add(coor.ToArray());
@@ -84,10 +95,11 @@ namespace SpeckleStructuralRevit
       string sectionID = null;
       try
       {
-        var mySection = new Structural2DProperty();
-
-        mySection.Name = Doc.GetElement(myRevitElement.GetTypeId()).Name;
-        mySection.ApplicationId = Doc.GetElement(myRevitElement.GetTypeId()).UniqueId;
+        var mySection = new Structural2DProperty
+        {
+          Name = Doc.GetElement(myRevitElement.GetTypeId()).Name,
+          ApplicationId = Doc.GetElement(myRevitElement.GetTypeId()).UniqueId
+        };
 
         if (myRevitElement is Floor)
         {
@@ -126,37 +138,43 @@ namespace SpeckleStructuralRevit
           switch (matType)
           {
             case "Concrete":
-              var concMat = new StructuralMaterialConcrete();
-              concMat.ApplicationId = myMat.UniqueId;
-              concMat.Name = Doc.GetElement(myMat.StructuralAssetId).Name;
-              concMat.YoungsModulus = matAsset.YoungModulus.X;
-              concMat.ShearModulus = matAsset.ShearModulus.X;
-              concMat.PoissonsRatio = matAsset.PoissonRatio.X;
-              concMat.Density = matAsset.Density;
-              concMat.CoeffThermalExpansion = matAsset.ThermalExpansionCoefficient.X;
-              concMat.CompressiveStrength = matAsset.ConcreteCompression;
-              concMat.MaxStrain = 0;
-              concMat.AggragateSize = 0;
+              var concMat = new StructuralMaterialConcrete
+              {
+                ApplicationId = myMat.UniqueId,
+                Name = Doc.GetElement(myMat.StructuralAssetId).Name,
+                YoungsModulus = matAsset.YoungModulus.X,
+                ShearModulus = matAsset.ShearModulus.X,
+                PoissonsRatio = matAsset.PoissonRatio.X,
+                Density = matAsset.Density,
+                CoeffThermalExpansion = matAsset.ThermalExpansionCoefficient.X,
+                CompressiveStrength = matAsset.ConcreteCompression,
+                MaxStrain = 0,
+                AggragateSize = 0
+              };
               myMaterial = concMat;
               break;
             case "Steel":
-              var steelMat = new StructuralMaterialSteel();
-              steelMat.ApplicationId = myMat.UniqueId;
-              steelMat.Name = Doc.GetElement(myMat.StructuralAssetId).Name;
-              steelMat.YoungsModulus = matAsset.YoungModulus.X;
-              steelMat.ShearModulus = matAsset.ShearModulus.X;
-              steelMat.PoissonsRatio = matAsset.PoissonRatio.X;
-              steelMat.Density = matAsset.Density;
-              steelMat.CoeffThermalExpansion = matAsset.ThermalExpansionCoefficient.X;
-              steelMat.YieldStrength = matAsset.MinimumYieldStress;
-              steelMat.UltimateStrength = matAsset.MinimumTensileStrength;
-              steelMat.MaxStrain = 0;
+              var steelMat = new StructuralMaterialSteel
+              {
+                ApplicationId = myMat.UniqueId,
+                Name = Doc.GetElement(myMat.StructuralAssetId).Name,
+                YoungsModulus = matAsset.YoungModulus.X,
+                ShearModulus = matAsset.ShearModulus.X,
+                PoissonsRatio = matAsset.PoissonRatio.X,
+                Density = matAsset.Density,
+                CoeffThermalExpansion = matAsset.ThermalExpansionCoefficient.X,
+                YieldStrength = matAsset.MinimumYieldStress,
+                UltimateStrength = matAsset.MinimumTensileStrength,
+                MaxStrain = 0
+              };
               myMaterial = steelMat;
               break;
             default:
-              var defMat = new StructuralMaterialSteel();
-              defMat.ApplicationId = myMat.UniqueId;
-              defMat.Name = Doc.GetElement(myMat.StructuralAssetId).Name;
+              var defMat = new StructuralMaterialSteel
+              {
+                ApplicationId = myMat.UniqueId,
+                Name = Doc.GetElement(myMat.StructuralAssetId).Name
+              };
               myMaterial = defMat;
               break;
           }
@@ -176,7 +194,7 @@ namespace SpeckleStructuralRevit
       }
       catch { }
 
-      var counter = 0;
+      counter = 0;
       foreach(var coor in polylines)
       {
         var dummyMesh = new Structural2DElementMesh(coor, null, type, null, null, null);
@@ -188,15 +206,21 @@ namespace SpeckleStructuralRevit
           i += dummyMesh.Faces[i] + 3;
         }
 
-        var mesh = new Structural2DElementMesh();
-        mesh.Vertices = dummyMesh.Vertices;
-        mesh.Faces = dummyMesh.Faces;
-        mesh.Colors = dummyMesh.Colors;
-        mesh.ElementType = type;
+        var mesh = new Structural2DElementMesh
+        {
+          Vertices = dummyMesh.Vertices,
+          Faces = dummyMesh.Faces,
+          Colors = dummyMesh.Colors,
+          ElementType = type
+        };
         if (sectionID != null)
+        {
           mesh.PropertyRef = sectionID;
+        }
         if (axis != null)
+        {
           mesh.Axis = Enumerable.Repeat(axis, numFaces).ToList();
+        }
         mesh.Offset = Enumerable.Repeat(0.0, numFaces).Cast<double>().ToList(); //TODO
 
         mesh.GenerateHash();

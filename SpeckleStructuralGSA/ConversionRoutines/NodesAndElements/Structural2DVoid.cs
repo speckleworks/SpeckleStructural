@@ -82,21 +82,46 @@ namespace SpeckleStructuralGSA
       };
       var topo = "";
       var prevNodeIndex = -1;
-      var connectivities = v.Edges();
-      var coor = new List<double>();
-
-      if (connectivities.Count == 0)
-        return "";
+      //var coor = new List<double>();
       
-      foreach (var c in connectivities[0])
+      if (v.Faces != null && v.Faces.Count() > 0)
       {
-        coor.AddRange(v.Vertices.Skip(c * 3).Take(3));
-        var currIndex = HelperClass.NodeAt(v.Vertices[c * 3], v.Vertices[c * 3 + 1], v.Vertices[c * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance);
-        if (prevNodeIndex != currIndex)
-          topo += currIndex.ToString() + " ";
-        prevNodeIndex = currIndex;
+        var connectivities = v.Edges();
+        foreach (var c in connectivities[0])
+        {
+          //coor.AddRange(v.Vertices.Skip(c * 3).Take(3));
+          var currIndex = HelperClass.NodeAt(v.Vertices[c * 3], v.Vertices[c * 3 + 1], v.Vertices[c * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance);
+          if (prevNodeIndex != currIndex)
+            topo += currIndex.ToString() + " ";
+          prevNodeIndex = currIndex;
+        }
       }
-
+      else
+      {
+        //Even if something has gone wrong in the generation of the faces (and therefore edges) of the mesh, if there are exactly 3 or 4 points, 
+        //assume that it is planar and create a void.
+        //TO DO: review why the generation of faces results in an empty list for wall voids in the ToSpeckle() code.  Once that has been fixed,
+        //the block below can be removed
+        if (v.Vertices != null && (v.Vertices.Count() == 9 || v.Vertices.Count() == 12))
+        {
+          int numVertices = v.Vertices.Count() / 3;
+          var indices = new List<int>();
+          for (var i = 0; i < numVertices; i++)
+          {
+            var currIndex = HelperClass.NodeAt(v.Vertices[i * 3], v.Vertices[i * 3 + 1], v.Vertices[i * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance);
+            if (prevNodeIndex != currIndex)
+            {
+              topo += currIndex.ToString() + " ";
+            }
+            prevNodeIndex = currIndex;
+          }
+        }
+        else
+        {
+          return "";
+        }
+      }
+      
       ls.Add(topo);
       ls.Add("0"); // Orientation node
       ls.Add("0"); // Angles
