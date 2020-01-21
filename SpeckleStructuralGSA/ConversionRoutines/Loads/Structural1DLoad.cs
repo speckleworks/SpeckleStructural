@@ -8,8 +8,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("LOAD_BEAM", new string[] { "EL.3", "MEMB.7" }, "loads", true, true, new Type[] { typeof(GSA1DElement), typeof(GSA1DMember) }, new Type[] { typeof(GSA1DElement), typeof(GSA1DMember), typeof(GSA1DElementPolyline) })]
-  public class GSA1DLoad : IGSASpeckleContainer
+  public abstract class GSA1DLoadBase
   {
     public int Axis; // Store this temporarily to generate other loads
     public bool Projected;
@@ -134,7 +133,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public string SetGWACommand()
+    public string SetGWACommand(string keyword)
     {
       if (this.Value == null)
         return "";
@@ -143,8 +142,6 @@ namespace SpeckleStructuralGSA
 
       if (load.Loading == null)
         return "";
-
-      var keyword = typeof(GSA1DLoad).GetGSAKeyword();
 
       List<int> elementRefs;
       List<int> groupRefs;
@@ -170,7 +167,8 @@ namespace SpeckleStructuralGSA
       {
         loadCaseRef = Initialiser.Cache.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef).Value;
       }
-      catch {
+      catch
+      {
         loadCaseRef = Initialiser.Cache.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef).Value;
       }
 
@@ -184,7 +182,7 @@ namespace SpeckleStructuralGSA
 
         if (load.Loading.Value[i] == 0) continue;
 
-        var index = Initialiser.Cache.ResolveIndex(typeof(GSA1DLoad).GetGSAKeyword());
+        var index = Initialiser.Cache.ResolveIndex(keyword);
 
         ls.Add("SET_AT");
         ls.Add(index.ToString());
@@ -205,141 +203,189 @@ namespace SpeckleStructuralGSA
     }
   }
 
+  [GSAObject("LOAD_BEAM", new string[] { "EL.3" }, "loads", true, false, new Type[] { typeof(GSA1DElement) }, new Type[] { typeof(GSA1DElement), typeof(GSA1DElementPolyline) })]
+  public class GSA1DLoadAnalysisLayer : GSA1DLoadBase, IGSASpeckleContainer
+  {
+    public void ParseGWACommand(List<GSA1DElement> elements)
+    {
+      base.ParseGWACommand(elements, new List<GSA1DMember>());
+    }
+
+    public string SetGWACommand()
+    {
+      return base.SetGWACommand(typeof(GSA1DLoadAnalysisLayer).GetGSAKeyword());
+    }
+  }
+
+  [GSAObject("LOAD_BEAM", new string[] { "MEMB.7" }, "loads", false, true, new Type[] { typeof(GSA1DMember) }, new Type[] { typeof(GSA1DMember) })]
+  public class GSA1DLoadDesignLayer : GSA1DLoadBase, IGSASpeckleContainer
+  {
+    public void ParseGWACommand(List<GSA1DMember> members)
+    {
+      base.ParseGWACommand(new List<GSA1DElement>(), members);
+    }
+
+    public string SetGWACommand()
+    {
+      return base.SetGWACommand(typeof(GSA1DLoadDesignLayer).GetGSAKeyword());
+    }
+  }
+
   public static partial class Conversions
   {
     public static string ToNative(this Structural1DLoad load)
     {
-      return new GSA1DLoad() { Value = load }.SetGWACommand();
+      return (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
+        ? new GSA1DLoadAnalysisLayer() { Value = load }.SetGWACommand()
+        : new GSA1DLoadDesignLayer() { Value = load }.SetGWACommand();
     }
 
-    public static SpeckleObject ToSpeckle(this GSA1DLoad dummyObject)
+    public static SpeckleObject ToSpeckle(this GSA1DLoadAnalysisLayer dummyObject)
     {
-      var newLines = ToSpeckleBase<GSA1DLoad>();
+      var newLines = ToSpeckleBase<GSA1DLoadAnalysisLayer>();
 
-      var loads = new List<GSA1DLoad>();
-      var elements = Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis ? Initialiser.GSASenderObjects[typeof(GSA1DElement)].Cast<GSA1DElement>().ToList() : new List<GSA1DElement>();
-      var members = Initialiser.Settings.TargetLayer == GSATargetLayer.Design ? Initialiser.GSASenderObjects[typeof(GSA1DMember)].Cast<GSA1DMember>().ToList() : new List<GSA1DMember>();
+      var loads = new List<GSA1DLoadAnalysisLayer>();
+      var elements = Initialiser.GSASenderObjects[typeof(GSA1DElement)].Cast<GSA1DElement>().ToList();
 
       foreach (var p in newLines.Values)
       {
-        var loadSubList = new List<GSA1DLoad>();
+        var loadSubList = new List<GSA1DLoadAnalysisLayer>();
 
         // Placeholder load object to get list of elements and load values
         // Need to transform to axis so one load definition may be transformed to many
-        var initLoad = new GSA1DLoad() { GWACommand = p };
-        initLoad.ParseGWACommand(elements, members);
+        var initLoad = new GSA1DLoadAnalysisLayer() { GWACommand = p };
+        initLoad.ParseGWACommand(elements);
 
-        if (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
+        // Create load for each element applied
+        foreach (string nRef in initLoad.Value.ElementRefs)
         {
-          // Create load for each element applied
-          foreach (string nRef in initLoad.Value.ElementRefs)
+          var load = new GSA1DLoadAnalysisLayer
           {
-            var load = new GSA1DLoad
+            GWACommand = initLoad.GWACommand,
+            SubGWACommand = new List<string>(initLoad.SubGWACommand)
+          };
+          load.Value.Name = initLoad.Value.Name;
+          load.Value.LoadCaseRef = initLoad.Value.LoadCaseRef;
+
+          // Transform load to defined axis
+          var elem = elements.Where(e => e.Value.ApplicationId == nRef).First();
+          StructuralAxis loadAxis = load.Axis == 0 ? new StructuralAxis(
+              new StructuralVectorThree(new double[] { 1, 0, 0 }),
+              new StructuralVectorThree(new double[] { 0, 1, 0 }),
+              new StructuralVectorThree(new double[] { 0, 0, 1 })) :
+              HelperClass.LocalAxisEntity1D(elem.Value.Value.ToArray(), elem.Value.ZAxis); // Assumes if not global, local
+          load.Value.Loading = initLoad.Value.Loading;
+          load.Value.Loading.TransformOntoAxis(loadAxis);
+
+          // Perform projection
+          if (load.Projected)
+          {
+            var loadDirection = new Vector3D(
+                load.Value.Loading.Value[0],
+                load.Value.Loading.Value[1],
+                load.Value.Loading.Value[2]);
+
+            if (loadDirection.Length > 0)
             {
-              GWACommand = initLoad.GWACommand,
-              SubGWACommand = new List<string>(initLoad.SubGWACommand)
-            };
-            load.Value.Name = initLoad.Value.Name;
-            load.Value.LoadCaseRef = initLoad.Value.LoadCaseRef;
-
-            // Transform load to defined axis
-            var elem = elements.Where(e => e.Value.ApplicationId == nRef).First();
-            StructuralAxis loadAxis = load.Axis == 0 ? new StructuralAxis(
-                new StructuralVectorThree(new double[] { 1, 0, 0 }),
-                new StructuralVectorThree(new double[] { 0, 1, 0 }),
-                new StructuralVectorThree(new double[] { 0, 0, 1 })) :
-                HelperClass.LocalAxisEntity1D(elem.Value.Value.ToArray(), elem.Value.ZAxis); // Assumes if not global, local
-            load.Value.Loading = initLoad.Value.Loading;
-            load.Value.Loading.TransformOntoAxis(loadAxis);
-
-            // Perform projection
-            if (load.Projected)
-            {
-              var loadDirection = new Vector3D(
-                  load.Value.Loading.Value[0],
-                  load.Value.Loading.Value[1],
-                  load.Value.Loading.Value[2]);
-
-              if (loadDirection.Length > 0)
-              {
-                var axisX = new Vector3D(elem.Value[5] - elem.Value[0], elem.Value[4] - elem.Value[1], elem.Value[3] - elem.Value[2]);
-                var angle = Vector3D.AngleBetween(loadDirection, axisX);
-                var factor = Math.Sin(angle);
-                load.Value.Loading.Value[0] *= factor;
-                load.Value.Loading.Value[1] *= factor;
-                load.Value.Loading.Value[2] *= factor;
-              }
-            }
-
-            // If the loading already exists, add element ref to list
-            var match = loadSubList.Count() > 0 ? loadSubList.Where(l => (l.Value.Loading.Value as List<double>).SequenceEqual(load.Value.Loading.Value as List<double>)).First() : null;
-            if (match != null)
-              match.Value.ElementRefs.Add(nRef);
-            else
-            {
-              load.Value.ElementRefs = new List<string>() { nRef };
-              loadSubList.Add(load);
+              var axisX = new Vector3D(elem.Value[5] - elem.Value[0], elem.Value[4] - elem.Value[1], elem.Value[3] - elem.Value[2]);
+              var angle = Vector3D.AngleBetween(loadDirection, axisX);
+              var factor = Math.Sin(angle);
+              load.Value.Loading.Value[0] *= factor;
+              load.Value.Loading.Value[1] *= factor;
+              load.Value.Loading.Value[2] *= factor;
             }
           }
-        }
-        else if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
-        {
-          // Create load for each element applied
-          foreach (string nRef in initLoad.Value.ElementRefs)
+
+          // If the loading already exists, add element ref to list
+          var match = loadSubList.Count() > 0 ? loadSubList.Where(l => (l.Value.Loading.Value as List<double>).SequenceEqual(load.Value.Loading.Value as List<double>)).First() : null;
+          if (match != null)
+            match.Value.ElementRefs.Add(nRef);
+          else
           {
-            var load = new GSA1DLoad
-            {
-              GWACommand = initLoad.GWACommand,
-              SubGWACommand = new List<string>(initLoad.SubGWACommand)
-            };
-            load.Value.Name = initLoad.Value.Name;
-            load.Value.LoadCaseRef = initLoad.Value.LoadCaseRef;
-
-            // Transform load to defined axis
-            var memb = members.Where(e => e.Value.ApplicationId == nRef).First();
-            StructuralAxis loadAxis = load.Axis == 0 ? new StructuralAxis(
-                new StructuralVectorThree(new double[] { 1, 0, 0 }),
-                new StructuralVectorThree(new double[] { 0, 1, 0 }),
-                new StructuralVectorThree(new double[] { 0, 0, 1 })) :
-                HelperClass.LocalAxisEntity1D(memb.Value.Value.ToArray(), memb.Value.ZAxis); // Assumes if not global, local
-            load.Value.Loading = initLoad.Value.Loading;
-            load.Value.Loading.TransformOntoAxis(loadAxis);
-
-            // Perform projection
-            if (load.Projected)
-            {
-              var loadDirection = new Vector3D(
-                  load.Value.Loading.Value[0],
-                  load.Value.Loading.Value[1],
-                  load.Value.Loading.Value[2]);
-
-              if (loadDirection.Length > 0)
-              {
-                var axisX = new Vector3D(memb.Value[5] - memb.Value[0], memb.Value[4] - memb.Value[1], memb.Value[3] - memb.Value[2]);
-                var angle = Vector3D.AngleBetween(loadDirection, axisX);
-                var factor = Math.Sin(angle);
-                load.Value.Loading.Value[0] *= factor;
-                load.Value.Loading.Value[1] *= factor;
-                load.Value.Loading.Value[2] *= factor;
-              }
-            }
-
-            // If the loading already exists, add element ref to list
-            var match = loadSubList.Count() > 0 ? loadSubList.Where(l => l.Value.Loading.Equals(load.Value.Loading)).First() : null;
-            if (match != null)
-              match.Value.ElementRefs.Add(nRef);
-            else
-            {
-              load.Value.ElementRefs = new List<string>() { nRef };
-              loadSubList.Add(load);
-            }
+            load.Value.ElementRefs = new List<string>() { nRef };
+            loadSubList.Add(load);
           }
         }
 
         loads.AddRange(loadSubList);
       }
 
-      Initialiser.GSASenderObjects[typeof(GSA1DLoad)].AddRange(loads);
+      Initialiser.GSASenderObjects[typeof(GSA1DLoadAnalysisLayer)].AddRange(loads);
+
+      return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+    }
+
+    public static SpeckleObject ToSpeckle(this GSA1DLoadDesignLayer dummyObject)
+    {
+      var newLines = ToSpeckleBase<GSA1DLoadDesignLayer>();
+
+      var loads = new List<GSA1DLoadDesignLayer>();
+      var members = Initialiser.GSASenderObjects[typeof(GSA1DMember)].Cast<GSA1DMember>().ToList();
+
+      foreach (var p in newLines.Values)
+      {
+        var loadSubList = new List<GSA1DLoadDesignLayer>();
+
+        // Placeholder load object to get list of elements and load values
+        // Need to transform to axis so one load definition may be transformed to many
+        var initLoad = new GSA1DLoadDesignLayer() { GWACommand = p };
+        initLoad.ParseGWACommand(members);
+
+        // Create load for each element applied
+        foreach (string nRef in initLoad.Value.ElementRefs)
+        {
+          var load = new GSA1DLoadDesignLayer
+          {
+            GWACommand = initLoad.GWACommand,
+            SubGWACommand = new List<string>(initLoad.SubGWACommand)
+          };
+          load.Value.Name = initLoad.Value.Name;
+          load.Value.LoadCaseRef = initLoad.Value.LoadCaseRef;
+
+          // Transform load to defined axis
+          var memb = members.Where(e => e.Value.ApplicationId == nRef).First();
+          StructuralAxis loadAxis = load.Axis == 0 ? new StructuralAxis(
+              new StructuralVectorThree(new double[] { 1, 0, 0 }),
+              new StructuralVectorThree(new double[] { 0, 1, 0 }),
+              new StructuralVectorThree(new double[] { 0, 0, 1 })) :
+              HelperClass.LocalAxisEntity1D(memb.Value.Value.ToArray(), memb.Value.ZAxis); // Assumes if not global, local
+          load.Value.Loading = initLoad.Value.Loading;
+          load.Value.Loading.TransformOntoAxis(loadAxis);
+
+          // Perform projection
+          if (load.Projected)
+          {
+            var loadDirection = new Vector3D(
+                load.Value.Loading.Value[0],
+                load.Value.Loading.Value[1],
+                load.Value.Loading.Value[2]);
+
+            if (loadDirection.Length > 0)
+            {
+              var axisX = new Vector3D(memb.Value[5] - memb.Value[0], memb.Value[4] - memb.Value[1], memb.Value[3] - memb.Value[2]);
+              var angle = Vector3D.AngleBetween(loadDirection, axisX);
+              var factor = Math.Sin(angle);
+              load.Value.Loading.Value[0] *= factor;
+              load.Value.Loading.Value[1] *= factor;
+              load.Value.Loading.Value[2] *= factor;
+            }
+          }
+
+          // If the loading already exists, add element ref to list
+          var match = loadSubList.Count() > 0 ? loadSubList.Where(l => l.Value.Loading.Equals(load.Value.Loading)).First() : null;
+          if (match != null)
+            match.Value.ElementRefs.Add(nRef);
+          else
+          {
+            load.Value.ElementRefs = new List<string>() { nRef };
+            loadSubList.Add(load);
+          }
+        }
+
+        loads.AddRange(loadSubList);
+      }
+
+      Initialiser.GSASenderObjects[typeof(GSA1DLoadDesignLayer)].AddRange(loads);
 
       return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
