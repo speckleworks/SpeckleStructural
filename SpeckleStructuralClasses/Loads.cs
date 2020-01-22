@@ -160,6 +160,35 @@ namespace SpeckleStructuralClasses
   }
 
   [Serializable]
+  public partial class Structural0DLoadPoint : SpecklePoint, IStructural
+  {
+    public override string Type { get => "Structural0DLoadPoint"; }
+
+    /// <summary>Base SpeckleLine.</summary>
+    [JsonIgnore]
+    public SpecklePoint loadPoint
+    {
+      get => this as SpecklePoint;
+      set
+      {
+        this.Value = value.Value;
+      }
+    }
+
+    /// <summary>Location of load.</summary>
+    [JsonProperty("loadAxis", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public StructuralAxis LoadAxis { get; set; }
+
+    /// <summary>A list of Fx, Fy, Fz, Mx, My, and Mz loads.</summary>
+    [JsonProperty("loading", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public StructuralVectorSix Loading { get; set; }
+
+    /// <summary>Application ID of StructuralLoadCase.</summary>
+    [JsonProperty("loadCaseRef", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public string LoadCaseRef { get; set; }
+  }
+
+  [Serializable]
   public partial class Structural1DLoad : SpeckleObject, IStructural
   {
     public override string Type { get => "Structural1DLoad"; }
@@ -223,6 +252,14 @@ namespace SpeckleStructuralClasses
     {
       get => StructuralProperties.ContainsKey("loading") ? (StructuralProperties["loading"] as StructuralVectorSix) : null;
       set { if (value != null) StructuralProperties["loading"] = value; }
+    }
+
+    /// <summary>End loading if load varies at end point. A list of Fx, Fy, Fz, Mx, My, and Mz loads.</summary>
+    [JsonIgnore]
+    public StructuralVectorSix LoadingEnd
+    {
+      get => StructuralProperties.ContainsKey("loadingEnd") ? (StructuralProperties["loadingEnd"] as StructuralVectorSix) : null;
+      set { if (value != null) StructuralProperties["loadingEnd"] = value; }
     }
 
     /// <summary>Application ID of StructuralLoadCase.</summary>

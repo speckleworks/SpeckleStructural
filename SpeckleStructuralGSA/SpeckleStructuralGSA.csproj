@@ -217,6 +217,7 @@
   <ItemGroup>
     <Compile Include="ConversionRoutines\Conversions.cs" />
     <Compile Include="ConversionRoutines\Loads\Structural0DLoad.cs" />
+    <Compile Include="ConversionRoutines\Loads\Structural0DLoadPoint.cs" />
     <Compile Include="ConversionRoutines\Loads\Structural1DLoad.cs" />
     <Compile Include="ConversionRoutines\Loads\Structural1DLoadLine.cs" />
     <Compile Include="ConversionRoutines\Loads\Structural2DLoad.cs" />
