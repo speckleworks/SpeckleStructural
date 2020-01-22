@@ -548,11 +548,16 @@ namespace SpeckleStructuralGSA
       var gwaAxisName = name ?? "";
       index = 0;
       gwa = "";
+      double[] globalOrigin = { 0, 0, 0 };
+      double[] globalXdir = { 1, 0, 0 };
+      double[] globalYdir = { 0, 1, 0 };
+      double[] globalZdir = { 0, 0, 1 };
 
       if (axis == null 
-        || (axis.Xdir.Value.SequenceEqual(new double[] { 1, 0, 0 }) &&
-          axis.Ydir.Value.SequenceEqual(new double[] { 0, 1, 0 }) &&
-          axis.Normal.Value.SequenceEqual(new double[] { 0, 0, 1 })))
+        || (
+          axis.Xdir.Value.SequenceEqual(globalXdir) &&
+          axis.Ydir.Value.SequenceEqual(globalYdir) &&
+          axis.Normal.Value.SequenceEqual(globalZdir)))
       {
         return;
       }
@@ -566,9 +571,9 @@ namespace SpeckleStructuralGSA
         gwaAxisName,
         "CART",
 
-        "0",
-        "0",
-        "0",
+        axis.Origin.Value[0].ToString(),
+        axis.Origin.Value[1].ToString(),
+        axis.Origin.Value[2].ToString(),
 
         axis.Xdir.Value[0].ToString(),
         axis.Xdir.Value[1].ToString(),
