@@ -224,7 +224,7 @@ namespace SpeckleStructuralGSA
 
           if (loadCaseRef.HasValue)
           {
-            if (loadTask.LoadFactors.Count() > i)
+            if (loadTask.LoadFactors != null && loadTask.LoadFactors.Count() > i)
               subLs.Add(loadTask.LoadFactors[i].ToString() + "L" + loadCaseRef.Value.ToString());
             else
               subLs.Add("L" + loadCaseRef.Value.ToString());
