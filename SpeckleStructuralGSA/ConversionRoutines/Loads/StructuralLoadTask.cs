@@ -214,7 +214,9 @@ namespace SpeckleStructuralGSA
       ls.Add(loadTask.Name == null || loadTask.Name == "" ? " " : loadTask.Name);
       ls.Add(taskIndex.ToString());
       if (loadTask.TaskType == StructuralLoadTaskType.Modal)
+      {
         ls.Add("M1");
+      }
       else
       {
         var subLs = new List<string>();
@@ -224,15 +226,15 @@ namespace SpeckleStructuralGSA
 
           if (loadCaseRef.HasValue)
           {
-            if (loadTask.LoadFactors.Count() > i)
+            if (loadTask.LoadFactors != null && loadTask.LoadFactors.Count() > i)
               subLs.Add(loadTask.LoadFactors[i].ToString() + "L" + loadCaseRef.Value.ToString());
             else
               subLs.Add("L" + loadCaseRef.Value.ToString());
           }
         }
         ls.Add(string.Join(" + ", subLs));
-        gwaCommands.Add(string.Join("\t", ls));
       }
+      gwaCommands.Add(string.Join("\t", ls));
       return string.Join("\n", gwaCommands);
     }
   }
