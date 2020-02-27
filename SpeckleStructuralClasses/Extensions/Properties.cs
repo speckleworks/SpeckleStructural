@@ -29,6 +29,8 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
+      this.YoungsModulus *= factor;
+      this.CompressiveStrength *= factor;
       this.Properties = ScaleProperties(this.Properties, factor);
       this.GenerateHash();
     }
