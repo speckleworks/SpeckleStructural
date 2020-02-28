@@ -624,12 +624,38 @@ namespace SpeckleStructuralGSA
       {
         using (var conn = new SQLiteConnection(DbPath, SQLiteOpenFlags.ReadOnly))
         {
-          var query_sect = "SELECT SECT_NAME, SECT_SHAPE, SECT_TYPE_NUM, SECT_DEPTH_DIAM, SECT_WIDTH, SECT_WEB_THICK, SECT_FLG_THICK" +
-              " FROM Sect" +
-              " WHERE lower(SECT_NAME) = lower(?)" +
-              " ORDER BY SECT_DATE_ADDED DESC LIMIT 1";
+          var query_sect = "SELECT SECT_NAME, SECT_SHAPE, SECT_TYPE_NUM, SECT_DEPTH_DIAM, SECT_WIDTH, SECT_WEB_THICK, SECT_FLG_THICK "
+            + "FROM Sect s "
+            + "INNER JOIN Types t ON s.SECT_TYPE_NUM = t.TYPE_NUM "
+            + "WHERE lower(SECT_NAME) = lower(?) "
+            + "ORDER BY SECT_DATE_ADDED DESC";
 
-          IEnumerable<GSASection> sect = conn.Query<GSASection>(query_sect, new object[] { name });
+          IEnumerable<GSASection> sect;
+
+          //Temporary work-around for a particular while the absence of some expected rows in the GSA catalogue table(s) is investigated
+          if (name.Contains(@"/"))
+          {
+            var pieces = name.Split(new[] { '/' });
+            var grade = pieces[0];
+            name = pieces[1];
+            
+            sect = conn.Query<GSASection>(query_sect, new object[] { name });
+            var typeNumbers = sect.Select(s => s.SECT_TYPE_NUM).ToList();
+
+            if (typeNumbers.Count() > 0)
+            {
+              if (typeNumbers.Contains(124) && grade == "350")
+              {
+                return "CAT%A-SHS350%" + sect.ToList()[0].SECT_NAME;
+              }
+              else if (typeNumbers.Contains(125) && grade == "450")
+              {
+                return "CAT%A-SHS450%" + sect.ToList()[0].SECT_NAME;
+              }
+            }
+          }
+
+          sect = conn.Query<GSASection>(query_sect, new object[] { name });
 
           if (sect.Count() == 0)
             return null;
