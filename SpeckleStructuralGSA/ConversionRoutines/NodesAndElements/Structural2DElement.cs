@@ -4,6 +4,7 @@ using System.Linq;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
+using System.Text.RegularExpressions;
 
 namespace SpeckleStructuralGSA
 {
@@ -185,10 +186,17 @@ namespace SpeckleStructuralGSA
       this.Group = Convert.ToInt32(pieces[counter++]); // Keep group for load targetting
 
       var coordinates = new List<double>();
-      var nodeRefs = pieces[counter++].ListSplit(" ");
+      var nodeRefsFull = pieces[counter++];
+
+      //Remove the specification of internal nodes
+      var nodeRefsWithoutInternalNodes = Regex.Replace(nodeRefsFull, @"P\([0-9]*(.*?)\)", "");
+
+      var nodeRefs = nodeRefsWithoutInternalNodes.Trim().ListSplit(" ");
       for (var i = 0; i < nodeRefs.Length; i++)
       {
         var node = nodes.Where(n => n.GSAId.ToString() == nodeRefs[i]).FirstOrDefault();
+        if (node == null) continue;
+
         coordinates.AddRange(node.Value.Value);
         this.SubGWACommand.Add(node.GWACommand);
       }

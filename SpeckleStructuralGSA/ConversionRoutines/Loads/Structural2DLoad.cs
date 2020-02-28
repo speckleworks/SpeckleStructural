@@ -7,8 +7,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("LOAD_2D_FACE.2", new string[] { "EL.3", "MEMB.7" }, "loads", true, true, new Type[] { typeof(GSA2DElement), typeof(GSA2DMember) }, new Type[] { typeof(GSA2DElement), typeof(GSA2DMember), typeof(GSA2DElementMesh) })]
-  public class GSA2DLoad : IGSASpeckleContainer
+  public abstract class GSA2DLoadBase
   {
     public int Axis; // Store this temporarily to generate other loads
     public bool Projected;
@@ -18,7 +17,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new Structural2DLoad();
 
-    public void ParseGWACommand(List<GSA2DElement> elements, List<GSA2DMember> members)
+    protected void ParseGWACommand(List<GSA2DElement> elements, List<GSA2DMember> members)
     {
       if (this.GWACommand == null)
         return;
@@ -91,7 +90,7 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    public string SetGWACommand()
+    protected string SetGWACommand(string keyword)
     {
       if (this.Value == null)
         return "";
@@ -100,8 +99,6 @@ namespace SpeckleStructuralGSA
 
       if (load.Loading == null)
         return "";
-
-      var keyword = typeof(GSA2DLoad).GetGSAKeyword();
 
       List<int> elementRefs;
       List<int> groupRefs;
@@ -126,7 +123,8 @@ namespace SpeckleStructuralGSA
       {
         loadCaseRef = Initialiser.Cache.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef).Value;
       }
-      catch {
+      catch
+      {
         loadCaseRef = Initialiser.Cache.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef);
       }
 
@@ -138,7 +136,7 @@ namespace SpeckleStructuralGSA
       {
         if (load.Loading.Value[i] == 0) continue;
 
-        var index = Initialiser.Cache.ResolveIndex(typeof(GSA2DLoad).GetGSAKeyword());
+        var index = Initialiser.Cache.ResolveIndex(keyword);
 
         var ls = new List<string>
         {
@@ -163,110 +161,159 @@ namespace SpeckleStructuralGSA
     }
   }
 
+  [GSAObject("LOAD_2D_FACE.2", new string[] { "EL.3" }, "loads", true, false, new Type[] { typeof(GSA2DElement) }, new Type[] { typeof(GSA2DElement), typeof(GSA2DElementMesh) })]
+  public class GSA2DLoadAnalysisLayer : GSA2DLoadBase, IGSASpeckleContainer
+  {
+    public void ParseGWACommand(List<GSA2DElement> elements)
+    {
+      base.ParseGWACommand(elements, new List<GSA2DMember>());
+    }
+
+    public string SetGWACommand()
+    {
+      return base.SetGWACommand(typeof(GSA2DLoadAnalysisLayer).GetGSAKeyword());
+    }
+  }
+
+  [GSAObject("LOAD_2D_FACE.2", new string[] { "MEMB.7" }, "loads", false, true, new Type[] {typeof(GSA2DMember) }, new Type[] {typeof(GSA2DMember)})]
+  public class GSA2DLoadDesignLayer : GSA2DLoadBase, IGSASpeckleContainer
+  {
+    public void ParseGWACommand(List<GSA2DMember> members)
+    {
+      base.ParseGWACommand(new List<GSA2DElement>(), members);
+    }
+
+    public string SetGWACommand()
+    {
+      return base.SetGWACommand(typeof(GSA2DLoadDesignLayer).GetGSAKeyword());
+    }
+  }
+
   public static partial class Conversions
   {
     public static string ToNative(this Structural2DLoad load)
     {
-      return new GSA2DLoad() { Value = load }.SetGWACommand();
+      return (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
+        ? new GSA2DLoadAnalysisLayer() { Value = load }.SetGWACommand()
+        : new GSA2DLoadDesignLayer() { Value = load }.SetGWACommand();
     }
 
-    public static SpeckleObject ToSpeckle(this GSA2DLoad dummyObject)
+    public static SpeckleObject ToSpeckle(this GSA2DLoadAnalysisLayer dummyObject)
     {
-      var newLines = ToSpeckleBase<GSA2DLoad>();
+      var newLines = ToSpeckleBase<GSA2DLoadAnalysisLayer>();
 
-      var loads = new List<GSA2DLoad>();
-      var elements = (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis) ? Initialiser.GSASenderObjects[typeof(GSA2DElement)].Cast<GSA2DElement>().ToList() : new List<GSA2DElement>();
-      var members = (Initialiser.Settings.TargetLayer == GSATargetLayer.Design) ? Initialiser.GSASenderObjects[typeof(GSA2DMember)].Cast<GSA2DMember>().ToList() : new List<GSA2DMember>();
+      var loads = new List<GSA2DLoadAnalysisLayer>();
+      var elements = Initialiser.GSASenderObjects[typeof(GSA2DElement)].Cast<GSA2DElement>().ToList();
 
       foreach (var p in newLines.Values)
       {
-        var loadSubList = new List<GSA2DLoad>();
+        var loadSubList = new List<GSA2DLoadAnalysisLayer>();
 
         // Placeholder load object to get list of elements and load values
         // Need to transform to axis so one load definition may be transformed to many
-        var initLoad = new GSA2DLoad() { GWACommand = p };
-        initLoad.ParseGWACommand(elements, members);
+        var initLoad = new GSA2DLoadAnalysisLayer() { GWACommand = p };
+        initLoad.ParseGWACommand(elements);
 
-        if (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
+        // Create load for each element applied
+        foreach (string nRef in initLoad.Value.ElementRefs)
         {
-          // Create load for each element applied
-          foreach (string nRef in initLoad.Value.ElementRefs)
+          var load = new GSA2DLoadAnalysisLayer
           {
-            var load = new GSA2DLoad
-            {
-              GWACommand = initLoad.GWACommand,
-              SubGWACommand = new List<string>(initLoad.SubGWACommand)
-            };
-            load.Value.Name = initLoad.Value.Name;
-            load.Value.LoadCaseRef = initLoad.Value.LoadCaseRef;
+            GWACommand = initLoad.GWACommand,
+            SubGWACommand = new List<string>(initLoad.SubGWACommand)
+          };
+          load.Value.Name = initLoad.Value.Name;
+          load.Value.LoadCaseRef = initLoad.Value.LoadCaseRef;
 
-            // Transform load to defined axis
-            var elem = elements.Where(e => e.Value.ApplicationId == nRef).First();
-            StructuralAxis loadAxis = HelperClass.Parse2DAxis(elem.Value.Vertices.ToArray(), 0, load.Axis != 0); // Assumes if not global, local
-            load.Value.Loading = initLoad.Value.Loading;
+          // Transform load to defined axis
+          var elem = elements.Where(e => e.Value.ApplicationId == nRef).First();
+          StructuralAxis loadAxis = HelperClass.Parse2DAxis(elem.Value.Vertices.ToArray(), 0, load.Axis != 0); // Assumes if not global, local
+          load.Value.Loading = initLoad.Value.Loading;
 
-            // Perform projection
-            if (load.Projected)
-            {
-              load.Value.Loading.Value[0] = 0;
-              load.Value.Loading.Value[1] = 0;
-            }
-            load.Value.Loading.TransformOntoAxis(loadAxis);
-
-            // If the loading already exists, add element ref to list
-            var match = loadSubList.Count() > 0 ? loadSubList.Where(l => l.Value.Loading.Equals(load.Value.Loading)).First() : null;
-            if (match != null)
-              match.Value.ElementRefs.Add(nRef);
-            else
-            {
-              load.Value.ElementRefs = new List<string>() { nRef };
-              loadSubList.Add(load);
-            }
+          // Perform projection
+          if (load.Projected)
+          {
+            load.Value.Loading.Value[0] = 0;
+            load.Value.Loading.Value[1] = 0;
           }
-        }
-        else if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
-        {
-          // Create load for each element applied
-          foreach (string nRef in initLoad.Value.ElementRefs)
+          load.Value.Loading.TransformOntoAxis(loadAxis);
+
+          // If the loading already exists, add element ref to list
+          var match = loadSubList.Count() > 0 ? loadSubList.Where(l => l.Value.Loading.Equals(load.Value.Loading)).First() : null;
+          if (match != null)
+            match.Value.ElementRefs.Add(nRef);
+          else
           {
-            var load = new GSA2DLoad
-            {
-              GWACommand = initLoad.GWACommand,
-              SubGWACommand = new List<string>(initLoad.SubGWACommand),
-            };
-            load.Value.Name = initLoad.Value.Name;
-            load.Value.LoadCaseRef = initLoad.Value.LoadCaseRef;
-
-            // Transform load to defined axis
-            var memb = members.Where(e => e.Value.ApplicationId == nRef).First();
-            StructuralAxis loadAxis = HelperClass.Parse2DAxis(memb.Value.Vertices.ToArray(), 0, load.Axis != 0); // Assumes if not global, local
-            load.Value.Loading = initLoad.Value.Loading;
-            load.Value.Loading.TransformOntoAxis(loadAxis);
-
-            // Perform projection
-            if (load.Projected)
-            {
-              load.Value.Loading.Value[0] = 0;
-              load.Value.Loading.Value[1] = 0;
-            }
-            load.Value.Loading.TransformOntoAxis(loadAxis);
-
-            // If the loading already exists, add element ref to list
-            var match = loadSubList.Count() > 0 ? loadSubList.Where(l => (l.Value.Loading.Value as List<double>).SequenceEqual(load.Value.Loading.Value as List<double>)).First() : null;
-            if (match != null)
-              match.Value.ElementRefs.Add(nRef);
-            else
-            {
-              load.Value.ElementRefs = new List<string>() { nRef };
-              loadSubList.Add(load);
-            }
+            load.Value.ElementRefs = new List<string>() { nRef };
+            loadSubList.Add(load);
           }
         }
 
         loads.AddRange(loadSubList);
       }
 
-      Initialiser.GSASenderObjects[typeof(GSA2DLoad)].AddRange(loads);
+      Initialiser.GSASenderObjects[typeof(GSA2DLoadAnalysisLayer)].AddRange(loads);
+
+      return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+    }
+
+    public static SpeckleObject ToSpeckle(this GSA2DLoadDesignLayer dummyObject)
+    {
+      var newLines = ToSpeckleBase<GSA2DLoadDesignLayer>();
+
+      var loads = new List<GSA2DLoadDesignLayer>();
+      var members = Initialiser.GSASenderObjects[typeof(GSA2DMember)].Cast<GSA2DMember>().ToList();
+
+      foreach (var p in newLines.Values)
+      {
+        var loadSubList = new List<GSA2DLoadDesignLayer>();
+
+        // Placeholder load object to get list of elements and load values
+        // Need to transform to axis so one load definition may be transformed to many
+        var initLoad = new GSA2DLoadDesignLayer() { GWACommand = p };
+        initLoad.ParseGWACommand(members);
+
+        // Create load for each element applied
+        foreach (string nRef in initLoad.Value.ElementRefs)
+        {
+          var load = new GSA2DLoadDesignLayer
+          {
+            GWACommand = initLoad.GWACommand,
+            SubGWACommand = new List<string>(initLoad.SubGWACommand),
+          };
+          load.Value.Name = initLoad.Value.Name;
+          load.Value.LoadCaseRef = initLoad.Value.LoadCaseRef;
+
+          // Transform load to defined axis
+          var memb = members.Where(e => e.Value.ApplicationId == nRef).First();
+          StructuralAxis loadAxis = HelperClass.Parse2DAxis(memb.Value.Vertices.ToArray(), 0, load.Axis != 0); // Assumes if not global, local
+          load.Value.Loading = initLoad.Value.Loading;
+          load.Value.Loading.TransformOntoAxis(loadAxis);
+
+          // Perform projection
+          if (load.Projected)
+          {
+            load.Value.Loading.Value[0] = 0;
+            load.Value.Loading.Value[1] = 0;
+          }
+          load.Value.Loading.TransformOntoAxis(loadAxis);
+
+          // If the loading already exists, add element ref to list
+          var match = loadSubList.Count() > 0 ? loadSubList.Where(l => (l.Value.Loading.Value as List<double>).SequenceEqual(load.Value.Loading.Value as List<double>)).First() : null;
+          if (match != null)
+            match.Value.ElementRefs.Add(nRef);
+          else
+          {
+            load.Value.ElementRefs = new List<string>() { nRef };
+            loadSubList.Add(load);
+          }
+        }
+
+
+        loads.AddRange(loadSubList);
+      }
+
+      Initialiser.GSASenderObjects[typeof(GSA2DLoadDesignLayer)].AddRange(loads);
 
       return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
