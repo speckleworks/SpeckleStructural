@@ -52,14 +52,9 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSAGravityLoading).GetGSAKeyword();
 
-      var loadCaseIndex = 0;
-      try
-      {
-        loadCaseIndex = Initialiser.Cache.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef).Value;
-      }
-      catch {
-        loadCaseIndex = Initialiser.Cache.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef);
-      }
+      var loadCaseKeyword = typeof(GSALoadCase).GetGSAKeyword();
+      var indexResult = Initialiser.Cache.LookupIndex(loadCaseKeyword, load.LoadCaseRef);
+      var loadCaseRef = indexResult ?? Initialiser.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
 
       var index = Initialiser.Cache.ResolveIndex(typeof(GSAGravityLoading).GetGSAKeyword());
 
@@ -70,7 +65,7 @@ namespace SpeckleStructuralGSA
           keyword + ":" + HelperClass.GenerateSID(load),
           string.IsNullOrEmpty(load.Name) ? "" : load.Name,
           "all",
-          loadCaseIndex.ToString(),
+          loadCaseRef.ToString(),
           load.GravityFactors.Value[0].ToString(),
           load.GravityFactors.Value[1].ToString(),
           load.GravityFactors.Value[2].ToString(),

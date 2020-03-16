@@ -131,14 +131,9 @@ namespace SpeckleStructuralGSA
       var gridSurfaceIndex = Initialiser.Cache.ResolveIndex("GRID_SURFACE.1");
       var gridPlaneIndex = Initialiser.Cache.ResolveIndex("GRID_PLANE.4");
 
-      var loadCaseRef = 0;
-      try
-      {
-        loadCaseRef = Initialiser.Cache.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef).Value;
-      }
-      catch {
-        loadCaseRef = Initialiser.Cache.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef);
-      }
+      var loadCaseKeyword = typeof(GSALoadCase).GetGSAKeyword();
+      var indexResult = Initialiser.Cache.LookupIndex(loadCaseKeyword, load.LoadCaseRef);
+      var loadCaseRef = indexResult ?? Initialiser.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
 
       var axis = HelperClass.Parse1DAxis(load.Value.ToArray());
 
