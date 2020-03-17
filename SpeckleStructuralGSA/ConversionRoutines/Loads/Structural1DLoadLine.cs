@@ -131,24 +131,25 @@ namespace SpeckleStructuralGSA
       var gridSurfaceIndex = Initialiser.Cache.ResolveIndex("GRID_SURFACE.1");
       var gridPlaneIndex = Initialiser.Cache.ResolveIndex("GRID_PLANE.4");
 
-      var loadCaseRef = 0;
-      try
+      var loadCaseKeyword = typeof(GSALoadCase).GetGSAKeyword();
+      var indexResult = Initialiser.Cache.LookupIndex(loadCaseKeyword, load.LoadCaseRef);
+      var loadCaseRef = indexResult ?? Initialiser.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
+
+      var axis = (load.Value == null) 
+        ? new StructuralAxis(new StructuralVectorThree(1, 0, 0), new StructuralVectorThree(0, 1, 0)) 
+        : HelperClass.Parse1DAxis(load.Value.ToArray());
+
+      double elevation = 0;
+      if (load.Value != null)
       {
-        loadCaseRef = Initialiser.Cache.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef).Value;
+        // Calculate elevation
+        elevation = (load.Value[0] * axis.Normal.Value[0] +
+            load.Value[1] * axis.Normal.Value[1] +
+            load.Value[2] * axis.Normal.Value[2]) /
+            Math.Sqrt(axis.Normal.Value[0] * axis.Normal.Value[0] +
+                axis.Normal.Value[1] * axis.Normal.Value[1] +
+                axis.Normal.Value[2] * axis.Normal.Value[2]);
       }
-      catch {
-        loadCaseRef = Initialiser.Cache.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef);
-      }
-
-      var axis = HelperClass.Parse1DAxis(load.Value.ToArray());
-
-      // Calculate elevation
-      var elevation = (load.Value[0] * axis.Normal.Value[0] +
-          load.Value[1] * axis.Normal.Value[1] +
-          load.Value[2] * axis.Normal.Value[2]) /
-          Math.Sqrt(axis.Normal.Value[0] * axis.Normal.Value[0] +
-              axis.Normal.Value[1] * axis.Normal.Value[1] +
-              axis.Normal.Value[2] * axis.Normal.Value[2]);
 
       // Transform coordinate to new axis
       var transformed = HelperClass.MapPointsGlobal2Local(load.Value.ToArray(), axis);

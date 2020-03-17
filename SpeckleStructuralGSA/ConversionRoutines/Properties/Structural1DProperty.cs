@@ -95,6 +95,12 @@ namespace SpeckleStructuralGSA
           materialType = "CONCRETE";
         }
       }
+      if (materialRef == 0)
+      {
+        //If the material reference can't be resolved, then point to generic material (which this code doesn't create anywhere else) with reference 1
+        materialRef = 1;
+        materialType = "GENERIC";
+      }
 
       var ls = new List<string>
       {

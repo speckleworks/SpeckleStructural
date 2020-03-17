@@ -118,15 +118,9 @@ namespace SpeckleStructuralGSA
         return "";
       }
 
-      var loadCaseRef = 0;
-      try
-      {
-        loadCaseRef = Initialiser.Cache.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef).Value;
-      }
-      catch
-      {
-        loadCaseRef = Initialiser.Cache.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef);
-      }
+      var loadCaseKeyword = typeof(GSALoadCase).GetGSAKeyword();
+      var indexResult = Initialiser.Cache.LookupIndex(loadCaseKeyword, load.LoadCaseRef);
+      var loadCaseRef = indexResult ?? Initialiser.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
 
       var direction = new string[3] { "X", "Y", "Z" };
 

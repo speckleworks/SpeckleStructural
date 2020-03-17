@@ -137,12 +137,9 @@ namespace SpeckleStructuralGSA
       var gridSurfaceIndex = Initialiser.Cache.ResolveIndex("GRID_SURFACE.1");
       var gridPlaneIndex = Initialiser.Cache.ResolveIndex("GRID_PLANE.4");
 
-      var loadCaseIndex = 0;
-      try
-      {
-        loadCaseIndex = Initialiser.Cache.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef).Value;
-      }
-      catch { }
+      var loadCaseKeyword = typeof(GSALoadCase).GetGSAKeyword();
+      var indexResult = Initialiser.Cache.LookupIndex(loadCaseKeyword, load.LoadCaseRef);
+      var loadCaseRef = indexResult ?? Initialiser.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
 
       var axis = HelperClass.Parse2DAxis(load.Value.ToArray());
 
@@ -184,7 +181,7 @@ namespace SpeckleStructuralGSA
           gridSurfaceIndex.ToString(),
           "POLYGON",
           string.Join(" ", subLs),
-          loadCaseIndex.ToString(),
+          loadCaseRef.ToString(),
           "GLOBAL",
           "NO",
           direction[i],

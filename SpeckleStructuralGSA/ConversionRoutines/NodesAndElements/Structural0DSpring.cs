@@ -72,12 +72,11 @@ namespace SpeckleStructuralGSA
       var keyword = typeof(GSA0DSpring).GetGSAKeyword();
 
       var index = Initialiser.Cache.ResolveIndex(keyword, spring.ApplicationId);
-      var propRef = 0;
-      try
-      {
-        propRef = Initialiser.Cache.LookupIndex(typeof(GSASpringProperty).GetGSAKeyword(), spring.PropertyRef).Value;
-      }
-      catch { }
+
+      var propKeyword = typeof(GSASpringProperty).GetGSAKeyword();
+      var indexResult = Initialiser.Cache.LookupIndex(propKeyword, spring.PropertyRef);
+      //If the reference can't be found, then reserve a new index so that it at least doesn't point to any other existing record
+      var propRef = indexResult ?? Initialiser.Cache.ResolveIndex(propKeyword, spring.PropertyRef);
 
       var ls = new List<string>
       {

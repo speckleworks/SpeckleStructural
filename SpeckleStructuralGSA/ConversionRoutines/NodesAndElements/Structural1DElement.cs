@@ -128,13 +128,12 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA1DElement).GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(typeof(GSA1DElement).GetGSAKeyword(), element.ApplicationId);
-      var propRef = 0;
-      try
-      {
-        propRef = Initialiser.Cache.LookupIndex(typeof(GSA1DProperty).GetGSAKeyword(), element.PropertyRef).Value;
-      }
-      catch { }
+      var index = Initialiser.Cache.ResolveIndex(keyword, element.ApplicationId);
+
+      var propKeyword = typeof(GSA1DProperty).GetGSAKeyword();
+      var indexResult = Initialiser.Cache.LookupIndex(propKeyword, element.PropertyRef);
+      //If the reference can't be found, then reserve a new index so that it at least doesn't point to any other existing record
+      var propRef = indexResult ?? Initialiser.Cache.ResolveIndex(propKeyword, element.PropertyRef);
 
       var ls = new List<string>
       {
@@ -332,14 +331,11 @@ namespace SpeckleStructuralGSA
       var keyword = typeof(GSA1DMember).GetGSAKeyword();
 
       var index = Initialiser.Cache.ResolveIndex(typeof(GSA1DMember).GetGSAKeyword(), member.ApplicationId);
-      var propRef = 0;
-      try
-      {
-        propRef = (member.ElementType == Structural1DElementType.Spring)
-          ? Initialiser.Cache.LookupIndex(typeof(GSASpringProperty).GetGSAKeyword(), member.PropertyRef).Value
-          : Initialiser.Cache.LookupIndex(typeof(GSA1DProperty).GetGSAKeyword(), member.PropertyRef).Value;
-      }
-      catch { }
+
+      var propKeyword = ((member.ElementType == Structural1DElementType.Spring) ? typeof(GSASpringProperty) : typeof(GSA1DProperty)).GetGSAKeyword();
+      var indexResult = Initialiser.Cache.LookupIndex(propKeyword, member.PropertyRef);
+      //If the reference can't be found, then reserve a new index so that it at least doesn't point to any other existing record
+      var propRef = indexResult ?? Initialiser.Cache.ResolveIndex(propKeyword, member.PropertyRef);
 
       var ls = new List<string>
       {
