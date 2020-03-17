@@ -19,6 +19,17 @@ namespace SpeckleStructuralGSA.TestPrep
 
       var receiverTestPrep = new ReceiverTestPrep(TestDataDirectory);
       receiverTestPrep.SetupContext();
+      if (!receiverTestPrep.SetUpReceptionTestData(ReceiverTests.savedBlankRefsJsonFileNames, ReceiverTests.expectedBlankRefsGwaPerIdsFileName, GSATargetLayer.Design))
+      {
+        Console.WriteLine("Error in preparing test data for the blank refs rx design layer test");
+      }
+      else
+      {
+        Console.WriteLine("Prepared reception test data for the blank refs rx design layer test");
+      }
+
+      receiverTestPrep = new ReceiverTestPrep(TestDataDirectory);
+      receiverTestPrep.SetupContext();
       if (!receiverTestPrep.SetUpReceptionTestData(ReceiverTests.savedJsonFileNames, ReceiverTests.expectedGwaPerIdsFileName, GSATargetLayer.Design))
       {
         Console.WriteLine("Error in preparing test data for the rx design layer test");

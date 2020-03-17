@@ -135,15 +135,21 @@ namespace SpeckleStructuralGSA
       var indexResult = Initialiser.Cache.LookupIndex(loadCaseKeyword, load.LoadCaseRef);
       var loadCaseRef = indexResult ?? Initialiser.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
 
-      var axis = HelperClass.Parse1DAxis(load.Value.ToArray());
+      var axis = (load.Value == null) 
+        ? new StructuralAxis(new StructuralVectorThree(1, 0, 0), new StructuralVectorThree(0, 1, 0)) 
+        : HelperClass.Parse1DAxis(load.Value.ToArray());
 
-      // Calculate elevation
-      var elevation = (load.Value[0] * axis.Normal.Value[0] +
-          load.Value[1] * axis.Normal.Value[1] +
-          load.Value[2] * axis.Normal.Value[2]) /
-          Math.Sqrt(axis.Normal.Value[0] * axis.Normal.Value[0] +
-              axis.Normal.Value[1] * axis.Normal.Value[1] +
-              axis.Normal.Value[2] * axis.Normal.Value[2]);
+      double elevation = 0;
+      if (load.Value != null)
+      {
+        // Calculate elevation
+        elevation = (load.Value[0] * axis.Normal.Value[0] +
+            load.Value[1] * axis.Normal.Value[1] +
+            load.Value[2] * axis.Normal.Value[2]) /
+            Math.Sqrt(axis.Normal.Value[0] * axis.Normal.Value[0] +
+                axis.Normal.Value[1] * axis.Normal.Value[1] +
+                axis.Normal.Value[2] * axis.Normal.Value[2]);
+      }
 
       // Transform coordinate to new axis
       var transformed = HelperClass.MapPointsGlobal2Local(load.Value.ToArray(), axis);

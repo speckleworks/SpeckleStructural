@@ -250,16 +250,11 @@ namespace SpeckleStructuralGSA
       var keyword = typeof(GSA2DMember).GetGSAKeyword();
 
       var index = Initialiser.Cache.ResolveIndex(typeof(GSA2DMember).GetGSAKeyword(), mesh.ApplicationId);
-      var propRef = 1;  //Default to 1 even if there is no such record - better for GSA than a default of 0
-      try
-      {
-        var indexResult = Initialiser.Cache.LookupIndex(typeof(GSA2DProperty).GetGSAKeyword(), mesh.PropertyRef);
-        if (indexResult.HasValue)
-        {
-          propRef = indexResult.Value;
-        }
-      }
-      catch { }
+
+      var propKeyword = typeof(GSA2DProperty).GetGSAKeyword();
+      var indexResult = Initialiser.Cache.LookupIndex(propKeyword, mesh.PropertyRef);
+      //If the reference can't be found, then reserve a new index so that it at least doesn't point to any other existing record
+      var propRef = indexResult ?? Initialiser.Cache.ResolveIndex(propKeyword, mesh.PropertyRef);
 
       var gwaCommands = new List<string>();
 
