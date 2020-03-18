@@ -75,7 +75,7 @@ namespace SpeckleStructuralGSA
 
         var results = new List<GSA2DElementResult>();
 
-        var keyword = HelperClass.GetGSAKeyword(typeof(GSA2DElement));
+        var keyword = Helper.GetGSAKeyword(typeof(GSA2DElement));
         var gwa = Initialiser.Cache.GetGwa(keyword);
 
         foreach (var kvp in Initialiser.Settings.Element2DResults)
@@ -122,7 +122,7 @@ namespace SpeckleStructuralGSA
                 var newRes = new Structural2DElementResult()
                 {
                   Value = new Dictionary<string, object>(),
-                  TargetRef = HelperClass.GetApplicationId(typeof(GSA2DElement).GetGSAKeyword(), id),
+                  TargetRef = Helper.GetApplicationId(typeof(GSA2DElement).GetGSAKeyword(), id),
                   IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
                 };
                 newRes.Value[kvp.Key + "_face"] = faceDictionary;

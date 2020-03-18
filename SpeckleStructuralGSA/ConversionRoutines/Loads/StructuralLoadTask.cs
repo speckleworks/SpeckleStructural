@@ -27,13 +27,13 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++];
 
       //Find task type
       int.TryParse(pieces[counter++], out int taskRef);
       var taskRec = Initialiser.Cache.GetGwa("TASK.1", taskRef).First();
-      obj.TaskType = HelperClass.GetLoadTaskType(taskRec);
+      obj.TaskType = Helper.GetLoadTaskType(taskRec);
       this.SubGWACommand.Add(taskRec);
 
       // Parse description
@@ -44,14 +44,14 @@ namespace SpeckleStructuralGSA
       // TODO: this only parses the super simple linear add descriptions
       try
       {
-        var desc = HelperClass.ParseLoadDescription(description);
+        var desc = Helper.ParseLoadDescription(description);
 
         foreach (var t in desc)
         {
           switch (t.Item1[0])
           {
             case 'L':
-              obj.LoadCaseRefs.Add(HelperClass.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(t.Item1.Substring(1))));
+              obj.LoadCaseRefs.Add(Helper.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(t.Item1.Substring(1))));
               obj.LoadFactors.Add(t.Item2);
               break;
           }
@@ -82,7 +82,7 @@ namespace SpeckleStructuralGSA
       {
         // Set TASK
         "SET",
-        "TASK.1" + ":" + HelperClass.GenerateSID(loadTask),
+        "TASK.1" + ":" + Helper.GenerateSID(loadTask),
         taskIndex.ToString(),
         "", // Name
         "0" // Stage
@@ -209,7 +209,7 @@ namespace SpeckleStructuralGSA
       // Set ANAL
       ls.Clear();
       ls.Add("SET");
-      ls.Add(keyword + ":" + HelperClass.GenerateSID(loadTask));
+      ls.Add(keyword + ":" + Helper.GenerateSID(loadTask));
       ls.Add(index.ToString());
       ls.Add(loadTask.Name == null || loadTask.Name == "" ? " " : loadTask.Name);
       ls.Add(taskIndex.ToString());

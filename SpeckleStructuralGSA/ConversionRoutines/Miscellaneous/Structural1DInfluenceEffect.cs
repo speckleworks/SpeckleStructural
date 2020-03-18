@@ -129,7 +129,7 @@ namespace SpeckleStructuralGSA
         {
           "SET_AT",
           index.ToString(),
-          keyword + ":" + HelperClass.GenerateSID(infl),
+          keyword + ":" + Helper.GenerateSID(infl),
           infl.Name == null || infl.Name == "" ? " " : infl.Name,
           infl.GSAEffectGroup.ToString(),
           elementRef.Value.ToString(),

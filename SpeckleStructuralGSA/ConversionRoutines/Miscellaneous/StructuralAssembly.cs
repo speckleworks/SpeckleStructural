@@ -28,7 +28,7 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
 
       var targetEntity = pieces[counter++];
@@ -148,7 +148,7 @@ namespace SpeckleStructuralGSA
       var nodeIndices = new List<int>();
       for (var i = 0; i < assembly.Value.Count(); i += 3)
       {
-        nodeIndices.Add(HelperClass.NodeAt(assembly.Value[i], assembly.Value[i + 1], assembly.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance));
+        nodeIndices.Add(Helper.NodeAt(assembly.Value[i], assembly.Value[i + 1], assembly.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance));
       }
 
       var numPoints = (assembly.NumPoints == 0) ? 10 : assembly.NumPoints;
@@ -159,7 +159,7 @@ namespace SpeckleStructuralGSA
       var ls = new List<string>
         {
           "SET",
-          keyword + ":" + HelperClass.GenerateSID(assembly),
+          keyword + ":" + Helper.GenerateSID(assembly),
           index.ToString(),
           string.IsNullOrEmpty(assembly.Name) ? "" : assembly.Name,
           // TODO: Once assemblies can properly target members, this should target members explicitly
@@ -168,7 +168,7 @@ namespace SpeckleStructuralGSA
           targetString,
           nodeIndices[0].ToString(),
           nodeIndices[1].ToString(),
-          HelperClass.NodeAt(assembly.OrientationPoint.Value[0], assembly.OrientationPoint.Value[1], assembly.OrientationPoint.Value[2], Initialiser.Settings.CoincidentNodeAllowance).ToString(),
+          Helper.NodeAt(assembly.OrientationPoint.Value[0], assembly.OrientationPoint.Value[1], assembly.OrientationPoint.Value[2], Initialiser.Settings.CoincidentNodeAllowance).ToString(),
           "", //Empty list for int_topo as it assumed that the line is never curved
           assembly.Width.ToString(), //Y
           "0", //Z

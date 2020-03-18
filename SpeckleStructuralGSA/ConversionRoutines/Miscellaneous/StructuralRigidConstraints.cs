@@ -27,7 +27,7 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
 
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       var masterNodeRef = Convert.ToInt32(pieces[counter++]);
       var masterNode = nodes.Where(n => n.GSAId == masterNodeRef);
       if (masterNode.Count() > 0)
@@ -166,7 +166,7 @@ namespace SpeckleStructuralGSA
       {
         "SET_AT",
         index.ToString(),
-        keyword + ":" + HelperClass.GenerateSID(constraint),
+        keyword + ":" + Helper.GenerateSID(constraint),
         constraint.Name == null || constraint.Name == "" ? " " : constraint.Name,
         (masterNodeIndex.HasValue) ? masterNodeIndex.Value.ToString() : "0", // Master node
         string.Join("-", subLs),

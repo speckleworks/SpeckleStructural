@@ -29,7 +29,7 @@ namespace SpeckleStructuralGSA
 
       var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; // Color
       obj.Value = new List<double>
@@ -84,7 +84,7 @@ namespace SpeckleStructuralGSA
             break;
           default: // Axis
             string gwaRec = null;
-            obj.Axis = HelperClass.Parse0DAxis(Convert.ToInt32(s), Initialiser.Interface, out gwaRec, obj.Value.ToArray());
+            obj.Axis = Helper.Parse0DAxis(Convert.ToInt32(s), Initialiser.Interface, out gwaRec, obj.Value.ToArray());
             if (gwaRec != null)
               this.SubGWACommand.Add(gwaRec);
             break;
@@ -103,12 +103,12 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSANode).GetGSAKeyword();
 
-      var index = HelperClass.NodeAt(node.Value[0], node.Value[1], node.Value[2], Initialiser.Settings.CoincidentNodeAllowance);
+      var index = Helper.NodeAt(node.Value[0], node.Value[1], node.Value[2], Initialiser.Settings.CoincidentNodeAllowance);
 
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + HelperClass.GenerateSID(node),
+        keyword + ":" + Helper.GenerateSID(node),
         index.ToString(),
         node.Name == null || node.Name == "" ? " " : node.Name,
         "NO_RGB",
@@ -126,7 +126,7 @@ namespace SpeckleStructuralGSA
       var axisGwa = "";
       try
       {
-        HelperClass.SetAxis(node.Axis, out var axisIndex, out axisGwa, node.Name);
+        Helper.SetAxis(node.Axis, out var axisIndex, out axisGwa, node.Name);
         if (axisGwa.Length > 0)
         {
           gwaCommands.Add(axisGwa);
@@ -247,7 +247,7 @@ namespace SpeckleStructuralGSA
       obj.Mass = mass;
       counter++; // group
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       // Rest is unimportant for 0D element
 
       this.Value = obj;
@@ -273,7 +273,7 @@ namespace SpeckleStructuralGSA
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + HelperClass.GenerateSID(node),
+        keyword + ":" + Helper.GenerateSID(node),
         index.ToString(),
         node.Name == null || node.Name == "" ? " " : node.Name,
         "NO_RGB",
@@ -296,7 +296,7 @@ namespace SpeckleStructuralGSA
       ls = new List<string>
       {
         "SET",
-        "PROP_MASS.2" + ":" + HelperClass.GenerateSID(node),
+        "PROP_MASS.2" + ":" + Helper.GenerateSID(node),
         propIndex.ToString(),
         "",
         "NO_RGB",

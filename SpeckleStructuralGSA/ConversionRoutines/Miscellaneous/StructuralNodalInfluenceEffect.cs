@@ -62,7 +62,7 @@ namespace SpeckleStructuralGSA
       var axis = pieces[counter++];
       if (axis == "GLOBAL")
       {
-        obj.Axis = HelperClass.Parse0DAxis(0, Initialiser.Interface, out var temp);
+        obj.Axis = Helper.Parse0DAxis(0, Initialiser.Interface, out var temp);
       }
       else if (axis == "LOCAL")
       {
@@ -70,7 +70,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        obj.Axis = HelperClass.Parse0DAxis(Convert.ToInt32(axis), Initialiser.Interface, out string rec, targetNode.Value.Value.ToArray());
+        obj.Axis = Helper.Parse0DAxis(Convert.ToInt32(axis), Initialiser.Interface, out string rec, targetNode.Value.Value.ToArray());
         if (rec != null)
           this.SubGWACommand.Add(rec);
       }
@@ -120,7 +120,7 @@ namespace SpeckleStructuralGSA
 
       var gwaCommands = new List<string>();
 
-      HelperClass.SetAxis(infl.Axis, out var axisIndex, out var axisGwa, infl.Name);
+      Helper.SetAxis(infl.Axis, out var axisIndex, out var axisGwa, infl.Name);
       if (axisGwa.Length > 0)
       {
         gwaCommands.Add(axisGwa);
@@ -134,7 +134,7 @@ namespace SpeckleStructuralGSA
         {
           "SET_AT",
           index.ToString(),
-          keyword + ":" + HelperClass.GenerateSID(infl),
+          keyword + ":" + Helper.GenerateSID(infl),
           infl.Name == null || infl.Name == "" ? " " : infl.Name,
           infl.GSAEffectGroup.ToString(),
           nodeRef.Value.ToString(),

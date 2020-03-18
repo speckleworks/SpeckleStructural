@@ -27,7 +27,7 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++];
 
       counter++; //Skip colour
@@ -55,7 +55,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        var groupIds = HelperClass.GetGroupsFromGSAList(elementList).ToList();
+        var groupIds = Helper.GetGroupsFromGSAList(elementList).ToList();
         foreach (var id in groupIds)
         {
           var memb1Ds = m1Ds.Where(m => m.Group == id);
@@ -125,7 +125,7 @@ namespace SpeckleStructuralGSA
         {
           // Set ANAL_STAGE
           "SET",
-          keyword + ":" + HelperClass.GenerateSID(stageDef),
+          keyword + ":" + Helper.GenerateSID(stageDef),
           index.ToString(),
           stageName, // Name
           "NO_RGB", // Colour
