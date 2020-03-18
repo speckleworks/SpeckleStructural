@@ -16,7 +16,7 @@ namespace SpeckleStructuralGSA.TestPrep
       Initialiser.Interface = gsaInterfacer;
       Initialiser.Cache = gsaCache;
       Initialiser.Settings = new Settings();
-      gsaInterfacer.OpenFile(Helper.ResolveFullPath(gsaFileName, TestDataDirectory));
+      gsaInterfacer.OpenFile(Test.Helper.ResolveFullPath(gsaFileName, TestDataDirectory));
     }
 
     public bool SetUpTransmissionTestData(string outputJsonFileName, GSATargetLayer layer,
@@ -31,7 +31,7 @@ namespace SpeckleStructuralGSA.TestPrep
       //Create JSON file containing serialised SpeckleObjects
       var jsonToWrite = JsonConvert.SerializeObject(speckleObjects, Formatting.Indented);
 
-      Helper.WriteFile(jsonToWrite, outputJsonFileName, TestDataDirectory);
+      Test.Helper.WriteFile(jsonToWrite, outputJsonFileName, TestDataDirectory);
 
       return true;
     }

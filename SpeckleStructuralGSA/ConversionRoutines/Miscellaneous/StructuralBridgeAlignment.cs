@@ -28,7 +28,7 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
 
       //TO DO
@@ -52,7 +52,7 @@ namespace SpeckleStructuralGSA
 
       var index = Initialiser.Cache.ResolveIndex(keyword, alignment.ApplicationId);
 
-      var sid = HelperClass.GenerateSID(alignment);
+      var sid = Helper.GenerateSID(alignment);
 
       var gwaCommands = new List<string>();
 
@@ -61,7 +61,7 @@ namespace SpeckleStructuralGSA
       var axis = new StructuralAxis() { Xdir = alignment.Plane.Xdir, Ydir = alignment.Plane.Ydir, Origin = alignment.Plane.Origin };
       axis.Normal = alignment.Plane.Normal ?? CrossProduct(alignment.Plane.Xdir, alignment.Plane.Ydir);
       
-      HelperClass.SetAxis(axis, out var axisIndex, out var axisGwa, alignment.Name);
+      Helper.SetAxis(axis, out var axisIndex, out var axisGwa, alignment.Name);
       if (axisGwa.Length > 0)
       {
         gwaCommands.Add(axisGwa);

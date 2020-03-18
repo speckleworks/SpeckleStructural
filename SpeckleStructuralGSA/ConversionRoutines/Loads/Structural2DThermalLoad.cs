@@ -27,7 +27,7 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
       
       obj.Name = pieces[counter++];
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
 
       var elementList = pieces[counter++];
 
@@ -49,7 +49,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        var groupIds = HelperClass.GetGroupsFromGSAList(elementList).ToList();
+        var groupIds = Helper.GetGroupsFromGSAList(elementList).ToList();
         foreach (var id in groupIds)
         {
           var memb2Ds = m2Ds.Where(m => m.Group == id);
@@ -59,7 +59,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      obj.LoadCaseRef = HelperClass.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
+      obj.LoadCaseRef = Helper.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
 
       var loadingType = pieces[counter++];
 
@@ -124,13 +124,25 @@ namespace SpeckleStructuralGSA
       var indexResult = Initialiser.Cache.LookupIndex(loadCaseKeyword, load.LoadCaseRef);
       var loadCaseRef = indexResult ?? Initialiser.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
 
+      if (indexResult == null && load.ApplicationId != null)
+      {
+        if (load.LoadCaseRef == null)
+        {
+          Helper.SafeDisplay("Blank load case references found for these Application IDs:", load.ApplicationId);
+        }
+        else
+        {
+          Helper.SafeDisplay("Load case references not found:", load.ApplicationId + " referencing " + load.LoadCaseRef);
+        }
+      }
+
       var loadingName = string.IsNullOrEmpty(load.Name) ? " " : load.Name;
 
       var ls = new List<string>
         {
           "SET_AT",
           index.ToString(),
-          keyword + ":" + HelperClass.GenerateSID(load),
+          keyword + ":" + Helper.GenerateSID(load),
           loadingName, // Name
           targetString, //Elements
 					loadCaseRef.ToString(),

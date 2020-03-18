@@ -29,7 +29,7 @@ namespace SpeckleStructuralGSA
 
       counter++; // Skip elements - assumed to always be "all" at this point int time
 
-      obj.LoadCaseRef = HelperClass.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
+      obj.LoadCaseRef = Helper.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
 
       var vector = new double[3];
       for (var i = 0; i < 3; i++)
@@ -56,13 +56,25 @@ namespace SpeckleStructuralGSA
       var indexResult = Initialiser.Cache.LookupIndex(loadCaseKeyword, load.LoadCaseRef);
       var loadCaseRef = indexResult ?? Initialiser.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
 
+      if (indexResult == null && load.ApplicationId != null)
+      {
+        if (load.LoadCaseRef == null)
+        {
+          Helper.SafeDisplay("Blank load case references found for these Application IDs:", load.ApplicationId);
+        }
+        else
+        {
+          Helper.SafeDisplay("Load case references not found:", load.ApplicationId + " referencing " + load.LoadCaseRef);
+        }
+      }
+
       var index = Initialiser.Cache.ResolveIndex(typeof(GSAGravityLoading).GetGSAKeyword());
 
       var ls = new List<string>
         {
           "SET_AT",
           index.ToString(),
-          keyword + ":" + HelperClass.GenerateSID(load),
+          keyword + ":" + Helper.GenerateSID(load),
           string.IsNullOrEmpty(load.Name) ? "" : load.Name,
           "all",
           loadCaseRef.ToString(),

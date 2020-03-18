@@ -14,7 +14,7 @@ namespace SpeckleStructuralGSA
   /// <summary>
   /// Static class containing helper functions used throughout SpeckleGSA
   /// </summary>
-  public static class HelperClass
+  public static class Helper
   {
     #region Math
     /// <summary>
@@ -657,7 +657,7 @@ namespace SpeckleStructuralGSA
       }
 
       //Rotation
-      var rotMat = HelperClass.RotationMatrix(x, rotationAngle.ToRadians());
+      var rotMat = Helper.RotationMatrix(x, rotationAngle.ToRadians());
       y = Vector3D.Multiply(y, rotMat);
       z = Vector3D.Multiply(z, rotMat);
 
@@ -834,7 +834,7 @@ namespace SpeckleStructuralGSA
       }
 
       //Rotation
-      var rotMat = HelperClass.RotationMatrix(z, rotationAngle * (Math.PI / 180));
+      var rotMat = Helper.RotationMatrix(z, rotationAngle * (Math.PI / 180));
       x = Vector3D.Multiply(x, rotMat);
       y = Vector3D.Multiply(y, rotMat);
 
@@ -1163,6 +1163,18 @@ namespace SpeckleStructuralGSA
       var pieces = gwa.ListSplit("\t");
 
       desc = pieces[6];
+    }
+
+    public static void SafeDisplay(string groupMessage, string details)
+    {
+      try
+      {
+        Initialiser.AppUI.Message(groupMessage, details);
+      }
+      catch
+      {
+        //Since display of these are not critical, if there is any error in displaying then these can be quashed
+      }
     }
 
     #endregion

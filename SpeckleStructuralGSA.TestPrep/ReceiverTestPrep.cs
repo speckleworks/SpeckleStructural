@@ -38,7 +38,7 @@ namespace SpeckleStructuralGSA.TestPrep
       var jsonToWrite = JsonConvert.SerializeObject(gwaRecords, Formatting.Indented, jsonSettings);
 
       //Save JSON file
-      Helper.WriteFile(jsonToWrite, outputGWAFileName, TestDataDirectory);
+      Test.Helper.WriteFile(jsonToWrite, outputGWAFileName, TestDataDirectory);
 
       return true;
     }

@@ -32,7 +32,19 @@ namespace SpeckleStructuralGSA.Test
 
       Initialiser.Cache = gsaCache;
       Initialiser.Interface = gsaInterfacer;
+    }
+
+    [SetUp]
+    public void BeforeEachTest()
+    {
       Initialiser.Settings = new Settings();
+    }
+
+    [TearDown]
+    public void AfterEachTest()
+    {
+      Initialiser.Interface.Close();
+      ((IGSACacheForTesting) Initialiser.Cache).Clear();
     }
 
     //Reception test

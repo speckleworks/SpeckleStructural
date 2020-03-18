@@ -269,10 +269,8 @@ namespace SpeckleStructuralGSA.Test
       var mockGsaInterfacer = new Mock<IGSAProxy>();
 
       ((IGSACache)Initialiser.Cache).Upsert(keyword, 1, gwaCommand, sid);
-      Initialiser.GSASenderObjects = new Dictionary<Type, List<object>>
-      {
-        { testType, new List<object>() }
-      };
+      Initialiser.GSASenderObjects.Clear();
+      Initialiser.GSASenderObjects.Add(testType, new List<object>());
     }
   }
 

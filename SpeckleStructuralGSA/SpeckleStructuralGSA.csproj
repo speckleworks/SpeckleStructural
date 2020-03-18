@@ -253,7 +253,7 @@
     <Compile Include="ConversionRoutines\Results\StructuralMiscResult.cs" />
     <Compile Include="ConversionRoutines\Results\StructuralNodeResult.cs" />
     <Compile Include="Enum.cs" />
-    <Compile Include="HelperClass.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="Initialiser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

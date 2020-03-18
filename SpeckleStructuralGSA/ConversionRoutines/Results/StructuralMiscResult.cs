@@ -61,7 +61,7 @@ namespace SpeckleStructuralGSA
 
             if (id != 0)
             {
-              newRes.TargetRef = HelperClass.GetApplicationId(kvp.Value.Item1, id);
+              newRes.TargetRef = Helper.GetApplicationId(kvp.Value.Item1, id);
             }
             newRes.GenerateHash();
             results.Add(new GSAMiscResult() { Value = newRes });

@@ -24,7 +24,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural2DElementMesh
       {
-        ApplicationId = HelperClass.GetApplicationId(typeof(GSA2DElementMesh).GetGSAKeyword(), GSAId),
+        ApplicationId = Helper.GetApplicationId(typeof(GSA2DElementMesh).GetGSAKeyword(), GSAId),
 
         Vertices = new List<double>(),
         Faces = new List<int>(),

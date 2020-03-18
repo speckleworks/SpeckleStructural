@@ -27,7 +27,7 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
       
       obj.Name = pieces[counter++];
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       //Restraints
       var restraints = new bool[6];
       for (var i = 0; i < 6; i++)
@@ -85,7 +85,7 @@ namespace SpeckleStructuralGSA
       {
         "SET_AT",
         index.ToString(),
-        keyword + ":" + HelperClass.GenerateSID(obj),
+        keyword + ":" + Helper.GenerateSID(obj),
 				string.IsNullOrEmpty(obj.Name) ? " " : obj.Name
 			};
 

@@ -26,16 +26,16 @@ namespace SpeckleStructuralGSA
 
       var counter = 1; // Skip identifier
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
 
-      HelperClass.GetGridPlaneRef(Convert.ToInt32(pieces[counter++]), out int gridPlaneRefRet, out string gridSurfaceRec);
-      HelperClass.GetGridPlaneData(gridPlaneRefRet, out int gridPlaneAxis, out double gridPlaneElevation, out string gridPlaneRec);
+      Helper.GetGridPlaneRef(Convert.ToInt32(pieces[counter++]), out int gridPlaneRefRet, out string gridSurfaceRec);
+      Helper.GetGridPlaneData(gridPlaneRefRet, out int gridPlaneAxis, out double gridPlaneElevation, out string gridPlaneRec);
 
       this.SubGWACommand.Add(gridSurfaceRec);
       this.SubGWACommand.Add(gridPlaneRec);
 
       string gwaRec = null;
-      var axis = HelperClass.Parse0DAxis(gridPlaneAxis, Initialiser.Interface, out gwaRec);
+      var axis = Helper.Parse0DAxis(gridPlaneAxis, Initialiser.Interface, out gwaRec);
       if (gwaRec != null)
         this.SubGWACommand.Add(gwaRec);
       double elevation = gridPlaneElevation;
@@ -50,25 +50,25 @@ namespace SpeckleStructuralGSA
         case "POLYREF":
           var polylineRef = pieces[counter++];
           string newRec = null;
-         HelperClass.GetPolylineDesc(Convert.ToInt32(polylineRef), out polylineDescription, out newRec);
+         Helper.GetPolylineDesc(Convert.ToInt32(polylineRef), out polylineDescription, out newRec);
           this.SubGWACommand.Add(newRec);
           break;
         case "POLYGON":
           polylineDescription = pieces[counter++];
           break;
       }
-      var polyVals = HelperClass.ParsePolylineDesc(polylineDescription);
+      var polyVals = Helper.ParsePolylineDesc(polylineDescription);
 
       for (var i = 2; i < polyVals.Length; i += 3)
         polyVals[i] = elevation;
 
-      obj.Value = HelperClass.MapPointsLocal2Global(polyVals, axis).ToList();
+      obj.Value = Helper.MapPointsLocal2Global(polyVals, axis).ToList();
       obj.Closed = true;
 
       var loadCaseIndex = Convert.ToInt32(pieces[counter++]);
       if (loadCaseIndex > 0)
       {
-        obj.LoadCaseRef = HelperClass.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), loadCaseIndex);
+        obj.LoadCaseRef = Helper.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), loadCaseIndex);
       }
 
       var loadAxisId = 0;
@@ -79,7 +79,7 @@ namespace SpeckleStructuralGSA
       else
       {
         loadAxisId = loadAxisData == "GLOBAL" ? 0 : Convert.ToInt32(loadAxisData);
-        loadAxis = HelperClass.Parse0DAxis(loadAxisId, Initialiser.Interface, out gwaRec);
+        loadAxis = Helper.Parse0DAxis(loadAxisId, Initialiser.Interface, out gwaRec);
         if (gwaRec != null)
           this.SubGWACommand.Add(gwaRec);
       }
@@ -141,7 +141,19 @@ namespace SpeckleStructuralGSA
       var indexResult = Initialiser.Cache.LookupIndex(loadCaseKeyword, load.LoadCaseRef);
       var loadCaseRef = indexResult ?? Initialiser.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
 
-      var axis = HelperClass.Parse2DAxis(load.Value.ToArray());
+      if (indexResult == null && load.ApplicationId != null)
+      {
+        if (load.LoadCaseRef == null)
+        {
+          Helper.SafeDisplay("Blank load case references found for these Application IDs:", load.ApplicationId);
+        }
+        else
+        {
+          Helper.SafeDisplay("Load case references not found:", load.ApplicationId + " referencing " + load.LoadCaseRef);
+        }
+      }
+
+      var axis = Helper.Parse2DAxis(load.Value.ToArray());
 
       // Calculate elevation
       var elevation = (load.Value[0] * axis.Normal.Value[0] +
@@ -152,7 +164,7 @@ namespace SpeckleStructuralGSA
               axis.Normal.Value[2] * axis.Normal.Value[2]);
 
       // Transform coordinate to new axis
-      var transformed = HelperClass.MapPointsGlobal2Local(load.Value.ToArray(), axis);
+      var transformed = Helper.MapPointsGlobal2Local(load.Value.ToArray(), axis);
 
       var ls = new List<string>();
 
@@ -176,7 +188,7 @@ namespace SpeckleStructuralGSA
         ls.AddRange(new string[] { 
           "SET_AT",
           index.ToString(),
-          keyword + ":" + HelperClass.GenerateSID(load),
+          keyword + ":" + Helper.GenerateSID(load),
           load.Name == null || load.Name == "" ? " " : load.Name,
           gridSurfaceIndex.ToString(),
           "POLYGON",
@@ -205,7 +217,7 @@ namespace SpeckleStructuralGSA
       gwaCommands.Add(string.Join("\t", ls));
 
       ls.Clear();
-      HelperClass.SetAxis(axis, out int planeAxisIndex, out string planeAxisGwa, load.Name);
+      Helper.SetAxis(axis, out int planeAxisIndex, out string planeAxisGwa, load.Name);
       if (planeAxisGwa.Length > 0)
       {
         gwaCommands.Add(planeAxisGwa);

@@ -30,12 +30,12 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
 
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; // Colour
       counter++; // Type
-      obj.PropertyRef = HelperClass.GetApplicationId(typeof(GSA1DProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
+      obj.PropertyRef = Helper.GetApplicationId(typeof(GSA1DProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
       counter++; // Group
 
       obj.Value = new List<double>();
@@ -53,12 +53,12 @@ namespace SpeckleStructuralGSA
       if (orientationNodeRef != "0")
       {
         var node = nodes.Where(n => n.GSAId == Convert.ToInt32(orientationNodeRef)).FirstOrDefault();
-        obj.ZAxis = HelperClass.Parse1DAxis(obj.Value.ToArray(),
+        obj.ZAxis = Helper.Parse1DAxis(obj.Value.ToArray(),
             rotationAngle, node.Value.Value.ToArray()).Normal as StructuralVectorThree;
         this.SubGWACommand.Add(node.GWACommand);
       }
       else
-        obj.ZAxis = HelperClass.Parse1DAxis(obj.Value.ToArray(), rotationAngle).Normal as StructuralVectorThree;
+        obj.ZAxis = Helper.Parse1DAxis(obj.Value.ToArray(), rotationAngle).Normal as StructuralVectorThree;
 
 
       if (pieces[counter++] != "NO_RLS")
@@ -134,11 +134,22 @@ namespace SpeckleStructuralGSA
       var indexResult = Initialiser.Cache.LookupIndex(propKeyword, element.PropertyRef);
       //If the reference can't be found, then reserve a new index so that it at least doesn't point to any other existing record
       var propRef = indexResult ?? Initialiser.Cache.ResolveIndex(propKeyword, element.PropertyRef);
+      if (indexResult == null && element.ApplicationId != null)
+      {
+        if (element.PropertyRef == null)
+        {
+          Helper.SafeDisplay("Blank property references found for these Application IDs:", element.ApplicationId);
+        }
+        else
+        {
+          Helper.SafeDisplay("Property references not found:", element.ApplicationId + " referencing " + element.PropertyRef);
+        }
+      }
 
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + HelperClass.GenerateSID(element),
+        keyword + ":" + Helper.GenerateSID(element),
         index.ToString(),
         element.Name == null || element.Name == "" ? " " : element.Name,
         "NO_RGB",
@@ -147,11 +158,11 @@ namespace SpeckleStructuralGSA
         group.ToString()
       };
       for (var i = 0; i < element.Value.Count(); i += 3)
-        ls.Add(HelperClass.NodeAt(element.Value[i], element.Value[i + 1], element.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString());
+        ls.Add(Helper.NodeAt(element.Value[i], element.Value[i + 1], element.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString());
       ls.Add("0"); // Orientation Node
       try
       {
-        ls.Add(HelperClass.Get1DAngle(element.Value.ToArray(), element.ZAxis).ToString());
+        ls.Add(Helper.Get1DAngle(element.Value.ToArray(), element.ZAxis).ToString());
       }
       catch { ls.Add("0"); }
       try
@@ -254,7 +265,7 @@ namespace SpeckleStructuralGSA
 
       var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; // Color
 
@@ -268,7 +279,7 @@ namespace SpeckleStructuralGSA
       else
         obj.ElementType = Structural1DElementType.Generic;
 
-      obj.PropertyRef = HelperClass.GetApplicationId(typeof(GSA1DProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
+      obj.PropertyRef = Helper.GetApplicationId(typeof(GSA1DProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
       this.Group = Convert.ToInt32(pieces[counter++]); // Keep group for load targetting
 
       obj.Value = new List<double>();
@@ -286,12 +297,12 @@ namespace SpeckleStructuralGSA
       if (orientationNodeRef != "0")
       {
         var node = nodes.Where(n => n.GSAId == Convert.ToInt32(orientationNodeRef)).FirstOrDefault();
-        obj.ZAxis = HelperClass.Parse1DAxis(obj.Value.ToArray(),
+        obj.ZAxis = Helper.Parse1DAxis(obj.Value.ToArray(),
             rotationAngle, node.Value.ToArray()).Normal as StructuralVectorThree;
         this.SubGWACommand.Add(node.GWACommand);
       }
       else
-        obj.ZAxis = HelperClass.Parse1DAxis(obj.Value.ToArray(), rotationAngle).Normal as StructuralVectorThree;
+        obj.ZAxis = Helper.Parse1DAxis(obj.Value.ToArray(), rotationAngle).Normal as StructuralVectorThree;
 
       counter += 9; //Skip to end conditions
 
@@ -336,11 +347,22 @@ namespace SpeckleStructuralGSA
       var indexResult = Initialiser.Cache.LookupIndex(propKeyword, member.PropertyRef);
       //If the reference can't be found, then reserve a new index so that it at least doesn't point to any other existing record
       var propRef = indexResult ?? Initialiser.Cache.ResolveIndex(propKeyword, member.PropertyRef);
+      if (indexResult == null && member.ApplicationId != null)
+      {
+        if (member.PropertyRef == null)
+        {
+          Helper.SafeDisplay("Blank property references found for these Application IDs:", member.ApplicationId);
+        }
+        else
+        {
+          Helper.SafeDisplay("Property references not found:", member.ApplicationId + " referencing " + member.PropertyRef);
+        }
+      }
 
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + HelperClass.GenerateSID(member),
+        keyword + ":" + Helper.GenerateSID(member),
         index.ToString(),
         member.Name == null || member.Name == "" ? " " : member.Name,
         "NO_RGB"
@@ -358,13 +380,13 @@ namespace SpeckleStructuralGSA
       var topo = "";
       for (var i = 0; i < member.Value.Count(); i += 3)
       {
-        topo += HelperClass.NodeAt(member.Value[i], member.Value[i + 1], member.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString() + " ";
+        topo += Helper.NodeAt(member.Value[i], member.Value[i + 1], member.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString() + " ";
       }
       ls.Add(topo);
       ls.Add("0"); // Orientation node
       try
       {
-        ls.Add(HelperClass.Get1DAngle(member.Value.ToArray(), member.ZAxis).ToString());
+        ls.Add(Helper.Get1DAngle(member.Value.ToArray(), member.ZAxis).ToString());
       }
       catch { ls.Add("0"); }
       //ls.Add(member.GSAMeshSize == 0 ? "0" : member.GSAMeshSize.ToString()); // Target mesh size

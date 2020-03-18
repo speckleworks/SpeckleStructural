@@ -44,7 +44,7 @@ namespace SpeckleStructuralGSA
       }
       else if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
       {
-        var targetGroups = HelperClass.GetGroupsFromGSAList(pieces[counter++]);
+        var targetGroups = Helper.GetGroupsFromGSAList(pieces[counter++]);
 
         if (members != null)
         {
@@ -55,7 +55,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      obj.LoadCaseRef = HelperClass.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
+      obj.LoadCaseRef = Helper.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
 
       var axis = pieces[counter++];
       this.Axis = axis == "GLOBAL" ? 0 : -1;// Convert.ToInt32(axis); // TODO: Assume local if not global
@@ -122,6 +122,18 @@ namespace SpeckleStructuralGSA
       var indexResult = Initialiser.Cache.LookupIndex(loadCaseKeyword, load.LoadCaseRef);
       var loadCaseRef = indexResult ?? Initialiser.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
 
+      if (indexResult == null && load.ApplicationId != null)
+      {
+        if (load.LoadCaseRef == null)
+        {
+          Helper.SafeDisplay("Blank load case references found for these Application IDs:", load.ApplicationId);
+        }
+        else
+        {
+          Helper.SafeDisplay("Load case references not found:", load.ApplicationId + " referencing " + load.LoadCaseRef);
+        }
+      }
+
       var direction = new string[3] { "X", "Y", "Z" };
 
       var gwaCommands = new List<string>();
@@ -136,7 +148,7 @@ namespace SpeckleStructuralGSA
         {
           "SET_AT",
           index.ToString(),
-          keyword + ":" + HelperClass.GenerateSID(load),
+          keyword + ":" + Helper.GenerateSID(load),
           load.Name == null || load.Name == "" ? " " : load.Name,
           // TODO: This is a hack.
           string.Join(" ", elementRefs.Select(x => x.ToString()).Concat(groupRefs.Select(x => "G" + x.ToString()))),
@@ -221,7 +233,7 @@ namespace SpeckleStructuralGSA
 
           // Transform load to defined axis
           var elem = elements.Where(e => e.Value.ApplicationId == nRef).First();
-          StructuralAxis loadAxis = HelperClass.Parse2DAxis(elem.Value.Vertices.ToArray(), 0, load.Axis != 0); // Assumes if not global, local
+          StructuralAxis loadAxis = Helper.Parse2DAxis(elem.Value.Vertices.ToArray(), 0, load.Axis != 0); // Assumes if not global, local
           load.Value.Loading = initLoad.Value.Loading;
 
           // Perform projection
@@ -280,7 +292,7 @@ namespace SpeckleStructuralGSA
 
           // Transform load to defined axis
           var memb = members.Where(e => e.Value.ApplicationId == nRef).First();
-          StructuralAxis loadAxis = HelperClass.Parse2DAxis(memb.Value.Vertices.ToArray(), 0, load.Axis != 0); // Assumes if not global, local
+          StructuralAxis loadAxis = Helper.Parse2DAxis(memb.Value.Vertices.ToArray(), 0, load.Axis != 0); // Assumes if not global, local
           load.Value.Loading = initLoad.Value.Loading;
           load.Value.Loading.TransformOntoAxis(loadAxis);
 
