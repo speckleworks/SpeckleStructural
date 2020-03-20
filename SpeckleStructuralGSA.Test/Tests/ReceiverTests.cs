@@ -32,6 +32,7 @@ namespace SpeckleStructuralGSA.Test
 
       Initialiser.Cache = gsaCache;
       Initialiser.Interface = gsaInterfacer;
+      Initialiser.AppUI = new SpeckleAppUI();
     }
 
     [SetUp]
@@ -53,6 +54,42 @@ namespace SpeckleStructuralGSA.Test
     public void ReceiverTestDesignLayer(GSATargetLayer layer)
     {
       RunReceiverTest(savedJsonFileNames, expectedGwaPerIdsFileName, layer);
+    }
+
+    [Ignore("Just used for debugging at this stage, will be finished in the future as a test")]
+    [TestCase(GSATargetLayer.Analysis, "pzdAVlBBQ_Canada.json")]
+    public void ReceiverTestAnalysisLayer(GSATargetLayer layer, string fileName)
+    {
+      var json = Helper.ReadFile(fileName, TestDataDirectory);
+
+      var mockGsaCom = SetupMockGsaCom();
+      gsaInterfacer.OpenFile("", false, mockGsaCom.Object);
+
+      var receiverProcessor = new ReceiverProcessor(TestDataDirectory, gsaInterfacer, gsaCache);
+
+      //Run conversion to GWA keywords
+      receiverProcessor.JsonSpeckleStreamsToGwaRecords(new[] { fileName }, out var actualGwaRecords);
+      Assert.IsNotNull(actualGwaRecords);
+      Assert.IsNotEmpty(actualGwaRecords);
+
+      var keywords = Helper.GetTypeCastPriority(ioDirection.Receive, layer, false).Select(i => i.Key.GetGSAKeyword()).Distinct().ToList();
+
+      //Log outcome to file
+
+      foreach (var keyword in keywords)
+      {
+        var actualGwaRecordsForKeyword = new List<GwaRecord>();
+        for (var i = 0; i < actualGwaRecords.Count(); i++)
+        {
+          Initialiser.Interface.ParseGeneralGwa(actualGwaRecords[i].GwaCommand, out var recordKeyword, out var foundIndex, out var foundStreamId, out string foundApplicationId, out var gwaWithoutSet, out var gwaSetCommandType);
+          if (recordKeyword.Equals(keyword, StringComparison.InvariantCultureIgnoreCase))
+          {
+            actualGwaRecordsForKeyword.Add(actualGwaRecords[i]);
+          }
+        }
+
+        var actualUniqueApplicationIds = actualGwaRecordsForKeyword.Where(r => !string.IsNullOrEmpty(r.ApplicationId)).Select(r => r.ApplicationId).Distinct();
+      }
     }
 
     //Reception test
@@ -78,7 +115,7 @@ namespace SpeckleStructuralGSA.Test
       Assert.IsNotNull(actualGwaRecords);
       Assert.IsNotEmpty(actualGwaRecords);
 
-      var keywords = Helper.GetTypeCastPriority(ioDirection.Receive, GSATargetLayer.Design, false).Select(i => i.Key.GetGSAKeyword()).Distinct().ToList();
+      var keywords = Helper.GetTypeCastPriority(ioDirection.Receive, layer, false).Select(i => i.Key.GetGSAKeyword()).Distinct().ToList();
 
       //Log outcome to file
 
