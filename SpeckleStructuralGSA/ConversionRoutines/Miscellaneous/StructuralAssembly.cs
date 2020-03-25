@@ -151,8 +151,6 @@ namespace SpeckleStructuralGSA
         nodeIndices.Add(Helper.NodeAt(assembly.Value[i], assembly.Value[i + 1], assembly.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance));
       }
 
-      var numPoints = (assembly.NumPoints == 0) ? 10 : assembly.NumPoints;
-
       //The width parameter is intentionally not being used here as the meaning doesn't map to the y coordinate parameter of the ASSEMBLY keyword
       //It is therefore to be ignored here for GSA purposes.
 
@@ -173,10 +171,23 @@ namespace SpeckleStructuralGSA
           assembly.Width.ToString(), //Y
           "0", //Z
           "LAGRANGE",
-          "0", //Curve order - reserved for future use according to the documentation
-          "POINTS",
+          "0" //Curve order - reserved for future use according to the documentation
+      };
+
+      if (assembly.NumPoints.HasValue)
+      {
+        var numPoints = (assembly.NumPoints == 0) ? 10 : assembly.NumPoints;
+        ls.AddRange(new[] { "POINTS",
           numPoints.ToString() //Number of points
-        };
+        });
+      }
+      else if (assembly.PointDistances != null && assembly.PointDistances.Count() > 0)
+      {
+        ls.AddRange(new[] { 
+          "EXPLICIT",
+          string.Join(" ", assembly.PointDistances)
+        });
+      }
 
       return (string.Join("\t", ls));
     }
