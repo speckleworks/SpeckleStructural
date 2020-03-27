@@ -34,6 +34,11 @@ namespace SpeckleStructuralClasses
       {
         this.OrientationPoint.Value[i] *= factor;
       }
+      //This is currently not scaled by the ScaleProperties below
+      if (this.PointDistances != null && this.PointDistances.Count() > 0)
+      {
+        this.PointDistances = this.PointDistances.Select(d => d * factor).ToList();
+      }
 
       this.Properties = ScaleProperties(this.Properties, factor);
       this.GenerateHash();

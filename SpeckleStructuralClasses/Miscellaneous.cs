@@ -74,6 +74,34 @@ namespace SpeckleStructuralClasses
       set { if (value != null) StructuralProperties["numPoints"] = value; }
     }
 
+    [JsonIgnore]
+    public List<double> PointDistances
+    {
+      get
+      {
+        if (StructuralProperties.ContainsKey("pointdistances"))
+        {
+          try
+          {
+            try
+            {
+              return (List<double>)StructuralProperties["pointdistances"];
+            }
+            catch
+            {
+              this.PointDistances = ((List<object>)StructuralProperties["pointdistances"]).Select(x => Convert.ToDouble(x)).ToList();
+              return this.PointDistances;
+            }
+          }
+          catch
+          { return null; }
+        }
+        else
+          return null;
+      }
+      set { if (value != null) StructuralProperties["pointdistances"] = value; }
+    }
+
     /// <summary>Base SpeckleLine.</summary>
     [JsonIgnore]
     public SpeckleLine BaseLine
