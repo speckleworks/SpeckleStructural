@@ -563,6 +563,8 @@ namespace SpeckleStructuralGSA
       }
       var res = Initialiser.Cache.ResolveIndex("AXIS.1");
 
+      var originCoords = (axis.Origin == null || axis.Origin.Value == null) ? new List<double> { 0, 0, 0 } : axis.Origin.Value;
+
       var ls = new List<string>
       {
         "SET",
@@ -571,9 +573,9 @@ namespace SpeckleStructuralGSA
         gwaAxisName,
         "CART",
 
-        axis.Origin.Value[0].ToString(),
-        axis.Origin.Value[1].ToString(),
-        axis.Origin.Value[2].ToString(),
+        originCoords[0].ToString(),
+        originCoords[1].ToString(),
+        originCoords[2].ToString(),
 
         axis.Xdir.Value[0].ToString(),
         axis.Xdir.Value[1].ToString(),
