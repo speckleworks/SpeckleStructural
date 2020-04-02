@@ -70,7 +70,7 @@ namespace SpeckleStructuralGSA
         "MAT.8",
         mat.Name == null || mat.Name == "" ? " " : mat.Name,
         "YES", // Unlocked
-        mat.YoungsModulus.ToString(), // E
+        (mat.YoungsModulus*1000).ToString(), // E
         mat.PoissonsRatio.ToString(), // nu
         mat.ShearModulus.ToString(), // G
         mat.Density.ToString(), // rho

@@ -548,11 +548,16 @@ namespace SpeckleStructuralGSA
       var gwaAxisName = name ?? "";
       index = 0;
       gwa = "";
+      double[] globalOrigin = { 0, 0, 0 };
+      double[] globalXdir = { 1, 0, 0 };
+      double[] globalYdir = { 0, 1, 0 };
+      double[] globalZdir = { 0, 0, 1 };
 
       if (axis == null 
-        || (axis.Xdir.Value.SequenceEqual(new double[] { 1, 0, 0 }) &&
-          axis.Ydir.Value.SequenceEqual(new double[] { 0, 1, 0 }) &&
-          axis.Normal.Value.SequenceEqual(new double[] { 0, 0, 1 })))
+        || (
+          axis.Xdir.Value.SequenceEqual(globalXdir) &&
+          axis.Ydir.Value.SequenceEqual(globalYdir) &&
+          axis.Normal.Value.SequenceEqual(globalZdir)))
       {
         return;
       }
@@ -566,9 +571,9 @@ namespace SpeckleStructuralGSA
         gwaAxisName,
         "CART",
 
-        "0",
-        "0",
-        "0",
+        axis.Origin.Value[0].ToString(),
+        axis.Origin.Value[1].ToString(),
+        axis.Origin.Value[2].ToString(),
 
         axis.Xdir.Value[0].ToString(),
         axis.Xdir.Value[1].ToString(),
@@ -583,7 +588,79 @@ namespace SpeckleStructuralGSA
 
       index = res;
     }
+    public static void SetAxis(StructuralAxis axis, int Index, out string gwa, string name = "")
+    {
+      var gwaAxisName = name ?? "";
 
+      gwa = "";
+      double[] globalOrigin = { 0, 0, 0 };
+      double[] globalXdir = { 1, 0, 0 };
+      double[] globalYdir = { 0, 1, 0 };
+      double[] globalZdir = { 0, 0, 1 };
+
+      if (axis == null
+        || (
+          axis.Xdir.Value.SequenceEqual(globalXdir) &&
+          axis.Ydir.Value.SequenceEqual(globalYdir) &&
+          axis.Normal.Value.SequenceEqual(globalZdir)))
+      {
+        return;
+      }
+
+      var ls = new List<string>
+      {
+        "SET",
+        "AXIS.1",
+        Index.ToString(),
+        gwaAxisName,
+        "CART",
+
+        axis.Origin.Value[0].ToString(),
+        axis.Origin.Value[1].ToString(),
+        axis.Origin.Value[2].ToString(),
+
+        axis.Xdir.Value[0].ToString(),
+        axis.Xdir.Value[1].ToString(),
+        axis.Xdir.Value[2].ToString(),
+
+        axis.Ydir.Value[0].ToString(),
+        axis.Ydir.Value[1].ToString(),
+        axis.Ydir.Value[2].ToString()
+      };
+
+      gwa = string.Join("\t", ls);
+
+    }
+
+    public static void SetAxis(SpeckleVector xVector, SpeckleVector xyVector, SpecklePoint origin, int Index, out string gwaCommand, string name = "")
+    {
+      gwaCommand = "";
+
+      var gwaCommands = new List<string>();
+
+      var ls = new List<string>()
+        {
+          "SET",
+          "AXIS.1",
+          Index.ToString(),
+          name ?? "",
+          "CART",
+
+          origin.Value[0].ToString(),
+          origin.Value[1].ToString(),
+          origin.Value[2].ToString(),
+
+          xVector.Value[0].ToString(),
+          xVector.Value[1].ToString(),
+          xVector.Value[2].ToString(),
+
+          xyVector.Value[0].ToString(),
+          xyVector.Value[1].ToString(),
+          xyVector.Value[2].ToString(),
+        };
+
+      gwaCommand = (string.Join("\t", ls));
+    }
     public static void SetAxis(SpeckleVector xVector, SpeckleVector xyVector, SpecklePoint origin, out int index, out string gwaCommand, string name = "")
     {
       gwaCommand = "";

@@ -112,6 +112,37 @@ namespace SpeckleStructuralGSA
         obj.Loading.Scale(scale);
       }
 
+      obj.LoadingEnd = new StructuralVectorSix(new double[6]);
+      switch (direction.ToUpper())
+      {
+        case "X":
+          obj.LoadingEnd.Value[0] = averageValue;
+          break;
+        case "Y":
+          obj.LoadingEnd.Value[1] = averageValue;
+          break;
+        case "Z":
+          obj.LoadingEnd.Value[2] = averageValue;
+          break;
+        default:
+          // TODO: Error case maybe?
+          break;
+      }
+      obj.LoadingEnd.TransformOntoAxis(loadAxis);
+
+      if (projected)
+      {
+        var scale = (obj.LoadingEnd.Value[0] * axis.Normal.Value[0] +
+            obj.LoadingEnd.Value[1] * axis.Normal.Value[1] +
+            obj.LoadingEnd.Value[2] * axis.Normal.Value[2]) /
+            (axis.Normal.Value[0] * axis.Normal.Value[0] +
+            axis.Normal.Value[1] * axis.Normal.Value[1] +
+            axis.Normal.Value[2] * axis.Normal.Value[2]);
+
+        obj.LoadingEnd = new StructuralVectorSix(axis.Normal.Value[0], axis.Normal.Value[1], axis.Normal.Value[2], 0, 0, 0);
+        obj.LoadingEnd.Scale(scale);
+      }
+
       this.Value = obj;
     }
 
@@ -198,7 +229,7 @@ namespace SpeckleStructuralGSA
           "NO",
           direction[i],
           load.Loading.Value[i].ToString(),
-          load.Loading.Value[i].ToString()});
+          load.LoadingEnd == null ? load.Loading.Value[i].ToString() : load.LoadingEnd.Value[i].ToString()});
 
         gwaCommands.Add(string.Join("\t", ls));
       }
