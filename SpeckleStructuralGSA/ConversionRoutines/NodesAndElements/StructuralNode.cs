@@ -101,6 +101,11 @@ namespace SpeckleStructuralGSA
 
       var node = this.Value as StructuralNode;
 
+      if (node.Value == null || node.Value.Count() != 3)
+      {
+        return "";
+      }
+
       var keyword = typeof(GSANode).GetGSAKeyword();
 
       var index = Helper.NodeAt(node.Value[0], node.Value[1], node.Value[2], Initialiser.Settings.CoincidentNodeAllowance);
@@ -259,6 +264,11 @@ namespace SpeckleStructuralGSA
         return "";
 
       var node = this.Value as StructuralNode;
+      if (node.Value == null || node.Value.Count() != 3)
+      {
+        Initialiser.AppUI.Message("Node with invalid point", node.ApplicationId);
+        return "";
+      }
 
       if (!node.Mass.HasValue || node.Mass == 0)
         return "";
