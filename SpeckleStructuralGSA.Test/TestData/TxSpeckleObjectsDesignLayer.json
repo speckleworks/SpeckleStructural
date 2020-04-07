@@ -35,6 +35,10 @@
     "properties": {}
   },
   {
+    "type": "StructuralLoadPlane",
+    "properties": {}
+  },
+  {
     "type": "Point/StructuralNode",
     "value": [
       22610.44,

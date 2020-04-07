@@ -27,7 +27,7 @@ namespace SpeckleStructuralGSA
       //int counter = 1; // Skip identifier
 
       //this.GSAId = Convert.ToInt32(pieces[counter++]);
-      //obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      //obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       //obj.Name = pieces[counter++];
 
       ////Find task type
@@ -39,7 +39,7 @@ namespace SpeckleStructuralGSA
       //// TODO: this only parses the super simple linear add descriptions
       //try
       //{
-      //  List<Tuple<string, double>> desc = HelperClass.ParseLoadDescription(description);
+      //  List<Tuple<string, double>> desc = Helper.ParseLoadDescription(description);
       //}
       //catch { }
 
