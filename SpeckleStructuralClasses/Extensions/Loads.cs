@@ -132,7 +132,10 @@ namespace SpeckleStructuralClasses
 
     public StructuralLoadPlane(StructuralAxis loadPlaneAxis, int elementDimension, double tolerance, int span, double spanAngle, string applicationId = null, Dictionary<string, object> properties = null)
     {
-      this.LoadPlaneAxis = loadPlaneAxis;
+      this.Origin = loadPlaneAxis.Origin;
+      this.Xdir = loadPlaneAxis.Xdir;
+      this.Ydir = loadPlaneAxis.Ydir;
+      this.Normal = loadPlaneAxis.Normal;
       this.ElementDimension = elementDimension;
       this.Tolerance = tolerance;
       this.Span = span;
@@ -204,14 +207,15 @@ namespace SpeckleStructuralClasses
       this.GenerateHash();
     }
   }
+
   public partial class Structural0DLoadPoint
   {
     public Structural0DLoadPoint() { }
 
-    public Structural0DLoadPoint(double[] value, StructuralLoadPlane loadPlane, StructuralVectorThree loading, string loadCaseRef, string applicationId = null, Dictionary<string, object> properties = null)
+    public Structural0DLoadPoint(double[] value, string loadPlaneRef, StructuralVectorSix loading, string loadCaseRef, string applicationId = null, Dictionary<string, object> properties = null)
     {
       this.Value = value.ToList();
-      this.LoadPlane = loadPlane;
+      this.LoadPlaneRef = loadPlaneRef;
       this.Loading = loading;
       this.LoadCaseRef = loadCaseRef;
       this.ApplicationId = applicationId;
@@ -227,7 +231,15 @@ namespace SpeckleStructuralClasses
     {
       for (var i = 0; i < Value.Count(); i++)
         Value[i] *= factor;
-      this.LoadAxis.Origin.Scale(factor);
+
+      if (Loading.Value != null)
+      {
+        for (var i = 0; i < Loading.Value.Count(); i++)
+        {
+          Loading.Value[i] *= factor;
+        }
+      }
+
       this.Properties = ScaleProperties(this.Properties, factor);
       this.GenerateHash();
     }
@@ -282,6 +294,23 @@ namespace SpeckleStructuralClasses
         this.Value[i] *= factor;
 
       this.Properties = ScaleProperties(this.Properties, factor);
+
+      if (Loading.Value != null)
+      {
+        for (var i = 0; i < Loading.Value.Count(); i++)
+        {
+          Loading.Value[i] *= factor;
+        }
+      }
+
+      if (LoadingEnd.Value != null)
+      {
+        for (var i = 0; i < LoadingEnd.Value.Count(); i++)
+        {
+          LoadingEnd.Value[i] *= factor;
+        }
+      }
+
       this.GenerateHash();
     }
   }

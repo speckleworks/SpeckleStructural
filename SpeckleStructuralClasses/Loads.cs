@@ -147,10 +147,6 @@ namespace SpeckleStructuralClasses
   {
     public override string Type { get => "StructuralLoadPlane"; }
 
-    /// <summary>Plane of load.</summary>
-    [JsonProperty("loadPlaneAxis", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public StructuralAxis LoadPlaneAxis { get; set; }
-
     /// <summary>Type elements to apply load to (1D or 2D).</summary>
     [JsonProperty("elementDimension", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
     public int? ElementDimension { get; set; }
@@ -166,9 +162,23 @@ namespace SpeckleStructuralClasses
     /// <summary>Span option.</summary>
     [JsonProperty("spanAngle", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
     public double? SpanAngle { get; set; }
-  }
-  [Serializable]
 
+    /// <summary>Base SpeckleLine.</summary>
+    [JsonIgnore]
+    public StructuralAxis BaseAxis
+    {
+      get => this as StructuralAxis;
+      set
+      {
+        this.Xdir = value.Xdir;
+        this.Ydir = value.Ydir;
+        this.Origin = value.Origin;
+        this.Normal = value.Normal;
+      }
+    }
+  }
+
+  [Serializable]
   public partial class Structural0DLoad : SpeckleObject, IStructural
   {
     public override string Type { get => "Structural0DLoad"; }
@@ -203,16 +213,11 @@ namespace SpeckleStructuralClasses
     }
 
     /// <summary>Plane of load.</summary>
-    [JsonProperty("loadPlane", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public StructuralLoadPlane LoadPlane { get; set; }
-     
-    /// <summary>Location of load.</summary>
-    [JsonProperty("loadAxis", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public StructuralAxis LoadAxis { get; set; }
-
-    /// <summary>A list of Fx, Fy, Fz, Mx, My, and Mz loads.</summary>
+    [JsonProperty("loadPlaneRef", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public string LoadPlaneRef { get; set; }
+    
     [JsonProperty("loading", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public StructuralVectorThree Loading { get; set; }
+    public StructuralVectorSix Loading { get; set; }
 
     /// <summary>Application ID of StructuralLoadCase.</summary>
     [JsonProperty("loadCaseRef", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
@@ -278,10 +283,10 @@ namespace SpeckleStructuralClasses
     }
 
     /// <summary>Plane of load.</summary>
-    [JsonProperty("loadPlane", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public StructuralLoadPlane LoadPlane { get; set; }
+    [JsonProperty("LoadPlaneRef", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public string LoadPlaneRef { get; set; }
 
-    /// <summary>A list of Fx, Fy, Fz, Mx, My, and Mz loads.</summary>
+    /// <summary>A list of Fx, Fy, Fz, loads.</summary>
     [JsonIgnore]
     public StructuralVectorSix Loading
     {

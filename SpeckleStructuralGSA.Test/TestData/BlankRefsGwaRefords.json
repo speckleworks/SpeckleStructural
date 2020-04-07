@@ -1,19 +1,5 @@
 [
   {
-    "ApplicationId": "gh/ce14eb199a860bd454baa4e03480aeb4",
-    "GwaCommand": "SET\tLOAD_GRID_LINE.2:{speckle_app_id:gh/ce14eb199a860bd454baa4e03480aeb4}\t \t1\tPOLYGON\t(-0.137446105800758,0.0215770248228732) (0.0591982432154293,0.0215770248228731)\t1\tGLOBAL\tNO\tX\t10\t10"
-  },
-  {
-    "ApplicationId": "gh/ce14eb199a860bd454baa4e03480aeb4",
-    "GwaCommand": "SET\tLOAD_GRID_LINE.2:{speckle_app_id:gh/ce14eb199a860bd454baa4e03480aeb4}\t \t1\tPOLYGON\t(-0.137446105800758,0.0215770248228732) (0.0591982432154293,0.0215770248228731)\t1\tGLOBAL\tNO\tY\t20\t20"
-  },
-  {
-    "GwaCommand": "SET\tGRID_SURFACE.1\t1\t \t1\t1\tall\t0.01\tTWO_SIMPLE\t0"
-  },
-  {
-    "GwaCommand": "SET\tGRID_SURFACE.1\t2\t \t2\t2\tall\t0.01\tONE\t0"
-  },
-  {
     "GwaCommand": "SET\tAXIS.1\t1\t\tCART\t0\t0\t0\t0.559385512730626\t-0.828907623409928\t0\t0.828907623409928\t0.559385512730626\t0"
   },
   {
@@ -24,6 +10,20 @@
   },
   {
     "GwaCommand": "SET\tGRID_PLANE.4\t2\t \tGENERAL\t2\t0\t0\t0"
+  },
+  {
+    "GwaCommand": "SET\tGRID_SURFACE.1\t1\t \t1\t1\tall\t0.01\tTWO_SIMPLE\t0"
+  },
+  {
+    "GwaCommand": "SET\tGRID_SURFACE.1\t2\t \t2\t2\tall\t0.01\tONE\t0"
+  },
+  {
+    "ApplicationId": "gh/ce14eb199a860bd454baa4e03480aeb4",
+    "GwaCommand": "SET\tLOAD_GRID_LINE.2:{speckle_app_id:gh/ce14eb199a860bd454baa4e03480aeb4}\t \t1\tPOLYGON\t(-0.137446105800758,0.0215770248228732) (0.0591982432154293,0.0215770248228731)\t1\tGLOBAL\tNO\tX\t0.01\t0.01"
+  },
+  {
+    "ApplicationId": "gh/ce14eb199a860bd454baa4e03480aeb4",
+    "GwaCommand": "SET\tLOAD_GRID_LINE.2:{speckle_app_id:gh/ce14eb199a860bd454baa4e03480aeb4}\t \t1\tPOLYGON\t(-0.137446105800758,0.0215770248228732) (0.0591982432154293,0.0215770248228731)\t1\tGLOBAL\tNO\tY\t0.02\t0.02"
   },
   {
     "ApplicationId": "gh/c72c2ee9e400df4db1e0df8ab96e5400",

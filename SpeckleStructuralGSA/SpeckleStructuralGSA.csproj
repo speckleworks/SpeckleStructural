@@ -226,6 +226,7 @@
     <Compile Include="ConversionRoutines\Loads\StructuralGravityLoading.cs" />
     <Compile Include="ConversionRoutines\Loads\StructuralLoadCase.cs" />
     <Compile Include="ConversionRoutines\Loads\StructuralLoadCombo.cs" />
+    <Compile Include="ConversionRoutines\Loads\StructuralLoadPlane.cs" />
     <Compile Include="ConversionRoutines\Loads\StructuralLoadTask.cs" />
     <Compile Include="ConversionRoutines\Loads\StructuralLoadTaskBuckling.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\Structural1DInfluenceEffect.cs" />

@@ -7,7 +7,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("LOAD_GRID_POINT.2", new string[] { "NODE.2", "AXIS.1" }, "loads", true, true, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode) })]
+  [GSAObject("LOAD_GRID_POINT.2", new string[] { "NODE.2", "AXIS.1" }, "loads", true, true, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSALoadPlane), typeof(GSANode) })]
   public class GSA0DLoadPoint : IGSASpeckleContainer
   {
     public int Axis; // Store this temporarily to generate other loads
@@ -24,10 +24,10 @@ namespace SpeckleStructuralGSA
       var obj = new Structural0DLoadPoint();
       this.GetAttribute("loadPlane");
       var pieces = this.GWACommand.ListSplit("\t");
-      
+
       var counter = 1; // Skip identifier
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
-      
+
       obj.LoadCaseRef = Helper.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
 
       var axis = pieces[counter++];
@@ -70,7 +70,7 @@ namespace SpeckleStructuralGSA
 
 
 
-      obj.Loading = new StructuralVectorThree(new double[3]);
+      obj.Loading = new StructuralVectorSix(new double[3]);
 
       var direction = pieces[counter++].ToLower();
       switch (direction.ToUpper())
@@ -99,119 +99,59 @@ namespace SpeckleStructuralGSA
         return "";
 
       var load = this.Value as Structural0DLoadPoint;
-      if (load.Loading == null)
+      if (load.Loading == null || load.LoadCaseRef == null)
         return "";
-      
+
       var keyword = typeof(GSA0DLoadPoint).GetGSAKeyword();
-
-      var gridSurfaceIndex = Initialiser.Cache.ResolveIndex("GRID_SURFACE.1");
-      var gridPlaneIndex = Initialiser.Cache.ResolveIndex("GRID_PLANE.4");
-      var axisIndex = Initialiser.Cache.ResolveIndex("AXIS.1");
-
-      var loadCaseRef = 0;
-      try
-      {
-        loadCaseRef = Initialiser.Cache.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef).Value;
-      }
-      catch {
-        loadCaseRef = Initialiser.Cache.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef);
-      }
-
-      var loadAxis = load.LoadAxis;
-      var plane = load.LoadPlane;
-      var planeAxis = load.LoadPlane.LoadPlaneAxis;
-
-      var planeElementDimension = plane.ElementDimension;
-      var planeSpan = plane.Span;
-      var planeSpanAngle = plane.SpanAngle;
-      var planeTolerance = plane.SpanAngle;
-
-
-      // Calculate elevation
-      //var elevation = (load.Value[0] * axis.Normal.Value[0] +
-      //    load.Value[1] * axis.Normal.Value[1] +
-      //    load.Value[2] * axis.Normal.Value[2]) /
-      //    Math.Sqrt(axis.Normal.Value[0] * axis.Normal.Value[0] +
-      //        axis.Normal.Value[1] * axis.Normal.Value[1] +
-      //        axis.Normal.Value[2] * axis.Normal.Value[2]);
-      var direction = new string[3] { "X", "Y", "Z"};
-
-      var gwaAxisCommand = "";
-      var gwaCommands = new List<string>();
+      var loadCaseKeyword = typeof(GSALoadCase).GetGSAKeyword();
+      var loadPlaneKeyword = typeof(GSALoadPlane).GetGSAKeyword();
 
       var axisRef = "GLOBAL";
-      var planeAxisRef = "GLOBAL";
+      int loadCaseRef;
+
+      var gwaCommands = new List<string>();
 
       var ls = new List<string>();
 
-       
+      try
+      {
+        loadCaseRef = Initialiser.Cache.LookupIndex(loadCaseKeyword, load.LoadCaseRef).Value;
+      }
+      catch
+      {
+        loadCaseRef = Initialiser.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
+      }
+
+      int gridSurfaceIndex;
+      try
+      {
+        gridSurfaceIndex = Initialiser.Cache.LookupIndex(loadPlaneKeyword, load.LoadPlaneRef).Value;
+      }
+      catch
+      {
+        gridSurfaceIndex = Initialiser.Cache.ResolveIndex(loadPlaneKeyword, load.LoadPlaneRef);
+      }
+
+      double x = 0;
+      double y = 0;
+      if (gridSurfaceIndex > 0)
+      {
+        var loadPlanes = Initialiser.Cache.GetIndicesSpeckleObjects(typeof(StructuralLoadPlane).Name);
+        var loadPlane = (StructuralLoadPlane)loadPlanes[gridSurfaceIndex];
+
+        //Now that load planes are shared, and a new surface and axis aren't created for each point where the point
+        //is arranged to be at the origin of the new surface and axis, there might need to be an X and Y coordinate calculated 
+        //that is relative to the plane
+        var axisCoords = Helper.MapPointsGlobal2Local(load.LoadPoint.Value.ToArray(), loadPlane);
+        x = axisCoords[0];
+        y = axisCoords[1];
+      }
 
       ls.Clear();
-      Helper.SetAxis(planeAxis.Xdir, planeAxis.Ydir, load, axisIndex, out string planeAxisGwa, load.Name);
-      if (planeAxisGwa.Length > 0)
-      {
-        gwaCommands.Add(planeAxisGwa);
-        planeAxisRef = axisIndex.ToString();
-      }
 
-      ls.AddRange(new[] {
-        "SET",
-        "GRID_PLANE.4",
-        gridPlaneIndex.ToString(),
-        load.Name == null || load.Name == "" ? " " : load.Name,
-        "GENERAL", // Type
-        planeAxisRef,
-        "0",
-        "0", // Elevation above
-        "0"}); // Elevation below
-      gwaCommands.Add(string.Join("\t", ls));
+      var direction = new string[3] { "X", "Y", "Z" };
 
-      ls.Clear();
-      ls.AddRange(new[] {
-        "SET",
-        "GRID_SURFACE.1",
-        gridSurfaceIndex.ToString(),
-        load.Name == null || load.Name == "" ? " " : load.Name,
-        gridPlaneIndex.ToString(),
-        planeElementDimension == 2 ? "2" : "1", // Dimension of elements to target
-        "all", // List of elements to target
-        planeTolerance?.ToString() ?? "0.01", // Tolerance
-        planeSpan == 2 ? "TWO" : "ONE" , // Span option
-        planeSpanAngle?.ToString() ?? "0" }); // Span angle
-      gwaCommands.Add(string.Join("\t", ls));
-      if (loadAxis == null)
-      {
-        //Default value
-        axisRef = "GLOBAL";
-      }
-      else
-      {
-        if (load.LoadAxis.Xdir.Value.SequenceEqual(new double[] { 1, 0, 0 }) &&
-          load.LoadAxis.Ydir.Value.SequenceEqual(new double[] { 0, 1, 0 }) &&
-          load.LoadAxis.Normal.Value.SequenceEqual(new double[] { 0, 0, 1 }))
-        {
-          axisRef = "GLOBAL";
-        }
-        else if (load.LoadAxis.Xdir.Value.SequenceEqual(new double[] { 0, 0, 1 }) &&
-          load.LoadAxis.Ydir.Value.SequenceEqual(new double[] { 1, 0, 0 }) &&
-          load.LoadAxis.Normal.Value.SequenceEqual(new double[] { 0, 1, 0 }))
-        {
-          axisRef = "VERTICAL";
-        }
-        else
-          try
-          {
-            Helper.SetAxis(load.LoadAxis, axisIndex + 1, out gwaAxisCommand, load.Name);
-            if (gwaAxisCommand.Length > 0)
-            {
-              gwaCommands.Add(gwaAxisCommand);
-              axisRef = (axisIndex + 1).ToString();
-            }
-          }
-          catch { axisRef = "GLOBAL"; }
-      }
-
-      for (var i = 0; i < load.Loading.Value.Count(); i++)
+      for (var i = 0; i < Math.Min(direction.Count(), load.Loading.Value.Count()) ; i++)
       {
         ls.Clear();
         if (load.Loading.Value[i] == 0) continue;
@@ -223,15 +163,15 @@ namespace SpeckleStructuralGSA
         ls.Add(keyword + ":" + Helper.GenerateSID(load));
         ls.Add(load.Name == null || load.Name == "" ? " " : load.Name);
         ls.Add(gridSurfaceIndex.ToString()); // Grid Surface
-        ls.Add("0"); // X coordinate
-        ls.Add("0"); // Y coordinate
+        ls.Add(x.ToString()); // X coordinate
+        ls.Add(y.ToString()); // Y coordinate
         ls.Add(loadCaseRef.ToString());
         ls.Add(axisRef); // Axis
         ls.Add(direction[i]);
         ls.Add(load.Loading.Value[i].ToString());
 
         gwaCommands.Add(string.Join("\t", ls));
-        
+
       }
       return string.Join("\n", gwaCommands);
     }

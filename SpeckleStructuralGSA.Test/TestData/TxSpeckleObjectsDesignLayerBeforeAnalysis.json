@@ -73,6 +73,18 @@
     "properties": {}
   },
   {
+    "type": "StructuralLoadPlane",
+    "properties": {}
+  },
+  {
+    "type": "StructuralLoadPlane",
+    "properties": {}
+  },
+  {
+    "type": "StructuralLoadPlane",
+    "properties": {}
+  },
+  {
     "type": "StructuralBridgeAlignment",
     "applicationId": "AL1",
     "name": "Alignment One",
