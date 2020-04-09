@@ -143,9 +143,65 @@ namespace SpeckleStructuralClasses
 
   [Serializable]
 
-  public partial class StructuralLoadPlane : StructuralAxis, IStructural
+  public partial class StructuralStorey : StructuralAxis, IStructural
+  {
+    /// <summary>Base SpecklePoint.</summary>
+    [JsonIgnore]
+    public StructuralAxis Axis
+    {
+      get => this as StructuralAxis;
+      set
+      {
+        this.Xdir = value.Xdir;
+        this.Ydir = value.Ydir;
+        this.Origin = value.Origin;
+        this.Normal = value.Normal;
+      }
+    }
+
+    /// <summary>Tolerance for element inclusion.</summary>
+    [JsonProperty("elevation", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public double? Elevation { get; set; }
+
+    /// <summary>Tolerance for element inclusion.</summary>
+    [JsonProperty("toleranceAbove", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public double? ToleranceAbove { get; set; }
+
+    /// <summary>Tolerance for element inclusion.</summary>
+    [JsonProperty("toleranceBelow", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public double? ToleranceBelow { get; set; }
+  }
+
+  [Serializable]
+
+  public partial class StructuralLoadPlane : SpeckleObject, IStructural
   {
     public override string Type { get => "StructuralLoadPlane"; }
+
+    [JsonIgnore]
+    private Dictionary<string, object> StructuralProperties
+    {
+      get
+      {
+        if (base.Properties == null)
+          base.Properties = new Dictionary<string, object>();
+
+        if (!base.Properties.ContainsKey("structural"))
+          base.Properties["structural"] = new Dictionary<string, object>();
+
+        return base.Properties["structural"] as Dictionary<string, object>;
+
+      }
+      set
+      {
+        if (base.Properties == null)
+          base.Properties = new Dictionary<string, object>();
+
+        base.Properties["structural"] = value;
+      }
+
+    }
+
 
     /// <summary>Type elements to apply load to (1D or 2D).</summary>
     [JsonProperty("elementDimension", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
@@ -163,18 +219,16 @@ namespace SpeckleStructuralClasses
     [JsonProperty("spanAngle", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
     public double? SpanAngle { get; set; }
 
-    /// <summary>Base SpeckleLine.</summary>
+    /// <summary>Application IDs of StructuralNodes to apply load.</summary>
+    [JsonProperty("storeyRef", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public string StoreyRef { get; set; }
+
+    /// <summary>Local axis of the node.</summary>
     [JsonIgnore]
-    public StructuralAxis BaseAxis
+    public StructuralAxis Axis
     {
-      get => this as StructuralAxis;
-      set
-      {
-        this.Xdir = value.Xdir;
-        this.Ydir = value.Ydir;
-        this.Origin = value.Origin;
-        this.Normal = value.Normal;
-      }
+      get => StructuralProperties.ContainsKey("axis") ? (StructuralProperties["axis"] as StructuralAxis) : null;
+      set { if (value != null) StructuralProperties["axis"] = value; }
     }
   }
 

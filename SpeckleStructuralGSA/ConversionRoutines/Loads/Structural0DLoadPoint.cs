@@ -7,7 +7,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("LOAD_GRID_POINT.2", new string[] { "NODE.2", "AXIS.1" }, "loads", true, true, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSALoadPlane), typeof(GSANode) })]
+  [GSAObject("LOAD_GRID_POINT.2", new string[] { "NODE.2", "AXIS.1" }, "loads", true, true, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSAGridSurface), typeof(GSAStorey), typeof(GSALoadCase), typeof(GSANode) })]
   public class GSA0DLoadPoint : IGSASpeckleContainer
   {
     public int Axis; // Store this temporarily to generate other loads
@@ -104,7 +104,7 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA0DLoadPoint).GetGSAKeyword();
       var loadCaseKeyword = typeof(GSALoadCase).GetGSAKeyword();
-      var loadPlaneKeyword = typeof(GSALoadPlane).GetGSAKeyword();
+      var loadPlaneKeyword = typeof(GSAGridSurface).GetGSAKeyword();
 
       var axisRef = "GLOBAL";
       int loadCaseRef;
@@ -137,7 +137,7 @@ namespace SpeckleStructuralGSA
       if (gridSurfaceIndex > 0)
       {
         var loadPlanes = Initialiser.Cache.GetIndicesSpeckleObjects(typeof(StructuralLoadPlane).Name);
-        var loadPlane = (StructuralLoadPlane)loadPlanes[gridSurfaceIndex];
+        var loadPlane = ((StructuralLoadPlane)loadPlanes[gridSurfaceIndex]).Axis;
 
         //Now that load planes are shared, and a new surface and axis aren't created for each point where the point
         //is arranged to be at the origin of the new surface and axis, there might need to be an X and Y coordinate calculated 
