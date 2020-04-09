@@ -18,5 +18,7 @@ namespace SpeckleStructuralGSA
       //as soon as it notices that the GWA isn't relevant to this class
       return Initialiser.Cache.GetGwaToSerialise(keyword);
     }
+
+    //private static bool CreateGridPlane()
   }
 }
