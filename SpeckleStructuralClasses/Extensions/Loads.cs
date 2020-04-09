@@ -132,10 +132,13 @@ namespace SpeckleStructuralClasses
 
     public StructuralLoadPlane(StructuralAxis loadPlaneAxis, int elementDimension, double tolerance, int span, double spanAngle, string applicationId = null, Dictionary<string, object> properties = null)
     {
-      this.Origin = loadPlaneAxis.Origin;
-      this.Xdir = loadPlaneAxis.Xdir;
-      this.Ydir = loadPlaneAxis.Ydir;
-      this.Normal = loadPlaneAxis.Normal;
+      if (loadPlaneAxis != null)
+      {
+        this.Axis.Origin = loadPlaneAxis.Origin;
+        this.Axis.Xdir = loadPlaneAxis.Xdir;
+        this.Axis.Ydir = loadPlaneAxis.Ydir;
+        this.Axis.Normal = loadPlaneAxis.Normal;
+      }
       this.ElementDimension = elementDimension;
       this.Tolerance = tolerance;
       this.Span = span;
