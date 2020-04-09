@@ -244,7 +244,33 @@ namespace SpeckleStructuralGSA
         var loadPlanesDict = Initialiser.Cache.GetIndicesSpeckleObjects(typeof(StructuralLoadPlane).Name);
         if (loadPlanesDict.ContainsKey(gridSurfaceIndex) && loadPlanesDict[gridSurfaceIndex] != null)
         {
-          axis = ((StructuralLoadPlane)loadPlanesDict[gridSurfaceIndex]).Axis;
+          var loadPlane = ((StructuralLoadPlane)loadPlanesDict[gridSurfaceIndex]);
+          if (loadPlane.Axis != null)
+          {
+            axis = loadPlane.Axis;
+          }
+          else
+          {
+            try
+            {
+              var storeyIndex = Initialiser.Cache.LookupIndex("GRID_PLANE.4", loadPlane.StoreyRef).Value;
+              var storeysDict = Initialiser.Cache.GetIndicesSpeckleObjects(typeof(StructuralStorey).Name);
+              if (storeysDict.ContainsKey(storeyIndex) && storeysDict[storeyIndex] != null)
+              {
+                var storey = ((StructuralStorey)storeysDict[storeyIndex]);
+                if (storey.Axis != null)
+                {
+                  axis = storey.Axis;
+                }
+              }
+            }
+            catch { }
+
+            if (axis == null)
+            {
+              axis = new StructuralAxis(new StructuralVectorThree(1, 0, 0), new StructuralVectorThree(0, 1, 0));
+            }
+          }
         }
       }
 

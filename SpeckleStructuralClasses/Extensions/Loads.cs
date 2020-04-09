@@ -161,6 +161,40 @@ namespace SpeckleStructuralClasses
       this.GenerateHash();
     }
   }
+
+  public partial class StructuralStorey
+  {
+    public StructuralStorey() { }
+
+    public StructuralStorey(StructuralAxis axis, string applicationId = null, Dictionary<string, object> properties = null)
+    {
+      if (axis != null)
+      {
+        this.Axis.Origin = axis.Origin;
+        this.Axis.Xdir = axis.Xdir;
+        this.Axis.Ydir = axis.Ydir;
+        this.Axis.Normal = axis.Normal;
+      }
+      this.ApplicationId = applicationId;
+
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
+
+      GenerateHash();
+    }
+
+    public override void Scale(double factor)
+    {
+      this.Elevation *= factor;
+      this.ToleranceAbove *= factor;
+      this.ToleranceBelow *= factor;
+      this.Properties = ScaleProperties(this.Properties, factor);
+      this.GenerateHash();
+    }
+  }
+
   //public partial class StructuralLoadPlane : StructuralAxis, IStructural
   //{
   //  public override string Type { get => "StructuralLoadPlane"; }

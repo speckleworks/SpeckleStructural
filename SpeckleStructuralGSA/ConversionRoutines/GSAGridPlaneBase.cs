@@ -17,7 +17,7 @@ namespace SpeckleStructuralGSA
     }
 
     protected List<string> SetAxisPlaneGWACommands(StructuralAxis axis, string planeName, out int gridPlaneIndex, double? elevation = null, 
-      double? elevationAbove = null, double? elevationBelow = null, GridPlaneType gridPlaneType = GridPlaneType.General)
+      double? elevationAbove = null, double? elevationBelow = null, GridPlaneType gridPlaneType = GridPlaneType.General, string sid = null)
     {
       var gridPlaneKeyword = "GRID_PLANE.4";
       gridPlaneIndex = Initialiser.Cache.ResolveIndex(gridPlaneKeyword);
@@ -38,7 +38,7 @@ namespace SpeckleStructuralGSA
 
       ls.AddRange(new[] {
         "SET",
-        gridPlaneKeyword,
+        gridPlaneKeyword + ((sid == null) ? "" : ":" + sid),
         gridPlaneIndex.ToString(),
         (string.IsNullOrEmpty(planeName)) ? " " : planeName,
         planeType, // Type

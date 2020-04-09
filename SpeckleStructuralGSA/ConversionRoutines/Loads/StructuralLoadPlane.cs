@@ -32,20 +32,20 @@ namespace SpeckleStructuralGSA
 
       int gridPlaneIndex;
 
+      var gwaCommands = new List<string>();
+
       if (plane.Axis != null)
       {
-        SetAxisPlaneGWACommands(plane.Axis, plane.Name, out gridPlaneIndex);
+        gwaCommands.AddRange(SetAxisPlaneGWACommands(plane.Axis, plane.Name, out gridPlaneIndex));
       }
       else if (plane.Axis == null && !string.IsNullOrEmpty(plane.StoreyRef))
       {
-        gridPlaneIndex = Initialiser.Cache.ResolveIndex(keyword, plane.StoreyRef);
+        gridPlaneIndex = Initialiser.Cache.ResolveIndex(typeof(GSAStorey).GetGSAKeyword(), plane.StoreyRef);
       }
       else
       {
         return "";
       }
-
-      var gwaCommands = new List<string>(); 
 
       var ls = new List<string>();
 

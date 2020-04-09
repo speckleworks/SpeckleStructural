@@ -13,7 +13,7 @@ namespace SpeckleStructuralGSA
     public int GSAId { get; set; }
     public string GWACommand { get; set; }
     public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural0DLoad();
+    public dynamic Value { get; set; } = new StructuralStorey();
 
     public void ParseGWACommand()
     {
@@ -27,7 +27,7 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
 
-      //TO DO
+      //TO DO 
 
       this.Value = obj;
     }
@@ -39,13 +39,10 @@ namespace SpeckleStructuralGSA
 
       var storey = this.Value as StructuralStorey;
 
-      var keyword = typeof(GSAStorey).GetGSAKeyword();
-      var index = Initialiser.Cache.ResolveIndex(keyword);
-
-      int gridPlaneIndex;
       var axis = (storey.Axis == null) ? new StructuralAxis(new StructuralVectorThree(1, 0, 0), new StructuralVectorThree(0, 1, 0)) : storey.Axis;
 
-      var gwaCommands = SetAxisPlaneGWACommands(axis, storey.Name, out gridPlaneIndex);
+      var gwaCommands = SetAxisPlaneGWACommands(axis, storey.Name, out var gridPlaneIndex, storey.Elevation, storey.ToleranceAbove, storey.ToleranceBelow, 
+        GridPlaneType.Storey, Helper.GenerateSID(storey));
 
       return string.Join("\n", gwaCommands);
     }

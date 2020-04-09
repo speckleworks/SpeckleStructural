@@ -1,1543 +1,1896 @@
 {
-	"success": true,
-	"resources": [
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": "300(AS3678)",
-			"geometryHash": null,
-			"hash": "e149c9965117cd1871ffe057964b4149",
-			"applicationId": "300(AS3678)",
-			"properties": null,
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e1f9abab0e733486ee3182b",
-			"type": "StructuralMaterialSteel",
-			"youngsModulus": 200000000,
-			"shearModulus": 76900000,
-			"poissonsRatio": 0.3,
-			"density": 7850,
-			"coeffThermalExpansion": 0.000012,
-			"yieldStrength": 320000,
-			"ultimateStrength": 430000,
-			"maxStrain": 0.05,
-			"owner": "5cd12a1f7ef1232a0a12b8a5",
-			"__v": 0,
-			"createdAt": "2020-01-15T23:05:30.203Z",
-			"updatedAt": "2020-01-15T23:05:30.203Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": null,
-			"geometryHash": null,
-			"hash": "69ab8e93db059cddb64917b0b9170eea",
-			"applicationId": "gh/69ab8e93db059cddb64917b0b9170eea",
-			"properties": null,
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e1f95e241bb29104dacfd31",
-			"type": "StructuralGravityLoading",
-			"gravityFactors": {
-				"type": "Vector/StructuralVectorThree",
-				"value": [
-					0,
-					0,
-					-1
-				],
-				"hash": "f88c7e92547a7cc3b687644230200018",
-				"applicationId": "gh/f88c7e92547a7cc3b687644230200018"
-			},
-			"loadCaseRef": "SW",
-			"owner": "5cd12a1f7ef1232a0a12b8a5",
-			"__v": 0,
-			"createdAt": "2020-01-15T22:44:50.861Z",
-			"updatedAt": "2020-01-15T22:44:50.861Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": "SW",
-			"geometryHash": null,
-			"hash": "94febecda92bea2b7ee57f8696f74e33",
-			"applicationId": "SW",
-			"properties": null,
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e1f95e241bb29104dacfd30",
-			"type": "StructuralLoadCase",
-			"caseType": "NotSet",
-			"owner": "5cd12a1f7ef1232a0a12b8a5",
-			"__v": 0,
-			"createdAt": "2020-01-15T22:44:50.860Z",
-			"updatedAt": "2020-01-15T22:44:50.860Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": "DL",
-			"geometryHash": null,
-			"hash": "848e7ff5c66b36ef97993a176d8a7971",
-			"applicationId": "DL",
-			"properties": null,
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e1f95e241bb29104dacfd2e",
-			"type": "StructuralLoadCase",
-			"caseType": "NotSet",
-			"owner": "5cd12a1f7ef1232a0a12b8a5",
-			"__v": 0,
-			"createdAt": "2020-01-15T22:44:50.860Z",
-			"updatedAt": "2020-01-15T22:44:50.860Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": "LL",
-			"geometryHash": null,
-			"hash": "46a2fbdacce645a82d7a8850f535e80b",
-			"applicationId": "LL",
-			"properties": null,
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e1f95e241bb29104dacfd2f",
-			"type": "StructuralLoadCase",
-			"caseType": "NotSet",
-			"owner": "5cd12a1f7ef1232a0a12b8a5",
-			"__v": 0,
-			"createdAt": "2020-01-15T22:44:50.860Z",
-			"updatedAt": "2020-01-15T22:44:50.860Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": null,
-			"geometryHash": null,
-			"hash": "9c12814416ee9df4fe1c070a36b04921",
-			"applicationId": "610UB125",
-			"properties": null,
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e1f9eb8b0e733486ee318f1",
-			"type": "Structural1DProperty",
-			"shape": "NotSet",
-			"catalogueName": "610UB125",
-			"materialRef": "300(AS3678)",
-			"owner": "5cd12a1f7ef1232a0a12b8a5",
-			"__v": 0,
-			"createdAt": "2020-01-15T23:22:32.654Z",
-			"updatedAt": "2020-01-15T23:22:32.654Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": null,
-			"geometryHash": null,
-			"hash": "0c5ec7ae7aecd7db7c21f4d410010451",
-			"applicationId": "gh/0c5ec7ae7aecd7db7c21f4d410010451",
-			"properties": {
-				"structural": {
-					"propertyRef": "610UB125",
-					"endRelease": [
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						},
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						}
-					]
-				}
-			},
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e866deeb0e733486ee425a6",
-			"type": "Line/Structural1DElement",
-			"value": [
-				-7219.277782972059,
-				-4069.9604378562796,
-				0,
-				5753.517934266812,
-				2285.728583834707,
-				0
-			],
-			"owner": "5cc252a6f659bb2a09e03748",
-			"__v": 0,
-			"createdAt": "2020-04-02T22:57:50.449Z",
-			"updatedAt": "2020-04-02T22:57:50.449Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": null,
-			"geometryHash": null,
-			"hash": "86ae69e1bb3756bb2f66ebafdff77d78",
-			"applicationId": "gh/86ae69e1bb3756bb2f66ebafdff77d78",
-			"properties": {
-				"structural": {
-					"propertyRef": "610UB125",
-					"endRelease": [
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						},
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						}
-					]
-				}
-			},
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e866deeb0e733486ee425a7",
-			"type": "Line/Structural1DElement",
-			"value": [
-				5753.517934266812,
-				2285.728583834707,
-				0,
-				2169.4827716591155,
-				9601.214890548352,
-				0
-			],
-			"owner": "5cc252a6f659bb2a09e03748",
-			"__v": 0,
-			"createdAt": "2020-04-02T22:57:50.449Z",
-			"updatedAt": "2020-04-02T22:57:50.449Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": null,
-			"geometryHash": null,
-			"hash": "dac2babff0e674f22a4a2fdbfb69e42f",
-			"applicationId": "gh/dac2babff0e674f22a4a2fdbfb69e42f",
-			"properties": {
-				"structural": {
-					"propertyRef": "610UB125",
-					"endRelease": [
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						},
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						}
-					]
-				}
-			},
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e866deeb0e733486ee425a8",
-			"type": "Line/Structural1DElement",
-			"value": [
-				2169.4827716591155,
-				9601.214890548352,
-				0,
-				-10803.312945579757,
-				3245.5258688573669,
-				0
-			],
-			"owner": "5cc252a6f659bb2a09e03748",
-			"__v": 0,
-			"createdAt": "2020-04-02T22:57:50.449Z",
-			"updatedAt": "2020-04-02T22:57:50.449Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": null,
-			"geometryHash": null,
-			"hash": "a065c9fd62fe57cce281fed6e684e06b",
-			"applicationId": "gh/a065c9fd62fe57cce281fed6e684e06b",
-			"properties": {
-				"structural": {
-					"propertyRef": "610UB125",
-					"endRelease": [
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						},
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						}
-					]
-				}
-			},
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e866deeb0e733486ee425a9",
-			"type": "Line/Structural1DElement",
-			"value": [
-				-10803.312945579757,
-				3245.5258688573669,
-				0,
-				-7219.277782972059,
-				-4069.9604378562796,
-				0
-			],
-			"owner": "5cc252a6f659bb2a09e03748",
-			"__v": 0,
-			"createdAt": "2020-04-02T22:57:50.449Z",
-			"updatedAt": "2020-04-02T22:57:50.449Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": null,
-			"geometryHash": null,
-			"hash": "b4f8d1dd49bde58ccda075141683072a",
-			"applicationId": "gh/b4f8d1dd49bde58ccda075141683072a",
-			"properties": {
-				"structural": {
-					"propertyRef": "610UB125",
-					"endRelease": [
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						},
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						}
-					]
-				}
-			},
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e866deeb0e733486ee425aa",
-			"type": "Line/Structural1DElement",
-			"value": [
-				-8267.277692585692,
-				4487.991391894701,
-				0,
-				-4878.322164823692,
-				-2923.0691858218158,
-				0
-			],
-			"owner": "5cc252a6f659bb2a09e03748",
-			"__v": 0,
-			"createdAt": "2020-04-02T22:57:50.449Z",
-			"updatedAt": "2020-04-02T22:57:50.449Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": null,
-			"geometryHash": null,
-			"hash": "3f080411c4077bb0b96d3144d0dc20d5",
-			"applicationId": "gh/3f080411c4077bb0b96d3144d0dc20d5",
-			"properties": {
-				"structural": {
-					"propertyRef": "610UB125",
-					"endRelease": [
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						},
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						}
-					]
-				}
-			},
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e866deeb0e733486ee425ab",
-			"type": "Line/Structural1DElement",
-			"value": [
-				-4219.375269537472,
-				6471.157515204295,
-				0,
-				-830.4197417754733,
-				-939.9030625122223,
-				0
-			],
-			"owner": "5cc252a6f659bb2a09e03748",
-			"__v": 0,
-			"createdAt": "2020-04-02T22:57:50.449Z",
-			"updatedAt": "2020-04-02T22:57:50.449Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": null,
-			"geometryHash": null,
-			"hash": "b029b5cbaaeb2afdb69a43d1c0cf26b5",
-			"applicationId": "gh/b029b5cbaaeb2afdb69a43d1c0cf26b5",
-			"properties": {
-				"structural": {
-					"propertyRef": "610UB125",
-					"endRelease": [
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						},
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						}
-					]
-				}
-			},
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e866deeb0e733486ee425ac",
-			"type": "Line/Structural1DElement",
-			"value": [
-				-805.4816597377678,
-				8143.707257754555,
-				0,
-				2778.5535028699316,
-				828.2209510409111,
-				0
-			],
-			"owner": "5cc252a6f659bb2a09e03748",
-			"__v": 0,
-			"createdAt": "2020-04-02T22:57:50.449Z",
-			"updatedAt": "2020-04-02T22:57:50.449Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": null,
-			"geometryHash": null,
-			"hash": "af4001415e5eed36b6431026fe93c3a6",
-			"applicationId": "gh/af4001415e5eed36b6431026fe93c3a6",
-			"properties": {
-				"structural": {
-					"propertyRef": "610UB125",
-					"endRelease": [
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						},
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						}
-					]
-				}
-			},
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e866deeb0e733486ee425ad",
-			"type": "Line/Structural1DElement",
-			"value": [
-				-7219.277782972059,
-				-4069.9604378562796,
-				0,
-				-7219.277782972059,
-				-4069.9604378562796,
-				14446.044844927437
-			],
-			"owner": "5cc252a6f659bb2a09e03748",
-			"__v": 0,
-			"createdAt": "2020-04-02T22:57:50.450Z",
-			"updatedAt": "2020-04-02T22:57:50.450Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": null,
-			"geometryHash": null,
-			"hash": "4d976504be17bba5360217e4fb019c00",
-			"applicationId": "gh/4d976504be17bba5360217e4fb019c00",
-			"properties": {
-				"structural": {
-					"propertyRef": "610UB125",
-					"endRelease": [
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						},
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						}
-					]
-				}
-			},
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e866deeb0e733486ee425ae",
-			"type": "Line/Structural1DElement",
-			"value": [
-				-7219.277782972059,
-				-4069.9604378562796,
-				14446.044844927437,
-				-10803.312945579757,
-				3245.5258688573669,
-				14446.044844927437
-			],
-			"owner": "5cc252a6f659bb2a09e03748",
-			"__v": 0,
-			"createdAt": "2020-04-02T22:57:50.450Z",
-			"updatedAt": "2020-04-02T22:57:50.450Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": null,
-			"geometryHash": null,
-			"hash": "1893f8fdf2df73732deb56d3b6743b9b",
-			"applicationId": "gh/1893f8fdf2df73732deb56d3b6743b9b",
-			"properties": {
-				"structural": {
-					"propertyRef": "610UB125",
-					"endRelease": [
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						},
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						}
-					]
-				}
-			},
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e866deeb0e733486ee425af",
-			"type": "Line/Structural1DElement",
-			"value": [
-				-10803.312945579757,
-				3245.5258688573669,
-				14446.044844927437,
-				-10803.312945579757,
-				3245.5258688573669,
-				0
-			],
-			"owner": "5cc252a6f659bb2a09e03748",
-			"__v": 0,
-			"createdAt": "2020-04-02T22:57:50.450Z",
-			"updatedAt": "2020-04-02T22:57:50.450Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": null,
-			"geometryHash": null,
-			"hash": "b2f1d2cb6a6278657e8fba966ad893e5",
-			"applicationId": "gh/b2f1d2cb6a6278657e8fba966ad893e5",
-			"properties": {
-				"structural": {
-					"propertyRef": "610UB125",
-					"endRelease": [
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						},
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						}
-					]
-				}
-			},
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e866deeb0e733486ee425b0",
-			"type": "Line/Structural1DElement",
-			"value": [
-				-10803.312945579757,
-				3245.5258688573669,
-				2824.038841865512,
-				-7219.277782972059,
-				-4069.9604378562796,
-				2606.805084798936
-			],
-			"owner": "5cc252a6f659bb2a09e03748",
-			"__v": 0,
-			"createdAt": "2020-04-02T22:57:50.450Z",
-			"updatedAt": "2020-04-02T22:57:50.451Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": null,
-			"geometryHash": null,
-			"hash": "a2045253dea37a9d761b4e49f4837fd8",
-			"applicationId": "gh/a2045253dea37a9d761b4e49f4837fd8",
-			"properties": {
-				"structural": {
-					"propertyRef": "610UB125",
-					"endRelease": [
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						},
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						}
-					]
-				}
-			},
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e866deeb0e733486ee425b1",
-			"type": "Line/Structural1DElement",
-			"value": [
-				-10803.312945579757,
-				3245.5258688573669,
-				7331.639300997007,
-				-7219.277782972059,
-				-4069.9604378562796,
-				7114.405543930428
-			],
-			"owner": "5cc252a6f659bb2a09e03748",
-			"__v": 0,
-			"createdAt": "2020-04-02T22:57:50.451Z",
-			"updatedAt": "2020-04-02T22:57:50.451Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": null,
-			"geometryHash": null,
-			"hash": "08a3b7868ab8c6890f51b1a1c8dec571",
-			"applicationId": "gh/08a3b7868ab8c6890f51b1a1c8dec571",
-			"properties": {
-				"structural": {
-					"propertyRef": "610UB125",
-					"endRelease": [
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						},
-						{
-							"type": "StructuralVectorBoolSix",
-							"value": [
-								true,
-								true,
-								true,
-								true,
-								false,
-								false
-							],
-							"hash": "32cd41c004b7e30e54d277e279d9c13f",
-							"applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
-						}
-					]
-				}
-			},
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e866deeb0e733486ee425b2",
-			"type": "Line/Structural1DElement",
-			"value": [
-				-10803.312945579757,
-				3245.5258688573669,
-				11133.230049662123,
-				-7219.277782972059,
-				-4069.9604378562796,
-				11133.230049662125
-			],
-			"owner": "5cc252a6f659bb2a09e03748",
-			"__v": 0,
-			"createdAt": "2020-04-02T22:57:50.451Z",
-			"updatedAt": "2020-04-02T22:57:50.451Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": "RestrainedNode1",
-			"geometryHash": null,
-			"hash": "408cf9259c01d1d1c17fde4629b02c0a",
-			"applicationId": "gh/408cf9259c01d1d1c17fde4629b02c0a",
-			"properties": {
-				"structural": {
-					"restraint": {
-						"type": "StructuralVectorBoolSix",
-						"value": [
-							true,
-							true,
-							true,
-							true,
-							true,
-							true
-						],
-						"hash": "b9a3c327532ae6c0df9305e97e3c853e",
-						"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
-					}
-				}
-			},
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e868144b0e733486ee425d3",
-			"type": "Point/StructuralNode",
-			"value": [
-				-10803.312945579757,
-				3245.5258688573669,
-				0
-			],
-			"owner": "5cc252a6f659bb2a09e03748",
-			"__v": 0,
-			"createdAt": "2020-04-03T00:20:20.744Z",
-			"updatedAt": "2020-04-03T00:20:20.744Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": "RestrainedNode2",
-			"geometryHash": null,
-			"hash": "10d4d8efe3fc65690e7b4c4b5f870bd0",
-			"applicationId": "gh/10d4d8efe3fc65690e7b4c4b5f870bd0",
-			"properties": {
-				"structural": {
-					"restraint": {
-						"type": "StructuralVectorBoolSix",
-						"value": [
-							true,
-							true,
-							true,
-							true,
-							true,
-							true
-						],
-						"hash": "b9a3c327532ae6c0df9305e97e3c853e",
-						"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
-					}
-				}
-			},
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e868144b0e733486ee425d4",
-			"type": "Point/StructuralNode",
-			"value": [
-				-7219.277782972059,
-				-4069.9604378562796,
-				0
-			],
-			"owner": "5cc252a6f659bb2a09e03748",
-			"__v": 0,
-			"createdAt": "2020-04-03T00:20:20.744Z",
-			"updatedAt": "2020-04-03T00:20:20.744Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": "RestrainedNode3",
-			"geometryHash": null,
-			"hash": "fedf78afd01a89839b256e1062b9eaf1",
-			"applicationId": "gh/fedf78afd01a89839b256e1062b9eaf1",
-			"properties": {
-				"structural": {
-					"restraint": {
-						"type": "StructuralVectorBoolSix",
-						"value": [
-							true,
-							true,
-							true,
-							true,
-							true,
-							true
-						],
-						"hash": "b9a3c327532ae6c0df9305e97e3c853e",
-						"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
-					}
-				}
-			},
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e868144b0e733486ee425d5",
-			"type": "Point/StructuralNode",
-			"value": [
-				2169.4827716591155,
-				9601.214890548352,
-				0
-			],
-			"owner": "5cc252a6f659bb2a09e03748",
-			"__v": 0,
-			"createdAt": "2020-04-03T00:20:20.744Z",
-			"updatedAt": "2020-04-03T00:20:20.744Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": "RestrainedNode4",
-			"geometryHash": null,
-			"hash": "3905514624d753880d88fdf20ea759ab",
-			"applicationId": "gh/3905514624d753880d88fdf20ea759ab",
-			"properties": {
-				"structural": {
-					"restraint": {
-						"type": "StructuralVectorBoolSix",
-						"value": [
-							true,
-							true,
-							true,
-							true,
-							true,
-							true
-						],
-						"hash": "b9a3c327532ae6c0df9305e97e3c853e",
-						"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
-					}
-				}
-			},
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e868144b0e733486ee425d6",
-			"type": "Point/StructuralNode",
-			"value": [
-				5753.517934266812,
-				2285.728583834707,
-				0
-			],
-			"owner": "5cc252a6f659bb2a09e03748",
-			"__v": 0,
-			"createdAt": "2020-04-03T00:20:20.744Z",
-			"updatedAt": "2020-04-03T00:20:20.744Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": "RestrainedNode5",
-			"geometryHash": null,
-			"hash": "cb7649d1246847a90b43af2e75970325",
-			"applicationId": "gh/cb7649d1246847a90b43af2e75970325",
-			"properties": {
-				"structural": {
-					"restraint": {
-						"type": "StructuralVectorBoolSix",
-						"value": [
-							true,
-							true,
-							true,
-							true,
-							true,
-							true
-						],
-						"hash": "b9a3c327532ae6c0df9305e97e3c853e",
-						"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
-					}
-				}
-			},
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e868144b0e733486ee425d7",
-			"type": "Point/StructuralNode",
-			"value": [
-				-10803.312945579757,
-				3245.5258688573669,
-				14446.044844927437
-			],
-			"owner": "5cc252a6f659bb2a09e03748",
-			"__v": 0,
-			"createdAt": "2020-04-03T00:20:20.744Z",
-			"updatedAt": "2020-04-03T00:20:20.744Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": "RestrainedNode6",
-			"geometryHash": null,
-			"hash": "f7838963558b956a1bcc94c1b37249d0",
-			"applicationId": "gh/f7838963558b956a1bcc94c1b37249d0",
-			"properties": {
-				"structural": {
-					"restraint": {
-						"type": "StructuralVectorBoolSix",
-						"value": [
-							true,
-							true,
-							true,
-							true,
-							true,
-							true
-						],
-						"hash": "b9a3c327532ae6c0df9305e97e3c853e",
-						"applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
-					}
-				}
-			},
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e868144b0e733486ee425d8",
-			"type": "Point/StructuralNode",
-			"value": [
-				-7219.277782972059,
-				-4069.9604378562796,
-				14446.044844927437
-			],
-			"owner": "5cc252a6f659bb2a09e03748",
-			"__v": 0,
-			"createdAt": "2020-04-03T00:20:20.744Z",
-			"updatedAt": "2020-04-03T00:20:20.744Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": "SpringProp1",
-			"geometryHash": null,
-			"hash": "abfb53911b61fa56fcb0c1e32a3455c8",
-			"applicationId": "SpringProp1",
-			"properties": {
-				"structural": {
-					"springType": "Compression",
-					"axis": {
-						"applicationId": "gh/e9b8f423ab53b5320abd2da87860d062",
-						"hash": "e9b8f423ab53b5320abd2da87860d062",
-						"type": "Plane/StructuralAxis",
-						"origin": {
-							"type": "Point",
-							"value": [
-								-9011.295364275908,
-								-412.21728449945638,
-								9613.644454844869
-							],
-							"hash": "a3f1e15aa95d5c91d440d4278c7aac30"
-						},
-						"normal": {
-							"type": "Vector",
-							"value": [
-								0.43996049367885739,
-								-0.8980171290136154,
-								0
-							],
-							"hash": "2ca272656e5b8cb70d806985d1547dd0"
-						},
-						"xdir": {
-							"type": "Vector",
-							"value": [
-								0.8980171290136154,
-								0.43996049367885739,
-								0
-							],
-							"hash": "55ea6278d4081fc7c9f4bd284aa7bf87"
-						},
-						"ydir": {
-							"type": "Vector",
-							"value": [
-								0,
-								0,
-								1
-							],
-							"hash": "3d6844a366bbb291f77602320a6e09d5"
-						}
-					},
-					"stiffness": {
-						"type": "StructuralVectorSix",
-						"value": [
-							20000,
-							0,
-							0,
-							0,
-							0,
-							0
-						],
-						"hash": "b37e3e5a7d569cb7bda9ac3ebd3f315b",
-						"applicationId": "gh/b37e3e5a7d569cb7bda9ac3ebd3f315b"
-					}
-				}
-			},
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e866e0ab0e733486ee425b5",
-			"type": "StructuralSpringProperty",
-			"owner": "5cc252a6f659bb2a09e03748",
-			"__v": 0,
-			"createdAt": "2020-04-02T22:58:18.575Z",
-			"updatedAt": "2020-04-02T22:58:18.575Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": null,
-			"geometryHash": null,
-			"hash": "e162561dcc2dc8d7ed524b5acfe919eb",
-			"applicationId": "gh/e162561dcc2dc8d7ed524b5acfe919eb",
-			"properties": {
-				"structural": {
-					"propertyRef": "SpringProp1"
-				}
-			},
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e866e1d41bb29104dae0ea7",
-			"type": "Point/Structural0DSpring",
-			"value": [
-				-9011.295364275908,
-				-412.21728449945638,
-				9613.644454844869
-			],
-			"owner": "5cc252a6f659bb2a09e03748",
-			"__v": 0,
-			"createdAt": "2020-04-02T22:58:37.297Z",
-			"updatedAt": "2020-04-02T22:58:37.297Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": "PlaneForWalls",
-			"geometryHash": null,
-			"hash": "85595aeb95b22963b4cb2f41e5ca5d76",
-			"applicationId": "PlaneForWalls",
-			"properties": null,
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e8bb96341bb29104dae1713",
-			"type": "StructuralLoadPlane",
-			"elementDimension": 1,
-			"span": 2,
-			"origin": {
-				"type": "Point",
-				"value": [
-					-7219.277782972059,
-					-4069.9604378562796,
-					14446.044844927437
-				],
-				"hash": "bdac94a9c5e2731f1f81d4a5ec744bd6"
-			},
-			"normal": {
-				"type": "Vector",
-				"value": [
-					0.898017129013283,
-					0.4399604936795358,
-					0
-				],
-				"hash": "cfd7dc29751eea50eeaea25cec896ad5"
-			},
-			"xdir": {
-				"type": "Vector",
-				"value": [
-					-0.40477510996308749,
-					0.826199141438947,
-					-0.39185723042955
-				],
-				"hash": "0fd03a7290a449dc6ede871f54c4692e"
-			},
-			"ydir": {
-				"type": "Vector",
-				"value": [
-					-0.17240170055168042,
-					0.351894505053441,
-					0.9200260381967909
-				],
-				"hash": "414904c6849776ff59ec79cecddbe412"
-			},
-			"owner": "5cc252a6f659bb2a09e03748",
-			"__v": 0,
-			"createdAt": "2020-04-06T23:21:07.733Z",
-			"updatedAt": "2020-04-06T23:21:07.733Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": "TestLoadPoint",
-			"geometryHash": null,
-			"hash": "4f4915520b788c271266b549f4aaf58b",
-			"applicationId": "TestLoadPoint",
-			"properties": null,
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e8bb96341bb29104dae1714",
-			"type": "Structural0DLoadPoint",
-			"loadPlaneRef": "PlaneForWalls",
-			"loading": {
-				"value": [
-					6948.704635724092,
-					-1662.2172844994566,
-					-550.3625527052191
-				],
-				"applicationId": "gh/c32f1c4cdf1e597683c32fdc4dbf7b8b",
-				"hash": "c32f1c4cdf1e597683c32fdc4dbf7b8b",
-				"type": "StructuralVectorSix"
-			},
-			"loadCaseRef": "LL",
-			"value": [
-				-8286.648295331812,
-				-1891.317089481188,
-				8908.088916592367
-			],
-			"owner": "5cc252a6f659bb2a09e03748",
-			"__v": 0,
-			"createdAt": "2020-04-06T23:21:07.733Z",
-			"updatedAt": "2020-04-06T23:21:07.733Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": "PlaneForFloors",
-			"geometryHash": null,
-			"hash": "30542ea74e3d042c6684b791a5becf7f",
-			"applicationId": "PlaneForFloors",
-			"properties": null,
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e8bf0b9b0e733486ee42adf",
-			"type": "StructuralLoadPlane",
-			"elementDimension": 2,
-			"span": 2,
-			"spanAngle": 0.5759586531581288,
-			"origin": {
-				"type": "Point",
-				"value": [
-					2169.4827716591155,
-					9601.214890548352,
-					0
-				],
-				"hash": "de5635207c910b70b9488beaad04bab3"
-			},
-			"normal": {
-				"type": "Vector",
-				"value": [
-					0,
-					0,
-					1
-				],
-				"hash": "3d6844a366bbb291f77602320a6e09d5"
-			},
-			"xdir": {
-				"type": "Vector",
-				"value": [
-					0.43996049367953579,
-					-0.8980171290132829,
-					0
-				],
-				"hash": "184833ebbc0b42c1d3383dd49df8c673"
-			},
-			"ydir": {
-				"type": "Vector",
-				"value": [
-					0.898017129013283,
-					0.4399604936795358,
-					0
-				],
-				"hash": "f5d78c247492977c116c6f5064d5653a"
-			},
-			"owner": "5cc252a6f659bb2a09e03748",
-			"__v": 0,
-			"createdAt": "2020-04-07T03:17:13.544Z",
-			"updatedAt": "2020-04-07T03:17:13.544Z"
-		},
-		{
-			"private": false,
-			"canRead": [],
-			"canWrite": [],
-			"anonymousComments": false,
-			"comments": [],
-			"name": "TestLoadLine",
-			"geometryHash": null,
-			"hash": "998c80897c8298cb28895b9e78ffcd7f",
-			"applicationId": "TestLoadLine",
-			"properties": {
-				"structural": {
-					"loading": {
-						"value": [
-							-5655.783983062245,
-							-2923.0691858218158,
-							-6236.774766705635
-						],
-						"applicationId": "gh/a54c5444ddbcd10b618d7834144cf702",
-						"hash": "a54c5444ddbcd10b618d7834144cf702",
-						"type": "StructuralVectorSix"
-					},
-					"loadCaseRef": "DL"
-				}
-			},
-			"deleted": false,
-			"parent": null,
-			"children": [],
-			"ancestors": [],
-			"_id": "5e8bb96341bb29104dae1716",
-			"type": "Line/Structural1DLoadLine",
-			"LoadPlaneRef": "PlaneForFloors",
-			"value": [
-				-6928.930887834487,
-				-1206.2946488220828,
-				0,
-				2376.9697064466674,
-				5227.647477879978,
-				0
-			],
-			"owner": "5cc252a6f659bb2a09e03748",
-			"__v": 0,
-			"createdAt": "2020-04-06T23:21:07.734Z",
-			"updatedAt": "2020-04-06T23:21:07.734Z"
-		}
-	],
-	"message": "Object list returned. If querying, duplication of objects in list will not be respected."
+  "success": true,
+  "resources": [
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "300(AS3678)",
+      "geometryHash": null,
+      "hash": "e149c9965117cd1871ffe057964b4149",
+      "applicationId": "300(AS3678)",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e1f9abab0e733486ee3182b",
+      "type": "StructuralMaterialSteel",
+      "youngsModulus": 200000000,
+      "shearModulus": 76900000,
+      "poissonsRatio": 0.3,
+      "density": 7850,
+      "coeffThermalExpansion": 0.000012,
+      "yieldStrength": 320000,
+      "ultimateStrength": 430000,
+      "maxStrain": 0.05,
+      "owner": "5cd12a1f7ef1232a0a12b8a5",
+      "__v": 0,
+      "createdAt": "2020-01-15T23:05:30.203Z",
+      "updatedAt": "2020-01-15T23:05:30.203Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": null,
+      "geometryHash": null,
+      "hash": "69ab8e93db059cddb64917b0b9170eea",
+      "applicationId": "gh/69ab8e93db059cddb64917b0b9170eea",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e1f95e241bb29104dacfd31",
+      "type": "StructuralGravityLoading",
+      "gravityFactors": {
+        "type": "Vector/StructuralVectorThree",
+        "value": [
+          0,
+          0,
+          -1
+        ],
+        "hash": "f88c7e92547a7cc3b687644230200018",
+        "applicationId": "gh/f88c7e92547a7cc3b687644230200018"
+      },
+      "loadCaseRef": "SW",
+      "owner": "5cd12a1f7ef1232a0a12b8a5",
+      "__v": 0,
+      "createdAt": "2020-01-15T22:44:50.861Z",
+      "updatedAt": "2020-01-15T22:44:50.861Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "SW",
+      "geometryHash": null,
+      "hash": "94febecda92bea2b7ee57f8696f74e33",
+      "applicationId": "SW",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e1f95e241bb29104dacfd30",
+      "type": "StructuralLoadCase",
+      "caseType": "NotSet",
+      "owner": "5cd12a1f7ef1232a0a12b8a5",
+      "__v": 0,
+      "createdAt": "2020-01-15T22:44:50.860Z",
+      "updatedAt": "2020-01-15T22:44:50.860Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "DL",
+      "geometryHash": null,
+      "hash": "848e7ff5c66b36ef97993a176d8a7971",
+      "applicationId": "DL",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e1f95e241bb29104dacfd2e",
+      "type": "StructuralLoadCase",
+      "caseType": "NotSet",
+      "owner": "5cd12a1f7ef1232a0a12b8a5",
+      "__v": 0,
+      "createdAt": "2020-01-15T22:44:50.860Z",
+      "updatedAt": "2020-01-15T22:44:50.860Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LL",
+      "geometryHash": null,
+      "hash": "46a2fbdacce645a82d7a8850f535e80b",
+      "applicationId": "LL",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e1f95e241bb29104dacfd2f",
+      "type": "StructuralLoadCase",
+      "caseType": "NotSet",
+      "owner": "5cd12a1f7ef1232a0a12b8a5",
+      "__v": 0,
+      "createdAt": "2020-01-15T22:44:50.860Z",
+      "updatedAt": "2020-01-15T22:44:50.860Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": null,
+      "geometryHash": null,
+      "hash": "9c12814416ee9df4fe1c070a36b04921",
+      "applicationId": "610UB125",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e1f9eb8b0e733486ee318f1",
+      "type": "Structural1DProperty",
+      "shape": "NotSet",
+      "catalogueName": "610UB125",
+      "materialRef": "300(AS3678)",
+      "owner": "5cd12a1f7ef1232a0a12b8a5",
+      "__v": 0,
+      "createdAt": "2020-01-15T23:22:32.654Z",
+      "updatedAt": "2020-01-15T23:22:32.654Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": null,
+      "geometryHash": null,
+      "hash": "0c5ec7ae7aecd7db7c21f4d410010451",
+      "applicationId": "gh/0c5ec7ae7aecd7db7c21f4d410010451",
+      "properties": {
+        "structural": {
+          "propertyRef": "610UB125",
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e866deeb0e733486ee425a6",
+      "type": "Line/Structural1DElement",
+      "value": [
+        -7219.277782972059,
+        -4069.9604378562794,
+        0,
+        5753.517934266812,
+        2285.728583834707,
+        0
+      ],
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-02T22:57:50.449Z",
+      "updatedAt": "2020-04-02T22:57:50.449Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": null,
+      "geometryHash": null,
+      "hash": "86ae69e1bb3756bb2f66ebafdff77d78",
+      "applicationId": "gh/86ae69e1bb3756bb2f66ebafdff77d78",
+      "properties": {
+        "structural": {
+          "propertyRef": "610UB125",
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e866deeb0e733486ee425a7",
+      "type": "Line/Structural1DElement",
+      "value": [
+        5753.517934266812,
+        2285.728583834707,
+        0,
+        2169.4827716591153,
+        9601.214890548352,
+        0
+      ],
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-02T22:57:50.449Z",
+      "updatedAt": "2020-04-02T22:57:50.449Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": null,
+      "geometryHash": null,
+      "hash": "dac2babff0e674f22a4a2fdbfb69e42f",
+      "applicationId": "gh/dac2babff0e674f22a4a2fdbfb69e42f",
+      "properties": {
+        "structural": {
+          "propertyRef": "610UB125",
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e866deeb0e733486ee425a8",
+      "type": "Line/Structural1DElement",
+      "value": [
+        2169.4827716591153,
+        9601.214890548352,
+        0,
+        -10803.312945579757,
+        3245.5258688573667,
+        0
+      ],
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-02T22:57:50.449Z",
+      "updatedAt": "2020-04-02T22:57:50.449Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": null,
+      "geometryHash": null,
+      "hash": "a065c9fd62fe57cce281fed6e684e06b",
+      "applicationId": "gh/a065c9fd62fe57cce281fed6e684e06b",
+      "properties": {
+        "structural": {
+          "propertyRef": "610UB125",
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e866deeb0e733486ee425a9",
+      "type": "Line/Structural1DElement",
+      "value": [
+        -10803.312945579757,
+        3245.5258688573667,
+        0,
+        -7219.277782972059,
+        -4069.9604378562794,
+        0
+      ],
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-02T22:57:50.449Z",
+      "updatedAt": "2020-04-02T22:57:50.449Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": null,
+      "geometryHash": null,
+      "hash": "b4f8d1dd49bde58ccda075141683072a",
+      "applicationId": "gh/b4f8d1dd49bde58ccda075141683072a",
+      "properties": {
+        "structural": {
+          "propertyRef": "610UB125",
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e866deeb0e733486ee425aa",
+      "type": "Line/Structural1DElement",
+      "value": [
+        -8267.277692585692,
+        4487.991391894701,
+        0,
+        -4878.322164823692,
+        -2923.0691858218156,
+        0
+      ],
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-02T22:57:50.449Z",
+      "updatedAt": "2020-04-02T22:57:50.449Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": null,
+      "geometryHash": null,
+      "hash": "3f080411c4077bb0b96d3144d0dc20d5",
+      "applicationId": "gh/3f080411c4077bb0b96d3144d0dc20d5",
+      "properties": {
+        "structural": {
+          "propertyRef": "610UB125",
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e866deeb0e733486ee425ab",
+      "type": "Line/Structural1DElement",
+      "value": [
+        -4219.375269537472,
+        6471.157515204295,
+        0,
+        -830.4197417754733,
+        -939.9030625122223,
+        0
+      ],
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-02T22:57:50.449Z",
+      "updatedAt": "2020-04-02T22:57:50.449Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": null,
+      "geometryHash": null,
+      "hash": "b029b5cbaaeb2afdb69a43d1c0cf26b5",
+      "applicationId": "gh/b029b5cbaaeb2afdb69a43d1c0cf26b5",
+      "properties": {
+        "structural": {
+          "propertyRef": "610UB125",
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e866deeb0e733486ee425ac",
+      "type": "Line/Structural1DElement",
+      "value": [
+        -805.4816597377678,
+        8143.707257754555,
+        0,
+        2778.5535028699314,
+        828.2209510409111,
+        0
+      ],
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-02T22:57:50.449Z",
+      "updatedAt": "2020-04-02T22:57:50.449Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": null,
+      "geometryHash": null,
+      "hash": "af4001415e5eed36b6431026fe93c3a6",
+      "applicationId": "gh/af4001415e5eed36b6431026fe93c3a6",
+      "properties": {
+        "structural": {
+          "propertyRef": "610UB125",
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e866deeb0e733486ee425ad",
+      "type": "Line/Structural1DElement",
+      "value": [
+        -7219.277782972059,
+        -4069.9604378562794,
+        0,
+        -7219.277782972059,
+        -4069.9604378562794,
+        14446.044844927437
+      ],
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-02T22:57:50.450Z",
+      "updatedAt": "2020-04-02T22:57:50.450Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": null,
+      "geometryHash": null,
+      "hash": "4d976504be17bba5360217e4fb019c00",
+      "applicationId": "gh/4d976504be17bba5360217e4fb019c00",
+      "properties": {
+        "structural": {
+          "propertyRef": "610UB125",
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e866deeb0e733486ee425ae",
+      "type": "Line/Structural1DElement",
+      "value": [
+        -7219.277782972059,
+        -4069.9604378562794,
+        14446.044844927437,
+        -10803.312945579757,
+        3245.5258688573667,
+        14446.044844927437
+      ],
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-02T22:57:50.450Z",
+      "updatedAt": "2020-04-02T22:57:50.450Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": null,
+      "geometryHash": null,
+      "hash": "1893f8fdf2df73732deb56d3b6743b9b",
+      "applicationId": "gh/1893f8fdf2df73732deb56d3b6743b9b",
+      "properties": {
+        "structural": {
+          "propertyRef": "610UB125",
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e866deeb0e733486ee425af",
+      "type": "Line/Structural1DElement",
+      "value": [
+        -10803.312945579757,
+        3245.5258688573667,
+        14446.044844927437,
+        -10803.312945579757,
+        3245.5258688573667,
+        0
+      ],
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-02T22:57:50.450Z",
+      "updatedAt": "2020-04-02T22:57:50.450Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": null,
+      "geometryHash": null,
+      "hash": "b2f1d2cb6a6278657e8fba966ad893e5",
+      "applicationId": "gh/b2f1d2cb6a6278657e8fba966ad893e5",
+      "properties": {
+        "structural": {
+          "propertyRef": "610UB125",
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e866deeb0e733486ee425b0",
+      "type": "Line/Structural1DElement",
+      "value": [
+        -10803.312945579757,
+        3245.5258688573667,
+        2824.038841865512,
+        -7219.277782972059,
+        -4069.9604378562794,
+        2606.805084798936
+      ],
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-02T22:57:50.450Z",
+      "updatedAt": "2020-04-02T22:57:50.451Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": null,
+      "geometryHash": null,
+      "hash": "a2045253dea37a9d761b4e49f4837fd8",
+      "applicationId": "gh/a2045253dea37a9d761b4e49f4837fd8",
+      "properties": {
+        "structural": {
+          "propertyRef": "610UB125",
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e866deeb0e733486ee425b1",
+      "type": "Line/Structural1DElement",
+      "value": [
+        -10803.312945579757,
+        3245.5258688573667,
+        7331.639300997007,
+        -7219.277782972059,
+        -4069.9604378562794,
+        7114.405543930428
+      ],
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-02T22:57:50.451Z",
+      "updatedAt": "2020-04-02T22:57:50.451Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": null,
+      "geometryHash": null,
+      "hash": "08a3b7868ab8c6890f51b1a1c8dec571",
+      "applicationId": "gh/08a3b7868ab8c6890f51b1a1c8dec571",
+      "properties": {
+        "structural": {
+          "propertyRef": "610UB125",
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                false,
+                false
+              ],
+              "hash": "32cd41c004b7e30e54d277e279d9c13f",
+              "applicationId": "gh/32cd41c004b7e30e54d277e279d9c13f"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e866deeb0e733486ee425b2",
+      "type": "Line/Structural1DElement",
+      "value": [
+        -10803.312945579757,
+        3245.5258688573667,
+        11133.230049662123,
+        -7219.277782972059,
+        -4069.9604378562794,
+        11133.230049662125
+      ],
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-02T22:57:50.451Z",
+      "updatedAt": "2020-04-02T22:57:50.451Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "RestrainedNode1",
+      "geometryHash": null,
+      "hash": "408cf9259c01d1d1c17fde4629b02c0a",
+      "applicationId": "gh/408cf9259c01d1d1c17fde4629b02c0a",
+      "properties": {
+        "structural": {
+          "restraint": {
+            "type": "StructuralVectorBoolSix",
+            "value": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ],
+            "hash": "b9a3c327532ae6c0df9305e97e3c853e",
+            "applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+          }
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e868144b0e733486ee425d3",
+      "type": "Point/StructuralNode",
+      "value": [
+        -10803.312945579757,
+        3245.5258688573667,
+        0
+      ],
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-03T00:20:20.744Z",
+      "updatedAt": "2020-04-03T00:20:20.744Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "RestrainedNode2",
+      "geometryHash": null,
+      "hash": "10d4d8efe3fc65690e7b4c4b5f870bd0",
+      "applicationId": "gh/10d4d8efe3fc65690e7b4c4b5f870bd0",
+      "properties": {
+        "structural": {
+          "restraint": {
+            "type": "StructuralVectorBoolSix",
+            "value": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ],
+            "hash": "b9a3c327532ae6c0df9305e97e3c853e",
+            "applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+          }
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e868144b0e733486ee425d4",
+      "type": "Point/StructuralNode",
+      "value": [
+        -7219.277782972059,
+        -4069.9604378562794,
+        0
+      ],
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-03T00:20:20.744Z",
+      "updatedAt": "2020-04-03T00:20:20.744Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "RestrainedNode3",
+      "geometryHash": null,
+      "hash": "fedf78afd01a89839b256e1062b9eaf1",
+      "applicationId": "gh/fedf78afd01a89839b256e1062b9eaf1",
+      "properties": {
+        "structural": {
+          "restraint": {
+            "type": "StructuralVectorBoolSix",
+            "value": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ],
+            "hash": "b9a3c327532ae6c0df9305e97e3c853e",
+            "applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+          }
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e868144b0e733486ee425d5",
+      "type": "Point/StructuralNode",
+      "value": [
+        2169.4827716591153,
+        9601.214890548352,
+        0
+      ],
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-03T00:20:20.744Z",
+      "updatedAt": "2020-04-03T00:20:20.744Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "RestrainedNode4",
+      "geometryHash": null,
+      "hash": "3905514624d753880d88fdf20ea759ab",
+      "applicationId": "gh/3905514624d753880d88fdf20ea759ab",
+      "properties": {
+        "structural": {
+          "restraint": {
+            "type": "StructuralVectorBoolSix",
+            "value": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ],
+            "hash": "b9a3c327532ae6c0df9305e97e3c853e",
+            "applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+          }
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e868144b0e733486ee425d6",
+      "type": "Point/StructuralNode",
+      "value": [
+        5753.517934266812,
+        2285.728583834707,
+        0
+      ],
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-03T00:20:20.744Z",
+      "updatedAt": "2020-04-03T00:20:20.744Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "RestrainedNode5",
+      "geometryHash": null,
+      "hash": "cb7649d1246847a90b43af2e75970325",
+      "applicationId": "gh/cb7649d1246847a90b43af2e75970325",
+      "properties": {
+        "structural": {
+          "restraint": {
+            "type": "StructuralVectorBoolSix",
+            "value": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ],
+            "hash": "b9a3c327532ae6c0df9305e97e3c853e",
+            "applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+          }
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e868144b0e733486ee425d7",
+      "type": "Point/StructuralNode",
+      "value": [
+        -10803.312945579757,
+        3245.5258688573667,
+        14446.044844927437
+      ],
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-03T00:20:20.744Z",
+      "updatedAt": "2020-04-03T00:20:20.744Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "RestrainedNode6",
+      "geometryHash": null,
+      "hash": "f7838963558b956a1bcc94c1b37249d0",
+      "applicationId": "gh/f7838963558b956a1bcc94c1b37249d0",
+      "properties": {
+        "structural": {
+          "restraint": {
+            "type": "StructuralVectorBoolSix",
+            "value": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ],
+            "hash": "b9a3c327532ae6c0df9305e97e3c853e",
+            "applicationId": "gh/b9a3c327532ae6c0df9305e97e3c853e"
+          }
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e868144b0e733486ee425d8",
+      "type": "Point/StructuralNode",
+      "value": [
+        -7219.277782972059,
+        -4069.9604378562794,
+        14446.044844927437
+      ],
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-03T00:20:20.744Z",
+      "updatedAt": "2020-04-03T00:20:20.744Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "SpringProp1",
+      "geometryHash": null,
+      "hash": "abfb53911b61fa56fcb0c1e32a3455c8",
+      "applicationId": "SpringProp1",
+      "properties": {
+        "structural": {
+          "springType": "Compression",
+          "axis": {
+            "applicationId": "gh/e9b8f423ab53b5320abd2da87860d062",
+            "hash": "e9b8f423ab53b5320abd2da87860d062",
+            "type": "Plane/StructuralAxis",
+            "origin": {
+              "type": "Point",
+              "value": [
+                -9011.295364275908,
+                -412.21728449945635,
+                9613.644454844869
+              ],
+              "hash": "a3f1e15aa95d5c91d440d4278c7aac30"
+            },
+            "normal": {
+              "type": "Vector",
+              "value": [
+                0.43996049367885737,
+                -0.8980171290136154,
+                0
+              ],
+              "hash": "2ca272656e5b8cb70d806985d1547dd0"
+            },
+            "xdir": {
+              "type": "Vector",
+              "value": [
+                0.8980171290136154,
+                0.43996049367885737,
+                0
+              ],
+              "hash": "55ea6278d4081fc7c9f4bd284aa7bf87"
+            },
+            "ydir": {
+              "type": "Vector",
+              "value": [
+                0,
+                0,
+                1
+              ],
+              "hash": "3d6844a366bbb291f77602320a6e09d5"
+            }
+          },
+          "stiffness": {
+            "type": "StructuralVectorSix",
+            "value": [
+              20000,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "hash": "b37e3e5a7d569cb7bda9ac3ebd3f315b",
+            "applicationId": "gh/b37e3e5a7d569cb7bda9ac3ebd3f315b"
+          }
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e866e0ab0e733486ee425b5",
+      "type": "StructuralSpringProperty",
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-02T22:58:18.575Z",
+      "updatedAt": "2020-04-02T22:58:18.575Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": null,
+      "geometryHash": null,
+      "hash": "e162561dcc2dc8d7ed524b5acfe919eb",
+      "applicationId": "gh/e162561dcc2dc8d7ed524b5acfe919eb",
+      "properties": {
+        "structural": {
+          "propertyRef": "SpringProp1"
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e866e1d41bb29104dae0ea7",
+      "type": "Point/Structural0DSpring",
+      "value": [
+        -9011.295364275908,
+        -412.21728449945635,
+        9613.644454844869
+      ],
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-02T22:58:37.297Z",
+      "updatedAt": "2020-04-02T22:58:37.297Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LoadPlane1",
+      "geometryHash": null,
+      "hash": "e80ccaeaba11e725078b8ee580ea19ec",
+      "applicationId": "LoadPlane1",
+      "properties": {
+        "structural": {
+          "axis": {
+            "type": "Plane/StructuralAxis",
+            "origin": {
+              "type": "Point",
+              "value": [
+                -7219.277782972059,
+                -4069.9604378562794,
+                14446.044844927437
+              ],
+              "hash": "bdac94a9c5e2731f1f81d4a5ec744bd6"
+            },
+            "normal": {
+              "type": "Vector",
+              "value": [
+                0.898017129013283,
+                0.4399604936795358,
+                0
+              ],
+              "hash": "cfd7dc29751eea50eeaea25cec896ad5"
+            },
+            "xdir": {
+              "type": "Vector",
+              "value": [
+                -0.40477510996308746,
+                0.826199141438947,
+                -0.39185723042955
+              ],
+              "hash": "0fd03a7290a449dc6ede871f54c4692e"
+            },
+            "ydir": {
+              "type": "Vector",
+              "value": [
+                -0.17240170055168041,
+                0.351894505053441,
+                0.9200260381967909
+              ],
+              "hash": "414904c6849776ff59ec79cecddbe412"
+            },
+            "hash": "2c6274b6462fbe7111abeffae6ba25d0",
+            "applicationId": "gh/2c6274b6462fbe7111abeffae6ba25d0",
+            "name": "AxisForWalls"
+          }
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e8ebf4441bb29104dae2a77",
+      "type": "StructuralLoadPlane",
+      "elementDimension": 2,
+      "span": 2,
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-09T06:23:00.173Z",
+      "updatedAt": "2020-04-09T06:23:00.173Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "TestLoadPoint",
+      "geometryHash": null,
+      "hash": "779074d8951b56c5bc4d52c7ef49a2b2",
+      "applicationId": "TestLoadPoint",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e8eb96041bb29104dae2a72",
+      "type": "Structural0DLoadPoint",
+      "loadPlaneRef": "LoadPlane1",
+      "loading": {
+        "value": [
+          6948.704635724092,
+          -1662.2172844994566,
+          -550.3625527052191
+        ],
+        "applicationId": "gh/c32f1c4cdf1e597683c32fdc4dbf7b8b",
+        "hash": "c32f1c4cdf1e597683c32fdc4dbf7b8b",
+        "type": "StructuralVectorSix"
+      },
+      "loadCaseRef": "LL",
+      "value": [
+        -8286.648295331812,
+        -1891.317089481188,
+        8908.088916592367
+      ],
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-09T05:57:52.855Z",
+      "updatedAt": "2020-04-09T05:57:52.855Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "Storey1",
+      "geometryHash": null,
+      "hash": "50b339b5d58c97613100d6fa6406052b",
+      "applicationId": "Storey1",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e8ebf4441bb29104dae2a78",
+      "elevation": 2,
+      "type": "Plane/StructuralStorey",
+      "origin": {
+        "type": "Point",
+        "value": [
+          2169.4827716591153,
+          9601.214890548352,
+          0
+        ],
+        "hash": "de5635207c910b70b9488beaad04bab3"
+      },
+      "normal": {
+        "type": "Vector",
+        "value": [
+          0,
+          0,
+          1
+        ],
+        "hash": "3d6844a366bbb291f77602320a6e09d5"
+      },
+      "xdir": {
+        "type": "Vector",
+        "value": [
+          0.43996049367953577,
+          -0.8980171290132829,
+          0
+        ],
+        "hash": "184833ebbc0b42c1d3383dd49df8c673"
+      },
+      "ydir": {
+        "type": "Vector",
+        "value": [
+          0.898017129013283,
+          0.4399604936795358,
+          0
+        ],
+        "hash": "f5d78c247492977c116c6f5064d5653a"
+      },
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-09T06:23:00.174Z",
+      "updatedAt": "2020-04-09T06:23:00.174Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "TestLoadLine",
+      "geometryHash": null,
+      "hash": "998c80897c8298cb28895b9e78ffcd7f",
+      "applicationId": "TestLoadLine",
+      "properties": {
+        "structural": {
+          "loading": {
+            "value": [
+              -5655.783983062245,
+              -2923.0691858218156,
+              -6236.774766705635
+            ],
+            "applicationId": "gh/a54c5444ddbcd10b618d7834144cf702",
+            "hash": "a54c5444ddbcd10b618d7834144cf702",
+            "type": "StructuralVectorSix"
+          },
+          "loadCaseRef": "DL"
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e8bb96341bb29104dae1716",
+      "type": "Line/Structural1DLoadLine",
+      "LoadPlaneRef": "PlaneForFloors",
+      "value": [
+        -6928.930887834487,
+        -1206.2946488220828,
+        0,
+        2376.9697064466673,
+        5227.647477879978,
+        0
+      ],
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-06T23:21:07.734Z",
+      "updatedAt": "2020-04-06T23:21:07.734Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "PlaneForFloors",
+      "geometryHash": null,
+      "hash": "262d44444df3b0d203e2b775f1f4a851",
+      "applicationId": "PlaneForFloors",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e8eb96041bb29104dae2a74",
+      "elementDimension": 1,
+      "span": 1,
+      "spanAngle": 0.5759586531581288,
+      "storeyRef": "Storey1",
+      "type": "StructuralLoadPlane",
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2020-04-09T05:57:52.855Z",
+      "updatedAt": "2020-04-09T05:57:52.855Z"
+    }
+  ],
+  "message": "Object list returned. If querying, duplication of objects in list will not be respected."
 }
