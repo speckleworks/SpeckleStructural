@@ -89,8 +89,14 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      this.Profile.Scale(factor);
-      this.Thickness *= factor;
+      if (this.Profile != null)
+      {
+        this.Profile.Scale(factor);
+      }
+      if (this.Thickness != null)
+      {
+        this.Thickness *= factor;
+      }
       if (this.Voids != null && this.Voids.Count() > 0)
       {
         for (var i = 0; i < this.Voids.Count(); i++)
@@ -148,7 +154,10 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      this.Axis.Origin.Scale(factor);
+      if (this.Axis != null && this.Axis.Origin != null)
+      {
+        this.Axis.Origin.Scale(factor);
+      }
       this.Properties = ScaleProperties(this.Properties, factor);
       this.GenerateHash();
     }

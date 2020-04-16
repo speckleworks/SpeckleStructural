@@ -332,7 +332,7 @@ namespace SpeckleStructuralClasses
 
       this.Properties = ScaleProperties(this.Properties, factor);
 
-      if (Loading.Value != null)
+      if (Loading != null && Loading.Value != null)
       {
         for (var i = 0; i < Loading.Value.Count(); i++)
         {
@@ -340,7 +340,7 @@ namespace SpeckleStructuralClasses
         }
       }
 
-      if (LoadingEnd.Value != null)
+      if (LoadingEnd != null && LoadingEnd.Value != null)
       {
         for (var i = 0; i < LoadingEnd.Value.Count(); i++)
         {
