@@ -39,6 +39,12 @@ namespace SpeckleStructuralGSA
       for (var i = 0; i < nodeRefs.Length; i++)
       {
         var node = nodes.Where(n => n.GSAId.ToString() == nodeRefs[i]).FirstOrDefault();
+        if (node == null)
+        {
+          //TO DO: review how this is possible and prevent it
+          continue;
+        }
+
         var speckleNodeObj = node.Value;
         if (speckleNodeObj != null)
         {
