@@ -343,6 +343,8 @@ namespace SpeckleStructuralGSA
         return "";
 
       var member = this.Value as Structural1DElement;
+      if (member.Value == null || member.Value.Count() == 0)
+        return "";
 
       var keyword = typeof(GSA1DMember).GetGSAKeyword();
 

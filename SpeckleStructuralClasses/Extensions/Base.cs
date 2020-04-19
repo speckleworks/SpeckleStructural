@@ -39,7 +39,7 @@ namespace SpeckleStructuralClasses
       for (var i = 0; i < this.Value.Count(); i++)
         this.Value[i] *= factor;
 
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
 
@@ -131,7 +131,7 @@ namespace SpeckleStructuralClasses
       for (var i = 0; i < this.Value.Count(); i++)
         this.Value[i] *= factor;
 
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
 
@@ -246,7 +246,7 @@ namespace SpeckleStructuralClasses
       //this.Xdir.Scale(factor);
       //this.Ydir.Scale(factor);
 
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
 

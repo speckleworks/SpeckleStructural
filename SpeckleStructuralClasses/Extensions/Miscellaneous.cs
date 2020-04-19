@@ -40,7 +40,7 @@ namespace SpeckleStructuralClasses
         this.PointDistances = this.PointDistances.Select(d => d * factor).ToList();
       }
 
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
   }
@@ -64,7 +64,7 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
   }
@@ -89,7 +89,7 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
   }
@@ -115,7 +115,7 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
   }
@@ -142,7 +142,7 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
   }
@@ -169,7 +169,7 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
   }

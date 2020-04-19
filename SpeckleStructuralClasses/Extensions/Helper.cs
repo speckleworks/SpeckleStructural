@@ -9,11 +9,88 @@ namespace SpeckleStructuralClasses
 {
   public static class Helper
   {
-    private static bool IsSimple(this Type type)
+    public static void ScaleProperties(Dictionary<string, object> dict, double factor)
     {
-      return (type.IsPrimitive || type.Equals(typeof(string)));
+      ScaleDictionary(ref dict, factor);
     }
 
+    private static void ScaleDictionary(ref Dictionary<string, object> dict, double factor)
+    {
+      var keys = dict.Keys.ToList();
+      foreach (var k in keys)
+      {
+        var v = dict[k];
+        if (ScaleValue(ref v, factor))
+        {
+          dict[k] = v;
+        }
+      }
+    }
+
+    private static bool ScaleValue(ref object o, double factor)
+    {
+      if (ScalePrimitive(ref o, factor))
+      {
+        return true;
+      }
+      else
+      {
+        if (o is Dictionary<string, object> d)
+        {
+          ScaleDictionary(ref d, factor);
+        }
+        else if (o is Array || o is List<object>)
+        {
+          var list = ((IEnumerable<object>)o).ToList();
+          for (var i = 0; i < list.Count(); i++)
+          {
+            var candidate = list[i];
+            ScaleValue(ref candidate, factor);
+          }
+        }
+        else
+        {
+          return ScaleObject(ref o, factor);
+        }
+      }
+      return false;
+    }
+
+    private static bool ScaleObject(ref object o, double factor)
+    {
+      try
+      {
+        var scaleMethod = o.GetType().GetMethod("Scale");
+        scaleMethod.Invoke(o, new object[] { factor });
+        return true;
+      }
+      catch
+      {
+        return false;
+      }
+    }
+
+    private static bool ScalePrimitive(ref object p, double factor)
+    {
+      if (p is double)
+      {
+        p = (double)p * factor;
+        return true;
+      }
+      else if (p is float)
+      {
+        p = (float)p * factor;
+        return true;
+      }
+      else if (p is decimal)
+      {
+        p = (decimal)p * (decimal)factor;
+        return true;
+      }
+      return (p is string);
+    }
+
+    /*
     public static void ScaleProperties(SpeckleObject so, double factor)
     {
       if (so.Properties != null)
@@ -27,11 +104,12 @@ namespace SpeckleStructuralClasses
           {
             var prop2ndLevelDict = (Dictionary<string, object>)so.Properties[key];
 
+            var simples = new Dictionary<string, object>();
+            var complexDict = new Dictionary<string, object>();
+
             foreach (var k2 in prop2ndLevelDict.Keys)
             {
-              var simples = new Dictionary<string, object>();
-              var complexDict = new Dictionary<string, object>();
-              if (prop2ndLevelDict[k2].GetType().IsSimple())
+              if (prop2ndLevelDict[k2].GetType().IsSimple() || prop2ndLevelDict[k2] is Array || prop2ndLevelDict[k2] is List<object>)
               {
                 simples.Add(k2, prop2ndLevelDict[k2]);
               }
@@ -39,14 +117,14 @@ namespace SpeckleStructuralClasses
               {
                 complexDict.Add(k2, prop2ndLevelDict[k2]);
               }
-              complexDict = so.ScaleProperties(complexDict, factor);
+            }
+            complexDict = so.ScaleProperties(complexDict, factor);
 
-              ((Dictionary<string, object>)so.Properties[key]).Clear();
-              so.Properties[key] = simples;
-              foreach (var ck in complexDict.Keys)
-              {
-                ((Dictionary<string, object>)so.Properties[key])[ck] = complexDict[ck];
-              }
+            ((Dictionary<string, object>)so.Properties[key]).Clear();
+            so.Properties[key] = simples;
+            foreach (var ck in complexDict.Keys)
+            {
+              ((Dictionary<string, object>)so.Properties[key])[ck] = complexDict[ck];
             }
           }
           else
@@ -61,5 +139,6 @@ namespace SpeckleStructuralClasses
         }
       }
     }
+    */
   }
 }

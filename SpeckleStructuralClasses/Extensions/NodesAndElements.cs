@@ -14,7 +14,7 @@ namespace SpeckleStructuralClasses
       for (var i = 0; i < Value.Count(); i++)
         Value[i] *= factor;
 
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       GenerateHash();
     }
   }
@@ -43,7 +43,7 @@ namespace SpeckleStructuralClasses
       for (var i = 0; i < Value.Count(); i++)
         Value[i] *= factor;
 
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       GenerateHash();
     }
   }
@@ -78,7 +78,7 @@ namespace SpeckleStructuralClasses
         for (var i = 0; i < Offset.Count(); i++)
           Offset[i].Scale(factor);
 
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       GenerateHash();
     }
   }
@@ -174,7 +174,7 @@ namespace SpeckleStructuralClasses
         for (var i = 0; i < Offset.Count(); i++)
           Offset[i].Scale(factor);
 
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       GenerateHash();
     }
   }
@@ -210,7 +210,7 @@ namespace SpeckleStructuralClasses
 
       Offset *= factor;
 
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       GenerateHash();
     }
   }
@@ -443,7 +443,7 @@ namespace SpeckleStructuralClasses
         for (var i = 0; i < Offset.Count(); i++)
           Offset[i] *= factor;
 
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       GenerateHash();
     }
 
@@ -759,7 +759,7 @@ namespace SpeckleStructuralClasses
       for (var i = 0; i < Vertices.Count(); i++)
         Vertices[i] *= factor;
 
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       GenerateHash();
     }
 

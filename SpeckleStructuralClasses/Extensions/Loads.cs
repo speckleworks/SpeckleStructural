@@ -21,7 +21,7 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
   }
@@ -46,7 +46,7 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
   }
@@ -71,7 +71,7 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
   }
@@ -98,7 +98,7 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
   }
@@ -122,7 +122,7 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
   }
@@ -157,7 +157,7 @@ namespace SpeckleStructuralClasses
     {
       this.Tolerance *= factor;
 
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
   }
@@ -190,7 +190,7 @@ namespace SpeckleStructuralClasses
       this.Elevation *= factor;
       this.ToleranceAbove *= factor;
       this.ToleranceBelow *= factor;
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
   }
@@ -240,7 +240,7 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
   }
@@ -277,7 +277,7 @@ namespace SpeckleStructuralClasses
         }
       }
 
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
   }
@@ -302,7 +302,7 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
   }
@@ -330,7 +330,7 @@ namespace SpeckleStructuralClasses
       for (var i = 0; i < this.Value.Count(); i++)
         this.Value[i] *= factor;
 
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
 
       if (Loading != null && Loading.Value != null)
       {
@@ -372,7 +372,7 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
   }
@@ -400,7 +400,7 @@ namespace SpeckleStructuralClasses
       for (var i = 0; i < this.Value.Count(); i++)
         this.Value[i] *= factor;
 
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
   }
@@ -419,7 +419,7 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      Helper.ScaleProperties(this, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
   }
