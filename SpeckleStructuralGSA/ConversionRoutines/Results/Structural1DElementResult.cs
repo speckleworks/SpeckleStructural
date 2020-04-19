@@ -23,12 +23,12 @@ namespace SpeckleStructuralGSA
       if (Initialiser.Settings.Element1DResults.Count() == 0)
         return new SpeckleNull();
 
-      if (Initialiser.Settings.EmbedResults && !Initialiser.GSASenderObjects.ContainsKey(typeof(GSA1DElement)))
+      if (Initialiser.Settings.EmbedResults && Initialiser.GSASenderObjects.Count<GSA1DElement>() == 0)
         return new SpeckleNull();
 
       if (Initialiser.Settings.EmbedResults)
       {
-        var elements = Initialiser.GSASenderObjects[typeof(GSA1DElement)].Cast<GSA1DElement>().ToList();
+        var elements = Initialiser.GSASenderObjects.Get<GSA1DElement>();
 
         var entities = elements.Cast<IGSASpeckleContainer>().ToList();
 
@@ -87,7 +87,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        Initialiser.GSASenderObjects[typeof(GSA1DElementResult)] = new List<object>();
+        //Initialiser.GSASenderObjects.Get<GSA1DElementResult)] = new List<object>();
 
         var results = new List<GSA1DElementResult>();
 
@@ -147,7 +147,7 @@ namespace SpeckleStructuralGSA
           }
         }
 
-        Initialiser.GSASenderObjects[typeof(GSA1DElementResult)].AddRange(results);
+        Initialiser.GSASenderObjects.AddRange(results);
       }
 
       return new SpeckleObject();

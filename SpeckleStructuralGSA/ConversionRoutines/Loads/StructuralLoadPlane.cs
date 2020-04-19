@@ -90,7 +90,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      Initialiser.GSASenderObjects[typeof(GSAGridSurface)].AddRange(planes);
+      Initialiser.GSASenderObjects.AddRange(planes);
 
       return (planes.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

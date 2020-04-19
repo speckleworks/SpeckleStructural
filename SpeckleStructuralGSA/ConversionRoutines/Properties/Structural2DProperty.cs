@@ -164,8 +164,8 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSA2DProperty>();
 
       var props = new List<GSA2DProperty>();
-      var steels = Initialiser.GSASenderObjects[typeof(GSAMaterialSteel)].Cast<GSAMaterialSteel>().ToList();
-      var concretes = Initialiser.GSASenderObjects[typeof(GSAMaterialConcrete)].Cast<GSAMaterialConcrete>().ToList();
+      var steels = Initialiser.GSASenderObjects.Get<GSAMaterialSteel>();
+      var concretes = Initialiser.GSASenderObjects.Get<GSAMaterialConcrete>();
 
       foreach (var p in newLines.Values)
       {
@@ -178,7 +178,7 @@ namespace SpeckleStructuralGSA
         catch { }
       }
 
-      Initialiser.GSASenderObjects[typeof(GSA2DProperty)].AddRange(props);
+      Initialiser.GSASenderObjects.AddRange(props);
 
       return (props.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

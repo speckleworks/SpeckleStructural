@@ -71,6 +71,9 @@ namespace SpeckleStructuralGSA
 
       var v = this.Value as Structural2DVoid;
 
+      if (v.Vertices == null || v.Vertices.Count() == 0)
+        return "";
+
       var keyword = typeof(GSA2DVoid).GetGSAKeyword();
 
       var index = Initialiser.Cache.ResolveIndex(keyword, v.ApplicationId);
@@ -160,7 +163,7 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSA2DVoid>();
 
       var voids = new List<GSA2DVoid>();
-      var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
+      var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
       foreach (var p in newLines.Values)
       {
@@ -181,7 +184,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      Initialiser.GSASenderObjects[typeof(GSA2DVoid)].AddRange(voids);
+      Initialiser.GSASenderObjects.AddRange(voids);
 
       return (voids.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

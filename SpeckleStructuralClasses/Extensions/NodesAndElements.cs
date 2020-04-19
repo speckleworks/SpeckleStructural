@@ -5,6 +5,19 @@ using System.Windows.Media.Media3D;
 
 namespace SpeckleStructuralClasses
 {
+  public partial class Structural0DSpring
+  {
+    public Structural0DSpring() { }
+
+    public override void Scale(double factor)
+    {
+      for (var i = 0; i < Value.Count(); i++)
+        Value[i] *= factor;
+
+      Helper.ScaleProperties(this, factor);
+      GenerateHash();
+    }
+  }
   public partial class StructuralNode
   {
     public StructuralNode() { }
@@ -30,7 +43,7 @@ namespace SpeckleStructuralClasses
       for (var i = 0; i < Value.Count(); i++)
         Value[i] *= factor;
 
-      Properties = ScaleProperties(Properties, factor);
+      Helper.ScaleProperties(this, factor);
       GenerateHash();
     }
   }
@@ -65,7 +78,7 @@ namespace SpeckleStructuralClasses
         for (var i = 0; i < Offset.Count(); i++)
           Offset[i].Scale(factor);
 
-      Properties = ScaleProperties(Properties, factor);
+      Helper.ScaleProperties(this, factor);
       GenerateHash();
     }
   }
@@ -161,7 +174,7 @@ namespace SpeckleStructuralClasses
         for (var i = 0; i < Offset.Count(); i++)
           Offset[i].Scale(factor);
 
-      Properties = ScaleProperties(Properties, factor);
+      Helper.ScaleProperties(this, factor);
       GenerateHash();
     }
   }
@@ -197,7 +210,7 @@ namespace SpeckleStructuralClasses
 
       Offset *= factor;
 
-      Properties = ScaleProperties(Properties, factor);
+      Helper.ScaleProperties(this, factor);
       GenerateHash();
     }
   }
@@ -430,7 +443,7 @@ namespace SpeckleStructuralClasses
         for (var i = 0; i < Offset.Count(); i++)
           Offset[i] *= factor;
 
-      Properties = ScaleProperties(Properties, factor);
+      Helper.ScaleProperties(this, factor);
       GenerateHash();
     }
 
@@ -746,7 +759,7 @@ namespace SpeckleStructuralClasses
       for (var i = 0; i < Vertices.Count(); i++)
         Vertices[i] *= factor;
 
-      Properties = ScaleProperties(Properties, factor);
+      Helper.ScaleProperties(this, factor);
       GenerateHash();
     }
 

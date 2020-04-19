@@ -125,7 +125,7 @@ namespace SpeckleStructuralGSA.Test
 
       //Call the ToSpeckle method, which just adds to the GSASenderObjects collection-
       Conversions.ToSpeckle(new GSASpringProperty());
-      var existing = (StructuralSpringProperty)((IGSASpeckleContainer)Initialiser.GSASenderObjects[typeof(GSASpringProperty)].First()).Value;
+      var existing = (StructuralSpringProperty)Initialiser.GSASenderObjects.Get<GSASpringProperty>().First().Value;
 
       var newToMerge = new StructuralSpringProperty() { DampingRatio = 1.5 };
 
@@ -170,7 +170,7 @@ namespace SpeckleStructuralGSA.Test
 
       //Call the ToSpeckle method, which just adds to the GSASenderObjects collection
       Conversions.ToSpeckle(new GSASpringProperty());
-      var existing = (StructuralSpringProperty) ((IGSASpeckleContainer)Initialiser.GSASenderObjects[typeof(GSASpringProperty)].First()).Value;
+      var existing = (StructuralSpringProperty)Initialiser.GSASenderObjects.Get<GSASpringProperty>().First().Value;
 
       var newToMerge = new StructuralSpringProperty() { DampingRatio = 1.5 };
 
@@ -270,7 +270,7 @@ namespace SpeckleStructuralGSA.Test
 
       ((IGSACache)Initialiser.Cache).Upsert(keyword, 1, gwaCommand, sid);
       Initialiser.GSASenderObjects.Clear();
-      Initialiser.GSASenderObjects.Add(testType, new List<object>());
+      //Initialiser.GSASenderObjects.Add(testType, new List<object>());
     }
   }
 

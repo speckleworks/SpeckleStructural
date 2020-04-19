@@ -58,13 +58,17 @@ namespace SpeckleStructuralGSA
 
       var ls = new List<string>();
 
-      var axis = new StructuralAxis() { Xdir = alignment.Plane.Xdir, Ydir = alignment.Plane.Ydir, Origin = alignment.Plane.Origin };
-      axis.Normal = alignment.Plane.Normal ?? CrossProduct(alignment.Plane.Xdir, alignment.Plane.Ydir);
-      
-      Helper.SetAxis(axis, out var axisIndex, out var axisGwa, alignment.Name);
-      if (axisGwa.Length > 0)
+      int axisIndex = 1;
+      if (alignment.Plane != null)
       {
-        gwaCommands.Add(axisGwa);
+        var axis = new StructuralAxis() { Xdir = alignment.Plane.Xdir, Ydir = alignment.Plane.Ydir, Origin = alignment.Plane.Origin };
+        axis.Normal = alignment.Plane.Normal ?? CrossProduct(alignment.Plane.Xdir, alignment.Plane.Ydir);
+
+        Helper.SetAxis(axis, out axisIndex, out var axisGwa, alignment.Name);
+        if (axisGwa.Length > 0)
+        {
+          gwaCommands.Add(axisGwa);
+        }
       }
 
       ls.Clear();
@@ -104,23 +108,25 @@ namespace SpeckleStructuralGSA
           index.ToString(),
           string.IsNullOrEmpty(alignment.Name) ? "" : alignment.Name,
           "1", //Grid surface
-          alignment.Nodes.Count().ToString(),
+          (alignment.Nodes == null ? 0 : alignment.Nodes.Count()).ToString(),
       });
 
-
-      foreach (var node in alignment.Nodes)
+      if (alignment.Nodes != null)
       {
-        ls.Add(node.Chainage.ToString());
-        if (node.Curvature == StructuralBridgeCurvature.Straight)
+        foreach (var node in alignment.Nodes)
         {
-          ls.Add("0");
+          ls.Add(node.Chainage.ToString());
+          if (node.Curvature == StructuralBridgeCurvature.Straight)
+          {
+            ls.Add("0");
+          }
+          else
+          {
+            ls.Add(((1d / node.Radius) * ((node.Curvature == StructuralBridgeCurvature.RightCurve) ? 1 : -1)).ToString());
+          }
         }
-        else
-        {
-          ls.Add(((1d / node.Radius) * ((node.Curvature == StructuralBridgeCurvature.RightCurve) ? 1 : -1)).ToString());
-        }
+        gwaCommands.Add(string.Join("\t", ls));
       }
-      gwaCommands.Add(string.Join("\t", ls));
 
       return string.Join("\n", gwaCommands);
     }
@@ -158,7 +164,7 @@ namespace SpeckleStructuralGSA
         alignments.Add(alignment);
       }
 
-      Initialiser.GSASenderObjects[typeof(GSABridgeAlignment)].AddRange(alignments);
+      Initialiser.GSASenderObjects.AddRange(alignments);
 
       return (alignments.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

@@ -137,7 +137,7 @@ namespace SpeckleStructuralGSA
         catch { }
       }
 
-      Initialiser.GSASenderObjects[typeof(GSAMaterialSteel)].AddRange(materials);
+      Initialiser.GSASenderObjects.AddRange(materials);
 
       return (materials.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

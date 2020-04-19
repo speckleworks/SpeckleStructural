@@ -58,17 +58,20 @@ namespace SpeckleStructuralGSA
           keyword + ":" + Helper.GenerateSID(vehicle),
           index.ToString(),
           string.IsNullOrEmpty(vehicle.Name) ? "" : vehicle.Name,
-          vehicle.Width.ToString(),
-          vehicle.Axles.Count().ToString()
+          ((vehicle.Width == null) ? 0 : vehicle.Width).ToString(),
+          ((vehicle.Axles == null) ? 0 : vehicle.Axles.Count()).ToString()
       };
 
-      foreach (var axle in vehicle.Axles)
+      if (vehicle.Axles != null && vehicle.Axles.Count() > 0)
       {
-        ls.AddRange(new[] {
+        foreach (var axle in vehicle.Axles)
+        {
+          ls.AddRange(new[] {
           axle.Position.ToString(),
           axle.WheelOffset.ToString(),
           axle.LeftWheelLoad.ToString(),
           axle.RightWheelLoad.ToString() });
+        }
       }
 
       return (string.Join("\t", ls));
@@ -97,7 +100,7 @@ namespace SpeckleStructuralGSA
         alignments.Add(alignment);
       }
 
-      Initialiser.GSASenderObjects[typeof(GSABridgeVehicle)].AddRange(alignments);
+      Initialiser.GSASenderObjects.AddRange(alignments);
 
       return (alignments.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

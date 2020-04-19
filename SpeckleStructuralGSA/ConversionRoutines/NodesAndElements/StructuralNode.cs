@@ -375,21 +375,21 @@ namespace SpeckleStructuralGSA
         nodes.Add(node);
       }
 
-      Initialiser.GSASenderObjects[typeof(GSANode)].AddRange(nodes);
+      Initialiser.GSASenderObjects.AddRange(nodes);
 
       return (nodes.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
 
     public static SpeckleObject ToSpeckle(this GSA0DElement dummyObject)
     {
-      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSA0DElement)))
+      if (Initialiser.GSASenderObjects.Count<GSA0DElement>() == 0)
         return new SpeckleNull();
 
       var newLines = ToSpeckleBase<GSA0DElement>();
 
       var changed = false;
 
-      var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
+      var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
       foreach (var p in newLines.Values)
       {

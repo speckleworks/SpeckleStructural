@@ -251,7 +251,7 @@ namespace SpeckleStructuralGSA
         catch { }
       }
 
-      Initialiser.GSASenderObjects[typeof(GSASpringProperty)].AddRange(springProperties);
+      Initialiser.GSASenderObjects.AddRange(springProperties);
 
       return (springProperties.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

@@ -138,7 +138,7 @@ namespace SpeckleStructuralGSA
         loadCases.Add(loadCase);
       }
 
-      Initialiser.GSASenderObjects[typeof(GSALoadCase)].AddRange(loadCases);
+      Initialiser.GSASenderObjects.AddRange(loadCases);
 
       return (loadCases.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

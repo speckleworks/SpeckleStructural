@@ -64,6 +64,9 @@ namespace SpeckleStructuralGSA.Test
         }
       } while (currentBatch.Count > 0);
 
+      speckleObjects.AddRange(Initialiser.GSASenderObjects.GetAll().SelectMany(i => i.Value).Select(o => (SpeckleObject)o));
+
+      /*
       foreach (var t in Initialiser.GSASenderObjects.Keys)
       {
         foreach (var o in Initialiser.GSASenderObjects[t])
@@ -71,6 +74,7 @@ namespace SpeckleStructuralGSA.Test
           speckleObjects.Add((SpeckleObject)(((IGSASpeckleContainer)o).Value));
         }
       }
+      */
     }
 
     #region private_methods

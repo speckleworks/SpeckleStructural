@@ -108,7 +108,7 @@ namespace SpeckleStructuralGSA
         paths.Add(path);
       }
 
-      Initialiser.GSASenderObjects[typeof(GSABridgePath)].AddRange(paths);
+      Initialiser.GSASenderObjects.AddRange(paths);
 
       return (paths.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

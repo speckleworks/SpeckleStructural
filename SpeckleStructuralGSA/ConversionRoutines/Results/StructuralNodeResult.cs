@@ -24,12 +24,12 @@ namespace SpeckleStructuralGSA
       if (Initialiser.Settings.NodalResults.Count() == 0)
         return new SpeckleNull();
 
-      if (Initialiser.Settings.EmbedResults && !Initialiser.GSASenderObjects.ContainsKey(typeof(GSANode)))
+      if (Initialiser.Settings.EmbedResults && Initialiser.GSASenderObjects.Count<GSANode>() == 0)
         return new SpeckleNull();
 
       if (Initialiser.Settings.EmbedResults)
       {
-        var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
+        var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
         foreach (var kvp in Initialiser.Settings.NodalResults)
         {
@@ -69,7 +69,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        Initialiser.GSASenderObjects[typeof(GSANodeResult)] = new List<object>();
+        //Initialiser.GSASenderObjects.Get<GSANodeResult)] = new List<object>();
 
         var results = new List<GSANodeResult>();
 
@@ -127,7 +127,7 @@ namespace SpeckleStructuralGSA
           }
         }
 
-        Initialiser.GSASenderObjects[typeof(GSANodeResult)].AddRange(results);
+        Initialiser.GSASenderObjects.AddRange(results);
       }
 
       return new SpeckleObject();

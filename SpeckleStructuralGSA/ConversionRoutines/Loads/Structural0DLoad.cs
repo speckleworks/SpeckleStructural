@@ -149,8 +149,7 @@ namespace SpeckleStructuralGSA
 
       var loads = new List<GSA0DLoad>();
 
-      var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
-
+      var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
       foreach (var p in newLines.Values)
       {
@@ -205,8 +204,7 @@ namespace SpeckleStructuralGSA
         loads.AddRange(loadSubList);
       }
 
-      Initialiser.GSASenderObjects[typeof(GSA0DLoad)].AddRange(loads);
-
+      Initialiser.GSASenderObjects.AddRange(loads);
       return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }

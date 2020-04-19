@@ -112,6 +112,8 @@ namespace SpeckleStructuralGSA
         return "";
 
       var constraint = this.Value as StructuralRigidConstraints;
+      if (constraint.Constraint == null)
+        return "";
 
       var keyword = typeof(GSARigidConstraints).GetGSAKeyword();
 
@@ -191,8 +193,8 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSARigidConstraints>();
 
       var constraints = new List<GSARigidConstraints>();
-      var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
-      var stages = Initialiser.GSASenderObjects[typeof(GSAConstructionStage)].Cast<GSAConstructionStage>().ToList();
+      var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
+      var stages = Initialiser.GSASenderObjects.Get<GSAConstructionStage>();
 
       foreach (var k in newLines.Keys)
       {
@@ -205,7 +207,7 @@ namespace SpeckleStructuralGSA
         catch { }
       }
 
-      Initialiser.GSASenderObjects[typeof(GSARigidConstraints)].AddRange(constraints);
+      Initialiser.GSASenderObjects.AddRange(constraints);
 
       return (constraints.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

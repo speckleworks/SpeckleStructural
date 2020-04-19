@@ -68,6 +68,8 @@ namespace SpeckleStructuralGSA
         return "";
 
       var spring = this.Value as Structural0DSpring;
+      if (spring.Value == null || spring.Value.Count() == 0)
+        return "";
 
       var keyword = typeof(GSA0DSpring).GetGSAKeyword();
 
@@ -149,7 +151,7 @@ namespace SpeckleStructuralGSA
 
       var springs = new List<GSA0DSpring>();
 
-      var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
+      var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
       foreach (var p in newLines.Select(nl => nl.Item2))
       {
@@ -162,7 +164,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      Initialiser.GSASenderObjects[typeof(GSA0DSpring)].AddRange(springs);
+      Initialiser.GSASenderObjects.AddRange(springs);
 
       return (springs.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

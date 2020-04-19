@@ -166,7 +166,7 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSA1DInfluenceEffect>();
 
-      var e1Ds = Initialiser.GSASenderObjects[typeof(GSA1DElement)].Cast<GSA1DElement>().ToList();
+      var e1Ds = Initialiser.GSASenderObjects.Get<GSA1DElement>();
 
       var infls = new List<GSA1DInfluenceEffect>();      
 
@@ -181,7 +181,7 @@ namespace SpeckleStructuralGSA
         catch { }
       }
 
-      Initialiser.GSASenderObjects[typeof(GSA1DInfluenceEffect)].AddRange(infls);
+      Initialiser.GSASenderObjects.AddRange(infls);
 
       return (infls.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

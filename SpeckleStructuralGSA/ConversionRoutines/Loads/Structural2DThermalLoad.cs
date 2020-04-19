@@ -181,11 +181,11 @@ namespace SpeckleStructuralGSA
 
       if (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
       {
-        e2Ds = Initialiser.GSASenderObjects[typeof(GSA2DElement)].Cast<GSA2DElement>().ToList();
+        e2Ds = Initialiser.GSASenderObjects.Get<GSA2DElement>().ToList();
       }
       else if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
       {
-        m2Ds = Initialiser.GSASenderObjects[typeof(GSA2DMember)].Cast<GSA2DMember>().ToList();
+        m2Ds = Initialiser.GSASenderObjects.Get<GSA2DMember>();
       }
 
       foreach (var k in newLines.Keys)
@@ -195,7 +195,7 @@ namespace SpeckleStructuralGSA
         loads.Add(load);
       }
 
-      Initialiser.GSASenderObjects[typeof(GSA2DThermalLoading)].AddRange(loads);
+      Initialiser.GSASenderObjects.AddRange(loads);
 
       return (loads.Count() > 0 ) ? new SpeckleObject() : new SpeckleNull();
     }

@@ -383,17 +383,27 @@ namespace SpeckleStructuralGSA
       ls.Add(propRef.ToString());
       ls.Add(group != 0 ? group.ToString() : index.ToString()); // TODO: This allows for targeting of elements from members group
       var topo = "";
-      for (var i = 0; i < member.Value.Count(); i += 3)
+      if (member.Value != null)
       {
-        topo += Helper.NodeAt(member.Value[i], member.Value[i + 1], member.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString() + " ";
+        for (var i = 0; i < member.Value.Count(); i += 3)
+        {
+          topo += Helper.NodeAt(member.Value[i], member.Value[i + 1], member.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString() + " ";
+        }
       }
       ls.Add(topo);
       ls.Add("0"); // Orientation node
-      try
+      if (member.Value == null)
       {
-        ls.Add(Helper.Get1DAngle(member.Value.ToArray(), member.ZAxis ?? new StructuralVectorThree(0, 0, 1)).ToString());
+        ls.Add("0");
       }
-      catch { ls.Add("0"); }
+      else
+      {
+        try
+        {
+          ls.Add(Helper.Get1DAngle(member.Value.ToArray(), member.ZAxis ?? new StructuralVectorThree(0, 0, 1)).ToString());
+        }
+        catch { ls.Add("0"); }
+      }
       //ls.Add(member.GSAMeshSize == 0 ? "0" : member.GSAMeshSize.ToString()); // Target mesh size
       ls.Add(member.GSAMeshSize == null ? "0" : member.GSAMeshSize.ToString()); // Target mesh size
       ls.Add("MESH"); // TODO: What is this?
@@ -541,7 +551,7 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSA1DElement>();
 
       var elements = new List<GSA1DElement>();
-      var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
+      var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
       foreach (var p in newLines.Values)
       {
@@ -559,7 +569,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      Initialiser.GSASenderObjects[typeof(GSA1DElement)].AddRange(elements);
+      Initialiser.GSASenderObjects.AddRange(elements);
 
       return (elements.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
@@ -567,7 +577,7 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA1DMember dummyObject)
     {
 
-      var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
+      var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
       var members = new List<GSA1DMember>();
       var newLines = ToSpeckleBase<GSA1DMember>();
       
@@ -586,7 +596,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      Initialiser.GSASenderObjects[typeof(GSA1DMember)].AddRange(members);
+      Initialiser.GSASenderObjects.AddRange(members);
 
       return (members.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

@@ -20,7 +20,7 @@ namespace SpeckleStructuralGSA
   {
     public static SpeckleObject ToSpeckle(this GSAMiscResult dummyObject)
     {
-      Initialiser.GSASenderObjects[typeof(GSAMiscResult)] = new List<object>();
+      //Initialiser.GSASenderObjects.Get<GSAMiscResult)] = new List<object>();
 
       if (Initialiser.Settings.MiscResults.Count() == 0)
         return new SpeckleNull();
@@ -69,7 +69,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      Initialiser.GSASenderObjects[typeof(GSAMiscResult)].AddRange(results);
+      Initialiser.GSASenderObjects.AddRange(results);
 
       return new SpeckleObject();
     }

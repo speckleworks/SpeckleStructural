@@ -263,6 +263,10 @@ namespace SpeckleStructuralGSA
 
       var obj = (SpeckleObject)this.Value;
       var baseMesh = (SpeckleMesh)this.Value;
+
+      if (baseMesh.Vertices == null || baseMesh.Vertices.Count() == 0)
+        return "";
+
       var colour = (baseMesh.Colors == null || baseMesh.Colors.Count < 1) ? "NO_RGB" : baseMesh.Colors[0].ArgbToHexColor().ToString();
 
       StructuralAxis axis;
@@ -411,8 +415,8 @@ namespace SpeckleStructuralGSA
       }
 
       var elements = new List<GSA2DElement>();
-      var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
-      var props = Initialiser.GSASenderObjects[typeof(GSA2DProperty)].Cast<GSA2DProperty>().ToList();
+      var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
+      var props = Initialiser.GSASenderObjects.Get<GSA2DProperty>();
 
       foreach (var p in newLines.Select(nl => nl.Item2))
       {
@@ -434,7 +438,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      Initialiser.GSASenderObjects[typeof(GSA2DElement)].AddRange(elements);
+      Initialiser.GSASenderObjects.AddRange(elements);
 
       return (elements.Count() == 0) ? new SpeckleNull() :  new SpeckleObject();
     }
@@ -444,8 +448,8 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSA2DMember>();
 
       var members = new List<GSA2DMember>();
-      var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
-      var props = Initialiser.GSASenderObjects[typeof(GSA2DProperty)].Cast<GSA2DProperty>().ToList();
+      var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
+      var props = Initialiser.GSASenderObjects.Get<GSA2DProperty>();
 
       foreach (var p in newLines.Values)
       {
@@ -466,7 +470,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      Initialiser.GSASenderObjects[typeof(GSA2DMember)].AddRange(members);
+      Initialiser.GSASenderObjects.AddRange(members);
 
       return (members.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

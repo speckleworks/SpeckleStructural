@@ -158,7 +158,7 @@ namespace SpeckleStructuralGSA
         loadCombos.Add(combo);
       }
 
-      Initialiser.GSASenderObjects[typeof(GSALoadCombo)].AddRange(loadCombos);
+      Initialiser.GSASenderObjects.AddRange(loadCombos);
 
       return (loadCombos.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

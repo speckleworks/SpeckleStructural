@@ -258,7 +258,7 @@ namespace SpeckleStructuralGSA
         loads.Add(load);
       }
 
-      Initialiser.GSASenderObjects[typeof(GSAGridAreaLoad)].AddRange(loads);
+      Initialiser.GSASenderObjects.AddRange(loads);
 
       return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

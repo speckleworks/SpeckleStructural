@@ -60,7 +60,10 @@ namespace SpeckleStructuralGSA
         return "";
 
       var obj = this.Value as StructuralStagedNodalRestraints;
-			var destinationType = typeof(GSAStructuralStagedNodalRestraints);
+      if (obj.Restraint == null)
+        return "";
+
+      var destinationType = typeof(GSAStructuralStagedNodalRestraints);
 
 			var keyword = destinationType.GetGSAKeyword();
       var subkeywords = destinationType.GetSubGSAKeyword();
@@ -110,8 +113,8 @@ namespace SpeckleStructuralGSA
 
       var genNodeRestraints = new List<GSAStructuralStagedNodalRestraints>();
 
-      var stageDefs = Initialiser.GSASenderObjects[typeof(GSAConstructionStage)].Cast<GSAConstructionStage>().ToList();
-      var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
+      var stageDefs = Initialiser.GSASenderObjects.Get<GSAConstructionStage>();
+      var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
       foreach (var k in newLines.Keys)
       {
@@ -124,7 +127,7 @@ namespace SpeckleStructuralGSA
         catch { }
       }
 
-      Initialiser.GSASenderObjects[typeof(GSAStructuralStagedNodalRestraints)].AddRange(genNodeRestraints);
+      Initialiser.GSASenderObjects.AddRange(genNodeRestraints);
 
       return (genNodeRestraints.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

@@ -104,6 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\Base.cs" />
+    <Compile Include="Extensions\Helper.cs" />
     <Compile Include="Extensions\Loads.cs" />
     <Compile Include="Extensions\Miscellaneous.cs" />
     <Compile Include="Extensions\NodesAndElements.cs" />

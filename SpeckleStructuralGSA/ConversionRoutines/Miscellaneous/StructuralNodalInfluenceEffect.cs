@@ -171,7 +171,7 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSANodalInfluenceEffect>();
 
       var infls = new List<GSANodalInfluenceEffect>();
-      var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
+      var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
       foreach (var p in newLines.Values)
       {
@@ -184,7 +184,7 @@ namespace SpeckleStructuralGSA
         catch { }
       }
 
-      Initialiser.GSASenderObjects[typeof(GSANodalInfluenceEffect)].AddRange(infls);
+      Initialiser.GSASenderObjects.AddRange(infls);
 
       return (infls.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

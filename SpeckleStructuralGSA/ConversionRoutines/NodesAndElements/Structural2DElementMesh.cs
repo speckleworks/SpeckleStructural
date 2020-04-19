@@ -150,30 +150,33 @@ namespace SpeckleStructuralGSA
 
     public static SpeckleObject ToSpeckle(this GSA2DElementMesh dummyObject)
     {
+      /*
       if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSA2DElementMesh)))
       {
-        Initialiser.GSASenderObjects[typeof(GSA2DElementMesh)] = new List<object>();
+        Initialiser.GSASenderObjects.Get<GSA2DElementMesh)] = new List<object>();
       }
+      */
 
       var meshes = new List<GSA2DElementMesh>();
 
       // Perform mesh merging
-      var uniqueMembers = new List<string>(Initialiser.GSASenderObjects[typeof(GSA2DElement)].Select(x => (x as GSA2DElement).Member).Where(m => Convert.ToInt32(m) > 0).Distinct());
+      var uniqueMembers = new List<string>(Initialiser.GSASenderObjects.Get<GSA2DElement>().Select(x => (x as GSA2DElement).Member).Where(m => Convert.ToInt32(m) > 0).Distinct());
       foreach (var member in uniqueMembers)
       {
         try
         {
-          var elementList = Initialiser.GSASenderObjects[typeof(GSA2DElement)].Where(x => (x as GSA2DElement).Member == member).Cast<GSA2DElement>().ToList();
+          var all2dElements = Initialiser.GSASenderObjects.Get<GSA2DElement>();
+          var matching2dElementList = all2dElements.Where(x => (x as GSA2DElement).Member == member).Cast<GSA2DElement>().ToList();
           var mesh = new GSA2DElementMesh() { GSAId = Convert.ToInt32(member) };
-          mesh.ParseGWACommand(elementList);
+          mesh.ParseGWACommand(matching2dElementList);
           meshes.Add(mesh);
 
-          Initialiser.GSASenderObjects[typeof(GSA2DElement)].RemoveAll(x => elementList.Contains(x));
+          Initialiser.GSASenderObjects.RemoveAll(matching2dElementList);
         }
         catch { }
       }
 
-      Initialiser.GSASenderObjects[typeof(GSA2DElementMesh)].AddRange(meshes);
+      Initialiser.GSASenderObjects.AddRange(meshes);
 
       return new SpeckleNull(); // Return null because ToSpeckle method for GSA2DElement will handle this change
     }
