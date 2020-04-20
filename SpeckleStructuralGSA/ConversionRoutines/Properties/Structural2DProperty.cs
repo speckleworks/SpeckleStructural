@@ -86,6 +86,8 @@ namespace SpeckleStructuralGSA
         return "";
 
       var prop = this.Value as Structural2DProperty;
+      if (prop.ReferenceSurface == Structural2DPropertyReferenceSurface.NotSet)
+        return "";
 
       var keyword = typeof(GSA2DProperty).GetGSAKeyword();
 

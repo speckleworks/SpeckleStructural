@@ -120,6 +120,8 @@ namespace SpeckleStructuralGSA
       var destType = typeof(GSASpringProperty);
 
       var springProp = this.Value as StructuralSpringProperty;
+      if (springProp.SpringType == StructuralSpringPropertyType.NotSet)
+        return "";
 
       var keyword = destType.GetGSAKeyword();
 
