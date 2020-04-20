@@ -269,6 +269,9 @@ namespace SpeckleStructuralGSA
         return "";
       }
 
+      if (!node.Mass.HasValue || node.Mass == 0)
+        return "";
+
       var keyword = typeof(GSA0DElement).GetGSAKeyword();
       var index = Initialiser.Cache.ResolveIndex(typeof(GSA0DElement).GetGSAKeyword(), node.ApplicationId);
       var propIndex = Initialiser.Cache.ResolveIndex("PROP_MASS.2", node.ApplicationId);

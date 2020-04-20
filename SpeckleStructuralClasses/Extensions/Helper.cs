@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SpeckleCore;
 
 namespace SpeckleStructuralClasses
 {
@@ -30,7 +26,7 @@ namespace SpeckleStructuralClasses
 
     private static bool ScaleValue(ref object o, double factor)
     {
-      if (ScalePrimitive(ref o, factor))
+      if (IsPrimitive(o))
       {
         return true;
       }
@@ -71,24 +67,9 @@ namespace SpeckleStructuralClasses
       }
     }
 
-    private static bool ScalePrimitive(ref object p, double factor)
+    private static bool IsPrimitive(object p)
     {
-      if (p is double)
-      {
-        p = (double)p * factor;
-        return true;
-      }
-      else if (p is float)
-      {
-        p = (float)p * factor;
-        return true;
-      }
-      else if (p is decimal)
-      {
-        p = (decimal)p * (decimal)factor;
-        return true;
-      }
-      return (p is string || p is bool);
+      return (p is string || p is bool || p is int || p is short || p is long || p is double || p is float || p is decimal);
     }
   }
 }
