@@ -266,12 +266,8 @@ namespace SpeckleStructuralGSA
       var node = this.Value as StructuralNode;
       if (node.Value == null || node.Value.Count() != 3)
       {
-        Initialiser.AppUI.Message("Node with invalid point", node.ApplicationId);
         return "";
       }
-
-      if (!node.Mass.HasValue || node.Mass == 0)
-        return "";
 
       var keyword = typeof(GSA0DElement).GetGSAKeyword();
       var index = Initialiser.Cache.ResolveIndex(typeof(GSA0DElement).GetGSAKeyword(), node.ApplicationId);

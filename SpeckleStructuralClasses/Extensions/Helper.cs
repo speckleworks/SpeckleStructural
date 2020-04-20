@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -39,7 +40,7 @@ namespace SpeckleStructuralClasses
         {
           ScaleDictionary(ref d, factor);
         }
-        else if (o is Array || o is List<object>)
+        else if (o is IList && o.GetType().IsGenericType)
         {
           var list = ((IEnumerable<object>)o).ToList();
           for (var i = 0; i < list.Count(); i++)
@@ -87,58 +88,7 @@ namespace SpeckleStructuralClasses
         p = (decimal)p * (decimal)factor;
         return true;
       }
-      return (p is string);
+      return (p is string || p is bool);
     }
-
-    /*
-    public static void ScaleProperties(SpeckleObject so, double factor)
-    {
-      if (so.Properties != null)
-      {
-        var singles = new Dictionary<string, object>();
-        var rest = new Dictionary<string, object>();
-
-        foreach (var key in so.Properties.Keys)
-        {
-          if (so.Properties[key] is Dictionary<string, object>)
-          {
-            var prop2ndLevelDict = (Dictionary<string, object>)so.Properties[key];
-
-            var simples = new Dictionary<string, object>();
-            var complexDict = new Dictionary<string, object>();
-
-            foreach (var k2 in prop2ndLevelDict.Keys)
-            {
-              if (prop2ndLevelDict[k2].GetType().IsSimple() || prop2ndLevelDict[k2] is Array || prop2ndLevelDict[k2] is List<object>)
-              {
-                simples.Add(k2, prop2ndLevelDict[k2]);
-              }
-              else
-              {
-                complexDict.Add(k2, prop2ndLevelDict[k2]);
-              }
-            }
-            complexDict = so.ScaleProperties(complexDict, factor);
-
-            ((Dictionary<string, object>)so.Properties[key]).Clear();
-            so.Properties[key] = simples;
-            foreach (var ck in complexDict.Keys)
-            {
-              ((Dictionary<string, object>)so.Properties[key])[ck] = complexDict[ck];
-            }
-          }
-          else
-          {
-            singles.Add(key, so.Properties[key]);
-          }
-        }
-        so.Properties = so.ScaleProperties(singles, factor);
-        foreach (var k in rest.Keys)
-        {
-          so.Properties.Add(k, rest[k]);
-        }
-      }
-    }
-    */
   }
 }
