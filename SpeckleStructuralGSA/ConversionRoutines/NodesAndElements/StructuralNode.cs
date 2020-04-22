@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
 using SpeckleGSAInterfaces;
@@ -365,14 +366,19 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSANode>();
 
+      var nodesLock = new object();
       var nodes = new List<GSANode>();
 
-      foreach (var p in newLines.Values)
+      Parallel.ForEach(newLines.Values, p =>
       {
         var node = new GSANode { GWACommand = p };
         node.ParseGWACommand();
-        nodes.Add(node);
+        lock (nodesLock)
+        {
+          nodes.Add(node);
+        }
       }
+      );
 
       Initialiser.GSASenderObjects.AddRange(nodes);
 
@@ -388,9 +394,10 @@ namespace SpeckleStructuralGSA
 
       var changed = false;
 
+      var nodesLock = new object();
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
-      foreach (var p in newLines.Values)
+      Parallel.ForEach(newLines.Values, p =>
       {
         var pPieces = p.ListSplit("\t");
         if (pPieces[4].ParseElementNumNodes() == 1)
@@ -400,9 +407,11 @@ namespace SpeckleStructuralGSA
             var massNode = new GSA0DElement() { GWACommand = p };
             massNode.ParseGWACommand();
 
-            var match = nodes
-                .Where(n => n.Value.ApplicationId == massNode.Value.ApplicationId)
-                .First();
+            GSANode match;
+            lock (nodesLock)
+            {
+              match = nodes.Where(n => n.Value.ApplicationId == massNode.Value.ApplicationId).First();
+            }
 
             if (match != null)
             {
@@ -417,6 +426,7 @@ namespace SpeckleStructuralGSA
           catch { }
         }
       }
+      );
 
       return (changed) ? new SpeckleObject() : new SpeckleNull();
     }
