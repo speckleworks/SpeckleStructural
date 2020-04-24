@@ -180,14 +180,7 @@ namespace SpeckleStructuralClasses
         {
           try
           {
-            try
-            {
-              return (List<StructuralVectorBoolSix>)StructuralProperties["endRelease"];
-            }
-            catch
-            {
-              return ((List<object>)StructuralProperties["endRelease"]).Select(x => x as StructuralVectorBoolSix).ToList();
-            }
+            return ((IEnumerable<object>)StructuralProperties["endRelease"]).Select(x => x as StructuralVectorBoolSix).ToList();
           }
           catch
           { return null; }
@@ -208,14 +201,7 @@ namespace SpeckleStructuralClasses
         {
           try
           {
-            try
-            {
-              return (List<StructuralVectorThree>)StructuralProperties["offset"];
-            }
-            catch
-            {
-              return ((List<object>)StructuralProperties["offset"]).Select(x => x as StructuralVectorThree).ToList();
-            }
+            return ((IEnumerable<object>)StructuralProperties["offset"]).Select(x => x as StructuralVectorThree).ToList();
           }
           catch
           { return null; }
@@ -252,15 +238,7 @@ namespace SpeckleStructuralClasses
         {
           try
           {
-            try
-            {
-              return (List<double>)StructuralProperties["resultVertices"];
-            }
-            catch
-            {
-              this.ResultVertices = ((List<object>)StructuralProperties["resultVertices"]).Select(x => Convert.ToDouble(x)).ToList();
-              return this.ResultVertices;
-            }
+            return ((IEnumerable<object>)StructuralProperties["resultVertices"]).Select(x => Convert.ToDouble(x)).ToList();
           }
           catch
           { return null; }
@@ -379,15 +357,7 @@ namespace SpeckleStructuralClasses
         {
           try
           {
-            try
-            {
-              return (List<string>)StructuralProperties["elementApplicationId"];
-            }
-            catch
-            {
-              this.ElementApplicationId = ((List<object>)StructuralProperties["elementApplicationId"]).Select(x => Convert.ToString(x)).ToList();
-              return this.ElementApplicationId;
-            }
+            return ((IEnumerable<object>)StructuralProperties["elementApplicationId"]).Select(x => Convert.ToString(x)).ToList();
           }
           catch
           { return null; }
@@ -437,15 +407,7 @@ namespace SpeckleStructuralClasses
         {
           try
           {
-            try
-            {
-              return (List<StructuralVectorThree>)StructuralProperties["zAxis"];
-            }
-            catch
-            {
-              this.ZAxis = ((List<object>)StructuralProperties["zAxis"]).Select(x => x as StructuralVectorThree).ToList();
-              return this.ZAxis;
-            }
+            return ((IEnumerable<object>)StructuralProperties["zAxis"]).Select(x => x as StructuralVectorThree).ToList();
           }
           catch
           { return null; }
@@ -466,15 +428,7 @@ namespace SpeckleStructuralClasses
         {
           try
           {
-            try
-            {
-              return (List<StructuralVectorBoolSix>)StructuralProperties["endRelease"];
-            }
-            catch
-            {
-              this.EndRelease = ((List<object>)StructuralProperties["endRelease"]).Select(x => x as StructuralVectorBoolSix).ToList();
-              return this.EndRelease;
-            }
+            return ((IEnumerable<object>)StructuralProperties["endRelease"]).Select(x => x as StructuralVectorBoolSix).ToList();
           }
           catch
           { return null; }
@@ -495,15 +449,7 @@ namespace SpeckleStructuralClasses
         {
           try
           {
-            try
-            {
-              return (List<StructuralVectorThree>)StructuralProperties["offset"];
-            }
-            catch
-            {
-              this.Offset = ((List<object>)StructuralProperties["offset"]).Select(x => x as StructuralVectorThree).ToList();
-              return this.Offset;
-            }
+            return ((IEnumerable<object>)StructuralProperties["offset"]).Select(x => x as StructuralVectorThree).ToList();
           }
           catch
           { return null; }
@@ -540,15 +486,7 @@ namespace SpeckleStructuralClasses
         {
           try
           {
-            try
-            {
-              return (List<double>)StructuralProperties["resultVertices"];
-            }
-            catch
-            {
-              this.ResultVertices = ((List<object>)StructuralProperties["resultVertices"]).Select(x => Convert.ToDouble(x)).ToList();
-              return this.ResultVertices;
-            }
+            return ((IEnumerable<object>)StructuralProperties["resultVertices"]).Select(x => Convert.ToDouble(x)).ToList();
           }
           catch
           { return null; }
@@ -712,18 +650,12 @@ namespace SpeckleStructuralClasses
         {
           try
           {
-            try
-            {
-              return (List<string>)StructuralProperties["elementApplicationId"];
-            }
-            catch
-            {
-              this.ElementApplicationId = ((List<object>)StructuralProperties["elementApplicationId"]).Select(x => Convert.ToString(x)).ToList();
-              return this.ElementApplicationId;
-            }
+            return ((IEnumerable<object>)StructuralProperties["elementApplicationId"]).Select(x => x.ToString()).ToList();
           }
           catch
-          { return null; }
+          { 
+            return null; 
+          }
         }
         else
           return null;
@@ -773,20 +705,15 @@ namespace SpeckleStructuralClasses
         {
           try
           {
-            try
-            {
-              return (List<StructuralAxis>)StructuralProperties["axis"];
-            }
-            catch
-            {
-              return ((List<object>)StructuralProperties["axis"]).Select(x => x as StructuralAxis).ToList();
-            }
+            return ((IEnumerable<object>)StructuralProperties["axis"]).Select(x => x as StructuralAxis).ToList();
           }
           catch
           { return null; }
         }
         else
+        {
           return null;
+        }
       }
       set { if (value != null) StructuralProperties["axis"] = value; }
     }
@@ -801,15 +728,7 @@ namespace SpeckleStructuralClasses
         {
           try
           {
-            try
-            {
-              return (List<double>)StructuralProperties["offset"];
-            }
-            catch
-            {
-              this.Offset = ((List<object>)StructuralProperties["offset"]).Select(x => Convert.ToDouble(x)).ToList();
-              return this.Offset;
-            }
+            return ((IEnumerable<object>)StructuralProperties["offset"]).Select(x => Convert.ToDouble(x)).ToList();
           }
           catch
           { return null; }

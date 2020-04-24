@@ -83,15 +83,7 @@ namespace SpeckleStructuralClasses
         {
           try
           {
-            try
-            {
-              return (List<double>)StructuralProperties["pointdistances"];
-            }
-            catch
-            {
-              this.PointDistances = ((List<object>)StructuralProperties["pointdistances"]).Select(x => Convert.ToDouble(x)).ToList();
-              return this.PointDistances;
-            }
+            return ((IEnumerable<double>)StructuralProperties["pointdistances"]).Select(x => Convert.ToDouble(x)).ToList();
           }
           catch
           { return null; }
@@ -138,15 +130,7 @@ namespace SpeckleStructuralClasses
         {
           try
           {
-            try
-            {
-              return (List<string>)StructuralProperties["elementRefs"];
-            }
-            catch
-            {
-              this.ElementRefs = ((List<object>)StructuralProperties["elementRefs"]).Select(x => Convert.ToString(x)).ToList();
-              return this.ElementRefs;
-            }
+            return ((IEnumerable<string>)StructuralProperties["elementRefs"]).Select(x => x.ToString()).ToList();
           }
           catch
           { return null; }
@@ -208,15 +192,7 @@ namespace SpeckleStructuralClasses
         {
           try
           {
-            try
-            {
-              return (List<StructuralBridgeAlignmentNode>)StructuralProperties["nodes"];
-            }
-            catch
-            {
-              this.Nodes = ((List<object>)StructuralProperties["nodes"]).Select(x => x as StructuralBridgeAlignmentNode).ToList();
-              return this.Nodes;
-            }
+            return ((IEnumerable<object>)StructuralProperties["nodes"]).Select(x => x as StructuralBridgeAlignmentNode).ToList();
           }
           catch
           { return null; }
@@ -306,15 +282,7 @@ namespace SpeckleStructuralClasses
         {
           try
           {
-            try
-            {
-              return (List<StructuralBridgeVehicleAxle>)StructuralProperties["axles"];
-            }
-            catch
-            {
-              this.Axles = ((List<object>)StructuralProperties["axles"]).Select(x => x as StructuralBridgeVehicleAxle).ToList();
-              return this.Axles;
-            }
+            return ((IEnumerable<object>)StructuralProperties["axles"]).Select(x => x as StructuralBridgeVehicleAxle).ToList();
           }
           catch
           { return null; }
