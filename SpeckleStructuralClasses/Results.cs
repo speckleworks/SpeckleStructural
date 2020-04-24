@@ -27,39 +27,28 @@ namespace SpeckleStructuralClasses
     /// <summary>(optional)String indicating source of result.</summary>
     [JsonProperty("resultSource", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
     public string ResultSource { get; set; }
+
+    /// <summary>Results.</summary>
+    [JsonProperty("value", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public Dictionary<string, object> Value { get; set; }
   }
 
   [Serializable]
   public partial class StructuralNodeResult : StructuralResultBase, IStructural
   {
     public override string Type { get => "StructuralNodeResult"; }
-
-    /// <summary>Results.</summary>
-    [JsonProperty("value", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    //[JsonConverter(typeof(SpecklePropertiesConverter))]
-    public Dictionary<string, object> Value { get; set; }
   }
 
   [Serializable]
   public partial class Structural1DElementResult : StructuralResultBase, IStructural
   {
     public override string Type { get => "Structural1DElementResult"; }
-
-    /// <summary>Results.</summary>
-    [JsonProperty("value", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    //[JsonConverter(typeof(SpecklePropertiesConverter))]
-    public Dictionary<string, object> Value { get; set; }
   }
 
   [Serializable]
   public partial class Structural2DElementResult : StructuralResultBase, IStructural
   {
     public override string Type { get => "Structural2DElementResult"; }
-
-    /// <summary>Results.</summary>
-    [JsonProperty("value", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    [JsonConverter(typeof(SpecklePropertiesConverter))]
-    public Dictionary<string, object> Value { get; set; }
   }
 
   [Serializable]
@@ -67,9 +56,5 @@ namespace SpeckleStructuralClasses
   {
     public override string Type { get => "StructuralMiscResult"; }
 
-    /// <summary>Results.</summary>
-    [JsonProperty("value", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    //[JsonConverter(typeof(SpecklePropertiesConverter))]
-    public Dictionary<string, object> Value { get; set; }
   }
 }
