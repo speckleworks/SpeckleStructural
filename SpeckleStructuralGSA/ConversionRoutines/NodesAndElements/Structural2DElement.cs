@@ -207,7 +207,11 @@ namespace SpeckleStructuralGSA
       for (var i = 0; i < nodeRefs.Length; i++)
       {
         var node = nodes.Where(n => n.GSAId.ToString() == nodeRefs[i]).FirstOrDefault();
-        if (node == null) continue;
+        if (node == null)
+        {
+          //TO DO: review how this is possible and prevent it
+          continue;
+        }
 
         coordinates.AddRange(node.Value.Value);
         this.SubGWACommand.Add(node.GWACommand);
@@ -354,11 +358,18 @@ namespace SpeckleStructuralGSA
       }
       ls.Add(topo.Trim());
       ls.Add("0"); // Orientation node
-      try
+      if (axis == null)
       {
-        ls.Add(Helper.Get2DAngle(coor.ToArray(), axis).ToString());
+        ls.Add("0");
       }
-      catch { ls.Add("0"); }
+      else
+      {
+        try
+        {
+          ls.Add(Helper.Get2DAngle(coor.ToArray(), axis).ToString());
+        }
+        catch { ls.Add("0"); }
+      }
       ls.Add(gsaMeshSize == 0 ? "1" : gsaMeshSize.ToString()); // Target mesh size
       ls.Add("MESH"); // TODO: What is this?
       ls.Add("LINEAR"); // Element type

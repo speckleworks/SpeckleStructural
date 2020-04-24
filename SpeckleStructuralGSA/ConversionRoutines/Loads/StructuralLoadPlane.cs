@@ -15,9 +15,10 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralLoadPlane();
 
-    public void ParseGWACommand()
+    public bool ParseGWACommand()
     {
       //TO DO
+      return false;
     }
 
     public string SetGWACommand()
@@ -83,8 +84,10 @@ namespace SpeckleStructuralGSA
       foreach (var p in newLines.Values)
       {
         var plane = new GSAGridSurface() { GWACommand = p };
-        plane.ParseGWACommand();
-        planes.Add(plane);
+        if (plane.ParseGWACommand())
+        {
+          planes.Add(plane);
+        }
       }
 
       Initialiser.GSASenderObjects[typeof(GSAGridSurface)].AddRange(planes);

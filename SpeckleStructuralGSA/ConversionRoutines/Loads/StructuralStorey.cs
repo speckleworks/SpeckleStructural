@@ -15,14 +15,19 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new StructuralStorey();
 
-    public void ParseGWACommand()
+    public bool ParseGWACommand()
     {
       if (this.GWACommand == null)
-        return;
-
-      var obj = new StructuralStorey();
+        return false;
 
       var pieces = this.GWACommand.ListSplit("\t");
+
+      if (pieces[3].ToLower() != "storey")
+      {
+        return false;
+      }
+
+      var obj = new StructuralStorey();
 
       var counter = 1; // Skip identifier
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
@@ -30,6 +35,8 @@ namespace SpeckleStructuralGSA
       //TO DO 
 
       this.Value = obj;
+
+      return true;
     }
 
     public string SetGWACommand()
@@ -63,12 +70,14 @@ namespace SpeckleStructuralGSA
 
       foreach (var k in newLines.Keys)
       {
-        var storey = new GSAStorey() { GSAId = k, GWACommand = newLines[k] };
-        storey.ParseGWACommand();
-        storeys.Add(storey);
+        var storey = new GSAStorey() { GWACommand = newLines[k] };
+        if (storey.ParseGWACommand())
+        {
+          storeys.Add(storey);
+        }
       }
 
-      Initialiser.GSASenderObjects[typeof(GSA2DThermalLoading)].AddRange(storeys);
+      Initialiser.GSASenderObjects[typeof(GSAStorey)].AddRange(storeys);
 
       return (storeys.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

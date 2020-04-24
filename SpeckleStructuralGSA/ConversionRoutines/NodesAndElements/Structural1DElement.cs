@@ -287,6 +287,11 @@ namespace SpeckleStructuralGSA
       for (var i = 0; i < nodeRefs.Length; i++)
       {
         var node = nodes.Where(n => n.GSAId == Convert.ToInt32(nodeRefs[i])).FirstOrDefault();
+        if (node == null)
+        {
+          //TO DO: review how this is possible and prevent it
+          continue;
+        }
         obj.Value.AddRange(node.Value.Value);
         this.SubGWACommand.Add(node.GWACommand);
       }
@@ -386,7 +391,7 @@ namespace SpeckleStructuralGSA
       ls.Add("0"); // Orientation node
       try
       {
-        ls.Add(Helper.Get1DAngle(member.Value.ToArray(), member.ZAxis).ToString());
+        ls.Add(Helper.Get1DAngle(member.Value.ToArray(), member.ZAxis ?? new StructuralVectorThree(0, 0, 1)).ToString());
       }
       catch { ls.Add("0"); }
       //ls.Add(member.GSAMeshSize == 0 ? "0" : member.GSAMeshSize.ToString()); // Target mesh size
@@ -400,41 +405,48 @@ namespace SpeckleStructuralGSA
       ls.Add("0"); // Time 4
       ls.Add((member.GSADummy.HasValue && member.GSADummy.Value) ? "DUMMY" : "ACTIVE");
 
-      try
+      if (member.EndRelease == null)
       {
-        if (member.EndRelease[0].Value.SequenceEqual(ParseEndReleases(1).Value))
-          ls.Add("1");
-        else if (member.EndRelease[0].Value.SequenceEqual(ParseEndReleases(2).Value))
-          ls.Add("2");
-        else if (member.EndRelease[0].Value.SequenceEqual(ParseEndReleases(3).Value))
-          ls.Add("3");
-        else
-        {
-          if (member.EndRelease[0].Value.Skip(3).Take(3).SequenceEqual(new bool[] { false, false, false }))
-            ls.Add("2");
-          else
-            ls.Add("1");
-        }
+        ls.AddRange(new[] { "2", "2" });
       }
-      catch { ls.Add("2"); }
+      else
+      {
+        try
+        {
+          if (member.EndRelease[0].Value.SequenceEqual(ParseEndReleases(1).Value))
+            ls.Add("1");
+          else if (member.EndRelease[0].Value.SequenceEqual(ParseEndReleases(2).Value))
+            ls.Add("2");
+          else if (member.EndRelease[0].Value.SequenceEqual(ParseEndReleases(3).Value))
+            ls.Add("3");
+          else
+          {
+            if (member.EndRelease[0].Value.Skip(3).Take(3).SequenceEqual(new bool[] { false, false, false }))
+              ls.Add("2");
+            else
+              ls.Add("1");
+          }
+        }
+        catch { ls.Add("2"); }
 
-      try
-      {
-        if (member.EndRelease[1].Value.SequenceEqual(ParseEndReleases(1).Value))
-          ls.Add("1");
-        else if (member.EndRelease[1].Value.SequenceEqual(ParseEndReleases(2).Value))
-          ls.Add("2");
-        else if (member.EndRelease[1].Value.SequenceEqual(ParseEndReleases(3).Value))
-          ls.Add("3");
-        else
+        try
         {
-          if (member.EndRelease[1].Value.Skip(3).Take(3).SequenceEqual(new bool[] { false, false, false }))
-            ls.Add("2");
-          else
+          if (member.EndRelease[1].Value.SequenceEqual(ParseEndReleases(1).Value))
             ls.Add("1");
+          else if (member.EndRelease[1].Value.SequenceEqual(ParseEndReleases(2).Value))
+            ls.Add("2");
+          else if (member.EndRelease[1].Value.SequenceEqual(ParseEndReleases(3).Value))
+            ls.Add("3");
+          else
+          {
+            if (member.EndRelease[1].Value.Skip(3).Take(3).SequenceEqual(new bool[] { false, false, false }))
+              ls.Add("2");
+            else
+              ls.Add("1");
+          }
         }
+        catch { ls.Add("2"); }
       }
-      catch { ls.Add("2"); }
 
       ls.Add("AUTOMATIC"); // Effective length option
       ls.Add("0"); // Pool
@@ -443,9 +455,15 @@ namespace SpeckleStructuralGSA
       ls.Add("MAN"); // Auto offset 2
       ls.Add("NO"); // Internal auto offset
 
-      try
+      if (member.Offset == null)
       {
-        var subLs = new List<string>
+        ls.AddRange(new[] { "0", "0", "0", "0" });
+      }
+      else
+      {
+        try
+        {
+          var subLs = new List<string>
         {
           member.Offset[0].Value[0].ToString(), // Offset x-start
           member.Offset[1].Value[0].ToString(), // Offset x-end
@@ -454,14 +472,12 @@ namespace SpeckleStructuralGSA
           member.Offset[0].Value[2].ToString()
         };
 
-        ls.AddRange(subLs);
-      }
-      catch
-      {
-        ls.Add("0");
-        ls.Add("0");
-        ls.Add("0");
-        ls.Add("0");
+          ls.AddRange(subLs);
+        }
+        catch
+        {
+          ls.AddRange(new[] { "0", "0", "0", "0" });
+        }
       }
       ls.Add("ALL"); // Exposure
 
