@@ -103,6 +103,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions.cs" />
     <Compile Include="Extensions\Base.cs" />
     <Compile Include="Extensions\Loads.cs" />
     <Compile Include="Extensions\Miscellaneous.cs" />

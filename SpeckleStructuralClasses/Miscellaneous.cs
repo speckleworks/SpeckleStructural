@@ -79,25 +79,7 @@ namespace SpeckleStructuralClasses
     {
       get
       {
-        if (StructuralProperties.ContainsKey("pointdistances"))
-        {
-          try
-          {
-            try
-            {
-              return (List<double>)StructuralProperties["pointdistances"];
-            }
-            catch
-            {
-              this.PointDistances = ((List<object>)StructuralProperties["pointdistances"]).Select(x => Convert.ToDouble(x)).ToList();
-              return this.PointDistances;
-            }
-          }
-          catch
-          { return null; }
-        }
-        else
-          return null;
+        return StructuralProperties.ValueAsTypedList<double>("pointdistances");
       }
       set { if (value != null) StructuralProperties["pointdistances"] = value; }
     }
@@ -134,25 +116,7 @@ namespace SpeckleStructuralClasses
     {
       get
       {
-        if (StructuralProperties.ContainsKey("elementRefs"))
-        {
-          try
-          {
-            try
-            {
-              return (List<string>)StructuralProperties["elementRefs"];
-            }
-            catch
-            {
-              this.ElementRefs = ((List<object>)StructuralProperties["elementRefs"]).Select(x => Convert.ToString(x)).ToList();
-              return this.ElementRefs;
-            }
-          }
-          catch
-          { return null; }
-        }
-        else
-          return null;
+        return StructuralProperties.ValueAsTypedList<string>("elementRefs");
       }
       set { if (value != null) StructuralProperties["elementRefs"] = value; }
     }
@@ -204,25 +168,7 @@ namespace SpeckleStructuralClasses
     {
       get
       {
-        if (StructuralProperties.ContainsKey("nodes"))
-        {
-          try
-          {
-            try
-            {
-              return (List<StructuralBridgeAlignmentNode>)StructuralProperties["nodes"];
-            }
-            catch
-            {
-              this.Nodes = ((List<object>)StructuralProperties["nodes"]).Select(x => x as StructuralBridgeAlignmentNode).ToList();
-              return this.Nodes;
-            }
-          }
-          catch
-          { return null; }
-        }
-        else
-          return null;
+        return StructuralProperties.ValueAsTypedList<StructuralBridgeAlignmentNode>("nodes");
       }
       set { if (value != null) StructuralProperties["nodes"] = value; }
     }
@@ -302,25 +248,7 @@ namespace SpeckleStructuralClasses
     {
       get
       {
-        if (StructuralProperties.ContainsKey("axles"))
-        {
-          try
-          {
-            try
-            {
-              return (List<StructuralBridgeVehicleAxle>)StructuralProperties["axles"];
-            }
-            catch
-            {
-              this.Axles = ((List<object>)StructuralProperties["axles"]).Select(x => x as StructuralBridgeVehicleAxle).ToList();
-              return this.Axles;
-            }
-          }
-          catch
-          { return null; }
-        }
-        else
-          return null;
+        return StructuralProperties.ValueAsTypedList<StructuralBridgeVehicleAxle>("axles");
       }
       set { if (value != null) StructuralProperties["axles"] = value; }
     }

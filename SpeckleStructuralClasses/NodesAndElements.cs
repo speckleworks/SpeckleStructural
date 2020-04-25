@@ -176,24 +176,7 @@ namespace SpeckleStructuralClasses
     {
       get
       {
-        if (StructuralProperties.ContainsKey("endRelease"))
-        {
-          try
-          {
-            try
-            {
-              return (List<StructuralVectorBoolSix>)StructuralProperties["endRelease"];
-            }
-            catch
-            {
-              return ((List<object>)StructuralProperties["endRelease"]).Select(x => x as StructuralVectorBoolSix).ToList();
-            }
-          }
-          catch
-          { return null; }
-        }
-        else
-          return null;
+        return StructuralProperties.ValueAsTypedList<StructuralVectorBoolSix>("endRelease");
       }
       set { if (value != null) StructuralProperties["endRelease"] = value; }
     }
@@ -204,24 +187,7 @@ namespace SpeckleStructuralClasses
     {
       get
       {
-        if (StructuralProperties.ContainsKey("offset"))
-        {
-          try
-          {
-            try
-            {
-              return (List<StructuralVectorThree>)StructuralProperties["offset"];
-            }
-            catch
-            {
-              return ((List<object>)StructuralProperties["offset"]).Select(x => x as StructuralVectorThree).ToList();
-            }
-          }
-          catch
-          { return null; }
-        }
-        else
-          return null;
+        return StructuralProperties.ValueAsTypedList<StructuralVectorThree>("endRelease");
       }
       set { if (value != null) StructuralProperties["offset"] = value; }
     }
@@ -248,25 +214,7 @@ namespace SpeckleStructuralClasses
     {
       get
       {
-        if (StructuralProperties.ContainsKey("resultVertices"))
-        {
-          try
-          {
-            try
-            {
-              return (List<double>)StructuralProperties["resultVertices"];
-            }
-            catch
-            {
-              this.ResultVertices = ((List<object>)StructuralProperties["resultVertices"]).Select(x => Convert.ToDouble(x)).ToList();
-              return this.ResultVertices;
-            }
-          }
-          catch
-          { return null; }
-        }
-        else
-          return null;
+        return StructuralProperties.ValueAsTypedList<double>("resultVertices");
       }
       set { if (value != null) StructuralProperties["resultVertices"] = value; }
     }
@@ -375,25 +323,7 @@ namespace SpeckleStructuralClasses
     {
       get
       {
-        if (StructuralProperties.ContainsKey("elementApplicationId"))
-        {
-          try
-          {
-            try
-            {
-              return (List<string>)StructuralProperties["elementApplicationId"];
-            }
-            catch
-            {
-              this.ElementApplicationId = ((List<object>)StructuralProperties["elementApplicationId"]).Select(x => Convert.ToString(x)).ToList();
-              return this.ElementApplicationId;
-            }
-          }
-          catch
-          { return null; }
-        }
-        else
-          return null;
+        return StructuralProperties.ValueAsTypedList<string>("elementApplicationId");
       }
       set { if (value != null) StructuralProperties["elementApplicationId"] = value; }
     }
@@ -433,25 +363,7 @@ namespace SpeckleStructuralClasses
     {
       get
       {
-        if (StructuralProperties.ContainsKey("zAxis"))
-        {
-          try
-          {
-            try
-            {
-              return (List<StructuralVectorThree>)StructuralProperties["zAxis"];
-            }
-            catch
-            {
-              this.ZAxis = ((List<object>)StructuralProperties["zAxis"]).Select(x => x as StructuralVectorThree).ToList();
-              return this.ZAxis;
-            }
-          }
-          catch
-          { return null; }
-        }
-        else
-          return null;
+        return StructuralProperties.ValueAsTypedList<StructuralVectorThree>("zAxis");
       }
       set { if (value != null) StructuralProperties["zAxis"] = value; }
     }
@@ -462,25 +374,7 @@ namespace SpeckleStructuralClasses
     {
       get
       {
-        if (StructuralProperties.ContainsKey("endRelease"))
-        {
-          try
-          {
-            try
-            {
-              return (List<StructuralVectorBoolSix>)StructuralProperties["endRelease"];
-            }
-            catch
-            {
-              this.EndRelease = ((List<object>)StructuralProperties["endRelease"]).Select(x => x as StructuralVectorBoolSix).ToList();
-              return this.EndRelease;
-            }
-          }
-          catch
-          { return null; }
-        }
-        else
-          return null;
+        return StructuralProperties.ValueAsTypedList<StructuralVectorBoolSix>("endRelease");
       }
       set { if (value != null) StructuralProperties["endRelease"] = value; }
     }
@@ -491,25 +385,7 @@ namespace SpeckleStructuralClasses
     {
       get
       {
-        if (StructuralProperties.ContainsKey("offset"))
-        {
-          try
-          {
-            try
-            {
-              return (List<StructuralVectorThree>)StructuralProperties["offset"];
-            }
-            catch
-            {
-              this.Offset = ((List<object>)StructuralProperties["offset"]).Select(x => x as StructuralVectorThree).ToList();
-              return this.Offset;
-            }
-          }
-          catch
-          { return null; }
-        }
-        else
-          return null;
+        return StructuralProperties.ValueAsTypedList<StructuralVectorThree>("offset");
       }
       set { if (value != null) StructuralProperties["offset"] = value; }
     }
@@ -536,25 +412,7 @@ namespace SpeckleStructuralClasses
     {
       get
       {
-        if (StructuralProperties.ContainsKey("resultVertices"))
-        {
-          try
-          {
-            try
-            {
-              return (List<double>)StructuralProperties["resultVertices"];
-            }
-            catch
-            {
-              this.ResultVertices = ((List<object>)StructuralProperties["resultVertices"]).Select(x => Convert.ToDouble(x)).ToList();
-              return this.ResultVertices;
-            }
-          }
-          catch
-          { return null; }
-        }
-        else
-          return null;
+        return StructuralProperties.ValueAsTypedList<double>("resultVertices");
       }
       set { if (value != null) StructuralProperties["resultVertices"] = value; }
     }
@@ -708,25 +566,7 @@ namespace SpeckleStructuralClasses
     {
       get
       {
-        if (StructuralProperties.ContainsKey("elementApplicationId"))
-        {
-          try
-          {
-            try
-            {
-              return (List<string>)StructuralProperties["elementApplicationId"];
-            }
-            catch
-            {
-              this.ElementApplicationId = ((List<object>)StructuralProperties["elementApplicationId"]).Select(x => Convert.ToString(x)).ToList();
-              return this.ElementApplicationId;
-            }
-          }
-          catch
-          { return null; }
-        }
-        else
-          return null;
+        return StructuralProperties.ValueAsTypedList<string>("elementApplicationId");
       }
       set { if (value != null) StructuralProperties["elementApplicationId"] = value; }
     }
@@ -769,24 +609,7 @@ namespace SpeckleStructuralClasses
     {
       get
       {
-        if (StructuralProperties.ContainsKey("axis"))
-        {
-          try
-          {
-            try
-            {
-              return (List<StructuralAxis>)StructuralProperties["axis"];
-            }
-            catch
-            {
-              return ((List<object>)StructuralProperties["axis"]).Select(x => x as StructuralAxis).ToList();
-            }
-          }
-          catch
-          { return null; }
-        }
-        else
-          return null;
+        return StructuralProperties.ValueAsTypedList<StructuralAxis>("axis");
       }
       set { if (value != null) StructuralProperties["axis"] = value; }
     }
@@ -797,25 +620,7 @@ namespace SpeckleStructuralClasses
     {
       get
       {
-        if (StructuralProperties.ContainsKey("offset"))
-        {
-          try
-          {
-            try
-            {
-              return (List<double>)StructuralProperties["offset"];
-            }
-            catch
-            {
-              this.Offset = ((List<object>)StructuralProperties["offset"]).Select(x => Convert.ToDouble(x)).ToList();
-              return this.Offset;
-            }
-          }
-          catch
-          { return null; }
-        }
-        else
-          return null;
+        return StructuralProperties.ValueAsTypedList<double>("offset");
       }
       set { if (value != null) StructuralProperties["offset"] = value; }
     }
