@@ -116,9 +116,9 @@ namespace SpeckleStructuralClasses
       Value = new List<double>(elements[0].Value.Take(3).ToArray());
       ElementType = elements[0].ElementType;
       PropertyRef = elements[0].PropertyRef;
-      ZAxis = new List<StructuralVectorThree>();
-      EndRelease = new List<StructuralVectorBoolSix>();
-      Offset = new List<StructuralVectorThree>();
+      var zAxes = new List<StructuralVectorThree>();
+      var endReleases = new List<StructuralVectorBoolSix>();
+      var offsets = new List<StructuralVectorThree>();
 
       foreach (var element in elements)
       {
@@ -132,10 +132,13 @@ namespace SpeckleStructuralClasses
           throw new Exception("Elements not continuous.");
 
         Value.AddRange(element.Value.Skip(3).Take(3));
-        ZAxis.Add(element.ZAxis);
-        EndRelease.AddRange(element.EndRelease);
-        Offset.AddRange(element.Offset);
+        zAxes.Add(element.ZAxis);
+        endReleases.AddRange(element.EndRelease);
+        offsets.AddRange(element.Offset);
       }
+      EndRelease = endReleases;
+      ZAxis = zAxes;
+      Offset = offsets;
 
       ApplicationId = applicationId;
 

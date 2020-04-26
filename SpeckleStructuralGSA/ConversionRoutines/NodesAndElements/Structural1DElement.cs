@@ -66,25 +66,26 @@ namespace SpeckleStructuralGSA
         var start = pieces[counter++];
         var end = pieces[counter++];
 
-        obj.EndRelease = new List<StructuralVectorBoolSix>
+        var endReleases = new List<StructuralVectorBoolSix>
         {
           new StructuralVectorBoolSix(new bool[6]),
           new StructuralVectorBoolSix(new bool[6])
         };
 
-        obj.EndRelease[0].Value[0] = ParseEndRelease(start[0], pieces, ref counter);
-        obj.EndRelease[0].Value[1] = ParseEndRelease(start[1], pieces, ref counter);
-        obj.EndRelease[0].Value[2] = ParseEndRelease(start[2], pieces, ref counter);
-        obj.EndRelease[0].Value[3] = ParseEndRelease(start[3], pieces, ref counter);
-        obj.EndRelease[0].Value[4] = ParseEndRelease(start[4], pieces, ref counter);
-        obj.EndRelease[0].Value[5] = ParseEndRelease(start[5], pieces, ref counter);
+        endReleases[0].Value[1] = ParseEndRelease(start[1], pieces, ref counter);
+        endReleases[0].Value[2] = ParseEndRelease(start[2], pieces, ref counter);
+        endReleases[0].Value[3] = ParseEndRelease(start[3], pieces, ref counter);
+        endReleases[0].Value[4] = ParseEndRelease(start[4], pieces, ref counter);
+        endReleases[0].Value[5] = ParseEndRelease(start[5], pieces, ref counter);
 
-        obj.EndRelease[1].Value[0] = ParseEndRelease(end[0], pieces, ref counter);
-        obj.EndRelease[1].Value[1] = ParseEndRelease(end[1], pieces, ref counter);
-        obj.EndRelease[1].Value[2] = ParseEndRelease(end[2], pieces, ref counter);
-        obj.EndRelease[1].Value[3] = ParseEndRelease(end[3], pieces, ref counter);
-        obj.EndRelease[1].Value[4] = ParseEndRelease(end[4], pieces, ref counter);
-        obj.EndRelease[1].Value[5] = ParseEndRelease(end[5], pieces, ref counter);
+        endReleases[1].Value[0] = ParseEndRelease(end[0], pieces, ref counter);
+        endReleases[1].Value[1] = ParseEndRelease(end[1], pieces, ref counter);
+        endReleases[1].Value[2] = ParseEndRelease(end[2], pieces, ref counter);
+        endReleases[1].Value[3] = ParseEndRelease(end[3], pieces, ref counter);
+        endReleases[1].Value[4] = ParseEndRelease(end[4], pieces, ref counter);
+        endReleases[1].Value[5] = ParseEndRelease(end[5], pieces, ref counter);
+
+        obj.EndRelease = endReleases;
       }
       else
       {
@@ -95,20 +96,22 @@ namespace SpeckleStructuralGSA
         };
       }
 
-      obj.Offset = new List<StructuralVectorThree>
+      var offsets = new List<StructuralVectorThree>
       {
         new StructuralVectorThree(new double[3]),
         new StructuralVectorThree(new double[3])
       };
 
-      obj.Offset[0].Value[0] = Convert.ToDouble(pieces[counter++]);
-      obj.Offset[1].Value[0] = Convert.ToDouble(pieces[counter++]);
+      offsets[0].Value[0] = Convert.ToDouble(pieces[counter++]);
+      offsets[1].Value[0] = Convert.ToDouble(pieces[counter++]);
 
-      obj.Offset[0].Value[1] = Convert.ToDouble(pieces[counter++]);
-      obj.Offset[1].Value[1] = obj.Offset[0].Value[1];
+      offsets[0].Value[1] = Convert.ToDouble(pieces[counter++]);
+      offsets[1].Value[1] = offsets[0].Value[1];
 
-      obj.Offset[0].Value[2] = Convert.ToDouble(pieces[counter++]);
-      obj.Offset[1].Value[2] = obj.Offset[0].Value[2];
+      offsets[0].Value[2] = Convert.ToDouble(pieces[counter++]);
+      offsets[1].Value[2] = offsets[0].Value[2];
+
+      obj.Offset = offsets;
 
       //counter++; // Action // TODO: EL.4 SUPPORT
       counter++; // Dummy
@@ -319,20 +322,22 @@ namespace SpeckleStructuralGSA
 
       // Skip to offsets at fifth to last
       counter = pieces.Length - 5;
-      obj.Offset = new List<StructuralVectorThree>
+      var offsets = new List<StructuralVectorThree>
       {
         new StructuralVectorThree(new double[3]),
         new StructuralVectorThree(new double[3])
       };
 
-      obj.Offset[0].Value[0] = Convert.ToDouble(pieces[counter++]);
-      obj.Offset[1].Value[0] = Convert.ToDouble(pieces[counter++]);
+      offsets[0].Value[0] = Convert.ToDouble(pieces[counter++]);
+      offsets[1].Value[0] = Convert.ToDouble(pieces[counter++]);
 
-      obj.Offset[0].Value[1] = Convert.ToDouble(pieces[counter++]);
-      obj.Offset[1].Value[1] = obj.Offset[0].Value[1];
+      offsets[0].Value[1] = Convert.ToDouble(pieces[counter++]);
+      offsets[1].Value[1] = offsets[0].Value[1];
 
-      obj.Offset[0].Value[2] = Convert.ToDouble(pieces[counter++]);
-      obj.Offset[1].Value[2] = obj.Offset[0].Value[2];
+      offsets[0].Value[2] = Convert.ToDouble(pieces[counter++]);
+      offsets[1].Value[2] = offsets[0].Value[2];
+
+      obj.Offset = offsets;
 
       this.Value = obj;
     }

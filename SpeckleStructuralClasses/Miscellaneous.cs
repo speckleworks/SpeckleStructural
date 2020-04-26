@@ -79,17 +79,7 @@ namespace SpeckleStructuralClasses
     {
       get
       {
-        if (StructuralProperties.ContainsKey("pointdistances"))
-        {
-          try
-          {
-            return ((IEnumerable<double>)StructuralProperties["pointdistances"]).Select(x => Convert.ToDouble(x)).ToList();
-          }
-          catch
-          { return null; }
-        }
-        else
-          return null;
+        return StructuralProperties.ValueAsTypedList<double>("pointdistances");
       }
       set { if (value != null) StructuralProperties["pointdistances"] = value; }
     }
@@ -126,17 +116,7 @@ namespace SpeckleStructuralClasses
     {
       get
       {
-        if (StructuralProperties.ContainsKey("elementRefs"))
-        {
-          try
-          {
-            return ((IEnumerable<string>)StructuralProperties["elementRefs"]).Select(x => x.ToString()).ToList();
-          }
-          catch
-          { return null; }
-        }
-        else
-          return null;
+        return StructuralProperties.ValueAsTypedList<string>("elementRefs");
       }
       set { if (value != null) StructuralProperties["elementRefs"] = value; }
     }
@@ -188,17 +168,7 @@ namespace SpeckleStructuralClasses
     {
       get
       {
-        if (StructuralProperties.ContainsKey("nodes"))
-        {
-          try
-          {
-            return ((IEnumerable<object>)StructuralProperties["nodes"]).Select(x => x as StructuralBridgeAlignmentNode).ToList();
-          }
-          catch
-          { return null; }
-        }
-        else
-          return null;
+        return StructuralProperties.ValueAsTypedList<StructuralBridgeAlignmentNode>("nodes");
       }
       set { if (value != null) StructuralProperties["nodes"] = value; }
     }
@@ -278,17 +248,7 @@ namespace SpeckleStructuralClasses
     {
       get
       {
-        if (StructuralProperties.ContainsKey("axles"))
-        {
-          try
-          {
-            return ((IEnumerable<object>)StructuralProperties["axles"]).Select(x => x as StructuralBridgeVehicleAxle).ToList();
-          }
-          catch
-          { return null; }
-        }
-        else
-          return null;
+        return StructuralProperties.ValueAsTypedList<StructuralBridgeVehicleAxle>("axles");
       }
       set { if (value != null) StructuralProperties["axles"] = value; }
     }

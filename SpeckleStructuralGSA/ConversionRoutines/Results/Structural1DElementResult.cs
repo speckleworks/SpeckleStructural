@@ -55,6 +55,8 @@ namespace SpeckleStructuralGSA
                 if (!entity.Value.Result.ContainsKey(loadCase))
                   entity.Value.Result[loadCase] = new Structural1DElementResult()
                   {
+                  TargetRef = Helper.GetApplicationId(typeof(GSA1DElement).GetGSAKeyword(), id),
+                  LoadCaseRef = loadCase,
                     Value = new Dictionary<string, object>()
                   };
 
@@ -137,6 +139,7 @@ namespace SpeckleStructuralGSA
                     Value = new Dictionary<string, object>(),
                     TargetRef = Helper.GetApplicationId(typeof(GSA1DElement).GetGSAKeyword(), id),
                     IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
+                  LoadCaseRef = loadCase
                   };
                   newRes.Value[kvp.Key] = resultExport;
 

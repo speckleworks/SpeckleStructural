@@ -52,6 +52,8 @@ namespace SpeckleStructuralGSA
                 if (!element.Value.Result.ContainsKey(loadCase))
                   element.Value.Result[loadCase] = new Structural2DElementResult()
                   {
+                  TargetRef = Helper.GetApplicationId(typeof(GSA2DElement).GetGSAKeyword(), id),
+                  LoadCaseRef = loadCase,
                     Value = new Dictionary<string, object>()
                   };
 
@@ -130,6 +132,7 @@ namespace SpeckleStructuralGSA
                     Value = new Dictionary<string, object>(),
                     TargetRef = Helper.GetApplicationId(typeof(GSA2DElement).GetGSAKeyword(), id),
                     IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
+                  LoadCaseRef = loadCase
                   };
                   newRes.Value[kvp.Key + "_face"] = faceDictionary;
                   newRes.Value[kvp.Key + "_vertex"] = vertexDictionary;

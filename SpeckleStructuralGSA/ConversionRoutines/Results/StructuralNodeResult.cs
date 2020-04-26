@@ -62,6 +62,8 @@ namespace SpeckleStructuralGSA
                 {
                   node.Value.Result[loadCase] = new StructuralNodeResult()
                   {
+                  LoadCaseRef = loadCase,
+                  TargetRef = Helper.GetApplicationId(typeof(GSANode).GetGSAKeyword(), id),
                     Value = new Dictionary<string, object>()
                   };
                 }
@@ -113,6 +115,7 @@ namespace SpeckleStructuralGSA
                     Value = new Dictionary<string, object>(),
                     TargetRef = Helper.GetApplicationId(typeof(GSANode).GetGSAKeyword(), id),
                     IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
+                  LoadCaseRef = loadCase
                   };
                   newRes.Value[kvp.Key] = resultExport;
 
