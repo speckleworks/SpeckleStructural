@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SpeckleCore;
+using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA.Test
 {
@@ -16,8 +17,8 @@ namespace SpeckleStructuralGSA.Test
   {
     public FileComparison() : base(@"C:\Nicolaas\Testing\Temp\SpeckleGSA\") { }
 
-    [Ignore]
-    [TestCase("OLD_TxSpeckleObjectsEmbedded.json", "NEW_TxSpeckleObjectsEmbedded.json")]
+    //[Ignore("Just as a utility at this stage")]
+    [TestCase("OLD_TxSpeckleObjectsNotEmbedded.json", "NEW_TxSpeckleObjectsNotEmbedded.json")]
     public void CompareFiles(string fn1, string fn2)
     {
       SpeckleInitializer.Initialize();
@@ -42,6 +43,11 @@ namespace SpeckleStructuralGSA.Test
       Assert.AreEqual(o2All.Count() - o1All.Count(), notFoundIn1.Count());
     }
 
+    private bool ResultMatch(StructuralResultBase a, StructuralResultBase b)
+    {
+      return (a.TargetRef == b.TargetRef && a.LoadCaseRef == b.LoadCaseRef && a.Description == b.Description);
+    }
+
     private void Compare(Dictionary<SpeckleObject, string> d1, Dictionary<SpeckleObject, string> d2, out Dictionary<SpeckleObject, List<SpeckleObject>> no1in2)
     {
       var ret = new Dictionary<SpeckleObject, List<SpeckleObject>>();
@@ -51,23 +57,49 @@ namespace SpeckleStructuralGSA.Test
       {
         var j = d1[o];
         var matchingExpected = d2.Where(e => JsonCompareAreEqual(e.Value, j));
-        if (matchingExpected == null)
+        if (matchingExpected == null || matchingExpected.Count() == 0)
         {
-          var nearest = string.IsNullOrEmpty(o.ApplicationId) ? null : d2.Where(e => e.Value.Contains(o.ApplicationId)).Select(kvp => kvp.Key).ToList();
-          lock (lockObj) { ret.Add(o, nearest); }
-
-          if (nearest == null)
+          if (o.ApplicationId == null && o is StructuralResultBase)
           {
-            lock (debugLock) { Debug.WriteLine("Found no nearest for " + o.ApplicationId); }
+            var r = (StructuralResultBase)o;
+            var d2results = d2.Where(kvp => kvp.Key is StructuralResultBase).ToList();
+
+            var nearest = d2results.Where(d => ResultMatch((StructuralResultBase)d.Key, r)).Select(k => k.Key).ToList();
+
+            if (nearest == null || nearest.Count() == 0)
+            {
+              lock (debugLock) { Debug.WriteLine("Found no nearest for result object " + r.TargetRef + "-" + r.LoadCaseRef + "-" + r.Description); }
+            }
+            else
+            {
+              lock (debugLock)
+              {
+                Debug.WriteLine("Found nearest result object " + r.TargetRef + "-" + r.LoadCaseRef + "-" + r.Description);
+                foreach (var n in nearest)
+                {
+                  Debug.WriteLine("Nearest JSON: " + d2[n]);
+                }
+              }
+            }
           }
           else
           {
-            lock (debugLock)
+            var nearest = string.IsNullOrEmpty(o.ApplicationId) ? null : d2.Where(e => e.Value.Contains(o.ApplicationId)).Select(kvp => kvp.Key).ToList();
+            lock (lockObj) { ret.Add(o, nearest); }
+
+            if (nearest == null || nearest.Count() == 0)
             {
-              Debug.WriteLine("Found nearest for " + o.ApplicationId);
-              foreach (var n in nearest)
+              lock (debugLock) { Debug.WriteLine("Found no nearest for " + o.ApplicationId); }
+            }
+            else
+            {
+              lock (debugLock)
               {
-                Debug.WriteLine("Nearest JSON: " + d2[n]);
+                Debug.WriteLine("Found nearest for " + o.ApplicationId);
+                foreach (var n in nearest)
+                {
+                  Debug.WriteLine("Nearest JSON: " + d2[n]);
+                }
               }
             }
           }

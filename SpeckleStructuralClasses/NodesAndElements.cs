@@ -187,7 +187,7 @@ namespace SpeckleStructuralClasses
     {
       get
       {
-        return StructuralProperties.ValueAsTypedList<StructuralVectorThree>("endRelease");
+        return StructuralProperties.ValueAsTypedList<StructuralVectorThree>("offset");
       }
       set { if (value != null) StructuralProperties["offset"] = value; }
     }
