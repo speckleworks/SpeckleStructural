@@ -56,7 +56,7 @@ namespace SpeckleStructuralGSA
               Description = kvp.Key,
               IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
               Value = resultExport,
-              ResultSource = loadCase
+              LoadCaseRef = loadCase
             };
 
             if (id != 0)

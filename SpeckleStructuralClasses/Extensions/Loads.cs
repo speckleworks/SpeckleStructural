@@ -195,30 +195,6 @@ namespace SpeckleStructuralClasses
     }
   }
 
-  //public partial class StructuralLoadPlane : StructuralAxis, IStructural
-  //{
-  //  public override string Type { get => "StructuralLoadPlane"; }
-
-  //  /// <summary>Plane of load.</summary>
-  //  [JsonProperty("loadPlane", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-  //  public StructuralAxis LoadPlane { get; set; }
-
-  //  /// <summary>Type elements to apply load to (1D or 2D).</summary>
-  //  [JsonProperty("elementDimension", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-  //  public int? ElementDimension { get; set; }
-
-  //  /// <summary>Tolerance for element inclusion.</summary>
-  //  [JsonProperty("tolerance", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-  //  public double? Tolerance { get; set; }
-
-  //  /// <summary>Span option.</summary>
-  //  [JsonProperty("span", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-  //  public int? Span { get; set; }
-
-  //  /// <summary>Span option.</summary>
-  //  [JsonProperty("spanAngle", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-  //  public double? SpanAngle { get; set; }
-  //}
   //[Serializable]
   public partial class Structural0DLoad
   {
