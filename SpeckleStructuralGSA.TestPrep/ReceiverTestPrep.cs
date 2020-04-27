@@ -17,6 +17,7 @@ namespace SpeckleStructuralGSA.TestPrep
       Initialiser.Cache = gsaCache;
       Initialiser.Interface = gsaInterfacer;
       Initialiser.Settings = new Settings();
+      Initialiser.AppUI = new SpeckleAppUI();
     }
 
     public bool SetUpReceptionTestData(string[] savedJsonFileNames, string outputGWAFileName, GSATargetLayer layer)
@@ -38,7 +39,7 @@ namespace SpeckleStructuralGSA.TestPrep
       var jsonToWrite = JsonConvert.SerializeObject(gwaRecords, Formatting.Indented, jsonSettings);
 
       //Save JSON file
-      Helper.WriteFile(jsonToWrite, outputGWAFileName, TestDataDirectory);
+      Test.Helper.WriteFile(jsonToWrite, outputGWAFileName, TestDataDirectory);
 
       return true;
     }

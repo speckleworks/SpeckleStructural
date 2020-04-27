@@ -26,7 +26,7 @@ namespace SpeckleStructuralGSA
 
       var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       var color = pieces[counter++].ParseGSAColor();
 
@@ -39,6 +39,12 @@ namespace SpeckleStructuralGSA
       for (var i = 0; i < nodeRefs.Length; i++)
       {
         var node = nodes.Where(n => n.GSAId.ToString() == nodeRefs[i]).FirstOrDefault();
+        if (node == null)
+        {
+          //TO DO: review how this is possible and prevent it
+          continue;
+        }
+
         var speckleNodeObj = node.Value;
         if (speckleNodeObj != null)
         {
@@ -72,7 +78,7 @@ namespace SpeckleStructuralGSA
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + HelperClass.GenerateSID(v),
+        keyword + ":" + Helper.GenerateSID(v),
         index.ToString(),
         v.Name == null || v.Name == "" ? " " : v.Name,
         v.Colors == null || v.Colors.Count() < 1 ? "NO_RGB" : v.Colors[0].ArgbToHexColor().ToString(),
@@ -90,7 +96,7 @@ namespace SpeckleStructuralGSA
         foreach (var c in connectivities[0])
         {
           //coor.AddRange(v.Vertices.Skip(c * 3).Take(3));
-          var currIndex = HelperClass.NodeAt(v.Vertices[c * 3], v.Vertices[c * 3 + 1], v.Vertices[c * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance);
+          var currIndex = Helper.NodeAt(v.Vertices[c * 3], v.Vertices[c * 3 + 1], v.Vertices[c * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance);
           if (prevNodeIndex != currIndex)
             topo += currIndex.ToString() + " ";
           prevNodeIndex = currIndex;
@@ -108,7 +114,7 @@ namespace SpeckleStructuralGSA
           var indices = new List<int>();
           for (var i = 0; i < numVertices; i++)
           {
-            var currIndex = HelperClass.NodeAt(v.Vertices[i * 3], v.Vertices[i * 3 + 1], v.Vertices[i * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance);
+            var currIndex = Helper.NodeAt(v.Vertices[i * 3], v.Vertices[i * 3 + 1], v.Vertices[i * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance);
             if (prevNodeIndex != currIndex)
             {
               topo += currIndex.ToString() + " ";

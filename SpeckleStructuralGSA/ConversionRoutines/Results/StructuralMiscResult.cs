@@ -7,7 +7,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("", new string[] { }, "results", true, false, new Type[] { }, new Type[] { })]
+  [GSAObject("", new string[] { "ASSEMBLY.3" }, "results", true, false, new Type[] { }, new Type[] { })]
   public class GSAMiscResult : IGSASpeckleContainer
   {
     public int GSAId { get; set; }
@@ -56,12 +56,12 @@ namespace SpeckleStructuralGSA
               Description = kvp.Key,
               IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
               Value = resultExport,
-              ResultSource = loadCase
+              LoadCaseRef = loadCase
             };
 
             if (id != 0)
             {
-              newRes.TargetRef = HelperClass.GetApplicationId(kvp.Value.Item1, id);
+              newRes.TargetRef = Helper.GetApplicationId(kvp.Value.Item1, id);
             }
             newRes.GenerateHash();
             results.Add(new GSAMiscResult() { Value = newRes });

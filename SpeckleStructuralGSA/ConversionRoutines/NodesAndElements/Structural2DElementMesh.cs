@@ -24,7 +24,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural2DElementMesh
       {
-        ApplicationId = HelperClass.GetApplicationId(typeof(GSA2DElementMesh).GetGSAKeyword(), GSAId),
+        ApplicationId = Helper.GetApplicationId(typeof(GSA2DElementMesh).GetGSAKeyword(), GSAId),
 
         Vertices = new List<double>(),
         Faces = new List<int>(),
@@ -39,6 +39,10 @@ namespace SpeckleStructuralGSA
       if (Initialiser.Settings.Element2DResults.Count > 0 && Initialiser.Settings.EmbedResults)
         obj.Result = new Dictionary<string, object>();
 
+      var axes = obj.Axis;
+      var offsets = obj.Offset;
+      var elementAppIds = obj.ElementApplicationId;
+
       foreach (var e in elements)
       {
         var verticesOffset = obj.Vertices.Count() / 3;
@@ -46,10 +50,10 @@ namespace SpeckleStructuralGSA
         obj.Faces.Add((e.Value.Faces as List<int>).First());
         obj.Faces.AddRange((e.Value.Faces as List<int>).Skip(1).Select(x => x + verticesOffset));
 
-        obj.Axis.Add(e.Value.Axis);
-        obj.Offset.Add(e.Value.Offset);
-
-        obj.ElementApplicationId.Add(e.Value.ApplicationId);
+        
+        axes.Add(e.Value.Axis);
+        offsets.Add(e.Value.Offset);
+        elementAppIds.Add(e.Value.ApplicationId);
 
         // Result merging
         if (obj.Result != null)
@@ -97,6 +101,10 @@ namespace SpeckleStructuralGSA
         this.SubGWACommand.Add(e.GWACommand);
         this.SubGWACommand.AddRange(e.SubGWACommand);
       }
+
+      obj.Axis = axes;
+      obj.Offset = offsets;
+      obj.ElementApplicationId = elementAppIds;
 
       this.Value = obj;
     }

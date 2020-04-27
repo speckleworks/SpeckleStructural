@@ -29,7 +29,7 @@ namespace SpeckleStructuralGSA
 
       var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; // Color
       var materialType = pieces[counter++];
@@ -95,11 +95,17 @@ namespace SpeckleStructuralGSA
           materialType = "CONCRETE";
         }
       }
+      if (materialRef == 0)
+      {
+        //If the material reference can't be resolved, then point to generic material (which this code doesn't create anywhere else) with reference 1
+        materialRef = 1;
+        materialType = "GENERIC";
+      }
 
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + HelperClass.GenerateSID(prop),
+        keyword + ":" + Helper.GenerateSID(prop),
         index.ToString(),
         prop.Name == null || prop.Name == "" ? " " : prop.Name,
         "NO_RGB",

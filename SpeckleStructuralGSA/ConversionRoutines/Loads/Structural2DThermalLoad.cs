@@ -27,7 +27,7 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
       
       obj.Name = pieces[counter++];
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
 
       var elementList = pieces[counter++];
 
@@ -49,7 +49,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        var groupIds = HelperClass.GetGroupsFromGSAList(elementList).ToList();
+        var groupIds = Helper.GetGroupsFromGSAList(elementList).ToList();
         foreach (var id in groupIds)
         {
           var memb2Ds = m2Ds.Where(m => m.Group == id);
@@ -59,7 +59,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      obj.LoadCaseRef = HelperClass.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
+      obj.LoadCaseRef = Helper.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
 
       var loadingType = pieces[counter++];
 
@@ -93,20 +93,20 @@ namespace SpeckleStructuralGSA
       if (this.Value == null)
         return "";
 
-      var loading = this.Value as Structural2DThermalLoad;
+      var load = this.Value as Structural2DThermalLoad;
 
       var keyword = typeof(GSA2DThermalLoading).GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(typeof(GSA2DThermalLoading).GetGSAKeyword(), loading.ApplicationId);
+      var index = Initialiser.Cache.ResolveIndex(typeof(GSA2DThermalLoading).GetGSAKeyword(), load.ApplicationId);
 
       var targetString = " ";
 
-      if (loading.ElementRefs != null && loading.ElementRefs.Count() > 0)
+      if (load.ElementRefs != null && load.ElementRefs.Count() > 0)
       {
         if (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
         {
-          var e2DIndices = Initialiser.Cache.LookupIndices(typeof(GSA2DElement).GetGSAKeyword(), loading.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-          var e2DMeshIndices = Initialiser.Cache.LookupIndices(typeof(GSA2DElementMesh).GetGSAKeyword(), loading.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var e2DIndices = Initialiser.Cache.LookupIndices(typeof(GSA2DElement).GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var e2DMeshIndices = Initialiser.Cache.LookupIndices(typeof(GSA2DElementMesh).GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
           targetString = string.Join(" ",
             e2DIndices.Select(x => x.ToString())
             .Concat(e2DMeshIndices.Select(x => "G" + x.ToString()))
@@ -114,36 +114,50 @@ namespace SpeckleStructuralGSA
         }
         else if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
         {
-          var m2DIndices = Initialiser.Cache.LookupIndices(typeof(GSA2DMember).GetGSAKeyword(), loading.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+          var m2DIndices = Initialiser.Cache.LookupIndices(typeof(GSA2DMember).GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
           targetString = string.Join(" ",
             m2DIndices.Select(x => "G" + x.ToString()));
         }
       }
 
-      var loadCaseRef = Initialiser.Cache.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), loading.LoadCaseRef);
+      var loadCaseKeyword = typeof(GSALoadCase).GetGSAKeyword();
+      var indexResult = Initialiser.Cache.LookupIndex(loadCaseKeyword, load.LoadCaseRef);
+      var loadCaseRef = indexResult ?? Initialiser.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
 
-      var loadingName = string.IsNullOrEmpty(loading.Name) ? " " : loading.Name;
+      if (indexResult == null && load.ApplicationId != null)
+      {
+        if (load.LoadCaseRef == null)
+        {
+          Helper.SafeDisplay("Blank load case references found for these Application IDs:", load.ApplicationId);
+        }
+        else
+        {
+          Helper.SafeDisplay("Load case references not found:", load.ApplicationId + " referencing " + load.LoadCaseRef);
+        }
+      }
+
+      var loadingName = string.IsNullOrEmpty(load.Name) ? " " : load.Name;
 
       var ls = new List<string>
         {
           "SET_AT",
           index.ToString(),
-          keyword + ":" + HelperClass.GenerateSID(loading),
+          keyword + ":" + Helper.GenerateSID(load),
           loadingName, // Name
           targetString, //Elements
-					(loadCaseRef.HasValue) ? loadCaseRef.Value.ToString() : "1",
+					loadCaseRef.ToString(),
         };
 
-      if (loading.TopTemperature == loading.BottomTemperature)
+      if (load.TopTemperature == load.BottomTemperature)
       {
         ls.Add("CONS");
-        ls.Add(loading.TopTemperature.ToString());
+        ls.Add(load.TopTemperature.ToString());
       }
       else
       {
         ls.Add("DZ");
-        ls.Add(loading.TopTemperature.ToString());
-        ls.Add(loading.BottomTemperature.ToString());
+        ls.Add(load.TopTemperature.ToString());
+        ls.Add(load.BottomTemperature.ToString());
       }
 
       return (string.Join("\t", ls));

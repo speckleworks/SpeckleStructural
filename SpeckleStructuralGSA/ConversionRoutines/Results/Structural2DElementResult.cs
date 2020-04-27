@@ -7,7 +7,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("", new string[] { }, "results", true, false, new Type[] { typeof(GSA2DElement) }, new Type[] { })]
+  [GSAObject("", new string[] { "EL.4" }, "results", true, false, new Type[] { typeof(GSA2DElement) }, new Type[] { })]
   public class GSA2DElementResult : IGSASpeckleContainer
   {
     public int GSAId { get; set; }
@@ -52,6 +52,8 @@ namespace SpeckleStructuralGSA
               if (!element.Value.Result.ContainsKey(loadCase))
                 element.Value.Result[loadCase] = new Structural2DElementResult()
                 {
+                  TargetRef = Helper.GetApplicationId(typeof(GSA2DElement).GetGSAKeyword(), id),
+                  LoadCaseRef = loadCase,
                   Value = new Dictionary<string, object>()
                 };
 
@@ -75,7 +77,7 @@ namespace SpeckleStructuralGSA
 
         var results = new List<GSA2DElementResult>();
 
-        var keyword = HelperClass.GetGSAKeyword(typeof(GSA2DElement));
+        var keyword = Helper.GetGSAKeyword(typeof(GSA2DElement));
         var gwa = Initialiser.Cache.GetGwa(keyword);
 
         foreach (var kvp in Initialiser.Settings.Element2DResults)
@@ -122,8 +124,9 @@ namespace SpeckleStructuralGSA
                 var newRes = new Structural2DElementResult()
                 {
                   Value = new Dictionary<string, object>(),
-                  TargetRef = HelperClass.GetApplicationId(typeof(GSA2DElement).GetGSAKeyword(), id),
+                  TargetRef = Helper.GetApplicationId(typeof(GSA2DElement).GetGSAKeyword(), id),
                   IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
+                  LoadCaseRef = loadCase
                 };
                 newRes.Value[kvp.Key + "_face"] = faceDictionary;
                 newRes.Value[kvp.Key + "_vertex"] = vertexDictionary;

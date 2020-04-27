@@ -1,0 +1,7056 @@
+{
+  "success": true,
+  "resources": [
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "Undefined",
+      "geometryHash": null,
+      "hash": "c9f780e24d1c0d7ac3b1a4b415c1c2c5",
+      "applicationId": "gsa/LOAD_TITLE.2_1",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a75ec",
+      "type": "StructuralLoadCase",
+      "caseType": "Generic",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.120Z",
+      "updatedAt": "2020-03-19T11:45:13.120Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "Dead",
+      "geometryHash": null,
+      "hash": "c823f43328cee42654630572994a3f5d",
+      "applicationId": "gsa/LOAD_TITLE.2_2",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a75ed",
+      "type": "StructuralLoadCase",
+      "caseType": "Generic",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.120Z",
+      "updatedAt": "2020-03-19T11:45:13.121Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "Superimposed dead",
+      "geometryHash": null,
+      "hash": "de89029e828e576d924927c91090b1de",
+      "applicationId": "gsa/LOAD_TITLE.2_3",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a75ee",
+      "type": "StructuralLoadCase",
+      "caseType": "Generic",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.121Z",
+      "updatedAt": "2020-03-19T11:45:13.121Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "Live",
+      "geometryHash": null,
+      "hash": "46afa4be208448717e9f286df2558e6f",
+      "applicationId": "gsa/LOAD_TITLE.2_4",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a75ef",
+      "type": "StructuralLoadCase",
+      "caseType": "Live",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.121Z",
+      "updatedAt": "2020-03-19T11:45:13.121Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "Live roof",
+      "geometryHash": null,
+      "hash": "00f0cc9b6fb09e1b98912d1e5dba401b",
+      "applicationId": "gsa/LOAD_TITLE.2_5",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a75f0",
+      "type": "StructuralLoadCase",
+      "caseType": "Live",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.121Z",
+      "updatedAt": "2020-03-19T11:45:13.121Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "Soil",
+      "geometryHash": null,
+      "hash": "b73bfacfe87700da6883358c1111829c",
+      "applicationId": "gsa/LOAD_TITLE.2_6",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a75f1",
+      "type": "StructuralLoadCase",
+      "caseType": "Generic",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.121Z",
+      "updatedAt": "2020-03-19T11:45:13.121Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "Notional",
+      "geometryHash": null,
+      "hash": "cd365875aeb206242cc0506a98695a38",
+      "applicationId": "gsa/LOAD_TITLE.2_7",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a75f2",
+      "type": "StructuralLoadCase",
+      "caseType": "Generic",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.121Z",
+      "updatedAt": "2020-03-19T11:45:13.121Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "Pre-stress",
+      "geometryHash": null,
+      "hash": "f94d35f261bf06d3dbce366a54e6ff35",
+      "applicationId": "gsa/LOAD_TITLE.2_8",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a75f3",
+      "type": "StructuralLoadCase",
+      "caseType": "Generic",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.121Z",
+      "updatedAt": "2020-03-19T11:45:13.121Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "Wind",
+      "geometryHash": null,
+      "hash": "39d27b090a06eb087b8560240b5b2a5c",
+      "applicationId": "gsa/LOAD_TITLE.2_9",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a75f4",
+      "type": "StructuralLoadCase",
+      "caseType": "Generic",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.121Z",
+      "updatedAt": "2020-03-19T11:45:13.121Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "Snow",
+      "geometryHash": null,
+      "hash": "4101f04285436a74dfcab52f0edff1cc",
+      "applicationId": "gsa/LOAD_TITLE.2_10",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a75f5",
+      "type": "StructuralLoadCase",
+      "caseType": "Generic",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.122Z",
+      "updatedAt": "2020-03-19T11:45:13.122Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "Rain",
+      "geometryHash": null,
+      "hash": "1088b95aa61a44d100b83b63e8f079b7",
+      "applicationId": "gsa/LOAD_TITLE.2_11",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a75f6",
+      "type": "StructuralLoadCase",
+      "caseType": "Generic",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.122Z",
+      "updatedAt": "2020-03-19T11:45:13.122Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "Thermal",
+      "geometryHash": null,
+      "hash": "93b0713e7f519d164f8744c9b617125f",
+      "applicationId": "gsa/LOAD_TITLE.2_12",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a75f7",
+      "type": "StructuralLoadCase",
+      "caseType": "Generic",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.122Z",
+      "updatedAt": "2020-03-19T11:45:13.122Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "Equivalent",
+      "geometryHash": null,
+      "hash": "e729a91c4db5e37c694cccd64d4608a7",
+      "applicationId": "gsa/LOAD_TITLE.2_13",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a75f8",
+      "type": "StructuralLoadCase",
+      "caseType": "Generic",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.122Z",
+      "updatedAt": "2020-03-19T11:45:13.122Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "Accidental",
+      "geometryHash": null,
+      "hash": "047d6d19f672dc31eafb9935ce467436",
+      "applicationId": "gsa/LOAD_TITLE.2_14",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a75f9",
+      "type": "StructuralLoadCase",
+      "caseType": "Generic",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.122Z",
+      "updatedAt": "2020-03-19T11:45:13.122Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "Earthquake",
+      "geometryHash": null,
+      "hash": "4c3c4f87c88f860101190114aabd4992",
+      "applicationId": "gsa/LOAD_TITLE.2_15",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a75fa",
+      "type": "StructuralLoadCase",
+      "caseType": "Generic",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.122Z",
+      "updatedAt": "2020-03-19T11:45:13.122Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "RESTRAINTS",
+      "geometryHash": null,
+      "hash": "7e4a161afd9dd0cc79a2c6f1a39bae7a",
+      "applicationId": "gsa/NODE.2_81",
+      "properties": {
+        "structural": {
+          "axis": {
+            "type": "Plane/StructuralAxis",
+            "normal": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                1
+              ],
+              "hash": "e1b3c2b2815370776062b19029833d00"
+            },
+            "xdir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                1,
+                0,
+                0
+              ],
+              "hash": "369b3fdb4aeb3f1552d866fc8e090ff8"
+            },
+            "ydir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                1,
+                0
+              ],
+              "hash": "82274609f5264484684a26028c804d66"
+            },
+            "hash": "e5f8b2e128eccc86fba95b667afa9bf3"
+          },
+          "restraint": {
+            "type": "StructuralVectorBoolSix",
+            "value": [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false
+            ],
+            "hash": "0b6aec53a3d142b8be1b7619c8f2c0f3"
+          }
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a75fb",
+      "type": "Point/StructuralNode",
+      "value": [
+        0,
+        3,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.122Z",
+      "updatedAt": "2020-03-19T11:45:13.122Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "RESTRAINTS",
+      "geometryHash": null,
+      "hash": "1267e2871824c2c18060e189b60ea647",
+      "applicationId": "gsa/NODE.2_82",
+      "properties": {
+        "structural": {
+          "axis": {
+            "type": "Plane/StructuralAxis",
+            "normal": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                1
+              ],
+              "hash": "e1b3c2b2815370776062b19029833d00"
+            },
+            "xdir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                1,
+                0,
+                0
+              ],
+              "hash": "369b3fdb4aeb3f1552d866fc8e090ff8"
+            },
+            "ydir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                1,
+                0
+              ],
+              "hash": "82274609f5264484684a26028c804d66"
+            },
+            "hash": "e5f8b2e128eccc86fba95b667afa9bf3"
+          },
+          "restraint": {
+            "type": "StructuralVectorBoolSix",
+            "value": [
+              true,
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "hash": "0b6aec53a3d142b8be1b7619c8f2c0f3"
+          }
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a75fc",
+      "type": "Point/StructuralNode",
+      "value": [
+        1,
+        3,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.123Z",
+      "updatedAt": "2020-03-19T11:45:13.123Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "RESTRAINTS",
+      "geometryHash": null,
+      "hash": "ba8349115abc7cb05382aace37a30ad8",
+      "applicationId": "gsa/NODE.2_83",
+      "properties": {
+        "structural": {
+          "axis": {
+            "type": "Plane/StructuralAxis",
+            "normal": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                1
+              ],
+              "hash": "e1b3c2b2815370776062b19029833d00"
+            },
+            "xdir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                1,
+                0,
+                0
+              ],
+              "hash": "369b3fdb4aeb3f1552d866fc8e090ff8"
+            },
+            "ydir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                1,
+                0
+              ],
+              "hash": "82274609f5264484684a26028c804d66"
+            },
+            "hash": "e5f8b2e128eccc86fba95b667afa9bf3"
+          },
+          "restraint": {
+            "type": "StructuralVectorBoolSix",
+            "value": [
+              true,
+              true,
+              true,
+              false,
+              false,
+              false
+            ],
+            "hash": "0b6aec53a3d142b8be1b7619c8f2c0f3"
+          }
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a75fd",
+      "type": "Point/StructuralNode",
+      "value": [
+        2,
+        3,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.123Z",
+      "updatedAt": "2020-03-19T11:45:13.123Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "RESTRAINTS",
+      "geometryHash": null,
+      "hash": "f5c34c77ae364e19229e2382f58dd441",
+      "applicationId": "gsa/NODE.2_84",
+      "properties": {
+        "structural": {
+          "axis": {
+            "type": "Plane/StructuralAxis",
+            "normal": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                1
+              ],
+              "hash": "e1b3c2b2815370776062b19029833d00"
+            },
+            "xdir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                1,
+                0,
+                0
+              ],
+              "hash": "369b3fdb4aeb3f1552d866fc8e090ff8"
+            },
+            "ydir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                1,
+                0
+              ],
+              "hash": "82274609f5264484684a26028c804d66"
+            },
+            "hash": "e5f8b2e128eccc86fba95b667afa9bf3"
+          },
+          "restraint": {
+            "type": "StructuralVectorBoolSix",
+            "value": [
+              false,
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "hash": "0b6aec53a3d142b8be1b7619c8f2c0f3"
+          }
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a75fe",
+      "type": "Point/StructuralNode",
+      "value": [
+        3,
+        3,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.123Z",
+      "updatedAt": "2020-03-19T11:45:13.123Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "RESTRAINTS",
+      "geometryHash": null,
+      "hash": "49c2d2ab94291edd0157ad3cd43c471a",
+      "applicationId": "gsa/NODE.2_85",
+      "properties": {
+        "structural": {
+          "axis": {
+            "type": "Plane/StructuralAxis",
+            "normal": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                1
+              ],
+              "hash": "e1b3c2b2815370776062b19029833d00"
+            },
+            "xdir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                1,
+                0,
+                0
+              ],
+              "hash": "369b3fdb4aeb3f1552d866fc8e090ff8"
+            },
+            "ydir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                1,
+                0
+              ],
+              "hash": "82274609f5264484684a26028c804d66"
+            },
+            "hash": "e5f8b2e128eccc86fba95b667afa9bf3"
+          },
+          "restraint": {
+            "type": "StructuralVectorBoolSix",
+            "value": [
+              false,
+              false,
+              false,
+              true,
+              true,
+              false
+            ],
+            "hash": "0b6aec53a3d142b8be1b7619c8f2c0f3"
+          }
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a75ff",
+      "type": "Point/StructuralNode",
+      "value": [
+        4,
+        3,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.123Z",
+      "updatedAt": "2020-03-19T11:45:13.123Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "RESTRAINTS",
+      "geometryHash": null,
+      "hash": "23f14f03b3a659342df9e5443de13055",
+      "applicationId": "gsa/NODE.2_86",
+      "properties": {
+        "structural": {
+          "axis": {
+            "type": "Plane/StructuralAxis",
+            "normal": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                1
+              ],
+              "hash": "e1b3c2b2815370776062b19029833d00"
+            },
+            "xdir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                1,
+                0,
+                0
+              ],
+              "hash": "369b3fdb4aeb3f1552d866fc8e090ff8"
+            },
+            "ydir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                1,
+                0
+              ],
+              "hash": "82274609f5264484684a26028c804d66"
+            },
+            "hash": "e5f8b2e128eccc86fba95b667afa9bf3"
+          },
+          "restraint": {
+            "type": "StructuralVectorBoolSix",
+            "value": [
+              false,
+              false,
+              false,
+              true,
+              true,
+              true
+            ],
+            "hash": "0b6aec53a3d142b8be1b7619c8f2c0f3"
+          }
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7600",
+      "type": "Point/StructuralNode",
+      "value": [
+        5,
+        3,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.123Z",
+      "updatedAt": "2020-03-19T11:45:13.123Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "RESTRAINTS",
+      "geometryHash": null,
+      "hash": "6226c03296943c6a604ba7695c94eec5",
+      "applicationId": "gsa/NODE.2_87",
+      "properties": {
+        "structural": {
+          "axis": {
+            "type": "Plane/StructuralAxis",
+            "normal": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                1
+              ],
+              "hash": "e1b3c2b2815370776062b19029833d00"
+            },
+            "xdir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                1,
+                0,
+                0
+              ],
+              "hash": "369b3fdb4aeb3f1552d866fc8e090ff8"
+            },
+            "ydir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                1,
+                0
+              ],
+              "hash": "82274609f5264484684a26028c804d66"
+            },
+            "hash": "e5f8b2e128eccc86fba95b667afa9bf3"
+          },
+          "restraint": {
+            "type": "StructuralVectorBoolSix",
+            "value": [
+              true,
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "hash": "0b6aec53a3d142b8be1b7619c8f2c0f3"
+          }
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7601",
+      "type": "Point/StructuralNode",
+      "value": [
+        6,
+        3,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.124Z",
+      "updatedAt": "2020-03-19T11:45:13.124Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "RESTRAINTS",
+      "geometryHash": null,
+      "hash": "aa04061da643e63c1c6ea8e7863e62a2",
+      "applicationId": "gsa/NODE.2_88",
+      "properties": {
+        "structural": {
+          "axis": {
+            "type": "Plane/StructuralAxis",
+            "normal": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                1
+              ],
+              "hash": "e1b3c2b2815370776062b19029833d00"
+            },
+            "xdir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                1,
+                0,
+                0
+              ],
+              "hash": "369b3fdb4aeb3f1552d866fc8e090ff8"
+            },
+            "ydir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                1,
+                0
+              ],
+              "hash": "82274609f5264484684a26028c804d66"
+            },
+            "hash": "e5f8b2e128eccc86fba95b667afa9bf3"
+          },
+          "stiffness": {
+            "type": "StructuralVectorSix",
+            "value": [
+              20,
+              5,
+              8,
+              0,
+              3,
+              0
+            ],
+            "hash": "1cf3537d6cb076a77dbce2ba884b22ed"
+          }
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7602",
+      "type": "Point/StructuralNode",
+      "value": [
+        7,
+        3,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.124Z",
+      "updatedAt": "2020-03-19T11:45:13.124Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "RESTRAINTS",
+      "geometryHash": null,
+      "hash": "c274a596a7770d4ccd37d268bed10b9c",
+      "applicationId": "gsa/NODE.2_89",
+      "properties": {
+        "structural": {
+          "axis": {
+            "type": "Plane/StructuralAxis",
+            "normal": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                1
+              ],
+              "hash": "e1b3c2b2815370776062b19029833d00"
+            },
+            "xdir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                1,
+                0,
+                0
+              ],
+              "hash": "369b3fdb4aeb3f1552d866fc8e090ff8"
+            },
+            "ydir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                1,
+                0
+              ],
+              "hash": "82274609f5264484684a26028c804d66"
+            },
+            "hash": "e5f8b2e128eccc86fba95b667afa9bf3"
+          },
+          "restraint": {
+            "type": "StructuralVectorBoolSix",
+            "value": [
+              true,
+              false,
+              false,
+              false,
+              true,
+              false
+            ],
+            "hash": "0b6aec53a3d142b8be1b7619c8f2c0f3"
+          },
+          "stiffness": {
+            "type": "StructuralVectorSix",
+            "value": [
+              0,
+              50,
+              0,
+              0,
+              0,
+              60
+            ],
+            "hash": "1cf3537d6cb076a77dbce2ba884b22ed"
+          }
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7603",
+      "type": "Point/StructuralNode",
+      "value": [
+        8,
+        3,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.124Z",
+      "updatedAt": "2020-03-19T11:45:13.124Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "CONSTRAINTS",
+      "geometryHash": null,
+      "hash": "f0a72f5040353220bee695883e22e753",
+      "applicationId": "gsa/NODE.2_101",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7604",
+      "type": "Point/StructuralNode",
+      "value": [
+        0,
+        4,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.124Z",
+      "updatedAt": "2020-03-19T11:45:13.124Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "CONSTRAINTS",
+      "geometryHash": null,
+      "hash": "86e39b9dfad3584869651debb53b5d9a",
+      "applicationId": "gsa/NODE.2_103",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7605",
+      "type": "Point/StructuralNode",
+      "value": [
+        2,
+        4,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.124Z",
+      "updatedAt": "2020-03-19T11:45:13.124Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "CONSTRAINTS",
+      "geometryHash": null,
+      "hash": "b0ebca8b580bfa84efe15fc1dd1e6c5c",
+      "applicationId": "gsa/NODE.2_105",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7606",
+      "type": "Point/StructuralNode",
+      "value": [
+        4,
+        4,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.124Z",
+      "updatedAt": "2020-03-19T11:45:13.124Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "CONSTRAINTS",
+      "geometryHash": null,
+      "hash": "35d2f3f77826eb916e2b28299e5c716e",
+      "applicationId": "gsa/NODE.2_107",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7607",
+      "type": "Point/StructuralNode",
+      "value": [
+        6,
+        4,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.124Z",
+      "updatedAt": "2020-03-19T11:45:13.124Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "CONSTRAINTS",
+      "geometryHash": null,
+      "hash": "45a90ea597e14f8f7fecd367dafbec01",
+      "applicationId": "gsa/NODE.2_109",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7608",
+      "type": "Point/StructuralNode",
+      "value": [
+        8,
+        4,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.125Z",
+      "updatedAt": "2020-03-19T11:45:13.125Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "CONSTRAINTS",
+      "geometryHash": null,
+      "hash": "6c5f7608137a4f4ef7dc68923845538c",
+      "applicationId": "gsa/NODE.2_111",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7609",
+      "type": "Point/StructuralNode",
+      "value": [
+        10,
+        4,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.125Z",
+      "updatedAt": "2020-03-19T11:45:13.125Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "CONSTRAINTS",
+      "geometryHash": null,
+      "hash": "ebffc70e19187c5e37fe8bed2900a59a",
+      "applicationId": "gsa/NODE.2_113",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a760a",
+      "type": "Point/StructuralNode",
+      "value": [
+        12,
+        4,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.125Z",
+      "updatedAt": "2020-03-19T11:45:13.125Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "CONSTRAINTS",
+      "geometryHash": null,
+      "hash": "7ccfb32539eee8561f56a5fbdd8eb33a",
+      "applicationId": "gsa/NODE.2_115",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a760b",
+      "type": "Point/StructuralNode",
+      "value": [
+        14,
+        4,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.125Z",
+      "updatedAt": "2020-03-19T11:45:13.125Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "CONSTRAINTS",
+      "geometryHash": null,
+      "hash": "80d7c8a88ae115e61b01e080ac13941b",
+      "applicationId": "gsa/NODE.2_117",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a760c",
+      "type": "Point/StructuralNode",
+      "value": [
+        16,
+        4,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.125Z",
+      "updatedAt": "2020-03-19T11:45:13.125Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "CONSTRAINTS",
+      "geometryHash": null,
+      "hash": "abce0282e128e7fd1414101f5da84d23",
+      "applicationId": "gsa/NODE.2_119",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a760d",
+      "type": "Point/StructuralNode",
+      "value": [
+        18,
+        4,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.126Z",
+      "updatedAt": "2020-03-19T11:45:13.126Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "CONSTRAINTS",
+      "geometryHash": null,
+      "hash": "973add14528f88fe65eac117b38ee5e8",
+      "applicationId": "gsa/NODE.2_121",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a760e",
+      "type": "Point/StructuralNode",
+      "value": [
+        20,
+        4,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.126Z",
+      "updatedAt": "2020-03-19T11:45:13.126Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "CONSTRAINTS",
+      "geometryHash": null,
+      "hash": "e55c4788e20004df5474ff78e0af63d0",
+      "applicationId": "gsa/NODE.2_123",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a760f",
+      "type": "Point/StructuralNode",
+      "value": [
+        22,
+        4,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.126Z",
+      "updatedAt": "2020-03-19T11:45:13.126Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "CONSTRAINTS",
+      "geometryHash": null,
+      "hash": "162340820970cceff358d812dbccbd53",
+      "applicationId": "gsa/NODE.2_125",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7610",
+      "type": "Point/StructuralNode",
+      "value": [
+        24,
+        4,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.126Z",
+      "updatedAt": "2020-03-19T11:45:13.126Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "CONSTRAINTS",
+      "geometryHash": null,
+      "hash": "c794b124b5cc9df587ed7c49bd6c4d45",
+      "applicationId": "gsa/NODE.2_127",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7611",
+      "type": "Point/StructuralNode",
+      "value": [
+        26,
+        4,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.126Z",
+      "updatedAt": "2020-03-19T11:45:13.126Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "CONSTRAINTS",
+      "geometryHash": null,
+      "hash": "310799d43aa4310fbd52c1239ed67e2e",
+      "applicationId": "gsa/NODE.2_129",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7612",
+      "type": "Point/StructuralNode",
+      "value": [
+        28,
+        4,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.126Z",
+      "updatedAt": "2020-03-19T11:45:13.126Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "CONSTRAINTS",
+      "geometryHash": null,
+      "hash": "ce869ba5f95f2aa4938dad18f7e6df26",
+      "applicationId": "gsa/NODE.2_131",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7613",
+      "type": "Point/StructuralNode",
+      "value": [
+        30,
+        4,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.126Z",
+      "updatedAt": "2020-03-19T11:45:13.126Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "CONSTRAINTS",
+      "geometryHash": null,
+      "hash": "896cad341a9ca56875362b026b9d463b",
+      "applicationId": "gsa/NODE.2_133",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7614",
+      "type": "Point/StructuralNode",
+      "value": [
+        32,
+        4,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.127Z",
+      "updatedAt": "2020-03-19T11:45:13.127Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "CONSTRAINTS",
+      "geometryHash": null,
+      "hash": "319f89543e8b5a131207b8fd139c59c6",
+      "applicationId": "gsa/NODE.2_134",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7615",
+      "type": "Point/StructuralNode",
+      "value": [
+        33,
+        4,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.127Z",
+      "updatedAt": "2020-03-19T11:45:13.127Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "CONSTRAINTS",
+      "geometryHash": null,
+      "hash": "eb0559f7af84cfd6533b4326ec494c6f",
+      "applicationId": "gsa/NODE.2_135",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7616",
+      "type": "Point/StructuralNode",
+      "value": [
+        34,
+        4,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.127Z",
+      "updatedAt": "2020-03-19T11:45:13.127Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_NODE",
+      "geometryHash": null,
+      "hash": "221fb7751d86c875cdd467f9e8df1258",
+      "applicationId": "gsa/NODE.2_161",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7617",
+      "type": "Point/StructuralNode",
+      "value": [
+        0,
+        5,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.127Z",
+      "updatedAt": "2020-03-19T11:45:13.127Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_NODE",
+      "geometryHash": null,
+      "hash": "c072569121a4756080b1b0cd7d4d9dc4",
+      "applicationId": "gsa/NODE.2_162",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7618",
+      "type": "Point/StructuralNode",
+      "value": [
+        1,
+        5,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.127Z",
+      "updatedAt": "2020-03-19T11:45:13.127Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_NODE",
+      "geometryHash": null,
+      "hash": "4fd273f5982baf8f86283a94023c2d31",
+      "applicationId": "gsa/NODE.2_163",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7619",
+      "type": "Point/StructuralNode",
+      "value": [
+        2,
+        5,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.127Z",
+      "updatedAt": "2020-03-19T11:45:13.127Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_NODE",
+      "geometryHash": null,
+      "hash": "560031513961e9c1fa905e38c9b48368",
+      "applicationId": "gsa/NODE.2_164",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a761a",
+      "type": "Point/StructuralNode",
+      "value": [
+        3,
+        5,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.127Z",
+      "updatedAt": "2020-03-19T11:45:13.127Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_NODE",
+      "geometryHash": null,
+      "hash": "b606352eea24d4b031e97d1efa25c3a6",
+      "applicationId": "gsa/NODE.2_165",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a761b",
+      "type": "Point/StructuralNode",
+      "value": [
+        4,
+        5,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.127Z",
+      "updatedAt": "2020-03-19T11:45:13.127Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_NODE",
+      "geometryHash": null,
+      "hash": "dff06cb39dfe5f76a141b2816bf174be",
+      "applicationId": "gsa/NODE.2_166",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a761c",
+      "type": "Point/StructuralNode",
+      "value": [
+        5,
+        5,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.127Z",
+      "updatedAt": "2020-03-19T11:45:13.127Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_NODE",
+      "geometryHash": null,
+      "hash": "f8ae151b7686810a48fb34aff147fa0e",
+      "applicationId": "gsa/NODE.2_167",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a761d",
+      "type": "Point/StructuralNode",
+      "value": [
+        6,
+        5,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.128Z",
+      "updatedAt": "2020-03-19T11:45:13.128Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_NODE",
+      "geometryHash": null,
+      "hash": "7dd232e5e6441366184794a13f5d4b3a",
+      "applicationId": "gsa/NODE.2_168",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a761e",
+      "type": "Point/StructuralNode",
+      "value": [
+        7,
+        5,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.128Z",
+      "updatedAt": "2020-03-19T11:45:13.128Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_NODE",
+      "geometryHash": null,
+      "hash": "fd48d34af1d6e831cb27d157ade802a3",
+      "applicationId": "gsa/NODE.2_169",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a761f",
+      "type": "Point/StructuralNode",
+      "value": [
+        8,
+        5,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.128Z",
+      "updatedAt": "2020-03-19T11:45:13.128Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_NODE",
+      "geometryHash": null,
+      "hash": "1bb7483755db83de80477abf59a2b3d1",
+      "applicationId": "gsa/NODE.2_170",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7620",
+      "type": "Point/StructuralNode",
+      "value": [
+        9,
+        5,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.128Z",
+      "updatedAt": "2020-03-19T11:45:13.128Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_NODE",
+      "geometryHash": null,
+      "hash": "5d9dca601ce9a96f63e92bcaecfbaaa2",
+      "applicationId": "gsa/NODE.2_171",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7621",
+      "type": "Point/StructuralNode",
+      "value": [
+        10,
+        5,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.128Z",
+      "updatedAt": "2020-03-19T11:45:13.128Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_NODE",
+      "geometryHash": null,
+      "hash": "49f63461e18a8f3d5594771a5b0c20c1",
+      "applicationId": "gsa/NODE.2_172",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7622",
+      "type": "Point/StructuralNode",
+      "value": [
+        11,
+        5,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.130Z",
+      "updatedAt": "2020-03-19T11:45:13.130Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "AXES",
+      "geometryHash": null,
+      "hash": "a3c87d3221224823a41bd10239f14b61",
+      "applicationId": null,
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7623",
+      "type": "Structural0DLoad",
+      "loading": {
+        "type": "StructuralVectorSix",
+        "value": [
+          0,
+          0,
+          -5,
+          0,
+          0,
+          0
+        ],
+        "hash": "8a28ce8362b4042115136ef3c1854dd2"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_161"
+      ],
+      "loadCaseRef": "gsa/LOAD_TITLE.2_1",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.130Z",
+      "updatedAt": "2020-03-19T11:45:13.130Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "AXES",
+      "geometryHash": null,
+      "hash": "6a37fccbed1525cdb83e40bd4aacd44d",
+      "applicationId": null,
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7624",
+      "type": "Structural0DLoad",
+      "loading": {
+        "type": "StructuralVectorSix",
+        "value": [
+          0,
+          0,
+          -3,
+          0,
+          0,
+          0
+        ],
+        "hash": "04905c1f0be878481bd444bcf3a64a71"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_162"
+      ],
+      "loadCaseRef": "gsa/LOAD_TITLE.2_1",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.130Z",
+      "updatedAt": "2020-03-19T11:45:13.130Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "AXES",
+      "geometryHash": null,
+      "hash": "84cf688840ac9d7e1257c2e9956dcb60",
+      "applicationId": null,
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7625",
+      "type": "Structural0DLoad",
+      "loading": {
+        "type": "StructuralVectorSix",
+        "value": [
+          0,
+          0,
+          15,
+          0,
+          0,
+          0
+        ],
+        "hash": "48619ade19b8aa2ace717d010622a7f2"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_163"
+      ],
+      "loadCaseRef": "gsa/LOAD_TITLE.2_1",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.130Z",
+      "updatedAt": "2020-03-19T11:45:13.130Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD CASE",
+      "geometryHash": null,
+      "hash": "94fbad9d366a590c1c0064d8b7e309f5",
+      "applicationId": null,
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7626",
+      "type": "Structural0DLoad",
+      "loading": {
+        "type": "StructuralVectorSix",
+        "value": [
+          0,
+          0,
+          80,
+          0,
+          0,
+          0
+        ],
+        "hash": "b6e1ddaa28a31152b1235bb13691c3ec"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_164"
+      ],
+      "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.133Z",
+      "updatedAt": "2020-03-19T11:45:13.133Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD CASE",
+      "geometryHash": null,
+      "hash": "75b5464b55cea7202d6366c0a3b0e48f",
+      "applicationId": null,
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7627",
+      "type": "Structural0DLoad",
+      "loading": {
+        "type": "StructuralVectorSix",
+        "value": [
+          0,
+          0,
+          100,
+          0,
+          0,
+          0
+        ],
+        "hash": "bd5dbe700bdf300583a83f6c4e9f8a33"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_165"
+      ],
+      "loadCaseRef": "gsa/LOAD_TITLE.2_4",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.133Z",
+      "updatedAt": "2020-03-19T11:45:13.133Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "DIR",
+      "geometryHash": null,
+      "hash": "9febc549aa66d9dd50056b6b17a3c09a",
+      "applicationId": null,
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7628",
+      "type": "Structural0DLoad",
+      "loading": {
+        "type": "StructuralVectorSix",
+        "value": [
+          10,
+          0,
+          0,
+          10,
+          10,
+          10
+        ],
+        "hash": "3a61556c197c7601dbedfc4b09c62b45"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_166"
+      ],
+      "loadCaseRef": "gsa/LOAD_TITLE.2_1",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.133Z",
+      "updatedAt": "2020-03-19T11:45:13.133Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "DIR",
+      "geometryHash": null,
+      "hash": "3db7265426b4307cb28e9a7b8870bb62",
+      "applicationId": null,
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7629",
+      "type": "Structural0DLoad",
+      "loading": {
+        "type": "StructuralVectorSix",
+        "value": [
+          0,
+          10,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hash": "c50784986521c744ae89a0caf7ff4c64"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_167"
+      ],
+      "loadCaseRef": "gsa/LOAD_TITLE.2_1",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.134Z",
+      "updatedAt": "2020-03-19T11:45:13.134Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "DIR",
+      "geometryHash": null,
+      "hash": "d5005c52179d5537593db9e6e5762f9e",
+      "applicationId": null,
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a762a",
+      "type": "Structural0DLoad",
+      "loading": {
+        "type": "StructuralVectorSix",
+        "value": [
+          0,
+          0,
+          10,
+          0,
+          0,
+          0
+        ],
+        "hash": "ec7990d11cefb1cc5d29eafb52d21b11"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_168"
+      ],
+      "loadCaseRef": "gsa/LOAD_TITLE.2_1",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.134Z",
+      "updatedAt": "2020-03-19T11:45:13.134Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "DIR",
+      "geometryHash": null,
+      "hash": "0ae7e9db1838c9934349f95939e05716",
+      "applicationId": null,
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a762b",
+      "type": "Structural0DLoad",
+      "loading": {
+        "type": "StructuralVectorSix",
+        "value": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hash": "1cf3537d6cb076a77dbce2ba884b22ed"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_169"
+      ],
+      "loadCaseRef": "gsa/LOAD_TITLE.2_1",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.134Z",
+      "updatedAt": "2020-03-19T11:45:13.134Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "DIR",
+      "geometryHash": null,
+      "hash": "30d60e24b415ca3e55e96795d5db6806",
+      "applicationId": null,
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a762c",
+      "type": "Structural0DLoad",
+      "loading": {
+        "type": "StructuralVectorSix",
+        "value": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hash": "1cf3537d6cb076a77dbce2ba884b22ed"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_170"
+      ],
+      "loadCaseRef": "gsa/LOAD_TITLE.2_1",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.134Z",
+      "updatedAt": "2020-03-19T11:45:13.134Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "DIR",
+      "geometryHash": null,
+      "hash": "7d1f52b6608c555cf18a898e8d0a74f4",
+      "applicationId": null,
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a762d",
+      "type": "Structural0DLoad",
+      "loading": {
+        "type": "StructuralVectorSix",
+        "value": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hash": "1cf3537d6cb076a77dbce2ba884b22ed"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_171"
+      ],
+      "loadCaseRef": "gsa/LOAD_TITLE.2_1",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.134Z",
+      "updatedAt": "2020-03-19T11:45:13.134Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "ZERO",
+      "geometryHash": null,
+      "hash": "1cf0ff984cd768d7e681e01d84098a2b",
+      "applicationId": null,
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a762e",
+      "type": "Structural0DLoad",
+      "loading": {
+        "type": "StructuralVectorSix",
+        "value": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hash": "1cf3537d6cb076a77dbce2ba884b22ed"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_172"
+      ],
+      "loadCaseRef": "gsa/LOAD_TITLE.2_1",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.135Z",
+      "updatedAt": "2020-03-19T11:45:13.135Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "ALL",
+      "geometryHash": null,
+      "hash": "c8f8d9a984850990839817e8866d189a",
+      "applicationId": null,
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a762f",
+      "type": "StructuralGravityLoading",
+      "gravityFactors": {
+        "type": "Vector/StructuralVectorThree",
+        "value": [
+          0,
+          0,
+          -1
+        ],
+        "hash": "9f063cf46cdfe57c16bb00e1a3578644"
+      },
+      "loadCaseRef": "gsa/LOAD_TITLE.2_1",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.135Z",
+      "updatedAt": "2020-03-19T11:45:13.135Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "SINGLE CASE",
+      "geometryHash": null,
+      "hash": "f0241129968ccdd890532a180a3969af",
+      "applicationId": null,
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7630",
+      "type": "StructuralGravityLoading",
+      "gravityFactors": {
+        "type": "Vector/StructuralVectorThree",
+        "value": [
+          0,
+          0,
+          -1
+        ],
+        "hash": "9f063cf46cdfe57c16bb00e1a3578644"
+      },
+      "loadCaseRef": "gsa/LOAD_TITLE.2_1",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.135Z",
+      "updatedAt": "2020-03-19T11:45:13.135Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LIST",
+      "geometryHash": null,
+      "hash": "a23c6355a58ef6dda74445a200cda77d",
+      "applicationId": null,
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7631",
+      "type": "StructuralGravityLoading",
+      "gravityFactors": {
+        "type": "Vector/StructuralVectorThree",
+        "value": [
+          0,
+          0,
+          -1
+        ],
+        "hash": "9f063cf46cdfe57c16bb00e1a3578644"
+      },
+      "loadCaseRef": "gsa/LOAD_TITLE.2_1",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.135Z",
+      "updatedAt": "2020-03-19T11:45:13.135Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOADCASE",
+      "geometryHash": null,
+      "hash": "fe4b4fe7f7617f4ce53f7e5da54b6aa5",
+      "applicationId": null,
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7632",
+      "type": "StructuralGravityLoading",
+      "gravityFactors": {
+        "type": "Vector/StructuralVectorThree",
+        "value": [
+          0,
+          0,
+          -1
+        ],
+        "hash": "9f063cf46cdfe57c16bb00e1a3578644"
+      },
+      "loadCaseRef": "gsa/LOAD_TITLE.2_2",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.135Z",
+      "updatedAt": "2020-03-19T11:45:13.135Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "DIR",
+      "geometryHash": null,
+      "hash": "fc5ede6217fc1f5ac9ca1889f7f14f8e",
+      "applicationId": null,
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7633",
+      "type": "StructuralGravityLoading",
+      "gravityFactors": {
+        "type": "Vector/StructuralVectorThree",
+        "value": [
+          -5,
+          3,
+          8
+        ],
+        "hash": "b06a576a2f60d36be1689af94a63a4d2"
+      },
+      "loadCaseRef": "gsa/LOAD_TITLE.2_1",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.136Z",
+      "updatedAt": "2020-03-19T11:45:13.136Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "TYPE",
+      "geometryHash": null,
+      "hash": "34c5ef39b885b85194c3a44288900740",
+      "applicationId": "gsa/EL.4_10",
+      "properties": {
+        "structural": {
+          "propertyRef": "gsa/PROP_SPR.3_1"
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7634",
+      "type": "Point/Structural0DSpring",
+      "value": [
+        5,
+        0,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.137Z",
+      "updatedAt": "2020-03-19T11:45:13.137Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "ORIENT",
+      "geometryHash": null,
+      "hash": "3135f82727c66870e19963654dc47d29",
+      "applicationId": "gsa/EL.4_59",
+      "properties": {
+        "structural": {
+          "propertyRef": "gsa/PROP_SPR.3_1"
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7635",
+      "type": "Point/Structural0DSpring",
+      "value": [
+        
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.137Z",
+      "updatedAt": "2020-03-19T11:45:13.138Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "TYPE",
+      "geometryHash": null,
+      "hash": "9b1d57cf4e77778c8f6dda12d3b45a7d",
+      "applicationId": "gsa/EL.4_4",
+      "properties": {
+        "structural": {
+          "propertyRef": "gsa/PROP_SEC.3_1",
+          "zAxis": {
+            "type": "Vector/StructuralVectorThree",
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "hash": "e1b3c2b2815370776062b19029833d00"
+          },
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            }
+          ],
+          "offset": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            },
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7636",
+      "type": "Line/Structural1DElement",
+      "value": [
+        3,
+        0,
+        0,
+        3,
+        1,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.138Z",
+      "updatedAt": "2020-03-19T11:45:13.138Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_BEAM",
+      "geometryHash": null,
+      "hash": "0a478471ab4a02208b7764f79797aa47",
+      "applicationId": "gsa/EL.4_80",
+      "properties": {
+        "structural": {
+          "propertyRef": "gsa/PROP_SEC.3_1",
+          "zAxis": {
+            "type": "Vector/StructuralVectorThree",
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "hash": "e1b3c2b2815370776062b19029833d00"
+          },
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            }
+          ],
+          "offset": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            },
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7637",
+      "type": "Line/Structural1DElement",
+      "value": [
+        0,
+        6,
+        0,
+        0,
+        7,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.138Z",
+      "updatedAt": "2020-03-19T11:45:13.138Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_BEAM",
+      "geometryHash": null,
+      "hash": "f813f0232b832ff91649d579bdbe89fe",
+      "applicationId": "gsa/EL.4_81",
+      "properties": {
+        "structural": {
+          "propertyRef": "gsa/PROP_SEC.3_1",
+          "zAxis": {
+            "type": "Vector/StructuralVectorThree",
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "hash": "e1b3c2b2815370776062b19029833d00"
+          },
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            }
+          ],
+          "offset": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            },
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7638",
+      "type": "Line/Structural1DElement",
+      "value": [
+        1,
+        6,
+        0,
+        1,
+        7,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.138Z",
+      "updatedAt": "2020-03-19T11:45:13.138Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_BEAM",
+      "geometryHash": null,
+      "hash": "3f0dee9080da3a4342d30499d7557aac",
+      "applicationId": "gsa/EL.4_82",
+      "properties": {
+        "structural": {
+          "propertyRef": "gsa/PROP_SEC.3_1",
+          "zAxis": {
+            "type": "Vector/StructuralVectorThree",
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "hash": "e1b3c2b2815370776062b19029833d00"
+          },
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            }
+          ],
+          "offset": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            },
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a7639",
+      "type": "Line/Structural1DElement",
+      "value": [
+        2,
+        6,
+        0,
+        2,
+        7,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.139Z",
+      "updatedAt": "2020-03-19T11:45:13.139Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_BEAM",
+      "geometryHash": null,
+      "hash": "ce027bfa8400db99be2b77f19202c64a",
+      "applicationId": "gsa/EL.4_83",
+      "properties": {
+        "structural": {
+          "propertyRef": "gsa/PROP_SEC.3_1",
+          "zAxis": {
+            "type": "Vector/StructuralVectorThree",
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "hash": "e1b3c2b2815370776062b19029833d00"
+          },
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            }
+          ],
+          "offset": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            },
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a763a",
+      "type": "Line/Structural1DElement",
+      "value": [
+        3,
+        6,
+        0,
+        3,
+        7,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.139Z",
+      "updatedAt": "2020-03-19T11:45:13.139Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_BEAM",
+      "geometryHash": null,
+      "hash": "b0aba238c3dd5a727340e17927822309",
+      "applicationId": "gsa/EL.4_84",
+      "properties": {
+        "structural": {
+          "propertyRef": "gsa/PROP_SEC.3_1",
+          "zAxis": {
+            "type": "Vector/StructuralVectorThree",
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "hash": "e1b3c2b2815370776062b19029833d00"
+          },
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            }
+          ],
+          "offset": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            },
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a763b",
+      "type": "Line/Structural1DElement",
+      "value": [
+        4,
+        6,
+        0,
+        4,
+        7,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.139Z",
+      "updatedAt": "2020-03-19T11:45:13.139Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_BEAM",
+      "geometryHash": null,
+      "hash": "e130b75ae49a1722007b5371517de01a",
+      "applicationId": "gsa/EL.4_85",
+      "properties": {
+        "structural": {
+          "propertyRef": "gsa/PROP_SEC.3_1",
+          "zAxis": {
+            "type": "Vector/StructuralVectorThree",
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "hash": "e1b3c2b2815370776062b19029833d00"
+          },
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            }
+          ],
+          "offset": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            },
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a763c",
+      "type": "Line/Structural1DElement",
+      "value": [
+        5,
+        6,
+        0,
+        5,
+        7,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.140Z",
+      "updatedAt": "2020-03-19T11:45:13.140Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_BEAM",
+      "geometryHash": null,
+      "hash": "2b122249b276e2aae8b7d0d818c50fe5",
+      "applicationId": "gsa/EL.4_86",
+      "properties": {
+        "structural": {
+          "propertyRef": "gsa/PROP_SEC.3_1",
+          "zAxis": {
+            "type": "Vector/StructuralVectorThree",
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "hash": "e1b3c2b2815370776062b19029833d00"
+          },
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            }
+          ],
+          "offset": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            },
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a763d",
+      "type": "Line/Structural1DElement",
+      "value": [
+        6,
+        6,
+        0,
+        6,
+        7,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.140Z",
+      "updatedAt": "2020-03-19T11:45:13.140Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_BEAM",
+      "geometryHash": null,
+      "hash": "cc3efe4015b20311730fb29466946ed0",
+      "applicationId": "gsa/EL.4_87",
+      "properties": {
+        "structural": {
+          "propertyRef": "gsa/PROP_SEC.3_1",
+          "zAxis": {
+            "type": "Vector/StructuralVectorThree",
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "hash": "e1b3c2b2815370776062b19029833d00"
+          },
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            }
+          ],
+          "offset": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            },
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49b5f7e0164e9a763e",
+      "type": "Line/Structural1DElement",
+      "value": [
+        7,
+        6,
+        0,
+        7,
+        7,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.140Z",
+      "updatedAt": "2020-03-19T11:45:13.140Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_BEAM",
+      "geometryHash": null,
+      "hash": "2d6695c51d0185535fd4b8a352288bfe",
+      "applicationId": "gsa/EL.4_88",
+      "properties": {
+        "structural": {
+          "propertyRef": "gsa/PROP_SEC.3_1",
+          "zAxis": {
+            "type": "Vector/StructuralVectorThree",
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "hash": "e1b3c2b2815370776062b19029833d00"
+          },
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            }
+          ],
+          "offset": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            },
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef7e",
+      "type": "Line/Structural1DElement",
+      "value": [
+        8,
+        6,
+        0,
+        8,
+        7,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.503Z",
+      "updatedAt": "2020-03-19T11:45:13.503Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_BEAM",
+      "geometryHash": null,
+      "hash": "76f705824b1b2238461d9b378c491f5d",
+      "applicationId": "gsa/EL.4_89",
+      "properties": {
+        "structural": {
+          "propertyRef": "gsa/PROP_SEC.3_1",
+          "zAxis": {
+            "type": "Vector/StructuralVectorThree",
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "hash": "e1b3c2b2815370776062b19029833d00"
+          },
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            }
+          ],
+          "offset": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            },
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef7f",
+      "type": "Line/Structural1DElement",
+      "value": [
+        9,
+        6,
+        0,
+        9,
+        7,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.504Z",
+      "updatedAt": "2020-03-19T11:45:13.504Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_BEAM",
+      "geometryHash": null,
+      "hash": "b5165bb90f623658cfa39996efa0904c",
+      "applicationId": "gsa/EL.4_90",
+      "properties": {
+        "structural": {
+          "propertyRef": "gsa/PROP_SEC.3_1",
+          "zAxis": {
+            "type": "Vector/StructuralVectorThree",
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "hash": "e1b3c2b2815370776062b19029833d00"
+          },
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            }
+          ],
+          "offset": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            },
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef80",
+      "type": "Line/Structural1DElement",
+      "value": [
+        10,
+        6,
+        0,
+        10,
+        7,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.504Z",
+      "updatedAt": "2020-03-19T11:45:13.504Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_BEAM",
+      "geometryHash": null,
+      "hash": "0d97d725a539cd63fa513f31d1b4ce3e",
+      "applicationId": "gsa/EL.4_91",
+      "properties": {
+        "structural": {
+          "propertyRef": "gsa/PROP_SEC.3_1",
+          "zAxis": {
+            "type": "Vector/StructuralVectorThree",
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "hash": "e1b3c2b2815370776062b19029833d00"
+          },
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            }
+          ],
+          "offset": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            },
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef81",
+      "type": "Line/Structural1DElement",
+      "value": [
+        11,
+        6,
+        0,
+        11,
+        7,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.504Z",
+      "updatedAt": "2020-03-19T11:45:13.504Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_BEAM",
+      "geometryHash": null,
+      "hash": "fc3a6b36f1376bf08a8d81cc5265ab58",
+      "applicationId": "gsa/EL.4_92",
+      "properties": {
+        "structural": {
+          "propertyRef": "gsa/PROP_SEC.3_1",
+          "zAxis": {
+            "type": "Vector/StructuralVectorThree",
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "hash": "e1b3c2b2815370776062b19029833d00"
+          },
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            }
+          ],
+          "offset": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            },
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef82",
+      "type": "Line/Structural1DElement",
+      "value": [
+        12,
+        6,
+        0,
+        12,
+        7,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.504Z",
+      "updatedAt": "2020-03-19T11:45:13.504Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "LOAD_BEAM",
+      "geometryHash": null,
+      "hash": "58712daf73f25b3b0c56dbe487e56e87",
+      "applicationId": "gsa/EL.4_93",
+      "properties": {
+        "structural": {
+          "propertyRef": "gsa/PROP_SEC.3_1",
+          "zAxis": {
+            "type": "Vector/StructuralVectorThree",
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "hash": "e1b3c2b2815370776062b19029833d00"
+          },
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+            }
+          ],
+          "offset": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            },
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef83",
+      "type": "Line/Structural1DElement",
+      "value": [
+        13,
+        6,
+        0,
+        13,
+        7,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.504Z",
+      "updatedAt": "2020-03-19T11:45:13.504Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "",
+      "geometryHash": null,
+      "hash": "3bd1dec9cd2a37aed6d22e0b8c11081b",
+      "applicationId": "gsa/EL.4_94",
+      "properties": {
+        "structural": {
+          "propertyRef": "gsa/PROP_SEC.3_10",
+          "zAxis": {
+            "type": "Vector/StructuralVectorThree",
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "hash": "e1b3c2b2815370776062b19029833d00"
+          },
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                false,
+                false,
+                false,
+                false,
+                true,
+                true
+              ],
+              "hash": "0b6aec53a3d142b8be1b7619c8f2c0f3"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                false,
+                false,
+                false,
+                false,
+                true,
+                true
+              ],
+              "hash": "0b6aec53a3d142b8be1b7619c8f2c0f3"
+            }
+          ],
+          "offset": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0.1,
+                1
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            },
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0.1,
+                1
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef84",
+      "type": "Line/Structural1DElement",
+      "value": [
+        0,
+        8,
+        0,
+        0,
+        9,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.504Z",
+      "updatedAt": "2020-03-19T11:45:13.504Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "",
+      "geometryHash": null,
+      "hash": "ab867f2ccea13cfc842d6b787387cabf",
+      "applicationId": "gsa/EL.4_95",
+      "properties": {
+        "structural": {
+          "propertyRef": "gsa/PROP_SEC.3_10",
+          "zAxis": {
+            "type": "Vector/StructuralVectorThree",
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "hash": "e1b3c2b2815370776062b19029833d00"
+          },
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                false,
+                false,
+                false,
+                false,
+                true,
+                true
+              ],
+              "hash": "0b6aec53a3d142b8be1b7619c8f2c0f3"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                false,
+                false,
+                false,
+                false,
+                true,
+                true
+              ],
+              "hash": "0b6aec53a3d142b8be1b7619c8f2c0f3"
+            }
+          ],
+          "offset": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0.1,
+                1
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            },
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0.1,
+                1
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef85",
+      "type": "Line/Structural1DElement",
+      "value": [
+        0,
+        8,
+        0,
+        0,
+        9,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.505Z",
+      "updatedAt": "2020-03-19T11:45:13.505Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "UPDATE_EL_SECTION",
+      "geometryHash": null,
+      "hash": "08e854ca66821e381048634cbd9cf5a3",
+      "applicationId": "gsa/EL.4_96",
+      "properties": {
+        "structural": {
+          "propertyRef": "gsa/PROP_SEC.3_100",
+          "zAxis": {
+            "type": "Vector/StructuralVectorThree",
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "hash": "e1b3c2b2815370776062b19029833d00"
+          },
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                false,
+                false,
+                false,
+                false,
+                true,
+                true
+              ],
+              "hash": "0b6aec53a3d142b8be1b7619c8f2c0f3"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                false,
+                false,
+                false,
+                false,
+                true,
+                true
+              ],
+              "hash": "0b6aec53a3d142b8be1b7619c8f2c0f3"
+            }
+          ],
+          "offset": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            },
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef86",
+      "type": "Line/Structural1DElement",
+      "value": [
+        1,
+        9,
+        0,
+        1,
+        8,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.506Z",
+      "updatedAt": "2020-03-19T11:45:13.506Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "UPDATE_MEMB_SECTION",
+      "geometryHash": null,
+      "hash": "11d836377b893193cc1e3e66e8784777",
+      "applicationId": "gsa/EL.4_97",
+      "properties": {
+        "structural": {
+          "propertyRef": "gsa/PROP_SEC.3_101",
+          "zAxis": {
+            "type": "Vector/StructuralVectorThree",
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "hash": "e1b3c2b2815370776062b19029833d00"
+          },
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                false,
+                false,
+                false,
+                false,
+                true,
+                true
+              ],
+              "hash": "0b6aec53a3d142b8be1b7619c8f2c0f3"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                false,
+                false,
+                false,
+                false,
+                true,
+                true
+              ],
+              "hash": "0b6aec53a3d142b8be1b7619c8f2c0f3"
+            }
+          ],
+          "offset": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            },
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "868a70337da5f8c1470c607c48f6a5bd"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef87",
+      "type": "Line/Structural1DElement",
+      "value": [
+        2,
+        9,
+        0,
+        2,
+        8,
+        0
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.506Z",
+      "updatedAt": "2020-03-19T11:45:13.506Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "SECTION",
+      "geometryHash": null,
+      "hash": "b2c87c8bd8dbb35fb8cb5f61838c865c",
+      "applicationId": "gsa/PROP_SEC.3_1",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef88",
+      "type": "Structural1DProperty",
+      "profile": {
+        "type": "Polyline",
+        "value": [
+          0.05,
+          0.05,
+          0,
+          -0.05,
+          0.05,
+          0,
+          -0.05,
+          -0.05,
+          0,
+          0.05,
+          -0.05,
+          0
+        ],
+        "closed": true,
+        "hash": "03f8879e68ddc9eb18d78fdc5cc2d1ba"
+      },
+      "shape": "Rectangular",
+      "hollow": false,
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.506Z",
+      "updatedAt": "2020-03-19T11:45:13.506Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "CATEGORY",
+      "geometryHash": null,
+      "hash": "89e99ee191a189362abab0e8ea2cb658",
+      "applicationId": "gsa/PROP_SEC.3_2",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef89",
+      "type": "Structural1DProperty",
+      "profile": {
+        "type": "Polyline",
+        "value": [
+          0.01075,
+          0.42364999999999997,
+          0,
+          0.21025,
+          0.42364999999999997,
+          0,
+          0.21025,
+          0.46025,
+          0,
+          -0.21025,
+          0.46025,
+          0,
+          -0.21025,
+          0.42364999999999997,
+          0,
+          -0.01075,
+          0.42364999999999997,
+          0,
+          -0.01075,
+          -0.42364999999999997,
+          0,
+          -0.21025,
+          -0.42364999999999997,
+          0,
+          -0.21025,
+          -0.46025,
+          0,
+          0.21025,
+          -0.46025,
+          0,
+          0.21025,
+          -0.42364999999999997,
+          0,
+          0.01075,
+          -0.42364999999999997,
+          0
+        ],
+        "closed": true,
+        "hash": "9b27c21a6e8ca0b5f533f48cbd4f0165"
+      },
+      "shape": "I",
+      "hollow": false,
+      "catalogueName": "UB914x419x388",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.506Z",
+      "updatedAt": "2020-03-19T11:45:13.507Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "RECTANGULAR",
+      "geometryHash": null,
+      "hash": "3ce4a00f6f559596caff1b09a7fbb842",
+      "applicationId": "gsa/PROP_SEC.3_3",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef8a",
+      "type": "Structural1DProperty",
+      "profile": {
+        "type": "Polyline",
+        "value": [
+          0.1,
+          0.05,
+          0,
+          -0.1,
+          0.05,
+          0,
+          -0.1,
+          -0.05,
+          0,
+          0.1,
+          -0.05,
+          0
+        ],
+        "closed": true,
+        "hash": "87ed43f81989626406dc4074b48fcba9"
+      },
+      "shape": "Rectangular",
+      "hollow": false,
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.507Z",
+      "updatedAt": "2020-03-19T11:45:13.507Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "RECTANGULAR_HOLLOW",
+      "geometryHash": null,
+      "hash": "3a192fc6deb135f61e5a74124890916c",
+      "applicationId": "gsa/PROP_SEC.3_4",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef8b",
+      "type": "Structural1DProperty",
+      "profile": {
+        "type": "Polyline",
+        "value": [
+          0.1,
+          0.05,
+          0,
+          -0.1,
+          0.05,
+          0,
+          -0.1,
+          -0.05,
+          0,
+          0.1,
+          -0.05,
+          0
+        ],
+        "closed": true,
+        "hash": "87ed43f81989626406dc4074b48fcba9"
+      },
+      "shape": "Rectangular",
+      "hollow": true,
+      "thickness": 0.015,
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.507Z",
+      "updatedAt": "2020-03-19T11:45:13.507Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "CIRCULAR",
+      "geometryHash": null,
+      "hash": "269fc87610d27a54f627ca85dc9b2625",
+      "applicationId": "gsa/PROP_SEC.3_5",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef8c",
+      "type": "Structural1DProperty",
+      "profile": {
+        "type": "Circle",
+        "radius": 0.05,
+        "center": {
+          "type": "Point",
+          "value": [
+            0,
+            0,
+            0
+          ],
+          "hash": "13e81f6567b656a19c629377c7f5a698"
+        },
+        "normal": {
+          "type": "Vector",
+          "value": [
+            0,
+            0,
+            1
+          ],
+          "hash": "724d8030cb8ad71ee4cfe9cc495a2c80"
+        },
+        "plane": {
+          "type": "Plane",
+          "origin": {
+            "type": "Point",
+            "value": [
+              0,
+              0,
+              0
+            ],
+            "hash": "13e81f6567b656a19c629377c7f5a698"
+          },
+          "normal": {
+            "type": "Vector",
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "hash": "724d8030cb8ad71ee4cfe9cc495a2c80"
+          },
+          "xdir": {
+            "type": "Vector",
+            "value": [
+              1,
+              0,
+              0
+            ],
+            "hash": "613ef61d98d318e2933240140a7c7f66"
+          },
+          "ydir": {
+            "type": "Vector",
+            "value": [
+              0,
+              1,
+              0
+            ],
+            "hash": "fe4dd3b48fb36ff465bbb267e97a7bd1"
+          },
+          "hash": "47d7862ffad6f0b04b45bc4851cdffc5"
+        },
+        "hash": "c535e6a702425549b28e4f8c5a748f33"
+      },
+      "shape": "Circular",
+      "hollow": false,
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.507Z",
+      "updatedAt": "2020-03-19T11:45:13.507Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "CIRCULAR_HOLLOW",
+      "geometryHash": null,
+      "hash": "d9368bc1403a431d183cb06cfe9050b3",
+      "applicationId": "gsa/PROP_SEC.3_6",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef8d",
+      "type": "Structural1DProperty",
+      "profile": {
+        "type": "Circle",
+        "radius": 0.05,
+        "center": {
+          "type": "Point",
+          "value": [
+            0,
+            0,
+            0
+          ],
+          "hash": "13e81f6567b656a19c629377c7f5a698"
+        },
+        "normal": {
+          "type": "Vector",
+          "value": [
+            0,
+            0,
+            1
+          ],
+          "hash": "724d8030cb8ad71ee4cfe9cc495a2c80"
+        },
+        "plane": {
+          "type": "Plane",
+          "origin": {
+            "type": "Point",
+            "value": [
+              0,
+              0,
+              0
+            ],
+            "hash": "13e81f6567b656a19c629377c7f5a698"
+          },
+          "normal": {
+            "type": "Vector",
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "hash": "724d8030cb8ad71ee4cfe9cc495a2c80"
+          },
+          "xdir": {
+            "type": "Vector",
+            "value": [
+              1,
+              0,
+              0
+            ],
+            "hash": "613ef61d98d318e2933240140a7c7f66"
+          },
+          "ydir": {
+            "type": "Vector",
+            "value": [
+              0,
+              1,
+              0
+            ],
+            "hash": "fe4dd3b48fb36ff465bbb267e97a7bd1"
+          },
+          "hash": "47d7862ffad6f0b04b45bc4851cdffc5"
+        },
+        "hash": "c535e6a702425549b28e4f8c5a748f33"
+      },
+      "shape": "Circular",
+      "hollow": true,
+      "thickness": 0.01,
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.507Z",
+      "updatedAt": "2020-03-19T11:45:13.507Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "I_SECTION",
+      "geometryHash": null,
+      "hash": "16ff94d1d4c2d05c2b32c3709b19fc2b",
+      "applicationId": "gsa/PROP_SEC.3_7",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef8e",
+      "type": "Structural1DProperty",
+      "profile": {
+        "type": "Polyline",
+        "value": [
+          0.005,
+          0.13,
+          0,
+          0.1,
+          0.13,
+          0,
+          0.1,
+          0.15,
+          0,
+          -0.1,
+          0.15,
+          0,
+          -0.1,
+          0.13,
+          0,
+          -0.005,
+          0.13,
+          0,
+          -0.005,
+          -0.13,
+          0,
+          -0.1,
+          -0.13,
+          0,
+          -0.1,
+          -0.15,
+          0,
+          0.1,
+          -0.15,
+          0,
+          0.1,
+          -0.13,
+          0,
+          0.005,
+          -0.13,
+          0
+        ],
+        "closed": true,
+        "hash": "5b7254a7a481742017b62271e7f32fd2"
+      },
+      "shape": "I",
+      "hollow": false,
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.507Z",
+      "updatedAt": "2020-03-19T11:45:13.507Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "TEE_SECTION",
+      "geometryHash": null,
+      "hash": "79f7e1874051ad5c6835976775c1cbf3",
+      "applicationId": "gsa/PROP_SEC.3_8",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef8f",
+      "type": "Structural1DProperty",
+      "profile": {
+        "type": "Polyline",
+        "value": [
+          0.005,
+          -0.02,
+          0,
+          0.1,
+          -0.02,
+          0,
+          0.1,
+          0,
+          0,
+          -0.1,
+          0,
+          0,
+          -0.1,
+          -0.02,
+          0,
+          -0.005,
+          -0.02,
+          0,
+          -0.005,
+          -0.3,
+          0,
+          0.005,
+          -0.3,
+          0
+        ],
+        "closed": true,
+        "hash": "db2bbbab3deed8efb57fd1bc3c33003b"
+      },
+      "shape": "T",
+      "hollow": false,
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.507Z",
+      "updatedAt": "2020-03-19T11:45:13.507Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "CHANNEL",
+      "geometryHash": null,
+      "hash": "df1e6ea873963dd1a040c02eedbee4b2",
+      "applicationId": "gsa/PROP_SEC.3_9",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef90",
+      "type": "Structural1DProperty",
+      "profile": {
+        "type": "Polyline",
+        "value": [
+          0.01,
+          0.13,
+          0,
+          0.2,
+          0.13,
+          0,
+          0.2,
+          0.15,
+          0,
+          0,
+          0.15,
+          0,
+          0,
+          -0.15,
+          0,
+          0.2,
+          -0.15,
+          0,
+          0.2,
+          -0.13,
+          0,
+          0.01,
+          -0.13,
+          0
+        ],
+        "closed": true,
+        "hash": "3d731274f36cb93d8020abda3a7ace2e"
+      },
+      "shape": "Generic",
+      "hollow": false,
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.507Z",
+      "updatedAt": "2020-03-19T11:45:13.507Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "DOUBLE_CHANNEL",
+      "geometryHash": null,
+      "hash": "38fa57127092b4c5052ab4fb1ceb4e4c",
+      "applicationId": "gsa/PROP_SEC.3_10",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef91",
+      "type": "Structural1DProperty",
+      "shape": "NotSet",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.508Z",
+      "updatedAt": "2020-03-19T11:45:13.508Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "ANGLE",
+      "geometryHash": null,
+      "hash": "e82ef10367712e310ec5bf7db1e39138",
+      "applicationId": "gsa/PROP_SEC.3_11",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef92",
+      "type": "Structural1DProperty",
+      "profile": {
+        "type": "Polyline",
+        "value": [
+          0,
+          0,
+          0,
+          0.2,
+          0,
+          0,
+          0.2,
+          0.02,
+          0,
+          0.01,
+          0.02,
+          0,
+          0.01,
+          0.3,
+          0,
+          0,
+          0.3,
+          0
+        ],
+        "closed": true,
+        "hash": "70542a3d4e9e13f527aa853ecf543e3d"
+      },
+      "shape": "Generic",
+      "hollow": false,
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.508Z",
+      "updatedAt": "2020-03-19T11:45:13.508Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "DOUBLE_ANGLE",
+      "geometryHash": null,
+      "hash": "0ecdf2950721b2c35b6c63877f04455f",
+      "applicationId": "gsa/PROP_SEC.3_12",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef93",
+      "type": "Structural1DProperty",
+      "shape": "NotSet",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.508Z",
+      "updatedAt": "2020-03-19T11:45:13.508Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "PERIMETER",
+      "geometryHash": null,
+      "hash": "65164c4c8c72968ac5776857c7dc3f2b",
+      "applicationId": "gsa/PROP_SEC.3_13",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef94",
+      "type": "Structural1DProperty",
+      "profile": {
+        "type": "Polyline",
+        "value": [
+          0,
+          0,
+          0,
+          0.01,
+          0,
+          0,
+          0.01,
+          0.01,
+          0,
+          0,
+          0.01,
+          0
+        ],
+        "closed": true,
+        "hash": "8c24e5bb05bf1a7551b655f823aeef24"
+      },
+      "shape": "Generic",
+      "hollow": false,
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.508Z",
+      "updatedAt": "2020-03-19T11:45:13.508Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "FABRICATED",
+      "geometryHash": null,
+      "hash": "8754c02603c3e8c1cd6674ccf0efd5fc",
+      "applicationId": "gsa/PROP_SEC.3_14",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef95",
+      "type": "Structural1DProperty",
+      "shape": "NotSet",
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.508Z",
+      "updatedAt": "2020-03-19T11:45:13.508Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "TYPE",
+      "geometryHash": null,
+      "hash": "0eedb61bc4140db9578e8fb5211f3464",
+      "applicationId": "gsa/EL.4_13",
+      "properties": {
+        "structural": {
+          "elementType": "Generic",
+          "propertyRef": "gsa/PROP_2D.5_1",
+          "axis": {
+            "type": "Plane/StructuralAxis",
+            "normal": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                1
+              ],
+              "hash": "e1b3c2b2815370776062b19029833d00"
+            },
+            "xdir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                1,
+                0,
+                0
+              ],
+              "hash": "369b3fdb4aeb3f1552d866fc8e090ff8"
+            },
+            "ydir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                1,
+                0
+              ],
+              "hash": "82274609f5264484684a26028c804d66"
+            },
+            "hash": "e5f8b2e128eccc86fba95b667afa9bf3"
+          },
+          "offset": 0
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef96",
+      "type": "Mesh/Structural2DElement",
+      "vertices": [
+        8,
+        0,
+        0,
+        9,
+        0,
+        0,
+        9,
+        1,
+        0,
+        8,
+        1,
+        0
+      ],
+      "faces": [
+        1,
+        0,
+        1,
+        2,
+        3
+      ],
+      "colors": [
+        
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.508Z",
+      "updatedAt": "2020-03-19T11:45:13.508Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "TYPE",
+      "geometryHash": null,
+      "hash": "3f66e432abb332be672d4bd338da8928",
+      "applicationId": "gsa/EL.4_15",
+      "properties": {
+        "structural": {
+          "elementType": "Generic",
+          "propertyRef": "gsa/PROP_2D.5_1",
+          "axis": {
+            "type": "Plane/StructuralAxis",
+            "normal": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                1
+              ],
+              "hash": "e1b3c2b2815370776062b19029833d00"
+            },
+            "xdir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                1,
+                0,
+                0
+              ],
+              "hash": "369b3fdb4aeb3f1552d866fc8e090ff8"
+            },
+            "ydir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                1,
+                0
+              ],
+              "hash": "82274609f5264484684a26028c804d66"
+            },
+            "hash": "e5f8b2e128eccc86fba95b667afa9bf3"
+          },
+          "offset": 0
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef97",
+      "type": "Mesh/Structural2DElement",
+      "vertices": [
+        16,
+        0,
+        0,
+        17,
+        0,
+        0,
+        16,
+        1,
+        0
+      ],
+      "faces": [
+        0,
+        0,
+        1,
+        2
+      ],
+      "colors": [
+        
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.508Z",
+      "updatedAt": "2020-03-19T11:45:13.508Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "ALL",
+      "geometryHash": null,
+      "hash": "fb92152019c2924a16fd9e6ead93d397",
+      "applicationId": "gsa/RIGID.3_1",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef98",
+      "type": "StructuralRigidConstraints",
+      "constraints": {
+        "type": "StructuralVectorBoolSix",
+        "value": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_101"
+      ],
+      "masterNodeRef": "gsa/NODE.2_102",
+      "constructionStageRefs": [
+        
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.509Z",
+      "updatedAt": "2020-03-19T11:45:13.509Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "PIN",
+      "geometryHash": null,
+      "hash": "71b8fdebd1d58878107fe286705c9552",
+      "applicationId": "gsa/RIGID.3_2",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef99",
+      "type": "StructuralRigidConstraints",
+      "constraints": {
+        "type": "StructuralVectorBoolSix",
+        "value": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_103"
+      ],
+      "masterNodeRef": "gsa/NODE.2_104",
+      "constructionStageRefs": [
+        
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.509Z",
+      "updatedAt": "2020-03-19T11:45:13.509Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "XY",
+      "geometryHash": null,
+      "hash": "2b2dc3b894e87dbb3908622c5b5979b9",
+      "applicationId": "gsa/RIGID.3_3",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef9a",
+      "type": "StructuralRigidConstraints",
+      "constraints": {
+        "type": "StructuralVectorBoolSix",
+        "value": [
+          true,
+          true,
+          false,
+          false,
+          false,
+          true
+        ],
+        "hash": "e64fb6941c4b002731563d14f8cbe55f"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_105"
+      ],
+      "masterNodeRef": "gsa/NODE.2_106",
+      "constructionStageRefs": [
+        
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.509Z",
+      "updatedAt": "2020-03-19T11:45:13.509Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "YZ",
+      "geometryHash": null,
+      "hash": "b688943172a8400248a52e10652c5941",
+      "applicationId": "gsa/RIGID.3_4",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef9b",
+      "type": "StructuralRigidConstraints",
+      "constraints": {
+        "type": "StructuralVectorBoolSix",
+        "value": [
+          false,
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        "hash": "bf280ce7dfd87e98045fef5f430ca896"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_107"
+      ],
+      "masterNodeRef": "gsa/NODE.2_108",
+      "constructionStageRefs": [
+        
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.509Z",
+      "updatedAt": "2020-03-19T11:45:13.509Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "ZX",
+      "geometryHash": null,
+      "hash": "dbac3318f6446ef7e288be46de180b86",
+      "applicationId": "gsa/RIGID.3_5",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef9c",
+      "type": "StructuralRigidConstraints",
+      "constraints": {
+        "type": "StructuralVectorBoolSix",
+        "value": [
+          true,
+          false,
+          true,
+          false,
+          true,
+          false
+        ],
+        "hash": "e911cc9d39645e442714f4bca351cb2b"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_109"
+      ],
+      "masterNodeRef": "gsa/NODE.2_110",
+      "constructionStageRefs": [
+        
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.509Z",
+      "updatedAt": "2020-03-19T11:45:13.509Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "XY PIN",
+      "geometryHash": null,
+      "hash": "a98ab4691c4d3751bb37e032fb03bccf",
+      "applicationId": "gsa/RIGID.3_6",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef9d",
+      "type": "StructuralRigidConstraints",
+      "constraints": {
+        "type": "StructuralVectorBoolSix",
+        "value": [
+          true,
+          true,
+          false,
+          false,
+          false,
+          true
+        ],
+        "hash": "e64fb6941c4b002731563d14f8cbe55f"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_111"
+      ],
+      "masterNodeRef": "gsa/NODE.2_112",
+      "constructionStageRefs": [
+        
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.509Z",
+      "updatedAt": "2020-03-19T11:45:13.509Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "YZ PIN",
+      "geometryHash": null,
+      "hash": "9dae74d6d0586c9e35cbacd019c3d7c7",
+      "applicationId": "gsa/RIGID.3_7",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef9e",
+      "type": "StructuralRigidConstraints",
+      "constraints": {
+        "type": "StructuralVectorBoolSix",
+        "value": [
+          false,
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        "hash": "bf280ce7dfd87e98045fef5f430ca896"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_113"
+      ],
+      "masterNodeRef": "gsa/NODE.2_114",
+      "constructionStageRefs": [
+        
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.509Z",
+      "updatedAt": "2020-03-19T11:45:13.509Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "ZX PIN",
+      "geometryHash": null,
+      "hash": "e29ed413804b0511984a865080ce2b54",
+      "applicationId": "gsa/RIGID.3_8",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0ef9f",
+      "type": "StructuralRigidConstraints",
+      "constraints": {
+        "type": "StructuralVectorBoolSix",
+        "value": [
+          true,
+          false,
+          true,
+          false,
+          true,
+          false
+        ],
+        "hash": "e911cc9d39645e442714f4bca351cb2b"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_115"
+      ],
+      "masterNodeRef": "gsa/NODE.2_116",
+      "constructionStageRefs": [
+        
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.509Z",
+      "updatedAt": "2020-03-19T11:45:13.509Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "Z",
+      "geometryHash": null,
+      "hash": "ed0fe9bc0c975faad0edc5e5ea679e46",
+      "applicationId": "gsa/RIGID.3_9",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0efa0",
+      "type": "StructuralRigidConstraints",
+      "constraints": {
+        "type": "StructuralVectorBoolSix",
+        "value": [
+          false,
+          false,
+          true,
+          true,
+          true,
+          false
+        ],
+        "hash": "5f28d0316798a2cfa7129b44b5cdb409"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_117"
+      ],
+      "masterNodeRef": "gsa/NODE.2_118",
+      "constructionStageRefs": [
+        
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.509Z",
+      "updatedAt": "2020-03-19T11:45:13.509Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "X",
+      "geometryHash": null,
+      "hash": "e7d55d9429d62339c60ac549c7ab42d6",
+      "applicationId": "gsa/RIGID.3_10",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0efa1",
+      "type": "StructuralRigidConstraints",
+      "constraints": {
+        "type": "StructuralVectorBoolSix",
+        "value": [
+          true,
+          false,
+          false,
+          false,
+          true,
+          true
+        ],
+        "hash": "a30770802932a3132c722d551260e4b5"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_119"
+      ],
+      "masterNodeRef": "gsa/NODE.2_120",
+      "constructionStageRefs": [
+        
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.509Z",
+      "updatedAt": "2020-03-19T11:45:13.509Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "Y",
+      "geometryHash": null,
+      "hash": "88e32c25dd459220cce58a96c269dc71",
+      "applicationId": "gsa/RIGID.3_11",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0efa2",
+      "type": "StructuralRigidConstraints",
+      "constraints": {
+        "type": "StructuralVectorBoolSix",
+        "value": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ],
+        "hash": "a042f7a4df1c85110e9d7165037192b0"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_121"
+      ],
+      "masterNodeRef": "gsa/NODE.2_122",
+      "constructionStageRefs": [
+        
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.509Z",
+      "updatedAt": "2020-03-19T11:45:13.510Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "Z PIN",
+      "geometryHash": null,
+      "hash": "31c03ac05ae3b1917d3d492493652fac",
+      "applicationId": "gsa/RIGID.3_12",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0efa3",
+      "type": "StructuralRigidConstraints",
+      "constraints": {
+        "type": "StructuralVectorBoolSix",
+        "value": [
+          false,
+          false,
+          true,
+          true,
+          true,
+          false
+        ],
+        "hash": "5f28d0316798a2cfa7129b44b5cdb409"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_123"
+      ],
+      "masterNodeRef": "gsa/NODE.2_124",
+      "constructionStageRefs": [
+        
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.510Z",
+      "updatedAt": "2020-03-19T11:45:13.510Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "X PIN",
+      "geometryHash": null,
+      "hash": "b1147014b42e1fb0d6560c9ef0515ed6",
+      "applicationId": "gsa/RIGID.3_13",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0efa4",
+      "type": "StructuralRigidConstraints",
+      "constraints": {
+        "type": "StructuralVectorBoolSix",
+        "value": [
+          true,
+          false,
+          false,
+          false,
+          true,
+          true
+        ],
+        "hash": "a30770802932a3132c722d551260e4b5"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_125"
+      ],
+      "masterNodeRef": "gsa/NODE.2_126",
+      "constructionStageRefs": [
+        
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.510Z",
+      "updatedAt": "2020-03-19T11:45:13.510Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "Y PIN",
+      "geometryHash": null,
+      "hash": "f4a7168e01961c4e042472ef06fa4499",
+      "applicationId": "gsa/RIGID.3_14",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0efa5",
+      "type": "StructuralRigidConstraints",
+      "constraints": {
+        "type": "StructuralVectorBoolSix",
+        "value": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ],
+        "hash": "a042f7a4df1c85110e9d7165037192b0"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_127"
+      ],
+      "masterNodeRef": "gsa/NODE.2_128",
+      "constructionStageRefs": [
+        
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.510Z",
+      "updatedAt": "2020-03-19T11:45:13.510Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "CUSTOM",
+      "geometryHash": null,
+      "hash": "a92f611e9585f41b003356a64ba99d84",
+      "applicationId": "gsa/RIGID.3_15",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0efa6",
+      "type": "StructuralRigidConstraints",
+      "constraints": {
+        "type": "StructuralVectorBoolSix",
+        "value": [
+          true,
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "hash": "e72d8d71dede5bdaf42ad7064dce99f7"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_129"
+      ],
+      "masterNodeRef": "gsa/NODE.2_130",
+      "constructionStageRefs": [
+        
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.510Z",
+      "updatedAt": "2020-03-19T11:45:13.510Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "CUSTOM",
+      "geometryHash": null,
+      "hash": "0d60b22be6c11cf1d2c16d188d49e8c6",
+      "applicationId": "gsa/RIGID.3_16",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0efa7",
+      "type": "StructuralRigidConstraints",
+      "constraints": {
+        "type": "StructuralVectorBoolSix",
+        "value": [
+          true,
+          true,
+          false,
+          true,
+          false,
+          false
+        ],
+        "hash": "8e6b68ec7f7e7de143f45bf37ce2d8e0"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_131"
+      ],
+      "masterNodeRef": "gsa/NODE.2_132",
+      "constructionStageRefs": [
+        
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.510Z",
+      "updatedAt": "2020-03-19T11:45:13.510Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+        
+      ],
+      "canWrite": [
+        
+      ],
+      "anonymousComments": false,
+      "comments": [
+        
+      ],
+      "name": "MULTI",
+      "geometryHash": null,
+      "hash": "2eac151d1f1b7b391f56c703ad02f08d",
+      "applicationId": "gsa/RIGID.3_17",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+        
+      ],
+      "ancestors": [
+        
+      ],
+      "_id": "5e735b49e20536164dd0efa8",
+      "type": "StructuralRigidConstraints",
+      "constraints": {
+        "type": "StructuralVectorBoolSix",
+        "value": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "hash": "4d8dc7866fe2f80672e65c3a2620ae93"
+      },
+      "nodeRefs": [
+        "gsa/NODE.2_133",
+        "gsa/NODE.2_134",
+        "gsa/NODE.2_135"
+      ],
+      "masterNodeRef": "gsa/NODE.2_136",
+      "constructionStageRefs": [
+        
+      ],
+      "owner": "5d77d904287a510552a6f19b",
+      "__v": 0,
+      "createdAt": "2020-03-19T11:45:13.510Z",
+      "updatedAt": "2020-03-19T11:45:13.510Z"
+    }
+  ],
+  "message": "Object list returned. If querying, duplication of objects in list will not be respected."
+}

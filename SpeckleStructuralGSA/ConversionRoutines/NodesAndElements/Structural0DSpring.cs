@@ -30,11 +30,11 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; // Colour
       counter++; // Type
-      obj.PropertyRef = HelperClass.GetApplicationId(typeof(GSASpringProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
+      obj.PropertyRef = Helper.GetApplicationId(typeof(GSASpringProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
       counter++; // Group
 
       obj.Value = new List<double>();
@@ -72,17 +72,27 @@ namespace SpeckleStructuralGSA
       var keyword = typeof(GSA0DSpring).GetGSAKeyword();
 
       var index = Initialiser.Cache.ResolveIndex(keyword, spring.ApplicationId);
-      var propRef = 0;
-      try
+
+      var propKeyword = typeof(GSASpringProperty).GetGSAKeyword();
+      var indexResult = Initialiser.Cache.LookupIndex(propKeyword, spring.PropertyRef);
+      //If the reference can't be found, then reserve a new index so that it at least doesn't point to any other existing record
+      var propRef = indexResult ?? Initialiser.Cache.ResolveIndex(propKeyword, spring.PropertyRef);
+      if (indexResult == null && spring.ApplicationId != null)
       {
-        propRef = Initialiser.Cache.LookupIndex(typeof(GSASpringProperty).GetGSAKeyword(), spring.PropertyRef).Value;
+        if (spring.PropertyRef == null)
+        {
+          Helper.SafeDisplay("Blank property references found for these Application IDs:", spring.ApplicationId);
+        }
+        else
+        {
+          Helper.SafeDisplay("Property references not found:", spring.ApplicationId + " referencing " + spring.PropertyRef);
+        }
       }
-      catch { }
 
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + HelperClass.GenerateSID(spring),
+        keyword + ":" + Helper.GenerateSID(spring),
         index.ToString(),
         spring.Name == null || spring.Name == "" ? " " : spring.Name,
         "NO_RGB",
@@ -95,7 +105,7 @@ namespace SpeckleStructuralGSA
       //Topology
       for (var i = 0; i < spring.Value.Count(); i += 3)
       {
-        ls.Add(HelperClass.NodeAt(spring.Value[i], spring.Value[i + 1], spring.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString());
+        ls.Add(Helper.NodeAt(spring.Value[i], spring.Value[i + 1], spring.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString());
       }
 
       ls.Add("0"); // Orientation Node

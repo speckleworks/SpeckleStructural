@@ -30,12 +30,12 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
 
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; // Colour
       counter++; // Type
-      obj.PropertyRef = HelperClass.GetApplicationId(typeof(GSA1DProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
+      obj.PropertyRef = Helper.GetApplicationId(typeof(GSA1DProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
       counter++; // Group
 
       obj.Value = new List<double>();
@@ -53,12 +53,12 @@ namespace SpeckleStructuralGSA
       if (orientationNodeRef != "0")
       {
         var node = nodes.Where(n => n.GSAId == Convert.ToInt32(orientationNodeRef)).FirstOrDefault();
-        obj.ZAxis = HelperClass.Parse1DAxis(obj.Value.ToArray(),
+        obj.ZAxis = Helper.Parse1DAxis(obj.Value.ToArray(),
             rotationAngle, node.Value.Value.ToArray()).Normal as StructuralVectorThree;
         this.SubGWACommand.Add(node.GWACommand);
       }
       else
-        obj.ZAxis = HelperClass.Parse1DAxis(obj.Value.ToArray(), rotationAngle).Normal as StructuralVectorThree;
+        obj.ZAxis = Helper.Parse1DAxis(obj.Value.ToArray(), rotationAngle).Normal as StructuralVectorThree;
 
 
       if (pieces[counter++] != "NO_RLS")
@@ -66,25 +66,26 @@ namespace SpeckleStructuralGSA
         var start = pieces[counter++];
         var end = pieces[counter++];
 
-        obj.EndRelease = new List<StructuralVectorBoolSix>
+        var endReleases = new List<StructuralVectorBoolSix>
         {
           new StructuralVectorBoolSix(new bool[6]),
           new StructuralVectorBoolSix(new bool[6])
         };
 
-        obj.EndRelease[0].Value[0] = ParseEndRelease(start[0], pieces, ref counter);
-        obj.EndRelease[0].Value[1] = ParseEndRelease(start[1], pieces, ref counter);
-        obj.EndRelease[0].Value[2] = ParseEndRelease(start[2], pieces, ref counter);
-        obj.EndRelease[0].Value[3] = ParseEndRelease(start[3], pieces, ref counter);
-        obj.EndRelease[0].Value[4] = ParseEndRelease(start[4], pieces, ref counter);
-        obj.EndRelease[0].Value[5] = ParseEndRelease(start[5], pieces, ref counter);
+        endReleases[0].Value[1] = ParseEndRelease(start[1], pieces, ref counter);
+        endReleases[0].Value[2] = ParseEndRelease(start[2], pieces, ref counter);
+        endReleases[0].Value[3] = ParseEndRelease(start[3], pieces, ref counter);
+        endReleases[0].Value[4] = ParseEndRelease(start[4], pieces, ref counter);
+        endReleases[0].Value[5] = ParseEndRelease(start[5], pieces, ref counter);
 
-        obj.EndRelease[1].Value[0] = ParseEndRelease(end[0], pieces, ref counter);
-        obj.EndRelease[1].Value[1] = ParseEndRelease(end[1], pieces, ref counter);
-        obj.EndRelease[1].Value[2] = ParseEndRelease(end[2], pieces, ref counter);
-        obj.EndRelease[1].Value[3] = ParseEndRelease(end[3], pieces, ref counter);
-        obj.EndRelease[1].Value[4] = ParseEndRelease(end[4], pieces, ref counter);
-        obj.EndRelease[1].Value[5] = ParseEndRelease(end[5], pieces, ref counter);
+        endReleases[1].Value[0] = ParseEndRelease(end[0], pieces, ref counter);
+        endReleases[1].Value[1] = ParseEndRelease(end[1], pieces, ref counter);
+        endReleases[1].Value[2] = ParseEndRelease(end[2], pieces, ref counter);
+        endReleases[1].Value[3] = ParseEndRelease(end[3], pieces, ref counter);
+        endReleases[1].Value[4] = ParseEndRelease(end[4], pieces, ref counter);
+        endReleases[1].Value[5] = ParseEndRelease(end[5], pieces, ref counter);
+
+        obj.EndRelease = endReleases;
       }
       else
       {
@@ -95,20 +96,22 @@ namespace SpeckleStructuralGSA
         };
       }
 
-      obj.Offset = new List<StructuralVectorThree>
+      var offsets = new List<StructuralVectorThree>
       {
         new StructuralVectorThree(new double[3]),
         new StructuralVectorThree(new double[3])
       };
 
-      obj.Offset[0].Value[0] = Convert.ToDouble(pieces[counter++]);
-      obj.Offset[1].Value[0] = Convert.ToDouble(pieces[counter++]);
+      offsets[0].Value[0] = Convert.ToDouble(pieces[counter++]);
+      offsets[1].Value[0] = Convert.ToDouble(pieces[counter++]);
 
-      obj.Offset[0].Value[1] = Convert.ToDouble(pieces[counter++]);
-      obj.Offset[1].Value[1] = obj.Offset[0].Value[1];
+      offsets[0].Value[1] = Convert.ToDouble(pieces[counter++]);
+      offsets[1].Value[1] = offsets[0].Value[1];
 
-      obj.Offset[0].Value[2] = Convert.ToDouble(pieces[counter++]);
-      obj.Offset[1].Value[2] = obj.Offset[0].Value[2];
+      offsets[0].Value[2] = Convert.ToDouble(pieces[counter++]);
+      offsets[1].Value[2] = offsets[0].Value[2];
+
+      obj.Offset = offsets;
 
       //counter++; // Action // TODO: EL.4 SUPPORT
       counter++; // Dummy
@@ -128,18 +131,28 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA1DElement).GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(typeof(GSA1DElement).GetGSAKeyword(), element.ApplicationId);
-      var propRef = 0;
-      try
+      var index = Initialiser.Cache.ResolveIndex(keyword, element.ApplicationId);
+
+      var propKeyword = typeof(GSA1DProperty).GetGSAKeyword();
+      var indexResult = Initialiser.Cache.LookupIndex(propKeyword, element.PropertyRef);
+      //If the reference can't be found, then reserve a new index so that it at least doesn't point to any other existing record
+      var propRef = indexResult ?? Initialiser.Cache.ResolveIndex(propKeyword, element.PropertyRef);
+      if (indexResult == null && element.ApplicationId != null)
       {
-        propRef = Initialiser.Cache.LookupIndex(typeof(GSA1DProperty).GetGSAKeyword(), element.PropertyRef).Value;
+        if (element.PropertyRef == null)
+        {
+          Helper.SafeDisplay("Blank property references found for these Application IDs:", element.ApplicationId);
+        }
+        else
+        {
+          Helper.SafeDisplay("Property references not found:", element.ApplicationId + " referencing " + element.PropertyRef);
+        }
       }
-      catch { }
 
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + HelperClass.GenerateSID(element),
+        keyword + ":" + Helper.GenerateSID(element),
         index.ToString(),
         element.Name == null || element.Name == "" ? " " : element.Name,
         "NO_RGB",
@@ -148,11 +161,11 @@ namespace SpeckleStructuralGSA
         group.ToString()
       };
       for (var i = 0; i < element.Value.Count(); i += 3)
-        ls.Add(HelperClass.NodeAt(element.Value[i], element.Value[i + 1], element.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString());
+        ls.Add(Helper.NodeAt(element.Value[i], element.Value[i + 1], element.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString());
       ls.Add("0"); // Orientation Node
       try
       {
-        ls.Add(HelperClass.Get1DAngle(element.Value.ToArray(), element.ZAxis).ToString());
+        ls.Add(Helper.Get1DAngle(element.Value.ToArray(), element.ZAxis).ToString());
       }
       catch { ls.Add("0"); }
       try
@@ -255,7 +268,7 @@ namespace SpeckleStructuralGSA
 
       var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; // Color
 
@@ -269,7 +282,7 @@ namespace SpeckleStructuralGSA
       else
         obj.ElementType = Structural1DElementType.Generic;
 
-      obj.PropertyRef = HelperClass.GetApplicationId(typeof(GSA1DProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
+      obj.PropertyRef = Helper.GetApplicationId(typeof(GSA1DProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
       this.Group = Convert.ToInt32(pieces[counter++]); // Keep group for load targetting
 
       obj.Value = new List<double>();
@@ -277,6 +290,11 @@ namespace SpeckleStructuralGSA
       for (var i = 0; i < nodeRefs.Length; i++)
       {
         var node = nodes.Where(n => n.GSAId == Convert.ToInt32(nodeRefs[i])).FirstOrDefault();
+        if (node == null)
+        {
+          //TO DO: review how this is possible and prevent it
+          continue;
+        }
         obj.Value.AddRange(node.Value.Value);
         this.SubGWACommand.Add(node.GWACommand);
       }
@@ -287,12 +305,12 @@ namespace SpeckleStructuralGSA
       if (orientationNodeRef != "0")
       {
         var node = nodes.Where(n => n.GSAId == Convert.ToInt32(orientationNodeRef)).FirstOrDefault();
-        obj.ZAxis = HelperClass.Parse1DAxis(obj.Value.ToArray(),
+        obj.ZAxis = Helper.Parse1DAxis(obj.Value.ToArray(),
             rotationAngle, node.Value.ToArray()).Normal as StructuralVectorThree;
         this.SubGWACommand.Add(node.GWACommand);
       }
       else
-        obj.ZAxis = HelperClass.Parse1DAxis(obj.Value.ToArray(), rotationAngle).Normal as StructuralVectorThree;
+        obj.ZAxis = Helper.Parse1DAxis(obj.Value.ToArray(), rotationAngle).Normal as StructuralVectorThree;
 
       counter += 9; //Skip to end conditions
 
@@ -304,20 +322,22 @@ namespace SpeckleStructuralGSA
 
       // Skip to offsets at fifth to last
       counter = pieces.Length - 5;
-      obj.Offset = new List<StructuralVectorThree>
+      var offsets = new List<StructuralVectorThree>
       {
         new StructuralVectorThree(new double[3]),
         new StructuralVectorThree(new double[3])
       };
 
-      obj.Offset[0].Value[0] = Convert.ToDouble(pieces[counter++]);
-      obj.Offset[1].Value[0] = Convert.ToDouble(pieces[counter++]);
+      offsets[0].Value[0] = Convert.ToDouble(pieces[counter++]);
+      offsets[1].Value[0] = Convert.ToDouble(pieces[counter++]);
 
-      obj.Offset[0].Value[1] = Convert.ToDouble(pieces[counter++]);
-      obj.Offset[1].Value[1] = obj.Offset[0].Value[1];
+      offsets[0].Value[1] = Convert.ToDouble(pieces[counter++]);
+      offsets[1].Value[1] = offsets[0].Value[1];
 
-      obj.Offset[0].Value[2] = Convert.ToDouble(pieces[counter++]);
-      obj.Offset[1].Value[2] = obj.Offset[0].Value[2];
+      offsets[0].Value[2] = Convert.ToDouble(pieces[counter++]);
+      offsets[1].Value[2] = offsets[0].Value[2];
+
+      obj.Offset = offsets;
 
       this.Value = obj;
     }
@@ -332,19 +352,27 @@ namespace SpeckleStructuralGSA
       var keyword = typeof(GSA1DMember).GetGSAKeyword();
 
       var index = Initialiser.Cache.ResolveIndex(typeof(GSA1DMember).GetGSAKeyword(), member.ApplicationId);
-      var propRef = 0;
-      try
+
+      var propKeyword = ((member.ElementType == Structural1DElementType.Spring) ? typeof(GSASpringProperty) : typeof(GSA1DProperty)).GetGSAKeyword();
+      var indexResult = Initialiser.Cache.LookupIndex(propKeyword, member.PropertyRef);
+      //If the reference can't be found, then reserve a new index so that it at least doesn't point to any other existing record
+      var propRef = indexResult ?? Initialiser.Cache.ResolveIndex(propKeyword, member.PropertyRef);
+      if (indexResult == null && member.ApplicationId != null)
       {
-        propRef = (member.ElementType == Structural1DElementType.Spring)
-          ? Initialiser.Cache.LookupIndex(typeof(GSASpringProperty).GetGSAKeyword(), member.PropertyRef).Value
-          : Initialiser.Cache.LookupIndex(typeof(GSA1DProperty).GetGSAKeyword(), member.PropertyRef).Value;
+        if (member.PropertyRef == null)
+        {
+          Helper.SafeDisplay("Blank property references found for these Application IDs:", member.ApplicationId);
+        }
+        else
+        {
+          Helper.SafeDisplay("Property references not found:", member.ApplicationId + " referencing " + member.PropertyRef);
+        }
       }
-      catch { }
 
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + HelperClass.GenerateSID(member),
+        keyword + ":" + Helper.GenerateSID(member),
         index.ToString(),
         member.Name == null || member.Name == "" ? " " : member.Name,
         "NO_RGB"
@@ -362,13 +390,13 @@ namespace SpeckleStructuralGSA
       var topo = "";
       for (var i = 0; i < member.Value.Count(); i += 3)
       {
-        topo += HelperClass.NodeAt(member.Value[i], member.Value[i + 1], member.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString() + " ";
+        topo += Helper.NodeAt(member.Value[i], member.Value[i + 1], member.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString() + " ";
       }
       ls.Add(topo);
       ls.Add("0"); // Orientation node
       try
       {
-        ls.Add(HelperClass.Get1DAngle(member.Value.ToArray(), member.ZAxis).ToString());
+        ls.Add(Helper.Get1DAngle(member.Value.ToArray(), member.ZAxis ?? new StructuralVectorThree(0, 0, 1)).ToString());
       }
       catch { ls.Add("0"); }
       //ls.Add(member.GSAMeshSize == 0 ? "0" : member.GSAMeshSize.ToString()); // Target mesh size
@@ -382,41 +410,48 @@ namespace SpeckleStructuralGSA
       ls.Add("0"); // Time 4
       ls.Add((member.GSADummy.HasValue && member.GSADummy.Value) ? "DUMMY" : "ACTIVE");
 
-      try
+      if (member.EndRelease == null)
       {
-        if (member.EndRelease[0].Value.SequenceEqual(ParseEndReleases(1).Value))
-          ls.Add("1");
-        else if (member.EndRelease[0].Value.SequenceEqual(ParseEndReleases(2).Value))
-          ls.Add("2");
-        else if (member.EndRelease[0].Value.SequenceEqual(ParseEndReleases(3).Value))
-          ls.Add("3");
-        else
-        {
-          if (member.EndRelease[0].Value.Skip(3).Take(3).SequenceEqual(new bool[] { false, false, false }))
-            ls.Add("2");
-          else
-            ls.Add("1");
-        }
+        ls.AddRange(new[] { "2", "2" });
       }
-      catch { ls.Add("2"); }
+      else
+      {
+        try
+        {
+          if (member.EndRelease[0].Value.SequenceEqual(ParseEndReleases(1).Value))
+            ls.Add("1");
+          else if (member.EndRelease[0].Value.SequenceEqual(ParseEndReleases(2).Value))
+            ls.Add("2");
+          else if (member.EndRelease[0].Value.SequenceEqual(ParseEndReleases(3).Value))
+            ls.Add("3");
+          else
+          {
+            if (member.EndRelease[0].Value.Skip(3).Take(3).SequenceEqual(new bool[] { false, false, false }))
+              ls.Add("2");
+            else
+              ls.Add("1");
+          }
+        }
+        catch { ls.Add("2"); }
 
-      try
-      {
-        if (member.EndRelease[1].Value.SequenceEqual(ParseEndReleases(1).Value))
-          ls.Add("1");
-        else if (member.EndRelease[1].Value.SequenceEqual(ParseEndReleases(2).Value))
-          ls.Add("2");
-        else if (member.EndRelease[1].Value.SequenceEqual(ParseEndReleases(3).Value))
-          ls.Add("3");
-        else
+        try
         {
-          if (member.EndRelease[1].Value.Skip(3).Take(3).SequenceEqual(new bool[] { false, false, false }))
-            ls.Add("2");
-          else
+          if (member.EndRelease[1].Value.SequenceEqual(ParseEndReleases(1).Value))
             ls.Add("1");
+          else if (member.EndRelease[1].Value.SequenceEqual(ParseEndReleases(2).Value))
+            ls.Add("2");
+          else if (member.EndRelease[1].Value.SequenceEqual(ParseEndReleases(3).Value))
+            ls.Add("3");
+          else
+          {
+            if (member.EndRelease[1].Value.Skip(3).Take(3).SequenceEqual(new bool[] { false, false, false }))
+              ls.Add("2");
+            else
+              ls.Add("1");
+          }
         }
+        catch { ls.Add("2"); }
       }
-      catch { ls.Add("2"); }
 
       ls.Add("AUTOMATIC"); // Effective length option
       ls.Add("0"); // Pool
@@ -425,9 +460,15 @@ namespace SpeckleStructuralGSA
       ls.Add("MAN"); // Auto offset 2
       ls.Add("NO"); // Internal auto offset
 
-      try
+      if (member.Offset == null)
       {
-        var subLs = new List<string>
+        ls.AddRange(new[] { "0", "0", "0", "0" });
+      }
+      else
+      {
+        try
+        {
+          var subLs = new List<string>
         {
           member.Offset[0].Value[0].ToString(), // Offset x-start
           member.Offset[1].Value[0].ToString(), // Offset x-end
@@ -436,14 +477,12 @@ namespace SpeckleStructuralGSA
           member.Offset[0].Value[2].ToString()
         };
 
-        ls.AddRange(subLs);
-      }
-      catch
-      {
-        ls.Add("0");
-        ls.Add("0");
-        ls.Add("0");
-        ls.Add("0");
+          ls.AddRange(subLs);
+        }
+        catch
+        {
+          ls.AddRange(new[] { "0", "0", "0", "0" });
+        }
       }
       ls.Add("ALL"); // Exposure
 

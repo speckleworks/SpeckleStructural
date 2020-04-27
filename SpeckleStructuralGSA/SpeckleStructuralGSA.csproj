@@ -19,7 +19,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>portable</DebugType>
+    <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -216,7 +216,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConversionRoutines\Conversions.cs" />
+    <Compile Include="ConversionRoutines\GSAGridPlaneBase.cs" />
     <Compile Include="ConversionRoutines\Loads\Structural0DLoad.cs" />
+    <Compile Include="ConversionRoutines\Loads\Structural0DLoadPoint.cs" />
     <Compile Include="ConversionRoutines\Loads\Structural1DLoad.cs" />
     <Compile Include="ConversionRoutines\Loads\Structural1DLoadLine.cs" />
     <Compile Include="ConversionRoutines\Loads\Structural2DLoad.cs" />
@@ -225,8 +227,10 @@
     <Compile Include="ConversionRoutines\Loads\StructuralGravityLoading.cs" />
     <Compile Include="ConversionRoutines\Loads\StructuralLoadCase.cs" />
     <Compile Include="ConversionRoutines\Loads\StructuralLoadCombo.cs" />
+    <Compile Include="ConversionRoutines\Loads\StructuralLoadPlane.cs" />
     <Compile Include="ConversionRoutines\Loads\StructuralLoadTask.cs" />
     <Compile Include="ConversionRoutines\Loads\StructuralLoadTaskBuckling.cs" />
+    <Compile Include="ConversionRoutines\Loads\StructuralStorey.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\Structural1DInfluenceEffect.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\StructuralAssembly.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\StructuralBridgeAlignment.cs" />
@@ -253,7 +257,7 @@
     <Compile Include="ConversionRoutines\Results\StructuralMiscResult.cs" />
     <Compile Include="ConversionRoutines\Results\StructuralNodeResult.cs" />
     <Compile Include="Enum.cs" />
-    <Compile Include="HelperClass.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="Initialiser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

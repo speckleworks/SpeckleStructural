@@ -221,9 +221,9 @@ namespace SpeckleStructuralClasses
     {
       this.Normal = new StructuralVectorThree(new double[]
       {
-                xdir.Value[2] * ydir.Value[3] - xdir.Value[3] * ydir.Value[2],
-                xdir.Value[3] * ydir.Value[1] - xdir.Value[1] * ydir.Value[3],
                 xdir.Value[1] * ydir.Value[2] - xdir.Value[2] * ydir.Value[1],
+                xdir.Value[2] * ydir.Value[0] - xdir.Value[0] * ydir.Value[2],
+                xdir.Value[0] * ydir.Value[1] - xdir.Value[1] * ydir.Value[0],
       });
       this.Xdir = xdir;
       this.Ydir = ydir;
@@ -238,9 +238,10 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      this.Normal.Scale(factor);
-      this.Xdir.Scale(factor);
-      this.Ydir.Scale(factor);
+      this.Origin.Scale(factor);
+      //this.Normal.Scale(factor);
+      //this.Xdir.Scale(factor);
+      //this.Ydir.Scale(factor);
 
       this.Properties = ScaleProperties(this.Properties, factor);
       this.GenerateHash();

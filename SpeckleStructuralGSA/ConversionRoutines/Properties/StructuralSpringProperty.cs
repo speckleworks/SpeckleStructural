@@ -27,18 +27,18 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; //Skip colour
       var gsaAxis = pieces[counter++];
 
       if (gsaAxis == "GLOBAL")
-        obj.Axis = HelperClass.Parse0DAxis(0, Initialiser.Interface, out var gwaRec);
+        obj.Axis = Helper.Parse0DAxis(0, Initialiser.Interface, out var gwaRec);
       else if (gsaAxis == "VERTICAL")
-        obj.Axis = HelperClass.Parse0DAxis(-14, Initialiser.Interface, out var gwaRec);
+        obj.Axis = Helper.Parse0DAxis(-14, Initialiser.Interface, out var gwaRec);
       else
       {
-        obj.Axis = HelperClass.Parse0DAxis(Convert.ToInt32(gsaAxis), Initialiser.Interface, out var gwaRec);
+        obj.Axis = Helper.Parse0DAxis(Convert.ToInt32(gsaAxis), Initialiser.Interface, out var gwaRec);
         this.SubGWACommand.Add(gwaRec);
       }
 
@@ -152,7 +152,7 @@ namespace SpeckleStructuralGSA
         else
           try
           {
-            HelperClass.SetAxis(springProp.Axis, out var axisIndex, out gwaAxisCommand, springProp.Name);
+            Helper.SetAxis(springProp.Axis, out var axisIndex, out gwaAxisCommand, springProp.Name);
             if (gwaAxisCommand.Length > 0)
             {
               gwaCommands.Add(gwaAxisCommand);
@@ -165,7 +165,7 @@ namespace SpeckleStructuralGSA
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + HelperClass.GenerateSID(springProp),
+        keyword + ":" + Helper.GenerateSID(springProp),
         index.ToString(),
         string.IsNullOrEmpty(springProp.Name) ? "" : springProp.Name,
         "NO_RGB",

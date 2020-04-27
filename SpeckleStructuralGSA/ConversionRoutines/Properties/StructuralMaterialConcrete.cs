@@ -30,7 +30,7 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
       
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       counter++; // MAT.8
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; // Unlocked
@@ -65,12 +65,12 @@ namespace SpeckleStructuralGSA
       var ls = new List<string>
       {
         "SET",
-        "MAT_CONCRETE.17" + ":" + HelperClass.GenerateSID(mat),
+        "MAT_CONCRETE.17" + ":" + Helper.GenerateSID(mat),
         index.ToString(),
         "MAT.8",
         mat.Name == null || mat.Name == "" ? " " : mat.Name,
         "YES", // Unlocked
-        mat.YoungsModulus.ToString(), // E
+        (mat.YoungsModulus*1000).ToString(), // E
         mat.PoissonsRatio.ToString(), // nu
         mat.ShearModulus.ToString(), // G
         mat.Density.ToString(), // rho

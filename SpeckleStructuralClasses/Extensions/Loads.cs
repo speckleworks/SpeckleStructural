@@ -126,7 +126,76 @@ namespace SpeckleStructuralClasses
       this.GenerateHash();
     }
   }
+  public partial class StructuralLoadPlane
+  {
+    public StructuralLoadPlane() { }
 
+    public StructuralLoadPlane(StructuralAxis loadPlaneAxis, int elementDimension, double tolerance, int span, double spanAngle, string applicationId = null, Dictionary<string, object> properties = null)
+    {
+      if (loadPlaneAxis != null)
+      {
+        this.Axis.Origin = loadPlaneAxis.Origin;
+        this.Axis.Xdir = loadPlaneAxis.Xdir;
+        this.Axis.Ydir = loadPlaneAxis.Ydir;
+        this.Axis.Normal = loadPlaneAxis.Normal;
+      }
+      this.ElementDimension = elementDimension;
+      this.Tolerance = tolerance;
+      this.Span = span;
+      this.SpanAngle = spanAngle;
+      this.ApplicationId = applicationId;
+
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
+
+      GenerateHash();
+    }
+
+    public override void Scale(double factor)
+    {
+      this.Tolerance *= factor;
+
+      this.Properties = ScaleProperties(this.Properties, factor);
+      this.GenerateHash();
+    }
+  }
+
+  public partial class StructuralStorey
+  {
+    public StructuralStorey() { }
+
+    public StructuralStorey(StructuralAxis axis, string applicationId = null, Dictionary<string, object> properties = null)
+    {
+      if (axis != null)
+      {
+        this.Axis.Origin = axis.Origin;
+        this.Axis.Xdir = axis.Xdir;
+        this.Axis.Ydir = axis.Ydir;
+        this.Axis.Normal = axis.Normal;
+      }
+      this.ApplicationId = applicationId;
+
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
+
+      GenerateHash();
+    }
+
+    public override void Scale(double factor)
+    {
+      this.Elevation *= factor;
+      this.ToleranceAbove *= factor;
+      this.ToleranceBelow *= factor;
+      this.Properties = ScaleProperties(this.Properties, factor);
+      this.GenerateHash();
+    }
+  }
+
+  //[Serializable]
   public partial class Structural0DLoad
   {
     public Structural0DLoad() { }
@@ -147,6 +216,43 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
+      this.Properties = ScaleProperties(this.Properties, factor);
+      this.GenerateHash();
+    }
+  }
+
+  public partial class Structural0DLoadPoint
+  {
+    public Structural0DLoadPoint() { }
+
+    public Structural0DLoadPoint(double[] value, string loadPlaneRef, StructuralVectorSix loading, string loadCaseRef, string applicationId = null, Dictionary<string, object> properties = null)
+    {
+      this.Value = value.ToList();
+      this.LoadPlaneRef = loadPlaneRef;
+      this.Loading = loading;
+      this.LoadCaseRef = loadCaseRef;
+      this.ApplicationId = applicationId;
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
+
+      GenerateHash();
+    }
+
+    public override void Scale(double factor)
+    {
+      for (var i = 0; i < Value.Count(); i++)
+        Value[i] *= factor;
+
+      if (Loading.Value != null)
+      {
+        for (var i = 0; i < Loading.Value.Count(); i++)
+        {
+          Loading.Value[i] *= factor;
+        }
+      }
+
       this.Properties = ScaleProperties(this.Properties, factor);
       this.GenerateHash();
     }
@@ -201,6 +307,23 @@ namespace SpeckleStructuralClasses
         this.Value[i] *= factor;
 
       this.Properties = ScaleProperties(this.Properties, factor);
+
+      if (Loading != null && Loading.Value != null)
+      {
+        for (var i = 0; i < Loading.Value.Count(); i++)
+        {
+          Loading.Value[i] *= factor;
+        }
+      }
+
+      if (LoadingEnd != null && LoadingEnd.Value != null)
+      {
+        for (var i = 0; i < LoadingEnd.Value.Count(); i++)
+        {
+          LoadingEnd.Value[i] *= factor;
+        }
+      }
+
       this.GenerateHash();
     }
   }

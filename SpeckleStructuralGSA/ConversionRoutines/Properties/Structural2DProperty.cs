@@ -28,7 +28,7 @@ namespace SpeckleStructuralGSA
 
       var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; // Color
       counter++; // Type
@@ -90,7 +90,7 @@ namespace SpeckleStructuralGSA
       var keyword = typeof(GSA2DProperty).GetGSAKeyword();
 
       var index = Initialiser.Cache.ResolveIndex(typeof(GSA2DProperty).GetGSAKeyword(), prop.ApplicationId);
-      var materialRef = 0;
+      var materialRef = 1;  //Default to 1 even if there is no such record - better for GSA than a default of 0
       var materialType = "UNDEF";
 
       var res = Initialiser.Cache.LookupIndex(typeof(GSAMaterialSteel).GetGSAKeyword(), prop.MaterialRef);
@@ -112,7 +112,7 @@ namespace SpeckleStructuralGSA
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + HelperClass.GenerateSID(prop),
+        keyword + ":" + Helper.GenerateSID(prop),
         index.ToString(),
         prop.Name == null || prop.Name == "" ? " " : prop.Name,
         "NO_RGB",

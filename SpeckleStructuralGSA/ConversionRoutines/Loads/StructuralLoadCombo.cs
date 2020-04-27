@@ -27,7 +27,7 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++];
 
       // Parse type
@@ -47,18 +47,18 @@ namespace SpeckleStructuralGSA
       // TODO: this only parses the super simple linear add descriptions
       try
       {
-        var desc = HelperClass.ParseLoadDescription(description);
+        var desc = Helper.ParseLoadDescription(description);
 
         foreach (var t in desc)
         {
           switch (t.Item1[0])
           {
             case 'A':
-              obj.LoadTaskRefs.Add(HelperClass.GetApplicationId(typeof(GSALoadTask).GetGSAKeyword(), Convert.ToInt32(t.Item1.Substring(1))));
+              obj.LoadTaskRefs.Add(Helper.GetApplicationId(typeof(GSALoadTask).GetGSAKeyword(), Convert.ToInt32(t.Item1.Substring(1))));
               obj.LoadTaskFactors.Add(t.Item2);
               break;
             case 'C':
-              obj.LoadComboRefs.Add(HelperClass.GetApplicationId(typeof(GSALoadCombo).GetGSAKeyword(), Convert.ToInt32(t.Item1.Substring(1))));
+              obj.LoadComboRefs.Add(Helper.GetApplicationId(typeof(GSALoadCombo).GetGSAKeyword(), Convert.ToInt32(t.Item1.Substring(1))));
               obj.LoadComboFactors.Add(t.Item2);
               break;
           }
@@ -85,7 +85,7 @@ namespace SpeckleStructuralGSA
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + HelperClass.GenerateSID(loadCombo),
+        keyword + ":" + Helper.GenerateSID(loadCombo),
         index.ToString(),
         loadCombo.Name == null || loadCombo.Name == "" ? " " : loadCombo.Name
       };

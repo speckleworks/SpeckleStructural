@@ -27,7 +27,7 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
 
       //TO DO : replace these defaults with the real thing
@@ -55,7 +55,7 @@ namespace SpeckleStructuralGSA
       var ls = new List<string>
         {
           "SET",
-          keyword + ":" + HelperClass.GenerateSID(vehicle),
+          keyword + ":" + Helper.GenerateSID(vehicle),
           index.ToString(),
           string.IsNullOrEmpty(vehicle.Name) ? "" : vehicle.Name,
           vehicle.Width.ToString(),

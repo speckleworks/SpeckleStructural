@@ -5,6 +5,7 @@ using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 using System.Text.RegularExpressions;
+using SpeckleCoreGeometryClasses;
 
 namespace SpeckleStructuralGSA
 {
@@ -29,7 +30,7 @@ namespace SpeckleStructuralGSA
 
       var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       var color = pieces[counter++].ParseGSAColor();
 
@@ -41,7 +42,7 @@ namespace SpeckleStructuralGSA
 
       obj.ElementType = Structural2DElementType.Generic;
       var propertyGSAId = Convert.ToInt32(pieces[counter++]);
-      obj.PropertyRef = HelperClass.GetApplicationId(typeof(GSA2DProperty).GetGSAKeyword(), propertyGSAId);
+      obj.PropertyRef = Helper.GetApplicationId(typeof(GSA2DProperty).GetGSAKeyword(), propertyGSAId);
       counter++; // Group
 
       obj.Vertices = new List<double>();
@@ -59,7 +60,7 @@ namespace SpeckleStructuralGSA
       counter++; // Orientation node
 
       var prop = props.Where(p => p.Value.ApplicationId == obj.PropertyRef).FirstOrDefault();
-      obj.Axis = HelperClass.Parse2DAxis(obj.Vertices.ToArray(),
+      obj.Axis = Helper.Parse2DAxis(obj.Vertices.ToArray(),
           Convert.ToDouble(pieces[counter++]),
           prop == null ? false : (prop as GSA2DProperty).IsAxisLocal);
       if (prop != null)
@@ -102,17 +103,27 @@ namespace SpeckleStructuralGSA
       var keyword = typeof(GSA2DElement).GetGSAKeyword();
 
       var index = Initialiser.Cache.ResolveIndex(typeof(GSA2DElement).GetGSAKeyword(), mesh.ApplicationId);
-      var propRef = 0;
-      try
+
+      var propKeyword = typeof(GSA2DProperty).GetGSAKeyword();
+      var indexResult = Initialiser.Cache.LookupIndex(propKeyword, mesh.PropertyRef);
+      //If the reference can't be found, then reserve a new index so that it at least doesn't point to any other existing record
+      var propRef = indexResult ?? Initialiser.Cache.ResolveIndex(propKeyword, mesh.PropertyRef);
+      if (indexResult == null && mesh.ApplicationId != null)
       {
-        propRef = Initialiser.Cache.LookupIndex(typeof(GSA2DProperty).GetGSAKeyword(), mesh.PropertyRef).Value;
+        if (mesh.PropertyRef == null)
+        {
+          Helper.SafeDisplay("Blank property references found for these Application IDs:", mesh.ApplicationId);
+        }
+        else
+        {
+          Helper.SafeDisplay("Property references not found:", mesh.ApplicationId + " referencing " + mesh.PropertyRef);
+        }
       }
-      catch { }
 
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + HelperClass.GenerateSID(mesh),
+        keyword + ":" + Helper.GenerateSID(mesh),
         index.ToString(),
         mesh.Name == null || mesh.Name == "" ? " " : mesh.Name,
         mesh.Colors == null || mesh.Colors.Count() < 1 ? "NO_RGB" : mesh.Colors[0].ArgbToHexColor().ToString(),
@@ -125,12 +136,12 @@ namespace SpeckleStructuralGSA
       for (var i = 1; i < mesh.Faces.Count(); i++)
       {
         coor.AddRange(mesh.Vertices.Skip(mesh.Faces[i] * 3).Take(3));
-        ls.Add(HelperClass.NodeAt(mesh.Vertices[mesh.Faces[i] * 3], mesh.Vertices[mesh.Faces[i] * 3 + 1], mesh.Vertices[mesh.Faces[i] * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString());
+        ls.Add(Helper.NodeAt(mesh.Vertices[mesh.Faces[i] * 3], mesh.Vertices[mesh.Faces[i] * 3 + 1], mesh.Vertices[mesh.Faces[i] * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString());
       }
       ls.Add("0"); //Orientation node
       try
       {
-        ls.Add(HelperClass.Get2DAngle(coor.ToArray(), mesh.Axis).ToString());
+        ls.Add(Helper.Get2DAngle(coor.ToArray(), mesh.Axis).ToString());
       }
       catch { ls.Add("0"); }
       ls.Add("NO_RLS");
@@ -169,7 +180,7 @@ namespace SpeckleStructuralGSA
 
       var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       var color = pieces[counter++].ParseGSAColor();
 
@@ -182,7 +193,8 @@ namespace SpeckleStructuralGSA
         obj.ElementType = Structural2DElementType.Generic;
 
       var propertyGSAId = Convert.ToInt32(pieces[counter++]);
-      obj.PropertyRef = HelperClass.GetApplicationId(typeof(GSA2DProperty).GetGSAKeyword(), propertyGSAId);
+
+      obj.PropertyRef = Helper.GetApplicationId(typeof(GSA2DProperty).GetGSAKeyword(), propertyGSAId);
       this.Group = Convert.ToInt32(pieces[counter++]); // Keep group for load targetting
 
       var coordinates = new List<double>();
@@ -195,7 +207,11 @@ namespace SpeckleStructuralGSA
       for (var i = 0; i < nodeRefs.Length; i++)
       {
         var node = nodes.Where(n => n.GSAId.ToString() == nodeRefs[i]).FirstOrDefault();
-        if (node == null) continue;
+        if (node == null)
+        {
+          //TO DO: review how this is possible and prevent it
+          continue;
+        }
 
         coordinates.AddRange(node.Value.Value);
         this.SubGWACommand.Add(node.GWACommand);
@@ -222,7 +238,7 @@ namespace SpeckleStructuralGSA
       counter++; // Orientation node
 
       var prop = props.Where(p => p.Value.ApplicationId == obj.PropertyRef).FirstOrDefault();
-      var axis = HelperClass.Parse2DAxis(coordinates.ToArray(),
+      var axis = Helper.Parse2DAxis(coordinates.ToArray(),
           Convert.ToDouble(pieces[counter++]),
           prop == null ? false : (prop as GSA2DProperty).IsAxisLocal);
       obj.Axis = Enumerable.Repeat(axis, numFaces).ToList();
@@ -245,35 +261,86 @@ namespace SpeckleStructuralGSA
       if (this.Value == null)
         return "";
 
-      var mesh = this.Value as Structural2DElementMesh;
+      var obj = (SpeckleObject)this.Value;
+      var baseMesh = (SpeckleMesh)this.Value;
+      var colour = (baseMesh.Colors == null || baseMesh.Colors.Count < 1) ? "NO_RGB" : baseMesh.Colors[0].ArgbToHexColor().ToString();
+
+      StructuralAxis axis;
+      Structural2DElementMesh mesh;
+      bool? gsaDummy;
+      string propRef;
+      double? offset;
+      string sid;
+      Structural2DElementType structural2dElementType;
+      double? gsaMeshSize;
+
+      //This is to avoid relying on the fact that this.Value is dynamic - casting to one of the expected types first
+      if (this.Value is Structural2DElement)
+      {
+        var el = (Structural2DElement)this.Value;
+        structural2dElementType = el.ElementType;
+        sid = Helper.GenerateSID(el);
+        propRef = el.PropertyRef;
+        mesh = new Structural2DElementMesh() { baseMesh = this.Value.baseMesh };
+        gsaMeshSize = el.GSAMeshSize;
+        gsaDummy = el.GSADummy;
+        axis = el.Axis;
+        offset = el.Offset;
+      }
+      else if (this.Value is Structural2DElementMesh)
+      {
+        var el = (Structural2DElementMesh)this.Value;
+        structural2dElementType = el.ElementType;
+        propRef = el.PropertyRef;
+        sid = Helper.GenerateSID(el);
+        mesh = this.Value;
+        gsaMeshSize = el.GSAMeshSize;
+        gsaDummy = el.GSADummy;
+        axis = (el.Axis == null || el.Axis.Count == 0) ? null : el.Axis.First();
+        offset = (el.Offset == null || el.Offset.Count == 0) ? null : (double ?) el.Offset.First();
+      }
+      else
+      {
+        return "";
+      }
 
       var keyword = typeof(GSA2DMember).GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(typeof(GSA2DMember).GetGSAKeyword(), mesh.ApplicationId);
-      var propRef = 0;
-      try
+      var index = Initialiser.Cache.ResolveIndex(typeof(GSA2DMember).GetGSAKeyword(), obj.ApplicationId);
+
+      var propKeyword = typeof(GSA2DProperty).GetGSAKeyword();
+      var indexResult = Initialiser.Cache.LookupIndex(propKeyword, propRef);
+      //If the reference can't be found, then reserve a new index so that it at least doesn't point to any other existing record
+      var propIndex = indexResult ?? Initialiser.Cache.ResolveIndex(propKeyword, propRef);
+      if (indexResult == null && obj.ApplicationId != null)
       {
-        propRef = Initialiser.Cache.LookupIndex(typeof(GSA2DProperty).GetGSAKeyword(), mesh.PropertyRef).Value;
+        if (propRef == null)
+        {
+          Helper.SafeDisplay("Blank property references found for these Application IDs:", obj.ApplicationId);
+        }
+        else
+        {
+          Helper.SafeDisplay("Property references not found:", obj.ApplicationId + " referencing " + propRef);
+        }
       }
-      catch { }
 
       var gwaCommands = new List<string>();
 
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + HelperClass.GenerateSID(mesh),
+        keyword + ":" + sid,
         index.ToString(),
-        mesh.Name == null || mesh.Name == "" ? " " : mesh.Name,
-        mesh.Colors == null || mesh.Colors.Count() < 1 ? "NO_RGB" : mesh.Colors[0].ArgbToHexColor().ToString()
+        string.IsNullOrEmpty(obj.Name) ? " " : obj.Name,
+        colour
       };
-      if (mesh.ElementType == Structural2DElementType.Slab)
+      if (structural2dElementType == Structural2DElementType.Slab)
         ls.Add("SLAB");
-      else if (mesh.ElementType == Structural2DElementType.Wall)
+      else if (structural2dElementType == Structural2DElementType.Wall)
         ls.Add("WALL");
       else
         ls.Add("2D_GENERIC");
-      ls.Add(propRef.ToString());
+      ls.Add(propIndex.ToString());
       ls.Add(group != 0 ? group.ToString() : index.ToString()); // TODO: This allows for targeting of elements from members group
       var topo = "";
       var prevNodeIndex = -1;
@@ -281,8 +348,8 @@ namespace SpeckleStructuralGSA
       var coor = new List<double>();
       foreach (var c in connectivities[0])
       {
-        coor.AddRange(mesh.Vertices.Skip(c * 3).Take(3));
-        var currIndex = HelperClass.NodeAt(mesh.Vertices[c * 3], mesh.Vertices[c * 3 + 1], mesh.Vertices[c * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance);
+        coor.AddRange(baseMesh.Vertices.Skip(c * 3).Take(3));
+        var currIndex = Helper.NodeAt(baseMesh.Vertices[c * 3], baseMesh.Vertices[c * 3 + 1], baseMesh.Vertices[c * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance);
         if (prevNodeIndex != currIndex)
         {
           topo += currIndex.ToString() + " ";
@@ -291,12 +358,19 @@ namespace SpeckleStructuralGSA
       }
       ls.Add(topo.Trim());
       ls.Add("0"); // Orientation node
-      try
+      if (axis == null)
       {
-        ls.Add(HelperClass.Get2DAngle(coor.ToArray(), mesh.Axis.First()).ToString());
+        ls.Add("0");
       }
-      catch { ls.Add("0"); }
-      ls.Add(mesh.GSAMeshSize == 0 ? "1" : mesh.GSAMeshSize.ToString()); // Target mesh size
+      else
+      {
+        try
+        {
+          ls.Add(Helper.Get2DAngle(coor.ToArray(), axis).ToString());
+        }
+        catch { ls.Add("0"); }
+      }
+      ls.Add(gsaMeshSize == 0 ? "1" : gsaMeshSize.ToString()); // Target mesh size
       ls.Add("MESH"); // TODO: What is this?
       ls.Add("LINEAR"); // Element type
       ls.Add("0"); // Fire
@@ -304,57 +378,13 @@ namespace SpeckleStructuralGSA
       ls.Add("0"); // Time 2
       ls.Add("0"); // Time 3
       ls.Add("0"); // TODO: What is this?
-      ls.Add((mesh.GSADummy.HasValue && mesh.GSADummy.Value) ? "DUMMY" : "ACTIVE");
+      ls.Add((gsaDummy.HasValue && gsaDummy.Value) ? "DUMMY" : "ACTIVE");
       ls.Add("NO"); // Internal auto offset
-      ls.Add((mesh.Offset != null && mesh.Offset.Count() > 0) ? mesh.Offset.First().ToString() : "0"); // Offset z
+      ls.Add(offset.HasValue ? offset.ToString() : "0"); // Offset z
       ls.Add("ALL"); // Exposure
 
       gwaCommands.Add(string.Join("\t", ls));
 
-      // Add voids
-      foreach (var conn in connectivities.Skip(1))
-      {
-        ls.Clear();
-
-        index = Initialiser.Cache.ResolveIndex(typeof(GSA2DVoid).GetGSAKeyword());
-
-        ls.Add("SET");
-        ls.Add(keyword + ":" + HelperClass.GenerateSID(mesh));
-        ls.Add(index.ToString());
-        ls.Add(mesh.Name == null || mesh.Name == "" ? " " : mesh.Name);
-        ls.Add(mesh.Colors == null || mesh.Colors.Count() < 1 ? "NO_RGB" : mesh.Colors[0].ArgbToHexColor().ToString());
-        ls.Add("2D_VOID_CUTTER");
-        ls.Add("1"); // Property reference
-        ls.Add("0"); // Group
-        topo = "";
-        prevNodeIndex = -1;
-        coor.Clear();
-        foreach (var c in conn)
-        {
-          coor.AddRange(mesh.Vertices.Skip(c * 3).Take(3));
-          var currIndex = HelperClass.NodeAt(mesh.Vertices[c * 3], mesh.Vertices[c * 3 + 1], mesh.Vertices[c * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance);
-          if (prevNodeIndex != currIndex)
-            topo += currIndex.ToString() + " ";
-          prevNodeIndex = currIndex;
-        }
-        ls.Add(topo);
-        ls.Add("0"); // Orientation node
-        ls.Add("0"); // Angles
-        ls.Add("1"); // Target mesh size
-        ls.Add("MESH"); // TODO: What is this?
-        ls.Add("LINEAR"); // Element type
-        ls.Add("0"); // Fire
-        ls.Add("0"); // Time 1
-        ls.Add("0"); // Time 2
-        ls.Add("0"); // Time 3
-        ls.Add("0"); // TODO: What is this?
-        ls.Add("ACTIVE"); // Dummy
-        ls.Add("NO"); // Internal auto offset
-        ls.Add("0"); // Offset z
-        ls.Add("ALL"); // Exposure
-
-        gwaCommands.Add(string.Join("\t", ls));
-      }
       return string.Join("\n", gwaCommands);
     }
   }

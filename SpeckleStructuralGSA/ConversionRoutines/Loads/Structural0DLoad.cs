@@ -43,7 +43,7 @@ namespace SpeckleStructuralGSA
           n.ForceSend = true;
       }
 
-      obj.LoadCaseRef = HelperClass.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
+      obj.LoadCaseRef = Helper.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
 
       var axis = pieces[counter++];
       this.Axis = axis == "GLOBAL" ? 0 : Convert.ToInt32(axis);
@@ -91,13 +91,21 @@ namespace SpeckleStructuralGSA
       var keyword = typeof(GSA0DLoad).GetGSAKeyword();
 
       var nodeRefs = Initialiser.Cache.LookupIndices(typeof(GSANode).GetGSAKeyword(), load.NodeRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-      var loadCaseRef = 0;
-      try
+
+      var loadCaseKeyword = typeof(GSALoadCase).GetGSAKeyword();
+      var indexResult = Initialiser.Cache.LookupIndex(loadCaseKeyword, load.LoadCaseRef);
+      var loadCaseRef = indexResult ?? Initialiser.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
+      if (indexResult == null && load.ApplicationId != null)
       {
-        loadCaseRef = Initialiser.Cache.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef).Value;
-      }
-      catch {
-        loadCaseRef = Initialiser.Cache.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), load.LoadCaseRef);
+        if (load.LoadCaseRef == null)
+        {
+          Helper.SafeDisplay("Blank load case references found for these Application IDs:", load.ApplicationId);
+        }
+        else
+        {
+          Helper.SafeDisplay("Load case references not found:", load.ApplicationId + " referencing " + load.LoadCaseRef);
+        }
+
       }
 
       var direction = new string[6] { "X", "Y", "Z", "XX", "YY", "ZZ" };
@@ -114,7 +122,7 @@ namespace SpeckleStructuralGSA
 
         ls.Add("SET_AT");
         ls.Add(index.ToString());
-        ls.Add(keyword + ":" + HelperClass.GenerateSID(load));
+        ls.Add(keyword + ":" + Helper.GenerateSID(load));
         ls.Add(load.Name == null || load.Name == "" ? " " : load.Name);
         ls.Add(string.Join(" ", nodeRefs));
         ls.Add(loadCaseRef.ToString());
@@ -173,7 +181,7 @@ namespace SpeckleStructuralGSA
           // Transform load to defined axis
           var node = nodes.Where(n => (n.Value.ApplicationId == nRef)).First();
           string gwaRecord = null;
-          StructuralAxis loadAxis = HelperClass.Parse0DAxis(initLoad.Axis, Initialiser.Interface, out gwaRecord, node.Value.Value.ToArray());
+          StructuralAxis loadAxis = Helper.Parse0DAxis(initLoad.Axis, Initialiser.Interface, out gwaRecord, node.Value.Value.ToArray());
           load.Value.Loading = initLoad.Value.Loading;
           load.Value.Loading.TransformOntoAxis(loadAxis);
 

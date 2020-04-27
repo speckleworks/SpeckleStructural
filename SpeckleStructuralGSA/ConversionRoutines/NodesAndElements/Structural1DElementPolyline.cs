@@ -25,7 +25,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural1DElementPolyline
       {
-        ApplicationId = HelperClass.GetApplicationId(typeof(GSA1DElementPolyline).GetGSAKeyword(), GSAId),
+        ApplicationId = Helper.GetApplicationId(typeof(GSA1DElementPolyline).GetGSAKeyword(), GSAId),
 
         Value = new List<double>(),
         ElementApplicationId = new List<string>(),
@@ -55,6 +55,16 @@ namespace SpeckleStructuralGSA
       var uniqueCoordinates = flatCoordinates.Where(x => flatCoordinates.Count(y => y == x) == 1).ToList();
 
       var current = uniqueCoordinates[0];
+
+      //Because these properties could, depending on how they've been added to the StructuralProperties dictionary,
+      //return another instance of the lists instead of a pointer to the lists themselves, temporary variables are used
+      //to build up new lists which are assigned as replacements to the property values further down
+      var elementAppIds = obj.ElementApplicationId;
+      var zAxes = obj.ZAxis;
+      var endReleases = obj.EndRelease;
+      var offsets = obj.Offset;
+      var resultVertices = obj.ResultVertices;
+
       while(coordinates.Count > 0)
       {
         var matchIndex = 0;
@@ -70,8 +80,8 @@ namespace SpeckleStructuralGSA
 
         var element = elementsListCopy[matchIndex];
 
-        obj.ElementApplicationId.Add(element.Value.ApplicationId);
-        obj.ZAxis.Add(element.Value.ZAxis);
+        elementAppIds.Add(element.Value.ApplicationId);
+        zAxes.Add(element.Value.ZAxis);
 
         if (obj.Value.Count == 0)
         {
@@ -89,30 +99,38 @@ namespace SpeckleStructuralGSA
         {
           current = string.Join(",", (element.Value.Value as List<double>).Skip(3).Take(3).Select(x => Math.Round(x, 4).ToString()));
           obj.Value.AddRange((element.Value.Value as List<double>).Skip(3).Take(3));
-          obj.EndRelease.AddRange(element.Value.EndRelease);
-          obj.Offset.AddRange(element.Value.Offset);
+          endReleases.AddRange(element.Value.EndRelease);
+          offsets.AddRange(element.Value.Offset);
 
           if (Initialiser.Settings.Element1DResults.Count > 0 && Initialiser.Settings.EmbedResults)
-            obj.ResultVertices.AddRange(element.Value.ResultVertices);
+          {
+            resultVertices.AddRange(element.Value.ResultVertices);
+          }
           else
-            obj.ResultVertices.AddRange((element.Value.Value as List<double>));
+          {
+            resultVertices.AddRange((element.Value.Value as List<double>));
+          }
         }
         else
         {
           current = string.Join(",", (element.Value.Value as List<double>).Take(3).Select(x => Math.Round(x, 4).ToString()));
           obj.Value.AddRange((element.Value.Value as List<double>).Take(3));
-          obj.EndRelease.Add((element.Value.EndRelease as List<StructuralVectorBoolSix>).Last());
-          obj.EndRelease.Add((element.Value.EndRelease as List<StructuralVectorBoolSix>).First());
-          obj.Offset.Add((element.Value.Offset as List<StructuralVectorThree>).Last());
-          obj.Offset.Add((element.Value.Offset as List<StructuralVectorThree>).First());
+          endReleases.Add((element.Value.EndRelease as List<StructuralVectorBoolSix>).Last());
+          endReleases.Add((element.Value.EndRelease as List<StructuralVectorBoolSix>).First());
+          offsets.Add((element.Value.Offset as List<StructuralVectorThree>).Last());
+          offsets.Add((element.Value.Offset as List<StructuralVectorThree>).First());
 
           if (Initialiser.Settings.Element1DResults.Count > 0 && Initialiser.Settings.EmbedResults)
+          {
             for (int i = element.Value.ResultVertices.Count - 3; i >= 0; i -= 3)
-              obj.ResultVertices.AddRange((element.Value.ResultVertices as List<double>).Skip(i).Take(3));
+            {
+              resultVertices.AddRange((element.Value.ResultVertices as List<double>).Skip(i).Take(3));
+            }
+          }
           else
           {
-            obj.ResultVertices.AddRange((element.Value.Value as List<double>).Skip(3).Take(3));
-            obj.ResultVertices.AddRange((element.Value.Value as List<double>).Take(3));
+            resultVertices.AddRange((element.Value.Value as List<double>).Skip(3).Take(3));
+            resultVertices.AddRange((element.Value.Value as List<double>).Take(3));
           }
         }
 
@@ -137,16 +155,23 @@ namespace SpeckleStructuralGSA
                 foreach (var key in resultExport.Value.Keys)
                 {
                   if (!(obj.Result[loadCase] as Structural1DElementResult).Value.ContainsKey(key))
-                    (obj.Result[loadCase] as Structural1DElementResult).Value[key] = new Dictionary<string, object>(resultExport.Value[key] as Dictionary<string, object>);
+                  {
+                    (obj.Result[loadCase] as Structural1DElementResult).Value[key]
+                      = new Dictionary<string, object>(resultExport.Value[key] as Dictionary<string, object>);
+                  }
                   else
+                  {
                     foreach (var resultKey in ((obj.Result[loadCase] as Structural1DElementResult).Value[key] as Dictionary<string, object>).Keys)
                     {
                       var res = (resultExport.Value[key] as Dictionary<string, object>)[resultKey] as List<double>;
                       if (reverseCoordinates)
+                      {
                         res.Reverse();
+                      }
                       (((obj.Result[loadCase] as Structural1DElementResult).Value[key] as Dictionary<string, object>)[resultKey] as List<double>)
                         .AddRange(res);
                     }
+                  }
                 }
               }
               else
@@ -170,7 +195,13 @@ namespace SpeckleStructuralGSA
         this.SubGWACommand.Add(element.GWACommand);
         this.SubGWACommand.AddRange(element.SubGWACommand);
       }
-      
+
+      obj.ElementApplicationId = elementAppIds;
+      obj.ZAxis = zAxes;
+      obj.EndRelease = endReleases;
+      obj.Offset = offsets;
+      obj.ResultVertices = resultVertices;
+
       this.Value = obj;
     }
 

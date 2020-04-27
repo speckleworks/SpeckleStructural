@@ -28,7 +28,7 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = HelperClass.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
 
       var targetEntity = pieces[counter++];
@@ -44,8 +44,10 @@ namespace SpeckleStructuralGSA
           var memberList = Initialiser.Interface.ConvertGSAList(targetList, SpeckleGSAInterfaces.GSAEntity.MEMBER);
           var match1D = e1Ds.Where(e => memberList.Contains(Convert.ToInt32(e.Member)));
           var match2D = e2Ds.Where(e => memberList.Contains(Convert.ToInt32(e.Member)));
-          obj.ElementRefs.AddRange(match1D.Select(e => (e.Value as SpeckleObject).ApplicationId.ToString()));
-          obj.ElementRefs.AddRange(match2D.Select(e => (e.Value as SpeckleObject).ApplicationId.ToString()));
+          var elementRefs = obj.ElementRefs;
+          elementRefs.AddRange(match1D.Select(e => (e.Value as SpeckleObject).ApplicationId.ToString()));
+          elementRefs.AddRange(match2D.Select(e => (e.Value as SpeckleObject).ApplicationId.ToString()));
+          obj.ElementRefs = elementRefs;
           this.SubGWACommand.AddRange(match1D.Select(e => (e as IGSASpeckleContainer).GWACommand));
           this.SubGWACommand.AddRange(match2D.Select(e => (e as IGSASpeckleContainer).GWACommand));
         }
@@ -54,8 +56,10 @@ namespace SpeckleStructuralGSA
           var elementList = Initialiser.Interface.ConvertGSAList(targetList, SpeckleGSAInterfaces.GSAEntity.ELEMENT);
           var match1D = e1Ds.Where(e => elementList.Contains(e.GSAId));
           var match2D = e2Ds.Where(e => elementList.Contains(e.GSAId));
-          obj.ElementRefs.AddRange(match1D.Select(e => (e.Value as SpeckleObject).ApplicationId.ToString()));
-          obj.ElementRefs.AddRange(match2D.Select(e => (e.Value as SpeckleObject).ApplicationId.ToString()));
+          var elementRefs = obj.ElementRefs;
+          elementRefs.AddRange(match1D.Select(e => (e.Value as SpeckleObject).ApplicationId.ToString()));
+          elementRefs.AddRange(match2D.Select(e => (e.Value as SpeckleObject).ApplicationId.ToString()));
+          obj.ElementRefs = elementRefs;
           this.SubGWACommand.AddRange(match1D.Select(e => (e as IGSASpeckleContainer).GWACommand));
           this.SubGWACommand.AddRange(match2D.Select(e => (e as IGSASpeckleContainer).GWACommand));
         }
@@ -67,8 +71,10 @@ namespace SpeckleStructuralGSA
           var memberList = Initialiser.Interface.ConvertGSAList(targetList, SpeckleGSAInterfaces.GSAEntity.MEMBER);
           var match1D = m1Ds.Where(e => memberList.Contains(e.GSAId));
           var match2D = m2Ds.Where(e => memberList.Contains(e.GSAId));
-          obj.ElementRefs.AddRange(match1D.Select(e => (e.Value as SpeckleObject).ApplicationId.ToString()));
-          obj.ElementRefs.AddRange(match2D.Select(e => (e.Value as SpeckleObject).ApplicationId.ToString()));
+          var elementRefs = obj.ElementRefs;
+          elementRefs.AddRange(match1D.Select(e => (e.Value as SpeckleObject).ApplicationId.ToString()));
+          elementRefs.AddRange(match2D.Select(e => (e.Value as SpeckleObject).ApplicationId.ToString()));
+          obj.ElementRefs = elementRefs;
           this.SubGWACommand.AddRange(match1D.Select(e => (e as IGSASpeckleContainer).GWACommand));
           this.SubGWACommand.AddRange(match2D.Select(e => (e as IGSASpeckleContainer).GWACommand));
         }
@@ -148,10 +154,8 @@ namespace SpeckleStructuralGSA
       var nodeIndices = new List<int>();
       for (var i = 0; i < assembly.Value.Count(); i += 3)
       {
-        nodeIndices.Add(HelperClass.NodeAt(assembly.Value[i], assembly.Value[i + 1], assembly.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance));
+        nodeIndices.Add(Helper.NodeAt(assembly.Value[i], assembly.Value[i + 1], assembly.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance));
       }
-
-      var numPoints = (assembly.NumPoints == 0) ? 10 : assembly.NumPoints;
 
       //The width parameter is intentionally not being used here as the meaning doesn't map to the y coordinate parameter of the ASSEMBLY keyword
       //It is therefore to be ignored here for GSA purposes.
@@ -159,7 +163,7 @@ namespace SpeckleStructuralGSA
       var ls = new List<string>
         {
           "SET",
-          keyword + ":" + HelperClass.GenerateSID(assembly),
+          keyword + ":" + Helper.GenerateSID(assembly),
           index.ToString(),
           string.IsNullOrEmpty(assembly.Name) ? "" : assembly.Name,
           // TODO: Once assemblies can properly target members, this should target members explicitly
@@ -168,15 +172,28 @@ namespace SpeckleStructuralGSA
           targetString,
           nodeIndices[0].ToString(),
           nodeIndices[1].ToString(),
-          HelperClass.NodeAt(assembly.OrientationPoint.Value[0], assembly.OrientationPoint.Value[1], assembly.OrientationPoint.Value[2], Initialiser.Settings.CoincidentNodeAllowance).ToString(),
+          Helper.NodeAt(assembly.OrientationPoint.Value[0], assembly.OrientationPoint.Value[1], assembly.OrientationPoint.Value[2], Initialiser.Settings.CoincidentNodeAllowance).ToString(),
           "", //Empty list for int_topo as it assumed that the line is never curved
           assembly.Width.ToString(), //Y
           "0", //Z
           "LAGRANGE",
-          "0", //Curve order - reserved for future use according to the documentation
-          "POINTS",
+          "0" //Curve order - reserved for future use according to the documentation
+      };
+
+      if (assembly.NumPoints.HasValue)
+      {
+        var numPoints = (assembly.NumPoints == 0) ? 10 : assembly.NumPoints;
+        ls.AddRange(new[] { "POINTS",
           numPoints.ToString() //Number of points
-        };
+        });
+      }
+      else if (assembly.PointDistances != null && assembly.PointDistances.Count() > 0)
+      {
+        ls.AddRange(new[] { 
+          "EXPLICIT",
+          string.Join(" ", assembly.PointDistances)
+        });
+      }
 
       return (string.Join("\t", ls));
     }
