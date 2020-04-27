@@ -251,43 +251,43 @@
   },
   {
     "ApplicationId": "gh/0e14ea030d377c1860dc6b72453e58fc",
-    "GwaCommand": "SET\tPROP_SPR.3:{speckle_app_id:gh/0e14ea030d377c1860dc6b72453e58fc}\t1\tLSP-General\tNO_RGB\tGLOBAL\tGENERAL\t0\t12\t0\t15\t0\t20\t0\t25\t0\t30\t0\t38\t0.21"
+    "GwaCommand": "SET\tPROP_SPR.3:{speckle_app_id:gh/0e14ea030d377c1860dc6b72453e58fc}\t1\tLSP-General\tNO_RGB\tGLOBAL\tGENERAL\t0\t0.012\t0\t0.015\t0\t0.02\t0\t0.025\t0\t0.03\t0\t0.038\t0.21"
   },
   {
     "ApplicationId": "gh/34a7311a137096403bbe0296bbed53b7",
-    "GwaCommand": "SET\tPROP_SPR.3:{speckle_app_id:gh/34a7311a137096403bbe0296bbed53b7}\t2\tLSP-Axial\tNO_RGB\tGLOBAL\tAXIAL\t12\t0.21"
+    "GwaCommand": "SET\tPROP_SPR.3:{speckle_app_id:gh/34a7311a137096403bbe0296bbed53b7}\t2\tLSP-Axial\tNO_RGB\tGLOBAL\tAXIAL\t0.012\t0.21"
   },
   {
     "ApplicationId": "gh/d3acde535f3ecd3a9d384929810714dc",
-    "GwaCommand": "SET\tPROP_SPR.3:{speckle_app_id:gh/d3acde535f3ecd3a9d384929810714dc}\t3\tLSP-Torsional\tNO_RGB\tGLOBAL\tTORSIONAL\t25\t0.21"
+    "GwaCommand": "SET\tPROP_SPR.3:{speckle_app_id:gh/d3acde535f3ecd3a9d384929810714dc}\t3\tLSP-Torsional\tNO_RGB\tGLOBAL\tTORSIONAL\t0.025\t0.21"
   },
   {
     "ApplicationId": "gh/150a6a79e8ecbc0f7efb4fa822d67558",
-    "GwaCommand": "SET\tPROP_SPR.3:{speckle_app_id:gh/150a6a79e8ecbc0f7efb4fa822d67558}\t4\tLSP-Compression\tNO_RGB\tGLOBAL\tCOMPRESSION\t12\t0.21"
+    "GwaCommand": "SET\tPROP_SPR.3:{speckle_app_id:gh/150a6a79e8ecbc0f7efb4fa822d67558}\t4\tLSP-Compression\tNO_RGB\tGLOBAL\tCOMPRESSION\t0.012\t0.21"
   },
   {
     "ApplicationId": "gh/ee71ea28e5836bad65af7cdde55f37ec",
-    "GwaCommand": "SET\tPROP_SPR.3:{speckle_app_id:gh/ee71ea28e5836bad65af7cdde55f37ec}\t5\tLSP-Tension\tNO_RGB\tGLOBAL\tTENSION\t12\t0.21"
+    "GwaCommand": "SET\tPROP_SPR.3:{speckle_app_id:gh/ee71ea28e5836bad65af7cdde55f37ec}\t5\tLSP-Tension\tNO_RGB\tGLOBAL\tTENSION\t0.012\t0.21"
   },
   {
     "ApplicationId": "gh/6854f7b9522dd1c5d13cf369b726cef1",
-    "GwaCommand": "SET\tPROP_SPR.3:{speckle_app_id:gh/6854f7b9522dd1c5d13cf369b726cef1}\t6\tLSP-Lockup\tNO_RGB\tGLOBAL\tLOCKUP\t12\t0.21\t0\t0"
+    "GwaCommand": "SET\tPROP_SPR.3:{speckle_app_id:gh/6854f7b9522dd1c5d13cf369b726cef1}\t6\tLSP-Lockup\tNO_RGB\tGLOBAL\tLOCKUP\t0.012\t0.21\t0\t0"
   },
   {
     "ApplicationId": "gh/75e517bb9ccbecdd6b844a57a73f2edb",
-    "GwaCommand": "SET\tPROP_SPR.3:{speckle_app_id:gh/75e517bb9ccbecdd6b844a57a73f2edb}\t7\tLSP-Gap\tNO_RGB\tGLOBAL\tGAP\t12\t0.21"
+    "GwaCommand": "SET\tPROP_SPR.3:{speckle_app_id:gh/75e517bb9ccbecdd6b844a57a73f2edb}\t7\tLSP-Gap\tNO_RGB\tGLOBAL\tGAP\t0.012\t0.21"
   },
   {
     "ApplicationId": "gh/a2f49ec8a94bdebe19c1433d95294955",
-    "GwaCommand": "SET\tPROP_SPR.3:{speckle_app_id:gh/a2f49ec8a94bdebe19c1433d95294955}\t8\tLSP-Friction\tNO_RGB\tGLOBAL\tFRICTION\t12\t15\t20\t0\t0.21"
+    "GwaCommand": "SET\tPROP_SPR.3:{speckle_app_id:gh/a2f49ec8a94bdebe19c1433d95294955}\t8\tLSP-Friction\tNO_RGB\tGLOBAL\tFRICTION\t0.012\t0.015\t0.02\t0\t0.21"
   },
   {
     "ApplicationId": "Live",
-    "GwaCommand": "SET\tLOAD_GRID_AREA.2:{speckle_app_id:Live}\tLive load panel\t2\tPOLYGON\t(14.756140625,24.6719296875) (-24.843859375,24.6719296875) (-24.843859375,-2.52719870209193) (14.756140625,4.8719296875)\t1\tGLOBAL\tNO\tZ\t-4.8"
+    "GwaCommand": "SET\tLOAD_GRID_AREA.2:{speckle_app_id:Live}\tLive load panel\t2\tPOLYGON\t(14.756140625,24.6719296875) (-24.843859375,24.6719296875) (-24.843859375,-2.52719870209193) (14.756140625,4.8719296875)\t1\tGLOBAL\tNO\tZ\t-0.0048"
   },
   {
     "ApplicationId": "SDL",
-    "GwaCommand": "SET\tLOAD_GRID_AREA.2:{speckle_app_id:SDL}\tDead load panel\t3\tPOLYGON\t(44.456140625,4.8719296875) (54.356140625,-74.3280703125) (74.156140625,-67.7347695434277) (74.156140625,4.8719296875)\t2\tGLOBAL\tNO\tZ\t-1.2"
+    "GwaCommand": "SET\tLOAD_GRID_AREA.2:{speckle_app_id:SDL}\tDead load panel\t3\tPOLYGON\t(44.456140625,4.8719296875) (54.356140625,-74.3280703125) (74.156140625,-67.7347695434277) (74.156140625,4.8719296875)\t2\tGLOBAL\tNO\tZ\t-0.0012"
   },
   {
     "GwaCommand": "SET\tAXIS.1\t1\tLive load panel\tCART\t0\t0\t0\t1\t0\t0\t0\t-1\t0"

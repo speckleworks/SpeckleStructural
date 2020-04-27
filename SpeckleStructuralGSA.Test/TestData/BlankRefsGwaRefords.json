@@ -1,11 +1,11 @@
 [
   {
     "ApplicationId": "gh/c72c2ee9e400df4db1e0df8ab96e5400",
-    "GwaCommand": "SET\tLOAD_GRID_AREA.2:{speckle_app_id:gh/c72c2ee9e400df4db1e0df8ab96e5400}\t \t1\tPOLYGON\t(-0.076,0.074) (-0.114,-0.022) (-0.031,-0.02) (0.003,0.069) (-0.02,0.097)\t1\tGLOBAL\tNO\tX\t11"
+    "GwaCommand": "SET\tLOAD_GRID_AREA.2:{speckle_app_id:gh/c72c2ee9e400df4db1e0df8ab96e5400}\t \t1\tPOLYGON\t(-0.076,0.074) (-0.114,-0.022) (-0.031,-0.02) (0.003,0.069) (-0.02,0.097)\t1\tGLOBAL\tNO\tX\t0.011"
   },
   {
     "ApplicationId": "gh/c72c2ee9e400df4db1e0df8ab96e5400",
-    "GwaCommand": "SET\tLOAD_GRID_AREA.2:{speckle_app_id:gh/c72c2ee9e400df4db1e0df8ab96e5400}\t \t1\tPOLYGON\t(-0.076,0.074) (-0.114,-0.022) (-0.031,-0.02) (0.003,0.069) (-0.02,0.097)\t1\tGLOBAL\tNO\tY\t22"
+    "GwaCommand": "SET\tLOAD_GRID_AREA.2:{speckle_app_id:gh/c72c2ee9e400df4db1e0df8ab96e5400}\t \t1\tPOLYGON\t(-0.076,0.074) (-0.114,-0.022) (-0.031,-0.02) (0.003,0.069) (-0.02,0.097)\t1\tGLOBAL\tNO\tY\t0.022"
   },
   {
     "GwaCommand": "SET\tGRID_SURFACE.1\t1\t \t1\t2\tall\t0.01\tONE\t0"
@@ -43,11 +43,11 @@
   },
   {
     "ApplicationId": "gh/ce14eb199a860bd454baa4e03480aeb4",
-    "GwaCommand": "SET\tLOAD_GRID_LINE.2:{speckle_app_id:gh/ce14eb199a860bd454baa4e03480aeb4}\t \t2\tPOLYGON\t(-0.137446105800758,0.0215770248228732) (0.0591982432154293,0.0215770248228731)\t3\tGLOBAL\tNO\tX\t0.01\t0.01"
+    "GwaCommand": "SET\tLOAD_GRID_LINE.2:{speckle_app_id:gh/ce14eb199a860bd454baa4e03480aeb4}\t \t2\tPOLYGON\t(-0.137446105800758,0.0215770248228732) (0.0591982432154293,0.0215770248228731)\t3\tGLOBAL\tNO\tX\t1E-05\t1E-05"
   },
   {
     "ApplicationId": "gh/ce14eb199a860bd454baa4e03480aeb4",
-    "GwaCommand": "SET\tLOAD_GRID_LINE.2:{speckle_app_id:gh/ce14eb199a860bd454baa4e03480aeb4}\t \t2\tPOLYGON\t(-0.137446105800758,0.0215770248228732) (0.0591982432154293,0.0215770248228731)\t3\tGLOBAL\tNO\tY\t0.02\t0.02"
+    "GwaCommand": "SET\tLOAD_GRID_LINE.2:{speckle_app_id:gh/ce14eb199a860bd454baa4e03480aeb4}\t \t2\tPOLYGON\t(-0.137446105800758,0.0215770248228732) (0.0591982432154293,0.0215770248228731)\t3\tGLOBAL\tNO\tY\t2E-05\t2E-05"
   },
   {
     "ApplicationId": "gh/2820605e9ba104099b09ff511bdc6ad9",
