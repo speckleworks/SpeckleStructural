@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
@@ -33,40 +32,38 @@ namespace SpeckleStructuralGSA
 
         var entities = elements.Cast<IGSASpeckleContainer>().ToList();
 
-        Parallel.ForEach(Initialiser.Settings.Element1DResults, kvp =>
+        foreach (var kvp in Initialiser.Settings.Element1DResults)
         {
-          Parallel.ForEach(Initialiser.Settings.ResultCases, loadCase =>
+          foreach (var loadCase in Initialiser.Settings.ResultCases)
           {
-            if (Initialiser.Interface.CaseExist(loadCase))
+            if (!Initialiser.Interface.CaseExist(loadCase))
+              continue;
+
+            foreach (var entity in entities)
             {
-              foreach (var entity in entities)
-              {
-                var id = entity.GSAId;
+              var id = entity.GSAId;
 
-                if (entity.Value.Result == null)
-                  entity.Value.Result = new Dictionary<string, object>();
+              if (entity.Value.Result == null)
+                entity.Value.Result = new Dictionary<string, object>();
 
-                var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis
-                  ? "local" : "global", Initialiser.Settings.Result1DNumPosition);
+              var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis
+                ? "local" : "global", Initialiser.Settings.Result1DNumPosition);
 
-                if (resultExport == null)
-                  continue;
+              if (resultExport == null)
+                continue;
 
-                if (!entity.Value.Result.ContainsKey(loadCase))
-                  entity.Value.Result[loadCase] = new Structural1DElementResult()
-                  {
+              if (!entity.Value.Result.ContainsKey(loadCase))
+                entity.Value.Result[loadCase] = new Structural1DElementResult()
+                {
                   TargetRef = Helper.GetApplicationId(typeof(GSA1DElement).GetGSAKeyword(), id),
                   LoadCaseRef = loadCase,
-                    Value = new Dictionary<string, object>()
-                  };
+                  Value = new Dictionary<string, object>()
+                };
 
-                (entity.Value.Result[loadCase] as Structural1DElementResult).Value[kvp.Key] = resultExport;
-              }
+              (entity.Value.Result[loadCase] as Structural1DElementResult).Value[kvp.Key] = resultExport;
             }
           }
-          );
         }
-        );
 
         // Linear interpolate the line values
         foreach (var entity in entities)
@@ -92,74 +89,64 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        var resultsLock = new object();
         var results = new List<GSA1DElementResult>();
 
         var keyword = Helper.GetGSAKeyword(typeof(GSA1DElement));
         var gwa = Initialiser.Cache.GetGwa(keyword);
 
-        Parallel.ForEach(Initialiser.Settings.Element1DResults, kvp =>
+        foreach (var kvp in Initialiser.Settings.Element1DResults)
         {
-          Parallel.ForEach(Initialiser.Settings.ResultCases, loadCase =>
+          foreach (var loadCase in Initialiser.Settings.ResultCases)
           {
-            if (Initialiser.Interface.CaseExist(loadCase))
+            if (!Initialiser.Interface.CaseExist(loadCase))
+              continue;
+
+            for (var i = 0; i < gwa.Count(); i++)
             {
-              for (var i = 0; i < gwa.Count(); i++)
+              var record = gwa[i];
+
+              var pPieces = record.ListSplit("\t");
+              if (pPieces[4].ParseElementNumNodes() != 2)
               {
-                var record = gwa[i];
+                continue;
+              }
 
-                var pPieces = record.ListSplit("\t");
-                if (pPieces[4].ParseElementNumNodes() != 2)
-                {
-                  continue;
-                }
+              if (!int.TryParse(pPieces[1], out var id))
+              {
+                //Could not extract index
+                continue;
+              }
 
-                if (!int.TryParse(pPieces[1], out var id))
-                {
-                  //Could not extract index
-                  continue;
-                }
+              var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global", Initialiser.Settings.Result1DNumPosition);
 
-                var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global", Initialiser.Settings.Result1DNumPosition);
+              if (resultExport == null || resultExport.Count() == 0)
+              {
+                continue;
+              }
 
-                if (resultExport == null || resultExport.Count() == 0)
+              var existingRes = results.FirstOrDefault(x => x.Value.TargetRef == id.ToString());
+              if (existingRes == null)
+              {
+                var newRes = new Structural1DElementResult()
                 {
-                  continue;
-                }
-
-                GSA1DElementResult existingRes;
-                lock (resultsLock)
-                {
-                  existingRes = results.FirstOrDefault(x => x.Value.TargetRef == id.ToString());
-                }
-                if (existingRes == null)
-                {
-                  var newRes = new Structural1DElementResult()
-                  {
-                    Value = new Dictionary<string, object>(),
-                    TargetRef = Helper.GetApplicationId(typeof(GSA1DElement).GetGSAKeyword(), id),
-                    IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
+                  Value = new Dictionary<string, object>(),
+                  TargetRef = Helper.GetApplicationId(typeof(GSA1DElement).GetGSAKeyword(), id),
+                  IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
                   LoadCaseRef = loadCase
-                  };
-                  newRes.Value[kvp.Key] = resultExport;
+                };
+                newRes.Value[kvp.Key] = resultExport;
 
-                  newRes.GenerateHash();
+                newRes.GenerateHash();
 
-                  lock (resultsLock)
-                  {
-                    results.Add(new GSA1DElementResult() { Value = newRes });
-                  }
-                }
-                else
-                {
-                  existingRes.Value.Value[kvp.Key] = resultExport;
-                }
+                results.Add(new GSA1DElementResult() { Value = newRes });
+              }
+              else
+              {
+                existingRes.Value.Value[kvp.Key] = resultExport;
               }
             }
           }
-          );
         }
-        );
 
         Initialiser.GSASenderObjects.AddRange(results);
       }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
@@ -36,106 +35,92 @@ namespace SpeckleStructuralGSA
       {
         var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
-        Parallel.ForEach(Initialiser.Settings.NodalResults, kvp =>
+        foreach (var kvp in Initialiser.Settings.NodalResults)
         {
-          Parallel.ForEach(Initialiser.Settings.ResultCases, loadCase =>
+          foreach (var loadCase in Initialiser.Settings.ResultCases)
           {
-            if (Initialiser.Interface.CaseExist(loadCase))
+            if (!Initialiser.Interface.CaseExist(loadCase)) continue;
+
+            foreach (var node in nodes)
             {
-              foreach (var node in nodes)
+              var id = node.GSAId;
+
+              if (node.Value.Result == null)
               {
-                var id = node.GSAId;
+                node.Value.Result = new Dictionary<string, object>();
+              }
 
-                if (node.Value.Result == null)
+              var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
+
+              if (resultExport == null || resultExport.Count() == 0)
+              {
+                continue;
+              }
+
+              if (!node.Value.Result.ContainsKey(loadCase))
+              {
+                node.Value.Result[loadCase] = new StructuralNodeResult()
                 {
-                  node.Value.Result = new Dictionary<string, object>();
-                }
-
-                var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
-
-                if (resultExport == null || resultExport.Count() == 0)
-                {
-                  continue;
-                }
-
-                if (!node.Value.Result.ContainsKey(loadCase))
-                {
-                  node.Value.Result[loadCase] = new StructuralNodeResult()
-                  {
                   LoadCaseRef = loadCase,
                   TargetRef = Helper.GetApplicationId(typeof(GSANode).GetGSAKeyword(), id),
-                    Value = new Dictionary<string, object>()
-                  };
-                }
-                (node.Value.Result[loadCase] as StructuralNodeResult).Value[kvp.Key] = resultExport.ToDictionary(x => x.Key, x => (x.Value as List<double>)[0] as object);
-
-                node.ForceSend = true;
+                  Value = new Dictionary<string, object>()
+                };
               }
+              (node.Value.Result[loadCase] as StructuralNodeResult).Value[kvp.Key] = resultExport.ToDictionary(x => x.Key, x => (x.Value as List<double>)[0] as object);
+
+              node.ForceSend = true;
             }
           }
-          );
         }
-        );
       }
       else
       {
         var results = new List<GSANodeResult>();
-        var resultsLock = new object();
 
         var keyword = Helper.GetGSAKeyword(typeof(GSANode));
 
         var indices = Initialiser.Cache.LookupIndices(keyword).Where(i => i.HasValue).Select(i => i.Value).ToList();
 
-        Parallel.ForEach(Initialiser.Settings.NodalResults, kvp =>
+        foreach (var kvp in Initialiser.Settings.NodalResults)
         {
-          Parallel.ForEach(Initialiser.Settings.ResultCases, loadCase =>
+          foreach (var loadCase in Initialiser.Settings.ResultCases)
           {
-            if (Initialiser.Interface.CaseExist(loadCase))
+            if (!Initialiser.Interface.CaseExist(loadCase)) continue;
+
+            for (var i = 0; i < indices.Count(); i++)
             {
-              for (var i = 0; i < indices.Count(); i++)
+              var id = indices[i];
+
+              var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
+
+              if (resultExport == null || resultExport.Count() == 0)
               {
-                var id = indices[i];
-
-                var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
-
-                if (resultExport == null || resultExport.Count() == 0)
+                id++;
+                continue;
+              }
+              var existingRes = results.FirstOrDefault(x => x.Value.TargetRef == id.ToString());
+              if (existingRes == null)
+              {
+                var newRes = new StructuralNodeResult()
                 {
-                  id++;
-                  continue;
-                }
-                GSANodeResult existingRes;
-                lock (resultsLock)
-                {
-                  existingRes = results.FirstOrDefault(x => x.Value.TargetRef == id.ToString());
-                }
-                if (existingRes == null)
-                {
-                  var newRes = new StructuralNodeResult()
-                  {
-                    Value = new Dictionary<string, object>(),
-                    TargetRef = Helper.GetApplicationId(typeof(GSANode).GetGSAKeyword(), id),
-                    IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
+                  Value = new Dictionary<string, object>(),
+                  TargetRef = Helper.GetApplicationId(typeof(GSANode).GetGSAKeyword(), id),
+                  IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
                   LoadCaseRef = loadCase
-                  };
-                  newRes.Value[kvp.Key] = resultExport;
+                };
+                newRes.Value[kvp.Key] = resultExport;
 
-                  newRes.GenerateHash();
+                newRes.GenerateHash();
 
-                  lock (resultsLock)
-                  {
-                    results.Add(new GSANodeResult() { Value = newRes });
-                  }
-                }
-                else
-                {
-                  existingRes.Value.Value[kvp.Key] = resultExport;
-                }
+                results.Add(new GSANodeResult() { Value = newRes });
+              }
+              else
+              {
+                existingRes.Value.Value[kvp.Key] = resultExport;
               }
             }
           }
-          );
         }
-        );
 
         Initialiser.GSASenderObjects.AddRange(results);
       }

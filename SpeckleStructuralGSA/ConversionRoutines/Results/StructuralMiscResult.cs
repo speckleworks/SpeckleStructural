@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
@@ -24,56 +23,49 @@ namespace SpeckleStructuralGSA
       if (Initialiser.Settings.MiscResults.Count() == 0)
         return new SpeckleNull();
 
-      var resultsLock = new object();
       var results = new List<GSAMiscResult>();
 
       var indices = Initialiser.Cache.LookupIndices(typeof(GSAAssembly).GetGSAKeyword()).Where(i => i.HasValue).Select(i => i.Value).ToList();
 
-      Parallel.ForEach(Initialiser.Settings.MiscResults, kvp =>
+      foreach (var kvp in Initialiser.Settings.MiscResults)
       {
-        Parallel.ForEach(Initialiser.Settings.ResultCases, loadCase =>
+        foreach (var loadCase in Initialiser.Settings.ResultCases)
         {
-          if (Initialiser.Interface.CaseExist(loadCase))
+          if (!Initialiser.Interface.CaseExist(loadCase)) continue;
+
+          var gwa = Initialiser.Cache.GetGwa("");
+
+          var id = 0;
+
+          for (var i = 0; i < indices.Count(); i++)
           {
-            var gwa = Initialiser.Cache.GetGwa("");
+            id = indices[i];
 
-            var id = 0;
+            var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item2, kvp.Value.Item3, kvp.Value.Item4, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
 
-            for (var i = 0; i < indices.Count(); i++)
+            if (resultExport == null || resultExport.Count() == 0)
             {
-              id = indices[i];
-
-              var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item2, kvp.Value.Item3, kvp.Value.Item4, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
-
-              if (resultExport == null || resultExport.Count() == 0)
-              {
-                id++;
-                continue;
-              }
-
-              var newRes = new StructuralMiscResult
-              {
-                Description = kvp.Key,
-                IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
-                Value = resultExport,
-                LoadCaseRef = loadCase
-              };
-
-              if (id != 0)
-              {
-                newRes.TargetRef = Helper.GetApplicationId(kvp.Value.Item1, id);
-              }
-              newRes.GenerateHash();
-              lock (resultsLock)
-              {
-                results.Add(new GSAMiscResult() { Value = newRes });
-              }
+              id++;
+              continue;
             }
+
+            var newRes = new StructuralMiscResult
+            {
+              Description = kvp.Key,
+              IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
+              Value = resultExport,
+              LoadCaseRef = loadCase
+            };
+
+            if (id != 0)
+            {
+              newRes.TargetRef = Helper.GetApplicationId(kvp.Value.Item1, id);
+            }
+            newRes.GenerateHash();
+            results.Add(new GSAMiscResult() { Value = newRes });
           }
         }
-        );
       }
-      );
 
       Initialiser.GSASenderObjects.AddRange(results);
 
