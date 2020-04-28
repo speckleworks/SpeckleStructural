@@ -45,7 +45,7 @@ namespace SpeckleStructuralGSA
       var coordinates = new List<Tuple<string, string>>();
 
       foreach (var e in elementsListCopy)
-        coordinates.Add( new Tuple<string, string>(
+        coordinates.Add(new Tuple<string, string>(
           string.Join(",", (e.Value.Value as List<double>).Take(3).Select(x => Math.Round(x, 4).ToString())),
           string.Join(",", (e.Value.Value as List<double>).Skip(3).Take(3).Select(x => Math.Round(x, 4).ToString()))
         ));
@@ -65,15 +65,15 @@ namespace SpeckleStructuralGSA
       var offsets = obj.Offset;
       var resultVertices = obj.ResultVertices;
 
-      while(coordinates.Count > 0)
+      while (coordinates.Count > 0)
       {
         var matchIndex = 0;
         var reverseCoordinates = false;
-        
+
         matchIndex = coordinates.FindIndex(x => x.Item1 == current);
         reverseCoordinates = false;
         if (matchIndex == -1)
-        { 
+        {
           matchIndex = coordinates.FindIndex(x => x.Item2 == current);
           reverseCoordinates = true;
         }
@@ -86,11 +86,11 @@ namespace SpeckleStructuralGSA
         if (obj.Value.Count == 0)
         {
           if (!reverseCoordinates)
-          { 
+          {
             obj.Value.AddRange((element.Value.Value as List<double>).Take(3));
           }
           else
-          { 
+          {
             obj.Value.AddRange((element.Value.Value as List<double>).Skip(3).Take(3));
           }
         }
@@ -138,7 +138,7 @@ namespace SpeckleStructuralGSA
         if (obj.Result != null)
         {
           try
-          { 
+          {
             foreach (string loadCase in element.Value.Result.Keys)
             {
               if (!obj.Result.ContainsKey(loadCase))
@@ -226,7 +226,7 @@ namespace SpeckleStructuralGSA
       else
       {
         var group = Initialiser.Cache.ResolveIndex(typeof(GSA1DElementPolyline).GetGSAKeyword(), obj.ApplicationId);
-        
+
         foreach (var element in elements)
         {
           gwaCommands.Add((Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
@@ -265,7 +265,9 @@ namespace SpeckleStructuralGSA
 
       // Perform mesh merging
       var uniqueMembers = new List<string>(Initialiser.GSASenderObjects.Get<GSA1DElement>().Select(x => (x as GSA1DElement).Member).Where(m => Convert.ToInt32(m) > 0).Distinct());
-      uniqueMembers.Sort();  //Just for human-readability and testing
+      uniqueMembers.Sort();  //Just for readability and testing
+
+      //This loop has been left as serial for now, considering the fact that the sender objects are retrieved and removed-from with each iteration
       foreach (var member in uniqueMembers)
       {
         try
@@ -273,6 +275,7 @@ namespace SpeckleStructuralGSA
           var all1dElements = Initialiser.GSASenderObjects.Get<GSA1DElement>();
           var matching1dElementList = all1dElements.Where(x => (x as GSA1DElement).Member == member)
             .OrderBy(m => m.GSAId).ToList(); //Ordering is just for human-readability and testing
+
           var poly = new GSA1DElementPolyline() { GSAId = Convert.ToInt32(member) };
           poly.ParseGWACommand(matching1dElementList);
           polylines.Add(poly);

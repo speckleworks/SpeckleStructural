@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
 using SpeckleGSAInterfaces;
@@ -557,10 +558,11 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSA1DElement>();
 
+      var elementsLock = new object();
       var elements = new List<GSA1DElement>();
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
-      foreach (var p in newLines.Values)
+      Parallel.ForEach(newLines.Values, p =>
       {
         var pPieces = p.ListSplit("\t");
 
@@ -570,11 +572,14 @@ namespace SpeckleStructuralGSA
           {
             var element = new GSA1DElement() { GWACommand = p };
             element.ParseGWACommand(nodes);
-            elements.Add(element);
+            lock (elementsLock)
+            {
+              elements.Add(element);
+            }
           }
           catch { }
         }
-      }
+      });
 
       Initialiser.GSASenderObjects.AddRange(elements);
 
@@ -585,10 +590,11 @@ namespace SpeckleStructuralGSA
     {
 
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
+      var membersLock = new object();
       var members = new List<GSA1DMember>();
       var newLines = ToSpeckleBase<GSA1DMember>();
-      
-      foreach (var p in newLines.Values)
+
+      Parallel.ForEach(newLines.Values, p =>
       {
         var pPieces = p.ListSplit("\t");
         if (pPieces[4].Is1DMember())
@@ -597,11 +603,14 @@ namespace SpeckleStructuralGSA
           {
             var member = new GSA1DMember() { GWACommand = p };
             member.ParseGWACommand(nodes);
-            members.Add(member);
+            lock (membersLock)
+            {
+              members.Add(member);
+            }
           }
           catch { }
         }
-      }
+      });
 
       Initialiser.GSASenderObjects.AddRange(members);
 

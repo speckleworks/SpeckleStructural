@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
@@ -89,16 +90,20 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSABridgeVehicle>();
 
+      var alignmentsLock = new object();
       //Get all relevant GSA entities in this entire model
       var alignments = new List<GSABridgeVehicle>();
 
-      foreach (var p in newLines.Values)
+      Parallel.ForEach(newLines.Values, p =>
       {
         var alignment = new GSABridgeVehicle() { GWACommand = p };
         //Pass in ALL the nodes and members - the Parse_ method will search through them
         alignment.ParseGWACommand();
-        alignments.Add(alignment);
-      }
+        lock (alignmentsLock)
+        {
+          alignments.Add(alignment);
+        }
+      });
 
       Initialiser.GSASenderObjects.AddRange(alignments);
 

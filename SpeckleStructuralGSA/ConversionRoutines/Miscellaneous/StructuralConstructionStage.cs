@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
@@ -149,6 +150,7 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSAConstructionStage>();
 
+      var stageDefsLock = new object();
       var stageDefs = new List<GSAConstructionStage>();
       var e1Ds = new List<GSA1DElement>();
       var e2Ds = new List<GSA2DElement>();
@@ -166,16 +168,19 @@ namespace SpeckleStructuralGSA
         m2Ds = Initialiser.GSASenderObjects.Get<GSA2DMember>();
       }
 
-      foreach (var p in newLines.Values)
+      Parallel.ForEach(newLines.Values, p =>
       {
         try
         {
           var stageDef = new GSAConstructionStage() { GWACommand = p };
           stageDef.ParseGWACommand(e1Ds, e2Ds, m1Ds, m2Ds);
-          stageDefs.Add(stageDef);
+          lock (stageDefsLock)
+          {
+            stageDefs.Add(stageDef);
+          }
         }
         catch { }
-      }
+      });
 
       Initialiser.GSASenderObjects.AddRange(stageDefs);
 

@@ -6,6 +6,7 @@ using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 using System.Text.RegularExpressions;
 using SpeckleCoreGeometryClasses;
+using System.Threading.Tasks;
 
 namespace SpeckleStructuralGSA
 {
@@ -404,39 +405,41 @@ namespace SpeckleStructuralGSA
     {
       var newElementLines = ToSpeckleBase<GSA2DElement>();
       var newMeshLines = ToSpeckleBase<GSA2DElementMesh>();
-      var newLines = new List<Tuple<int, string>>();
+      var newLinesTuples = new List<Tuple<int, string>>();
       foreach (var k in newElementLines.Keys)
       {
-        newLines.Add(new Tuple<int, string>(k, newElementLines[k]));
+        newLinesTuples.Add(new Tuple<int, string>(k, newElementLines[k]));
       }
       foreach (var k in newMeshLines.Keys)
       {
-        newLines.Add(new Tuple<int, string>(k, newMeshLines[k]));
+        newLinesTuples.Add(new Tuple<int, string>(k, newMeshLines[k]));
       }
 
+      var elementsLock = new object();
       var elements = new List<GSA2DElement>();
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
       var props = Initialiser.GSASenderObjects.Get<GSA2DProperty>();
 
-      foreach (var p in newLines.Select(nl => nl.Item2))
+      var newLines = newLinesTuples.Select(nl => nl.Item2);
+      Parallel.ForEach(newLines, p =>
       {
         var pPieces = p.ListSplit("\t");
         // Check if void or not an element
-        if (pPieces[4] == "2D_VOID_CUTTER" || pPieces[4].Is1DMember() || pPieces[4].Is2DMember())
-        {
-          continue;
-        }
-        if (pPieces[4].ParseElementNumNodes() == 3 | pPieces[4].ParseElementNumNodes() == 4)
+        if (!(pPieces[4] == "2D_VOID_CUTTER" || pPieces[4].Is1DMember() || pPieces[4].Is2DMember())
+          && (pPieces[4].ParseElementNumNodes() == 3 | pPieces[4].ParseElementNumNodes() == 4))
         {
           try
           {
             var element = new GSA2DElement() { GWACommand = p };
             element.ParseGWACommand(nodes, props);
-            elements.Add(element);
+            lock (elementsLock)
+            {
+              elements.Add(element);
+            }
           }
           catch { }
         }
-      }
+      });
 
       Initialiser.GSASenderObjects.AddRange(elements);
 
@@ -447,11 +450,12 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSA2DMember>();
 
+      var membersLock = new object();
       var members = new List<GSA2DMember>();
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
       var props = Initialiser.GSASenderObjects.Get<GSA2DProperty>();
 
-      foreach (var p in newLines.Values)
+      Parallel.ForEach(newLines.Values, p =>
       {
         var pPieces = p.ListSplit("\t");
         if (pPieces[4].Is2DMember())
@@ -463,12 +467,15 @@ namespace SpeckleStructuralGSA
             {
               var member = new GSA2DMember() { GWACommand = p };
               member.ParseGWACommand(nodes, props);
-              members.Add(member);
+              lock (membersLock)
+              {
+                members.Add(member);
+              }
             }
             catch { }
           }
         }
-      }
+      });
 
       Initialiser.GSASenderObjects.AddRange(members);
 

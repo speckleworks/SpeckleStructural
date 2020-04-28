@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
@@ -149,20 +150,24 @@ namespace SpeckleStructuralGSA
         newLines.Add(new Tuple<int, string>(k, newNodeLines[k]));
       }
 
+      var springsLock = new object();
       var springs = new List<GSA0DSpring>();
 
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
-      foreach (var p in newLines.Select(nl => nl.Item2))
+      Parallel.ForEach(newLines.Select(nl => nl.Item2), p =>
       {
         var pPieces = p.ListSplit("\t");
         if (pPieces[4] == "GRD_SPRING")
         {
           var spring = new GSA0DSpring() { GWACommand = p };
           spring.ParseGWACommand(nodes);
-          springs.Add(spring);
+          lock (springsLock)
+          {
+            springs.Add(spring);
+          }
         }
-      }
+      });
 
       Initialiser.GSASenderObjects.AddRange(springs);
 

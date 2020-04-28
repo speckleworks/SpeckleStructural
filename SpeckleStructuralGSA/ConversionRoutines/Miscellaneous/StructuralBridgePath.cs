@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
@@ -100,13 +101,18 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSABridgePath>();
       var paths = new List<GSABridgePath>();
 
-      foreach (var p in newLines.Values)
+      var pathsLock = new object();
+
+      Parallel.ForEach(newLines.Values, p =>
       {
         var path = new GSABridgePath() { GWACommand = p };
         //Pass in ALL the nodes and members - the Parse_ method will search through them
         path.ParseGWACommand();
-        paths.Add(path);
-      }
+        lock (pathsLock)
+        {
+          paths.Add(path);
+        }
+      });
 
       Initialiser.GSASenderObjects.AddRange(paths);
 

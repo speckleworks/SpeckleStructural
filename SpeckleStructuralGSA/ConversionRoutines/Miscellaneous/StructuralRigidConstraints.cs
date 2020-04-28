@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
@@ -192,20 +193,24 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSARigidConstraints>();
 
+      var constraintsLock = new object();
       var constraints = new List<GSARigidConstraints>();
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
       var stages = Initialiser.GSASenderObjects.Get<GSAConstructionStage>();
 
-      foreach (var k in newLines.Keys)
+      Parallel.ForEach(newLines.Keys, k =>
       {
         try
         {
-          var constraint = new GSARigidConstraints() { GSAId = k,  GWACommand = newLines[k] };
+          var constraint = new GSARigidConstraints() { GSAId = k, GWACommand = newLines[k] };
           constraint.ParseGWACommand(nodes, stages);
-          constraints.Add(constraint);
+          lock (constraintsLock)
+          {
+            constraints.Add(constraint);
+          }
         }
         catch { }
-      }
+      });
 
       Initialiser.GSASenderObjects.AddRange(constraints);
 

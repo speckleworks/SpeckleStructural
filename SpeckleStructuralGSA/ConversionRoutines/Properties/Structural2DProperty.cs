@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
@@ -165,20 +166,24 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSA2DProperty>();
 
+      var propsLock = new object();
       var props = new List<GSA2DProperty>();
       var steels = Initialiser.GSASenderObjects.Get<GSAMaterialSteel>();
       var concretes = Initialiser.GSASenderObjects.Get<GSAMaterialConcrete>();
 
-      foreach (var p in newLines.Values)
+      Parallel.ForEach(newLines.Values, p =>
       {
         try
         {
           var prop = new GSA2DProperty() { GWACommand = p };
           prop.ParseGWACommand(steels, concretes);
-          props.Add(prop);
+          lock (propsLock)
+          {
+            props.Add(prop);
+          }
         }
         catch { }
-      }
+      });
 
       Initialiser.GSASenderObjects.AddRange(props);
 

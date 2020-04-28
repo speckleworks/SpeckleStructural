@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
 using SpeckleGSAInterfaces;
@@ -216,6 +217,8 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSAAssembly>();
 
+      var assembliesLock = new object();
+
       //Get all relevant GSA entities in this entire model
       var assemblies = new List<GSAAssembly>();
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
@@ -235,7 +238,7 @@ namespace SpeckleStructuralGSA
         m2Ds = Initialiser.GSASenderObjects.Get<GSA2DMember>();
       }
 
-      foreach (var p in newLines.Values)
+      Parallel.ForEach(newLines.Values, p =>
       {
         try
         {
@@ -248,11 +251,14 @@ namespace SpeckleStructuralGSA
           //Once this condition has been met, assign to null so it won't form part of the sender objects list
           if (assembly.Value != null)
           {
-            assemblies.Add(assembly);
+            lock (assembliesLock)
+            {
+              assemblies.Add(assembly);
+            }
           }
         }
         catch { }
-      }
+      });
 
       Initialiser.GSASenderObjects.AddRange(assemblies);
 

@@ -158,17 +158,12 @@ namespace SpeckleStructuralGSA
 
     public static SpeckleObject ToSpeckle(this GSA2DElementMesh dummyObject)
     {
-      /*
-      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSA2DElementMesh)))
-      {
-        Initialiser.GSASenderObjects.Get<GSA2DElementMesh)] = new List<object>();
-      }
-      */
-
       var meshes = new List<GSA2DElementMesh>();
 
       // Perform mesh merging
       var uniqueMembers = new List<string>(Initialiser.GSASenderObjects.Get<GSA2DElement>().Select(x => (x as GSA2DElement).Member).Where(m => Convert.ToInt32(m) > 0).Distinct());
+
+      //This loop has been left as serial for now, considering the fact that the sender objects are retrieved and removed-from with each iteration
       foreach (var member in uniqueMembers)
       {
         try
