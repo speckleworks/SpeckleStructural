@@ -42,7 +42,7 @@ namespace SpeckleStructuralGSA
         var targetNodes = nodes
             .Where(n => targetNodeRefs.Contains(n.GSAId)).ToList();
 
-        obj.NodeRefs = targetNodes.Select(n => (string)n.Value.ApplicationId).ToList();
+        obj.NodeRefs = targetNodes.Select(n => (string)n.Value.ApplicationId).OrderBy(i => i).ToList();
         this.SubGWACommand.AddRange(targetNodes.Select(n => n.GWACommand));
 
         foreach (var n in targetNodes)
@@ -74,7 +74,7 @@ namespace SpeckleStructuralGSA
       var nodesStr = "none"; //default value
       if (obj.NodeRefs != null && obj.NodeRefs.Count() >= 1)
       {
-        var nodeIndices = Initialiser.Cache.LookupIndices(typeof(GSANode).GetGSAKeyword(), obj.NodeRefs);
+        var nodeIndices = Initialiser.Cache.LookupIndices(typeof(GSANode).GetGSAKeyword(), obj.NodeRefs).OrderBy(i => i);
         nodesStr = string.Join(" ", nodeIndices);
       }
 

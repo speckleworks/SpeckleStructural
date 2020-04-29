@@ -36,7 +36,7 @@ namespace SpeckleStructuralGSA
         var targetNodes = nodes
             .Where(n => targetNodeRefs.Contains(n.GSAId)).ToList();
 
-        obj.NodeRefs = targetNodes.Select(n => (string)n.Value.ApplicationId).ToList();
+        obj.NodeRefs = targetNodes.Select(n => (string)n.Value.ApplicationId).OrderBy(n => n).ToList();
         this.SubGWACommand.AddRange(targetNodes.Select(n => n.GWACommand));
 
         foreach (var n in targetNodes)
@@ -90,7 +90,7 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA0DLoad).GetGSAKeyword();
 
-      var nodeRefs = Initialiser.Cache.LookupIndices(typeof(GSANode).GetGSAKeyword(), load.NodeRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
+      var nodeRefs = Initialiser.Cache.LookupIndices(typeof(GSANode).GetGSAKeyword(), load.NodeRefs).Where(x => x.HasValue).Select(x => x.Value).OrderBy(i => i).ToList();
 
       var loadCaseKeyword = typeof(GSALoadCase).GetGSAKeyword();
       var indexResult = Initialiser.Cache.LookupIndex(loadCaseKeyword, load.LoadCaseRef);
