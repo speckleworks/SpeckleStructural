@@ -53,18 +53,22 @@ namespace SpeckleStructuralGSA.Test
 
       expectedObjects = expectedObjects.OrderBy(a => a.ApplicationId).ToList();
 
+      var expected = new Dictionary<SpeckleObject, string>();
+      foreach (var expectedObject in expectedObjects)
+      {
+        var expectedJson = JsonConvert.SerializeObject(expectedObject, jsonSettings);
+
+        expectedJson = Regex.Replace(expectedJson, jsonDecSearch, "$1");
+        expectedJson = Regex.Replace(expectedJson, jsonHashSearch, jsonHashReplace);
+
+        expected.Add(expectedObject, expectedJson);
+      }
+
       var actualObjects = ModelToSpeckleObjects(layer, resultsOnly, embedResults, loadCases, resultTypes);
       Assert.IsNotNull(actualObjects);
-
       actualObjects = actualObjects.OrderBy(a => a.ApplicationId).ToList();
 
-      //Assert.AreEqual(expectedObjects.Count(), actualObjects.Count());
-
-      var expectedJsons = expectedObjects.Select(e => Regex.Replace(JsonConvert.SerializeObject(e, jsonSettings), jsonDecSearch, "$1")).ToList();
-      expectedJsons = expectedJsons.Select(e => Regex.Replace(e, jsonHashSearch, jsonHashReplace)).ToList();
-
-      var unmatching = new List<Tuple<string, string, List<string>>>();
-      //Compare each object
+      var actual = new Dictionary<SpeckleObject, string>();
       foreach (var actualObject in actualObjects)
       {
         var actualJson = JsonConvert.SerializeObject(actualObject, jsonSettings);
@@ -72,21 +76,36 @@ namespace SpeckleStructuralGSA.Test
         actualJson = Regex.Replace(actualJson, jsonDecSearch, "$1");
         actualJson = Regex.Replace(actualJson, jsonHashSearch, jsonHashReplace);
 
-        var matchingExpected = expectedJsons.FirstOrDefault(e => JsonCompareAreEqual(e, actualJson));
+        actual.Add(actualObject, actualJson);
+      }
 
-        if (matchingExpected == null)
+      var unmatching = new List<Tuple<string, string, List<string>>>();
+      //Compare each object
+      foreach (var actualObject in actual.Keys)
+      {
+        var actualJson = actual[actualObject];
+        var actualType = actualObject.GetType();
+
+        var matchingTypeAndId = expected.Where(kvp => kvp.Key.GetType() == actualType && kvp.Key.ApplicationId == actualObject.ApplicationId);
+        var matchingExpected = matchingTypeAndId.Where(kvp => JsonCompareAreEqual(kvp.Value, actualJson));
+
+        if (matchingExpected == null || matchingExpected.Count() == 0)
         {
           var nearestMatching = new List<string>();
           if (!string.IsNullOrEmpty(actualObject.ApplicationId))
           {
-            nearestMatching.AddRange(expectedJsons.Where(e => e.Contains(actualObject.ApplicationId)));
+            nearestMatching.AddRange(matchingTypeAndId.Select(kvp => kvp.Value));
           }
           
           unmatching.Add(new Tuple<string, string, List<string>>(actualObject.ApplicationId, actualJson, nearestMatching));
         }        
+        else if (matchingExpected.Count() == 1)
+        {
+          expected.Remove(matchingExpected.First().Key);
+        }
         else
         {
-          expectedJsons.Remove(matchingExpected);
+          //TO DO
         }
       }
 
