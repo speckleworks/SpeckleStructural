@@ -33,8 +33,6 @@ namespace SpeckleStructuralGSA
         {
           if (!Initialiser.Interface.CaseExist(loadCase)) continue;
 
-          var gwa = Initialiser.Cache.GetGwa("");
-
           var id = 0;
 
           for (var i = 0; i < indices.Count(); i++)
