@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SpeckleCore;
@@ -53,16 +54,25 @@ namespace SpeckleStructuralGSA.Test
 
       expectedObjects = expectedObjects.OrderBy(a => a.ApplicationId).ToList();
 
-      var expected = new Dictionary<SpeckleObject, string>();
-      foreach (var expectedObject in expectedObjects)
+      var expected = new Dictionary<Type, List<Tuple<string, SpeckleObject, string>>>();
+      var expectedLock = new object();
+      Parallel.ForEach(expectedObjects, expectedObject =>
       {
         var expectedJson = JsonConvert.SerializeObject(expectedObject, jsonSettings);
 
         expectedJson = Regex.Replace(expectedJson, jsonDecSearch, "$1");
         expectedJson = Regex.Replace(expectedJson, jsonHashSearch, jsonHashReplace);
 
-        expected.Add(expectedObject, expectedJson);
-      }
+        var type = expectedObject.GetType();
+        lock (expectedLock)
+        {
+          if (!expected.ContainsKey(type))
+          {
+            expected[type] = new List<Tuple<string, SpeckleObject, string>>();
+          }
+          expected[type].Add(new Tuple<string, SpeckleObject, string>(expectedObject.ApplicationId, expectedObject, expectedJson));
+        }
+      });
 
       var actualObjects = ModelToSpeckleObjects(layer, resultsOnly, embedResults, loadCases, resultTypes);
       Assert.IsNotNull(actualObjects);
@@ -79,38 +89,72 @@ namespace SpeckleStructuralGSA.Test
         actual.Add(actualObject, actualJson);
       }
 
+      var matched = new List<SpeckleObject>();
+      var matchedLock = new object();
       var unmatching = new List<Tuple<string, string, List<string>>>();
+      var unmatchingLock = new object();
       //Compare each object
-      foreach (var actualObject in actual.Keys)
+      Parallel.ForEach(actual.Keys, actualObject =>
       {
         var actualJson = actual[actualObject];
         var actualType = actualObject.GetType();
 
-        var matchingTypeAndId = expected.Where(kvp => kvp.Key.GetType() == actualType && kvp.Key.ApplicationId == actualObject.ApplicationId);
-        var matchingExpected = matchingTypeAndId.Where(kvp => JsonCompareAreEqual(kvp.Value, actualJson));
-
-        if (matchingExpected == null || matchingExpected.Count() == 0)
+        List<Tuple<string, SpeckleObject, string>> matchingExpected;
+        bool containsKey;
+        lock (expectedLock)
         {
-          var nearestMatching = new List<string>();
-          if (!string.IsNullOrEmpty(actualObject.ApplicationId))
+          containsKey = expected.ContainsKey(actualType);
+        }
+        if (containsKey)
+        {
+          List<Tuple<string, SpeckleObject, string>> matchingTypeAndId;
+          lock (expectedLock)
           {
-            nearestMatching.AddRange(matchingTypeAndId.Select(kvp => kvp.Value));
+            matchingTypeAndId = expected[actualType].Where(tup => tup.Item1 == actualObject.ApplicationId).ToList();
           }
-          
-          unmatching.Add(new Tuple<string, string, List<string>>(actualObject.ApplicationId, actualJson, nearestMatching));
-        }        
-        else if (matchingExpected.Count() == 1)
-        {
-          expected.Remove(matchingExpected.First().Key);
+          matchingExpected = matchingTypeAndId.Where(tup => JsonCompareAreEqual(tup.Item3, actualJson)).ToList();
+
+          if (matchingExpected.Count() == 0)
+          {
+            var nearestMatching = new List<string>();
+            if (!string.IsNullOrEmpty(actualObject.ApplicationId))
+            {
+              nearestMatching.AddRange(matchingTypeAndId.Select(kvp => kvp.Item3));
+            }
+
+            lock (unmatchingLock)
+            {
+              unmatching.Add(new Tuple<string, string, List<string>>(actualObject.ApplicationId, actualJson, nearestMatching));
+            }
+          }
+          else if (matchingExpected.Count() == 1)
+          {
+            lock (expectedLock)
+            {
+              expected[actualType].Remove(matchingExpected.First());
+            }
+            lock (matchedLock)
+            {
+              matched.Add(actualObject);
+            }
+          }
+          else
+          {
+            //TO DO
+          }
         }
         else
         {
-          //TO DO
+          lock (unmatchingLock)
+          {
+            unmatching.Add(new Tuple<string, string, List<string>>(actualObject.ApplicationId, actualJson, new List<string>()));
+          }
         }
-      }
+      });
 
       gsaInterfacer.Close();
 
+      Assert.AreEqual(actual.Count(), matched.Count());
       Assert.IsEmpty(unmatching, unmatching.Count().ToString() + " unmatched objects");
     }
   }

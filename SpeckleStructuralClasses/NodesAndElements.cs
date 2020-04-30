@@ -610,8 +610,6 @@ namespace SpeckleStructuralClasses
       get
       {
         return StructuralProperties.ValueAsTypedList<StructuralAxis>("axis");
-        {
-        }
       }
       set { if (value != null) StructuralProperties["axis"] = value; }
     }
