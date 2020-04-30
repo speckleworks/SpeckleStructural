@@ -70,6 +70,10 @@ namespace SpeckleStructuralGSA
         return "";
 
       var loadCase = this.Value as StructuralLoadCase;
+      if (loadCase.ApplicationId == null)
+      {
+        return "";
+      }
 
       var keyword = typeof(GSALoadCase).GetGSAKeyword();
 

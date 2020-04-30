@@ -45,6 +45,10 @@ namespace SpeckleStructuralGSA
       var destType = typeof(GSABridgeAlignment);
 
       var alignment = this.Value as StructuralBridgeAlignment;
+      if (alignment.ApplicationId == null)
+      {
+        return "";
+      }
 
       var keyword = destType.GetGSAKeyword();
 

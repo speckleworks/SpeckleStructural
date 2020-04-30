@@ -45,6 +45,10 @@ namespace SpeckleStructuralGSA
       var destType = typeof(GSABridgeVehicle);
 
       var vehicle = this.Value as StructuralBridgeVehicle;
+      if (vehicle.ApplicationId == null)
+      {
+        return "";
+      }
 
       var keyword = destType.GetGSAKeyword();
 

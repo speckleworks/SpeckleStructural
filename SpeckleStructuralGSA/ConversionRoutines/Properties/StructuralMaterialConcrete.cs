@@ -58,6 +58,10 @@ namespace SpeckleStructuralGSA
         return "";
 
       var mat = this.Value as StructuralMaterialConcrete;
+      if (mat.ApplicationId == null)
+      {
+        return "";
+      }
 
       var keyword = typeof(GSAMaterialConcrete).GetGSAKeyword();
       var index = Initialiser.Cache.ResolveIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), mat.ApplicationId);

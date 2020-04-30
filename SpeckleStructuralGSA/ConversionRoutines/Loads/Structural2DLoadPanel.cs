@@ -128,7 +128,7 @@ namespace SpeckleStructuralGSA
 
       var load = this.Value as Structural2DLoadPanel;
 
-      if (load.Loading == null)
+      if (load.ApplicationId == null)
         return "";
 
       var keyword = typeof(GSAGridAreaLoad).GetGSAKeyword();

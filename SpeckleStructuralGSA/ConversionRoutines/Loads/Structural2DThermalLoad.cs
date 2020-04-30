@@ -95,6 +95,11 @@ namespace SpeckleStructuralGSA
 
       var load = this.Value as Structural2DThermalLoad;
 
+      if (load.ApplicationId == null)
+      {
+        return "";
+      }
+
       var keyword = typeof(GSA2DThermalLoading).GetGSAKeyword();
 
       var index = Initialiser.Cache.ResolveIndex(typeof(GSA2DThermalLoading).GetGSAKeyword(), load.ApplicationId);

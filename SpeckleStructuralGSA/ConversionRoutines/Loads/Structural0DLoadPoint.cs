@@ -99,7 +99,7 @@ namespace SpeckleStructuralGSA
         return "";
 
       var load = this.Value as Structural0DLoadPoint;
-      if (load.Loading == null || load.LoadCaseRef == null)
+      if (load.ApplicationId == null)
         return "";
 
       var keyword = typeof(GSA0DLoadPoint).GetGSAKeyword();

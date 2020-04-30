@@ -56,6 +56,10 @@ namespace SpeckleStructuralGSA
         return "";
 
       var mat = this.Value as StructuralMaterialSteel;
+      if (mat.ApplicationId == null)
+      {
+        return "";
+      }
 
       var keyword = typeof(GSAMaterialSteel).GetGSAKeyword();
 
