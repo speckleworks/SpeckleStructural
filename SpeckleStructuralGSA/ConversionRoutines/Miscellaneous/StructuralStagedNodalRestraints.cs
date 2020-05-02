@@ -32,21 +32,24 @@ namespace SpeckleStructuralGSA
       //Restraints
       var restraints = new bool[6];
       for (var i = 0; i < 6; i++)
+      {
         restraints[i] = pieces[counter++] == "1";
+      }
       obj.Restraint = new StructuralVectorBoolSix(restraints);
       
       var targetNodeRefs = Initialiser.Interface.ConvertGSAList(pieces[counter++], SpeckleGSAInterfaces.GSAEntity.NODE);
 
       if (nodes != null)
       {
-        var targetNodes = nodes
-            .Where(n => targetNodeRefs.Contains(n.GSAId)).ToList();
+        var targetNodes = nodes.Where(n => targetNodeRefs.Contains(n.GSAId)).ToList();
 
-        obj.NodeRefs = targetNodes.Select(n => (string)n.Value.ApplicationId).OrderBy(i => i).ToList();
+        obj.NodeRefs = targetNodes.Select(n => (string)n.Value.ApplicationId).Distinct().OrderBy(i => i).ToList();
         this.SubGWACommand.AddRange(targetNodes.Select(n => n.GWACommand));
 
         foreach (var n in targetNodes)
+        {
           n.ForceSend = true;
+        }
       }
       
       var gwaStageDefGsaIds = pieces[counter++].ListSplit(" ");
@@ -74,14 +77,14 @@ namespace SpeckleStructuralGSA
       var nodesStr = "none"; //default value
       if (obj.NodeRefs != null && obj.NodeRefs.Count() >= 1)
       {
-        var nodeIndices = Initialiser.Cache.LookupIndices(typeof(GSANode).GetGSAKeyword(), obj.NodeRefs).OrderBy(i => i);
+        var nodeIndices = Initialiser.Cache.LookupIndices(typeof(GSANode).GetGSAKeyword(), obj.NodeRefs).Distinct().OrderBy(i => i);
         nodesStr = string.Join(" ", nodeIndices);
       }
 
       var stageDefStr = "all"; //default value
       if (obj.ConstructionStageRefs != null && obj.ConstructionStageRefs.Count() >= 1)
       {
-        var stageDefIndices = Initialiser.Cache.LookupIndices(typeof(GSAConstructionStage).GetGSAKeyword(), obj.ConstructionStageRefs);
+        var stageDefIndices = Initialiser.Cache.LookupIndices(typeof(GSAConstructionStage).GetGSAKeyword(), obj.ConstructionStageRefs).Distinct().OrderBy(i => i);
         stageDefStr = string.Join(" ", stageDefIndices);
       }
 

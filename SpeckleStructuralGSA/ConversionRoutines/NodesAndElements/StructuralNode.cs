@@ -62,13 +62,17 @@ namespace SpeckleStructuralGSA
           case "REST":
             obj.Restraint = new StructuralVectorBoolSix(new bool[6]);
             for (var i = 0; i < 6; i++)
+            {
               obj.Restraint.Value[i] = pieces[counter++] == "0" ? false : true;
+            }
             this.ForceSend = true;
             break;
           case "STIFF":
             obj.Stiffness = new StructuralVectorSix(new double[6]);
             for (var i = 0; i < 6; i++)
+            {
               obj.Stiffness.Value[i] = Convert.ToDouble(pieces[counter++]);
+            }
             this.ForceSend = true;
             break;
           case "MESH":
@@ -87,7 +91,9 @@ namespace SpeckleStructuralGSA
             string gwaRec = null;
             obj.Axis = Helper.Parse0DAxis(Convert.ToInt32(s), Initialiser.Interface, out gwaRec, obj.Value.ToArray());
             if (gwaRec != null)
+            {
               this.SubGWACommand.Add(gwaRec);
+            }
             break;
         }
       }
@@ -118,7 +124,7 @@ namespace SpeckleStructuralGSA
         index.ToString(),
         node.Name == null || node.Name == "" ? " " : node.Name,
         "NO_RGB",
-        string.Join("\t", node.Value.ToArray()),
+        string.Join("\t", node.Value.Select(v => Math.Round(v, 8)).ToArray()), //GSA seems to round to 8 here
 
         //ls.Add("0"); // TODO: Skip unknown fields in NODE.3
         //ls.Add("0"); // TODO: Skip unknown fields in NODE.3
@@ -151,32 +157,37 @@ namespace SpeckleStructuralGSA
         else
         {
           var subLs = new List<string>
-          {
-            "REST",
-            node.Restraint.Value[0] ? "1" : "0",
-            node.Restraint.Value[1] ? "1" : "0",
-            node.Restraint.Value[2] ? "1" : "0",
-            node.Restraint.Value[3] ? "1" : "0",
-            node.Restraint.Value[4] ? "1" : "0",
-            node.Restraint.Value[5] ? "1" : "0"
-          };
+        {
+          "REST",
+          node.Restraint.Value[0] ? "1" : "0",
+          node.Restraint.Value[1] ? "1" : "0",
+          node.Restraint.Value[2] ? "1" : "0",
+          node.Restraint.Value[3] ? "1" : "0",
+          node.Restraint.Value[4] ? "1" : "0",
+          node.Restraint.Value[5] ? "1" : "0"
+        };
           ls.AddRange(subLs);
         }
-
-        
-
       }
       catch { ls.Add("NO_REST"); }
 
-      try
+
+      if ((node.Stiffness == null || !node.Stiffness.Value.Any(x => x == 0))
+        && (node.GSALocalMeshSize == 0))
       {
-        if (node.Stiffness == null || !node.Stiffness.Value.Any(x => x == 0))
+        //GSA leaves the rest off the GWA in this case
+      }
+      else
+      {
+        try
         {
-          ls.Add("NO_STIFF");
-        }
-        else
-        {
-          var subLs = new List<string>
+          if (node.Stiffness == null || !node.Stiffness.Value.Any(x => x == 0))
+          {
+            ls.Add("NO_STIFF");
+          }
+          else
+          {
+            var subLs = new List<string>
           {
             "STIFF",
             node.Stiffness.Value[0].ToString(),
@@ -186,39 +197,41 @@ namespace SpeckleStructuralGSA
             node.Stiffness.Value[4].ToString(),
             node.Stiffness.Value[5].ToString()
           };
-          ls.AddRange(subLs);
+            ls.AddRange(subLs);
+          }
         }
-      }
-      catch { ls.Add("NO_STIFF"); }
+        catch { ls.Add("NO_STIFF"); }
 
-      try
-      {
-        if (node.GSALocalMeshSize == 0)
+        try
+        {
+          if (node.GSALocalMeshSize == 0)
+          {
+            //GSA seems to leave this off if there is no mesh
+            //ls.Add("NO_MESH");
+          }
+          else
+          {
+            var subLs = new List<string>
+            {
+              "MESH",
+              node.GSALocalMeshSize.ToString(),
+              "0", // Radius
+              "NO", // Tie to mesh
+              "NO", // column rigidity will be generated
+              "0", // Column property number
+              "0", //Column orientation node
+              "0", //Column orientation angle
+              "1", //Column dimension factor
+              "0" //Column slab thickness factor
+            };
+
+            ls.AddRange(subLs);
+          }
+        }
+        catch (Exception)
         {
           ls.Add("NO_MESH");
         }
-        else
-        {
-          var subLs = new List<string>
-          {
-            "MESH",
-            node.GSALocalMeshSize.ToString(),
-            "0", // Radius
-            "NO", // Tie to mesh
-            "NO", // column rigidity will be generated
-            "0", // Column property number
-            "0", //Column orientation node
-            "0", //Column orientation angle
-            "1", //Column dimension factor
-            "0" //Column slab thickness factor
-          };
-
-          ls.AddRange(subLs);
-        }
-      }
-      catch (Exception)
-      {
-        ls.Add("NO_MESH");
       }
 
       gwaCommands.Add(string.Join("\t", ls));

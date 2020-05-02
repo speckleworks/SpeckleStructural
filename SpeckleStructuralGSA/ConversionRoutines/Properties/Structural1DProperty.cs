@@ -114,7 +114,10 @@ namespace SpeckleStructuralGSA
         materialRef.ToString(),
         "0", // Analysis material
         GetGSADesc(prop, GSAUnits),
-        "0" // Cost
+        "0", // Cost
+        "CENTROID", //this needs review
+        "0", //this needs review
+        "0" //this needs review
       };
 
       return (string.Join("\t", ls));
@@ -501,10 +504,7 @@ namespace SpeckleStructuralGSA
         {
           "GEO"
         };
-        if (gsaUnit == "mm")
-          ls.Add("P");
-        else
-          ls.Add("P(" + gsaUnit + ")");
+        ls.Add((gsaUnit == "mm") ? "P" : "P(" + gsaUnit + ")");
 
         for (var i = 0; i < X.Count(); i++)
         {

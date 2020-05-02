@@ -44,6 +44,7 @@ namespace SpeckleStructuralGSA
       {
         var key = pieces[counter++];
         var node = nodes.Where(n => n.GSAId == Convert.ToInt32(key)).FirstOrDefault();
+        node.ForceSend = true;
         obj.Value.AddRange(node.Value.Value);
         this.SubGWACommand.Add(node.GWACommand);
       }
@@ -54,12 +55,15 @@ namespace SpeckleStructuralGSA
       if (orientationNodeRef != "0")
       {
         var node = nodes.Where(n => n.GSAId == Convert.ToInt32(orientationNodeRef)).FirstOrDefault();
+        node.ForceSend = true;
         obj.ZAxis = Helper.Parse1DAxis(obj.Value.ToArray(),
             rotationAngle, node.Value.Value.ToArray()).Normal as StructuralVectorThree;
         this.SubGWACommand.Add(node.GWACommand);
       }
       else
+      {
         obj.ZAxis = Helper.Parse1DAxis(obj.Value.ToArray(), rotationAngle).Normal as StructuralVectorThree;
+      }
 
 
       if (pieces[counter++] != "NO_RLS")
@@ -162,7 +166,9 @@ namespace SpeckleStructuralGSA
         group.ToString()
       };
       for (var i = 0; i < element.Value.Count(); i += 3)
+      {
         ls.Add(Helper.NodeAt(element.Value[i], element.Value[i + 1], element.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString());
+      }
       ls.Add("0"); // Orientation Node
       try
       {

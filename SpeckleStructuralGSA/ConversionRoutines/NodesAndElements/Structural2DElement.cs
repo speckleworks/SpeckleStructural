@@ -398,7 +398,9 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this Structural2DElement mesh)
     {
-      return (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis) ? new GSA2DElement() { Value = mesh }.SetGWACommand() : new GSA2DMember() { Value = mesh }.SetGWACommand();
+      return (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis) 
+        ? new GSA2DElement() { Value = mesh }.SetGWACommand() 
+        : new GSA2DMember() { Value = mesh }.SetGWACommand();
     }
 
     public static SpeckleObject ToSpeckle(this GSA2DElement dummyObject)
