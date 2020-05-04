@@ -97,9 +97,13 @@ namespace SpeckleStructuralGSA
       if (this.Value == null)
       { 
         return "";
-        }
+      }
 
       var mesh = this.Value as Structural2DElement;
+      if (mesh.ApplicationId == null)
+      {
+        return "";
+      }
 
       var keyword = typeof(GSA2DElement).GetGSAKeyword();
 
@@ -140,11 +144,18 @@ namespace SpeckleStructuralGSA
         ls.Add(Helper.NodeAt(mesh.Vertices[mesh.Faces[i] * 3], mesh.Vertices[mesh.Faces[i] * 3 + 1], mesh.Vertices[mesh.Faces[i] * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString());
       }
       ls.Add("0"); //Orientation node
-      try
+      if (mesh.Axis == null)
       {
-        ls.Add(Helper.Get2DAngle(coor.ToArray(), mesh.Axis).ToString());
+        ls.Add("0");
       }
-      catch { ls.Add("0"); }
+      else
+      {
+        try
+        {
+          ls.Add(Helper.Get2DAngle(coor.ToArray(), mesh.Axis).ToString());
+        }
+        catch { ls.Add("0"); }
+      }
       ls.Add("NO_RLS");
 
       ls.Add("0"); // Offset x-start
@@ -160,7 +171,7 @@ namespace SpeckleStructuralGSA
 
   }
 
-  [GSAObject("MEMB.7", new string[] { "NODE.2" }, "elements", false, true, new Type[] { typeof(GSANode), typeof(GSA2DProperty) }, new Type[] { typeof(GSANode), typeof(GSA1DProperty) })]
+  [GSAObject("MEMB.7", new string[] { "NODE.2" }, "elements", false, true, new Type[] { typeof(GSANode), typeof(GSA2DProperty) }, new Type[] { typeof(GSANode), typeof(GSA2DProperty) })]
   public class GSA2DMember : IGSASpeckleContainer
   {
     public int Group; // Keep for load targetting
@@ -339,17 +350,19 @@ namespace SpeckleStructuralGSA
         string.IsNullOrEmpty(obj.Name) ? " " : obj.Name,
         colour
       };
-      if (structural2dElementType == Structural2DElementType.Slab)
-        ls.Add("SLAB");
-      else if (structural2dElementType == Structural2DElementType.Wall)
-        ls.Add("WALL");
-      else
-        ls.Add("2D_GENERIC");
+      ls.Add(ElementTypeToString(structural2dElementType));
       ls.Add(propIndex.ToString());
       ls.Add(group != 0 ? group.ToString() : index.ToString()); // TODO: This allows for targeting of elements from members group
       var topo = "";
       var prevNodeIndex = -1;
       var connectivities = mesh.Edges();
+
+      if (connectivities == null || connectivities.Count() == 0)
+      {
+        //This is likely if the vertices are duplicated or other strange states
+        return "";
+      }
+
       var coor = new List<double>();
       foreach (var c in connectivities[0])
       {
@@ -391,6 +404,19 @@ namespace SpeckleStructuralGSA
       gwaCommands.Add(string.Join("\t", ls));
 
       return string.Join("\n", gwaCommands);
+    }
+
+    private string ElementTypeToString(Structural2DElementType t)
+    {
+      if (t == Structural2DElementType.Slab)
+      {
+        return "SLAB";
+      }
+      if (t == Structural2DElementType.Wall)
+      {
+        return "WALL";
+      }
+      return "2D_GENERIC";
     }
   }
   

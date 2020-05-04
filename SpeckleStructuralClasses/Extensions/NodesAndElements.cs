@@ -352,8 +352,7 @@ namespace SpeckleStructuralClasses
             Math.Pow(Vertices.Skip(conn[i] * 3 + 2).Take(1).First() - Vertices.Skip(conn[i + 1] * 3 + 2).Take(1).First(), 2);
           length = Math.Sqrt(length);
 
-          if (edges.Any(e => (e.Item3 == c1 && e.Item4 == c2) |
-              (e.Item3 == c2 && e.Item4 == c1)))
+          if (edges.Any(e => (e.Item3 == c1 && e.Item4 == c2) || (e.Item3 == c2 && e.Item4 == c1)))
           {
             edges.RemoveAll(x => (x.Item3 == c1 && x.Item4 == c2) || (x.Item3 == c2 && x.Item4 == c1));
           }
