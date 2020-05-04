@@ -404,7 +404,7 @@ namespace SpeckleStructuralGSA
           topo += Helper.NodeAt(member.Value[i], member.Value[i + 1], member.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString() + " ";
         }
       }
-      ls.Add(topo);
+      ls.Add(topo.TrimEnd());
       ls.Add("0"); // Orientation node
       if (member.Value == null)
       {

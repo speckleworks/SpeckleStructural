@@ -3004,18 +3004,16 @@
   },
   {
     "type": "StructuralBridgePath",
-    "pathType": "Lane",
-    "gauge": 0.0,
-    "leftRailFactor": 0.0,
+    "pathType": "Track",
+    "leftRailFactor": 0.5,
     "applicationId": "gh/1be0944ea0aa85ffb4b9326b0d49debc",
     "name": "Path Two",
     "properties": {}
   },
   {
     "type": "StructuralBridgePath",
-    "pathType": "Lane",
-    "gauge": 0.0,
-    "leftRailFactor": 0.0,
+    "pathType": "Carriage1Way",
+    "leftRailFactor": 0.5,
     "applicationId": "gh/ae62546782298ee240dcba1541255690",
     "name": "Path One",
     "properties": {}
