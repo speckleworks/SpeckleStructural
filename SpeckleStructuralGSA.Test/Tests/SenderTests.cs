@@ -157,5 +157,33 @@ namespace SpeckleStructuralGSA.Test
       Assert.AreEqual(actual.Count(), matched.Count());
       Assert.IsEmpty(unmatching, unmatching.Count().ToString() + " unmatched objects");
     }
+
+    [Ignore("There is an equivalent test in SpeckleGSA repo, so this one might be removed")]
+    [TestCase(GSATargetLayer.Design, false, false, "sjc.gwb")]
+    public void TransmissionTestForDebug(GSATargetLayer layer, bool resultsOnly, bool embedResults, string gsaFileName)
+    {
+      gsaInterfacer.OpenFile(Helper.ResolveFullPath(gsaFileName, TestDataDirectory));
+
+      var actualObjects = ModelToSpeckleObjects(layer, resultsOnly, embedResults, loadCases, resultTypes);
+      Assert.IsNotNull(actualObjects);
+      actualObjects = actualObjects.OrderBy(a => a.ApplicationId).ToList();
+
+      var objectsByType = actualObjects.GroupBy(o => o.GetType());
+
+      var actual = new Dictionary<SpeckleObject, string>();
+      foreach (var actualObject in actualObjects)
+      {
+        var actualJson = JsonConvert.SerializeObject(actualObject, jsonSettings);
+
+        actualJson = Regex.Replace(actualJson, jsonDecSearch, "$1");
+        actualJson = Regex.Replace(actualJson, jsonHashSearch, jsonHashReplace);
+
+        actual.Add(actualObject, actualJson);
+      }
+
+      var matched = new List<SpeckleObject>();
+
+      gsaInterfacer.Close();
+    }
   }
 }
