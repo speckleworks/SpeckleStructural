@@ -23,6 +23,7 @@ namespace SpeckleStructuralGSA.Test
       Initialiser.Cache = new GSACache();
       Initialiser.Settings = new Settings();
     }
+
     [Test]
     public void MergeTestAutomapperForStackOverlow()
     {

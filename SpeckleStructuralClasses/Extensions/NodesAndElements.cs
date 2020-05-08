@@ -222,7 +222,9 @@ namespace SpeckleStructuralClasses
   {
     public Structural2DElementMesh() { }
 
-    public Structural2DElementMesh(double[] vertices, int[] faces, int[] colors, Structural2DElementType elementType, string propertyRef, StructuralAxis[] axis, double[] offset, string applicationId = null, double meshSize = 0, Dictionary<string, object> properties = null)
+    public Structural2DElementMesh(IEnumerable<double> vertices, IEnumerable<int> faces, IEnumerable<int> colors, 
+      Structural2DElementType elementType, string propertyRef, IEnumerable<StructuralAxis> axes, IEnumerable<double> offsets, 
+      string applicationId = null, double meshSize = 0, Dictionary<string, object> properties = null)
     {
       if (properties != null)
       {
@@ -233,9 +235,11 @@ namespace SpeckleStructuralClasses
       Colors = colors == null ? null : colors.ToList();
       ElementType = elementType;
       PropertyRef = propertyRef;
-      Axis = axis.ToList();
-      if (offset != null && offset.Count() > 0)
-        Offset = offset.ToList();
+      Axis = axes.ToList();
+      if (offsets != null && offsets.Count() > 0)
+      {
+        Offset = offsets.ToList();
+      }
       GSAMeshSize = meshSize;
       ApplicationId = applicationId;
       TextureCoordinates = null;
@@ -243,7 +247,8 @@ namespace SpeckleStructuralClasses
       GenerateHash();
     }
 
-    public Structural2DElementMesh(double[] edgeVertices, int? color, Structural2DElementType elementType, string propertyRef, StructuralAxis[] axis, double[] offset, string applicationId = null, Dictionary<string, object> properties = null)
+    public Structural2DElementMesh(IEnumerable<double> edgeVertices, int? color, Structural2DElementType elementType, string propertyRef,
+      IEnumerable<StructuralAxis> axes, IEnumerable<double> offsets, string applicationId = null, Dictionary<string, object> properties = null)
     {
       if (properties != null)
       {
@@ -253,7 +258,7 @@ namespace SpeckleStructuralClasses
 
       // Perform mesh making
       var faces = SplitMesh(
-          edgeVertices,
+          edgeVertices.ToArray(),
           (Enumerable.Range(0, edgeVertices.Count() / 3).ToArray()));
 
       Faces = new List<int>();
@@ -264,17 +269,18 @@ namespace SpeckleStructuralClasses
         Faces.AddRange(face);
       }
 
-      if (color != null)
-        Colors = Enumerable.Repeat(color.Value, Vertices.Count() / 3).ToList();
-      else
-        Colors = new List<int>();
+      Colors = (color == null) ? new List<int>() : Enumerable.Repeat(color.Value, Vertices.Count() / 3).ToList();
 
       ElementType = elementType;
       PropertyRef = propertyRef;
-      if (axis != null)
-        Axis = axis.ToList();
-      if (offset != null && offset.Count() > 0)
-        Offset = offset.ToList();
+      if (axes != null)
+      {
+        Axis = axes.ToList();
+      }
+      if (offsets != null && offsets.Count() > 0)
+      {
+        Offset = offsets.ToList();
+      }
       ApplicationId = applicationId;
 
       TextureCoordinates = null;

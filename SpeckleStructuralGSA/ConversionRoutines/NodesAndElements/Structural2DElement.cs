@@ -230,7 +230,7 @@ namespace SpeckleStructuralGSA
       }
 
       var temp = new Structural2DElementMesh(
-          coordinates.ToArray(),
+          coordinates.Essential(),
           color.HexToArgbColor(),
           obj.ElementType, obj.PropertyRef,
           null,

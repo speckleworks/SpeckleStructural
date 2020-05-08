@@ -17,7 +17,7 @@ namespace SpeckleStructuralGSA.Test
   {
     public FileComparison() : base(AppDomain.CurrentDomain.BaseDirectory.TrimEnd(new[] { '\\' }) + @"\..\..\TestData\") { }
 
-    //[Ignore("Just as a utility at this stage")]
+    [Ignore("Just as a utility at this stage")]
     [TestCase("OLD_TxSpeckleObjectsNotEmbedded.json", "TxSpeckleObjectsNotEmbedded.json")]
     [TestCase("OLD_TxSpeckleObjectsEmbedded.json", "TxSpeckleObjectsEmbedded.json")]
     [TestCase("OLD_TxSpeckleObjectsResultsOnly.json", "TxSpeckleObjectsResultsOnly.json")]
