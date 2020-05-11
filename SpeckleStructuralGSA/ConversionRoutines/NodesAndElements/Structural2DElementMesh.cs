@@ -9,7 +9,7 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   // Keyword set as MEMB to not clash with grouping of members
-  [GSAObject("MEMB.7", new string[] { }, "elements", true, false, new Type[] { typeof(GSA2DElement) }, new Type[] { typeof(GSA2DProperty) })]
+  [GSAObject("MEMB.7", new string[] { }, "elements", true, false, new Type[] { typeof(GSA2DElement), typeof(GSA2DElementResult) }, new Type[] { typeof(GSA2DProperty) })]
   public class GSA2DElementMesh : IGSASpeckleContainer
   {
     public int GSAId { get; set; }
@@ -56,7 +56,7 @@ namespace SpeckleStructuralGSA
         elementAppIds.Add(e.Value.ApplicationId);
 
         // Result merging
-        if (obj.Result != null)
+        if (obj.Result != null && ((Structural2DElement)e.Value).Result != null)
         {
           try
           {

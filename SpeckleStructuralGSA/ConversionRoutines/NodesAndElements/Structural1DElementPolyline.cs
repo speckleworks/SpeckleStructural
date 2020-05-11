@@ -136,7 +136,7 @@ namespace SpeckleStructuralGSA
         }
 
         // Result merging
-        if (obj.Result != null)
+        if (obj.Result != null && ((Structural1DElement)element.Value).Result != null)
         {
           try
           {
