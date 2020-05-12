@@ -274,8 +274,7 @@ namespace SpeckleStructuralGSA
         try
         {
           var all1dElements = Initialiser.GSASenderObjects.Get<GSA1DElement>();
-          var matching1dElementList = all1dElements.Where(x => (x as GSA1DElement).Member == member)
-            .OrderBy(m => m.GSAId).ToList(); //Ordering is just for human-readability and testing
+          var matching1dElementList = all1dElements.Where(x => (x as GSA1DElement).Member == member).OrderBy(m => m.GSAId).ToList();
 
           var poly = new GSA1DElementPolyline() { GSAId = Convert.ToInt32(member) };
           poly.ParseGWACommand(matching1dElementList);

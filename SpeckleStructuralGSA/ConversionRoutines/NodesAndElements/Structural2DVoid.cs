@@ -55,7 +55,7 @@ namespace SpeckleStructuralGSA
       }
 
       var temp = new Structural2DVoid(
-          coordinates.ToArray(),
+          coordinates.Essential(),
           color.HexToArgbColor());
 
       obj.Vertices = temp.Vertices;

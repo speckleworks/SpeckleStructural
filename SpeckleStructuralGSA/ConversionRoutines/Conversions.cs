@@ -30,6 +30,33 @@ namespace SpeckleStructuralGSA
       return retCoords;
     }
 
+    public static List<Point3D> Essential(this List<Point3D> origPts)
+    {
+      var origPtsExtended = new List<Point3D>() { origPts.Last() };
+      origPtsExtended.AddRange(origPts);
+      origPtsExtended.Add(origPts.First());
+      var numPtsExtended = origPtsExtended.Count();
+      var retList = new List<Point3D>();
+
+      for (var i = 1; i < (numPtsExtended - 1); i++)
+      {
+        var prev = origPtsExtended[i - 1];
+        var next = origPtsExtended[i + 1];
+        if (!origPtsExtended[i].IsOnLineBetween(prev, next))
+        {
+          retList.Add(origPtsExtended[i]);
+        }
+      }
+
+      return retList;
+    }
+
+    public static bool IsOnLineBetween(this Point3D p, Point3D start, Point3D end)
+    {
+      var l = new Line3D(start, end);
+      return l.IsOnLine(p);
+    }
+
     public static List<Point3D> ToPoints(this IEnumerable<double> coords)
     {
       var numPts = (int)(coords.Count() / 3);
@@ -43,65 +70,11 @@ namespace SpeckleStructuralGSA
       return pts;
     }
 
-    public static List<Point3D> Essential(this List<Point3D> origPts)
-    {
-      var pts = new List<Point3D>();
-
-      for (var i = 0; i < origPts.Count(); i++)
-      {
-        var otherOrigPts = origPts.GetWithoutIndex(i);
-
-        var linesBnAllPts = LinesBetweenAllPoints(otherOrigPts).ToList();
-
-        var found = false;
-        foreach (var l in linesBnAllPts)
-        {
-          if (IsOnLine(l, origPts[i]))
-          {
-            found = true;
-            break;
-          }
-        }
-        if (found == false)
-        {
-          pts.Add(origPts[i]);
-        }
-      }
-
-      return pts;
-    }
-
     public static bool IsOnLine(this Line3D l, Point3D p)
     {
       var closest = l.ClosestPointTo(p, true);
       var ret = (closest.Equals(p, 0.001));
       return ret;
-    }
-
-    private static List<Point3D> GetWithoutIndex(this IEnumerable<Point3D> pts, int index)
-    {
-      var otherPts = new List<Point3D>();
-      var ptsArray = pts.ToArray();
-      for (int i = 0; i < pts.Count(); i++)
-      {
-        if (i != index)
-        {
-          otherPts.Add(ptsArray[i]);
-        }
-      }
-      return otherPts;
-    }
-
-    private static IEnumerable<Line3D> LinesBetweenAllPoints(this IEnumerable<Point3D> pts)
-    {
-      var ptsArray = pts.ToArray();
-      for (var i = 0; i < pts.Count(); i++)
-      {
-        for (var j = i + 1; j < pts.Count(); j++)
-        {
-          yield return new Line3D(ptsArray[i], ptsArray[j]);
-        }
-      }
     }
   }
 }
