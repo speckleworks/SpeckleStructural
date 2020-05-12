@@ -152,6 +152,11 @@ namespace SpeckleStructuralGSA
           Helper.SafeDisplay("Load case references not found:", load.ApplicationId + " referencing " + load.LoadCaseRef);
         }
       }
+      if (load.Loading == null || load.Loading.Value == null || load.Loading.Value.Count() == 0)
+      {
+        Helper.SafeDisplay("Grid area loads not added to model due to empty loading found:", load.ApplicationId);
+        return "";
+      }
 
       var axis = Helper.Parse2DAxis(load.Value.ToArray());
 
