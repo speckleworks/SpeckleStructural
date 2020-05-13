@@ -19,7 +19,7 @@ namespace SpeckleStructuralGSA.Test
       Initialiser.Settings.TargetLayer = layer;
     }
 
-    public void JsonSpeckleStreamsToGwaRecords(IEnumerable<string> savedJsonFileNames, out List<GwaRecord> gwaRecords)
+    public void JsonSpeckleStreamsToGwaRecords(IEnumerable<string> savedJsonFileNames, out List<GwaRecord> gwaRecords, GSATargetLayer layer)
     {
       gwaRecords = new List<GwaRecord>();
 
@@ -27,7 +27,7 @@ namespace SpeckleStructuralGSA.Test
 
       ScaleObjects();
 
-      ConvertSpeckleObjectsToGsaInterfacerCache();
+      ConvertSpeckleObjectsToGsaInterfacerCache(layer);
 
       var gwaCommands = GSACache.GetGwaSetCommands();
       foreach (var gwaC in gwaCommands)
@@ -59,12 +59,12 @@ namespace SpeckleStructuralGSA.Test
       }
     }
 
-    private void ConvertSpeckleObjectsToGsaInterfacerCache()
+    private void ConvertSpeckleObjectsToGsaInterfacerCache(GSATargetLayer layer)
     {
       // Write objects
       var currentBatch = new List<Type>();
       var traversedTypes = new List<Type>();
-      var TypePrerequisites = Helper.GetTypeCastPriority(ioDirection.Receive, GSATargetLayer.Design, false);
+      var TypePrerequisites = Helper.GetTypeCastPriority(ioDirection.Receive, layer, false);
       do
       {
         currentBatch = TypePrerequisites.Where(i => i.Value.Count(x => !traversedTypes.Contains(x)) == 0).Select(i => i.Key).ToList();

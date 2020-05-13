@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
@@ -86,6 +87,8 @@ namespace SpeckleStructuralGSA
         return "";
 
       var prop = this.Value as Structural2DProperty;
+      if (prop.ReferenceSurface == Structural2DPropertyReferenceSurface.NotSet)
+        return "";
 
       var keyword = typeof(GSA2DProperty).GetGSAKeyword();
 
@@ -163,22 +166,26 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSA2DProperty>();
 
+      var propsLock = new object();
       var props = new List<GSA2DProperty>();
-      var steels = Initialiser.GSASenderObjects[typeof(GSAMaterialSteel)].Cast<GSAMaterialSteel>().ToList();
-      var concretes = Initialiser.GSASenderObjects[typeof(GSAMaterialConcrete)].Cast<GSAMaterialConcrete>().ToList();
+      var steels = Initialiser.GSASenderObjects.Get<GSAMaterialSteel>();
+      var concretes = Initialiser.GSASenderObjects.Get<GSAMaterialConcrete>();
 
-      foreach (var p in newLines.Values)
+      Parallel.ForEach(newLines.Values, p =>
       {
         try
         {
           var prop = new GSA2DProperty() { GWACommand = p };
           prop.ParseGWACommand(steels, concretes);
-          props.Add(prop);
+          lock (propsLock)
+          {
+            props.Add(prop);
+          }
         }
         catch { }
-      }
+      });
 
-      Initialiser.GSASenderObjects[typeof(GSA2DProperty)].AddRange(props);
+      Initialiser.GSASenderObjects.AddRange(props);
 
       return (props.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

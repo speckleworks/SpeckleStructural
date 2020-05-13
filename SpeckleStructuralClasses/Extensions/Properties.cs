@@ -31,7 +31,7 @@ namespace SpeckleStructuralClasses
     {
       this.YoungsModulus *= factor;
       this.CompressiveStrength *= factor;
-      this.Properties = ScaleProperties(this.Properties, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
   }
@@ -61,7 +61,7 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      this.Properties = ScaleProperties(this.Properties, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
   }
@@ -104,7 +104,7 @@ namespace SpeckleStructuralClasses
           this.Voids[i].Scale(factor);
         }
       }
-      this.Properties = ScaleProperties(this.Properties, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
   }
@@ -131,7 +131,7 @@ namespace SpeckleStructuralClasses
     {
       this.Thickness *= factor;
 
-      this.Properties = ScaleProperties(this.Properties, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
   }
@@ -158,7 +158,7 @@ namespace SpeckleStructuralClasses
       {
         this.Axis.Origin.Scale(factor);
       }
-      this.Properties = ScaleProperties(this.Properties, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
   }

@@ -553,7 +553,7 @@ namespace SpeckleStructuralGSA
       double[] globalYdir = { 0, 1, 0 };
       double[] globalZdir = { 0, 0, 1 };
 
-      if (axis == null 
+      if (axis == null || (axis.Xdir == null && axis.Ydir == null)
         || (
           axis.Xdir.Value.SequenceEqual(globalXdir) &&
           axis.Ydir.Value.SequenceEqual(globalYdir) &&

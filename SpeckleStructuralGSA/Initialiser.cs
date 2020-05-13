@@ -10,7 +10,11 @@ namespace SpeckleStructuralGSA
     public static IGSASettings Settings { get; set; }
     public static IGSAProxy Interface { get; set; }
     public static IGSACacheForKit Cache { get; set; }
-    public static Dictionary<Type, List<object>> GSASenderObjects { get; } = new Dictionary<Type, List<object>>();
     public static ISpeckleGSAAppUI AppUI { get; set; }
+    //The variable below must be a property (i.e. with { get; }) and of Dictionary<Type, List<object>> type so that SpeckleGSA
+    //can recognise this as a kit it can work with
+    public static IGSASenderDictionary GSASenderObjects { get; } = new GSASenderDictionary();
+
+    
   }
 }

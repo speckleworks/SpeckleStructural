@@ -91,6 +91,8 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
     <Reference Include="System.Net" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -105,6 +107,7 @@
   <ItemGroup>
     <Compile Include="Extensions.cs" />
     <Compile Include="Extensions\Base.cs" />
+    <Compile Include="Extensions\Helper.cs" />
     <Compile Include="Extensions\Loads.cs" />
     <Compile Include="Extensions\Miscellaneous.cs" />
     <Compile Include="Extensions\NodesAndElements.cs" />

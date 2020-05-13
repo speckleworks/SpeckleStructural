@@ -128,7 +128,7 @@ namespace SpeckleStructuralGSA
 
       var load = this.Value as Structural2DLoadPanel;
 
-      if (load.Loading == null)
+      if (load.ApplicationId == null)
         return "";
 
       var keyword = typeof(GSAGridAreaLoad).GetGSAKeyword();
@@ -152,6 +152,11 @@ namespace SpeckleStructuralGSA
           Helper.SafeDisplay("Load case references not found:", load.ApplicationId + " referencing " + load.LoadCaseRef);
         }
       }
+      if (load.Loading == null || load.Loading.Value == null || load.Loading.Value.Count() == 0)
+      {
+        Helper.SafeDisplay("Grid area loads not added to model due to empty loading found:", load.ApplicationId);
+        return "";
+      }
 
       var axis = Helper.Parse2DAxis(load.Value.ToArray());
 
@@ -172,51 +177,7 @@ namespace SpeckleStructuralGSA
 
       var gwaCommands = new List<string>();
 
-      for (var i = 0; i < load.Loading.Value.Count(); i++)
-      {
-        if (load.Loading.Value[i] == 0) continue;
-
-        var index = Initialiser.Cache.ResolveIndex(typeof(GSAGridAreaLoad).GetGSAKeyword());
-
-        ls.Clear();
-        var subLs = new List<string>();
-        for (var j = 0; j < transformed.Count(); j += 3)
-        {
-          subLs.Add("(" + transformed[j].ToString() + "," + transformed[j + 1].ToString() + ")");
-        }
-
-        ls.AddRange(new string[] { 
-          "SET_AT",
-          index.ToString(),
-          keyword + ":" + Helper.GenerateSID(load),
-          load.Name == null || load.Name == "" ? " " : load.Name,
-          gridSurfaceIndex.ToString(),
-          "POLYGON",
-          string.Join(" ", subLs),
-          loadCaseRef.ToString(),
-          "GLOBAL",
-          "NO",
-          direction[i],
-          load.Loading.Value[i].ToString() });
-
-        gwaCommands.Add(string.Join("\t", ls));
-      }
-
-      ls.Clear();
-      ls.AddRange(new[] {
-        "SET",
-        "GRID_SURFACE.1",
-        gridSurfaceIndex.ToString(),
-        load.Name == null || load.Name == "" ? " " : load.Name,
-        gridPlaneIndex.ToString(),
-        "2", // Dimension of elements to target
-        "all", // List of elements to target
-        "0.01", // Tolerance
-        "ONE", // Span option
-        "0"}); // Span angle
-      gwaCommands.Add(string.Join("\t", ls));
-
-      ls.Clear();
+      
       Helper.SetAxis(axis, out int planeAxisIndex, out string planeAxisGwa, load.Name);
       if (planeAxisGwa.Length > 0)
       {
@@ -234,6 +195,51 @@ namespace SpeckleStructuralGSA
         "0", // Elevation above
         "0"}); // Elevation below
       gwaCommands.Add(string.Join("\t", ls));
+
+      ls.Clear();
+      ls.AddRange(new[] {
+        "SET",
+        "GRID_SURFACE.1",
+        gridSurfaceIndex.ToString(),
+        load.Name == null || load.Name == "" ? " " : load.Name,
+        gridPlaneIndex.ToString(),
+        "2", // Dimension of elements to target
+        "all", // List of elements to target
+        "0.01", // Tolerance
+        "ONE", // Span option
+        "0"}); // Span angle
+      gwaCommands.Add(string.Join("\t", ls));
+
+      for (var i = 0; i < load.Loading.Value.Count(); i++)
+      {
+        if (load.Loading.Value[i] == 0) continue;
+
+        var index = Initialiser.Cache.ResolveIndex(typeof(GSAGridAreaLoad).GetGSAKeyword());
+
+        ls.Clear();
+        var subLs = new List<string>();
+        for (var j = 0; j < transformed.Count(); j += 3)
+        {
+          //The GWA that GSA generates seems to return a rounded number, so do so here
+          subLs.Add("(" + Math.Round(transformed[j],4).ToString() + "," + Math.Round(transformed[j + 1],4).ToString() + ")");
+        }
+
+        ls.AddRange(new string[] { 
+          "SET_AT",
+          index.ToString(),
+          keyword + ":" + Helper.GenerateSID(load),
+          load.Name == null || load.Name == "" ? " " : load.Name,
+          gridSurfaceIndex.ToString(),
+          "POLYGON",
+          "\"" + string.Join(" ", subLs) + "(m)\"",
+          loadCaseRef.ToString(),
+          "GLOBAL",
+          "NO",
+          direction[i],
+          load.Loading.Value[i].ToString() });
+
+        gwaCommands.Add(string.Join("\t", ls));
+      }
 
       return string.Join("\n", gwaCommands);
     }
@@ -258,7 +264,7 @@ namespace SpeckleStructuralGSA
         loads.Add(load);
       }
 
-      Initialiser.GSASenderObjects[typeof(GSAGridAreaLoad)].AddRange(loads);
+      Initialiser.GSASenderObjects.AddRange(loads);
 
       return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

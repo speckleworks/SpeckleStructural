@@ -15,12 +15,16 @@ namespace SpeckleStructuralGSA.Test
   [TestFixture]
   public class FileComparison : TestBase
   {
-    public FileComparison() : base(@"C:\Nicolaas\Testing\Temp\SpeckleGSA\") { }
+    public FileComparison() : base(AppDomain.CurrentDomain.BaseDirectory.TrimEnd(new[] { '\\' }) + @"\..\..\TestData\") { }
 
-    //[Ignore("Just as a utility at this stage")]
-    [TestCase("OLD_TxSpeckleObjectsNotEmbedded.json", "NEW_TxSpeckleObjectsNotEmbedded.json")]
+    [Ignore("Just as a utility at this stage")]
+    [TestCase("OLD_TxSpeckleObjectsNotEmbedded.json", "TxSpeckleObjectsNotEmbedded.json")]
+    [TestCase("OLD_TxSpeckleObjectsEmbedded.json", "TxSpeckleObjectsEmbedded.json")]
+    [TestCase("OLD_TxSpeckleObjectsResultsOnly.json", "TxSpeckleObjectsResultsOnly.json")]
     public void CompareFiles(string fn1, string fn2)
     {
+      Debug.WriteLine("----------------");
+      Debug.WriteLine("Comparing: " + fn1 + " and " + fn2);
       SpeckleInitializer.Initialize();
 
       var j1Full = Helper.ReadFile(fn1, TestDataDirectory);
@@ -38,6 +42,9 @@ namespace SpeckleStructuralGSA.Test
 
       Debug.WriteLine("Listing items in 2 that aren't in 1");
       Compare(j2List, j1List, out Dictionary<SpeckleObject, List<SpeckleObject>> notFoundIn1);
+
+      Debug.WriteLine("Number of in 1 that isn't found in 2: " + notFoundIn2.Count());
+      Debug.WriteLine("Number of in 2 that isn't found in 1: " + notFoundIn1.Count());
 
       Assert.AreEqual(0, notFoundIn2.Count());
       Assert.AreEqual(o2All.Count() - o1All.Count(), notFoundIn1.Count());
@@ -75,6 +82,7 @@ namespace SpeckleStructuralGSA.Test
               lock (debugLock)
               {
                 Debug.WriteLine("Found nearest result object " + r.TargetRef + "-" + r.LoadCaseRef + "-" + r.Description);
+                Debug.WriteLine(".. with JSON: " + j);
                 foreach (var n in nearest)
                 {
                   Debug.WriteLine("Nearest JSON: " + d2[n]);
@@ -84,18 +92,22 @@ namespace SpeckleStructuralGSA.Test
           }
           else
           {
-            var nearest = string.IsNullOrEmpty(o.ApplicationId) ? null : d2.Where(e => e.Value.Contains(o.ApplicationId)).Select(kvp => kvp.Key).ToList();
+            var nearest = string.IsNullOrEmpty(o.ApplicationId) ? null : d2.Where(e => e.Key.ApplicationId == o.ApplicationId).Select(kvp => kvp.Key).ToList();
             lock (lockObj) { ret.Add(o, nearest); }
 
             if (nearest == null || nearest.Count() == 0)
             {
-              lock (debugLock) { Debug.WriteLine("Found no nearest for " + o.ApplicationId); }
+              lock (debugLock) 
+              { 
+                Debug.WriteLine("Found no nearest for " + o.ApplicationId); 
+              }
             }
             else
             {
               lock (debugLock)
               {
                 Debug.WriteLine("Found nearest for " + o.ApplicationId);
+                Debug.WriteLine(".. with JSON: " + j);
                 foreach (var n in nearest)
                 {
                   Debug.WriteLine("Nearest JSON: " + d2[n]);

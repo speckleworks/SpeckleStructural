@@ -99,7 +99,7 @@ namespace SpeckleStructuralGSA
         return "";
 
       var load = this.Value as Structural0DLoadPoint;
-      if (load.Loading == null || load.LoadCaseRef == null)
+      if (load.ApplicationId == null)
         return "";
 
       var keyword = typeof(GSA0DLoadPoint).GetGSAKeyword();
@@ -190,7 +190,7 @@ namespace SpeckleStructuralGSA
 
       var loads = new List<GSA0DLoadPoint>();
 
-      var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
+      var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
 
       foreach (var p in newPoints.Values)
@@ -212,7 +212,7 @@ namespace SpeckleStructuralGSA
         loads.AddRange(loadSubList);
       }
 
-      Initialiser.GSASenderObjects[typeof(GSA0DLoadPoint)].AddRange(loads);
+      Initialiser.GSASenderObjects.AddRange(loads);
 
       return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
 using SpeckleGSAInterfaces;
@@ -115,6 +116,9 @@ namespace SpeckleStructuralGSA
 
       var assembly = this.Value as StructuralAssembly;
 
+      if (assembly.Value == null || assembly.Value.Count() == 0)
+        return "";
+
       var keyword = destType.GetGSAKeyword();
 
       var index = Initialiser.Cache.ResolveIndex(keyword, assembly.ApplicationId);
@@ -159,6 +163,9 @@ namespace SpeckleStructuralGSA
 
       //The width parameter is intentionally not being used here as the meaning doesn't map to the y coordinate parameter of the ASSEMBLY keyword
       //It is therefore to be ignored here for GSA purposes.
+      var orientationPoint = (assembly.OrientationPoint == null || assembly.OrientationPoint.Value == null || assembly.OrientationPoint.Value.Count < 3)
+        ? new SpecklePoint(0, 0, 0)
+        : assembly.OrientationPoint;
 
       var ls = new List<string>
         {
@@ -172,7 +179,7 @@ namespace SpeckleStructuralGSA
           targetString,
           nodeIndices[0].ToString(),
           nodeIndices[1].ToString(),
-          Helper.NodeAt(assembly.OrientationPoint.Value[0], assembly.OrientationPoint.Value[1], assembly.OrientationPoint.Value[2], Initialiser.Settings.CoincidentNodeAllowance).ToString(),
+          Helper.NodeAt(orientationPoint.Value[0], orientationPoint.Value[1], orientationPoint.Value[2], Initialiser.Settings.CoincidentNodeAllowance).ToString(),
           "", //Empty list for int_topo as it assumed that the line is never curved
           assembly.Width.ToString(), //Y
           "0", //Z
@@ -210,9 +217,11 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSAAssembly>();
 
+      var assembliesLock = new object();
+
       //Get all relevant GSA entities in this entire model
       var assemblies = new List<GSAAssembly>();
-      var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
+      var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
       var e1Ds = new List<GSA1DElement>();
       var e2Ds = new List<GSA2DElement>();
       var m1Ds = new List<GSA1DMember>();
@@ -220,16 +229,16 @@ namespace SpeckleStructuralGSA
 
       if (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
       {
-        e1Ds = Initialiser.GSASenderObjects[typeof(GSA1DElement)].Cast<GSA1DElement>().ToList();
-        e2Ds = Initialiser.GSASenderObjects[typeof(GSA2DElement)].Cast<GSA2DElement>().ToList();
+        e1Ds = Initialiser.GSASenderObjects.Get<GSA1DElement>();
+        e2Ds = Initialiser.GSASenderObjects.Get<GSA2DElement>();
       }
       else if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
       {
-        m1Ds = Initialiser.GSASenderObjects[typeof(GSA1DMember)].Cast<GSA1DMember>().ToList();
-        m2Ds = Initialiser.GSASenderObjects[typeof(GSA2DMember)].Cast<GSA2DMember>().ToList();
+        m1Ds = Initialiser.GSASenderObjects.Get<GSA1DMember>();
+        m2Ds = Initialiser.GSASenderObjects.Get<GSA2DMember>();
       }
 
-      foreach (var p in newLines.Values)
+      Parallel.ForEach(newLines.Values, p =>
       {
         try
         {
@@ -242,13 +251,16 @@ namespace SpeckleStructuralGSA
           //Once this condition has been met, assign to null so it won't form part of the sender objects list
           if (assembly.Value != null)
           {
-            assemblies.Add(assembly);
+            lock (assembliesLock)
+            {
+              assemblies.Add(assembly);
+            }
           }
         }
         catch { }
-      }
+      });
 
-      Initialiser.GSASenderObjects[typeof(GSAAssembly)].AddRange(assemblies);
+      Initialiser.GSASenderObjects.AddRange(assemblies);
 
       return (assemblies.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
