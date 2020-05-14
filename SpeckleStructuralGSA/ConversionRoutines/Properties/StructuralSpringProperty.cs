@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
@@ -120,6 +121,8 @@ namespace SpeckleStructuralGSA
       var destType = typeof(GSASpringProperty);
 
       var springProp = this.Value as StructuralSpringProperty;
+      if (springProp.SpringType == StructuralSpringPropertyType.NotSet)
+        return "";
 
       var keyword = destType.GetGSAKeyword();
 
@@ -237,21 +240,25 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSASpringProperty>();
 
+      var springPropLock = new object();
       //Get all relevant GSA entities in this entire model
       var springProperties = new List<GSASpringProperty>();
 
-      foreach (var p in newLines.Values)
+      Parallel.ForEach(newLines.Values, p =>
       {
         try
         {
           var springProperty = new GSASpringProperty() { GWACommand = p };
           springProperty.ParseGWACommand();
-          springProperties.Add(springProperty);
+          lock (springPropLock)
+          {
+            springProperties.Add(springProperty);
+          }
         }
         catch { }
-      }
+      });
 
-      Initialiser.GSASenderObjects[typeof(GSASpringProperty)].AddRange(springProperties);
+      Initialiser.GSASenderObjects.AddRange(springProperties);
 
       return (springProperties.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

@@ -22,7 +22,6 @@ namespace SpeckleStructuralGSA
         return;
 
       var obj = new Structural0DLoadPoint();
-      this.GetAttribute("loadPlane");
       var pieces = this.GWACommand.ListSplit("\t");
 
       var counter = 1; // Skip identifier
@@ -32,9 +31,6 @@ namespace SpeckleStructuralGSA
 
       var axis = pieces[counter++];
       this.Axis = axis == "GLOBAL" ? 0 : Convert.ToInt32(axis);
-
-
-
 
       //Helper.GetGridPlaneRef(Convert.ToInt32(pieces[counter++]), out int gridPlaneRefRet, out string gridSurfaceRec);
       //Helper.GetGridPlaneData(gridPlaneRefRet, out int gridPlaneAxis, out double gridPlaneElevation, out string gridPlaneRec);
@@ -63,11 +59,6 @@ namespace SpeckleStructuralGSA
       //var planeProjected = pieces[counter++] == "YES";
       //var planeDirection = pieces[counter++];
       //var value = Convert.ToDouble(pieces[counter++]);
-
-
-
-
-
 
 
       obj.Loading = new StructuralVectorSix(new double[3]);
@@ -99,7 +90,7 @@ namespace SpeckleStructuralGSA
         return "";
 
       var load = this.Value as Structural0DLoadPoint;
-      if (load.Loading == null || load.LoadCaseRef == null)
+      if (load.ApplicationId == null)
         return "";
 
       var keyword = typeof(GSA0DLoadPoint).GetGSAKeyword();
@@ -190,7 +181,7 @@ namespace SpeckleStructuralGSA
 
       var loads = new List<GSA0DLoadPoint>();
 
-      var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
+      var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
 
       foreach (var p in newPoints.Values)
@@ -212,7 +203,7 @@ namespace SpeckleStructuralGSA
         loads.AddRange(loadSubList);
       }
 
-      Initialiser.GSASenderObjects[typeof(GSA0DLoadPoint)].AddRange(loads);
+      Initialiser.GSASenderObjects.AddRange(loads);
 
       return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

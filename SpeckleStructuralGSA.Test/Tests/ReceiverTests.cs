@@ -59,8 +59,9 @@ namespace SpeckleStructuralGSA.Test
       RunReceiverTest(savedJsonFileNames, expectedGwaPerIdsFileName, layer);
     }
 
-    //[Ignore("Just used for debugging at this stage, will be finished in the future as a test")]
-    [TestCase(GSATargetLayer.Design, "nagwSLyPE.json")]
+    [Ignore("Just used for debugging at this stage, will be finished in the future as a test")]
+    [TestCase(GSATargetLayer.Analysis, "8V_CIKfmt.json")]
+    //[TestCase(GSATargetLayer.Analysis, "S5pNxjmUH.json")]
     public void ReceiverTestForDebug(GSATargetLayer layer, string fileName)
     {
       var json = Helper.ReadFile(fileName, TestDataDirectory);
@@ -71,7 +72,7 @@ namespace SpeckleStructuralGSA.Test
       var receiverProcessor = new ReceiverProcessor(TestDataDirectory, gsaInterfacer, gsaCache);
 
       //Run conversion to GWA keywords
-      receiverProcessor.JsonSpeckleStreamsToGwaRecords(new[] { fileName }, out var actualGwaRecords);
+      receiverProcessor.JsonSpeckleStreamsToGwaRecords(new[] { fileName }, out var actualGwaRecords, layer);
       Assert.IsNotNull(actualGwaRecords);
       Assert.IsNotEmpty(actualGwaRecords);
 
@@ -114,7 +115,7 @@ namespace SpeckleStructuralGSA.Test
       var receiverProcessor = new ReceiverProcessor(TestDataDirectory, gsaInterfacer, gsaCache);
 
       //Run conversion to GWA keywords
-      receiverProcessor.JsonSpeckleStreamsToGwaRecords(savedJsonFileNames, out var actualGwaRecords);
+      receiverProcessor.JsonSpeckleStreamsToGwaRecords(savedJsonFileNames, out var actualGwaRecords, layer);
       Assert.IsNotNull(actualGwaRecords);
       Assert.IsNotEmpty(actualGwaRecords);
 

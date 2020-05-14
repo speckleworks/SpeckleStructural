@@ -54,9 +54,8 @@ namespace SpeckleStructuralGSA.Test
       //Compile all GWA commands with application IDs
       var senderProcessor = new SenderProcessor(TestDataDirectory, gsaInterfacer, gsaCache, layer, embedResults, cases, resultsToSend);
 
-      //var keywords = senderProcessor.GetTypeCastPriority(ioDirection.Receive, GSATargetLayer.Analysis, false).Select(i => i.Key.GetGSAKeyword()).Distinct().ToList();
       var keywords = senderProcessor.GetKeywords(layer);
-      var data = gsaInterfacer.GetGwaData(keywords);
+      var data = gsaInterfacer.GetGwaData(keywords, false);
       for (int i = 0; i < data.Count(); i++)
       {
         gsaCache.Upsert(

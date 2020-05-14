@@ -1,4 +1,5 @@
-﻿using SpeckleCore;
+﻿using MathNet.Numerics.LinearAlgebra;
+using SpeckleCore;
 using SpeckleCoreGeometryClasses;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
@@ -553,7 +554,7 @@ namespace SpeckleStructuralGSA
       double[] globalYdir = { 0, 1, 0 };
       double[] globalZdir = { 0, 0, 1 };
 
-      if (axis == null 
+      if (axis == null || (axis.Xdir == null && axis.Ydir == null)
         || (
           axis.Xdir.Value.SequenceEqual(globalXdir) &&
           axis.Ydir.Value.SequenceEqual(globalYdir) &&
@@ -753,36 +754,41 @@ namespace SpeckleStructuralGSA
     /// <param name="values">Flat array of coordinates</param>
     /// <param name="axis">Local coordinate system</param>
     /// <returns>Transformed array of coordinates</returns>
-    public static double[] MapPointsGlobal2Local(double[] values, StructuralAxis axis)
+    public static double[] MapPointsGlobal2Local(IEnumerable<double> values, StructuralAxis axis)
     {
       var newVals = new List<double>();
 
-      for (var i = 0; i < values.Length; i += 3)
+      for (var i = 0; i < values.Count(); i += 3)
       {
         var coor = values.Skip(i).Take(3).ToList();
-
-        double x = 0;
-        double y = 0;
-        double z = 0;
-
-        x += axis.Xdir.Value[0] * coor[0];
-        y += axis.Ydir.Value[0] * coor[0];
-        z += axis.Normal.Value[0] * coor[0];
-
-        x += axis.Xdir.Value[1] * coor[1];
-        y += axis.Ydir.Value[1] * coor[1];
-        z += axis.Normal.Value[1] * coor[1];
-
-        x += axis.Xdir.Value[2] * coor[2];
-        y += axis.Ydir.Value[2] * coor[2];
-        z += axis.Normal.Value[2] * coor[2];
-
-        newVals.Add(x);
-        newVals.Add(y);
-        newVals.Add(z);
+        var translated = coor.MapGlobal2Local(axis);
+        newVals.AddRange(translated);
       }
 
       return newVals.ToArray();
+    }
+
+    public static double[] MapGlobal2Local(this IEnumerable<double> globalCoords, StructuralAxis axis)
+    {
+      var coords = globalCoords.ToArray();
+      if (axis == null)
+      {
+        return coords;
+      }
+      var cartesianDifference = (axis.Origin == null || axis.Origin.Value == null || axis.Origin.Value.Count != 3)
+        ? coords
+        : new double[] { coords[0] - axis.Origin.Value[0], coords[1] - axis.Origin.Value[1], coords[2] - axis.Origin.Value[2] };
+
+      var A = Matrix<double>.Build.DenseOfArray(new double[,] {
+        { axis.Xdir.Value[0] , axis.Xdir.Value[1], axis.Xdir.Value[2] },
+        { axis.Ydir.Value[0] , axis.Ydir.Value[1], axis.Ydir.Value[2] },
+        { axis.Normal.Value[0] , axis.Normal.Value[1], axis.Normal.Value[2] }
+      });
+      A = A.Transpose();
+      var b = Vector<double>.Build.Dense(cartesianDifference);
+      var coefficients = A.Solve(b);
+
+      return coefficients.Select(c => Math.Round(c, 10)).ToArray();
     }
 
     /// <summary>
@@ -791,11 +797,11 @@ namespace SpeckleStructuralGSA
     /// <param name="values">Flat array of coordinates</param>
     /// <param name="axis">Local coordinate system</param>
     /// <returns>Transformed array of coordinates</returns>
-    public static double[] MapPointsLocal2Global(double[] values, StructuralAxis axis)
+    public static double[] MapPointsLocal2Global(IEnumerable<double> values, StructuralAxis axis)
     {
       var newVals = new List<double>();
 
-      for (var i = 0; i < values.Length; i += 3)
+      for (var i = 0; i < values.Count(); i += 3)
       {
         var coor = values.Skip(i).Take(3).ToList();
 
@@ -815,6 +821,12 @@ namespace SpeckleStructuralGSA
         y += axis.Normal.Value[1] * coor[2];
         z += axis.Normal.Value[2] * coor[2];
 
+        if (axis.Origin != null && axis.Origin.Value != null && axis.Origin.Value.Count == 3)
+        {
+          x += axis.Origin.Value[0];
+          y += axis.Origin.Value[1];
+          z += axis.Origin.Value[2];
+        }
         newVals.Add(x);
         newVals.Add(y);
         newVals.Add(z);

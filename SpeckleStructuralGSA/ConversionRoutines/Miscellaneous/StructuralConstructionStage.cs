@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
@@ -149,6 +150,7 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSAConstructionStage>();
 
+      var stageDefsLock = new object();
       var stageDefs = new List<GSAConstructionStage>();
       var e1Ds = new List<GSA1DElement>();
       var e2Ds = new List<GSA2DElement>();
@@ -157,27 +159,30 @@ namespace SpeckleStructuralGSA
 
       if (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
       {
-        e1Ds = Initialiser.GSASenderObjects[typeof(GSA1DElement)].Cast<GSA1DElement>().ToList();
-        e2Ds = Initialiser.GSASenderObjects[typeof(GSA2DElement)].Cast<GSA2DElement>().ToList();
+        e1Ds = Initialiser.GSASenderObjects.Get<GSA1DElement>();
+        e2Ds = Initialiser.GSASenderObjects.Get<GSA2DElement>();
       }
       else if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
       {
-        m1Ds = Initialiser.GSASenderObjects[typeof(GSA1DMember)].Cast<GSA1DMember>().ToList();
-        m2Ds = Initialiser.GSASenderObjects[typeof(GSA2DMember)].Cast<GSA2DMember>().ToList();
+        m1Ds = Initialiser.GSASenderObjects.Get<GSA1DMember>();
+        m2Ds = Initialiser.GSASenderObjects.Get<GSA2DMember>();
       }
 
-      foreach (var p in newLines.Values)
+      Parallel.ForEach(newLines.Values, p =>
       {
         try
         {
           var stageDef = new GSAConstructionStage() { GWACommand = p };
           stageDef.ParseGWACommand(e1Ds, e2Ds, m1Ds, m2Ds);
-          stageDefs.Add(stageDef);
+          lock (stageDefsLock)
+          {
+            stageDefs.Add(stageDef);
+          }
         }
         catch { }
-      }
+      });
 
-      Initialiser.GSASenderObjects[typeof(GSAConstructionStage)].AddRange(stageDefs);
+      Initialiser.GSASenderObjects.AddRange(stageDefs);
 
       return (stageDefs.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

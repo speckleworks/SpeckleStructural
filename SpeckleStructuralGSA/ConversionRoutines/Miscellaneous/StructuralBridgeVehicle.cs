@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
@@ -44,6 +45,10 @@ namespace SpeckleStructuralGSA
       var destType = typeof(GSABridgeVehicle);
 
       var vehicle = this.Value as StructuralBridgeVehicle;
+      if (vehicle.ApplicationId == null)
+      {
+        return "";
+      }
 
       var keyword = destType.GetGSAKeyword();
 
@@ -58,17 +63,20 @@ namespace SpeckleStructuralGSA
           keyword + ":" + Helper.GenerateSID(vehicle),
           index.ToString(),
           string.IsNullOrEmpty(vehicle.Name) ? "" : vehicle.Name,
-          vehicle.Width.ToString(),
-          vehicle.Axles.Count().ToString()
+          ((vehicle.Width == null) ? 0 : vehicle.Width).ToString(),
+          ((vehicle.Axles == null) ? 0 : vehicle.Axles.Count()).ToString()
       };
 
-      foreach (var axle in vehicle.Axles)
+      if (vehicle.Axles != null && vehicle.Axles.Count() > 0)
       {
-        ls.AddRange(new[] {
+        foreach (var axle in vehicle.Axles)
+        {
+          ls.AddRange(new[] {
           axle.Position.ToString(),
           axle.WheelOffset.ToString(),
           axle.LeftWheelLoad.ToString(),
           axle.RightWheelLoad.ToString() });
+        }
       }
 
       return (string.Join("\t", ls));
@@ -86,18 +94,22 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSABridgeVehicle>();
 
+      var alignmentsLock = new object();
       //Get all relevant GSA entities in this entire model
       var alignments = new List<GSABridgeVehicle>();
 
-      foreach (var p in newLines.Values)
+      Parallel.ForEach(newLines.Values, p =>
       {
         var alignment = new GSABridgeVehicle() { GWACommand = p };
         //Pass in ALL the nodes and members - the Parse_ method will search through them
         alignment.ParseGWACommand();
-        alignments.Add(alignment);
-      }
+        lock (alignmentsLock)
+        {
+          alignments.Add(alignment);
+        }
+      });
 
-      Initialiser.GSASenderObjects[typeof(GSABridgeVehicle)].AddRange(alignments);
+      Initialiser.GSASenderObjects.AddRange(alignments);
 
       return (alignments.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

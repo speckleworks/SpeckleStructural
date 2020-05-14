@@ -34,12 +34,27 @@ namespace SpeckleStructuralClasses
       GenerateHash();
     }
 
+    public void Normalise()
+    {
+      if (this.Value != null || this.Value.Count() == 3)
+      {
+        var currLength = Math.Sqrt(Math.Pow(this.Value[0], 2) + Math.Pow(this.Value[1], 2) + Math.Pow(this.Value[2], 2));
+        this.Value[0] /= currLength;
+        this.Value[1] /= currLength;
+        this.Value[2] /= currLength;
+      }
+    }
+
     public override void Scale(double factor)
     {
-      for (var i = 0; i < this.Value.Count(); i++)
-        this.Value[i] *= factor;
-
-      this.Properties = ScaleProperties(this.Properties, factor);
+      if (this.Value != null && this.Value.Count() > 0)
+      {
+        for (var i = 0; i < this.Value.Count(); i++)
+        {
+          this.Value[i] *= factor;
+        }
+      }
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
 
@@ -131,7 +146,7 @@ namespace SpeckleStructuralClasses
       for (var i = 0; i < this.Value.Count(); i++)
         this.Value[i] *= factor;
 
-      this.Properties = ScaleProperties(this.Properties, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
 
@@ -238,12 +253,15 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      this.Origin.Scale(factor);
+      if (this.Origin != null)
+      {
+        this.Origin.Scale(factor);
+      }
       //this.Normal.Scale(factor);
       //this.Xdir.Scale(factor);
       //this.Ydir.Scale(factor);
 
-      this.Properties = ScaleProperties(this.Properties, factor);
+      Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
     }
 

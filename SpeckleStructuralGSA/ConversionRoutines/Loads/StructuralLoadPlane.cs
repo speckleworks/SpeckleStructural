@@ -27,6 +27,10 @@ namespace SpeckleStructuralGSA
         return "";
 
       var plane = this.Value as StructuralLoadPlane;
+      if (plane.ApplicationId == null)
+      {
+        return "";
+      }
 
       var keyword = typeof(GSAGridSurface).GetGSAKeyword();
       var index = Initialiser.Cache.ResolveIndex(keyword);
@@ -90,7 +94,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      Initialiser.GSASenderObjects[typeof(GSAGridSurface)].AddRange(planes);
+      Initialiser.GSASenderObjects.AddRange(planes);
 
       return (planes.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
 using SpeckleGSAInterfaces;
@@ -113,7 +114,10 @@ namespace SpeckleStructuralGSA
         materialRef.ToString(),
         "0", // Analysis material
         GetGSADesc(prop, GSAUnits),
-        "0" // Cost
+        "0", // Cost
+        "CENTROID", //this needs review
+        "0", //this needs review
+        "0" //this needs review
       };
 
       return (string.Join("\t", ls));
@@ -500,10 +504,7 @@ namespace SpeckleStructuralGSA
         {
           "GEO"
         };
-        if (gsaUnit == "mm")
-          ls.Add("P");
-        else
-          ls.Add("P(" + gsaUnit + ")");
+        ls.Add((gsaUnit == "mm") ? "P" : "P(" + gsaUnit + ")");
 
         for (var i = 0; i < X.Count(); i++)
         {
@@ -714,22 +715,26 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSA1DProperty>();
 
+      var propsLock = new object();
       var props = new List<GSA1DProperty>();
-      var steels = Initialiser.GSASenderObjects[typeof(GSAMaterialSteel)].Cast<GSAMaterialSteel>().ToList();      
-      var concretes = Initialiser.GSASenderObjects[typeof(GSAMaterialConcrete)].Cast<GSAMaterialConcrete>().ToList();
+      var steels = Initialiser.GSASenderObjects.Get<GSAMaterialSteel>();      
+      var concretes = Initialiser.GSASenderObjects.Get<GSAMaterialConcrete>();
 
-      foreach (var p in newLines.Values)
+      Parallel.ForEach(newLines.Values, p =>
       {
         try
         {
           var prop = new GSA1DProperty() { GWACommand = p };
           prop.ParseGWACommand(Initialiser.Settings.Units, steels, concretes);
-          props.Add(prop);
+          lock (propsLock)
+          {
+            props.Add(prop);
+          }
         }
         catch { }
-      }
+      });
 
-      Initialiser.GSASenderObjects[typeof(GSA1DProperty)].AddRange(props);
+      Initialiser.GSASenderObjects.AddRange(props);
 
       return (props.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

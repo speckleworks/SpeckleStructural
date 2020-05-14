@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("EL.4", new string[] { "NODE.2" }, "elements", true, false, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSA1DProperty) })]
+  [GSAObject("EL.4", new string[] { "NODE.2" }, "elements", true, false, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode), typeof(GSA1DProperty) })]
   public class GSA0DSpring : IGSASpeckleContainer
   {
     public string Member;
@@ -68,6 +69,8 @@ namespace SpeckleStructuralGSA
         return "";
 
       var spring = this.Value as Structural0DSpring;
+      if (spring.Value == null || spring.Value.Count() == 0)
+        return "";
 
       var keyword = typeof(GSA0DSpring).GetGSAKeyword();
 
@@ -147,22 +150,26 @@ namespace SpeckleStructuralGSA
         newLines.Add(new Tuple<int, string>(k, newNodeLines[k]));
       }
 
+      var springsLock = new object();
       var springs = new List<GSA0DSpring>();
 
-      var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
+      var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
-      foreach (var p in newLines.Select(nl => nl.Item2))
+      Parallel.ForEach(newLines.Select(nl => nl.Item2), p =>
       {
         var pPieces = p.ListSplit("\t");
         if (pPieces[4] == "GRD_SPRING")
         {
           var spring = new GSA0DSpring() { GWACommand = p };
           spring.ParseGWACommand(nodes);
-          springs.Add(spring);
+          lock (springsLock)
+          {
+            springs.Add(spring);
+          }
         }
-      }
+      });
 
-      Initialiser.GSASenderObjects[typeof(GSA0DSpring)].AddRange(springs);
+      Initialiser.GSASenderObjects.AddRange(springs);
 
       return (springs.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

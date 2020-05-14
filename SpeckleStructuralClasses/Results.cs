@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using SpeckleCore;
 
 namespace SpeckleStructuralClasses
@@ -30,6 +31,7 @@ namespace SpeckleStructuralClasses
 
     /// <summary>Results.</summary>
     [JsonProperty("value", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    [JsonConverter(typeof(SpecklePropertiesConverter))]
     public Dictionary<string, object> Value { get; set; }
   }
 

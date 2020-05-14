@@ -147,7 +147,7 @@ namespace SpeckleStructuralGSA
 
       var load = this.Value as Structural1DLoadLine;
 
-      if (load.Loading == null)
+      if (load.ApplicationId == null)
         return "";
 
       var keyword = typeof(GSAGridLineLoad).GetGSAKeyword();
@@ -352,7 +352,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      Initialiser.GSASenderObjects[typeof(GSAGridLineLoad)].AddRange(loads);
+      Initialiser.GSASenderObjects.AddRange(loads);
 
       return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

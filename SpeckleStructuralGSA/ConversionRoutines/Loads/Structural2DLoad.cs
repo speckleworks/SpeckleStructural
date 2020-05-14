@@ -167,7 +167,7 @@ namespace SpeckleStructuralGSA
     }
   }
 
-  [GSAObject("LOAD_2D_FACE.2", new string[] { "EL.3" }, "loads", true, false, new Type[] { typeof(GSA2DElement) }, new Type[] { typeof(GSA2DElement), typeof(GSA2DElementMesh) })]
+  [GSAObject("LOAD_2D_FACE.2", new string[] { "EL.3" }, "loads", true, false, new Type[] { typeof(GSA2DElementMesh), typeof(GSA2DElement) }, new Type[] { typeof(GSA2DElement), typeof(GSA2DElementMesh) })]
   public class GSA2DLoadAnalysisLayer : GSA2DLoadBase, IGSASpeckleContainer
   {
     public void ParseGWACommand(List<GSA2DElement> elements)
@@ -209,7 +209,7 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSA2DLoadAnalysisLayer>();
 
       var loads = new List<GSA2DLoadAnalysisLayer>();
-      var elements = Initialiser.GSASenderObjects[typeof(GSA2DElement)].Cast<GSA2DElement>().ToList();
+      var elements = Initialiser.GSASenderObjects.Get<GSA2DElement>();
 
       foreach (var p in newLines.Values)
       {
@@ -258,7 +258,7 @@ namespace SpeckleStructuralGSA
         loads.AddRange(loadSubList);
       }
 
-      Initialiser.GSASenderObjects[typeof(GSA2DLoadAnalysisLayer)].AddRange(loads);
+      Initialiser.GSASenderObjects.AddRange(loads);
 
       return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
@@ -268,7 +268,7 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSA2DLoadDesignLayer>();
 
       var loads = new List<GSA2DLoadDesignLayer>();
-      var members = Initialiser.GSASenderObjects[typeof(GSA2DMember)].Cast<GSA2DMember>().ToList();
+      var members = Initialiser.GSASenderObjects.Get<GSA2DMember>();
 
       foreach (var p in newLines.Values)
       {
@@ -319,7 +319,7 @@ namespace SpeckleStructuralGSA
         loads.AddRange(loadSubList);
       }
 
-      Initialiser.GSASenderObjects[typeof(GSA2DLoadDesignLayer)].AddRange(loads);
+      Initialiser.GSASenderObjects.AddRange(loads);
 
       return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

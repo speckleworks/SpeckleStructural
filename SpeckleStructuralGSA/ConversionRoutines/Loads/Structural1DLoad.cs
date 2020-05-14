@@ -40,7 +40,7 @@ namespace SpeckleStructuralGSA
         {
           var elems = elements.Where(n => targetElements.Contains(n.GSAId)).ToList();
 
-          obj.ElementRefs = elems.Select(n => (string)n.Value.ApplicationId).ToList();
+          obj.ElementRefs = elems.Select(n => (string)n.Value.ApplicationId).OrderBy(i => i).ToList();
           this.SubGWACommand.AddRange(elems.Select(n => n.GWACommand));
         }
       }
@@ -194,7 +194,7 @@ namespace SpeckleStructuralGSA
         ls.Add("LOAD_BEAM_UDL" + ":" + Helper.GenerateSID(load)); // TODO: Only writes to UDL load
         ls.Add(load.Name == null || load.Name == "" ? " " : load.Name);
         // TODO: This is a hack.
-        ls.Add(string.Join(" ", elementRefs.Select(x => x.ToString()).Concat(groupRefs.Select(x => "G" + x.ToString()))));
+        ls.Add(string.Join(" ", elementRefs.Select(x => x.ToString()).Concat(groupRefs.Select(x => "G" + x.ToString())).OrderBy(e => e)));
         ls.Add(loadCaseRef.ToString());
         ls.Add("GLOBAL"); // Axis
         ls.Add("NO"); // Projected
@@ -250,7 +250,7 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSA1DLoadAnalysisLayer>();
 
       var loads = new List<GSA1DLoadAnalysisLayer>();
-      var elements = Initialiser.GSASenderObjects[typeof(GSA1DElement)].Cast<GSA1DElement>().ToList();
+      var elements = Initialiser.GSASenderObjects.Get<GSA1DElement>();
 
       foreach (var p in newLines.Values)
       {
@@ -315,7 +315,7 @@ namespace SpeckleStructuralGSA
         loads.AddRange(loadSubList);
       }
 
-      Initialiser.GSASenderObjects[typeof(GSA1DLoadAnalysisLayer)].AddRange(loads);
+      Initialiser.GSASenderObjects.AddRange(loads);
 
       return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
@@ -325,7 +325,8 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSA1DLoadDesignLayer>();
 
       var loads = new List<GSA1DLoadDesignLayer>();
-      var members = Initialiser.GSASenderObjects[typeof(GSA1DMember)].Cast<GSA1DMember>().ToList();
+      //var members = Initialiser.GSASenderObjects.Get<GSA1DMember)].Cast<GSA1DMember>().ToList();
+      var members = Initialiser.GSASenderObjects.Get<GSA1DMember>();
 
       foreach (var p in newLines.Values)
       {
@@ -390,7 +391,7 @@ namespace SpeckleStructuralGSA
         loads.AddRange(loadSubList);
       }
 
-      Initialiser.GSASenderObjects[typeof(GSA1DLoadDesignLayer)].AddRange(loads);
+      Initialiser.GSASenderObjects.AddRange(loads);
 
       return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
