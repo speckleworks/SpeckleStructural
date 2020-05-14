@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
 using SpeckleGSAInterfaces;
@@ -8,7 +9,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("NODE.2", new string[] { "AXIS.1" }, "nodes", true, true, new Type[] { }, new Type[] { typeof(GSA1DElement), typeof(GSA1DMember), typeof(GSA2DElement), typeof(GSA2DMember) })]
+  [GSAObject("NODE.2", new string[] { "AXIS.1" }, "nodes", true, true, new Type[] { }, new Type[] { })]
   public class GSANode : IGSASpeckleContainer
   {
     public bool ForceSend; // This is to filter only "important" nodes
@@ -61,13 +62,17 @@ namespace SpeckleStructuralGSA
           case "REST":
             obj.Restraint = new StructuralVectorBoolSix(new bool[6]);
             for (var i = 0; i < 6; i++)
+            {
               obj.Restraint.Value[i] = pieces[counter++] == "0" ? false : true;
+            }
             this.ForceSend = true;
             break;
           case "STIFF":
             obj.Stiffness = new StructuralVectorSix(new double[6]);
             for (var i = 0; i < 6; i++)
+            {
               obj.Stiffness.Value[i] = Convert.ToDouble(pieces[counter++]);
+            }
             this.ForceSend = true;
             break;
           case "MESH":
@@ -86,7 +91,9 @@ namespace SpeckleStructuralGSA
             string gwaRec = null;
             obj.Axis = Helper.Parse0DAxis(Convert.ToInt32(s), Initialiser.Interface, out gwaRec, obj.Value.ToArray());
             if (gwaRec != null)
+            {
               this.SubGWACommand.Add(gwaRec);
+            }
             break;
         }
       }
@@ -117,7 +124,7 @@ namespace SpeckleStructuralGSA
         index.ToString(),
         node.Name == null || node.Name == "" ? " " : node.Name,
         "NO_RGB",
-        string.Join("\t", node.Value.ToArray()),
+        string.Join("\t", node.Value.Select(v => Math.Round(v, 8)).ToArray()), //GSA seems to round to 8 here
 
         //ls.Add("0"); // TODO: Skip unknown fields in NODE.3
         //ls.Add("0"); // TODO: Skip unknown fields in NODE.3
@@ -150,32 +157,37 @@ namespace SpeckleStructuralGSA
         else
         {
           var subLs = new List<string>
-          {
-            "REST",
-            node.Restraint.Value[0] ? "1" : "0",
-            node.Restraint.Value[1] ? "1" : "0",
-            node.Restraint.Value[2] ? "1" : "0",
-            node.Restraint.Value[3] ? "1" : "0",
-            node.Restraint.Value[4] ? "1" : "0",
-            node.Restraint.Value[5] ? "1" : "0"
-          };
+        {
+          "REST",
+          node.Restraint.Value[0] ? "1" : "0",
+          node.Restraint.Value[1] ? "1" : "0",
+          node.Restraint.Value[2] ? "1" : "0",
+          node.Restraint.Value[3] ? "1" : "0",
+          node.Restraint.Value[4] ? "1" : "0",
+          node.Restraint.Value[5] ? "1" : "0"
+        };
           ls.AddRange(subLs);
         }
-
-        
-
       }
       catch { ls.Add("NO_REST"); }
 
-      try
+
+      if ((node.Stiffness == null || !node.Stiffness.Value.Any(x => x == 0))
+        && (node.GSALocalMeshSize == 0))
       {
-        if (node.Stiffness == null || !node.Stiffness.Value.Any(x => x == 0))
+        //GSA leaves the rest off the GWA in this case
+      }
+      else
+      {
+        try
         {
-          ls.Add("NO_STIFF");
-        }
-        else
-        {
-          var subLs = new List<string>
+          if (node.Stiffness == null || !node.Stiffness.Value.Any(x => x == 0))
+          {
+            ls.Add("NO_STIFF");
+          }
+          else
+          {
+            var subLs = new List<string>
           {
             "STIFF",
             node.Stiffness.Value[0].ToString(),
@@ -185,39 +197,41 @@ namespace SpeckleStructuralGSA
             node.Stiffness.Value[4].ToString(),
             node.Stiffness.Value[5].ToString()
           };
-          ls.AddRange(subLs);
+            ls.AddRange(subLs);
+          }
         }
-      }
-      catch { ls.Add("NO_STIFF"); }
+        catch { ls.Add("NO_STIFF"); }
 
-      try
-      {
-        if (node.GSALocalMeshSize == 0)
+        try
+        {
+          if (node.GSALocalMeshSize == 0)
+          {
+            //GSA seems to leave this off if there is no mesh
+            //ls.Add("NO_MESH");
+          }
+          else
+          {
+            var subLs = new List<string>
+            {
+              "MESH",
+              node.GSALocalMeshSize.ToString(),
+              "0", // Radius
+              "NO", // Tie to mesh
+              "NO", // column rigidity will be generated
+              "0", // Column property number
+              "0", //Column orientation node
+              "0", //Column orientation angle
+              "1", //Column dimension factor
+              "0" //Column slab thickness factor
+            };
+
+            ls.AddRange(subLs);
+          }
+        }
+        catch (Exception)
         {
           ls.Add("NO_MESH");
         }
-        else
-        {
-          var subLs = new List<string>
-          {
-            "MESH",
-            node.GSALocalMeshSize.ToString(),
-            "0", // Radius
-            "NO", // Tie to mesh
-            "NO", // column rigidity will be generated
-            "0", // Column property number
-            "0", //Column orientation node
-            "0", //Column orientation angle
-            "1", //Column dimension factor
-            "0" //Column slab thickness factor
-          };
-
-          ls.AddRange(subLs);
-        }
-      }
-      catch (Exception)
-      {
-        ls.Add("NO_MESH");
       }
 
       gwaCommands.Add(string.Join("\t", ls));
@@ -266,7 +280,6 @@ namespace SpeckleStructuralGSA
       var node = this.Value as StructuralNode;
       if (node.Value == null || node.Value.Count() != 3)
       {
-        Initialiser.AppUI.Message("Node with invalid point", node.ApplicationId);
         return "";
       }
 
@@ -366,32 +379,38 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSANode>();
 
+      var nodesLock = new object();
       var nodes = new List<GSANode>();
 
-      foreach (var p in newLines.Values)
+      Parallel.ForEach(newLines.Values, p =>
       {
         var node = new GSANode { GWACommand = p };
         node.ParseGWACommand();
-        nodes.Add(node);
+        lock (nodesLock)
+        {
+          nodes.Add(node);
+        }
       }
+      );
 
-      Initialiser.GSASenderObjects[typeof(GSANode)].AddRange(nodes);
+      Initialiser.GSASenderObjects.AddRange(nodes);
 
       return (nodes.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
 
     public static SpeckleObject ToSpeckle(this GSA0DElement dummyObject)
     {
-      if (!Initialiser.GSASenderObjects.ContainsKey(typeof(GSA0DElement)))
+      if (Initialiser.GSASenderObjects.Count<GSA0DElement>() == 0)
         return new SpeckleNull();
 
       var newLines = ToSpeckleBase<GSA0DElement>();
 
       var changed = false;
 
-      var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
+      var nodesLock = new object();
+      var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
-      foreach (var p in newLines.Values)
+      Parallel.ForEach(newLines.Values, p =>
       {
         var pPieces = p.ListSplit("\t");
         if (pPieces[4].ParseElementNumNodes() == 1)
@@ -401,9 +420,11 @@ namespace SpeckleStructuralGSA
             var massNode = new GSA0DElement() { GWACommand = p };
             massNode.ParseGWACommand();
 
-            var match = nodes
-                .Where(n => n.Value.ApplicationId == massNode.Value.ApplicationId)
-                .First();
+            GSANode match;
+            lock (nodesLock)
+            {
+              match = nodes.Where(n => n.Value.ApplicationId == massNode.Value.ApplicationId).First();
+            }
 
             if (match != null)
             {
@@ -418,6 +439,7 @@ namespace SpeckleStructuralGSA
           catch { }
         }
       }
+      );
 
       return (changed) ? new SpeckleObject() : new SpeckleNull();
     }

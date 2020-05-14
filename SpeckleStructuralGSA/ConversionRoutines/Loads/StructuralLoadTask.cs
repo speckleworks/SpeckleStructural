@@ -219,20 +219,23 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        var subLs = new List<string>();
-        for (var i = 0; i < loadTask.LoadCaseRefs.Count(); i++)
+        if (loadTask.LoadCaseRefs != null)
         {
-          var loadCaseRef = Initialiser.Cache.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), loadTask.LoadCaseRefs[i]);
-
-          if (loadCaseRef.HasValue)
+          var subLs = new List<string>();
+          for (var i = 0; i < loadTask.LoadCaseRefs.Count(); i++)
           {
-            if (loadTask.LoadFactors != null && loadTask.LoadFactors.Count() > i)
-              subLs.Add(loadTask.LoadFactors[i].ToString() + "L" + loadCaseRef.Value.ToString());
-            else
-              subLs.Add("L" + loadCaseRef.Value.ToString());
+            var loadCaseRef = Initialiser.Cache.LookupIndex(typeof(GSALoadCase).GetGSAKeyword(), loadTask.LoadCaseRefs[i]);
+
+            if (loadCaseRef.HasValue)
+            {
+              if (loadTask.LoadFactors != null && loadTask.LoadFactors.Count() > i)
+                subLs.Add(loadTask.LoadFactors[i].ToString() + "L" + loadCaseRef.Value.ToString());
+              else
+                subLs.Add("L" + loadCaseRef.Value.ToString());
+            }
           }
+          ls.Add(string.Join(" + ", subLs));
         }
-        ls.Add(string.Join(" + ", subLs));
       }
       gwaCommands.Add(string.Join("\t", ls));
       return string.Join("\n", gwaCommands);
@@ -259,7 +262,7 @@ namespace SpeckleStructuralGSA
         loadTasks.Add(task);
       }
 
-      Initialiser.GSASenderObjects[typeof(GSALoadTask)].AddRange(loadTasks);
+      Initialiser.GSASenderObjects.AddRange(loadTasks);
 
       return (loadTasks.Count() > 0 ) ? new SpeckleObject() : new SpeckleNull();
     }

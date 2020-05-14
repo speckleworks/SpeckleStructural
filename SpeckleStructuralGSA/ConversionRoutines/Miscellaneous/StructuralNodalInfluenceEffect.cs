@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
@@ -170,21 +171,25 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSANodalInfluenceEffect>();
 
+      var inflsLock = new object();
       var infls = new List<GSANodalInfluenceEffect>();
-      var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
+      var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
-      foreach (var p in newLines.Values)
+      Parallel.ForEach(newLines.Values, p =>
       {
         try
         {
           var infl = new GSANodalInfluenceEffect() { GWACommand = p };
           infl.ParseGWACommand(nodes);
-          infls.Add(infl);
+          lock (inflsLock)
+          {
+            infls.Add(infl);
+          }
         }
         catch { }
-      }
+      });
 
-      Initialiser.GSASenderObjects[typeof(GSANodalInfluenceEffect)].AddRange(infls);
+      Initialiser.GSASenderObjects.AddRange(infls);
 
       return (infls.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

@@ -5,6 +5,19 @@ using System.Windows.Media.Media3D;
 
 namespace SpeckleStructuralClasses
 {
+  public partial class Structural0DSpring
+  {
+    public Structural0DSpring() { }
+
+    public override void Scale(double factor)
+    {
+      for (var i = 0; i < Value.Count(); i++)
+        Value[i] *= factor;
+
+      Helper.ScaleProperties(Properties, factor);
+      GenerateHash();
+    }
+  }
   public partial class StructuralNode
   {
     public StructuralNode() { }
@@ -30,7 +43,7 @@ namespace SpeckleStructuralClasses
       for (var i = 0; i < Value.Count(); i++)
         Value[i] *= factor;
 
-      Properties = ScaleProperties(Properties, factor);
+      Helper.ScaleProperties(Properties, factor);
       GenerateHash();
     }
   }
@@ -65,7 +78,7 @@ namespace SpeckleStructuralClasses
         for (var i = 0; i < Offset.Count(); i++)
           Offset[i].Scale(factor);
 
-      Properties = ScaleProperties(Properties, factor);
+      Helper.ScaleProperties(Properties, factor);
       GenerateHash();
     }
   }
@@ -164,7 +177,7 @@ namespace SpeckleStructuralClasses
         for (var i = 0; i < Offset.Count(); i++)
           Offset[i].Scale(factor);
 
-      Properties = ScaleProperties(Properties, factor);
+      Helper.ScaleProperties(Properties, factor);
       GenerateHash();
     }
   }
@@ -200,7 +213,7 @@ namespace SpeckleStructuralClasses
 
       Offset *= factor;
 
-      Properties = ScaleProperties(Properties, factor);
+      Helper.ScaleProperties(Properties, factor);
       GenerateHash();
     }
   }
@@ -209,7 +222,9 @@ namespace SpeckleStructuralClasses
   {
     public Structural2DElementMesh() { }
 
-    public Structural2DElementMesh(double[] vertices, int[] faces, int[] colors, Structural2DElementType elementType, string propertyRef, StructuralAxis[] axis, double[] offset, string applicationId = null, double meshSize = 0, Dictionary<string, object> properties = null)
+    public Structural2DElementMesh(IEnumerable<double> vertices, IEnumerable<int> faces, IEnumerable<int> colors, 
+      Structural2DElementType elementType, string propertyRef, IEnumerable<StructuralAxis> axes, IEnumerable<double> offsets, 
+      string applicationId = null, double meshSize = 0, Dictionary<string, object> properties = null)
     {
       if (properties != null)
       {
@@ -220,9 +235,11 @@ namespace SpeckleStructuralClasses
       Colors = colors == null ? null : colors.ToList();
       ElementType = elementType;
       PropertyRef = propertyRef;
-      Axis = axis.ToList();
-      if (offset != null && offset.Count() > 0)
-        Offset = offset.ToList();
+      Axis = axes.ToList();
+      if (offsets != null && offsets.Count() > 0)
+      {
+        Offset = offsets.ToList();
+      }
       GSAMeshSize = meshSize;
       ApplicationId = applicationId;
       TextureCoordinates = null;
@@ -230,7 +247,8 @@ namespace SpeckleStructuralClasses
       GenerateHash();
     }
 
-    public Structural2DElementMesh(double[] edgeVertices, int? color, Structural2DElementType elementType, string propertyRef, StructuralAxis[] axis, double[] offset, string applicationId = null, Dictionary<string, object> properties = null)
+    public Structural2DElementMesh(IEnumerable<double> edgeVertices, int? color, Structural2DElementType elementType, string propertyRef,
+      IEnumerable<StructuralAxis> axes, IEnumerable<double> offsets, string applicationId = null, Dictionary<string, object> properties = null)
     {
       if (properties != null)
       {
@@ -240,7 +258,7 @@ namespace SpeckleStructuralClasses
 
       // Perform mesh making
       var faces = SplitMesh(
-          edgeVertices,
+          edgeVertices.ToArray(),
           (Enumerable.Range(0, edgeVertices.Count() / 3).ToArray()));
 
       Faces = new List<int>();
@@ -251,17 +269,18 @@ namespace SpeckleStructuralClasses
         Faces.AddRange(face);
       }
 
-      if (color != null)
-        Colors = Enumerable.Repeat(color.Value, Vertices.Count() / 3).ToList();
-      else
-        Colors = new List<int>();
+      Colors = (color == null) ? new List<int>() : Enumerable.Repeat(color.Value, Vertices.Count() / 3).ToList();
 
       ElementType = elementType;
       PropertyRef = propertyRef;
-      if (axis != null)
-        Axis = axis.ToList();
-      if (offset != null && offset.Count() > 0)
-        Offset = offset.ToList();
+      if (axes != null)
+      {
+        Axis = axes.ToList();
+      }
+      if (offsets != null && offsets.Count() > 0)
+      {
+        Offset = offsets.ToList();
+      }
       ApplicationId = applicationId;
 
       TextureCoordinates = null;
@@ -339,8 +358,7 @@ namespace SpeckleStructuralClasses
             Math.Pow(Vertices.Skip(conn[i] * 3 + 2).Take(1).First() - Vertices.Skip(conn[i + 1] * 3 + 2).Take(1).First(), 2);
           length = Math.Sqrt(length);
 
-          if (edges.Any(e => (e.Item3 == c1 && e.Item4 == c2) |
-              (e.Item3 == c2 && e.Item4 == c1)))
+          if (edges.Any(e => (e.Item3 == c1 && e.Item4 == c2) || (e.Item3 == c2 && e.Item4 == c1)))
           {
             edges.RemoveAll(x => (x.Item3 == c1 && x.Item4 == c2) || (x.Item3 == c2 && x.Item4 == c1));
           }
@@ -433,7 +451,7 @@ namespace SpeckleStructuralClasses
         for (var i = 0; i < Offset.Count(); i++)
           Offset[i] *= factor;
 
-      Properties = ScaleProperties(Properties, factor);
+      Helper.ScaleProperties(Properties, factor);
       GenerateHash();
     }
 
@@ -749,7 +767,7 @@ namespace SpeckleStructuralClasses
       for (var i = 0; i < Vertices.Count(); i++)
         Vertices[i] *= factor;
 
-      Properties = ScaleProperties(Properties, factor);
+      Helper.ScaleProperties(Properties, factor);
       GenerateHash();
     }
 

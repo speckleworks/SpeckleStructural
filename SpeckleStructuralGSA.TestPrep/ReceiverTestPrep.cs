@@ -33,7 +33,7 @@ namespace SpeckleStructuralGSA.TestPrep
       var receiverProcessor = new ReceiverProcessor(TestDataDirectory, gsaInterfacer, gsaCache, layer);
 
       //Run conversion to GWA keywords
-      receiverProcessor.JsonSpeckleStreamsToGwaRecords(savedJsonFileNames, out var gwaRecords);
+      receiverProcessor.JsonSpeckleStreamsToGwaRecords(savedJsonFileNames, out var gwaRecords, layer);
 
       //Create JSON file containing pairs of ApplicationId and GWA commands
       var jsonToWrite = JsonConvert.SerializeObject(gwaRecords, Formatting.Indented, jsonSettings);

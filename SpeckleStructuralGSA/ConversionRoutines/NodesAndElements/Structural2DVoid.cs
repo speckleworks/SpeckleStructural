@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("MEMB.7", new string[] { "NODE.2" }, "elements", false, true, new Type[] { typeof(GSANode) }, new Type[] { })]
+  [GSAObject("MEMB.7", new string[] { "NODE.2" }, "elements", false, true, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode) })]
   public class GSA2DVoid : IGSASpeckleContainer
   {
     public int GSAId { get; set; }
@@ -54,7 +55,7 @@ namespace SpeckleStructuralGSA
       }
 
       var temp = new Structural2DVoid(
-          coordinates.ToArray(),
+          coordinates.Essential(),
           color.HexToArgbColor());
 
       obj.Vertices = temp.Vertices;
@@ -70,6 +71,9 @@ namespace SpeckleStructuralGSA
         return "";
 
       var v = this.Value as Structural2DVoid;
+
+      if (v.Vertices == null || v.Vertices.Count() == 0)
+        return "";
 
       var keyword = typeof(GSA2DVoid).GetGSAKeyword();
 
@@ -159,10 +163,11 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSA2DVoid>();
 
+      var voidsLock = new object();
       var voids = new List<GSA2DVoid>();
-      var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
+      var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
-      foreach (var p in newLines.Values)
+      Parallel.ForEach(newLines.Values, p =>
       {
         var pPieces = p.ListSplit("\t");
         if (!pPieces[4].Is2DMember())
@@ -174,14 +179,17 @@ namespace SpeckleStructuralGSA
             {
               var v = new GSA2DVoid() { GWACommand = p };
               v.ParseGWACommand(nodes);
-              voids.Add(v);
+              lock (voidsLock)
+              {
+                voids.Add(v);
+              }
             }
             catch { }
           }
         }
-      }
+      });
 
-      Initialiser.GSASenderObjects[typeof(GSA2DVoid)].AddRange(voids);
+      Initialiser.GSASenderObjects.AddRange(voids);
 
       return (voids.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

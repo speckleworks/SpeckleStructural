@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
@@ -30,10 +31,16 @@ namespace SpeckleStructuralGSA
       obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
 
-      //TO DO: change these defaults for the real thing
-      obj.PathType = StructuralBridgePathType.Lane;
-      obj.Gauge = 0;
-      obj.LeftRailFactor = 0;
+      //PATH.1 \t2    \tPath One\tCWAY_1WAY\t1    \t1             \t-6.8\t6.8  \t0.5
+      //keyword\tIndex\tName    \tPathType \tGroup\tAlignmentIndex\tLeft\tRight\tLeftRailFactor
+
+      obj.PathType = GWAStringToPathType(pieces[counter++]);
+      //obj.Gauge = 0;
+      counter++; //Group
+      counter++; //AlignmentIndex 
+      counter++; //Left
+      counter++; //Right
+      obj.LeftRailFactor = pieces[counter++].ToDouble();
 
       this.Value = obj;
     }
@@ -86,6 +93,19 @@ namespace SpeckleStructuralGSA
         default: return "TRACK";
       }
     }
+
+    private StructuralBridgePathType GWAStringToPathType(string pathType)
+    {
+      switch (pathType)
+      {
+        case "CWAY_1WAY": return StructuralBridgePathType.Carriage1Way;
+        case "CWAY_2WAY": return StructuralBridgePathType.Carriage2Way;
+        case "FOOTWAY":  return StructuralBridgePathType.Footway ;
+        case "LANE": return StructuralBridgePathType.Lane;
+        case "VEHICLE": return StructuralBridgePathType.Vehicle;
+        default: return StructuralBridgePathType.Track;
+      }
+    }
   }
 
   public static partial class Conversions
@@ -100,15 +120,20 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSABridgePath>();
       var paths = new List<GSABridgePath>();
 
-      foreach (var p in newLines.Values)
+      var pathsLock = new object();
+
+      Parallel.ForEach(newLines.Values, p =>
       {
         var path = new GSABridgePath() { GWACommand = p };
         //Pass in ALL the nodes and members - the Parse_ method will search through them
         path.ParseGWACommand();
-        paths.Add(path);
-      }
+        lock (pathsLock)
+        {
+          paths.Add(path);
+        }
+      });
 
-      Initialiser.GSASenderObjects[typeof(GSABridgePath)].AddRange(paths);
+      Initialiser.GSASenderObjects.AddRange(paths);
 
       return (paths.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

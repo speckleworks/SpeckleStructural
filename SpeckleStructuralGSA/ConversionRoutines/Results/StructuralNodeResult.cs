@@ -22,14 +22,18 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSANodeResult dummyObject)
     {
       if (Initialiser.Settings.NodalResults.Count() == 0)
+      {
         return new SpeckleNull();
+      }
 
-      if (Initialiser.Settings.EmbedResults && !Initialiser.GSASenderObjects.ContainsKey(typeof(GSANode)))
+      if (Initialiser.Settings.EmbedResults && Initialiser.GSASenderObjects.Count<GSANode>() == 0)
+      {
         return new SpeckleNull();
+      }
 
       if (Initialiser.Settings.EmbedResults)
       {
-        var nodes = Initialiser.GSASenderObjects[typeof(GSANode)].Cast<GSANode>().ToList();
+        var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
         foreach (var kvp in Initialiser.Settings.NodalResults)
         {
@@ -62,7 +66,7 @@ namespace SpeckleStructuralGSA
                   Value = new Dictionary<string, object>()
                 };
               }
-              (node.Value.Result[loadCase] as StructuralNodeResult).Value[kvp.Key] = resultExport.ToDictionary( x => x.Key, x => (x.Value as List<double>)[0] as object );
+              (node.Value.Result[loadCase] as StructuralNodeResult).Value[kvp.Key] = resultExport.ToDictionary(x => x.Key, x => (x.Value as List<double>)[0] as object);
 
               node.ForceSend = true;
             }
@@ -71,8 +75,6 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        Initialiser.GSASenderObjects[typeof(GSANodeResult)] = new List<object>();
-
         var results = new List<GSANodeResult>();
 
         var keyword = Helper.GetGSAKeyword(typeof(GSANode));
@@ -96,7 +98,6 @@ namespace SpeckleStructuralGSA
                 id++;
                 continue;
               }
-
               var existingRes = results.FirstOrDefault(x => x.Value.TargetRef == id.ToString());
               if (existingRes == null)
               {
@@ -117,12 +118,11 @@ namespace SpeckleStructuralGSA
               {
                 existingRes.Value.Value[kvp.Key] = resultExport;
               }
-
             }
           }
         }
 
-        Initialiser.GSASenderObjects[typeof(GSANodeResult)].AddRange(results);
+        Initialiser.GSASenderObjects.AddRange(results);
       }
 
       return new SpeckleObject();

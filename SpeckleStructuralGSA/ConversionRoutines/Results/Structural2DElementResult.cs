@@ -23,12 +23,12 @@ namespace SpeckleStructuralGSA
       if (Initialiser.Settings.Element2DResults.Count() == 0)
         return new SpeckleNull();
 
-      if (Initialiser.Settings.EmbedResults && !Initialiser.GSASenderObjects.ContainsKey(typeof(GSA2DElement)))
+      if (Initialiser.Settings.EmbedResults && Initialiser.GSASenderObjects.Count<GSA2DElement>() == 0)
         return new SpeckleNull();
 
       if (Initialiser.Settings.EmbedResults)
       {
-        var elements = Initialiser.GSASenderObjects[typeof(GSA2DElement)].Cast<GSA2DElement>().ToList();
+        var elements = Initialiser.GSASenderObjects.Get<GSA2DElement>();
 
         foreach (var kvp in Initialiser.Settings.Element2DResults)
         {
@@ -73,8 +73,6 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        Initialiser.GSASenderObjects[typeof(GSA2DElementResult)] = new List<object>();
-
         var results = new List<GSA2DElementResult>();
 
         var keyword = Helper.GetGSAKeyword(typeof(GSA2DElement));
@@ -141,11 +139,10 @@ namespace SpeckleStructuralGSA
                 existingRes.Value.Value[kvp.Key + "_vertex"] = vertexDictionary;
               }
             }
-
           }
         }
 
-        Initialiser.GSASenderObjects[typeof(GSA2DElementResult)].AddRange(results);
+        Initialiser.GSASenderObjects.AddRange(results);
       }
 
       return new SpeckleObject();

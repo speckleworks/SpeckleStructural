@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
@@ -57,6 +58,10 @@ namespace SpeckleStructuralGSA
         return "";
 
       var mat = this.Value as StructuralMaterialConcrete;
+      if (mat.ApplicationId == null)
+      {
+        return "";
+      }
 
       var keyword = typeof(GSAMaterialConcrete).GetGSAKeyword();
       var index = Initialiser.Cache.ResolveIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), mat.ApplicationId);
@@ -148,20 +153,24 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSAMaterialConcrete>();
 
+      var materialsLock = new object();
       var materials = new List<GSAMaterialConcrete>();
 
-      foreach (var p in newLines.Values)
+      Parallel.ForEach(newLines.Values, p =>
       {
         try
         {
           var mat = new GSAMaterialConcrete() { GWACommand = p };
           mat.ParseGWACommand();
-          materials.Add(mat);
+          lock (materialsLock)
+          {
+            materials.Add(mat);
+          }
         }
         catch { }
-      }
+      });
 
-      Initialiser.GSASenderObjects[typeof(GSAMaterialConcrete)].AddRange(materials);
+      Initialiser.GSASenderObjects.AddRange(materials);
 
       return (materials.Count() > 0 ) ? new SpeckleObject() : new SpeckleNull();
     }
