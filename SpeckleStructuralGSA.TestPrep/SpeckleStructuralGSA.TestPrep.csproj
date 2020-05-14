@@ -89,6 +89,7 @@
     </Reference>
     <Reference Include="SpeckleGSAInterfaces">
       <HintPath>..\SpeckleStructuralGSA\SpeckleGSAInterfaces.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="SpeckleGSAProxy">
       <HintPath>..\SpeckleStructuralGSA.Test\SpeckleGSAProxy.dll</HintPath>

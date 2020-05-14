@@ -22,7 +22,6 @@ namespace SpeckleStructuralGSA
         return;
 
       var obj = new Structural0DLoadPoint();
-      this.GetAttribute("loadPlane");
       var pieces = this.GWACommand.ListSplit("\t");
 
       var counter = 1; // Skip identifier
@@ -32,9 +31,6 @@ namespace SpeckleStructuralGSA
 
       var axis = pieces[counter++];
       this.Axis = axis == "GLOBAL" ? 0 : Convert.ToInt32(axis);
-
-
-
 
       //Helper.GetGridPlaneRef(Convert.ToInt32(pieces[counter++]), out int gridPlaneRefRet, out string gridSurfaceRec);
       //Helper.GetGridPlaneData(gridPlaneRefRet, out int gridPlaneAxis, out double gridPlaneElevation, out string gridPlaneRec);
@@ -63,11 +59,6 @@ namespace SpeckleStructuralGSA
       //var planeProjected = pieces[counter++] == "YES";
       //var planeDirection = pieces[counter++];
       //var value = Convert.ToDouble(pieces[counter++]);
-
-
-
-
-
 
 
       obj.Loading = new StructuralVectorSix(new double[3]);

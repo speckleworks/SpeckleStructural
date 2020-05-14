@@ -187,6 +187,10 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
+      if (this.Origin != null)
+      {
+        this.Origin.Scale(factor);
+      }
       this.Elevation *= factor;
       this.ToleranceAbove *= factor;
       this.ToleranceBelow *= factor;

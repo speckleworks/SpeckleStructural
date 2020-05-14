@@ -34,6 +34,17 @@ namespace SpeckleStructuralClasses
       GenerateHash();
     }
 
+    public void Normalise()
+    {
+      if (this.Value != null || this.Value.Count() == 3)
+      {
+        var currLength = Math.Sqrt(Math.Pow(this.Value[0], 2) + Math.Pow(this.Value[1], 2) + Math.Pow(this.Value[2], 2));
+        this.Value[0] /= currLength;
+        this.Value[1] /= currLength;
+        this.Value[2] /= currLength;
+      }
+    }
+
     public override void Scale(double factor)
     {
       if (this.Value != null && this.Value.Count() > 0)

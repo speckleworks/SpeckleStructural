@@ -1,6 +1,12 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using SpeckleStructuralClasses;
+using SpeckleCoreGeometryClasses;
+using System.Collections.Generic;
+using System;
+using NUnit.Framework.Interfaces;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Spatial.Euclidean;
 
 namespace SpeckleStructuralGSA.Test.Tests
 {
@@ -16,5 +22,43 @@ namespace SpeckleStructuralGSA.Test.Tests
       var essentialCoords = coords.Essential();
       Assert.AreEqual(numExpectedPts * 3, essentialCoords.Count());
     }
+
+    [Test]
+    public void TestCoordinateMappings()
+    {
+      //< axis vector multiplier, global point , expected local point relative to axis >
+      var globalExpected = new List<Tuple<double, SpecklePoint, SpecklePoint>>()
+      {
+        { new Tuple<double, SpecklePoint, SpecklePoint>(1, new SpecklePoint(3, 4, 5), new SpecklePoint(0,0,0)) },
+        { new Tuple<double, SpecklePoint, SpecklePoint>(1, new SpecklePoint(3, 4, 6), new SpecklePoint(0,0,1)) },
+        { new Tuple<double, SpecklePoint, SpecklePoint>(2, new SpecklePoint(3, 4 + (2 * Math.Sqrt(8)), 5), new SpecklePoint(2, 2, 0)) }
+      };
+
+      foreach (var tuple in globalExpected)
+      {
+        var axisFactor = tuple.Item1;
+        var pt = tuple.Item2;
+        var expectedPoint = tuple.Item3;
+
+        var xdir = new StructuralVectorThree(1, 1, 0);
+        xdir.Normalise();
+        xdir.Scale(axisFactor);
+        var ydir = new StructuralVectorThree(-1, 1, 0);
+        ydir.Normalise();
+        ydir.Scale(axisFactor);
+
+        var axis = new StructuralAxis(xdir, ydir)
+        {
+          Origin = new SpecklePoint(3, 4, 5)
+        };
+
+        var localCoords = pt.Value.MapGlobal2Local(axis);
+        Assert.AreEqual(expectedPoint.Value[0], localCoords[0]);
+        Assert.AreEqual(expectedPoint.Value[1], localCoords[1]);
+        Assert.AreEqual(expectedPoint.Value[2], localCoords[2]);
+      }
+    }
+
+    
   }
 }
