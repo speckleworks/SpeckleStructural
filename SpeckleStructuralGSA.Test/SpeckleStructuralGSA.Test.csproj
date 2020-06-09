@@ -153,6 +153,7 @@
     <Compile Include="Other\Enums.cs" />
     <Compile Include="Other\GwaRecord.cs" />
     <Compile Include="Other\Helper.cs" />
+    <Compile Include="Tests\FileComparison.cs" />
     <Compile Include="Tests\GeometryTests.cs" />
     <Compile Include="Tests\MeshTests.cs" />
     <Compile Include="Tests\MergingTests.cs" />
