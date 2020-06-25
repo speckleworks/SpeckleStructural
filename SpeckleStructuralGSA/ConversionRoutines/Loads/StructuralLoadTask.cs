@@ -113,6 +113,7 @@ namespace SpeckleStructuralGSA
           ls.Add("RESID_NO");
           ls.Add("0");
           ls.Add("1");
+          ls.Add("0");
           break;
         case StructuralLoadTaskType.NonlinearStatic:
           ls.Add("GSRELAX");
@@ -177,6 +178,7 @@ namespace SpeckleStructuralGSA
           ls.Add("RESID_NO");
           ls.Add("0");
           ls.Add("1");
+          ls.Add("0");
           break;
         default:
           ls.Add("GSS");
@@ -202,6 +204,7 @@ namespace SpeckleStructuralGSA
           ls.Add("RESID_NO");
           ls.Add("0");
           ls.Add("1");
+          ls.Add("0");
           break;
       }
       gwaCommands.Add(string.Join("\t", ls));
