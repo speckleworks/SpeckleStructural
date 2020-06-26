@@ -8,7 +8,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("PROP_2D.5", new string[] { "MAT_STEEL.3", "MAT_CONCRETE.16" }, "properties", true, true, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) }, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) })]
+  [GSAObject("PROP_2D.6", new string[] { "MAT_STEEL.3", "MAT_CONCRETE.16" }, "properties", true, true, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) }, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) })]
   public class GSA2DProperty : IGSASpeckleContainer
   {
     public bool IsAxisLocal;
@@ -58,8 +58,8 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      counter++; // Analysis material
-      obj.Thickness = Convert.ToDouble(pieces[counter++]);
+      counter++; // design property
+      obj.Thickness = Convert.ToDouble(pieces[counter++]); // version 5 and 6 of this command are meant to include 'profile' but it does not yet seem functional and so only thickness is recorded
 
       switch (pieces[counter++])
       {
