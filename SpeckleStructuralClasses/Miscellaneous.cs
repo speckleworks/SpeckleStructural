@@ -378,4 +378,39 @@ namespace SpeckleStructuralClasses
     [JsonProperty("gsaEffectGroup", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
     public int? GSAEffectGroup { get; set; }
   }
+
+  [Serializable]
+  public partial class StructuralGridSystem : SpeckleObject, IStructural
+  {
+    public override string Type { get => "StructuralGridSystem"; }
+
+    [JsonProperty("origin", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public SpecklePoint Origin { get; set; }
+
+    [JsonProperty("gridLines", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public List<StructuralGridLine> GridLines { get; set; }
+
+    //Will apply to all storeys at this stage
+  }
+
+  //For grid lines, either have:
+  // custom lines: 
+  //    from StartPoint, for Length, on Angle
+  // parallel lines (simpler level of specification)
+  //    on Ordinate, where if Angle=0 then it's the X ordinate and if Angle=90 then it's the Y ordinate
+
+  [Serializable]
+  public partial class StructuralGridLine : SpeckleObject, IStructural
+  {
+    public override string Type { get => "StructuralGridLine"; }
+
+    public SpecklePoint StartPoint { get; set; }
+
+    public double? Length { get; set; }
+
+    //From global X axis
+    public double? Angle { get; set; }
+
+    public double? Ordinate { get; set; }
+  }
 }
