@@ -380,37 +380,43 @@ namespace SpeckleStructuralClasses
   }
 
   [Serializable]
-  public partial class StructuralGridSystem : SpeckleObject, IStructural
+  public partial class StructuralReferenceLine : SpeckleLine, IStructural
   {
-    public override string Type { get => "StructuralGridSystem"; }
+    public override string Type { get => "StructuralReferenceLine"; }
 
-    [JsonProperty("origin", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public SpecklePoint Origin { get; set; }
+    [JsonIgnore]
+    public string Group
+    {
+      get => StructuralProperties.ContainsKey("group") ? (StructuralProperties["group"] as string) : null;
+      set { if (value != null) StructuralProperties["group"] = value; }
+    }
 
-    [JsonProperty("gridLines", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-    public List<StructuralGridLine> GridLines { get; set; }
+    [JsonIgnore]
+    private Dictionary<string, object> StructuralProperties
+    {
+      get
+      {
+        if (base.Properties == null)
+        {
+          base.Properties = new Dictionary<string, object>();
+        }
 
-    //Will apply to all storeys at this stage
-  }
+        if (!base.Properties.ContainsKey("structural"))
+        {
+          base.Properties["structural"] = new Dictionary<string, object>();
+        }
 
-  //For grid lines, either have:
-  // custom lines: 
-  //    from StartPoint, for Length, on Angle
-  // parallel lines (simpler level of specification)
-  //    on Ordinate, where if Angle=0 then it's the X ordinate and if Angle=90 then it's the Y ordinate
+        return base.Properties["structural"] as Dictionary<string, object>;
+      }
+      set
+      {
+        if (base.Properties == null)
+        {
+          base.Properties = new Dictionary<string, object>();
+        }
 
-  [Serializable]
-  public partial class StructuralGridLine : SpeckleObject, IStructural
-  {
-    public override string Type { get => "StructuralGridLine"; }
-
-    public SpecklePoint StartPoint { get; set; }
-
-    public double? Length { get; set; }
-
-    //From global X axis
-    public double? Angle { get; set; }
-
-    public double? Ordinate { get; set; }
+        base.Properties["structural"] = value;
+      }
+    }
   }
 }

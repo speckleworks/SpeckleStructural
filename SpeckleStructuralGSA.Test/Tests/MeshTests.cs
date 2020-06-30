@@ -76,8 +76,6 @@ namespace SpeckleStructuralGSA.Test
       var meshes = Initialiser.GSASenderObjects.Get<GSA2DMember>();
       Assert.AreEqual(50, meshes.Count);
 
-      //var mesh359 = meshes.FirstOrDefault(m => ((Structural2DElementMesh)m.Value).ApplicationId == "gh/433bc42d96bf273a2629bf0495e9b004");
-
       var noFaceMeshes = meshes.Where(m => ((Structural2DElementMesh)m.Value).Faces == null || ((Structural2DElementMesh)m.Value).Faces.Count() == 0).ToList();
       Assert.AreEqual(0, noFaceMeshes.Count());
     }

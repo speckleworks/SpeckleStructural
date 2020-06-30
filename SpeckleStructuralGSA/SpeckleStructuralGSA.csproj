@@ -169,6 +169,7 @@
     <Compile Include="ConversionRoutines\Miscellaneous\StructuralBridgePath.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\StructuralBridgeVehicle.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\StructuralConstructionStage.cs" />
+    <Compile Include="ConversionRoutines\Miscellaneous\StructuralReferenceLine.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\StructuralNodalInfluenceEffect.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\StructuralRigidConstraints.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\StructuralStagedNodalRestraints.cs" />
