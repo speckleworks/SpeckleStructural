@@ -936,6 +936,30 @@ namespace SpeckleStructuralGSA
       );
     }
 
+    public static StructuralAxis Global = new StructuralAxis(
+                                              new StructuralVectorThree(new double[] { 1, 0, 0 }),
+                                              new StructuralVectorThree(new double[] { 0, 1, 0 }),
+                                              new StructuralVectorThree(new double[] { 0, 0, 1 })
+                                          );
+
+    public static StructuralAxis XElevation = new StructuralAxis(
+                                                new StructuralVectorThree(new double[] { 0, -1, 0 }),
+                                                new StructuralVectorThree(new double[] { 0, 0, 1 }),
+                                                new StructuralVectorThree(new double[] { -1, 0, 0 })
+                                            );
+
+    public static StructuralAxis YElevation = new StructuralAxis(
+                                                new StructuralVectorThree(new double[] { 1, 0, 0 }),
+                                                new StructuralVectorThree(new double[] { 0, 0, 1 }),
+                                                new StructuralVectorThree(new double[] { 0, -1, 0 })
+                                            );
+
+    public static StructuralAxis Vertical = new StructuralAxis(
+                                                new StructuralVectorThree(new double[] { 0, 0, 1 }),
+                                                new StructuralVectorThree(new double[] { 1, 0, 0 }),
+                                                new StructuralVectorThree(new double[] { 0, 1, 0 })
+                                            );
+
     /// <summary>
     /// Calculates the local axis of a point from a GSA node axis.
     /// </summary>
@@ -955,32 +979,16 @@ namespace SpeckleStructuralGSA
       {
         case 0:
           // Global
-          return new StructuralAxis(
-              new StructuralVectorThree(new double[] { 1, 0, 0 }),
-              new StructuralVectorThree(new double[] { 0, 1, 0 }),
-              new StructuralVectorThree(new double[] { 0, 0, 1 })
-          );
+          return Global;
         case -11:
           // X elevation
-          return new StructuralAxis(
-              new StructuralVectorThree(new double[] { 0, -1, 0 }),
-              new StructuralVectorThree(new double[] { 0, 0, 1 }),
-              new StructuralVectorThree(new double[] { -1, 0, 0 })
-          );
+          return XElevation;
         case -12:
           // Y elevation
-          return new StructuralAxis(
-              new StructuralVectorThree(new double[] { 1, 0, 0 }),
-              new StructuralVectorThree(new double[] { 0, 0, 1 }),
-              new StructuralVectorThree(new double[] { 0, -1, 0 })
-          );
+          return YElevation;
         case -14:
           // Vertical
-          return new StructuralAxis(
-              new StructuralVectorThree(new double[] { 0, 0, 1 }),
-              new StructuralVectorThree(new double[] { 1, 0, 0 }),
-              new StructuralVectorThree(new double[] { 0, 1, 0 })
-          );
+          return Vertical;
         case -13:
           // Global cylindrical
           x = new Vector3D(evalAtCoor[0], evalAtCoor[1], 0);
@@ -1203,7 +1211,7 @@ namespace SpeckleStructuralGSA
         //Only needs to be added to the cache if there is an application ID
         var gwa = Initialiser.Interface.GetGwaForNode(index);
         gwa = Initialiser.Interface.SetSid(gwa, streamId ?? "", applicationId);
-        Initialiser.Cache.Upsert("NODE.2", index, gwa, streamId, applicationId, GwaSetCommandType.Set);
+        Initialiser.Cache.Upsert("NODE.3", index, gwa, streamId, applicationId, GwaSetCommandType.Set);
       }
 
       return index;
@@ -1265,6 +1273,58 @@ namespace SpeckleStructuralGSA
       catch
       {
         //Since display of these are not critical, if there is any error in displaying then these can be quashed
+      }
+    }
+
+    public static StructuralVectorBoolSix RestraintFromCode(string code)
+    {
+      if (code == "free")
+        return new StructuralVectorBoolSix(false, false, false, false, false, false);
+      else if (code == "pin")
+        return new StructuralVectorBoolSix(true, true, true, false, false, false);
+      else if (code == "fix")
+        return new StructuralVectorBoolSix(true, true, true, true, true, true);
+      else
+      {
+        var fixities = new bool[6];
+
+        if (code.Contains("xxx"))
+        {
+          fixities[0] = true;
+          fixities[3] = true;
+        }
+        else if (code.Contains("xx"))
+        {
+          fixities[3] = true;
+        }
+        else if (code.Contains("x"))
+          fixities[0] = true;
+
+        if (code.Contains("yyy"))
+        {
+          fixities[1] = true;
+          fixities[4] = true;
+        }
+        else if (code.Contains("yy"))
+        {
+          fixities[4] = true;
+        }
+        else if (code.Contains("y"))
+          fixities[1] = true;
+
+        if (code.Contains("zzz"))
+        {
+          fixities[2] = true;
+          fixities[5] = true;
+        }
+        else if (code.Contains("zz"))
+        {
+          fixities[5] = true;
+        }
+        else if (code.Contains("z"))
+          fixities[2] = true;
+
+        return new StructuralVectorBoolSix(fixities);
       }
     }
 

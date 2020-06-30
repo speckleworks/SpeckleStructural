@@ -7,7 +7,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("LOAD_GRID_POINT.2", new string[] { "NODE.2", "AXIS.1" }, "loads", true, true, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSAGridSurface), typeof(GSAStorey), typeof(GSALoadCase), typeof(GSANode) })]
+  [GSAObject("LOAD_GRID_POINT.2", new string[] { "NODE.3", "AXIS.1" }, "loads", true, true, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSAGridSurface), typeof(GSAStorey), typeof(GSALoadCase), typeof(GSANode) })]
   public class GSA0DLoadPoint : IGSASpeckleContainer
   {
     public int Axis; // Store this temporarily to generate other loads

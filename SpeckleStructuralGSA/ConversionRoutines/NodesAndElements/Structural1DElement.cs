@@ -9,7 +9,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("EL.4", new string[] { "NODE.2" }, "elements", true, false, new Type[] { typeof(GSANode), typeof(GSA1DProperty), typeof(GSASpringProperty) }, new Type[] { typeof(GSANode), typeof(GSA1DProperty), typeof(GSASpringProperty) })]
+  [GSAObject("EL.4", new string[] { "NODE.3" }, "elements", true, false, new Type[] { typeof(GSANode), typeof(GSA1DProperty), typeof(GSASpringProperty) }, new Type[] { typeof(GSANode), typeof(GSA1DProperty), typeof(GSASpringProperty) })]
   public class GSA1DElement : IGSASpeckleContainer
   {
     public string Member;
@@ -21,6 +21,11 @@ namespace SpeckleStructuralGSA
 
     public void ParseGWACommand(List<GSANode> nodes)
     {
+      // GWA command from 10.1 docs
+      // EL.4 | num | name | colour | type | prop | group | topo() | orient_node | orient_angle |
+      // is_rls { | rls { | k } }
+      // off_x1 | off_x2 | off_y | off_z | parent_member | dummy
+
       if (this.GWACommand == null)
         return;
 
@@ -118,11 +123,10 @@ namespace SpeckleStructuralGSA
 
       obj.Offset = offsets;
 
-      //counter++; // Action // TODO: EL.4 SUPPORT
+      if (String.IsNullOrEmpty(pieces[counter++]) == false)
+        Member = pieces[counter++]; // no references to this piece of data, why do we store it rather than just skipping over?
+
       counter++; // Dummy
-      
-      if (counter < pieces.Length)
-        Member = pieces[counter++];
 
       this.Value = obj;
     }
@@ -165,19 +169,26 @@ namespace SpeckleStructuralGSA
         element.Name == null || element.Name == "" ? " " : element.Name,
         "NO_RGB",
         "BEAM", // Type
-        propRef.ToString(),
-        group.ToString()
+        propRef.ToString(), // Prop
+        group.ToString() // Group
       };
+      
+      // topo()
       for (var i = 0; i < element.Value.Count(); i += 3)
       {
         ls.Add(Helper.NodeAt(element.Value[i], element.Value[i + 1], element.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString());
       }
+      
       ls.Add("0"); // Orientation Node
+      
+      // orient_angle
       try
       {
         ls.Add(Helper.Get1DAngle(element.Value.ToArray(), element.ZAxis).ToString());
       }
       catch { ls.Add("0"); }
+      
+      // is_rls { | k }
       try
       {
         var subLs = new List<string>();
@@ -214,6 +225,7 @@ namespace SpeckleStructuralGSA
       }
       catch { ls.Add("NO_RLS"); }
 
+      // off_x1 | off_x2 | off_y | off_z
       try
       {
         var subLs = new List<string>
@@ -235,8 +247,9 @@ namespace SpeckleStructuralGSA
         ls.Add("0");
       }
 
-      //ls.Add("NORMAL"); // Action // TODO: EL.4 SUPPORT
-      ls.Add((element.GSADummy.HasValue && element.GSADummy.Value) ? "DUMMY" : "");
+      ls.Add(""); // parent_member
+
+      ls.Add((element.GSADummy.HasValue && element.GSADummy.Value) ? "DUMMY" : ""); // dummy
 
       return (string.Join("\t", ls));
     }
@@ -257,7 +270,7 @@ namespace SpeckleStructuralGSA
     }
   }
 
-  [GSAObject("MEMB.7", new string[] { "NODE.2" }, "elements", false, true, new Type[] { typeof(GSA1DProperty), typeof(GSANode), typeof(GSASpringProperty) }, new Type[] { typeof(GSA1DProperty), typeof(GSANode), typeof(GSASpringProperty) })]
+  [GSAObject("MEMB.7", new string[] { "NODE.3" }, "elements", false, true, new Type[] { typeof(GSA1DProperty), typeof(GSANode), typeof(GSASpringProperty) }, new Type[] { typeof(GSA1DProperty), typeof(GSANode), typeof(GSASpringProperty) })]
   public class GSA1DMember : IGSASpeckleContainer
   {
     public int Group; // Keep for load targetting

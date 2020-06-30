@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("EL.4", new string[] { "NODE.2", "PROP_2D" }, "elements", true, false, new Type[] { typeof(GSANode), typeof(GSA2DProperty) }, new Type[] { typeof(GSANode), typeof(GSA2DProperty) })]
+  [GSAObject("EL.4", new string[] { "NODE.3", "PROP_2D" }, "elements", true, false, new Type[] { typeof(GSANode), typeof(GSA2DProperty) }, new Type[] { typeof(GSANode), typeof(GSA2DProperty) })]
   public class GSA2DElement : IGSASpeckleContainer
   {
     public string Member;
@@ -22,6 +22,11 @@ namespace SpeckleStructuralGSA
 
     public void ParseGWACommand( List<GSANode> nodes, List<GSA2DProperty> props)
     {
+      // GWA command from 10.1 docs
+      // EL.4 | num | name | colour | type | prop | group | topo() | orient_node | orient_angle |
+      // is_rls { | rls { | k } }
+      // off_x1 | off_x2 | off_y | off_z | parent_member | dummy
+      
       if (this.GWACommand == null)
         return;
 
@@ -84,10 +89,10 @@ namespace SpeckleStructuralGSA
 
       obj.Offset = offset;
 
-      counter++; // Dummy
+      if (String.IsNullOrEmpty(pieces[counter++]) == false)
+        Member = pieces[counter++]; // no references to this piece of data, why do we store it rather than just skipping over?
 
-      if (counter < pieces.Length)
-        Member = pieces[counter++];
+      counter++; // Dummy
 
       this.Value = obj;
     }
@@ -163,7 +168,8 @@ namespace SpeckleStructuralGSA
       ls.Add("0"); // Offset y
       ls.Add(mesh.Offset.ToString());
 
-      //ls.Add("NORMAL"); // Action // TODO: EL.4 SUPPORT
+      ls.Add(""); // parent_member
+
       ls.Add((mesh.GSADummy.HasValue && mesh.GSADummy.Value) ? "DUMMY" : "");
 
       return (string.Join("\t", ls));
@@ -171,7 +177,7 @@ namespace SpeckleStructuralGSA
 
   }
 
-  [GSAObject("MEMB.7", new string[] { "NODE.2" }, "elements", false, true, new Type[] { typeof(GSANode), typeof(GSA2DProperty) }, new Type[] { typeof(GSANode), typeof(GSA2DProperty) })]
+  [GSAObject("MEMB.7", new string[] { "NODE.3" }, "elements", false, true, new Type[] { typeof(GSANode), typeof(GSA2DProperty) }, new Type[] { typeof(GSANode), typeof(GSA2DProperty) })]
   public class GSA2DMember : IGSASpeckleContainer
   {
     public int Group; // Keep for load targetting
