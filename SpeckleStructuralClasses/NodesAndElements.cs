@@ -69,6 +69,10 @@ namespace SpeckleStructuralClasses
       set { if (value != null) StructuralProperties["axis"] = value; }
     }
 
+    // 'Restraint' and 'Stiffness' should be combined and replaced with a custom object
+    // This would be similar to the BHoM version and allow for any type of support
+    // which will then be easier to deconstruct into application-specific models
+    
     /// <summary>A list of the X, Y, Z, Rx, Ry, and Rz restraints.</summary>
     [JsonIgnore]
     public StructuralVectorBoolSix Restraint
