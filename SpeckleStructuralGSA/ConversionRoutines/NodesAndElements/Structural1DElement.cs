@@ -270,7 +270,7 @@ namespace SpeckleStructuralGSA
     }
   }
 
-  [GSAObject("MEMB.7", new string[] { "NODE.3" }, "elements", false, true, new Type[] { typeof(GSA1DProperty), typeof(GSANode), typeof(GSASpringProperty) }, new Type[] { typeof(GSA1DProperty), typeof(GSANode), typeof(GSASpringProperty) })]
+  [GSAObject("MEMB.8", new string[] { "NODE.3" }, "elements", false, true, new Type[] { typeof(GSA1DProperty), typeof(GSANode), typeof(GSASpringProperty) }, new Type[] { typeof(GSA1DProperty), typeof(GSANode), typeof(GSASpringProperty) })]
   public class GSA1DMember : IGSASpeckleContainer
   {
     public int Group; // Keep for load targetting
@@ -282,6 +282,16 @@ namespace SpeckleStructuralGSA
 
     public void ParseGWACommand(List<GSANode> nodes)
     {
+      // MEMB.8 | num | name | colour | type(1D) | exposure | prop | group | topology | node | angle | mesh_size | is_intersector | analysis_type | fire | limiting_temperature | time[4] | dummy | rls_1 { | k_1 }
+      // rls_2 { | k_2 } | restraint_end_1 | restraint_end_2 | AUTOMATIC | load_height | load_ref | is_off { | auto_off_x1 | auto_off_x2 | off_x1 | off_x2 | off_y | off_z }
+      // 
+      // MEMB.8 | num | name | colour | type(1D) | exposure | prop | group | topology | node | angle | mesh_size | is_intersector | analysis_type | fire | limiting_temperature | time[4] | dummy | rls_1 { | k_1 }
+      // rls_2 { | k_2 } | restraint_end_1 | restraint_end_2 | EFF_LEN | lyy | lzz | llt | load_height | load_ref | is_off { | auto_off_x1 | auto_off_x2 | off_x1 | off_x2 | off_y | off_z }
+      // 
+      // MEMB.8 | num | name | colour | type(1D) | exposure | prop | group | topology | node | angle | mesh_size | is_intersector | analysis_type | fire | limiting_temperature | time[4] | dummy | rls_1 { | k_1 }
+      // rls_2 { | k_2 } | restraint_end_1 | restraint_end_2 | EXPLICIT | num_pt | { pt | rest | } | num_span | { span | rest | }
+      // load_height | load_ref | is_off { | auto_off_x1 | auto_off_x2 | off_x1 | off_x2 | off_y | off_z }
+
       if (this.GWACommand == null)
         return;
 
@@ -289,25 +299,29 @@ namespace SpeckleStructuralGSA
 
       var pieces = this.GWACommand.ListSplit("\t");
 
-      var counter = 1; // Skip identifier
+      var counter = 1; // num - Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
       obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
-      obj.Name = pieces[counter++].Trim(new char[] { '"' });
-      counter++; // Color
+      obj.Name = pieces[counter++].Trim(new char[] { '"' }); // name
+      counter++; // colour
 
+      // type(1D)
       var type = pieces[counter++];
       if (type == "BEAM")
         obj.ElementType = Structural1DElementType.Beam;
       else if (type == "COLUMN")
         obj.ElementType = Structural1DElementType.Column;
       else if (type == "CANTILEVER")
-        obj.ElementType = Structural1DElementType.Cantilever;
+        obj.ElementType = Structural1DElementType.Cantilever; // doesnt appear to be an option in GSA10.1
       else
         obj.ElementType = Structural1DElementType.Generic;
 
-      obj.PropertyRef = Helper.GetApplicationId(typeof(GSA1DProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
-      this.Group = Convert.ToInt32(pieces[counter++]); // Keep group for load targetting
+      counter++; // exposure - fire property e.g. TOP_BOT - not currently supported
 
+      obj.PropertyRef = Helper.GetApplicationId(typeof(GSA1DProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++])); // prop
+      this.Group = Convert.ToInt32(pieces[counter++]); // group - Keep group for load targetting
+
+      // topology
       obj.Value = new List<double>();
       var nodeRefs = pieces[counter++].ListSplit(" ");
       for (var i = 0; i < nodeRefs.Length; i++)
@@ -322,8 +336,9 @@ namespace SpeckleStructuralGSA
         this.SubGWACommand.Add(node.GWACommand);
       }
 
-      var orientationNodeRef = pieces[counter++];
-      var rotationAngle = Convert.ToDouble(pieces[counter++]);
+      // orientation
+      var orientationNodeRef = pieces[counter++]; // node - aka orientation node
+      var rotationAngle = Convert.ToDouble(pieces[counter++]); // angle
 
       if (orientationNodeRef != "0")
       {
@@ -334,6 +349,20 @@ namespace SpeckleStructuralGSA
       }
       else
         obj.ZAxis = Helper.Parse1DAxis(obj.Value.ToArray(), rotationAngle).Normal as StructuralVectorThree;
+
+      obj.GSAMeshSize = Convert.ToDouble(pieces[counter++]);
+
+      counter++; // is_intersector
+      counter++; // analysis_type
+      counter++; // fire
+      counter++; // limiting temperature
+      counter++; // time[4] - time member created from project start
+
+      // dummy
+      if (pieces[counter++].ToLower() == "dummy")
+        obj.GSADummy = true;
+      else
+        obj.GSADummy = false;
 
       counter += 9; //Skip to end conditions
 
