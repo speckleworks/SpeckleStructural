@@ -378,4 +378,45 @@ namespace SpeckleStructuralClasses
     [JsonProperty("gsaEffectGroup", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
     public int? GSAEffectGroup { get; set; }
   }
+
+  [Serializable]
+  public partial class StructuralReferenceLine : SpeckleLine, IStructural
+  {
+    public override string Type { get => "StructuralReferenceLine"; }
+
+    [JsonIgnore]
+    public string Group
+    {
+      get => StructuralProperties.ContainsKey("group") ? (StructuralProperties["group"] as string) : null;
+      set { if (value != null) StructuralProperties["group"] = value; }
+    }
+
+    [JsonIgnore]
+    private Dictionary<string, object> StructuralProperties
+    {
+      get
+      {
+        if (base.Properties == null)
+        {
+          base.Properties = new Dictionary<string, object>();
+        }
+
+        if (!base.Properties.ContainsKey("structural"))
+        {
+          base.Properties["structural"] = new Dictionary<string, object>();
+        }
+
+        return base.Properties["structural"] as Dictionary<string, object>;
+      }
+      set
+      {
+        if (base.Properties == null)
+        {
+          base.Properties = new Dictionary<string, object>();
+        }
+
+        base.Properties["structural"] = value;
+      }
+    }
+  }
 }

@@ -45,7 +45,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Interop.Gsa_10_1">
-      <HintPath>.\Interop.Gsa_10_1.dll</HintPath>
+      <HintPath>..\Resource\Interop.Gsa_10_1.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="MathNet.Numerics, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -99,8 +99,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="SpeckleGSAInterfaces">
-      <HintPath>.\SpeckleGSAInterfaces.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\Resource\SpeckleGSAInterfaces.dll</HintPath>
     </Reference>
     <Reference Include="SQLite-net, Version=1.5.231.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\sqlite-net-pcl.1.5.231\lib\netstandard1.1\SQLite-net.dll</HintPath>
@@ -167,6 +166,7 @@
     <Compile Include="ConversionRoutines\Miscellaneous\StructuralBridgePath.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\StructuralBridgeVehicle.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\StructuralConstructionStage.cs" />
+    <Compile Include="ConversionRoutines\Miscellaneous\StructuralReferenceLine.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\StructuralNodalInfluenceEffect.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\StructuralRigidConstraints.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\StructuralStagedNodalRestraints.cs" />

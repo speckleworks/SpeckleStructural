@@ -50,8 +50,8 @@
     <Reference Include="geometry3Sharp, Version=1.0.324.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\geometry3Sharp.1.0.324\lib\net45\geometry3Sharp.dll</HintPath>
     </Reference>
-    <Reference Include="Interop.Gsa_10_0">
-      <HintPath>..\SpeckleStructuralGSA\Interop.Gsa_10_0.dll</HintPath>
+    <Reference Include="Interop.Gsa_10_1">
+      <HintPath>..\Resource\Interop.Gsa_10_1.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="MathNet.Numerics, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -97,12 +97,11 @@
       <HintPath>..\packages\SpeckleCoreGeometry.1.2.8\lib\net461\SpeckleCoreGeometryClasses.dll</HintPath>
     </Reference>
     <Reference Include="SpeckleGSAInterfaces">
-      <HintPath>..\SpeckleStructuralGSA\SpeckleGSAInterfaces.dll</HintPath>
-      <Private>True</Private>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>..\Resource\SpeckleGSAInterfaces.dll</HintPath>
     </Reference>
-    <Reference Include="SpeckleGSAProxy">
-      <HintPath>.\SpeckleGSAProxy.dll</HintPath>
+    <Reference Include="SpeckleGSAProxy, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resource\SpeckleGSAProxy.dll</HintPath>
     </Reference>
     <Reference Include="SpeckleUtil, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
