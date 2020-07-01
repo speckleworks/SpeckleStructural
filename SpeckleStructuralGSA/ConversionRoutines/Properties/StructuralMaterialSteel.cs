@@ -71,9 +71,8 @@ namespace SpeckleStructuralGSA
         "SET",
         "MAT_STEEL.3" + ":" + Helper.GenerateSID(mat),
         index.ToString(),
-        "MAT.8",
+        "MAT.10",
         mat.Name == null || mat.Name == "" ? " " : mat.Name,
-        "YES", // Unlocked
         mat.YoungsModulus.ToString(), // E
         mat.PoissonsRatio.ToString(), // nu
         mat.ShearModulus.ToString(), // G
@@ -97,14 +96,26 @@ namespace SpeckleStructuralGSA
         "0", // TODO: What is this?
         "0", // TODO: What is this?
         mat.MaxStrain.ToString(), // Ultimate strain
-        "MAT_CURVE_PARAM.2",
+        "MAT_CURVE_PARAM.3",
         "",
-        "UNDEF",
+        "ELAS_PLAS", // GSA default model for steel - ULS
+        "0", // strain[6]
+        "0",
+        "0",
+        "0",
+        "0.05",
+        "0.05",
         "1", // Material factor on strength
         "1", // Material factor on elastic modulus
         "MAT_CURVE_PARAM.2",
         "",
-        "UNDEF",
+        "ELAS_PLAS",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0.05",
+        "0.05",
         "1", // Material factor on strength
         "1", // Material factor on elastic modulus
         "0", // Cost
