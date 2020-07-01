@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("GRID_LINE.1", new string[] { }, "misc", true, false, new Type[] { }, new Type[] { })]
+  [GSAObject("GRID_LINE.1", new string[] { }, "misc", true, true, new Type[] { }, new Type[] { })]
   public class GSAGridLine : IGSASpeckleContainer
   {
     public int GSAId { get; set; }

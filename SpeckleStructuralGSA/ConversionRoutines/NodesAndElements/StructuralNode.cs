@@ -43,23 +43,39 @@ namespace SpeckleStructuralGSA
         Convert.ToDouble(pieces[counter++]) // z
       };
 
-      obj.Restraint = Helper.RestraintFromCode(pieces[counter++]); // restraint
-
-      // axis
-      var axis = pieces[counter++];
-      if (axis == "GLOBAL")
-        obj.Axis = Helper.Global;
-      else
+      if (counter >= pieces.Length)
       {
-        string gwaRec = null;
-        obj.Axis = Helper.Parse0DAxis(Convert.ToInt32(axis), Initialiser.Interface, out gwaRec, obj.Value.ToArray());
-        if (gwaRec != null)
+        this.Value = obj;
+        return;
+      }
+
+      if (counter < pieces.Length)
+      {
+        obj.Restraint = Helper.RestraintFromCode(pieces[counter++]); // restraint
+      }
+
+      if (counter < pieces.Length)
+      {
+
+        // axis
+        var axis = pieces[counter++];
+        if (axis == "GLOBAL")
+          obj.Axis = Helper.Global;
+        else
         {
-          this.SubGWACommand.Add(gwaRec);
+          string gwaRec = null;
+          obj.Axis = Helper.Parse0DAxis(Convert.ToInt32(axis), Initialiser.Interface, out gwaRec, obj.Value.ToArray());
+          if (gwaRec != null)
+          {
+            this.SubGWACommand.Add(gwaRec);
+          }
         }
       }
 
-      obj.GSALocalMeshSize = pieces[counter++].ToDouble(); // mesh_size
+      if (counter < pieces.Length)
+      {
+        obj.GSALocalMeshSize = pieces[counter++].ToDouble(); // mesh_size
+      }
 
       counter++; // TODO: spring properties - extract stiffnesses from PROP_SPRING
       counter++; // TODO: mass properties - extract mass properties from PROP_MASS
