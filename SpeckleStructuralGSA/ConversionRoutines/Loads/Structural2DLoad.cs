@@ -181,7 +181,7 @@ namespace SpeckleStructuralGSA
     }
   }
 
-  [GSAObject("LOAD_2D_FACE.2", new string[] { "MEMB.7" }, "loads", false, true, new Type[] {typeof(GSA2DMember) }, new Type[] {typeof(GSA2DMember)})]
+  [GSAObject("LOAD_2D_FACE.2", new string[] { "MEMB.8" }, "loads", false, true, new Type[] {typeof(GSA2DMember) }, new Type[] {typeof(GSA2DMember)})]
   public class GSA2DLoadDesignLayer : GSA2DLoadBase, IGSASpeckleContainer
   {
     public void ParseGWACommand(List<GSA2DMember> members)

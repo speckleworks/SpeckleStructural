@@ -222,7 +222,7 @@ namespace SpeckleStructuralGSA
     }
   }
 
-  [GSAObject("LOAD_BEAM", new string[] { "MEMB.7" }, "loads", false, true, new Type[] { typeof(GSA1DMember) }, new Type[] { typeof(GSA1DMember) })]
+  [GSAObject("LOAD_BEAM", new string[] { "MEMB.8" }, "loads", false, true, new Type[] { typeof(GSA1DMember) }, new Type[] { typeof(GSA1DMember) })]
   public class GSA1DLoadDesignLayer : GSA1DLoadBase, IGSASpeckleContainer
   {
     public void ParseGWACommand(List<GSA1DMember> members)
