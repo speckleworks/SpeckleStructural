@@ -8,7 +8,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("MEMB.7", new string[] { "NODE.3" }, "elements", false, true, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode) })]
+  [GSAObject("MEMB.8", new string[] { "NODE.3" }, "elements", false, true, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode) })]
   public class GSA2DVoid : IGSASpeckleContainer
   {
     public int GSAId { get; set; }
@@ -32,6 +32,7 @@ namespace SpeckleStructuralGSA
       var color = pieces[counter++].ParseGSAColor();
 
       counter++; // Type
+      counter++; // Exposure
       counter++; // Property
       counter++; // Group
 
@@ -87,9 +88,12 @@ namespace SpeckleStructuralGSA
         v.Name == null || v.Name == "" ? " " : v.Name,
         v.Colors == null || v.Colors.Count() < 1 ? "NO_RGB" : v.Colors[0].ArgbToHexColor().ToString(),
         "2D_VOID_CUTTER",
+        "ALL", // exposure
         "1", // Property reference
         "0" // Group
       };
+      
+      // topo
       var topo = "";
       var prevNodeIndex = -1;
       //var coor = new List<double>();
@@ -133,20 +137,21 @@ namespace SpeckleStructuralGSA
       }
       
       ls.Add(topo);
+      
       ls.Add("0"); // Orientation node
       ls.Add("0"); // Angles
       ls.Add("1"); // Target mesh size
-      ls.Add("MESH"); // TODO: What is this?
+      ls.Add("YES"); // intersector
       ls.Add("LINEAR"); // Element type
-      ls.Add("0"); // Fire
+      ls.Add("0"); // Fire resistance (mins)
+      ls.Add("0"); // Fire limiting temp
       ls.Add("0"); // Time 1
       ls.Add("0"); // Time 2
       ls.Add("0"); // Time 3
-      ls.Add("0"); // TODO: What is this?
+      ls.Add("0"); // Time 4
       ls.Add("ACTIVE"); // Dummy
-      ls.Add("NO"); // Internal auto offset
       ls.Add("0"); // Offset z
-      ls.Add("ALL"); // Exposure
+      ls.Add("NO"); // Internal auto offset
 
       return (string.Join("\t", ls));
     }

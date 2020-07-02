@@ -177,7 +177,7 @@ namespace SpeckleStructuralGSA
 
   }
 
-  [GSAObject("MEMB.7", new string[] { "NODE.3" }, "elements", false, true, new Type[] { typeof(GSANode), typeof(GSA2DProperty) }, new Type[] { typeof(GSANode), typeof(GSA2DProperty) })]
+  [GSAObject("MEMB.8", new string[] { "NODE.3" }, "elements", false, true, new Type[] { typeof(GSANode), typeof(GSA2DProperty) }, new Type[] { typeof(GSANode), typeof(GSA2DProperty) })]
   public class GSA2DMember : IGSASpeckleContainer
   {
     public int Group; // Keep for load targetting
@@ -189,6 +189,8 @@ namespace SpeckleStructuralGSA
 
     public void ParseGWACommand( List<GSANode> nodes, List<GSA2DProperty> props)
     {
+      // MEMB.8 | num | name | colour | type (2D) | exposure | prop | group | topology | node | angle | mesh_size | is_intersector | analysis_type | fire | time[4] | dummy | off_auto_internal | off_z | reinforcement2d |
+
       if (this.GWACommand == null)
         return;
 
@@ -199,8 +201,8 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
       obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
-      obj.Name = pieces[counter++].Trim(new char[] { '"' });
-      var color = pieces[counter++].ParseGSAColor();
+      obj.Name = pieces[counter++].Trim(new char[] { '"' }); // name
+      var color = pieces[counter++].ParseGSAColor(); // colour
 
       var type = pieces[counter++];
       if (type == "SLAB")
@@ -212,13 +214,17 @@ namespace SpeckleStructuralGSA
 
       var propertyGSAId = Convert.ToInt32(pieces[counter++]);
 
+      counter++; // exposure - fire property
+
       obj.PropertyRef = Helper.GetApplicationId(typeof(GSA2DProperty).GetGSAKeyword(), propertyGSAId);
       this.Group = Convert.ToInt32(pieces[counter++]); // Keep group for load targetting
 
+      // topology
       var coordinates = new List<double>();
       var nodeRefsFull = pieces[counter++];
 
       //Remove the specification of internal nodes
+      // TODO: remove V (void) and L (line) nodes as well if they cause problems
       var nodeRefsWithoutInternalNodes = Regex.Replace(nodeRefsFull, @"P\([0-9]*(.*?)\)", "");
 
       var nodeRefs = nodeRefsWithoutInternalNodes.Trim().ListSplit(" ");
@@ -263,13 +269,20 @@ namespace SpeckleStructuralGSA
       if (prop != null)
         this.SubGWACommand.Add(prop.GWACommand);
 
-      // Skip to offsets at second to last
-      counter = pieces.Length - 2;
+      obj.GSAMeshSize = Convert.ToDouble(pieces[counter++]); // mesh_size
+
+      counter++; // intersector
+      counter++; // analysis type
+
+      counter = counter + 6; // skip fire bits to get to dummy status
+      obj.GSADummy = pieces[counter++] == "DUMMY" ? true : false;
 
       Initialiser.Interface.GetGSATotal2DElementOffset(propertyGSAId, Convert.ToDouble(pieces[counter++]), out var offset, out var offsetRec);
       this.SubGWACommand.Add(offsetRec);
 
       obj.Offset = Enumerable.Repeat(offset, numFaces).ToList();
+
+      // skip remaining commands
 
       this.Value = obj;
     }
@@ -357,8 +370,11 @@ namespace SpeckleStructuralGSA
         colour
       };
       ls.Add(ElementTypeToString(structural2dElementType));
+      ls.Add("ALL");
       ls.Add(propIndex.ToString());
       ls.Add(group != 0 ? group.ToString() : index.ToString()); // TODO: This allows for targeting of elements from members group
+      
+      // topo
       var topo = "";
       var prevNodeIndex = -1;
       var connectivities = mesh.Edges();
@@ -381,7 +397,10 @@ namespace SpeckleStructuralGSA
         prevNodeIndex = currIndex;
       }
       ls.Add(topo.Trim());
+      
       ls.Add("0"); // Orientation node
+      
+      // angle
       if (axis == null)
       {
         ls.Add("0");
@@ -395,17 +414,18 @@ namespace SpeckleStructuralGSA
         catch { ls.Add("0"); }
       }
       ls.Add(gsaMeshSize == 0 ? "1" : gsaMeshSize.ToString()); // Target mesh size
-      ls.Add("MESH"); // TODO: What is this?
+      ls.Add("YES"); // intersector
       ls.Add("LINEAR"); // Element type
-      ls.Add("0"); // Fire
+      ls.Add("0"); // Fire resistance (mins)
+      ls.Add("0"); // Fire limiting temp
       ls.Add("0"); // Time 1
       ls.Add("0"); // Time 2
       ls.Add("0"); // Time 3
-      ls.Add("0"); // TODO: What is this?
+      ls.Add("0"); // Time 4
       ls.Add((gsaDummy.HasValue && gsaDummy.Value) ? "DUMMY" : "ACTIVE");
-      ls.Add("NO"); // Internal auto offset
       ls.Add(offset.HasValue ? offset.ToString() : "0"); // Offset z
-      ls.Add("ALL"); // Exposure
+      ls.Add("NO"); // Internal auto offset
+      // ignore rebar commands and hope GSA fills in default values
 
       gwaCommands.Add(string.Join("\t", ls));
 

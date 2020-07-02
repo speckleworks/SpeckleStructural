@@ -72,9 +72,8 @@ namespace SpeckleStructuralGSA
         "SET",
         "MAT_CONCRETE.17" + ":" + Helper.GenerateSID(mat),
         index.ToString(),
-        "MAT.8",
+        "MAT.10",
         mat.Name == null || mat.Name == "" ? " " : mat.Name,
-        "YES", // Unlocked
         (mat.YoungsModulus*1000).ToString(), // E
         mat.PoissonsRatio.ToString(), // nu
         mat.ShearModulus.ToString(), // G
@@ -98,14 +97,26 @@ namespace SpeckleStructuralGSA
         "0", // TODO: What is this?
         "0", // TODO: What is this?
         "0", // Ultimate strain
-        "MAT_CURVE_PARAM.2",
+        "MAT_CURVE_PARAM.3", // ULS - this is GSA default for concrete
         "",
-        "UNDEF",
-        "1", // Material factor on strength
+        "RECT_PARABOLA+NO_TENSION", // material model
+        "0", // strain[6]
+        "0",
+        "0",
+        "0",
+        "0.0035",
+        "1",
+        "1.5", // Material factor on strength
         "1", // Material factor on elastic modulus
-        "MAT_CURVE_PARAM.2",
+        "MAT_CURVE_PARAM.3", // SLS - this is the GSA default for concrete
         "",
-        "UNDEF",
+        "FIB_SCHEMATIC+INTERPOLATED",
+        "0", // strain[6]
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
         "1", // Material factor on strength
         "1", // Material factor on elastic modulus
         "0", // Cost

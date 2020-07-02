@@ -9,7 +9,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("NODE.3", new string[] { "AXIS.1" }, "nodes", true, true, new Type[] { }, new Type[] { })]
+  [GSAObject("NODE.3", new string[] { "AXIS.1", "PROP_SPRING.4", "PROP_MASS.2" }, "nodes", true, true, new Type[] { }, new Type[] { })]
   public class GSANode : IGSASpeckleContainer
   {
     public bool ForceSend; // This is to filter only "important" nodes
@@ -77,8 +77,26 @@ namespace SpeckleStructuralGSA
         obj.GSALocalMeshSize = pieces[counter++].ToDouble(); // mesh_size
       }
 
-      counter++; // TODO: spring properties - extract stiffnesses from PROP_SPRING
-      counter++; // TODO: mass properties - extract mass properties from PROP_MASS
+      // springProperty
+      var springPropsGwa = Initialiser.Cache.GetGwa(typeof(GSASpringProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++])); // not sure how this could ever return multiple?
+      if(springPropsGwa.Count > 0)
+      {
+        var springPropGWA = springPropsGwa[0];
+        var springProp = new GSASpringProperty();
+        springProp.GWACommand = springPropGWA;
+        springProp.ParseGWACommand();
+        obj.Stiffness = springProp.Value.Stiffness;
+      }
+      
+      // massProperty
+      // Speckle node currently only supports single mass, rather than the more complicated PROP_MASS in GSA
+      var massPropsGwa = Initialiser.Cache.GetGwa("PROP_MASS.2", Convert.ToInt32(pieces[counter++]));
+      if(massPropsGwa.Count > 0)
+      {
+        var massPropGwa = massPropsGwa[0];
+        var massPropPieces = massPropGwa.ListSplit("\t");
+        obj.Mass = Convert.ToDouble(massPropPieces[5]);
+      }
       
       // damperProperty - not yet supported
 
@@ -143,7 +161,11 @@ namespace SpeckleStructuralGSA
       ls.Add(node.GSALocalMeshSize.HasValue ? node.GSALocalMeshSize.Value.ToString() : ""); // mesh_size - may need to perform rounding here
 
       // TODO: springProperty
+      // naive of one spring property per springy node could create thousands of spring props
+      
       // TODO: massProperty
+      // similar potential problem as spring props
+      
       // damperProperty - not supported
 
       gwaCommands.Add(string.Join("\t", ls));
