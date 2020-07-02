@@ -103,13 +103,21 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSAGravityLoading dummyObject)
     {
       var newLines = ToSpeckleBase<GSAGravityLoading>();
-
+      var typeName = dummyObject.GetType().Name;
       var loads = new List<GSAGravityLoading>();
 
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
       {
+        var p = newLines[k];
         var load = new GSAGravityLoading() { GWACommand = p };
-        load.ParseGWACommand();
+        try
+        {
+          load.ParseGWACommand();
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+        }
         loads.Add(load);
       }
 

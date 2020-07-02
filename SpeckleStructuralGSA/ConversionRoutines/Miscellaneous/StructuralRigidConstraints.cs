@@ -194,7 +194,7 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSARigidConstraints dummyObject)
     {
       var newLines = ToSpeckleBase<GSARigidConstraints>();
-
+      var typeName = dummyObject.GetType().Name;
       var constraintsLock = new object();
       var constraints = new List<GSARigidConstraints>();
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
@@ -211,7 +211,10 @@ namespace SpeckleStructuralGSA
             constraints.Add(constraint);
           }
         }
-        catch { }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+        }
       });
 
       Initialiser.GSASenderObjects.AddRange(constraints);

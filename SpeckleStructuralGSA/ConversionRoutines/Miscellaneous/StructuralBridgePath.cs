@@ -119,17 +119,25 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSABridgePath>();
       var paths = new List<GSABridgePath>();
-
+      var typeName = dummyObject.GetType().Name;
       var pathsLock = new object();
 
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
       {
+        var p = newLines[k];
         var path = new GSABridgePath() { GWACommand = p };
         //Pass in ALL the nodes and members - the Parse_ method will search through them
-        path.ParseGWACommand();
-        lock (pathsLock)
+        try
         {
-          paths.Add(path);
+          path.ParseGWACommand();
+          lock (pathsLock)
+          {
+            paths.Add(path);
+          }
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
         }
       });
 

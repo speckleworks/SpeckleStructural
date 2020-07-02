@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting;
 using System.Threading.Tasks;
 using System.Windows.Ink;
 using SpeckleCore;
@@ -372,21 +373,29 @@ namespace SpeckleStructuralGSA
 
       // end releases
       List<StructuralVectorBoolSix> releases = new List<StructuralVectorBoolSix>();
-      string end1release = pieces[counter++].ToLower();
-      if (end1release.Contains('k'))
-        counter++; // skip past spring stiffnesses
-      string end2release = pieces[counter++].ToLower();
-      if (end2release.Contains('k'))
-        counter++; // skip past spring stiffnesses
-
-      obj.EndRelease = new List<StructuralVectorBoolSix>
+      var endReleases = new List<StructuralVectorBoolSix>();
+      if (counter < pieces.Length)
       {
-        ParseEndRelease(end1release),
-        ParseEndRelease(end2release)
-      };
+        var end1Release = pieces[counter++].ToLower();
+        endReleases.Add(ParseEndRelease(end1Release));
+        if (end1Release.Contains('k'))
+          counter++; // skip past spring stiffnesses
+      }
+      if (counter < pieces.Length)
+      {
+        var end2Release = pieces[counter++].ToLower();
+        endReleases.Add(ParseEndRelease(end2Release));
+        if (end2Release.Contains('k'))
+          counter++; // skip past spring stiffnesses
+      }
+
+      if (endReleases.Count() > 0)
+      {
+        obj.EndRelease = endReleases;
+      }
 
       // skip to offsets
-      if(pieces[pieces.Length].ToLower() == "yes")
+      if(pieces.Last().ToLower() == "yes")
       {
         // this approach ignores the auto / manual distinction in GSA
         // which may affect the true offset
@@ -598,7 +607,7 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA1DElement dummyObject)
     {
       var newLines = ToSpeckleBase<GSA1DElement>();
-
+      var typeName = dummyObject.GetType().Name;
       var elementsLock = new object();
       var elements = new List<GSA1DElement>();
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
@@ -609,6 +618,7 @@ namespace SpeckleStructuralGSA
 
         if (pPieces[4] == "BEAM" && pPieces[4].ParseElementNumNodes() == 2)
         {
+          var gsaId = pPieces[1];
           try
           {
             var element = new GSA1DElement() { GWACommand = p };
@@ -618,7 +628,10 @@ namespace SpeckleStructuralGSA
               elements.Add(element);
             }
           }
-          catch { }
+          catch (Exception ex)
+          {
+            Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+          }
         }
       });
 
@@ -629,15 +642,16 @@ namespace SpeckleStructuralGSA
 
     public static SpeckleObject ToSpeckle(this GSA1DMember dummyObject)
     {
-
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
       var membersLock = new object();
       var members = new List<GSA1DMember>();
       var newLines = ToSpeckleBase<GSA1DMember>();
+      var typeName = dummyObject.GetType().Name;
 
       Parallel.ForEach(newLines.Values, p =>
       {
         var pPieces = p.ListSplit("\t");
+        var gsaId = pPieces[1];
         if (pPieces[4].Is1DMember())
         {
           try
@@ -649,7 +663,10 @@ namespace SpeckleStructuralGSA
               members.Add(member);
             }
           }
-          catch { }
+          catch (Exception ex)
+          {
+            Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+          }
         }
       });
 

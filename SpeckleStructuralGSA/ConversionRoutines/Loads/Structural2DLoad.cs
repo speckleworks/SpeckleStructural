@@ -207,18 +207,26 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA2DLoadAnalysisLayer dummyObject)
     {
       var newLines = ToSpeckleBase<GSA2DLoadAnalysisLayer>();
-
+      var typeName = dummyObject.GetType().Name;
       var loads = new List<GSA2DLoadAnalysisLayer>();
       var elements = Initialiser.GSASenderObjects.Get<GSA2DElement>();
 
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
       {
+        var p = newLines[k];
         var loadSubList = new List<GSA2DLoadAnalysisLayer>();
 
         // Placeholder load object to get list of elements and load values
         // Need to transform to axis so one load definition may be transformed to many
         var initLoad = new GSA2DLoadAnalysisLayer() { GWACommand = p };
-        initLoad.ParseGWACommand(elements);
+        try
+        {
+          initLoad.ParseGWACommand(elements);
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+        }
 
         // Create load for each element applied
         foreach (string nRef in initLoad.Value.ElementRefs)
@@ -266,18 +274,26 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA2DLoadDesignLayer dummyObject)
     {
       var newLines = ToSpeckleBase<GSA2DLoadDesignLayer>();
-
+      var typeName = dummyObject.GetType().Name;
       var loads = new List<GSA2DLoadDesignLayer>();
       var members = Initialiser.GSASenderObjects.Get<GSA2DMember>();
 
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
       {
+        var p = newLines[k];
         var loadSubList = new List<GSA2DLoadDesignLayer>();
 
         // Placeholder load object to get list of elements and load values
         // Need to transform to axis so one load definition may be transformed to many
         var initLoad = new GSA2DLoadDesignLayer() { GWACommand = p };
-        initLoad.ParseGWACommand(members);
+        try
+        {
+          initLoad.ParseGWACommand(members);
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+        }
 
         // Create load for each element applied
         foreach (string nRef in initLoad.Value.ElementRefs)

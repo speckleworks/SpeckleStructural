@@ -142,6 +142,7 @@ namespace SpeckleStructuralGSA
     //Sending to Speckle, search through a
     public static SpeckleObject ToSpeckle(this GSA0DSpring dummyObject)
     {
+      var typeName = dummyObject.GetType().Name;
       var newSpringLines = ToSpeckleBase<GSA0DSpring>();
       var newNodeLines = ToSpeckleBase<GSANode>();
       var newLines = new List<Tuple<int, string>>();
@@ -164,11 +165,19 @@ namespace SpeckleStructuralGSA
         var pPieces = p.ListSplit("\t");
         if (pPieces[4] == "GRD_SPRING")
         {
+          var gsaId = pPieces[1];
           var spring = new GSA0DSpring() { GWACommand = p };
-          spring.ParseGWACommand(nodes);
-          lock (springsLock)
+          try
           {
-            springs.Add(spring);
+            spring.ParseGWACommand(nodes);
+            lock (springsLock)
+            {
+              springs.Add(spring);
+            }
+          }
+          catch (Exception ex)
+          {
+            Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
           }
         }
       });

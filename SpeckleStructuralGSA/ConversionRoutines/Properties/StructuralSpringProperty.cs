@@ -197,6 +197,7 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSASpringProperty dummyObject)
     {
       var newLines = ToSpeckleBase<GSASpringProperty>();
+      var typeName = dummyObject.GetType().Name;
 
       var springPropLock = new object();
       //Get all relevant GSA entities in this entire model
@@ -204,6 +205,8 @@ namespace SpeckleStructuralGSA
 
       Parallel.ForEach(newLines.Values, p =>
       {
+        var pPieces = p.ListSplit("\t");
+        var gsaId = pPieces[1];
         try
         {
           var springProperty = new GSASpringProperty() { GWACommand = p };
@@ -213,7 +216,10 @@ namespace SpeckleStructuralGSA
             springProperties.Add(springProperty);
           }
         }
-        catch { }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+        }
       });
 
       Initialiser.GSASenderObjects.AddRange(springProperties);

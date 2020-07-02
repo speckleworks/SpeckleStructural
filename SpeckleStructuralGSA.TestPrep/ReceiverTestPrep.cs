@@ -17,7 +17,7 @@ namespace SpeckleStructuralGSA.TestPrep
       Initialiser.Cache = gsaCache;
       Initialiser.Interface = gsaInterfacer;
       Initialiser.Settings = new Settings();
-      Initialiser.AppUI = new SpeckleAppUI();
+      Initialiser.AppUI = new TestAppUI();
     }
 
     public bool SetUpReceptionTestData(string[] savedJsonFileNames, string outputGWAFileName, GSATargetLayer layer)

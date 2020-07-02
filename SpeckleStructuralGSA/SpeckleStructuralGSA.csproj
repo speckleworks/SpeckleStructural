@@ -159,7 +159,7 @@
     <Compile Include="ConversionRoutines\Loads\StructuralLoadPlane.cs" />
     <Compile Include="ConversionRoutines\Loads\StructuralLoadTask.cs" />
     <Compile Include="ConversionRoutines\Loads\StructuralLoadTaskBuckling.cs" />
-    <Compile Include="ConversionRoutines\Loads\StructuralStorey.cs" />
+    <Compile Include="ConversionRoutines\Miscellaneous\StructuralStorey.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\Structural1DInfluenceEffect.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\StructuralAssembly.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\StructuralBridgeAlignment.cs" />

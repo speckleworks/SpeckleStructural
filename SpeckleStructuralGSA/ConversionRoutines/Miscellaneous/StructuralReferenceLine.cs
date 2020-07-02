@@ -114,19 +114,27 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSAGridLine dummyObject)
     {
       var newLines = ToSpeckleBase<GSAGridLine>();
-
+      var typeName = dummyObject.GetType().Name;
       var rlLock = new object();
       //Get all relevant GSA entities in this entire model
       var rls = new List<GSAGridLine>();
 
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
       {
+        var p = newLines[k];
         var rl = new GSAGridLine() { GWACommand = p };
         //Pass in ALL the nodes and members - the Parse_ method will search through them
-        rl.ParseGWACommand();
-        lock (rlLock)
+        try
         {
-          rls.Add(rl);
+          rl.ParseGWACommand();
+          lock (rlLock)
+          {
+            rls.Add(rl);
+          }
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
         }
       });
 

@@ -167,7 +167,7 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA2DVoid dummyObject)
     {
       var newLines = ToSpeckleBase<GSA2DVoid>();
-
+      var typeName = dummyObject.GetType().Name;
       var voidsLock = new object();
       var voids = new List<GSA2DVoid>();
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
@@ -180,6 +180,7 @@ namespace SpeckleStructuralGSA
           // Check if void
           if (pPieces[4] == "2D_VOID_CUTTER")
           {
+            var gsaId = pPieces[1];
             try
             {
               var v = new GSA2DVoid() { GWACommand = p };
@@ -189,7 +190,10 @@ namespace SpeckleStructuralGSA
                 voids.Add(v);
               }
             }
-            catch { }
+            catch (Exception ex)
+            {
+              Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+            }
           }
         }
       });

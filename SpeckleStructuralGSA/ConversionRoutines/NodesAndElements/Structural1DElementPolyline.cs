@@ -263,7 +263,7 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA1DElementPolyline dummyObject)
     {
       var polylines = new List<GSA1DElementPolyline>();
-
+      var typeName = dummyObject.GetType().Name;
       // Perform mesh merging
       var uniqueMembers = new List<string>(Initialiser.GSASenderObjects.Get<GSA1DElement>().Select(x => (x as GSA1DElement).Member).Where(m => Convert.ToInt32(m) > 0).Distinct());
       uniqueMembers.Sort();  //Just for readability and testing
@@ -277,8 +277,15 @@ namespace SpeckleStructuralGSA
           var matching1dElementList = all1dElements.Where(x => (x as GSA1DElement).Member == member).OrderBy(m => m.GSAId).ToList();
 
           var poly = new GSA1DElementPolyline() { GSAId = Convert.ToInt32(member) };
-          poly.ParseGWACommand(matching1dElementList);
-          polylines.Add(poly);
+          try
+          {
+            poly.ParseGWACommand(matching1dElementList);
+            polylines.Add(poly);
+          }
+          catch (Exception ex)
+          {
+            Initialiser.AppUI.Message(typeName + ": " + ex.Message, member);
+          }
 
           Initialiser.GSASenderObjects.RemoveAll(matching1dElementList);
         }

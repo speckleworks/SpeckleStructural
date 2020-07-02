@@ -212,9 +212,9 @@ namespace SpeckleStructuralGSA
       else
         obj.ElementType = Structural2DElementType.Generic;
 
-      var propertyGSAId = Convert.ToInt32(pieces[counter++]);
-
       counter++; // exposure - fire property
+
+      var propertyGSAId = Convert.ToInt32(pieces[counter++]);
 
       obj.PropertyRef = Helper.GetApplicationId(typeof(GSA2DProperty).GetGSAKeyword(), propertyGSAId);
       this.Group = Convert.ToInt32(pieces[counter++]); // Keep group for load targetting
@@ -275,7 +275,7 @@ namespace SpeckleStructuralGSA
       counter++; // analysis type
 
       counter = counter + 6; // skip fire bits to get to dummy status
-      obj.GSADummy = pieces[counter++] == "DUMMY" ? true : false;
+      obj.GSADummy = pieces[20] == "DUMMY" ? true : false;
 
       Initialiser.Interface.GetGSATotal2DElementOffset(propertyGSAId, Convert.ToDouble(pieces[counter++]), out var offset, out var offsetRec);
       this.SubGWACommand.Add(offsetRec);
@@ -457,6 +457,7 @@ namespace SpeckleStructuralGSA
 
     public static SpeckleObject ToSpeckle(this GSA2DElement dummyObject)
     {
+      var typeName = dummyObject.GetType().Name;
       var newElementLines = ToSpeckleBase<GSA2DElement>();
       var newMeshLines = ToSpeckleBase<GSA2DElementMesh>();
       var newLinesTuples = new List<Tuple<int, string>>();
@@ -482,6 +483,7 @@ namespace SpeckleStructuralGSA
         if (!(pPieces[4] == "2D_VOID_CUTTER" || pPieces[4].Is1DMember() || pPieces[4].Is2DMember())
           && (pPieces[4].ParseElementNumNodes() == 3 | pPieces[4].ParseElementNumNodes() == 4))
         {
+          var gsaId = pPieces[1];
           try
           {
             var element = new GSA2DElement() { GWACommand = p };
@@ -491,7 +493,10 @@ namespace SpeckleStructuralGSA
               elements.Add(element);
             }
           }
-          catch { }
+          catch (Exception ex)
+          {
+            Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+          }
         }
       });
 
@@ -503,7 +508,7 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA2DMember dummyObject)
     {
       var newLines = ToSpeckleBase<GSA2DMember>();
-
+      var typeName = dummyObject.GetType().Name;
       var membersLock = new object();
       var members = new List<GSA2DMember>();
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
@@ -515,8 +520,9 @@ namespace SpeckleStructuralGSA
         if (pPieces[4].Is2DMember())
         {
           // Check if dummy
-          if (pPieces[pPieces.Length - 4] == "ACTIVE")
+          if (pPieces[20] == "ACTIVE")
           {
+            var gsaId = pPieces[1];
             try
             {
               var member = new GSA2DMember() { GWACommand = p };
@@ -526,7 +532,10 @@ namespace SpeckleStructuralGSA
                 members.Add(member);
               }
             }
-            catch { }
+            catch (Exception ex)
+            {
+              Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+            }
           }
         }
       });

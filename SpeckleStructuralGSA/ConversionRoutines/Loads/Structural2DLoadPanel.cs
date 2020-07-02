@@ -256,11 +256,20 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSAGridAreaLoad>();
       var loads = new List<GSAGridAreaLoad>();
+      var typeName = dummyObject.GetType().Name;
 
       foreach (var k in newLines.Keys)
       {
         var load = new GSAGridAreaLoad() { GSAId = k, GWACommand = newLines[k] };
-        load.ParseGWACommand();
+        try
+        {
+          load.ParseGWACommand();
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+        }
+
         loads.Add(load);
       }
 

@@ -180,7 +180,7 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA2DThermalLoading dummyObject)
     {
       var newLines = ToSpeckleBase<GSA2DThermalLoading>();
-
+      var typeName = dummyObject.GetType().Name;
       var loads = new List<GSA2DThermalLoading>();
       var e2Ds = new List<GSA2DElement>();
       var m2Ds = new List<GSA2DMember>();
@@ -197,7 +197,14 @@ namespace SpeckleStructuralGSA
       foreach (var k in newLines.Keys)
       {
         var load = new GSA2DThermalLoading() { GSAId = k, GWACommand = newLines[k] };
-        load.ParseGWACommand(e2Ds, m2Ds);
+        try
+        {
+          load.ParseGWACommand(e2Ds, m2Ds);
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+        }
         loads.Add(load);
       }
 
