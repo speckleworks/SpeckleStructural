@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
@@ -78,24 +79,30 @@ namespace SpeckleStructuralGSA
       }
 
       // springProperty
-      var springPropsGwa = Initialiser.Cache.GetGwa(typeof(GSASpringProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++])); // not sure how this could ever return multiple?
-      if(springPropsGwa.Count > 0)
+      if (counter < pieces.Length)
       {
-        var springPropGWA = springPropsGwa[0];
-        var springProp = new GSASpringProperty();
-        springProp.GWACommand = springPropGWA;
-        springProp.ParseGWACommand();
-        obj.Stiffness = springProp.Value.Stiffness;
+        var springPropsGwa = Initialiser.Cache.GetGwa(typeof(GSASpringProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++])); // not sure how this could ever return multiple?
+        if (springPropsGwa.Count > 0)
+        {
+          var springPropGWA = springPropsGwa[0];
+          var springProp = new GSASpringProperty();
+          springProp.GWACommand = springPropGWA;
+          springProp.ParseGWACommand();
+          obj.Stiffness = springProp.Value.Stiffness;
+        }
       }
-      
+
       // massProperty
       // Speckle node currently only supports single mass, rather than the more complicated PROP_MASS in GSA
-      var massPropsGwa = Initialiser.Cache.GetGwa("PROP_MASS.2", Convert.ToInt32(pieces[counter++]));
-      if(massPropsGwa.Count > 0)
+      if (counter < pieces.Length)
       {
-        var massPropGwa = massPropsGwa[0];
-        var massPropPieces = massPropGwa.ListSplit("\t");
-        obj.Mass = Convert.ToDouble(massPropPieces[5]);
+        var massPropsGwa = Initialiser.Cache.GetGwa("PROP_MASS.2", Convert.ToInt32(pieces[counter++]));
+        if (massPropsGwa.Count > 0)
+        {
+          var massPropGwa = massPropsGwa[0];
+          var massPropPieces = massPropGwa.ListSplit("\t");
+          obj.Mass = Convert.ToDouble(massPropPieces[5]);
+        }
       }
       
       // damperProperty - not yet supported
