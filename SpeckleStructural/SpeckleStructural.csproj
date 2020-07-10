@@ -69,34 +69,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <UsingTask TaskName="ILMerge.MSBuild.Tasks.ILMerge" AssemblyFile="$(SolutionDir)packages\ILMerge.MSBuild.Tasks.1.0.0.3\tools\ILMerge.MSBuild.Tasks.dll" />
   <Target Name="AfterBuild">
-    <ItemGroup>
-      <MergeAsm1 Include="$(OutputPath)SpeckleStructuralClasses.dll" />
-      <MergeAsm1 Include="$(OutputPath)MathNet.Numerics.dll" />
-      <MergeAsm1 Include="$(OutputPath)MathNet.Spatial.dll" />
-    </ItemGroup>
-    <ItemGroup>
-      <MergeAsm2 Include="$(OutputPath)SpeckleStructuralGSA.dll" />
-      <MergeAsm2 Include="$(OutputPath)MathNet.Numerics.dll" />
-      <MergeAsm2 Include="$(OutputPath)MathNet.Spatial.dll" />
-    </ItemGroup>
-    <PropertyGroup>
-      <MergedAssembly1>$(ProjectDir)$(OutDir)SpeckleStructuralClasses.dll</MergedAssembly1>
-    </PropertyGroup>
-    <PropertyGroup>
-      <MergedAssembly2>$(ProjectDir)$(OutDir)SpeckleStructuralGSA.dll</MergedAssembly2>
-    </PropertyGroup>
-    <Message Text="ILMerge @(MergeAsm1) -&gt; $(MergedAssembly1)" Importance="high" />
-    <ILMerge InputAssemblies="@(MergeAsm1)" OutputFile="$(MergedAssembly1)" TargetKind="SameAsPrimaryAssembly" />
-    <Message Text="ILMerge @(MergeAsm2) -&gt; $(MergedAssembly2)" Importance="high" />
-    <ILMerge InputAssemblies="@(MergeAsm2)" OutputFile="$(MergedAssembly2)" TargetKind="SameAsPrimaryAssembly" />
-    <Delete Files="$(OutputPath)MathNet.Numerics.dll;$(OutputPath)MathNet.Spatial.dll" />
     <!-- REMOVES CRUFT FROM SQLITE -->
     <RemoveDir Directories="$(TargetDir)x64" />
     <RemoveDir Directories="$(TargetDir)x86" />
     <ItemGroup>
-      <BuildFiles Include="$(TargetDir)\SpeckleStructural*.dll;$(TargetDir)\SpeckleGSAInterfaces.dll" />
+      <BuildFiles Include="$(TargetDir)\*.*" />
     </ItemGroup>
     <Copy SourceFiles="@(BuildFiles)" DestinationFolder="$(LocalAppData)\SpeckleKits\$(ProjectName)" />
   </Target>
