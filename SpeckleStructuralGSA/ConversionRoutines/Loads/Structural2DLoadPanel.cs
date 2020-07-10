@@ -158,7 +158,15 @@ namespace SpeckleStructuralGSA
         return "";
       }
 
-      var axis = Helper.Parse2DAxis(load.Value.ToArray());
+      StructuralAxis axis = null;
+      try
+      {
+        axis = Helper.Parse2DAxis(load.Value.ToArray());
+      }
+      catch
+      {
+        Initialiser.AppUI.Message("Generating axis from coordinates for 2D load panel", load.ApplicationId);
+      }
 
       // Calculate elevation
       var elevation = (load.Value[0] * axis.Normal.Value[0] +

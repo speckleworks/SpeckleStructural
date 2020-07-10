@@ -76,11 +76,15 @@ namespace SpeckleStructuralGSA
                 foreach (var key in resultExport.Value.Keys)
                 {
                   if (!(obj.Result[loadCase] as Structural2DElementResult).Value.ContainsKey(key))
+                  {
                     (obj.Result[loadCase] as Structural2DElementResult).Value[key] = new Dictionary<string, object>(resultExport.Value[key] as Dictionary<string, object>);
+                  }
                   else
                     foreach (var resultKey in ((obj.Result[loadCase] as Structural2DElementResult).Value[key] as Dictionary<string, object>).Keys)
+                    {
                       (((obj.Result[loadCase] as Structural2DElementResult).Value[key] as Dictionary<string, object>)[resultKey] as List<double>)
                         .AddRange((resultExport.Value[key] as Dictionary<string, object>)[resultKey] as List<double>);
+                    }
                 }
               }
               else

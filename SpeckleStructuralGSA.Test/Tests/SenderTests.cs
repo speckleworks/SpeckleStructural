@@ -94,6 +94,7 @@ namespace SpeckleStructuralGSA.Test
       var unmatching = new List<Tuple<string, string, List<string>>>();
       var unmatchingLock = new object();
       //Compare each object
+
       Parallel.ForEach(actual.Keys, actualObject =>
       {
         var actualJson = actual[actualObject];
@@ -150,7 +151,8 @@ namespace SpeckleStructuralGSA.Test
             unmatching.Add(new Tuple<string, string, List<string>>(actualObject.ApplicationId, actualJson, new List<string>()));
           }
         }
-      });
+      }
+      );
 
       gsaInterfacer.Close();
 
