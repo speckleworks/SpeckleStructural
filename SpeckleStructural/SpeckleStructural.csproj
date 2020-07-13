@@ -72,41 +72,35 @@
   <UsingTask TaskName="ILMerge.MSBuild.Tasks.ILMerge" AssemblyFile="$(SolutionDir)packages\ILMerge.MSBuild.Tasks.1.0.0.3\tools\ILMerge.MSBuild.Tasks.dll" />
   
   <Target Name="AfterBuild">
-    <!-- For debug build, there is no merging of assemblies in SpeckleStructuralClasses (to help with intellisense)
-	     so do that merging here, for the purpose of copying the result to the %localappdata% location -->
 	<ItemGroup>
       <MergeAsm1 Include="$(TargetDir)SpeckleStructuralClasses.dll" />
       <MergeAsm1 Include="$(TargetDir)MathNet.Numerics.dll" />
       <MergeAsm1 Include="$(TargetDir)MathNet.Spatial.dll" />
     </ItemGroup>
     <PropertyGroup>
-      <MergedAssembly1>$(ProjectDir)$(OutDir)SpeckleStructuralClasses.dll</MergedAssembly1>
+      <MergedAssembly1>$(TargetDir)SpeckleStructuralClasses.dll</MergedAssembly1>
     </PropertyGroup>
-    <Message Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " Text="ILMerge @(MergeAsm1) -&gt; $(MergedAssembly1)" Importance="high" />
-    <ILMerge Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " InputAssemblies="@(MergeAsm1)" OutputFile="$(MergedAssembly1)" TargetKind="SameAsPrimaryAssembly" />
+    <Message Text="ILMerge @(MergeAsm1) -&gt; $(MergedAssembly1)" Importance="high" />
+    <ILMerge InputAssemblies="@(MergeAsm1)" OutputFile="$(MergedAssembly1)" TargetKind="SameAsPrimaryAssembly" />
 
-    <!-- CopyLocal needs to be set to true for these files for for ilmerge to work - that is the case for both debug and release.
-        The release config of SpeckleStructuralClasses deletes these right after merging assemblies (with ilmerge), 
-		but this is not the case for debug build.
-        So for the debug build, they remain and are copied to SpeckleStructural/bin/debug, so they can be deleted here -->
     <ItemGroup>
       <CopiedDllsToDel Include="$(TargetDir)MathNet.Numerics.*" />
       <CopiedDllsToDel Include="$(TargetDir)MathNet.Spatial.*" />
       <CopiedDllsToDel Include="$(TargetDir)Newtonsoft.Json.*" />
       <CopiedDllsToDel Include="$(TargetDir)websocket-sharp.*" />
       <CopiedDllsToDel Include="$(TargetDir)SpeckleCore*.*" />
+	  <CopiedDllsToDel Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " Include="$(TargetDir)*.config" />
     </ItemGroup>
-    <Delete Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " Files="@(CopiedDllsToDel)" />
+    <Delete Files="@(CopiedDllsToDel)" />
 
     <!-- Debug builds result in more output files - useful for debugging.  For release builds being tested on the local computer,
          it is best if these extra files are deleted.  So for release builds only, delete all files in the %localappfiles% sub-directory for this kit -->
     <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-      <ReleaseCopiedDllsToDel Include="$(TargetDir)*.config" />
       <!-- remove output of previous debug builds -->
-      <ReleaseCopiedDllsToDel Include="$(LocalAppData)\SpeckleKits\$(ProjectName)\*.*" />
+      <ReleaseDllsToDel Include="$(LocalAppData)\SpeckleKits\$(ProjectName)\*.*" />
     </ItemGroup>
     <Message Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " Text="Removing previous files at $(LocalAppData)\SpeckleKits\$(ProjectName)" Importance="high" />
-    <Delete Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " Files="@(ReleaseCopiedDllsToDel)" />
+    <Delete Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " Files="@(ReleaseDllsToDel)" />
 
     <!-- REMOVES CRUFT FROM SQLITE -->
     <RemoveDir Directories="$(TargetDir)x64" />
