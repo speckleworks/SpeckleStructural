@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Media.Media3D;
+using MathNet.Spatial.Euclidean;
 
 namespace SpeckleStructuralClasses
 {
@@ -579,13 +579,13 @@ namespace SpeckleStructuralClasses
       var p2 = new Point3D(coordinates[tri[2] * 3], coordinates[tri[2] * 3 + 1], coordinates[tri[2] * 3 + 2]);
       var p = new Point3D(coordinates[point * 3], coordinates[point * 3 + 1], coordinates[point * 3 + 2]);
 
-      var u = Point3D.Subtract(p1, p0);
-      var v = Point3D.Subtract(p2, p0);
-      var n = Vector3D.CrossProduct(u, v);
-      var w = Point3D.Subtract(p, p0);
+      var u = p1 - p0;
+      var v = p2 - p0;
+      var n = u.CrossProduct(v);
+      var w = p - p0;
 
-      var gamma = Vector3D.DotProduct(Vector3D.CrossProduct(u, w), n) / (n.Length * n.Length);
-      var beta = Vector3D.DotProduct(Vector3D.CrossProduct(w, v), n) / (n.Length * n.Length);
+      var gamma = u.CrossProduct(w).DotProduct(n) / (n.Length * n.Length);
+      var beta = w.CrossProduct(v).DotProduct(n) / (n.Length * n.Length);
       var alpha = 1 - gamma - beta;
 
       if (alpha >= 0 && beta >= 0 && gamma >= 0 && alpha <= 1 && beta <= 1 && gamma <= 1)
@@ -895,13 +895,13 @@ namespace SpeckleStructuralClasses
       var p2 = new Point3D(coordinates[tri[2] * 3], coordinates[tri[2] * 3 + 1], coordinates[tri[2] * 3 + 2]);
       var p = new Point3D(coordinates[point * 3], coordinates[point * 3 + 1], coordinates[point * 3 + 2]);
 
-      var u = Point3D.Subtract(p1, p0);
-      var v = Point3D.Subtract(p2, p0);
-      var n = Vector3D.CrossProduct(u, v);
-      var w = Point3D.Subtract(p, p0);
+      var u = p1 - p0;
+      var v = p2 - p0;
+      var n = u.CrossProduct(v);
+      var w = p - p0;
 
-      var gamma = Vector3D.DotProduct(Vector3D.CrossProduct(u, w), n) / (n.Length * n.Length);
-      var beta = Vector3D.DotProduct(Vector3D.CrossProduct(w, v), n) / (n.Length * n.Length);
+      var gamma = u.CrossProduct(w).DotProduct(n) / (n.Length * n.Length);
+      var beta = w.CrossProduct(v).DotProduct(n) / (n.Length * n.Length);
       var alpha = 1 - gamma - beta;
 
       if (alpha >= 0 & beta >= 0 & gamma >= 0 & alpha <= 1 & beta <= 1 & gamma <= 1)
