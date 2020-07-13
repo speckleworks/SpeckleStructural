@@ -73,6 +73,12 @@
     <!-- REMOVES CRUFT FROM SQLITE -->
     <RemoveDir Directories="$(TargetDir)x64" />
     <RemoveDir Directories="$(TargetDir)x86" />
+	<ItemGroup>
+      <CopiedDllsToDel Include="$(TargetDir)*.config" />
+	  <!-- remove output of previous debug builds -->
+	  <CopiedDllsToDel Include="$(LocalAppData)\SpeckleKits\$(ProjectName)\*.*" />
+    </ItemGroup>
+    <Delete Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU'" Files="@(CopiedDllsToDel)" />
     <ItemGroup>
       <BuildFiles Include="$(TargetDir)\*.*" />
     </ItemGroup>

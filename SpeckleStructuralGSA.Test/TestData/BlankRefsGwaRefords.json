@@ -51,11 +51,11 @@
   },
   {
     "ApplicationId": "gh/ce14eb199a860bd454baa4e03480aeb4",
-    "GwaCommand": "SET\tLOAD_GRID_LINE.2:{speckle_app_id:gh/ce14eb199a860bd454baa4e03480aeb4}\t \t2\tPOLYGON\t(-0.137446105800758,0.0215770248228732) (0.0591982432154293,0.0215770248228731)\t4\tGLOBAL\tNO\tX\t1E-05\t1E-05"
+    "GwaCommand": "SET\tLOAD_GRID_LINE.2:{speckle_app_id:gh/ce14eb199a860bd454baa4e03480aeb4}\t \t2\tPOLYGON\t(-0.1374461058,0.0215770248) (0.0591982432,0.0215770248)\t4\tGLOBAL\tNO\tX\t1E-05\t1E-05"
   },
   {
     "ApplicationId": "gh/ce14eb199a860bd454baa4e03480aeb4",
-    "GwaCommand": "SET\tLOAD_GRID_LINE.2:{speckle_app_id:gh/ce14eb199a860bd454baa4e03480aeb4}\t \t2\tPOLYGON\t(-0.137446105800758,0.0215770248228732) (0.0591982432154293,0.0215770248228731)\t4\tGLOBAL\tNO\tY\t2E-05\t2E-05"
+    "GwaCommand": "SET\tLOAD_GRID_LINE.2:{speckle_app_id:gh/ce14eb199a860bd454baa4e03480aeb4}\t \t2\tPOLYGON\t(-0.1374461058,0.0215770248) (0.0591982432,0.0215770248)\t4\tGLOBAL\tNO\tY\t2E-05\t2E-05"
   },
   {
     "ApplicationId": "gh/2820605e9ba104099b09ff511bdc6ad9",

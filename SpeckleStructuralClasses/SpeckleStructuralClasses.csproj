@@ -162,7 +162,8 @@
       <CopiedDllsToDel Include="$(OutputPath)Newtonsoft.Json.*" />
       <CopiedDllsToDel Include="$(OutputPath)websocket-sharp.*" />
       <CopiedDllsToDel Include="$(OutputPath)SpeckleCore*.*" />
+      <CopiedDllsToDel Include="$(OutputPath)*.config" />
     </ItemGroup>
-    <Delete Files="@(CopiedDllsToDel)" />
+    <Delete Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU'" Files="@(CopiedDllsToDel)" />
   </Target>
 </Project>
