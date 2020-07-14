@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Media.Media3D;
+using MathNet.Spatial.Euclidean;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
@@ -301,8 +301,8 @@ namespace SpeckleStructuralGSA
             if (loadDirection.Length > 0)
             {
               var axisX = new Vector3D(elem.Value[5] - elem.Value[0], elem.Value[4] - elem.Value[1], elem.Value[3] - elem.Value[2]);
-              var angle = Vector3D.AngleBetween(loadDirection, axisX);
-              var factor = Math.Sin(angle);
+              var angle = loadDirection.AngleTo(axisX);
+              var factor = Math.Sin(angle.Radians);
               load.Value.Loading.Value[0] *= factor;
               load.Value.Loading.Value[1] *= factor;
               load.Value.Loading.Value[2] *= factor;
@@ -385,8 +385,8 @@ namespace SpeckleStructuralGSA
             if (loadDirection.Length > 0)
             {
               var axisX = new Vector3D(memb.Value[5] - memb.Value[0], memb.Value[4] - memb.Value[1], memb.Value[3] - memb.Value[2]);
-              var angle = Vector3D.AngleBetween(loadDirection, axisX);
-              var factor = Math.Sin(angle);
+              var angle = loadDirection.AngleTo(axisX);
+              var factor = Math.Sin(angle.Radians);
               load.Value.Loading.Value[0] *= factor;
               load.Value.Loading.Value[1] *= factor;
               load.Value.Loading.Value[2] *= factor;

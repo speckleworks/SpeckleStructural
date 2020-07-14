@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting;
 using System.Threading.Tasks;
-using System.Windows.Ink;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
 using SpeckleGSAInterfaces;
@@ -59,19 +57,25 @@ namespace SpeckleStructuralGSA
       var orientationNodeRef = pieces[counter++];
       var rotationAngle = Convert.ToDouble(pieces[counter++]);
 
-      if (orientationNodeRef != "0")
+      try
       {
-        var node = nodes.Where(n => n.GSAId == Convert.ToInt32(orientationNodeRef)).FirstOrDefault();
-        node.ForceSend = true;
-        obj.ZAxis = Helper.Parse1DAxis(obj.Value.ToArray(),
-            rotationAngle, node.Value.Value.ToArray()).Normal as StructuralVectorThree;
-        this.SubGWACommand.Add(node.GWACommand);
-      }
-      else
-      {
-        obj.ZAxis = Helper.Parse1DAxis(obj.Value.ToArray(), rotationAngle).Normal as StructuralVectorThree;
-      }
+        if (orientationNodeRef != "0")
+        {
+          var node = nodes.Where(n => n.GSAId == Convert.ToInt32(orientationNodeRef)).FirstOrDefault();
+          node.ForceSend = true;
 
+          obj.ZAxis = Helper.Parse1DAxis(obj.Value.ToArray(), rotationAngle, node.Value.Value.ToArray()).Normal as StructuralVectorThree;
+          this.SubGWACommand.Add(node.GWACommand);
+        }
+        else
+        {
+          obj.ZAxis = Helper.Parse1DAxis(obj.Value.ToArray(), rotationAngle).Normal as StructuralVectorThree;
+        }
+      }
+      catch
+      {
+        Initialiser.AppUI.Message("Generating axis from coordinates for 1D element", obj.ApplicationId);
+      }
 
       if (pieces[counter++] != "NO_RLS")
       {

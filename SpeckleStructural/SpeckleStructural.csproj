@@ -24,7 +24,7 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>portable</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -66,15 +66,60 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <UsingTask TaskName="ILMerge.MSBuild.Tasks.ILMerge" AssemblyFile="$(SolutionDir)packages\ILMerge.MSBuild.Tasks.1.0.0.3\tools\ILMerge.MSBuild.Tasks.dll" />
+  
   <Target Name="AfterBuild">
+    <ItemGroup>
+      <MergeAsm1 Include="$(TargetDir)SpeckleStructuralClasses.dll" />
+      <MergeAsm1 Include="$(TargetDir)MathNet.Numerics.dll" />
+      <MergeAsm1 Include="$(TargetDir)MathNet.Spatial.dll" />
+    </ItemGroup>
+    <PropertyGroup>
+      <MergedAssembly1>$(TargetDir)SpeckleStructuralClasses.dll</MergedAssembly1>
+    </PropertyGroup>
+    <Message Text="ILMerge @(MergeAsm1) -&gt; $(MergedAssembly1)" Importance="high" />
+    <ILMerge InputAssemblies="@(MergeAsm1)" OutputFile="$(MergedAssembly1)" TargetKind="SameAsPrimaryAssembly" />
+    <ItemGroup>
+      <MergeAsm2 Include="$(TargetDir)SpeckleStructuralGSA.dll" />
+      <MergeAsm2 Include="$(TargetDir)MathNet.Numerics.dll" />
+      <MergeAsm2 Include="$(TargetDir)MathNet.Spatial.dll" />
+    </ItemGroup>
+    <PropertyGroup>
+      <MergedAssembly2>$(TargetDir)SpeckleStructuralGSA.dll</MergedAssembly2>
+    </PropertyGroup>
+    <Message Text="ILMerge @(MergeAsm2) -&gt; $(MergedAssembly2)" Importance="high" />
+    <ILMerge InputAssemblies="@(MergeAsm2)" OutputFile="$(MergedAssembly2)" TargetKind="SameAsPrimaryAssembly" />
+
+    <ItemGroup>
+      <CopiedDllsToDel Include="$(TargetDir)MathNet.Numerics.*" />
+      <CopiedDllsToDel Include="$(TargetDir)MathNet.Spatial.*" />
+      <CopiedDllsToDel Include="$(TargetDir)Newtonsoft.Json.*" />
+      <CopiedDllsToDel Include="$(TargetDir)SQLite-net.*" />
+      <CopiedDllsToDel Include="$(TargetDir)websocket-sharp.*" />
+      <CopiedDllsToDel Include="$(TargetDir)SpeckleCore*.*" />
+      <CopiedDllsToDel Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " Include="$(TargetDir)*.config" />
+    </ItemGroup>
+    <Delete Files="@(CopiedDllsToDel)" />
+
+    <!-- Debug builds result in more output files - useful for debugging.  For release builds being tested on the local computer,
+         it is best if these extra files are deleted.  So for release builds only, delete all files in the %localappfiles% sub-directory for this kit -->
+    <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+      <!-- remove output of previous debug builds -->
+      <ReleaseDllsToDel Include="$(LocalAppData)\SpeckleKits\$(ProjectName)\*.*" />
+    </ItemGroup>
+    <Message Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " Text="Removing previous files at $(LocalAppData)\SpeckleKits\$(ProjectName)" Importance="high" />
+    <Delete Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " Files="@(ReleaseDllsToDel)" />
+
     <!-- REMOVES CRUFT FROM SQLITE -->
     <RemoveDir Directories="$(TargetDir)x64" />
     <RemoveDir Directories="$(TargetDir)x86" />
     <ItemGroup>
       <BuildFiles Include="$(TargetDir)\*.*" />
     </ItemGroup>
+    <Message Text="Copying built files to $(LocalAppData)\SpeckleKits\$(ProjectName)" Importance="high" />
     <Copy SourceFiles="@(BuildFiles)" DestinationFolder="$(LocalAppData)\SpeckleKits\$(ProjectName)" />
   </Target>
 </Project>

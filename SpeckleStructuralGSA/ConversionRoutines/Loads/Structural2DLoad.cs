@@ -241,7 +241,15 @@ namespace SpeckleStructuralGSA
 
           // Transform load to defined axis
           var elem = elements.Where(e => e.Value.ApplicationId == nRef).First();
-          StructuralAxis loadAxis = Helper.Parse2DAxis(elem.Value.Vertices.ToArray(), 0, load.Axis != 0); // Assumes if not global, local
+          StructuralAxis loadAxis = null;
+          try
+          { 
+            loadAxis = Helper.Parse2DAxis(elem.Value.Vertices.ToArray(), 0, load.Axis != 0); // Assumes if not global, local
+          }
+          catch
+          {
+            Initialiser.AppUI.Message("Generating axis from coordinates for element ref for 2D load", nRef);
+          }
           load.Value.Loading = initLoad.Value.Loading;
 
           // Perform projection
@@ -308,7 +316,15 @@ namespace SpeckleStructuralGSA
 
           // Transform load to defined axis
           var memb = members.Where(e => e.Value.ApplicationId == nRef).First();
-          StructuralAxis loadAxis = Helper.Parse2DAxis(memb.Value.Vertices.ToArray(), 0, load.Axis != 0); // Assumes if not global, local
+          StructuralAxis loadAxis = null;
+          try
+          {
+            loadAxis = Helper.Parse2DAxis(memb.Value.Vertices.ToArray(), 0, load.Axis != 0); // Assumes if not global, local
+          }
+          catch
+          {
+            Initialiser.AppUI.Message("Generating axis from coordinates for 2D laod", loadAxis.ApplicationId);
+          }
           load.Value.Loading = initLoad.Value.Loading;
           load.Value.Loading.TransformOntoAxis(loadAxis);
 

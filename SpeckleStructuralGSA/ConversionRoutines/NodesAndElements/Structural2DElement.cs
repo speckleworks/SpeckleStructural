@@ -66,9 +66,17 @@ namespace SpeckleStructuralGSA
       counter++; // Orientation node
 
       var prop = props.Where(p => p.Value.ApplicationId == obj.PropertyRef).FirstOrDefault();
-      obj.Axis = Helper.Parse2DAxis(obj.Vertices.ToArray(),
-          Convert.ToDouble(pieces[counter++]),
-          prop == null ? false : (prop as GSA2DProperty).IsAxisLocal);
+      try
+      {
+        obj.Axis = Helper.Parse2DAxis(obj.Vertices.ToArray(),
+            Convert.ToDouble(pieces[counter++]),
+            prop == null ? false : (prop as GSA2DProperty).IsAxisLocal);
+      }
+      catch
+      {
+        Initialiser.AppUI.Message("Generating axis from coordinates for 2D element", obj.ApplicationId);
+      }
+
       if (prop != null)
         this.SubGWACommand.Add(prop.GWACommand);
 
@@ -187,7 +195,7 @@ namespace SpeckleStructuralGSA
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new Structural2DElementMesh();
 
-    public void ParseGWACommand( List<GSANode> nodes, List<GSA2DProperty> props)
+    public void ParseGWACommand(List<GSANode> nodes, List<GSA2DProperty> props)
     {
       // MEMB.8 | num | name | colour | type (2D) | exposure | prop | group | topology | node | angle | mesh_size | is_intersector | analysis_type | fire | time[4] | dummy | off_auto_internal | off_z | reinforcement2d |
 
@@ -262,12 +270,26 @@ namespace SpeckleStructuralGSA
       counter++; // Orientation node
 
       var prop = props.Where(p => p.Value.ApplicationId == obj.PropertyRef).FirstOrDefault();
-      var axis = Helper.Parse2DAxis(coordinates.ToArray(),
-          Convert.ToDouble(pieces[counter++]),
-          prop == null ? false : (prop as GSA2DProperty).IsAxisLocal);
-      obj.Axis = Enumerable.Repeat(axis, numFaces).ToList();
-      if (prop != null)
-        this.SubGWACommand.Add(prop.GWACommand);
+      StructuralAxis axis = null;
+      try
+      {
+        axis = Helper.Parse2DAxis(coordinates.ToArray(),
+            Convert.ToDouble(pieces[counter++]),
+            prop == null ? false : (prop as GSA2DProperty).IsAxisLocal);
+      }
+      catch
+      {
+        Initialiser.AppUI.Message("Generating axis from coordinates for 2D member", obj.ApplicationId);
+      }
+
+      if (axis != null)
+      {
+        obj.Axis = Enumerable.Repeat(axis, numFaces).ToList();
+        if (prop != null)
+        {
+          this.SubGWACommand.Add(prop.GWACommand);
+        }
+      }
 
       obj.GSAMeshSize = Convert.ToDouble(pieces[counter++]); // mesh_size
 
