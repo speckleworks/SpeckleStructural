@@ -72,7 +72,7 @@
   <UsingTask TaskName="ILMerge.MSBuild.Tasks.ILMerge" AssemblyFile="$(SolutionDir)packages\ILMerge.MSBuild.Tasks.1.0.0.3\tools\ILMerge.MSBuild.Tasks.dll" />
   
   <Target Name="AfterBuild">
-	<ItemGroup>
+    <ItemGroup>
       <MergeAsm1 Include="$(TargetDir)SpeckleStructuralClasses.dll" />
       <MergeAsm1 Include="$(TargetDir)MathNet.Numerics.dll" />
       <MergeAsm1 Include="$(TargetDir)MathNet.Spatial.dll" />
@@ -82,14 +82,25 @@
     </PropertyGroup>
     <Message Text="ILMerge @(MergeAsm1) -&gt; $(MergedAssembly1)" Importance="high" />
     <ILMerge InputAssemblies="@(MergeAsm1)" OutputFile="$(MergedAssembly1)" TargetKind="SameAsPrimaryAssembly" />
+    <ItemGroup>
+      <MergeAsm2 Include="$(TargetDir)SpeckleStructuralGSA.dll" />
+      <MergeAsm2 Include="$(TargetDir)MathNet.Numerics.dll" />
+      <MergeAsm2 Include="$(TargetDir)MathNet.Spatial.dll" />
+    </ItemGroup>
+    <PropertyGroup>
+      <MergedAssembly2>$(TargetDir)SpeckleStructuralGSA.dll</MergedAssembly2>
+    </PropertyGroup>
+    <Message Text="ILMerge @(MergeAsm2) -&gt; $(MergedAssembly2)" Importance="high" />
+    <ILMerge InputAssemblies="@(MergeAsm2)" OutputFile="$(MergedAssembly2)" TargetKind="SameAsPrimaryAssembly" />
 
     <ItemGroup>
       <CopiedDllsToDel Include="$(TargetDir)MathNet.Numerics.*" />
       <CopiedDllsToDel Include="$(TargetDir)MathNet.Spatial.*" />
       <CopiedDllsToDel Include="$(TargetDir)Newtonsoft.Json.*" />
+      <CopiedDllsToDel Include="$(TargetDir)SQLite-net.*" />
       <CopiedDllsToDel Include="$(TargetDir)websocket-sharp.*" />
       <CopiedDllsToDel Include="$(TargetDir)SpeckleCore*.*" />
-	  <CopiedDllsToDel Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " Include="$(TargetDir)*.config" />
+      <CopiedDllsToDel Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " Include="$(TargetDir)*.config" />
     </ItemGroup>
     <Delete Files="@(CopiedDllsToDel)" />
 
