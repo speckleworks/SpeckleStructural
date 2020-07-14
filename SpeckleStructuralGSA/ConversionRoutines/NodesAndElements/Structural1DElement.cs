@@ -129,11 +129,12 @@ namespace SpeckleStructuralGSA
 
       obj.Offset = offsets;
 
-      if (String.IsNullOrEmpty(pieces[counter++]) == false)
-        Member = pieces[counter++]; // no references to this piece of data, why do we store it rather than just skipping over?
-
       counter++; // Dummy
 
+      if (counter < pieces.Length)
+      {
+        Member = pieces[counter++]; // no references to this piece of data, why do we store it rather than just skipping over?
+      }
       this.Value = obj;
     }
 
@@ -616,7 +617,11 @@ namespace SpeckleStructuralGSA
       var elements = new List<GSA1DElement>();
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
+#if DEBUG
+      foreach (var p in newLines.Values)
+#else
       Parallel.ForEach(newLines.Values, p =>
+#endif
       {
         var pPieces = p.ListSplit("\t");
 
@@ -637,7 +642,10 @@ namespace SpeckleStructuralGSA
             Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
           }
         }
-      });
+      }
+#if !DEBUG
+      );
+#endif
 
       Initialiser.GSASenderObjects.AddRange(elements);
 
@@ -652,7 +660,11 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSA1DMember>();
       var typeName = dummyObject.GetType().Name;
 
+#if DEBUG
+      foreach (var p in newLines.Values)
+#else
       Parallel.ForEach(newLines.Values, p =>
+#endif
       {
         var pPieces = p.ListSplit("\t");
         var gsaId = pPieces[1];
@@ -672,7 +684,10 @@ namespace SpeckleStructuralGSA
             Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
           }
         }
-      });
+      }
+#if !DEBUG
+      );
+#endif
 
       Initialiser.GSASenderObjects.AddRange(members);
 

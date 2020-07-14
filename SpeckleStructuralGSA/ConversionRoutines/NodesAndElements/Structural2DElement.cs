@@ -296,8 +296,8 @@ namespace SpeckleStructuralGSA
       counter++; // intersector
       counter++; // analysis type
 
-      counter = counter + 6; // skip fire bits to get to dummy status
-      obj.GSADummy = pieces[20] == "DUMMY" ? true : false;
+      counter = counter+=6; // skip fire bits to get to dummy status
+      obj.GSADummy = pieces[counter++] == "DUMMY" ? true : false;
 
       Initialiser.Interface.GetGSATotal2DElementOffset(propertyGSAId, Convert.ToDouble(pieces[counter++]), out var offset, out var offsetRec);
       this.SubGWACommand.Add(offsetRec);
@@ -536,7 +536,11 @@ namespace SpeckleStructuralGSA
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
       var props = Initialiser.GSASenderObjects.Get<GSA2DProperty>();
 
+#if DEBUG
+      foreach (var p in newLines.Values)
+#else
       Parallel.ForEach(newLines.Values, p =>
+#endif
       {
         var pPieces = p.ListSplit("\t");
         if (pPieces[4].Is2DMember())
@@ -560,7 +564,10 @@ namespace SpeckleStructuralGSA
             }
           }
         }
-      });
+      }
+#if !DEBUG
+      );
+#endif
 
       Initialiser.GSASenderObjects.AddRange(members);
 
