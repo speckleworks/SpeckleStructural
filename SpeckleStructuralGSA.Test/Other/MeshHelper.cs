@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using MathNet.Numerics;
 using MathNet.Spatial.Euclidean;
 
 namespace SpeckleStructuralGSA.Test
@@ -12,17 +13,30 @@ namespace SpeckleStructuralGSA.Test
   {
     public static bool Intersects(this Line2D candidate, Line2D other)
     {
-      var intPt = candidate.IntersectWith(other);
-      if (!intPt.HasValue)
+      var intPtIntersection = candidate.IntersectWith(other);
+      if (!intPtIntersection.HasValue)
       { 
         return false; 
       }
+      var intPt = intPtIntersection.Value;
+
       //By default MathNet defines lines with infinite length so determine if the intersection point is actually within the original bounds of the line
 
-      var intPtOnCandidateLine = candidate.ClosestPointTo(intPt.Value, true);
-      var intPtOnOtherLine = other.ClosestPointTo(intPt.Value, true);
+      //The endpoints don't count
+      if (intPt.EqualsWithinTolerance(candidate.StartPoint) || intPt.EqualsWithinTolerance(candidate.EndPoint))
+      {
+        return false;
+      }
 
-      return (intPtOnCandidateLine.DistanceTo(intPtOnOtherLine).Equals(0));
+      var intPtOnCandidateLine = candidate.ClosestPointTo(intPt, true);
+      var intPtOnOtherLine = other.ClosestPointTo(intPt, true);
+
+      return intPtOnCandidateLine.EqualsWithinTolerance(intPtOnOtherLine);
+    }
+
+    public static bool EqualsWithinTolerance(this Point2D pt1, Point2D pt2, int toleranceNumDecimalPlaces = 3)
+    {
+      return pt1.DistanceTo(pt2).AlmostEqual(0, toleranceNumDecimalPlaces);
     }
 
     //Between does not include being parallel to either vectors - the value returned will be zer0

@@ -10,12 +10,13 @@ using MathNet.Numerics.Distributions;
 using MathNet.Numerics.Providers.LinearAlgebra;
 using MathNet.Spatial.Euclidean;
 using MathNet.Spatial.Units;
+using Moq;
 
 namespace SpeckleStructuralGSA.Test
 {
   public partial class MeshArea
   {
-    private class IndexPair : IEqualityComparer
+    private class IndexPair
     {
       public readonly int[] Indices = new int[2];
       public IndexPair(int index1, int index2)
@@ -45,27 +46,13 @@ namespace SpeckleStructuralGSA.Test
         }
       }
 
-      public new bool Equals(object x, object y)
+      public static bool Equals(IndexPair x, IndexPair y)
       {
         var l1 = (IndexPair)x;
         var l2 = (IndexPair)y;
 
-        return ((l1.Indices[0] == l2.Indices[0]) && (l1.Indices[1] == l2.Indices[1]) || (l1.Indices[0] == l2.Indices[1]) && (l1.Indices[1] == l2.Indices[0]));
-      }
-
-      public int GetHashCode(object obj)
-      {
-        if (obj == null)
-        {
-          return 0;
-        }
-        IndexPair line = null;
-        try
-        {
-          line = ((IndexPair)obj);
-        }
-        catch { }
-        return (line == null) ? 0 : line.Indices[0].GetHashCode() ^ line.Indices[1].GetHashCode();
+        return (((l1.Indices[0] == l2.Indices[0]) && (l1.Indices[1] == l2.Indices[1])) 
+          || ((l1.Indices[0] == l2.Indices[1]) && (l1.Indices[1] == l2.Indices[0])));
       }
     }
 
@@ -135,51 +122,62 @@ namespace SpeckleStructuralGSA.Test
       //Go through each point
       for (var i = 0; i < n; i++)
       {
-        var nextPtIndex = (i < (n - 1)) ? (i + 1): 0;
+        var nextPtIndex = (i < (n - 1)) ? (i + 1) : 0;
         var prevPtIndex = (i > 0) ? i - 1 : (n - 1);
         var dictHalfSweep = PointIndicesInHalfSweep(i, nextPtIndex, prevPtIndex);
 
         if (dictHalfSweep == null)
         {
+          //This would only happen if winding direction hasn't been determined yet
           return faces.ToArray();
         }
-        
-        //Go through each line emanating from this point
-        foreach (var vector in dictHalfSweep.Keys)
+
+        if (dictHalfSweep.Keys.Count == 0)
+        {
+          //This would only happen if the only valid point in the half-sweep is the previous point
+
+          //Check if the internal lines already has the line between the previous and next points, and add it if not
+          var prevNextIndexPair = new IndexPair(prevPtIndex, nextPtIndex);
+
+          if (!InternalLinesContains(prevNextIndexPair))
+          {
+            InternalIndexPairs.Add(prevNextIndexPair);
+          }
+        }
+        else
         {
           double? currShortestDistance = null;
           int? shortestPtIndex = null;
-          foreach (var ptIndex in dictHalfSweep[vector])
+
+          //Go through each direction (ending in an external point) emanating from this candidate point
+          foreach (var vector in dictHalfSweep.Keys)
           {
-            var indexPair = new IndexPair(i, ptIndex);
-
-            //Create line from the candidate point to this item point
-            var currLine = GetLine(indexPair);
-
-            //Check if this line is already in the collection - if so, ignore it
-            if (InternalIndexPairs.Contains(indexPair)) continue;
-
-            //Check if this line would intersect any external lines in this collection - if so, ignore it
-            if (IntersectsExternalLines(indexPair)) continue;
-
-            //Check if this line would intersect any already in this collection - if so, ignore it
-            if (IntersectsInternalLines(indexPair)) continue;
-
-            //Calculate distance - if currShortestDistance is either -1 or shorter than the shortest, replace the shortest
-            var distance = GetLength(indexPair);
-            if (!currShortestDistance.HasValue || (distance < currShortestDistance))
+            //Go through each point in the same direction from this candidate point (because multiple external points can be in alignment
+            //along the same direction)
+            foreach (var ptIndex in dictHalfSweep[vector])
             {
-              currShortestDistance = distance;
-              shortestPtIndex = ptIndex;
+              var indexPair = new IndexPair(i, ptIndex);
+
+              if (!ValidNewInternalLine(indexPair)) continue;
+
+              //Calculate distance - if currShortestDistance is either -1 or shorter than the shortest, replace the shortest
+              var distance = GetLength(indexPair);
+              if (!currShortestDistance.HasValue || (distance < currShortestDistance))
+              {
+                currShortestDistance = distance;
+                shortestPtIndex = ptIndex;
+              }
             }
           }
 
           //Now that the shortest valid line to another point has been found, add it to the list of lines
           if (currShortestDistance > 0 && shortestPtIndex.HasValue && shortestPtIndex > 0)
           {
-            //Add line
+            //Add line - which has already been checked to ensure it doesn't intersect others, etc
             InternalIndexPairs.Add(new IndexPair(i, shortestPtIndex.Value));
+            continue;
           }
+
         }
       }
 
@@ -193,7 +191,7 @@ namespace SpeckleStructuralGSA.Test
 
         var sharedPtIndices = indicesLinkedToCurr.Where(ci => indicesLinkedToNext.Any(ni => ci == ni));
 
-        if (sharedPtIndices != null)
+        if (sharedPtIndices != null && sharedPtIndices.Count() > 0)
         {
           if (sharedPtIndices.Count() == 1)
           {
@@ -207,6 +205,28 @@ namespace SpeckleStructuralGSA.Test
       }
 
       return faces.ToArray();
+    }
+
+    private bool InternalLinesContains(IndexPair indexPair)
+    {
+      var matching = InternalIndexPairs.Where(i => IndexPair.Equals(i, indexPair));
+      return (matching.Count() > 0);
+    }
+
+    private bool ValidNewInternalLine(IndexPair indexPair)
+    {
+      if (indexPair == null) return false;
+
+      //Check if this line is already in the collection - if so, ignore it
+      if (InternalLinesContains(indexPair)) return false;
+
+      //Check if this line would intersect any external lines in this collection - if so, ignore it
+      if (IntersectsExternalLines(indexPair)) return false;
+
+      //Check if this line would intersect any already in this collection - if so, ignore it
+      if (IntersectsInternalLines(indexPair)) return false;
+
+      return true;
     }
 
     private List<int> GetPairedIndices(int index)
@@ -257,14 +277,14 @@ namespace SpeckleStructuralGSA.Test
     {
       var line = GetLine(indexPair);
 
-      return GetExternalLines().Any(el => el.Intersects(line));
+      return GetExternalLines().Any(el => line.Intersects(el));
     }
 
     private bool IntersectsInternalLines(IndexPair indexPair)
     {
       var line = GetLine(indexPair);
 
-      return GetExternalLines().Any(el => el.Intersects(line));
+      return GetInternalLines().Any(el => line.Intersects(el));
     }
 
     private bool Intersects(IndexPair i1, IndexPair i2)
@@ -316,7 +336,7 @@ namespace SpeckleStructuralGSA.Test
 
       for (var i = 0; i < pts.Count(); i++)
       {
-        if (i == ptIndex) continue;
+        if (i == ptIndex || i == nextPtIndex || i == prevPtIndex) continue;
 
         var vItem = pts[ptIndex].VectorTo(pts[i]).Normalize();
 

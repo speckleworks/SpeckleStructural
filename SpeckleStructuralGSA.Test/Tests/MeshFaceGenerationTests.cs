@@ -26,6 +26,10 @@ namespace SpeckleStructuralGSA.Test.Tests
     {
       var ma = new MeshArea();
       Assert.IsTrue(ma.Init(coor));
+
+      var faces = ma.Faces();
+      Assert.IsNotNull(faces);
+      Assert.Greater(faces.Count(), 0);
     }
   }
 }
