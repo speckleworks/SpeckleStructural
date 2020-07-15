@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using MathNet.Numerics;
@@ -16,43 +17,42 @@ namespace SpeckleStructuralGSA.Test
 {
   public partial class MeshArea
   {
-    private class IndexPair
+    private abstract class IndexSet
     {
-      public readonly int[] Indices = new int[2];
-      public IndexPair(int index1, int index2)
+      public readonly int[] Indices;
+
+      public IndexSet(List<int> values)
       {
-        Indices[0] = index1;
-        Indices[1] = index2;
+        Indices = values.OrderBy(v => v).ToArray();
       }
 
       public bool Contains(int index)
       {
-        return ((Indices[0] == index) || (Indices[1] == index));
+        return Indices.Any(i => i == index);
+      }
+
+      public bool Equals(IndexSet other)
+      {
+        return Indices.SequenceEqual(other.Indices);
+      }
+    }
+
+    private class IndexPair : IndexSet
+    {
+      public IndexPair(int index1, int index2) : base (new List<int>() { index1, index2 })
+      {
       }
 
       public int? Other(int index)
       {
-        if (Indices[0] == index)
-        {
-          return Indices[1];
-        }
-        else if (Indices[1] == index)
-        {
-          return 0;
-        }
-        else
-        {
-          return null;
-        }
+        return (Indices[0] == index) ? Indices[1] : (Indices[1] == index) ? (int ?) Indices[0] : null;
       }
+    }
 
-      public static bool Equals(IndexPair x, IndexPair y)
+    private class TriangleIndexSet : IndexSet
+    {
+      public TriangleIndexSet(int index1, int index2, int index3) : base(new List<int>() {  index1, index2, index3 })
       {
-        var l1 = (IndexPair)x;
-        var l2 = (IndexPair)y;
-
-        return (((l1.Indices[0] == l2.Indices[0]) && (l1.Indices[1] == l2.Indices[1])) 
-          || ((l1.Indices[0] == l2.Indices[1]) && (l1.Indices[1] == l2.Indices[0])));
       }
     }
 
@@ -60,6 +60,18 @@ namespace SpeckleStructuralGSA.Test
     private int windingDirection = 0; //Will be 1 for left and -1 for right orientation wrt line direction along plane
 
     private readonly List<IndexPair> InternalIndexPairs = new List<IndexPair>();
+    private readonly List<IndexPair> ExternalIndexPairs = new List<IndexPair>();
+
+    private List<IndexPair> AllIndexPairs
+    {
+      get
+      {
+        var pairs = new List<IndexPair>();
+        pairs.AddRange(InternalIndexPairs);
+        pairs.AddRange(ExternalIndexPairs);
+        return pairs;
+      }
+    }
 
     public MeshArea()
     {
@@ -93,7 +105,8 @@ namespace SpeckleStructuralGSA.Test
 
       //project points onto the plane - if the points are co-planar and translation is done correctly, all Z values should be zero
       int nonCoPlanarPts = 0;
-      for (var i = 0; i < origPts.Count(); i++)
+      var n = origPts.Count();
+      for (var i = 0; i < n; i++)
       {
         var projectedPt = coordinateTranslation.Transform(origPts[i]);
         if (!projectedPt.Z.AlmostEqual(0,3))
@@ -101,6 +114,8 @@ namespace SpeckleStructuralGSA.Test
           nonCoPlanarPts++;
         }
         pts.Add(new Point2D(projectedPt.X, projectedPt.Y));
+
+        ExternalIndexPairs.Add(new IndexPair(i, (i == (n - 1)) ? 0 : i + 1));
       }
 
       if (nonCoPlanarPts > 0)
@@ -114,8 +129,8 @@ namespace SpeckleStructuralGSA.Test
 
     public int[] Faces()
     {
-      var faces = new List<int>();
       var n = pts.Count();
+      var faces = new List<int>();
 
       var externalLines = GetExternalLines();
 
@@ -182,20 +197,28 @@ namespace SpeckleStructuralGSA.Test
       }
 
       //Now determine faces by cycling through each edge line and finding which other point is shared between all lines emanating from this point
-      for (var i = 0; i < n; i++)
+
+      var triangles = new List<TriangleIndexSet>();
+      for ( var i = 0; i < n; i++)
       {
         var nextPtIndex = (i < (n - 1)) ? (i + 1) : 0;
 
         var indicesLinkedToCurr = GetPairedIndices(i);
+        indicesLinkedToCurr.Remove(nextPtIndex);
         var indicesLinkedToNext = GetPairedIndices(nextPtIndex);
+        indicesLinkedToNext.Remove(i);
 
-        var sharedPtIndices = indicesLinkedToCurr.Where(ci => indicesLinkedToNext.Any(ni => ci == ni));
+        var sharedPtIndices = indicesLinkedToCurr.Where(ci => indicesLinkedToNext.Any(ni => ci == ni)).ToList();
 
         if (sharedPtIndices != null && sharedPtIndices.Count() > 0)
         {
           if (sharedPtIndices.Count() == 1)
           {
-            faces.AddRange(new[] { 0, i, nextPtIndex, sharedPtIndices.First() });
+            var currTriangle = new TriangleIndexSet(i, nextPtIndex, sharedPtIndices[0]);
+            if (triangles.All(t => !t.Equals(currTriangle)))
+            {
+              triangles.Add(currTriangle);
+            }
           }
           else
           {
@@ -204,12 +227,18 @@ namespace SpeckleStructuralGSA.Test
         }
       }
 
+      foreach (var t in triangles)
+      {
+        faces.Add(0); // signifying a triangle
+        faces.AddRange(t.Indices.Take(3));
+      }
+
       return faces.ToArray();
     }
 
     private bool InternalLinesContains(IndexPair indexPair)
     {
-      var matching = InternalIndexPairs.Where(i => IndexPair.Equals(i, indexPair));
+      var matching = InternalIndexPairs.Where(i => i.Equals(indexPair));
       return (matching.Count() > 0);
     }
 
@@ -231,7 +260,7 @@ namespace SpeckleStructuralGSA.Test
 
     private List<int> GetPairedIndices(int index)
     {
-      return InternalIndexPairs.Select(l => l.Other(index)).Where(l => l.HasValue).Cast<int>().ToList();
+      return AllIndexPairs.Select(l => l.Other(index)).Where(l => l.HasValue).Cast<int>().ToList();
     }
 
     private double GetLength(IndexPair indexPair)
