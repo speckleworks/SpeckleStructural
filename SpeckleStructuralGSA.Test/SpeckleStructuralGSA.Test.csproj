@@ -152,7 +152,9 @@
     <Compile Include="Other\Enums.cs" />
     <Compile Include="Other\GwaRecord.cs" />
     <Compile Include="Other\Helper.cs" />
+    <Compile Include="Other\MeshHelper.cs" />
     <Compile Include="Other\TestAppUI.cs" />
+    <Compile Include="Tests\MeshFaceGenerationTests.cs" />
     <Compile Include="Tests\FileComparison.cs" />
     <Compile Include="Tests\GeometryTests.cs" />
     <Compile Include="Tests\MeshTests.cs" />
@@ -161,6 +163,7 @@
     <Compile Include="Other\ReceiverProcessor.cs" />
     <Compile Include="Other\Result.cs" />
     <Compile Include="Other\SenderProcessor.cs" />
+    <Compile Include="Other\MeshArea.cs" />
     <Compile Include="Tests\ReceiverTests.cs" />
     <Compile Include="Tests\ScalingTests.cs" />
     <Compile Include="Tests\SenderTests.cs" />
