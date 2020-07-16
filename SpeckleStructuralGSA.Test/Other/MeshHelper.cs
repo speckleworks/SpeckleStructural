@@ -11,6 +11,38 @@ namespace SpeckleStructuralGSA.Test
 {
   public static class MeshHelper
   {
+
+    //Using pseudocode found in https://stackoverflow.com/questions/1165647/how-to-determine-if-a-list-of-polygon-points-are-in-clockwise-order/1180256#1180256
+    public static int GetWindingDirection(this IEnumerable<Point2D> loopPoints)
+    {
+      var pts = loopPoints.ToArray();
+      double signedArea = 0;
+      var n = pts.Count();
+      for (var i = 0; i < n; i++)
+      {
+        var nextPtIndex = (i < (n - 1)) ? (i + 1) : 0;
+        var x1 = pts[i].X;
+        var y1 = pts[i].Y;
+        var x2 = pts[nextPtIndex].X;
+        var y2 = pts[nextPtIndex].Y;
+
+        signedArea += (x1 * y2 - x2 * y1);
+      }
+
+      if (signedArea > 0)
+      {
+        return 1;
+      }
+      else if (signedArea < 0)
+      {
+        return -1;
+      }
+      else
+      {
+        return 0;
+      }
+    }
+
     public static bool Intersects(this Line2D candidate, Line2D other)
     {
       var intPtIntersection = candidate.IntersectWith(other);

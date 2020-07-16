@@ -1,22 +1,14 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
-using System.Threading.Tasks;
 using MathNet.Numerics;
-using MathNet.Numerics.Distributions;
-using MathNet.Numerics.Providers.LinearAlgebra;
 using MathNet.Spatial.Euclidean;
-using MathNet.Spatial.Units;
-using Moq;
 
 namespace SpeckleStructuralGSA.Test
 {
   public partial class MeshArea
   {
+    #region helper_classes
     private abstract class IndexSet
     {
       public readonly int[] Indices;
@@ -31,7 +23,7 @@ namespace SpeckleStructuralGSA.Test
         return Indices.Any(i => i == index);
       }
 
-      public bool Equals(IndexSet other)
+      public bool Matches(IndexSet other)
       {
         return Indices.SequenceEqual(other.Indices);
       }
@@ -56,90 +48,197 @@ namespace SpeckleStructuralGSA.Test
       }
     }
 
-    private readonly List<Point2D> pts = new List<Point2D>(); //Ordered
-    private int windingDirection = 0; //Will be 1 for left and -1 for right orientation wrt line direction along plane
-
-    private readonly List<IndexPair> InternalIndexPairs = new List<IndexPair>();
-    private readonly List<IndexPair> ExternalIndexPairs = new List<IndexPair>();
-
-    private List<IndexPair> AllIndexPairs
+    private class ClosedLoop
     {
-      get
+      public Dictionary<int, Point2D> pts;
+      public Dictionary<IndexPair, Line2D> Loop;
+      public int WindingDirection;
+      public CoordinateSystem CoordinateTranslation;
+
+      private int ptIndexOffset = 0;
+
+      public bool Init(double[] globalCoords, ref CoordinateSystem CoordinateTranslation, int ptIndexOffset = 0)
       {
-        var pairs = new List<IndexPair>();
-        pairs.AddRange(InternalIndexPairs);
-        pairs.AddRange(ExternalIndexPairs);
-        return pairs;
+        this.ptIndexOffset = ptIndexOffset;
+
+        var essential = globalCoords.Essential();
+        var origPts = new List<Point3D>();
+        for (var i = 0; i < essential.Length; i += 3)
+        {
+          origPts.Add(new Point3D(essential[i], essential[i + 1], essential[i + 2]));
+        }
+
+        this.pts = new Dictionary<int, Point2D>();
+
+        if (CoordinateTranslation == null)
+        {
+          //Create plane
+          var plane = Plane.FromPoints(origPts[0], origPts[1], origPts[2]);
+          var normal = plane.Normal;
+          var origin = origPts[0];
+          var xDir = origPts[0].VectorTo(origPts[1]).Normalize();
+          var yDir = normal.CrossProduct(xDir);
+
+          //The CoordinateSystem class in MathNet.Spatial and its methods aren't not very intuitive as discussed in https://github.com/mathnet/mathnet-spatial/issues/53
+          //Since I don't understand the offsets that seem to be applied by TransformFrom and TransformTo, I focussed on the Transform method,
+          //which transforms a local point to a global point.
+          //In order to transform a point from global into local, the coordinate system needs to be reversed so that the resulting coordinateSystem.Transform does the
+          //transformation from global to local.
+          CoordinateTranslation = new CoordinateSystem((new CoordinateSystem(origin, xDir, yDir, normal)).Inverse());
+        }
+        else
+        {
+          this.CoordinateTranslation = CoordinateTranslation;
+        }
+
+        //project points onto the plane - if the points are co-planar and translation is done correctly, all Z values should be zero
+        var nonCoPlanarPts = 0;
+        var n = origPts.Count();
+        for (var i = 0; i < n; i++)
+        {
+          var projectedPt = CoordinateTranslation.Transform(origPts[i]);
+          if (!projectedPt.Z.AlmostEqual(0, 3))
+          {
+            nonCoPlanarPts++;
+          }
+          AddPoint(projectedPt.X, projectedPt.Y);
+        }
+
+        WindingDirection = 0;
+        Loop = new Dictionary<IndexPair, Line2D>();
+        if (nonCoPlanarPts > 0)
+        {
+          return false;
+        }
+
+        for (var i = 0; i < n; i++)
+        {
+          var indexPair = new IndexPair(ptIndexOffset + i, ptIndexOffset + ((i == (n - 1)) ? 0 : (i + 1)));
+          Loop.Add(indexPair, GetLine(indexPair));
+        }
+
+        this.WindingDirection = this.pts.Select(p => p.Value).GetWindingDirection();
+
+        return true;
+      }
+
+      private void AddPoint(double x, double y)
+      {
+        var index = pts.Count() + this.ptIndexOffset;
+
+        pts.Add(index, new Point2D(x, y));
+      }
+
+      private Line2D GetLine(IndexPair indexPair)
+      {
+        return new Line2D(this.pts[indexPair.Indices[0]], this.pts[indexPair.Indices[1]]);
       }
     }
+    #endregion
 
-    public MeshArea()
-    {
-      
-    }
+    private CoordinateSystem CoordinateTranslation = null;
+
+    private readonly ClosedLoop ExternalLoop = new ClosedLoop();
+    private readonly Dictionary<IndexPair, Line2D> Internals = new Dictionary<IndexPair, Line2D>();
+    private readonly List<ClosedLoop> Openings = new List<ClosedLoop>();
 
     //Assumptions:
     // - input coordinates are an ordered set of external vertices (i.e. not vertices of openings)
     // - the lines defined by these vertices don't intersect each other
-    public bool Init(double[] coords)
+    public bool Init(double[] coords, List<double[]> openingCoordsList = null)
     {
-      var origPts = new List<Point3D>();
-      for (var i = 0; i < coords.Length; i += 3)
+      ExternalLoop.Init(coords, ref CoordinateTranslation);
+
+      if (openingCoordsList != null)
       {
-        origPts.Add(new Point3D(coords[i], coords[i + 1], coords[i + 2]));
-      }
-
-      //Create plane
-      var plane = Plane.FromPoints(origPts[0], origPts[1], origPts[2]);
-      var normal = plane.Normal;
-      var origin = origPts[0];
-      var xDir = origPts[0].VectorTo(origPts[1]).Normalize();
-      var yDir = normal.CrossProduct(xDir);
-
-      //The CoordinateSystem class in MathNet.Spatial and its methods aren't not very intuitive as discussed in https://github.com/mathnet/mathnet-spatial/issues/53
-      //Since I don't understand the offsets that seem to be applied by TransformFrom and TransformTo, I focussed on the Transform method,
-      //which transforms a local point to a global point.
-      //In order to transform a point from global into local, the coordinate system needs to be reversed so that the resulting coordinateSystem.Transform does the
-      //transformation from global to local.
-      var coordinateTranslation = new CoordinateSystem((new CoordinateSystem(origin, xDir, yDir, normal)).Inverse());
-
-      //project points onto the plane - if the points are co-planar and translation is done correctly, all Z values should be zero
-      int nonCoPlanarPts = 0;
-      var n = origPts.Count();
-      for (var i = 0; i < n; i++)
-      {
-        var projectedPt = coordinateTranslation.Transform(origPts[i]);
-        if (!projectedPt.Z.AlmostEqual(0,3))
+        var indexOffset = ExternalLoop.pts.Count();
+        foreach (var openingGlobalCoords in openingCoordsList)
         {
-          nonCoPlanarPts++;
+          var openingLoop = new ClosedLoop();
+          openingLoop.Init(openingGlobalCoords, ref this.CoordinateTranslation, indexOffset);
+          indexOffset += openingLoop.pts.Count();
+          Openings.Add(openingLoop);
         }
-        pts.Add(new Point2D(projectedPt.X, projectedPt.Y));
-
-        ExternalIndexPairs.Add(new IndexPair(i, (i == (n - 1)) ? 0 : i + 1));
       }
-
-      if (nonCoPlanarPts > 0)
-      {
-        return false;
-      }
-
-      GetWindingDirection();
+      
       return true;
     }
 
+    //public bool Init(double[] coords, List<double[]> openingCoordsList = null)
+    //{
+    //  var essential = coords.Essential();
+    //  var origPts = new List<Point3D>();
+    //  for (var i = 0; i < essential.Length; i += 3)
+    //  {
+    //    origPts.Add(new Point3D(essential[i], essential[i + 1], essential[i + 2]));
+    //  }
+
+    //  if (openingCoordsList != null)
+    //  {
+    //    foreach (var openingCoords in openingCoordsList)
+    //    {
+    //      var essentialOpeningCoords = openingCoords.Essential();
+
+    //      for (var i = 0; i < essentialOpeningCoords.Length; i += 3)
+    //      {
+
+    //      }
+    //    }
+    //  }
+
+    //  //Create plane
+    //  var plane = Plane.FromPoints(origPts[0], origPts[1], origPts[2]);
+    //  var normal = plane.Normal;
+    //  var origin = origPts[0];
+    //  var xDir = origPts[0].VectorTo(origPts[1]).Normalize();
+    //  var yDir = normal.CrossProduct(xDir);
+
+    //  //The CoordinateSystem class in MathNet.Spatial and its methods aren't not very intuitive as discussed in https://github.com/mathnet/mathnet-spatial/issues/53
+    //  //Since I don't understand the offsets that seem to be applied by TransformFrom and TransformTo, I focussed on the Transform method,
+    //  //which transforms a local point to a global point.
+    //  //In order to transform a point from global into local, the coordinate system needs to be reversed so that the resulting coordinateSystem.Transform does the
+    //  //transformation from global to local.
+    //  CoordinateTranslation = new CoordinateSystem((new CoordinateSystem(origin, xDir, yDir, normal)).Inverse());
+
+    //  //project points onto the plane - if the points are co-planar and translation is done correctly, all Z values should be zero
+    //  var nonCoPlanarPts = 0;
+    //  var n = origPts.Count();
+    //  for (var i = 0; i < n; i++)
+    //  {
+    //    var projectedPt = coordinateTranslation.Transform(origPts[i]);
+    //    if (!projectedPt.Z.AlmostEqual(0, 3))
+    //    {
+    //      nonCoPlanarPts++;
+    //    }
+    //    pts.Add(new Point2D(projectedPt.X, projectedPt.Y));
+    //  }
+
+    //  for (var i = 0; i < n; i++)
+    //  {
+    //    var externalIndexPair = new IndexPair(i, (i == (n - 1)) ? 0 : (i + 1));
+    //    Externals.Add(externalIndexPair, GetLine(externalIndexPair));
+    //  }
+
+    //  if (nonCoPlanarPts > 0)
+    //  {
+    //    return false;
+    //  }
+
+    //  GetWindingDirection();
+    //  return true;
+    //}
+
     public int[] Faces()
     {
-      var n = pts.Count();
+      var n = ExternalLoop.pts.Count() + ((Openings == null) ? 0 : Openings.Sum(o => o.pts.Count()));
       var faces = new List<int>();
-
-      var externalLines = GetExternalLines();
 
       //Go through each point
       for (var i = 0; i < n; i++)
       {
         var nextPtIndex = (i < (n - 1)) ? (i + 1) : 0;
         var prevPtIndex = (i > 0) ? i - 1 : (n - 1);
-        var dictHalfSweep = PointIndicesInHalfSweep(i, nextPtIndex, prevPtIndex);
+        var dictHalfSweep = PointIndicesSweep(i, nextPtIndex, prevPtIndex);
 
         if (dictHalfSweep == null)
         {
@@ -153,46 +252,46 @@ namespace SpeckleStructuralGSA.Test
 
           //Check if the internal lines already has the line between the previous and next points, and add it if not
           var prevNextIndexPair = new IndexPair(prevPtIndex, nextPtIndex);
-
-          if (!InternalLinesContains(prevNextIndexPair))
+          var line = GetLine(prevNextIndexPair);
+          if (ValidNewInternalLine(prevNextIndexPair, line))
           {
-            InternalIndexPairs.Add(prevNextIndexPair);
+            Internals.Add(prevNextIndexPair, line);
           }
         }
         else
         {
-          double? currShortestDistance = null;
-          int? shortestPtIndex = null;
-
           //Go through each direction (ending in an external point) emanating from this candidate point
           foreach (var vector in dictHalfSweep.Keys)
           {
+            double? currShortestDistance = null;
+            int? shortestPtIndex = null;
+
             //Go through each point in the same direction from this candidate point (because multiple external points can be in alignment
             //along the same direction)
             foreach (var ptIndex in dictHalfSweep[vector])
             {
               var indexPair = new IndexPair(i, ptIndex);
-
-              if (!ValidNewInternalLine(indexPair)) continue;
+              var line = GetLine(indexPair);
+              if (!ValidNewInternalLine(indexPair, line)) continue;
 
               //Calculate distance - if currShortestDistance is either -1 or shorter than the shortest, replace the shortest
-              var distance = GetLength(indexPair);
+              var distance = line.Length;
               if (!currShortestDistance.HasValue || (distance < currShortestDistance))
               {
                 currShortestDistance = distance;
                 shortestPtIndex = ptIndex;
               }
             }
-          }
 
-          //Now that the shortest valid line to another point has been found, add it to the list of lines
-          if (currShortestDistance > 0 && shortestPtIndex.HasValue && shortestPtIndex > 0)
-          {
-            //Add line - which has already been checked to ensure it doesn't intersect others, etc
-            InternalIndexPairs.Add(new IndexPair(i, shortestPtIndex.Value));
-            continue;
+            //Now that the shortest valid line to another point has been found, add it to the list of lines
+            if (currShortestDistance > 0 && shortestPtIndex.HasValue && shortestPtIndex > 0)
+            {
+              //Add line - which has already been checked to ensure it doesn't intersect others, etc
+              var shortestIndexPair = new IndexPair(i, shortestPtIndex.Value);
+              Internals.Add(shortestIndexPair, GetLine(shortestIndexPair));
+              continue;
+            }
           }
-
         }
       }
 
@@ -215,7 +314,7 @@ namespace SpeckleStructuralGSA.Test
           if (sharedPtIndices.Count() == 1)
           {
             var currTriangle = new TriangleIndexSet(i, nextPtIndex, sharedPtIndices[0]);
-            if (triangles.All(t => !t.Equals(currTriangle)))
+            if (triangles.All(t => !t.Matches(currTriangle)))
             {
               triangles.Add(currTriangle);
             }
@@ -236,141 +335,140 @@ namespace SpeckleStructuralGSA.Test
       return faces.ToArray();
     }
 
-    private bool InternalLinesContains(IndexPair indexPair)
+    private Dictionary<IndexPair, Line2D> AllIndexLines
     {
-      var matching = InternalIndexPairs.Where(i => i.Equals(indexPair));
+      get
+      {
+        var pairs = new Dictionary<IndexPair, Line2D>();
+        foreach (var k in Internals.Keys)
+        {
+          pairs.Add(k, Internals[k]);
+        }
+        foreach (var k in ExternalLoop.Loop.Keys)
+        {
+          pairs.Add(k, ExternalLoop.Loop[k]);
+        }
+
+        foreach (var l in Openings)
+        {
+          foreach (var k in l.Loop.Keys)
+          {
+            pairs.Add(k, l.Loop[k]);
+          }
+        }
+        return pairs;
+      }
+    }
+
+    private bool ExistingLinesContains(IndexPair indexPair)
+    {
+      var matching = AllIndexLines.Keys.Where(i => i.Matches(indexPair));
       return (matching.Count() > 0);
     }
 
-    private bool ValidNewInternalLine(IndexPair indexPair)
+    private Line2D GetLine(IndexPair indexPair)
+    {
+      var allPts = GetAllPts();
+      return new Line2D(allPts[indexPair.Indices[0]], allPts[indexPair.Indices[1]]);
+    }
+
+    private bool ValidNewInternalLine(IndexPair indexPair, Line2D line)
     {
       if (indexPair == null) return false;
 
       //Check if this line is already in the collection - if so, ignore it
-      if (InternalLinesContains(indexPair)) return false;
+      if (ExistingLinesContains(indexPair)) return false;
 
       //Check if this line would intersect any external lines in this collection - if so, ignore it
-      if (IntersectsExternalLines(indexPair)) return false;
+      if (IntersectsBoundaryLines(line)) return false;
 
       //Check if this line would intersect any already in this collection - if so, ignore it
-      if (IntersectsInternalLines(indexPair)) return false;
+      if (IntersectsInternalLines(line)) return false;
 
       return true;
     }
 
     private List<int> GetPairedIndices(int index)
     {
-      return AllIndexPairs.Select(l => l.Other(index)).Where(l => l.HasValue).Cast<int>().ToList();
+      return AllIndexLines.Keys.Select(l => l.Other(index)).Where(l => l.HasValue).Cast<int>().ToList();
     }
 
-    private double GetLength(IndexPair indexPair)
+    private List<Point2D> GetAllPts()
     {
-      Line2D? line = null;
-      try
+      var allPts = new List<Point2D>();
+      allPts.AddRange(ExternalLoop.pts.Select(p => p.Value));
+      if (Openings != null)
       {
-        line = GetLine(indexPair);
+        foreach (var opening in Openings)
+        {
+          allPts.AddRange(opening.pts.Select(p => p.Value));
+        }
       }
-      catch { }
-      return (line == null) ? 0 : line.Value.Length;
+      return allPts;
     }
 
-    private Line2D GetLine(IndexPair indexPair)
+    private List<Line2D> GetAllBoundaryLines()
     {
-      return new Line2D(pts[indexPair.Indices[0]], pts[indexPair.Indices[1]]);
-    }
-
-    private List<Line2D> GetExternalLines()
-    {
-      var lines = new List<Line2D>();
-      var n = pts.Count();
-      for (var i = 0; i < n; i++)
+      var allBoundaryLines = new List<Line2D>();
+      allBoundaryLines.AddRange(ExternalLoop.Loop.Select(p => p.Value));
+      foreach (var opening in Openings)
       {
-        var nextPtIndex = (i < (n - 1)) ? (i + 1) : 0;
-        lines.Add(new Line2D(pts[i], pts[nextPtIndex]));
+        allBoundaryLines.AddRange(opening.Loop.Select(p => p.Value));
       }
-      return lines;
+      return allBoundaryLines;
     }
 
-    private List<Line2D> GetInternalLines()
+    private bool IntersectsBoundaryLines(Line2D line)
     {
-      var lines = new List<Line2D>();
-      var n = InternalIndexPairs.Count();
-      for (var i = 0; i < n; i++)
+      var allBoundaryLines = GetAllBoundaryLines();
+      foreach (var bl in allBoundaryLines)
       {
-        lines.Add(GetLine(InternalIndexPairs[i]));
-      }
-      return lines;
-    }
-
-    private bool IntersectsExternalLines(IndexPair indexPair)
-    {
-      var line = GetLine(indexPair);
-
-      return GetExternalLines().Any(el => line.Intersects(el));
-    }
-
-    private bool IntersectsInternalLines(IndexPair indexPair)
-    {
-      var line = GetLine(indexPair);
-
-      return GetInternalLines().Any(el => line.Intersects(el));
-    }
-
-    private bool Intersects(IndexPair i1, IndexPair i2)
-    {
-      var line1 = GetLine(i1);
-      var line2 = GetLine(i2);
-
-      return line1.Intersects(line2);
-    }
-
-    //Using pseudocode found in https://stackoverflow.com/questions/1165647/how-to-determine-if-a-list-of-polygon-points-are-in-clockwise-order/1180256#1180256
-    private void GetWindingDirection()
-    {
-      double signedArea = 0;
-      var n = pts.Count();
-      for (var i = 0; i < n; i++)
-      {
-        var nextPtIndex = (i < (n - 1)) ? (i + 1) : 0;
-        var x1 = pts[i].X;
-        var y1 = pts[i].Y;
-        var x2 = pts[nextPtIndex].X;
-        var y2 = pts[nextPtIndex].Y;
-
-        signedArea += (x1 * y2 - x2 * y1);
+        if (bl.Intersects(line))
+        {
+          return true;
+        }
       }
 
-      if (signedArea > 0)
+      return false;
+    }
+
+    private bool IntersectsInternalLines(Line2D line)
+    {
+      foreach (var ik in Internals.Keys)
       {
-        windingDirection = 1;
+        if (Internals[ik].Intersects(line))
+        {
+          return true;
+        }
       }
-      else if (signedArea < 0)
-      {
-        windingDirection = -1;
-      }
+
+      return false;
     }
 
     //Because multiple points can be aligned along the same direction from any given point, a dictionary is returned where
     //the (unit) vectors towards the points are the keys, and all points in that exact direction listed as the values
-    private Dictionary<Vector2D, List<int>> PointIndicesInHalfSweep(int ptIndex, int nextPtIndex, int prevPtIndex)
+    private Dictionary<Vector2D, List<int>> PointIndicesSweep(int ptIndex, int nextPtIndex, int prevPtIndex)
     {
-      if (windingDirection == 0)
+      if (ExternalLoop.WindingDirection == 0)
       {
         return null;
       }
-      var vCurrToNext = pts[ptIndex].VectorTo(pts[nextPtIndex]).Normalize();
-      var vCurrToPrev = pts[ptIndex].VectorTo(pts[prevPtIndex]).Normalize();
+
+      var allPts = GetAllPts();
+
+      var vCurrToNext = allPts[ptIndex].VectorTo(allPts[nextPtIndex]).Normalize();
+      var vCurrToPrev = allPts[ptIndex].VectorTo(allPts[prevPtIndex]).Normalize();
 
       var dict = new Dictionary<Vector2D, List<int>>();
 
-      for (var i = 0; i < pts.Count(); i++)
+      for (var i = 0; i < allPts.Count(); i++)
       {
         if (i == ptIndex || i == nextPtIndex || i == prevPtIndex) continue;
 
-        var vItem = pts[ptIndex].VectorTo(pts[i]).Normalize();
+        var vItem = allPts[ptIndex].VectorTo(allPts[i]).Normalize();
 
         //The swapping of the vectors below is to align with the fact that the vector angle comparison is always done anti-clockwise
-        var isBetween = (windingDirection > 0)
+        var isBetween = (ExternalLoop.WindingDirection > 0)
           ? vItem.IsBetweenVectors(vCurrToNext, vCurrToPrev)
           : vItem.IsBetweenVectors(vCurrToPrev, vCurrToNext);
 
@@ -384,57 +482,6 @@ namespace SpeckleStructuralGSA.Test
         }
       }
       return dict;
-    }
-
-    // wn_PnPoly(): winding number test for a point in a polygon
-    //      Input:   P = a point,
-    //               V[] = vertex points of a polygon V[n+1] with V[n]=V[0]
-    //      Return:  wn = the winding number (=0 only when P is outside)
-    // Adapted from: http://geomalgorithms.com/a03-_inclusion.html
-    private int Wn_PnPoly(Point2D P, List<Point2D> V)
-    {
-      int wn = 0;    // the  winding number counter
-      int n = V.Count();
-
-      // loop through all edges of the polygon
-      for (int i = 0; i < n; i++)
-      {   // edge from V[i] to  V[i+1]
-        if (V[i].Y <= P.Y)
-        {          // start y <= P.y
-          if (V[i + 1].Y > P.Y)      // an upward crossing
-          {
-            if (IsLeft(V[i], V[i + 1], P) > 0)  // P left of  edge
-            {
-              ++wn;            // have  a valid up intersect
-            }
-          }
-        }
-        else
-        {                        // start y > P.y (no test needed)
-          if (V[i + 1].Y <= P.Y)     // a downward crossing
-          {
-            if (IsLeft(V[i], V[i + 1], P) < 0)  // P right of  edge
-            {
-              --wn;            // have  a valid down intersect
-            }
-          }
-        }
-      }
-      return wn;
-    }
-
-    // isLeft(): tests if a point is Left|On|Right of an infinite line.
-    //    Input:  three points P0, P1, and P2
-    //    Return: >0 for P2 left of the line through P0 and P1
-    //            =0 for P2  on the line
-    //            <0 for P2  right of the line
-    //    See: Algorithm 1 "Area of Triangles and Polygons"
-    // Adapted from: http://geomalgorithms.com/a03-_inclusion.html
-    private int IsLeft(Point2D P0, Point2D P1, Point2D P2)
-    {
-      var result = ( ((P1.X - P0.X) * (P2.Y - P0.Y)
-              - (P2.X - P0.X) * (P1.Y - P0.Y)));
-      return (result == 0) ? 0 : (result < 0) ? -1 : 1;
     }
   }
 }
