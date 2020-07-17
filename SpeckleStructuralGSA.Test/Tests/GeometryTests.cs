@@ -8,7 +8,7 @@ using NUnit.Framework.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Spatial.Euclidean;
 
-namespace SpeckleStructuralGSA.Test.Tests
+namespace SpeckleStructuralGSA.Test
 {
   [TestFixture]
   public class GeometryTests

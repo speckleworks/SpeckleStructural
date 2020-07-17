@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
+using Speckle2dMesher;
 
-namespace SpeckleStructuralGSA.Test.Tests
+namespace SpeckleStructuralGSA.Test
 {
   [TestFixture]
   public class MeshFaceGenerationTests
@@ -49,7 +48,7 @@ namespace SpeckleStructuralGSA.Test.Tests
       };
 
       Assert.IsTrue(ma.Init(coor));
-
+      ma.GenerateInternals();
       var faces = ma.Faces();
       Assert.IsNotNull(faces);
       Assert.Greater(faces.Count(), 0);
@@ -59,7 +58,7 @@ namespace SpeckleStructuralGSA.Test.Tests
     public void TestDecagon()
     {
       Assert.IsTrue(ma.Init(decagonCoor));
-
+      ma.GenerateInternals();
       var faces = ma.Faces();
       Assert.IsNotNull(faces);
       Assert.True(faces.SequenceEqual(new[] 
@@ -82,7 +81,7 @@ namespace SpeckleStructuralGSA.Test.Tests
       var coor = new double[] { 0, 0, 0, 100, 0, 0, 80, 50, 0 };
 
       Assert.IsTrue(ma.Init(coor));
-
+      ma.GenerateInternals();
       var faces = ma.Faces();
       Assert.IsNotNull(faces);
       Assert.True(faces.SequenceEqual(new[]
@@ -98,7 +97,7 @@ namespace SpeckleStructuralGSA.Test.Tests
       var coor = new double[] { 111, -29, 0, 52, -29, 0, 83, 13, 0, 174, 13, 0};
 
       Assert.IsTrue(ma.Init(coor));
-
+      ma.GenerateInternals();
       var faces = ma.Faces();
       Assert.IsNotNull(faces);
       Assert.True(faces.SequenceEqual(new[]
@@ -114,7 +113,7 @@ namespace SpeckleStructuralGSA.Test.Tests
       var coor = new double[] { 0, -107, -1, 0, -192.456877, -1, 0, -234, -1, 0, -234, 31.270637, 0, -234, 82, 0, -168, 20, 0, -107, 82.0 };
 
       Assert.IsTrue(ma.Init(coor));
-
+      ma.GenerateInternals();
       var faces = ma.Faces();
       Assert.IsNotNull(faces);
       Assert.True(faces.SequenceEqual(new[]
@@ -126,9 +125,35 @@ namespace SpeckleStructuralGSA.Test.Tests
     }
 
     [Test]
-    public void TestSingleOpening()
+    public void TestSingleOpeningRectangle()
+    {
+      var coor = new double[] { 0, 0, 0, 0, 50, 0, 100, 60, 0, 80, 0, 0 };
+      var coorOpening = new double[] { 20, 20, 0, 40, 20, 0, 40, 40, 0, 20, 40, 0 };
+
+      Assert.IsTrue(ma.Init(coor, new List<double[]> { coorOpening }));
+      ma.GenerateInternals();
+      var faces = ma.Faces();
+      Assert.IsNotNull(faces);
+      Assert.True(faces.SequenceEqual(new[]
+      {
+        0, 0, 1, 7,
+        0, 1, 2, 6,
+        0, 2, 3, 5,
+        0, 0, 3, 5,
+        0, 0, 4, 5,
+        0, 2, 5, 6,
+        0, 1, 6, 7,
+        0, 0, 4, 7
+      }));
+    }
+
+    [Test]
+    public void TestSingleOpeningDecagon()
     {
       Assert.IsTrue(ma.Init(decagonCoor, new List<double[]> { decagonOpening1Coor }));
+      ma.GenerateInternals();
+
+      var internalGlobalCoords = ma.GetInternalGlobalCoords();
 
       var faces = ma.Faces();
       Assert.IsNotNull(faces);
@@ -139,7 +164,7 @@ namespace SpeckleStructuralGSA.Test.Tests
     public void TestMultipleOpenings()
     {
       Assert.IsTrue(ma.Init(decagonCoor, new List<double[]> { decagonOpening1Coor, decagonOpening2Coor }));
-
+      ma.GenerateInternals();
       var faces = ma.Faces();
       Assert.IsNotNull(faces);
       Assert.Greater(faces.Count(), 0);
