@@ -8,6 +8,63 @@ namespace Speckle2dMesher
 {
   public static class Extensions
   {
+    public static bool IsInside(this IEnumerable<Point2D> pts, Point2D p)
+    {
+      var ptsList = pts.ToList();
+      ptsList.Add(ptsList[0]); // Add the end node again
+      return (Wn_PnPoly(p, ptsList) != 0);
+    }
+
+    // wn_PnPoly(): winding number test for a point in a polygon
+    //      Input:   P = a point,
+    //               V[] = vertex points of a polygon V[n+1] with V[n]=V[0]
+    //      Return:  wn = the winding number (=0 only when P is outside)
+    // Adapted from: http://geomalgorithms.com/a03-_inclusion.html
+    private static int Wn_PnPoly(Point2D P, List<Point2D> V)
+    {
+      int wn = 0;    // the  winding number counter
+      int n = V.Count() - 1;
+
+      // loop through all edges of the polygon
+      for (int i = 0; i < n; i++)
+      {   // edge from V[i] to  V[i+1]
+        if (V[i].Y <= P.Y)
+        {          // start y <= P.y
+          if (V[i + 1].Y > P.Y)      // an upward crossing
+          {
+            if (IsLeft(V[i], V[i + 1], P) > 0)  // P left of  edge
+            {
+              ++wn;            // have  a valid up intersect
+            }
+          }
+        }
+        else
+        {                        // start y > P.y (no test needed)
+          if (V[i + 1].Y <= P.Y)     // a downward crossing
+          {
+            if (IsLeft(V[i], V[i + 1], P) < 0)  // P right of  edge
+            {
+              --wn;            // have  a valid down intersect
+            }
+          }
+        }
+      }
+      return wn;
+    }
+
+    // isLeft(): tests if a point is Left|On|Right of an infinite line.
+    //    Input:  three points P0, P1, and P2
+    //    Return: >0 for P2 left of the line through P0 and P1
+    //            =0 for P2  on the line
+    //            <0 for P2  right of the line
+    //    See: Algorithm 1 "Area of Triangles and Polygons"
+    // Adapted from: http://geomalgorithms.com/a03-_inclusion.html
+    private static int IsLeft(Point2D P0, Point2D P1, Point2D P2)
+    {
+      var result = (((P1.X - P0.X) * (P2.Y - P0.Y)
+              - (P2.X - P0.X) * (P1.Y - P0.Y)));
+      return (result == 0) ? 0 : (result < 0) ? -1 : 1;
+    }
 
     //Using pseudocode found in https://stackoverflow.com/questions/1165647/how-to-determine-if-a-list-of-polygon-points-are-in-clockwise-order/1180256#1180256
     public static int GetWindingDirection(this IEnumerable<Point2D> loopPoints)
@@ -75,12 +132,9 @@ namespace Speckle2dMesher
       var fromDia = vFrom.DiamondAngle();
       var toDia = vTo.DiamondAngle();
 
-      if(fromDia > toDia)
-      {
-        toDia += 4; //4 is the maximum diamond angle, so this will add a revolution
-      }
-
-      return (candidateDia > fromDia && candidateDia < toDia);
+      return (fromDia < toDia)
+        ? (candidateDia > fromDia && candidateDia < toDia)
+        : (candidateDia > fromDia || candidateDia < toDia);
     }
 
     public static double[] Essential(this IEnumerable<double> coords)
@@ -109,6 +163,7 @@ namespace Speckle2dMesher
       {
         var prev = origPtsExtended[i - 1];
         var next = origPtsExtended[i + 1];
+
         if (!origPtsExtended[i].IsOnLineBetween(prev, next))
         {
           retList.Add(origPtsExtended[i]);

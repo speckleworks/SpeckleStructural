@@ -122,7 +122,7 @@ namespace Speckle2dMesher
 
         for (var i = 0; i < n; i++)
         {
-          var indexPair = new IndexPair(ptIndexOffset + i, ptIndexOffset + ((i == (n - 1)) ? 0 : (i + 1)));
+          var indexPair = new IndexPair(ptIndexOffset + i, ptIndexOffset + (((i == (n - 1)) ? 0 : (i + 1))));
           IndexedLines.Add(indexPair, new Line2D(MeshPointByIndex(indexPair.Indices[0]).Local, MeshPointByIndex(indexPair.Indices[1]).Local));
         }
 
@@ -146,10 +146,11 @@ namespace Speckle2dMesher
     #endregion
 
     private CoordinateSystem CoordinateTranslation = null;
-
+    
     private readonly ClosedLoop ExternalLoop = new ClosedLoop();
     private readonly Dictionary<IndexPair, Line2D> Internals = new Dictionary<IndexPair, Line2D>();
     private readonly List<ClosedLoop> Openings = new List<ClosedLoop>();
+    private readonly List<TriangleIndexSet> Triangles = new List<TriangleIndexSet>();
 
     //Assumptions:
     // - input coordinates are an ordered set of external vertices (i.e. not vertices of openings)
@@ -171,11 +172,21 @@ namespace Speckle2dMesher
           Openings.Add(openingLoop);
         }
       }
-      
+
+      if (!GenerateInternals())
+      {
+        return false;
+      }
+
+      if (!GenerateFaces())
+      {
+        return false;
+      }
+
       return true;
     }
 
-    public bool GenerateInternals()
+    private bool GenerateInternals()
     {
       var loops = GetLoops();
 
@@ -253,10 +264,19 @@ namespace Speckle2dMesher
     public int[] Faces()
     {
       var faces = new List<int>();
+      foreach (var t in Triangles)
+      {
+        faces.Add(0); // signifying a triangle
+        faces.AddRange(t.Indices.Take(3));
+      }
 
+      return faces.ToArray();
+    }
+
+    private bool GenerateFaces()
+    {
       //Now determine faces by cycling through each edge line and finding which other point is shared between all lines emanating from this point
-
-      var triangles = new List<TriangleIndexSet>();
+      Triangles.Clear();
       var boundaryIndexPairs = GetAllBoundaryIndexPairs();
 
       foreach (var l in GetLoops())
@@ -274,9 +294,9 @@ namespace Speckle2dMesher
             if (sharedPtIndices.Count() == 1)
             {
               var currTriangle = new TriangleIndexSet(i, nextPtIndex, sharedPtIndices[0]);
-              if (triangles.All(t => !t.Matches(currTriangle)))
+              if (Triangles.All(t => !t.Matches(currTriangle)))
               {
-                triangles.Add(currTriangle);
+                Triangles.Add(currTriangle);
               }
             }
             else
@@ -287,13 +307,7 @@ namespace Speckle2dMesher
         }
       }
 
-      foreach (var t in triangles)
-      {
-        faces.Add(0); // signifying a triangle
-        faces.AddRange(t.Indices.Take(3));
-      }
-
-      return faces.ToArray();
+      return true;
     }
 
     private Dictionary<IndexPair, Line2D> AllIndexLocalLines
