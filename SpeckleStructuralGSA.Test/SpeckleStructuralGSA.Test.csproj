@@ -153,17 +153,14 @@
     <Compile Include="Other\GwaRecord.cs" />
     <Compile Include="Other\Helper.cs" />
     <Compile Include="Other\TestAppUI.cs" />
-    <Compile Include="Tests\MeshFaceGenerationTests.cs" />
     <Compile Include="Tests\FileComparison.cs" />
-    <Compile Include="Tests\GeometryTests.cs" />
-    <Compile Include="Tests\MeshTests.cs" />
     <Compile Include="Tests\MergingTests.cs" />
     <Compile Include="Base\ProcessorBase.cs" />
     <Compile Include="Other\ReceiverProcessor.cs" />
     <Compile Include="Other\Result.cs" />
     <Compile Include="Other\SenderProcessor.cs" />
+    <Compile Include="Tests\MeshTests.cs" />
     <Compile Include="Tests\ReceiverTests.cs" />
-    <Compile Include="Tests\ScalingTests.cs" />
     <Compile Include="Tests\SenderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Other\Settings.cs" />
@@ -185,10 +182,6 @@
     <None Include="TestData\UNg87ieJG.json" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Speckle2dMesher\Speckle2dMesher.csproj">
-      <Project>{81cf5e61-6e72-452e-910c-17f6fd22d93a}</Project>
-      <Name>Speckle2dMesher</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SpeckleStructuralClasses\SpeckleStructuralClasses.csproj">
       <Project>{42e1db9c-e4d5-4190-9977-874e8143dcc5}</Project>
       <Name>SpeckleStructuralClasses</Name>

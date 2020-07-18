@@ -1,150 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MathNet.Numerics;
+using MathNet.Numerics.Interpolation;
 using MathNet.Spatial.Euclidean;
 
-namespace Speckle2dMesher
+namespace SpeckleStructuralClasses.PolygonMesher
 {
-  public partial class MeshArea
+  public class PolygonMesher
   {
-    #region helper_classes
-    private abstract class IndexSet
-    {
-      public readonly int[] Indices;
-
-      public IndexSet(List<int> values)
-      {
-        Indices = values.OrderBy(v => v).ToArray();
-      }
-
-      public bool Contains(int index)
-      {
-        return Indices.Any(i => i == index);
-      }
-
-      public bool Matches(IndexSet other)
-      {
-        return Indices.SequenceEqual(other.Indices);
-      }
-    }
-
-    private class IndexPair : IndexSet
-    {
-      public IndexPair(int index1, int index2) : base (new List<int>() { index1, index2 })
-      {
-      }
-
-      public int? Other(int index)
-      {
-        return (Indices[0] == index) ? Indices[1] : (Indices[1] == index) ? (int ?) Indices[0] : null;
-      }
-    }
-
-    private class TriangleIndexSet : IndexSet
-    {
-      public TriangleIndexSet(int index1, int index2, int index3) : base(new List<int>() {  index1, index2, index3 })
-      {
-      }
-    }
-
-    private class MeshPoint
-    {
-      public int Index;
-      public Point2D Local;
-      public Point3D Global;
-      public MeshPoint(int index, Point2D local, Point3D global)
-      {
-        this.Local = local;
-        this.Index = index;
-        this.Global = global;
-      }
-    }
-
-    private class ClosedLoop
-    {
-      public List<MeshPoint> MeshPoints = new List<MeshPoint>();
-      public Dictionary<IndexPair, Line2D> IndexedLines = new Dictionary<IndexPair, Line2D>();
-      public int WindingDirection;
-      public CoordinateSystem CoordinateTranslation;
-
-      public bool Init(double[] globalCoords, ref CoordinateSystem CoordinateTranslation, int ptIndexOffset = 0)
-      {
-        var essential = globalCoords.Essential();
-
-        var origPts = new List<Point3D>();
-        for (var i = 0; i < essential.Length; i += 3)
-        {
-          origPts.Add(new Point3D(essential[i], essential[i + 1], essential[i + 2]));
-        }
-
-        if (CoordinateTranslation == null)
-        {
-          //Create plane
-          var plane = Plane.FromPoints(origPts[0], origPts[1], origPts[2]);
-          var normal = plane.Normal;
-          var origin = origPts[0];
-          var xDir = origPts[0].VectorTo(origPts[1]).Normalize();
-          var yDir = normal.CrossProduct(xDir);
-
-          //The CoordinateSystem class in MathNet.Spatial and its methods aren't not very intuitive as discussed in https://github.com/mathnet/mathnet-spatial/issues/53
-          //Since I don't understand the offsets that seem to be applied by TransformFrom and TransformTo, I focussed on the Transform method,
-          //which transforms a local point to a global point.
-          //In order to transform a point from global into local, the coordinate system needs to be reversed so that the resulting coordinateSystem.Transform does the
-          //transformation from global to local.
-          CoordinateTranslation = new CoordinateSystem((new CoordinateSystem(origin, xDir, yDir, normal)).Inverse());
-        }
-        else
-        {
-          this.CoordinateTranslation = CoordinateTranslation;
-        }
-
-        //project points onto the plane - if the points are co-planar and translation is done correctly, all Z values should be zero
-        var nonCoPlanarPts = 0;
-        var n = origPts.Count();
-        for (var i = 0; i < n; i++)
-        {
-          var projectedPt = CoordinateTranslation.Transform(origPts[i]);
-          if (!projectedPt.Z.AlmostEqual(0, 3))
-          {
-            nonCoPlanarPts++;
-          }
-          var localPt = new Point2D(projectedPt.X, projectedPt.Y);
-          MeshPoints.Add(new MeshPoint(ptIndexOffset + i, localPt, origPts[i]));
-        }
-
-        WindingDirection = 0;
-        IndexedLines = new Dictionary<IndexPair, Line2D>();
-        if (nonCoPlanarPts > 0)
-        {
-          return false;
-        }
-
-        for (var i = 0; i < n; i++)
-        {
-          var indexPair = new IndexPair(ptIndexOffset + i, ptIndexOffset + (((i == (n - 1)) ? 0 : (i + 1))));
-          IndexedLines.Add(indexPair, new Line2D(MeshPointByIndex(indexPair.Indices[0]).Local, MeshPointByIndex(indexPair.Indices[1]).Local));
-        }
-
-        WindingDirection = MeshPoints.Select(mp => mp.Local).GetWindingDirection();
-
-        return true;
-      }
-
-      public int NextIndex(int currIndex) => (currIndex == MeshPoints.Last().Index) ? MeshPoints.First().Index : currIndex + 1;
-      public int PrevIndex(int currIndex) => (currIndex == MeshPoints.First().Index) ? MeshPoints.Last().Index : currIndex - 1;
-      public int FirstIndex() => MeshPoints.First().Index;
-      public int LastIndex() => MeshPoints.Last().Index;
-
-      public void ReverseDirection()
-      {
-        WindingDirection *= -1;
-      }
-
-      private MeshPoint MeshPointByIndex(int index) => MeshPoints.FirstOrDefault(mp => mp.Index == index);
-    }
-    #endregion
-
     private CoordinateSystem CoordinateTranslation = null;
     
     private readonly ClosedLoop ExternalLoop = new ClosedLoop();
@@ -153,23 +16,39 @@ namespace Speckle2dMesher
     private readonly Dictionary<IndexPair, Line2D> Internals = new Dictionary<IndexPair, Line2D>();
     private readonly List<TriangleIndexSet> Triangles = new List<TriangleIndexSet>();
 
+    private readonly double tolerance = 0.001;
+
+    public double[] Coordinates
+    {
+      get
+      {
+        var coord = new List<double>();
+        var vs = GetAllVertices();
+        foreach (var v in vs)
+        {
+          coord.AddRange(v.Coordinates);
+        }
+        return coord.ToArray();
+      }
+    }
+
     //Assumptions:
     // - input coordinates are an ordered set of external vertices (i.e. not vertices of openings)
     // - the lines defined by these vertices don't intersect each other
-    public bool Init(double[] coords, List<double[]> openingCoordsList = null)
+    public bool Init(IEnumerable<double> coords, IEnumerable<IEnumerable<double>> openingCoordsList = null)
     {
-      ExternalLoop.Init(coords, ref CoordinateTranslation);
+      ExternalLoop.Init(coords, ref CoordinateTranslation, tolerance);
 
       if (openingCoordsList != null)
       {
-        var indexOffset = ExternalLoop.MeshPoints.Count();
+        var indexOffset = ExternalLoop.Vertices.Count();
         foreach (var openingGlobalCoords in openingCoordsList)
         {
           var openingLoop = new ClosedLoop();
-          openingLoop.Init(openingGlobalCoords, ref this.CoordinateTranslation, indexOffset);
+          openingLoop.Init(openingGlobalCoords, ref this.CoordinateTranslation, tolerance, indexOffset);
           //openings are inverse loops - the inside should be considered the outside, to reverse the winding order
           openingLoop.ReverseDirection();
-          indexOffset += openingLoop.MeshPoints.Count();
+          indexOffset += openingLoop.Vertices.Count();
           Openings.Add(openingLoop);
         }
       }
@@ -247,6 +126,7 @@ namespace Speckle2dMesher
       return true;
     }
 
+    //This method might become useful when visualising these in Rhino, for example
     public List<double[]> GetInternalGlobalCoords()
     {
       var l = new List<double[]>();
@@ -278,31 +158,27 @@ namespace Speckle2dMesher
     {
       //Now determine faces by cycling through each edge line and finding which other point is shared between all lines emanating from this point
       Triangles.Clear();
-      var boundaryIndexPairs = GetAllBoundaryIndexPairs();
 
-      foreach (var l in GetLoops())
+      var indexPairs = GetAllIndexPairs();
+      var vertices = GetAllVertices();
+      var vertexSets = new List<int[]>();
+
+      foreach (var vertex in vertices)
       {
-        for(var i = l.FirstIndex(); i <= l.LastIndex(); i++)
+        var linkedIndices = indexPairs.Where(v => v.Contains(vertex.Index)).Select(v => v.Other(vertex.Index).Value).ToList();
+
+        foreach (var l1i in linkedIndices)
         {
-          var nextPtIndex = l.NextIndex(i);
-          var indicesLinkedToCurr = GetPairedIndices(i).Except(new[] { nextPtIndex }).ToList();
-          var indicesLinkedToNext = GetPairedIndices(nextPtIndex).Except(new[] { i }).ToList();
-
-          var sharedPtIndices = indicesLinkedToCurr.Where(ci => indicesLinkedToNext.Any(ni => ci == ni)).ToList();
-
-          if (sharedPtIndices != null && sharedPtIndices.Count() > 0)
+          var level2Indices = indexPairs.Where(v => v.Contains(l1i) && !v.Contains(vertex.Index)).Select(v => v.Other(l1i).Value).ToList();
+          foreach (var l2i in level2Indices)
           {
-            if (sharedPtIndices.Count() == 1)
+            if (indexPairs.Any(ip => ip.Matches(new IndexPair(l2i, vertex.Index))))
             {
-              var currTriangle = new TriangleIndexSet(i, nextPtIndex, sharedPtIndices[0]);
-              if (Triangles.All(t => !t.Matches(currTriangle)))
+              var triangle = new TriangleIndexSet(vertex.Index, l1i, l2i);
+              if (Triangles.All(t => !t.Matches(triangle)))
               {
-                Triangles.Add(currTriangle);
+                Triangles.Add(triangle);
               }
-            }
-            else
-            {
-              throw new Exception("Found multiple shared indices");
             }
           }
         }
@@ -344,7 +220,7 @@ namespace Speckle2dMesher
 
         foreach (var l in GetLoops())
         {
-          foreach (var mp in l.MeshPoints)
+          foreach (var mp in l.Vertices)
           {
             indexPoints.Add(mp.Index, mp.Global);
           }
@@ -399,15 +275,20 @@ namespace Speckle2dMesher
     private List<Point2D> GetAllPts()
     {
       var allPts = new List<Point2D>();
-      allPts.AddRange(ExternalLoop.MeshPoints.Select(mp => mp.Local));
+      allPts.AddRange(ExternalLoop.Vertices.Select(mp => mp.Local));
       if (Openings != null)
       {
         foreach (var opening in Openings)
         {
-          allPts.AddRange(opening.MeshPoints.Select(p => p.Local));
+          allPts.AddRange(opening.Vertices.Select(p => p.Local));
         }
       }
       return allPts;
+    }
+
+    private List<Vertex> GetAllVertices()
+    {
+      return GetLoops().SelectMany(l => l.Vertices).ToList();
     }
 
     private List<Line2D> GetAllBoundaryLines()
@@ -432,12 +313,20 @@ namespace Speckle2dMesher
       return allBoundaryPairs;
     }
 
+    private List<IndexPair> GetAllIndexPairs()
+    {
+      var allPairs = new List<IndexPair>();
+      allPairs.AddRange(GetAllBoundaryIndexPairs());
+      allPairs.AddRange(Internals.Select(i => i.Key));
+      return allPairs;
+    }
+
     private bool IntersectsBoundaryLines(Line2D line)
     {
       var allBoundaryLines = GetAllBoundaryLines();
       foreach (var bl in allBoundaryLines)
       {
-        if (bl.Intersects(line))
+        if (bl.Intersects(line, tolerance))
         {
           return true;
         }
@@ -450,7 +339,7 @@ namespace Speckle2dMesher
     {
       foreach (var ik in Internals.Keys)
       {
-        if (Internals[ik].Intersects(line))
+        if (Internals[ik].Intersects(line, tolerance))
         {
           return true;
         }

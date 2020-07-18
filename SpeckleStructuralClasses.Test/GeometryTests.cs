@@ -4,8 +4,9 @@ using SpeckleStructuralClasses;
 using SpeckleCoreGeometryClasses;
 using System.Collections.Generic;
 using System;
+using SpeckleStructuralClasses.PolygonMesher;
 
-namespace SpeckleStructuralGSA.Test
+namespace SpeckleStructuralClasses.Test
 {
   [TestFixture]
   public class GeometryTests

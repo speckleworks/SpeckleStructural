@@ -4,7 +4,7 @@ using System.Linq;
 using MathNet.Numerics;
 using MathNet.Spatial.Euclidean;
 
-namespace Speckle2dMesher
+namespace SpeckleStructuralClasses.PolygonMesher
 {
   public static class Extensions
   {
@@ -99,7 +99,7 @@ namespace Speckle2dMesher
 
     //Assumption: this method would never be called when the intersector's end points lie in the middle of an intersectee line
     //This is the case for meshes defined by an ordered set of vertices
-    public static bool Intersects(this Line2D intersectee, Line2D intersector)
+    public static bool Intersects(this Line2D intersectee, Line2D intersector, double tolerance)
     {
       var intPtIntersection = intersectee.IntersectWith(intersector);
       if (!intPtIntersection.HasValue)
@@ -109,7 +109,7 @@ namespace Speckle2dMesher
       var intPt = intPtIntersection.Value;
 
       //There is no intersection if it's at the end points of the line doing the suppposed intersection
-      if (intersector.StartPoint.EqualsWithinTolerance(intPt) || intersector.EndPoint.EqualsWithinTolerance(intPt))
+      if (intersector.StartPoint.EqualsWithinTolerance(intPt, tolerance) || intersector.EndPoint.EqualsWithinTolerance(intPt, tolerance))
       {
         return false;
       }
@@ -117,12 +117,12 @@ namespace Speckle2dMesher
       //By default MathNet defines lines with infinite length so determine if the intersection point is actually within the original bounds of the line
       var intersecteePt = intersectee.ClosestPointTo(intPt, true);
       var intersectorPt = intersector.ClosestPointTo(intPt, true);
-      return intersecteePt.EqualsWithinTolerance(intersectorPt);
+      return intersecteePt.EqualsWithinTolerance(intersectorPt, tolerance);
     }
 
-    public static bool EqualsWithinTolerance(this Point2D pt1, Point2D pt2, int toleranceNumDecimalPlaces = 3)
+    public static bool EqualsWithinTolerance(this Point2D pt1, Point2D pt2, double tolerance)
     {
-      return pt1.DistanceTo(pt2).AlmostEqual(0, toleranceNumDecimalPlaces);
+      return (pt1.DistanceTo(pt2) < tolerance);
     }
 
     //Between does not include being parallel to either vectors - the value returned will be zer0

@@ -119,10 +119,10 @@ namespace SpeckleStructuralGSA.Test
     [Test]
     public void MergeTestGSA_WithMerger()
     {
-      var ls1 = new object[] { "PROP_SPR.3:{speckle_app_id:gh/a}", 1, "LSPxGeneral", "NO_RGB", "GLOBAL", "GENERAL", 0, 16, 0, 17, 0, 18, 0, 19, 0, 20, 0, 21, 0.21 };
+      var ls1 = new object[] { "PROP_SPR.4:{speckle_app_id:gh/a}", 1, "LSPxGeneral", "NO_RGB", "GLOBAL", "GENERAL", 0, 16, 0, 17, 0, 18, 0, 19, 0, 20, 0, 21, 0.21 };
       var gwa1 = string.Join("\t", ls1.Select(l => l.ToString()));
 
-      PrepareInterfacerForGwaToSpeckle<GSASpringProperty>(gwa1, "PROP_SPR.3", "gh/a");
+      PrepareInterfacerForGwaToSpeckle<GSASpringProperty>(gwa1, "PROP_SPR.4", "gh/a");
 
       //Call the ToSpeckle method, which just adds to the GSASenderObjects collection-
       Conversions.ToSpeckle(new GSASpringProperty());
@@ -164,10 +164,10 @@ namespace SpeckleStructuralGSA.Test
     [Test]
     public void MergeTestGSA()
     {
-      var ls1 = new object[] { "PROP_SPR.3:{speckle_app_id:gh/a}", 1, "LSPxGeneral", "NO_RGB", "GLOBAL", "GENERAL", 0, 16, 0, 17, 0, 18, 0, 19, 0, 20, 0, 21, 0.21 };
+      var ls1 = new object[] { "PROP_SPR.4:{speckle_app_id:gh/a}", 1, "LSPxGeneral", "NO_RGB", "GLOBAL", "GENERAL", 0, 16, 0, 17, 0, 18, 0, 19, 0, 20, 0, 21, 0.21 };
       var gwa1 = string.Join("\t", ls1.Select(l => l.ToString()));
 
-      PrepareInterfacerForGwaToSpeckle<GSASpringProperty>(gwa1, "PROP_SPR.3", "gh/a");
+      PrepareInterfacerForGwaToSpeckle<GSASpringProperty>(gwa1, "PROP_SPR.4", "gh/a");
 
       //Call the ToSpeckle method, which just adds to the GSASenderObjects collection
       Conversions.ToSpeckle(new GSASpringProperty());
