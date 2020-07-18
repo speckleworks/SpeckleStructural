@@ -148,8 +148,9 @@ namespace Speckle2dMesher
     private CoordinateSystem CoordinateTranslation = null;
     
     private readonly ClosedLoop ExternalLoop = new ClosedLoop();
-    private readonly Dictionary<IndexPair, Line2D> Internals = new Dictionary<IndexPair, Line2D>();
     private readonly List<ClosedLoop> Openings = new List<ClosedLoop>();
+
+    private readonly Dictionary<IndexPair, Line2D> Internals = new Dictionary<IndexPair, Line2D>();
     private readonly List<TriangleIndexSet> Triangles = new List<TriangleIndexSet>();
 
     //Assumptions:

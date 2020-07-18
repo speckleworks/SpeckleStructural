@@ -65,7 +65,6 @@ namespace SpeckleStructuralGSA.Test
         0, 2, 3, 6,
         0, 3, 4, 5,
         0, 3, 5, 6,
-        0, 2, 6, 7,
         0, 0, 6, 7
         }));
 
