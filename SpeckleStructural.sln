@@ -113,7 +113,6 @@ Global
 		{3897A232-7AA1-4059-83EB-D14C95FBA39D}.DebugParallels|x64.ActiveCfg = Debug|Any CPU
 		{3897A232-7AA1-4059-83EB-D14C95FBA39D}.DebugParallels|x64.Build.0 = Debug|Any CPU
 		{3897A232-7AA1-4059-83EB-D14C95FBA39D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3897A232-7AA1-4059-83EB-D14C95FBA39D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3897A232-7AA1-4059-83EB-D14C95FBA39D}.Release|x64.ActiveCfg = Release|Any CPU
 		{3897A232-7AA1-4059-83EB-D14C95FBA39D}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
