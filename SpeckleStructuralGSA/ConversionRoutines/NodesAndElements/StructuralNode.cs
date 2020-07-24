@@ -9,7 +9,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("NODE.3", new string[] { "AXIS.1", "PROP_SPRING.4", "PROP_MASS.2" }, "nodes", true, true, new Type[] { }, new Type[] { })]
+  [GSAObject("NODE.3", new string[] { "AXIS.1", "PROP_SPR.4", "PROP_MASS.2" }, "nodes", true, true, new Type[] { }, new Type[] { })]
   public class GSANode : IGSASpeckleContainer
   {
     public bool ForceSend; // This is to filter only "important" nodes
