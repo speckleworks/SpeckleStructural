@@ -57,15 +57,24 @@ namespace SpeckleStructuralGSA
                 continue;
               }
 
-              if (!node.Value.Result.ContainsKey(loadCase))
+              var newResult = new StructuralNodeResult()
               {
-                node.Value.Result[loadCase] = new StructuralNodeResult()
-                {
-                  LoadCaseRef = loadCase,
-                  TargetRef = Helper.GetApplicationId(typeof(GSANode).GetGSAKeyword(), id),
-                  Value = new Dictionary<string, object>()
-                };
+                LoadCaseRef = loadCase,
+                TargetRef = Helper.GetApplicationId(typeof(GSANode).GetGSAKeyword(), id),
+                Value = new Dictionary<string, object>()
+              };
+
+              //The setter of node.Value.Result won't accept a value if there are no keys (to avoid issues during merging), so
+              //setting a value here needs to be done with at least one key in it
+              if (node.Value.Result == null)
+              {
+                node.Value.Result = new Dictionary<string, object>() { { loadCase, newResult } };
               }
+              else if (!node.Value.Result.ContainsKey(loadCase))
+              {
+                node.Value.Result[loadCase] = newResult;
+              }
+
               (node.Value.Result[loadCase] as StructuralNodeResult).Value[kvp.Key] = resultExport.ToDictionary(x => x.Key, x => (x.Value as List<double>)[0] as object);
 
               node.ForceSend = true;

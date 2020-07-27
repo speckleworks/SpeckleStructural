@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
 using SpeckleCore;
@@ -39,8 +40,9 @@ namespace SpeckleStructuralGSA
         ResultVertices = new List<double>()
       };
 
+      Dictionary<string, object> results = null;
       if (Initialiser.Settings.Element1DResults.Count > 0 && Initialiser.Settings.EmbedResults)
-        obj.Result = new Dictionary<string, object>();
+        results = new Dictionary<string, object>();
 
       // Match up coordinates
       var coordinates = new List<Tuple<string, string>>();
@@ -60,11 +62,15 @@ namespace SpeckleStructuralGSA
       //Because these properties could, depending on how they've been added to the StructuralProperties dictionary,
       //return another instance of the lists instead of a pointer to the lists themselves, temporary variables are used
       //to build up new lists which are assigned as replacements to the property values further down
-      var elementAppIds = obj.ElementApplicationId;
-      var zAxes = obj.ZAxis;
-      var endReleases = obj.EndRelease;
-      var offsets = obj.Offset;
-      var resultVertices = obj.ResultVertices;
+      if (obj.ElementApplicationId == null)
+      {
+        obj.ElementApplicationId = new List<string>();
+      }
+      var elementAppIds = obj.ElementApplicationId ?? new List<string>();
+      var zAxes = obj.ZAxis ?? new List<StructuralVectorThree>();
+      var endReleases = obj.EndRelease ?? new List<StructuralVectorBoolSix>();
+      var offsets = obj.Offset ?? new List<StructuralVectorThree>();
+      var resultVertices = obj.ResultVertices ?? new List<double>();
 
       while (coordinates.Count > 0)
       {
@@ -79,97 +85,99 @@ namespace SpeckleStructuralGSA
           reverseCoordinates = true;
         }
 
-        var element = elementsListCopy[matchIndex];
+        var gsaElement = elementsListCopy[matchIndex];
+        Structural1DElement element = gsaElement.Value;
 
-        elementAppIds.Add(element.Value.ApplicationId);
-        zAxes.Add(element.Value.ZAxis);
+        elementAppIds.Add(element.ApplicationId);
+        zAxes.Add(element.ZAxis);
 
         if (obj.Value.Count == 0)
         {
           if (!reverseCoordinates)
           {
-            obj.Value.AddRange((element.Value.Value as List<double>).Take(3));
+            obj.Value.AddRange((element.Value as List<double>).Take(3));
           }
           else
           {
-            obj.Value.AddRange((element.Value.Value as List<double>).Skip(3).Take(3));
+            obj.Value.AddRange((element.Value as List<double>).Skip(3).Take(3));
           }
         }
 
         if (!reverseCoordinates)
         {
-          current = string.Join(",", (element.Value.Value as List<double>).Skip(3).Take(3).Select(x => Math.Round(x, 4).ToString()));
-          obj.Value.AddRange((element.Value.Value as List<double>).Skip(3).Take(3));
-          endReleases.AddRange(element.Value.EndRelease);
-          offsets.AddRange(element.Value.Offset);
+          current = string.Join(",", (element.Value as List<double>).Skip(3).Take(3).Select(x => Math.Round(x, 4).ToString()));
+          obj.Value.AddRange((element.Value as List<double>).Skip(3).Take(3));
+          endReleases.AddRange(element.EndRelease);
+          offsets.AddRange(element.Offset);
 
           if (Initialiser.Settings.Element1DResults.Count > 0 && Initialiser.Settings.EmbedResults)
           {
-            resultVertices.AddRange(element.Value.ResultVertices);
+            resultVertices.AddRange(element.ResultVertices);
           }
           else
           {
-            resultVertices.AddRange((element.Value.Value as List<double>));
+            resultVertices.AddRange((element.Value as List<double>));
           }
         }
         else
         {
-          current = string.Join(",", (element.Value.Value as List<double>).Take(3).Select(x => Math.Round(x, 4).ToString()));
-          obj.Value.AddRange((element.Value.Value as List<double>).Take(3));
-          endReleases.Add((element.Value.EndRelease as List<StructuralVectorBoolSix>).Last());
-          endReleases.Add((element.Value.EndRelease as List<StructuralVectorBoolSix>).First());
-          offsets.Add((element.Value.Offset as List<StructuralVectorThree>).Last());
-          offsets.Add((element.Value.Offset as List<StructuralVectorThree>).First());
+          current = string.Join(",", (element.Value as List<double>).Take(3).Select(x => Math.Round(x, 4).ToString()));
+          obj.Value.AddRange((element.Value as List<double>).Take(3));
+          endReleases.Add((element.EndRelease as List<StructuralVectorBoolSix>).Last());
+          endReleases.Add((element.EndRelease as List<StructuralVectorBoolSix>).First());
+          offsets.Add((element.Offset as List<StructuralVectorThree>).Last());
+          offsets.Add((element.Offset as List<StructuralVectorThree>).First());
 
           if (Initialiser.Settings.Element1DResults.Count > 0 && Initialiser.Settings.EmbedResults)
           {
-            for (int i = element.Value.ResultVertices.Count - 3; i >= 0; i -= 3)
+            for (var i = (element.ResultVertices.Count - 3); i >= 0; i -= 3)
             {
-              resultVertices.AddRange((element.Value.ResultVertices as List<double>).Skip(i).Take(3));
+              resultVertices.AddRange((element.ResultVertices as List<double>).Skip(i).Take(3));
             }
           }
           else
           {
-            resultVertices.AddRange((element.Value.Value as List<double>).Skip(3).Take(3));
-            resultVertices.AddRange((element.Value.Value as List<double>).Take(3));
+            resultVertices.AddRange((element.Value as List<double>).Skip(3).Take(3));
+            resultVertices.AddRange((element.Value as List<double>).Take(3));
           }
         }
 
         // Result merging
-        if (obj.Result != null && ((Structural1DElement)element.Value).Result != null)
+        if (results != null && ((Structural1DElement)gsaElement.Value).Result != null)
         {
           try
           {
-            foreach (string loadCase in element.Value.Result.Keys)
+            foreach (var loadCase in element.Result.Keys)
             {
-              if (!obj.Result.ContainsKey(loadCase))
-                obj.Result[loadCase] = new Structural1DElementResult()
+              if (!results.ContainsKey(loadCase))
+              {
+                results[loadCase] = new Structural1DElementResult()
                 {
                   Value = new Dictionary<string, object>(),
                   IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
                 };
+              }
 
-              var resultExport = element.Value.Result[loadCase] as Structural1DElementResult;
 
-              if (resultExport != null)
+              if (element.Result[loadCase] is Structural1DElementResult resultExport)
               {
                 foreach (var key in resultExport.Value.Keys)
                 {
-                  if (!(obj.Result[loadCase] as Structural1DElementResult).Value.ContainsKey(key))
+                  if (!(results[loadCase] as Structural1DElementResult).Value.ContainsKey(key))
                   {
-                    (obj.Result[loadCase] as Structural1DElementResult).Value[key]
+                    (results[loadCase] as Structural1DElementResult).Value[key]
                       = new Dictionary<string, object>(resultExport.Value[key] as Dictionary<string, object>);
                   }
                   else
                   {
-                    foreach (var resultKey in ((obj.Result[loadCase] as Structural1DElementResult).Value[key] as Dictionary<string, object>).Keys)
+                    foreach (var resultKey in ((results[loadCase] as Structural1DElementResult).Value[key] as Dictionary<string, object>).Keys)
                     {
                       var res = (resultExport.Value[key] as Dictionary<string, object>)[resultKey] as List<double>;
                       if (reverseCoordinates)
                       {
                         res.Reverse();
                       }
-                      (((obj.Result[loadCase] as Structural1DElementResult).Value[key] as Dictionary<string, object>)[resultKey] as List<double>)
+                      (((results[loadCase] as Structural1DElementResult).Value[key] as Dictionary<string, object>)[resultKey] as List<double>)
                         .AddRange(res);
                     }
                   }
@@ -178,7 +186,8 @@ namespace SpeckleStructuralGSA
               else
               {
                 // UNABLE TO MERGE RESULTS
-                obj.Result = null;
+                //obj.Result = null;
+                results = null;
                 break;
               }
             }
@@ -186,15 +195,16 @@ namespace SpeckleStructuralGSA
           catch
           {
             // UNABLE TO MERGE RESULTS
-            obj.Result = null;
+            //obj.Result = null;
+            results = null;
           }
         }
 
         coordinates.RemoveAt(matchIndex);
         elementsListCopy.RemoveAt(matchIndex);
 
-        this.SubGWACommand.Add(element.GWACommand);
-        this.SubGWACommand.AddRange(element.SubGWACommand);
+        this.SubGWACommand.Add(gsaElement.GWACommand);
+        this.SubGWACommand.AddRange(gsaElement.SubGWACommand);
       }
 
       obj.ElementApplicationId = elementAppIds;
@@ -202,7 +212,7 @@ namespace SpeckleStructuralGSA
       obj.EndRelease = endReleases;
       obj.Offset = offsets;
       obj.ResultVertices = resultVertices;
-
+      obj.Result = results;
       this.Value = obj;
     }
 

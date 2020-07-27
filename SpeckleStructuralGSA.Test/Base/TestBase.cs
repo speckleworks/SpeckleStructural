@@ -85,8 +85,8 @@ namespace SpeckleStructuralGSA.Test
         {
           //Required until SpeckleCoreGeometry has an updated such that its constructors create empty dictionaries for the "properties" property by default,
           //which would bring it in line with the default creation of empty dictionaries when they are created by other means
-          removeNullEmptyFields(jt1, new[] { "properties" });
-          removeNullEmptyFields(jt2, new[] { "properties" });
+          RemoveNullEmptyFields(jt1, new[] { "properties" });
+          RemoveNullEmptyFields(jt2, new[] { "properties" });
 
           var newResult = JToken.DeepEquals(jt1, jt2);
         }
@@ -99,7 +99,7 @@ namespace SpeckleStructuralGSA.Test
       }
     }
 
-    protected void removeNullEmptyFields(JToken token, string[] fields)
+    protected void RemoveNullEmptyFields(JToken token, string[] fields)
     {
       var container = token as JContainer;
       if (container == null) return;
@@ -112,7 +112,7 @@ namespace SpeckleStructuralGSA.Test
         {
           removeList.Add(el);
         }
-        removeNullEmptyFields(el, fields);
+        RemoveNullEmptyFields(el, fields);
       }
 
       foreach (var el in removeList)

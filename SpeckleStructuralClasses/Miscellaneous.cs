@@ -81,7 +81,7 @@ namespace SpeckleStructuralClasses
       {
         return StructuralProperties.ValueAsTypedList<double>("pointdistances");
       }
-      set { if (value != null) StructuralProperties["pointdistances"] = value; }
+      set { if (value != null && value.Count() > 0) StructuralProperties["pointdistances"] = value; }
     }
 
     /// <summary>Base SpeckleLine.</summary>
@@ -118,7 +118,7 @@ namespace SpeckleStructuralClasses
       {
         return StructuralProperties.ValueAsTypedList<string>("elementRefs");
       }
-      set { if (value != null) StructuralProperties["elementRefs"] = value; }
+      set { if (value != null && value.Count() > 0) StructuralProperties["elementRefs"] = value; }
     }
   }
 
@@ -170,7 +170,7 @@ namespace SpeckleStructuralClasses
       {
         return StructuralProperties.ValueAsTypedList<StructuralBridgeAlignmentNode>("nodes");
       }
-      set { if (value != null) StructuralProperties["nodes"] = value; }
+      set { if (value != null && value.Count() > 0) StructuralProperties["nodes"] = value; }
     }
 
     [JsonIgnore]
@@ -250,7 +250,7 @@ namespace SpeckleStructuralClasses
       {
         return StructuralProperties.ValueAsTypedList<StructuralBridgeVehicleAxle>("axles");
       }
-      set { if (value != null) StructuralProperties["axles"] = value; }
+      set { if (value != null && value.Count() > 0) StructuralProperties["axles"] = value; }
     }
 
     [JsonIgnore]
