@@ -8,7 +8,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("PROP_SPR.3", new string[] { }, "properties", true, true, new Type[] { }, new Type[] { })]
+  [GSAObject("PROP_SPR.4", new string[] { }, "properties", true, true, new Type[] { }, new Type[] { })]
   public class GSASpringProperty : IGSASpeckleContainer
   {
     public int GSAId { get; set; }
@@ -18,6 +18,9 @@ namespace SpeckleStructuralGSA
 
     public void ParseGWACommand()
     {
+      // GSA documentation of this GWA command is almost useless
+      // save a GSA file as GWA to learn about it as GSA creates it
+      
       if (this.GWACommand == null)
         return;
 
@@ -31,17 +34,6 @@ namespace SpeckleStructuralGSA
       obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; //Skip colour
-      var gsaAxis = pieces[counter++];
-
-      if (gsaAxis == "GLOBAL")
-        obj.Axis = Helper.Parse0DAxis(0, Initialiser.Interface, out var gwaRec);
-      else if (gsaAxis == "VERTICAL")
-        obj.Axis = Helper.Parse0DAxis(-14, Initialiser.Interface, out var gwaRec);
-      else
-      {
-        obj.Axis = Helper.Parse0DAxis(Convert.ToInt32(gsaAxis), Initialiser.Interface, out var gwaRec);
-        this.SubGWACommand.Add(gwaRec);
-      }
 
       var springPropertyType = pieces[counter++];
 
@@ -90,6 +82,7 @@ namespace SpeckleStructuralGSA
           break;
 
         case "general":
+          // Speckle spring currently only supports linear springs
           obj.SpringType = StructuralSpringPropertyType.General;
           counter--;
           for (var i = 0; i < 6; i++)
@@ -131,48 +124,13 @@ namespace SpeckleStructuralGSA
       var gwaAxisCommand = "";
       var gwaCommands = new List<string>();
 
-      var axisRef = "GLOBAL";
-
-      if (springProp.Axis == null)
-      {
-        //Default value
-        axisRef = "GLOBAL";
-      }
-      else
-      {
-        if (springProp.Axis.Xdir.Value.SequenceEqual(new double[] { 1, 0, 0 }) &&
-          springProp.Axis.Ydir.Value.SequenceEqual(new double[] { 0, 1, 0 }) &&
-          springProp.Axis.Normal.Value.SequenceEqual(new double[] { 0, 0, 1 }))
-        {
-          axisRef = "GLOBAL";
-        }
-        else if (springProp.Axis.Xdir.Value.SequenceEqual(new double[] { 0, 0, 1 }) &&
-          springProp.Axis.Ydir.Value.SequenceEqual(new double[] { 1, 0, 0 }) &&
-          springProp.Axis.Normal.Value.SequenceEqual(new double[] { 0, 1, 0 }))
-        {
-          axisRef = "VERTICAL";
-        }
-        else
-          try
-          {
-            Helper.SetAxis(springProp.Axis, out var axisIndex, out gwaAxisCommand, springProp.Name);
-            if (gwaAxisCommand.Length > 0)
-            {
-              gwaCommands.Add(gwaAxisCommand);
-              axisRef = axisIndex.ToString();
-            }
-          }
-          catch { axisRef = "GLOBAL"; }
-      }
-
       var ls = new List<string>
       {
         "SET",
         keyword + ":" + Helper.GenerateSID(springProp),
         index.ToString(),
         string.IsNullOrEmpty(springProp.Name) ? "" : springProp.Name,
-        "NO_RGB",
-        axisRef
+        "NO_RGB"
       };
 
       ls.AddRange(SpringTypeCommandPieces(springProp.SpringType, springProp.Stiffness, springProp.DampingRatio ?? 0));
@@ -239,6 +197,7 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSASpringProperty dummyObject)
     {
       var newLines = ToSpeckleBase<GSASpringProperty>();
+      var typeName = dummyObject.GetType().Name;
 
       var springPropLock = new object();
       //Get all relevant GSA entities in this entire model
@@ -246,6 +205,8 @@ namespace SpeckleStructuralGSA
 
       Parallel.ForEach(newLines.Values, p =>
       {
+        var pPieces = p.ListSplit("\t");
+        var gsaId = pPieces[1];
         try
         {
           var springProperty = new GSASpringProperty() { GWACommand = p };
@@ -255,7 +216,10 @@ namespace SpeckleStructuralGSA
             springProperties.Add(springProperty);
           }
         }
-        catch { }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+        }
       });
 
       Initialiser.GSASenderObjects.AddRange(springProperties);

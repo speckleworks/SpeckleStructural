@@ -17,7 +17,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>portable</DebugType>
+    <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -26,7 +26,7 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>portable</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -42,6 +42,12 @@
       <HintPath>..\packages\DeviceId.4.3.0\lib\net40\DeviceId.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="MathNet.Numerics, Version=4.9.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MathNet.Numerics.4.9.1\lib\net461\MathNet.Numerics.dll</HintPath>
+    </Reference>
+    <Reference Include="MathNet.Spatial, Version=0.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MathNet.Spatial.0.6.0\lib\net461\MathNet.Spatial.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
       <Private>False</Private>
@@ -56,16 +62,15 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="PresentationCore" />
     <Reference Include="SpeckleCore, Version=1.6.9.0, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\SpeckleCore.1.6.9\lib\net45\SpeckleCore.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="SpeckleCoreGeometryClasses, Version=1.2.8.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SpeckleCoreGeometry.1.2.8\lib\net461\SpeckleCoreGeometryClasses.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="SQLite-net, Version=1.5.231.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\sqlite-net-pcl.1.5.231\lib\netstandard1.1\SQLite-net.dll</HintPath>
@@ -101,7 +106,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="websocket-sharp, Version=1.0.2.32519, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL">
       <HintPath>..\packages\WebSocketSharp-NonPreRelease.1.0.0\lib\net35\websocket-sharp.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +117,13 @@
     <Compile Include="Extensions\Miscellaneous.cs" />
     <Compile Include="Extensions\NodesAndElements.cs" />
     <Compile Include="Extensions\Properties.cs" />
+    <Compile Include="PolygonMesher\ClosedLoop.cs" />
+    <Compile Include="PolygonMesher\Extensions.cs" />
+    <Compile Include="PolygonMesher\IndexPair.cs" />
+    <Compile Include="PolygonMesher\IndexSet.cs" />
+    <Compile Include="PolygonMesher\PolygonMesher.cs" />
+    <Compile Include="PolygonMesher\TriangleIndexSet.cs" />
+    <Compile Include="PolygonMesher\Vertex.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Base.cs" />
     <Compile Include="Loads.cs" />

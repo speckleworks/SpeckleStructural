@@ -82,15 +82,23 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSAGridSurface dummyObject)
     {
       var newLines = ToSpeckleBase<GSAGridSurface>();
-
+      var typeName = dummyObject.GetType().Name;
       var planes = new List<GSAGridSurface>();
 
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
       {
+        var p = newLines[k];
         var plane = new GSAGridSurface() { GWACommand = p };
-        if (plane.ParseGWACommand())
+        try
         {
-          planes.Add(plane);
+          if (plane.ParseGWACommand())
+          {
+            planes.Add(plane);
+          }
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
         }
       }
 

@@ -714,7 +714,7 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA1DProperty dummyObject)
     {
       var newLines = ToSpeckleBase<GSA1DProperty>();
-
+      var typeName = dummyObject.GetType().Name;
       var propsLock = new object();
       var props = new List<GSA1DProperty>();
       var steels = Initialiser.GSASenderObjects.Get<GSAMaterialSteel>();      
@@ -722,6 +722,8 @@ namespace SpeckleStructuralGSA
 
       Parallel.ForEach(newLines.Values, p =>
       {
+        var pPieces = p.ListSplit("\t");
+        var gsaId = pPieces[1];
         try
         {
           var prop = new GSA1DProperty() { GWACommand = p };
@@ -731,7 +733,10 @@ namespace SpeckleStructuralGSA
             props.Add(prop);
           }
         }
-        catch { }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+        }
       });
 
       Initialiser.GSASenderObjects.AddRange(props);

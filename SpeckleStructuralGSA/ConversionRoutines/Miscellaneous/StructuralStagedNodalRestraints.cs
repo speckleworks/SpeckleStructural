@@ -9,7 +9,7 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("GEN_REST.2", new string[] { }, "misc", true, true, new Type[] { typeof(GSANode), typeof(GSAConstructionStage) }, new Type[] { typeof(GSANode), typeof(GSAConstructionStage) })]
-  public class GSAStructuralStagedNodalRestraints : IGSASpeckleContainer
+  public class GSAStagedNodalRestraints : IGSASpeckleContainer
   {
     public int GSAId { get; set; }
     public string GWACommand { get; set; }
@@ -67,7 +67,7 @@ namespace SpeckleStructuralGSA
       if (obj.Restraint == null)
         return "";
 
-      var destinationType = typeof(GSAStructuralStagedNodalRestraints);
+      var destinationType = typeof(GSAStagedNodalRestraints);
 
 			var keyword = destinationType.GetGSAKeyword();
       var subkeywords = destinationType.GetSubGSAKeyword();
@@ -108,15 +108,15 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this StructuralStagedNodalRestraints restraint)
     {
-      return new GSAStructuralStagedNodalRestraints() { Value = restraint }.SetGWACommand();
+      return new GSAStagedNodalRestraints() { Value = restraint }.SetGWACommand();
     }
 
-    public static SpeckleObject ToSpeckle(this GSAStructuralStagedNodalRestraints dummyObject)
+    public static SpeckleObject ToSpeckle(this GSAStagedNodalRestraints dummyObject)
     {
-      var newLines = ToSpeckleBase< GSAStructuralStagedNodalRestraints>();
-
+      var newLines = ToSpeckleBase< GSAStagedNodalRestraints>();
+      var typeName = dummyObject.GetType().Name;
       var nodalRestraintsLock = new object();
-      var genNodalRestraints = new List<GSAStructuralStagedNodalRestraints>();
+      var genNodalRestraints = new List<GSAStagedNodalRestraints>();
 
       var stageDefs = Initialiser.GSASenderObjects.Get<GSAConstructionStage>();
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
@@ -125,14 +125,17 @@ namespace SpeckleStructuralGSA
       {
         try
         {
-          var genNodalRestraint = new GSAStructuralStagedNodalRestraints() { GSAId = k, GWACommand = newLines[k] };
+          var genNodalRestraint = new GSAStagedNodalRestraints() { GSAId = k, GWACommand = newLines[k] };
           genNodalRestraint.ParseGWACommand(nodes, stageDefs);
           lock (nodalRestraintsLock)
           {
             genNodalRestraints.Add(genNodalRestraint);
           }
         }
-        catch { }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+        }
       });
 
       Initialiser.GSASenderObjects.AddRange(genNodalRestraints);

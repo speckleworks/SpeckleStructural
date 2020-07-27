@@ -1,4 +1,6 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
+using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Units;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
 using SpeckleGSAInterfaces;
@@ -8,7 +10,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows.Media.Media3D;
 
 namespace SpeckleStructuralGSA
 {
@@ -75,8 +76,10 @@ namespace SpeckleStructuralGSA
     /// <param name="zUnitVector">Z unit vector</param>
     /// <param name="angle">Angle of rotation in radians</param>
     /// <returns>Rotation matrix</returns>
-    public static Matrix3D RotationMatrix(Vector3D zUnitVector, double angle)
+    public static Matrix<double> RotationMatrix(UnitVector3D zUnitVector, double angle)
     {
+      return Matrix3D.RotationAroundArbitraryVector(zUnitVector, Angle.FromRadians(angle));
+      /*
       var cos = Math.Cos(angle);
       var sin = Math.Sin(angle);
 
@@ -99,6 +102,7 @@ namespace SpeckleStructuralGSA
 
           0, 0, 0, 1
       );
+      */
     }
     #endregion
 
@@ -704,42 +708,37 @@ namespace SpeckleStructuralGSA
     /// <returns>Axis</returns>
     public static StructuralAxis Parse1DAxis(double[] coor, double rotationAngle = 0, double[] orientationNode = null)
     {
-      Vector3D x, y, z;
+      UnitVector3D x, y, z;
 
-      x = new Vector3D(coor[3] - coor[0], coor[4] - coor[1], coor[5] - coor[2]);
-      x.Normalize();
+      x = (new Vector3D(coor[3] - coor[0], coor[4] - coor[1], coor[5] - coor[2])).Normalize();
 
       if (orientationNode == null)
       {
         if (x.X == 0 && x.Y == 0)
         {
           //Column
-          y = new Vector3D(0, 1, 0);
-          z = Vector3D.CrossProduct(x, y);
+          y = (new Vector3D(0, 1, 0)).Normalize();
+          z = x.CrossProduct(y);
         }
         else
         {
           //Non-Vertical
           var Z = new Vector3D(0, 0, 1);
-          y = Vector3D.CrossProduct(Z, x);
-          y.Normalize();
-          z = Vector3D.CrossProduct(x, y);
-          z.Normalize();
+          y = Z.CrossProduct(x).Normalize();
+          z = x.CrossProduct(y);
         }
       }
       else
       {
-        var Yp = new Vector3D(orientationNode[0], orientationNode[1], orientationNode[2]);
-        z = Vector3D.CrossProduct(x, Yp);
-        z.Normalize();
-        y = Vector3D.CrossProduct(z, x);
-        y.Normalize();
+        var Yp = (new Vector3D(orientationNode[0], orientationNode[1], orientationNode[2])).Normalize();
+        z = x.CrossProduct(Yp);
+        y = z.CrossProduct(x);
       }
 
       //Rotation
       var rotMat = Helper.RotationMatrix(x, rotationAngle.ToRadians());
-      y = Vector3D.Multiply(y, rotMat);
-      z = Vector3D.Multiply(z, rotMat);
+      y = y.TransformBy(rotMat).Normalize();
+      z = z.TransformBy(rotMat).Normalize();
 
       return new StructuralAxis(
           new StructuralVectorThree(new double[] { x.X, x.Y, x.Z }),
@@ -845,7 +844,7 @@ namespace SpeckleStructuralGSA
     {
       var axisX = new Vector3D(coor[3] - coor[0], coor[4] - coor[1], coor[5] - coor[2]);
       var axisZ = new Vector3D(zAxis.Value[0], zAxis.Value[1], zAxis.Value[2]);
-      var axisY = Vector3D.CrossProduct(axisZ, axisX);
+      var axisY = axisZ.CrossProduct(axisX);
 
       var axis = new StructuralAxis(
           new StructuralVectorThree(new double[] { axisX.X, axisX.Y, axisX.Z }),
@@ -863,13 +862,15 @@ namespace SpeckleStructuralGSA
     /// <param name="rotationAngle">Angle of rotation from default axis</param>
     /// <param name="isLocalAxis">Is axis calculated from local coordinates?</param>
     /// <returns>Axis</returns>
-    public static StructuralAxis Parse2DAxis(double[] coor, double rotationAngle = 0, bool isLocalAxis = false)
+    public static StructuralAxis Parse2DAxis(double[] fullCoords, double rotationAngle = 0, bool isLocalAxis = false)
     {
-      Vector3D x;
-      Vector3D y;
-      Vector3D z;
+      UnitVector3D x;
+      UnitVector3D y;
+      UnitVector3D z;
 
       var nodes = new List<Vector3D>();
+
+      var coor = fullCoords.Essential();
 
       for (var i = 0; i < coor.Length; i += 3)
         nodes.Add(new Vector3D(coor[i], coor[i + 1], coor[i + 2]));
@@ -878,56 +879,40 @@ namespace SpeckleStructuralGSA
       {
         if (nodes.Count == 3)
         {
-          x = Vector3D.Subtract(nodes[1], nodes[0]);
-          x.Normalize();
-          z = Vector3D.CrossProduct(x, Vector3D.Subtract(nodes[2], nodes[0]));
-          z.Normalize();
-          y = Vector3D.CrossProduct(z, x);
-          y.Normalize();
-        }
-        else if (nodes.Count == 4)
-        {
-          x = Vector3D.Subtract(nodes[2], nodes[0]);
-          x.Normalize();
-          z = Vector3D.CrossProduct(x, Vector3D.Subtract(nodes[3], nodes[1]));
-          z.Normalize();
-          y = Vector3D.CrossProduct(z, x);
-          y.Normalize();
+          x = (nodes[1] - nodes[0]).Normalize();
+          z = x.CrossProduct(nodes[2] - nodes[0]).Normalize();
+          y = z.CrossProduct(x);
         }
         else
         {
           // Default to QUAD method
-          x = Vector3D.Subtract(nodes[2], nodes[0]);
-          x.Normalize();
-          z = Vector3D.CrossProduct(x, Vector3D.Subtract(nodes[3], nodes[1]));
-          z.Normalize();
-          y = Vector3D.CrossProduct(z, x);
-          y.Normalize();
+          x = (nodes[2] - nodes[0]).Normalize();
+          z = x.CrossProduct(nodes[3] - nodes[1]).Normalize();
+          y = z.CrossProduct(x);
         }
       }
       else
       {
-        x = Vector3D.Subtract(nodes[1], nodes[0]);
-        x.Normalize();
-        z = Vector3D.CrossProduct(x, Vector3D.Subtract(nodes[2], nodes[0]));
-        z.Normalize();
+        x = (nodes[1] - nodes[0]).Normalize();
+        z = x.CrossProduct(nodes[2] - nodes[0]).Normalize();
 
-        x = new Vector3D(1, 0, 0);
-        x = Vector3D.Subtract(x, Vector3D.Multiply(Vector3D.DotProduct(x, z), z));
+        if ((x - (x.DotProduct(z) * z)).Length == 0)
+        {
+          x = (new Vector3D(0, z.X > 0 ? -1 : 1, 0)).Normalize();
+        }
+        else
+        {
+          x = (new Vector3D(1, 0, 0)).Normalize();
+          x = (x - (x.DotProduct(z) * z)).Normalize();
+        }
 
-        if (x.Length == 0)
-          x = new Vector3D(0, z.X > 0 ? -1 : 1, 0);
-
-        y = Vector3D.CrossProduct(z, x);
-
-        x.Normalize();
-        y.Normalize();
+        y = z.CrossProduct(x);
       }
 
       //Rotation
       var rotMat = Helper.RotationMatrix(z, rotationAngle * (Math.PI / 180));
-      x = Vector3D.Multiply(x, rotMat);
-      y = Vector3D.Multiply(y, rotMat);
+      x = x.TransformBy(rotMat).Normalize();
+      y = y.TransformBy(rotMat).Normalize();
 
       return new StructuralAxis(
           new StructuralVectorThree(new double[] { x.X, x.Y, x.Z }),
@@ -935,6 +920,30 @@ namespace SpeckleStructuralGSA
           new StructuralVectorThree(new double[] { z.X, z.Y, z.Z })
       );
     }
+
+    public static StructuralAxis Global = new StructuralAxis(
+                                              new StructuralVectorThree(new double[] { 1, 0, 0 }),
+                                              new StructuralVectorThree(new double[] { 0, 1, 0 }),
+                                              new StructuralVectorThree(new double[] { 0, 0, 1 })
+                                          );
+
+    public static StructuralAxis XElevation = new StructuralAxis(
+                                                new StructuralVectorThree(new double[] { 0, -1, 0 }),
+                                                new StructuralVectorThree(new double[] { 0, 0, 1 }),
+                                                new StructuralVectorThree(new double[] { -1, 0, 0 })
+                                            );
+
+    public static StructuralAxis YElevation = new StructuralAxis(
+                                                new StructuralVectorThree(new double[] { 1, 0, 0 }),
+                                                new StructuralVectorThree(new double[] { 0, 0, 1 }),
+                                                new StructuralVectorThree(new double[] { 0, -1, 0 })
+                                            );
+
+    public static StructuralAxis Vertical = new StructuralAxis(
+                                                new StructuralVectorThree(new double[] { 0, 0, 1 }),
+                                                new StructuralVectorThree(new double[] { 1, 0, 0 }),
+                                                new StructuralVectorThree(new double[] { 0, 1, 0 })
+                                            );
 
     /// <summary>
     /// Calculates the local axis of a point from a GSA node axis.
@@ -955,38 +964,22 @@ namespace SpeckleStructuralGSA
       {
         case 0:
           // Global
-          return new StructuralAxis(
-              new StructuralVectorThree(new double[] { 1, 0, 0 }),
-              new StructuralVectorThree(new double[] { 0, 1, 0 }),
-              new StructuralVectorThree(new double[] { 0, 0, 1 })
-          );
+          return Global;
         case -11:
           // X elevation
-          return new StructuralAxis(
-              new StructuralVectorThree(new double[] { 0, -1, 0 }),
-              new StructuralVectorThree(new double[] { 0, 0, 1 }),
-              new StructuralVectorThree(new double[] { -1, 0, 0 })
-          );
+          return XElevation;
         case -12:
           // Y elevation
-          return new StructuralAxis(
-              new StructuralVectorThree(new double[] { 1, 0, 0 }),
-              new StructuralVectorThree(new double[] { 0, 0, 1 }),
-              new StructuralVectorThree(new double[] { 0, -1, 0 })
-          );
+          return YElevation;
         case -14:
           // Vertical
-          return new StructuralAxis(
-              new StructuralVectorThree(new double[] { 0, 0, 1 }),
-              new StructuralVectorThree(new double[] { 1, 0, 0 }),
-              new StructuralVectorThree(new double[] { 0, 1, 0 })
-          );
+          return Vertical;
         case -13:
           // Global cylindrical
           x = new Vector3D(evalAtCoor[0], evalAtCoor[1], 0);
           x.Normalize();
           z = new Vector3D(0, 0, 1);
-          y = Vector3D.CrossProduct(z, x);
+          y = z.CrossProduct(x);
 
           return new StructuralAxis(
               new StructuralVectorThree(new double[] { x.X, x.Y, x.Z }),
@@ -1014,10 +1007,10 @@ namespace SpeckleStructuralGSA
 
 
           var Yp = new Vector3D(Convert.ToDouble(pieces[10]), Convert.ToDouble(pieces[11]), Convert.ToDouble(pieces[12]));
-          var Z = Vector3D.CrossProduct(X, Yp);
+          var Z = X.CrossProduct(Yp);
           Z.Normalize();
 
-          var Y = Vector3D.CrossProduct(Z, X);
+          var Y = Z.CrossProduct(X);
 
           var pos = new Vector3D(0, 0, 0);
 
@@ -1042,7 +1035,7 @@ namespace SpeckleStructuralGSA
               x = new Vector3D(pos.X, pos.Y, 0);
               x.Normalize();
               z = Z;
-              y = Vector3D.CrossProduct(Z, x);
+              y = Z.CrossProduct(x);
               y.Normalize();
 
               return new StructuralAxis(
@@ -1053,9 +1046,9 @@ namespace SpeckleStructuralGSA
             case "SPH":
               x = pos;
               x.Normalize();
-              z = Vector3D.CrossProduct(Z, x);
+              z = Z.CrossProduct(x);
               z.Normalize();
-              y = Vector3D.CrossProduct(z, x);
+              y = z.CrossProduct(x);
               z.Normalize();
 
               return new StructuralAxis(
@@ -1100,23 +1093,23 @@ namespace SpeckleStructuralGSA
         // Column
         var Yglobal = new Vector3D(0, 1, 0);
 
-        var angle = Math.Acos(Vector3D.DotProduct(Yglobal, axisY) / (Yglobal.Length * axisY.Length)).ToDegrees();
+        var angle = Math.Acos(Yglobal.DotProduct(axisY) / (Yglobal.Length * axisY.Length)).ToDegrees();
         if (double.IsNaN(angle)) return 0;
 
-        var signVector = Vector3D.CrossProduct(Yglobal, axisY);
-        var sign = Vector3D.DotProduct(signVector, axisX);
+        var signVector = Yglobal.CrossProduct(axisY);
+        var sign = signVector.DotProduct(axisX);
 
         return sign >= 0 ? angle : -angle;
       }
       else
       {
         var Zglobal = new Vector3D(0, 0, 1);
-        var Y0 = Vector3D.CrossProduct(Zglobal, axisX);
-        var angle = Math.Acos(Vector3D.DotProduct(Y0, axisY) / (Y0.Length * axisY.Length)).ToDegrees();
+        var Y0 = Zglobal.CrossProduct(axisX);
+        var angle = Math.Acos(Y0.DotProduct(axisY) / (Y0.Length * axisY.Length)).ToDegrees();
         if (double.IsNaN(angle)) angle = 0;
 
-        var signVector = Vector3D.CrossProduct(Y0, axisY);
-        var sign = Vector3D.DotProduct(signVector, axisX);
+        var signVector = Y0.CrossProduct( axisY);
+        var sign = signVector.DotProduct(axisX);
 
         return sign >= 0 ? angle : 360 - angle;
       }
@@ -1143,13 +1136,13 @@ namespace SpeckleStructuralGSA
         nodes.Add(new Vector3D(coor[i], coor[i + 1], coor[i + 2]));
 
       // Get 0 angle axis in GLOBAL coordinates
-      x0 = Vector3D.Subtract(nodes[1], nodes[0]);
+      x0 = nodes[1] - nodes[0];
       x0.Normalize();
-      z0 = Vector3D.CrossProduct(x0, Vector3D.Subtract(nodes[2], nodes[0]));
+      z0 = x0.CrossProduct(nodes[2] - nodes[0]);
       z0.Normalize();
 
       x0 = new Vector3D(1, 0, 0);
-      x0 = Vector3D.Subtract(x0, Vector3D.Multiply(Vector3D.DotProduct(x0, z0), z0));
+      x0 = x0 - (x0.DotProduct(z0) * z0);
 
       if (x0.Length == 0)
         x0 = new Vector3D(0, z0.X > 0 ? -1 : 1, 0);
@@ -1157,11 +1150,11 @@ namespace SpeckleStructuralGSA
       x0.Normalize();
 
       // Find angle
-      var angle = Math.Acos(Vector3D.DotProduct(x0, axisX) / (x0.Length * axisX.Length)).ToDegrees();
+      var angle = Math.Acos(x0.DotProduct(axisX) / (x0.Length * axisX.Length)).ToDegrees();
       if (double.IsNaN(angle)) return 0;
 
-      var signVector = Vector3D.CrossProduct(x0, axisX);
-      var sign = Vector3D.DotProduct(signVector, axisZ);
+      var signVector = x0.CrossProduct(axisX);
+      var sign = signVector.DotProduct(axisZ);
 
       return sign >= 0 ? angle : -angle;
     }
@@ -1203,7 +1196,7 @@ namespace SpeckleStructuralGSA
         //Only needs to be added to the cache if there is an application ID
         var gwa = Initialiser.Interface.GetGwaForNode(index);
         gwa = Initialiser.Interface.SetSid(gwa, streamId ?? "", applicationId);
-        Initialiser.Cache.Upsert("NODE.2", index, gwa, streamId, applicationId, GwaSetCommandType.Set);
+        Initialiser.Cache.Upsert("NODE.3", index, gwa, streamId, applicationId, GwaSetCommandType.Set);
       }
 
       return index;
@@ -1265,6 +1258,58 @@ namespace SpeckleStructuralGSA
       catch
       {
         //Since display of these are not critical, if there is any error in displaying then these can be quashed
+      }
+    }
+
+    public static StructuralVectorBoolSix RestraintFromCode(string code)
+    {
+      if (code == "free")
+        return new StructuralVectorBoolSix(false, false, false, false, false, false);
+      else if (code == "pin")
+        return new StructuralVectorBoolSix(true, true, true, false, false, false);
+      else if (code == "fix")
+        return new StructuralVectorBoolSix(true, true, true, true, true, true);
+      else
+      {
+        var fixities = new bool[6];
+
+        if (code.Contains("xxx"))
+        {
+          fixities[0] = true;
+          fixities[3] = true;
+        }
+        else if (code.Contains("xx"))
+        {
+          fixities[3] = true;
+        }
+        else if (code.Contains("x"))
+          fixities[0] = true;
+
+        if (code.Contains("yyy"))
+        {
+          fixities[1] = true;
+          fixities[4] = true;
+        }
+        else if (code.Contains("yy"))
+        {
+          fixities[4] = true;
+        }
+        else if (code.Contains("y"))
+          fixities[1] = true;
+
+        if (code.Contains("zzz"))
+        {
+          fixities[2] = true;
+          fixities[5] = true;
+        }
+        else if (code.Contains("zz"))
+        {
+          fixities[5] = true;
+        }
+        else if (code.Contains("z"))
+          fixities[2] = true;
+
+        return new StructuralVectorBoolSix(fixities);
       }
     }
 

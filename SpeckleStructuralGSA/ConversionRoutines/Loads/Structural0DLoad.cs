@@ -7,7 +7,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("LOAD_NODE.2", new string[] { "NODE.2", "AXIS.1" }, "loads", true, true, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode) })]
+  [GSAObject("LOAD_NODE.2", new string[] { "NODE.3", "AXIS.1" }, "loads", true, true, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode) })]
   public class GSA0DLoad : IGSASpeckleContainer
   {
     public int Axis; // Store this temporarily to generate other loads
@@ -146,19 +146,28 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA0DLoad dummyObject)
     {
       var newLines = ToSpeckleBase<GSA0DLoad>();
-
+      var typeName = dummyObject.GetType().Name;
       var loads = new List<GSA0DLoad>();
 
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
       {
+        var p = newLines[k];
         var loadSubList = new List<GSA0DLoad>();
 
         // Placeholder load object to get list of nodes and load values
         // Need to transform to axis so one load definition may be transformed to many
         var initLoad = new GSA0DLoad() { GWACommand = p };
-        initLoad.ParseGWACommand(nodes);
+
+        try
+        {
+          initLoad.ParseGWACommand(nodes);
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+        }
 
         // Raise node flag to make sure it gets sent
         foreach (var n in nodes.Where(n => initLoad.Value.NodeRefs.Contains(n.Value.ApplicationId)))
@@ -179,8 +188,8 @@ namespace SpeckleStructuralGSA
 
           // Transform load to defined axis
           var node = nodes.Where(n => (n.Value.ApplicationId == nRef)).First();
-          string gwaRecord = null;
-          StructuralAxis loadAxis = Helper.Parse0DAxis(initLoad.Axis, Initialiser.Interface, out gwaRecord, node.Value.Value.ToArray());
+
+          var loadAxis = Helper.Parse0DAxis(initLoad.Axis, Initialiser.Interface, out string gwaRecord, node.Value.Value.ToArray());
           load.Value.Loading = initLoad.Value.Loading;
           load.Value.Loading.TransformOntoAxis(loadAxis);
 

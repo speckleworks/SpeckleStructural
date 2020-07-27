@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("LOAD_GRAVITY.2", new string[] { }, "loads", true, true, new Type[] { typeof(GSALoadCase) }, new Type[] { typeof(GSALoadCase) })]
+  [GSAObject("LOAD_GRAVITY.3", new string[] { }, "loads", true, true, new Type[] { typeof(GSALoadCase) }, new Type[] { typeof(GSALoadCase) })]
   public class GSAGravityLoading : IGSASpeckleContainer
   {
     public int GSAId { get; set; }
@@ -17,6 +17,8 @@ namespace SpeckleStructuralGSA
 
     public void ParseGWACommand()
     {
+      // LOAD_GRAVITY.3 | name | elemlist | nodelist | case | x | y | z
+
       if (this.GWACommand == null)
         return;
 
@@ -25,12 +27,14 @@ namespace SpeckleStructuralGSA
       var pieces = this.GWACommand.ListSplit("\t");
 
       var counter = 1; // Skip identifier
-      obj.Name = pieces[counter++].Trim(new char[] { '"' });
+      obj.Name = pieces[counter++].Trim(new char[] { '"' }); // name
 
-      counter++; // Skip elements - assumed to always be "all" at this point int time
+      counter++; // elemlist - Skip elements - assumed to always be "all" at this point in time
+      counter++; // nodelist - also skipped
 
-      obj.LoadCaseRef = Helper.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
+      obj.LoadCaseRef = Helper.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++])); // case
 
+      // x | y| z
       var vector = new double[3];
       for (var i = 0; i < 3; i++)
         double.TryParse(pieces[counter++], out vector[i]);
@@ -77,6 +81,7 @@ namespace SpeckleStructuralGSA
           keyword + ":" + Helper.GenerateSID(load),
           string.IsNullOrEmpty(load.Name) ? "" : load.Name,
           "all",
+          "all",
           loadCaseRef.ToString(),
           load.GravityFactors.Value[0].ToString(),
           load.GravityFactors.Value[1].ToString(),
@@ -98,13 +103,21 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSAGravityLoading dummyObject)
     {
       var newLines = ToSpeckleBase<GSAGravityLoading>();
-
+      var typeName = dummyObject.GetType().Name;
       var loads = new List<GSAGravityLoading>();
 
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
       {
+        var p = newLines[k];
         var load = new GSAGravityLoading() { GWACommand = p };
-        load.ParseGWACommand();
+        try
+        {
+          load.ParseGWACommand();
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+        }
         loads.Add(load);
       }
 

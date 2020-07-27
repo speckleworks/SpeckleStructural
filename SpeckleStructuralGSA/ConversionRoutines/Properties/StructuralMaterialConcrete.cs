@@ -41,13 +41,11 @@ namespace SpeckleStructuralGSA
       obj.Density = Convert.ToDouble(pieces[counter++]);
       obj.CoeffThermalExpansion = Convert.ToDouble(pieces[counter++]);
 
-      obj.CompressiveStrength = Convert.ToDouble(pieces[41]);
+      obj.CompressiveStrength = Convert.ToDouble(pieces[54]);
 
-      counter = (commandVersion == 16) ? 54 : 52;
-      obj.MaxStrain = Convert.ToDouble(pieces[counter]);
+      obj.MaxStrain = Convert.ToDouble(pieces[65]);
 
-      counter = (commandVersion == 16) ? 59 : 57;
-      obj.AggragateSize = Convert.ToDouble(pieces[counter]);
+      obj.AggragateSize = Convert.ToDouble(pieces[70]);
 
       this.Value = obj;
     }
@@ -72,9 +70,8 @@ namespace SpeckleStructuralGSA
         "SET",
         "MAT_CONCRETE.17" + ":" + Helper.GenerateSID(mat),
         index.ToString(),
-        "MAT.8",
+        "MAT.10",
         mat.Name == null || mat.Name == "" ? " " : mat.Name,
-        "YES", // Unlocked
         (mat.YoungsModulus*1000).ToString(), // E
         mat.PoissonsRatio.ToString(), // nu
         mat.ShearModulus.ToString(), // G
@@ -98,14 +95,26 @@ namespace SpeckleStructuralGSA
         "0", // TODO: What is this?
         "0", // TODO: What is this?
         "0", // Ultimate strain
-        "MAT_CURVE_PARAM.2",
+        "MAT_CURVE_PARAM.3", // ULS - this is GSA default for concrete
         "",
-        "UNDEF",
-        "1", // Material factor on strength
+        "RECT_PARABOLA+NO_TENSION", // material model
+        "0", // strain[6]
+        "0",
+        "0",
+        "0",
+        "0.0035",
+        "1",
+        "1.5", // Material factor on strength
         "1", // Material factor on elastic modulus
-        "MAT_CURVE_PARAM.2",
+        "MAT_CURVE_PARAM.3", // SLS - this is the GSA default for concrete
         "",
-        "UNDEF",
+        "FIB_SCHEMATIC+INTERPOLATED",
+        "0", // strain[6]
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
         "1", // Material factor on strength
         "1", // Material factor on elastic modulus
         "0", // Cost
@@ -152,12 +161,14 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSAMaterialConcrete dummyObject)
     {
       var newLines = ToSpeckleBase<GSAMaterialConcrete>();
-
+      var typeName = dummyObject.GetType().Name;
       var materialsLock = new object();
       var materials = new List<GSAMaterialConcrete>();
 
       Parallel.ForEach(newLines.Values, p =>
       {
+        var pPieces = p.ListSplit("\t");
+        var gsaId = pPieces[1];
         try
         {
           var mat = new GSAMaterialConcrete() { GWACommand = p };
@@ -167,7 +178,10 @@ namespace SpeckleStructuralGSA
             materials.Add(mat);
           }
         }
-        catch { }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+        }
       });
 
       Initialiser.GSASenderObjects.AddRange(materials);

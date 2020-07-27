@@ -9,7 +9,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("NODE.2", new string[] { "AXIS.1" }, "nodes", true, true, new Type[] { }, new Type[] { })]
+  [GSAObject("NODE.3", new string[] { "AXIS.1", "PROP_SPR.4", "PROP_MASS.2" }, "nodes", true, true, new Type[] { }, new Type[] { })]
   public class GSANode : IGSASpeckleContainer
   {
     public bool ForceSend; // This is to filter only "important" nodes
@@ -21,6 +21,9 @@ namespace SpeckleStructuralGSA
 
     public void ParseGWACommand()
     {
+      // NODE.3 | num | name | colour | x | y | z | restraint | axis |
+      // mesh_size | springProperty | massProperty | damperProperty
+
       if (this.GWACommand == null)
         return;
 
@@ -29,74 +32,79 @@ namespace SpeckleStructuralGSA
       var pieces = this.GWACommand.ListSplit("\t");
 
       var counter = 1; // Skip identifier
-      this.GSAId = Convert.ToInt32(pieces[counter++]);
+      this.GSAId = Convert.ToInt32(pieces[counter++]); // num
       obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
-      obj.Name = pieces[counter++].Trim(new char[] { '"' });
-      counter++; // Color
+      obj.Name = pieces[counter++].Trim(new char[] { '"' }); // name
+      counter++; // colour
       obj.Value = new List<double>
       {
-        Convert.ToDouble(pieces[counter++]),
-        Convert.ToDouble(pieces[counter++]),
-        Convert.ToDouble(pieces[counter++])
+        Convert.ToDouble(pieces[counter++]), // x
+        Convert.ToDouble(pieces[counter++]), // y
+        Convert.ToDouble(pieces[counter++]) // z
       };
 
-      //counter += 3; // TODO: Skip unknown fields in NODE.3
-
-      while (counter < pieces.Length)
+      if (counter >= pieces.Length)
       {
-        var s = pieces[counter++];
+        this.Value = obj;
+        return;
+      }
 
-        switch (s)
+      if (counter < pieces.Length)
+      {
+        obj.Restraint = Helper.RestraintFromCode(pieces[counter++]); // restraint
+      }
+
+      if (counter < pieces.Length)
+      {
+
+        // axis
+        var axis = pieces[counter++];
+        if (axis == "GLOBAL")
+          obj.Axis = Helper.Global;
+        else
         {
-          case "NO_GRID":
-          case "NO_REST":
-          case "NO_MESH":
-          case "NO_STIFF":
-            continue;
-          case "GRID":
-            counter++; // Grid place
-            counter++; // Datum
-            counter++; // Grid line A
-            counter++; // Grid line B
-            break;
-          case "REST":
-            obj.Restraint = new StructuralVectorBoolSix(new bool[6]);
-            for (var i = 0; i < 6; i++)
-            {
-              obj.Restraint.Value[i] = pieces[counter++] == "0" ? false : true;
-            }
-            this.ForceSend = true;
-            break;
-          case "STIFF":
-            obj.Stiffness = new StructuralVectorSix(new double[6]);
-            for (var i = 0; i < 6; i++)
-            {
-              obj.Stiffness.Value[i] = Convert.ToDouble(pieces[counter++]);
-            }
-            this.ForceSend = true;
-            break;
-          case "MESH":
-            obj.GSALocalMeshSize = pieces[counter++].ToDouble();
-            counter++; // Edge length
-            counter++; // Radius
-            counter++; // Tie to mesh
-            counter++; // Column rigidity
-            counter++; // Column prop
-            counter++; // Column node
-            counter++; // Column angle
-            counter++; // Column factor
-            counter++; // Column slab factor
-            break;
-          default: // Axis
-            string gwaRec = null;
-            obj.Axis = Helper.Parse0DAxis(Convert.ToInt32(s), Initialiser.Interface, out gwaRec, obj.Value.ToArray());
-            if (gwaRec != null)
-            {
-              this.SubGWACommand.Add(gwaRec);
-            }
-            break;
+          string gwaRec = null;
+          obj.Axis = Helper.Parse0DAxis(Convert.ToInt32(axis), Initialiser.Interface, out gwaRec, obj.Value.ToArray());
+          if (gwaRec != null)
+          {
+            this.SubGWACommand.Add(gwaRec);
+          }
         }
       }
+
+      if (counter < pieces.Length)
+      {
+        obj.GSALocalMeshSize = pieces[counter++].ToDouble(); // mesh_size
+      }
+
+      if (counter < pieces.Length)
+      {
+        // springProperty
+        var springPropsGwa = Initialiser.Cache.GetGwa(typeof(GSASpringProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++])); // not sure how this could ever return multiple?
+        if (springPropsGwa.Count > 0)
+        {
+          var springPropGWA = springPropsGwa[0];
+          var springProp = new GSASpringProperty();
+          springProp.GWACommand = springPropGWA;
+          springProp.ParseGWACommand();
+          obj.Stiffness = springProp.Value.Stiffness;
+        }
+      }
+
+      if (counter < pieces.Length)
+      {
+        // massProperty
+        // Speckle node currently only supports single mass, rather than the more complicated PROP_MASS in GSA
+        var massPropsGwa = Initialiser.Cache.GetGwa("PROP_MASS.2", Convert.ToInt32(pieces[counter++]));
+        if (massPropsGwa.Count > 0)
+        {
+          var massPropGwa = massPropsGwa[0];
+          var massPropPieces = massPropGwa.ListSplit("\t");
+          obj.Mass = Convert.ToDouble(massPropPieces[5]);
+        }
+      }
+      
+      // damperProperty - not yet supported
 
       this.Value = obj;
     }
@@ -121,19 +129,27 @@ namespace SpeckleStructuralGSA
       {
         "SET",
         keyword + ":" + Helper.GenerateSID(node),
-        index.ToString(),
-        node.Name == null || node.Name == "" ? " " : node.Name,
-        "NO_RGB",
-        string.Join("\t", node.Value.Select(v => Math.Round(v, 8)).ToArray()), //GSA seems to round to 8 here
-
-        //ls.Add("0"); // TODO: Skip unknown fields in NODE.3
-        //ls.Add("0"); // TODO: Skip unknown fields in NODE.3
-        //ls.Add("0"); // TODO: Skip unknown fields in NODE.3
-
-        "NO_GRID"
+        index.ToString(), // num
+        node.Name == null || node.Name == "" ? " " : node.Name, // name
+        "NO_RGB", // colour
+        string.Join("\t", node.Value.Select(v => Math.Round(v, 8)).ToArray()), // x y z - GSA seems to round to 8 here
       };
 
+      // restraint
+      try
+      {
+        string restraint = "";
+        restraint += node.Restraint.Value[0] ? "x" : "";
+        restraint += node.Restraint.Value[1] ? "y" : "";
+        restraint += node.Restraint.Value[2] ? "z" : "";
+        restraint += node.Restraint.Value[3] ? "xx" : "";
+        restraint += node.Restraint.Value[4] ? "yy" : "";
+        restraint += node.Restraint.Value[5] ? "zz" : "";
+        ls.Add(restraint);
+      }
+      catch { ls.Add("free"); }
 
+      // axis
       var gwaCommands = new List<string>();
       var axisGwa = "";
       try
@@ -146,93 +162,17 @@ namespace SpeckleStructuralGSA
 
         ls.Add(axisIndex.ToString());
       }
-      catch { ls.Add("0"); }
+      catch { ls.Add("GLOBAL"); }
 
-      try
-      {
-        if (node.Restraint == null || !node.Restraint.Value.Any(x => x))
-        {
-          ls.Add("NO_REST");
-        }
-        else
-        {
-          var subLs = new List<string>
-        {
-          "REST",
-          node.Restraint.Value[0] ? "1" : "0",
-          node.Restraint.Value[1] ? "1" : "0",
-          node.Restraint.Value[2] ? "1" : "0",
-          node.Restraint.Value[3] ? "1" : "0",
-          node.Restraint.Value[4] ? "1" : "0",
-          node.Restraint.Value[5] ? "1" : "0"
-        };
-          ls.AddRange(subLs);
-        }
-      }
-      catch { ls.Add("NO_REST"); }
+      ls.Add(node.GSALocalMeshSize.HasValue ? node.GSALocalMeshSize.Value.ToString() : ""); // mesh_size - may need to perform rounding here
 
-
-      if ((node.Stiffness == null || !node.Stiffness.Value.Any(x => x == 0))
-        && (node.GSALocalMeshSize == 0))
-      {
-        //GSA leaves the rest off the GWA in this case
-      }
-      else
-      {
-        try
-        {
-          if (node.Stiffness == null || !node.Stiffness.Value.Any(x => x == 0))
-          {
-            ls.Add("NO_STIFF");
-          }
-          else
-          {
-            var subLs = new List<string>
-          {
-            "STIFF",
-            node.Stiffness.Value[0].ToString(),
-            node.Stiffness.Value[1].ToString(),
-            node.Stiffness.Value[2].ToString(),
-            node.Stiffness.Value[3].ToString(),
-            node.Stiffness.Value[4].ToString(),
-            node.Stiffness.Value[5].ToString()
-          };
-            ls.AddRange(subLs);
-          }
-        }
-        catch { ls.Add("NO_STIFF"); }
-
-        try
-        {
-          if (node.GSALocalMeshSize == 0)
-          {
-            //GSA seems to leave this off if there is no mesh
-            //ls.Add("NO_MESH");
-          }
-          else
-          {
-            var subLs = new List<string>
-            {
-              "MESH",
-              node.GSALocalMeshSize.ToString(),
-              "0", // Radius
-              "NO", // Tie to mesh
-              "NO", // column rigidity will be generated
-              "0", // Column property number
-              "0", //Column orientation node
-              "0", //Column orientation angle
-              "1", //Column dimension factor
-              "0" //Column slab thickness factor
-            };
-
-            ls.AddRange(subLs);
-          }
-        }
-        catch (Exception)
-        {
-          ls.Add("NO_MESH");
-        }
-      }
+      // TODO: springProperty
+      // naive of one spring property per springy node could create thousands of spring props
+      
+      // TODO: massProperty
+      // similar potential problem as spring props
+      
+      // damperProperty - not supported
 
       gwaCommands.Add(string.Join("\t", ls));
 
@@ -378,17 +318,26 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSANode dummyObject)
     {
       var newLines = ToSpeckleBase<GSANode>();
-
+      var typeName = dummyObject.GetType().Name;
       var nodesLock = new object();
       var nodes = new List<GSANode>();
 
       Parallel.ForEach(newLines.Values, p =>
       {
+        var pPieces = p.ListSplit("\t");
+        var gsaId = pPieces[1];
         var node = new GSANode { GWACommand = p };
-        node.ParseGWACommand();
-        lock (nodesLock)
+        try
         {
-          nodes.Add(node);
+          node.ParseGWACommand();
+          lock (nodesLock)
+          {
+            nodes.Add(node);
+          }
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
         }
       }
       );
@@ -404,7 +353,7 @@ namespace SpeckleStructuralGSA
         return new SpeckleNull();
 
       var newLines = ToSpeckleBase<GSA0DElement>();
-
+      var typeName = dummyObject.GetType().Name;
       var changed = false;
 
       var nodesLock = new object();
@@ -413,6 +362,7 @@ namespace SpeckleStructuralGSA
       Parallel.ForEach(newLines.Values, p =>
       {
         var pPieces = p.ListSplit("\t");
+        var gsaId = pPieces[1];
         if (pPieces[4].ParseElementNumNodes() == 1)
         {
           try
@@ -436,7 +386,10 @@ namespace SpeckleStructuralGSA
               changed = true;
             }
           }
-          catch { }
+          catch (Exception ex)
+          {
+            Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+          }
         }
       }
       );

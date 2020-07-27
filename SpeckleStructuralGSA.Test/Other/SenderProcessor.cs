@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Interop.Gsa_10_0;
+using Interop.Gsa_10_1;
 using Moq;
 using SpeckleCore;
 using SpeckleGSAInterfaces;

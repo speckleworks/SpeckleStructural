@@ -132,13 +132,21 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSALoadCase dummyObject)
     {
       var newLines = ToSpeckleBase<GSALoadCase>();
-
+      var typeName = dummyObject.GetType().Name;
       var loadCases = new List<GSALoadCase>();
 
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
       {
+        var p = newLines[k];
         var loadCase = new GSALoadCase() { GWACommand = p };
-        loadCase.ParseGWACommand();
+        try
+        {
+          loadCase.ParseGWACommand();
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+        }
         loadCases.Add(loadCase);
       }
 

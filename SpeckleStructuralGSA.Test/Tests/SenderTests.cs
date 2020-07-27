@@ -19,7 +19,7 @@ namespace SpeckleStructuralGSA.Test
     public static string[] resultTypes = new[] { "Nodal Reaction", "1D Element Strain Energy Density", "1D Element Force", "Nodal Displacements", "1D Element Stress" };
     public static string[] loadCases = new[] { "A2", "C1" };
     public const string gsaFileNameWithResults = "20180906 - Existing structure GSA_V7_modified.gwb";
-    public const string gsaFileNameWithoutResults = "Structural Demo 191004.gwb";
+    public const string gsaFileNameWithoutResults = "Structural Demo 200630.gwb";
 
     [OneTimeSetUp]
     public void SetupTests()
@@ -94,6 +94,7 @@ namespace SpeckleStructuralGSA.Test
       var unmatching = new List<Tuple<string, string, List<string>>>();
       var unmatchingLock = new object();
       //Compare each object
+
       Parallel.ForEach(actual.Keys, actualObject =>
       {
         var actualJson = actual[actualObject];
@@ -150,7 +151,8 @@ namespace SpeckleStructuralGSA.Test
             unmatching.Add(new Tuple<string, string, List<string>>(actualObject.ApplicationId, actualJson, new List<string>()));
           }
         }
-      });
+      }
+      );
 
       gsaInterfacer.Close();
 

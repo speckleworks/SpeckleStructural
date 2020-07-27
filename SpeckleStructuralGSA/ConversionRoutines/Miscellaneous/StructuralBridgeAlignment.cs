@@ -157,20 +157,28 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSABridgeAlignment dummyObject)
     {
       var newLines = ToSpeckleBase<GSABridgeAlignment>();
-
+      var typeName = dummyObject.GetType().Name;
       var alignmentsLock = new object();
 
       //Get all relevant GSA entities in this entire model
       var alignments = new List<GSABridgeAlignment>();
 
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
       {
+        var p = newLines[k];
         var alignment = new GSABridgeAlignment() { GWACommand = p };
         //Pass in ALL the nodes and members - the Parse_ method will search through them
-        alignment.ParseGWACommand();
-        lock (alignmentsLock)
+        try
         {
-          alignments.Add(alignment);
+          alignment.ParseGWACommand();
+          lock (alignmentsLock)
+          {
+            alignments.Add(alignment);
+          }
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
         }
       });
 

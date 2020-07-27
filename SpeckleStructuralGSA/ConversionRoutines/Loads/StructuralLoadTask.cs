@@ -113,6 +113,7 @@ namespace SpeckleStructuralGSA
           ls.Add("RESID_NO");
           ls.Add("0");
           ls.Add("1");
+          ls.Add("0");
           break;
         case StructuralLoadTaskType.NonlinearStatic:
           ls.Add("GSRELAX");
@@ -177,6 +178,7 @@ namespace SpeckleStructuralGSA
           ls.Add("RESID_NO");
           ls.Add("0");
           ls.Add("1");
+          ls.Add("0");
           break;
         default:
           ls.Add("GSS");
@@ -202,6 +204,7 @@ namespace SpeckleStructuralGSA
           ls.Add("RESID_NO");
           ls.Add("0");
           ls.Add("1");
+          ls.Add("0");
           break;
       }
       gwaCommands.Add(string.Join("\t", ls));
@@ -252,13 +255,21 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSALoadTask dummyObject)
     {
       var newLines = ToSpeckleBase<GSALoadTask>();
-
+      var typeName = dummyObject.GetType().Name;
       var loadTasks = new List<GSALoadTask>();
 
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
       {
+        var p = newLines[k];
         var task = new GSALoadTask() { GWACommand = p };
-        task.ParseGWACommand();
+        try
+        {
+          task.ParseGWACommand();
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+        }
         loadTasks.Add(task);
       }
 
