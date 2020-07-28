@@ -149,7 +149,7 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSAConstructionStage dummyObject)
     {
       var newLines = ToSpeckleBase<GSAConstructionStage>();
-
+      var typeName = dummyObject.GetType().Name;
       var stageDefsLock = new object();
       var stageDefs = new List<GSAConstructionStage>();
       var e1Ds = new List<GSA1DElement>();
@@ -168,8 +168,9 @@ namespace SpeckleStructuralGSA
         m2Ds = Initialiser.GSASenderObjects.Get<GSA2DMember>();
       }
 
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
       {
+        var p = newLines[k];
         try
         {
           var stageDef = new GSAConstructionStage() { GWACommand = p };
@@ -179,7 +180,10 @@ namespace SpeckleStructuralGSA
             stageDefs.Add(stageDef);
           }
         }
-        catch { }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+        }
       });
 
       Initialiser.GSASenderObjects.AddRange(stageDefs);

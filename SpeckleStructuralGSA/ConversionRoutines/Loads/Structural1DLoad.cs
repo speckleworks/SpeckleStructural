@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Media.Media3D;
+using MathNet.Spatial.Euclidean;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
@@ -248,18 +248,26 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA1DLoadAnalysisLayer dummyObject)
     {
       var newLines = ToSpeckleBase<GSA1DLoadAnalysisLayer>();
-
+      var typeName = dummyObject.GetType().Name;
       var loads = new List<GSA1DLoadAnalysisLayer>();
       var elements = Initialiser.GSASenderObjects.Get<GSA1DElement>();
 
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
       {
+        var p = newLines[k];
         var loadSubList = new List<GSA1DLoadAnalysisLayer>();
 
         // Placeholder load object to get list of elements and load values
         // Need to transform to axis so one load definition may be transformed to many
         var initLoad = new GSA1DLoadAnalysisLayer() { GWACommand = p };
-        initLoad.ParseGWACommand(elements);
+        try
+        {
+          initLoad.ParseGWACommand(elements);
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+        }
 
         // Create load for each element applied
         foreach (string nRef in initLoad.Value.ElementRefs)
@@ -293,8 +301,8 @@ namespace SpeckleStructuralGSA
             if (loadDirection.Length > 0)
             {
               var axisX = new Vector3D(elem.Value[5] - elem.Value[0], elem.Value[4] - elem.Value[1], elem.Value[3] - elem.Value[2]);
-              var angle = Vector3D.AngleBetween(loadDirection, axisX);
-              var factor = Math.Sin(angle);
+              var angle = loadDirection.AngleTo(axisX);
+              var factor = Math.Sin(angle.Radians);
               load.Value.Loading.Value[0] *= factor;
               load.Value.Loading.Value[1] *= factor;
               load.Value.Loading.Value[2] *= factor;
@@ -323,19 +331,27 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA1DLoadDesignLayer dummyObject)
     {
       var newLines = ToSpeckleBase<GSA1DLoadDesignLayer>();
-
+      var typeName = dummyObject.GetType().Name;
       var loads = new List<GSA1DLoadDesignLayer>();
       //var members = Initialiser.GSASenderObjects.Get<GSA1DMember)].Cast<GSA1DMember>().ToList();
       var members = Initialiser.GSASenderObjects.Get<GSA1DMember>();
 
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
       {
+        var p = newLines[k];
         var loadSubList = new List<GSA1DLoadDesignLayer>();
 
         // Placeholder load object to get list of elements and load values
         // Need to transform to axis so one load definition may be transformed to many
         var initLoad = new GSA1DLoadDesignLayer() { GWACommand = p };
-        initLoad.ParseGWACommand(members);
+        try
+        {
+          initLoad.ParseGWACommand(members);
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+        }
 
         // Create load for each element applied
         foreach (string nRef in initLoad.Value.ElementRefs)
@@ -369,8 +385,8 @@ namespace SpeckleStructuralGSA
             if (loadDirection.Length > 0)
             {
               var axisX = new Vector3D(memb.Value[5] - memb.Value[0], memb.Value[4] - memb.Value[1], memb.Value[3] - memb.Value[2]);
-              var angle = Vector3D.AngleBetween(loadDirection, axisX);
-              var factor = Math.Sin(angle);
+              var angle = loadDirection.AngleTo(axisX);
+              var factor = Math.Sin(angle.Radians);
               load.Value.Loading.Value[0] *= factor;
               load.Value.Loading.Value[1] *= factor;
               load.Value.Loading.Value[2] *= factor;

@@ -10,7 +10,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("NODE.3", new string[] { "AXIS.1", "PROP_SPRING.4", "PROP_MASS.2" }, "nodes", true, true, new Type[] { }, new Type[] { })]
+  [GSAObject("NODE.3", new string[] { "AXIS.1", "PROP_SPR.4", "PROP_MASS.2" }, "nodes", true, true, new Type[] { }, new Type[] { })]
   public class GSANode : IGSASpeckleContainer
   {
     public bool ForceSend; // This is to filter only "important" nodes
@@ -78,9 +78,9 @@ namespace SpeckleStructuralGSA
         obj.GSALocalMeshSize = pieces[counter++].ToDouble(); // mesh_size
       }
 
-      // springProperty
       if (counter < pieces.Length)
       {
+        // springProperty
         var springPropsGwa = Initialiser.Cache.GetGwa(typeof(GSASpringProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++])); // not sure how this could ever return multiple?
         if (springPropsGwa.Count > 0)
         {
@@ -92,10 +92,10 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      // massProperty
-      // Speckle node currently only supports single mass, rather than the more complicated PROP_MASS in GSA
       if (counter < pieces.Length)
       {
+        // massProperty
+        // Speckle node currently only supports single mass, rather than the more complicated PROP_MASS in GSA
         var massPropsGwa = Initialiser.Cache.GetGwa("PROP_MASS.2", Convert.ToInt32(pieces[counter++]));
         if (massPropsGwa.Count > 0)
         {
@@ -319,17 +319,26 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSANode dummyObject)
     {
       var newLines = ToSpeckleBase<GSANode>();
-
+      var typeName = dummyObject.GetType().Name;
       var nodesLock = new object();
       var nodes = new List<GSANode>();
 
       Parallel.ForEach(newLines.Values, p =>
       {
+        var pPieces = p.ListSplit("\t");
+        var gsaId = pPieces[1];
         var node = new GSANode { GWACommand = p };
-        node.ParseGWACommand();
-        lock (nodesLock)
+        try
         {
-          nodes.Add(node);
+          node.ParseGWACommand();
+          lock (nodesLock)
+          {
+            nodes.Add(node);
+          }
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
         }
       }
       );
@@ -345,7 +354,7 @@ namespace SpeckleStructuralGSA
         return new SpeckleNull();
 
       var newLines = ToSpeckleBase<GSA0DElement>();
-
+      var typeName = dummyObject.GetType().Name;
       var changed = false;
 
       var nodesLock = new object();
@@ -354,6 +363,7 @@ namespace SpeckleStructuralGSA
       Parallel.ForEach(newLines.Values, p =>
       {
         var pPieces = p.ListSplit("\t");
+        var gsaId = pPieces[1];
         if (pPieces[4].ParseElementNumNodes() == 1)
         {
           try
@@ -377,7 +387,10 @@ namespace SpeckleStructuralGSA
               changed = true;
             }
           }
-          catch { }
+          catch (Exception ex)
+          {
+            Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+          }
         }
       }
       );

@@ -216,7 +216,7 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSAAssembly dummyObject)
     {
       var newLines = ToSpeckleBase<GSAAssembly>();
-
+      var typeName = dummyObject.GetType().Name;
       var assembliesLock = new object();
 
       //Get all relevant GSA entities in this entire model
@@ -238,10 +238,11 @@ namespace SpeckleStructuralGSA
         m2Ds = Initialiser.GSASenderObjects.Get<GSA2DMember>();
       }
 
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
       {
         try
         {
+          var p = newLines[k];
           var assembly = new GSAAssembly() { GWACommand = p };
           //Pass in ALL the nodes and members - the Parse_ method will search through them
           assembly.ParseGWACommand(nodes, e1Ds, e2Ds, m1Ds, m2Ds);
@@ -257,7 +258,10 @@ namespace SpeckleStructuralGSA
             }
           }
         }
-        catch { }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+        }
       });
 
       Initialiser.GSASenderObjects.AddRange(assemblies);

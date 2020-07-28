@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Ink;
 using SpeckleCore;
 using SpeckleCoreGeometryClasses;
 using SpeckleGSAInterfaces;
@@ -58,19 +57,25 @@ namespace SpeckleStructuralGSA
       var orientationNodeRef = pieces[counter++];
       var rotationAngle = Convert.ToDouble(pieces[counter++]);
 
-      if (orientationNodeRef != "0")
+      try
       {
-        var node = nodes.Where(n => n.GSAId == Convert.ToInt32(orientationNodeRef)).FirstOrDefault();
-        node.ForceSend = true;
-        obj.ZAxis = Helper.Parse1DAxis(obj.Value.ToArray(),
-            rotationAngle, node.Value.Value.ToArray()).Normal as StructuralVectorThree;
-        this.SubGWACommand.Add(node.GWACommand);
-      }
-      else
-      {
-        obj.ZAxis = Helper.Parse1DAxis(obj.Value.ToArray(), rotationAngle).Normal as StructuralVectorThree;
-      }
+        if (orientationNodeRef != "0")
+        {
+          var node = nodes.Where(n => n.GSAId == Convert.ToInt32(orientationNodeRef)).FirstOrDefault();
+          node.ForceSend = true;
 
+          obj.ZAxis = Helper.Parse1DAxis(obj.Value.ToArray(), rotationAngle, node.Value.Value.ToArray()).Normal as StructuralVectorThree;
+          this.SubGWACommand.Add(node.GWACommand);
+        }
+        else
+        {
+          obj.ZAxis = Helper.Parse1DAxis(obj.Value.ToArray(), rotationAngle).Normal as StructuralVectorThree;
+        }
+      }
+      catch
+      {
+        Initialiser.AppUI.Message("Generating axis from coordinates for 1D element", obj.ApplicationId);
+      }
 
       if (pieces[counter++] != "NO_RLS")
       {
@@ -124,11 +129,12 @@ namespace SpeckleStructuralGSA
 
       obj.Offset = offsets;
 
-      if (String.IsNullOrEmpty(pieces[counter++]) == false)
-        Member = pieces[counter++]; // no references to this piece of data, why do we store it rather than just skipping over?
-
       counter++; // Dummy
 
+      if (counter < pieces.Length)
+      {
+        Member = pieces[counter++]; // no references to this piece of data, why do we store it rather than just skipping over?
+      }
       this.Value = obj;
     }
 
@@ -372,21 +378,29 @@ namespace SpeckleStructuralGSA
 
       // end releases
       List<StructuralVectorBoolSix> releases = new List<StructuralVectorBoolSix>();
-      string end1release = pieces[counter++].ToLower();
-      if (end1release.Contains('k'))
-        counter++; // skip past spring stiffnesses
-      string end2release = pieces[counter++].ToLower();
-      if (end2release.Contains('k'))
-        counter++; // skip past spring stiffnesses
-
-      obj.EndRelease = new List<StructuralVectorBoolSix>
+      var endReleases = new List<StructuralVectorBoolSix>();
+      if (counter < pieces.Length)
       {
-        ParseEndRelease(end1release),
-        ParseEndRelease(end2release)
-      };
+        var end1Release = pieces[counter++].ToLower();
+        endReleases.Add(ParseEndRelease(end1Release));
+        if (end1Release.Contains('k'))
+          counter++; // skip past spring stiffnesses
+      }
+      if (counter < pieces.Length)
+      {
+        var end2Release = pieces[counter++].ToLower();
+        endReleases.Add(ParseEndRelease(end2Release));
+        if (end2Release.Contains('k'))
+          counter++; // skip past spring stiffnesses
+      }
+
+      if (endReleases.Count() > 0)
+      {
+        obj.EndRelease = endReleases;
+      }
 
       // skip to offsets
-      if(pieces[pieces.Length].ToLower() == "yes")
+      if(pieces.Last().ToLower() == "yes")
       {
         // this approach ignores the auto / manual distinction in GSA
         // which may affect the true offset
@@ -598,17 +612,22 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA1DElement dummyObject)
     {
       var newLines = ToSpeckleBase<GSA1DElement>();
-
+      var typeName = dummyObject.GetType().Name;
       var elementsLock = new object();
       var elements = new List<GSA1DElement>();
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
+#if DEBUG
+      foreach (var p in newLines.Values)
+#else
       Parallel.ForEach(newLines.Values, p =>
+#endif
       {
         var pPieces = p.ListSplit("\t");
 
         if (pPieces[4] == "BEAM" && pPieces[4].ParseElementNumNodes() == 2)
         {
+          var gsaId = pPieces[1];
           try
           {
             var element = new GSA1DElement() { GWACommand = p };
@@ -618,9 +637,15 @@ namespace SpeckleStructuralGSA
               elements.Add(element);
             }
           }
-          catch { }
+          catch (Exception ex)
+          {
+            Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+          }
         }
-      });
+      }
+#if !DEBUG
+      );
+#endif
 
       Initialiser.GSASenderObjects.AddRange(elements);
 
@@ -629,15 +654,20 @@ namespace SpeckleStructuralGSA
 
     public static SpeckleObject ToSpeckle(this GSA1DMember dummyObject)
     {
-
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
       var membersLock = new object();
       var members = new List<GSA1DMember>();
       var newLines = ToSpeckleBase<GSA1DMember>();
+      var typeName = dummyObject.GetType().Name;
 
+#if DEBUG
+      foreach (var p in newLines.Values)
+#else
       Parallel.ForEach(newLines.Values, p =>
+#endif
       {
         var pPieces = p.ListSplit("\t");
+        var gsaId = pPieces[1];
         if (pPieces[4].Is1DMember())
         {
           try
@@ -649,9 +679,15 @@ namespace SpeckleStructuralGSA
               members.Add(member);
             }
           }
-          catch { }
+          catch (Exception ex)
+          {
+            Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+          }
         }
-      });
+      }
+#if !DEBUG
+      );
+#endif
 
       Initialiser.GSASenderObjects.AddRange(members);
 

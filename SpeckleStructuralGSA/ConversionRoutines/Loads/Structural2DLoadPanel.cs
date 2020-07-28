@@ -158,7 +158,15 @@ namespace SpeckleStructuralGSA
         return "";
       }
 
-      var axis = Helper.Parse2DAxis(load.Value.ToArray());
+      StructuralAxis axis = null;
+      try
+      {
+        axis = Helper.Parse2DAxis(load.Value.ToArray());
+      }
+      catch
+      {
+        Initialiser.AppUI.Message("Generating axis from coordinates for 2D load panel", load.ApplicationId);
+      }
 
       // Calculate elevation
       var elevation = (load.Value[0] * axis.Normal.Value[0] +
@@ -256,11 +264,20 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSAGridAreaLoad>();
       var loads = new List<GSAGridAreaLoad>();
+      var typeName = dummyObject.GetType().Name;
 
       foreach (var k in newLines.Keys)
       {
         var load = new GSAGridAreaLoad() { GSAId = k, GWACommand = newLines[k] };
-        load.ParseGWACommand();
+        try
+        {
+          load.ParseGWACommand();
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+        }
+
         loads.Add(load);
       }
 

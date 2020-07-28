@@ -183,15 +183,23 @@ namespace SpeckleStructuralGSA
 
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
-
-      foreach (var p in newPoints.Values)
+      var typeName = dummyObject.GetType().Name;
+      foreach (var k in newPoints.Keys)
       {
+        var p = newPoints[k];
         var loadSubList = new List<GSA0DLoadPoint>();
 
         // Placeholder load object to get list of nodes and load values
         // Need to transform to axis so one load definition may be transformed to many
         var initLoad = new GSA0DLoadPoint() { GWACommand = p };
-        initLoad.ParseGWACommand();
+        try
+        {
+          initLoad.ParseGWACommand();
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+        }
 
         // Raise node flag to make sure it gets sent
         foreach (var n in nodes.Where(n => initLoad.Value.NodeRefs.Contains(n.Value.ApplicationId)))

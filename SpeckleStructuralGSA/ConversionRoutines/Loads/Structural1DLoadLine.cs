@@ -325,14 +325,22 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSAGridLineLoad dummyObject)
     {
       var newLines = ToSpeckleBase<GSAGridLineLoad>();
-
+      var typeName = dummyObject.GetType().Name;
       var loads = new List<GSAGridLineLoad>();
 
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
       {
+        var p = newLines[k];
         var load = new GSAGridLineLoad() { GWACommand = p };
-        load.ParseGWACommand();
-        
+        try
+        {
+          load.ParseGWACommand();
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+        }
+
         // Break them apart
         for (var i = 0; i < load.Value.Value.Count - 3; i += 3)
         {

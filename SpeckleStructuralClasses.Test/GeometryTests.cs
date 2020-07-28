@@ -4,11 +4,9 @@ using SpeckleStructuralClasses;
 using SpeckleCoreGeometryClasses;
 using System.Collections.Generic;
 using System;
-using NUnit.Framework.Interfaces;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Spatial.Euclidean;
+using SpeckleStructuralClasses.PolygonMesher;
 
-namespace SpeckleStructuralGSA.Test.Tests
+namespace SpeckleStructuralClasses.Test
 {
   [TestFixture]
   public class GeometryTests

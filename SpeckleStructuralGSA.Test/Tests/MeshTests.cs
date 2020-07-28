@@ -10,7 +10,6 @@ using SpeckleGSAProxy;
 using SpeckleStructuralClasses;
 using MathNet.Spatial;
 using MathNet.Spatial.Euclidean;
-using g3;
 
 namespace SpeckleStructuralGSA.Test
 {
@@ -31,6 +30,7 @@ namespace SpeckleStructuralGSA.Test
       Initialiser.Cache = gsaCache;
       Initialiser.Interface = gsaInterfacer;
       Initialiser.Settings = new Settings();
+      Initialiser.AppUI = new SpeckleAppUI();
     }
 
     [SetUp]
