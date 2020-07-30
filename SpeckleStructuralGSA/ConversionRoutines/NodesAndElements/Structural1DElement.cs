@@ -517,7 +517,7 @@ namespace SpeckleStructuralGSA
       ls.Add("Free"); // restraint_end_1
       ls.Add("Free"); // restraint_end_2
 
-      ls.Add("AUTOMATIC"); // Effective length option
+      ls.Add("0"); // Effective length option
       ls.Add("0"); // height
       ls.Add("0"); // load_ref
 
