@@ -132,36 +132,36 @@ namespace SpeckleStructuralGSA.Test
 
       var retrievedGwa = Initialiser.Interface.GetGwaData(keywords, true);
 
-      var retrievedDict = new Dictionary<string, int>();
+      var retrievedDict = new Dictionary<string, List<string>>();
       foreach (var gwa in retrievedGwa)
       {
         Initialiser.Interface.ParseGeneralGwa(gwa.GwaWithoutSet, out string keyword, out _, out _, out _, out _, out _);
         if (!retrievedDict.ContainsKey(keyword))
         {
-          retrievedDict.Add(keyword, 0);
+          retrievedDict.Add(keyword, new List<string>());
         }
-        retrievedDict[keyword]++;
+        retrievedDict[keyword].Add(gwa.GwaWithoutSet);
       }
 
-      var fromFileDict = new Dictionary<string, int>();
+      var fromFileDict = new Dictionary<string, List<string>>();
       foreach (var r in gwaRecordsFromFile)
       {
         Initialiser.Interface.ParseGeneralGwa(r.GwaCommand, out string keyword, out _, out _, out _, out _, out _);
         if (!fromFileDict.ContainsKey(keyword))
         {
-          fromFileDict.Add(keyword, 0);
+          fromFileDict.Add(keyword, new List<string>());
         }
-        fromFileDict[keyword]++;
+        fromFileDict[keyword].Add(r.GwaCommand);
       }
 
       Initialiser.Interface.Close();
 
-      var unmatching = new List<string>();
+      var unmatching = new Dictionary<string, (List<string> retrieved, List<string> fromFile)>();
       foreach (var keyword in fromFileDict.Keys)
       {
-        if ((!retrievedDict.ContainsKey(keyword)) || (retrievedDict[keyword] != fromFileDict[keyword]))
+        if ((!retrievedDict.ContainsKey(keyword)) || (retrievedDict[keyword].Count != fromFileDict[keyword].Count))
         {
-          unmatching.Add(keyword);
+          unmatching[keyword] = (retrievedDict.ContainsKey(keyword) ? retrievedDict[keyword] : null, fromFileDict.ContainsKey(keyword) ? fromFileDict[keyword] : null);
         }
       }
 
