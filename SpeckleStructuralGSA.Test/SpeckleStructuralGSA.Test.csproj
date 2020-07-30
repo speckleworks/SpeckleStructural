@@ -159,7 +159,6 @@
     <Compile Include="Other\ReceiverProcessor.cs" />
     <Compile Include="Other\Result.cs" />
     <Compile Include="Other\SenderProcessor.cs" />
-    <Compile Include="Tests\Node.cs" />
     <Compile Include="Tests\MeshTests.cs" />
     <Compile Include="Tests\ReceiverTests.cs" />
     <Compile Include="Tests\SenderTests.cs" />

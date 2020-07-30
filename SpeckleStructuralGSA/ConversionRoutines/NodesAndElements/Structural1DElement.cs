@@ -374,8 +374,6 @@ namespace SpeckleStructuralGSA
       else
         obj.GSADummy = false;
 
-      counter += 9; //Skip to end conditions
-
       // end releases
       List<StructuralVectorBoolSix> releases = new List<StructuralVectorBoolSix>();
       var endReleases = new List<StructuralVectorBoolSix>();
@@ -400,12 +398,12 @@ namespace SpeckleStructuralGSA
       }
 
       // skip to offsets
-      if(pieces.Last().ToLower() == "yes")
+      if(pieces.Last().ToLower() != "no")
       {
         // this approach ignores the auto / manual distinction in GSA
         // which may affect the true offset
         
-        counter = pieces.Length - 3;
+        counter = pieces.Length - 4;
 
         var offsets = new List<StructuralVectorThree>
         {
