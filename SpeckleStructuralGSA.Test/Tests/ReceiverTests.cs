@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using Moq;
 using NUnit.Framework;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
@@ -94,6 +96,77 @@ namespace SpeckleStructuralGSA.Test
 
         var actualUniqueApplicationIds = actualGwaRecordsForKeyword.Where(r => !string.IsNullOrEmpty(r.ApplicationId)).Select(r => r.ApplicationId).Distinct();
       }
+    }
+
+    [Test]
+    public void ReceiverGsaValidation()
+    {
+      Initialiser.Interface = new GSAProxy();
+      Initialiser.Cache = new GSACache();
+      Initialiser.AppUI = new SpeckleAppUI();
+      Initialiser.Interface.NewFile(false);
+
+      var receiverProcessor = new ReceiverProcessor(TestDataDirectory, gsaInterfacer, gsaCache);
+
+      //Run conversion to GWA keywords
+      receiverProcessor.JsonSpeckleStreamsToGwaRecords(savedJsonFileNames, out var gwaRecordsFromFile, GSATargetLayer.Design);
+
+      //Run conversion to GWA keywords
+      Assert.IsNotNull(gwaRecordsFromFile);
+      Assert.IsNotEmpty(gwaRecordsFromFile);
+
+      var designTypeHierarchy = Helper.GetTypeCastPriority(ioDirection.Receive, GSATargetLayer.Design, false);
+      var analysisTypeHierarchy = Helper.GetTypeCastPriority(ioDirection.Receive, GSATargetLayer.Analysis, false);
+      var keywords = designTypeHierarchy.Select(i => i.Key.GetGSAKeyword()).ToList();
+      keywords.AddRange(designTypeHierarchy.SelectMany(i => i.Key.GetSubGSAKeyword()));
+      keywords.AddRange(analysisTypeHierarchy.Select(i => i.Key.GetGSAKeyword()));
+      keywords.AddRange(analysisTypeHierarchy.SelectMany(i => i.Key.GetSubGSAKeyword()));
+      keywords = keywords.Distinct().ToList();
+
+      foreach (var gwa in gwaRecordsFromFile.Select(r => r.GwaCommand))
+      {
+        Initialiser.Interface.SetGwa(gwa);
+      }
+
+      Initialiser.Interface.Sync();
+
+      var retrievedGwa = Initialiser.Interface.GetGwaData(keywords, true);
+
+      var retrievedDict = new Dictionary<string, int>();
+      foreach (var gwa in retrievedGwa)
+      {
+        Initialiser.Interface.ParseGeneralGwa(gwa.GwaWithoutSet, out string keyword, out _, out _, out _, out _, out _);
+        if (!retrievedDict.ContainsKey(keyword))
+        {
+          retrievedDict.Add(keyword, 0);
+        }
+        retrievedDict[keyword]++;
+      }
+
+      var fromFileDict = new Dictionary<string, int>();
+      foreach (var r in gwaRecordsFromFile)
+      {
+        Initialiser.Interface.ParseGeneralGwa(r.GwaCommand, out string keyword, out _, out _, out _, out _, out _);
+        if (!fromFileDict.ContainsKey(keyword))
+        {
+          fromFileDict.Add(keyword, 0);
+        }
+        fromFileDict[keyword]++;
+      }
+
+      Initialiser.Interface.Close();
+
+      var unmatching = new List<string>();
+      foreach (var keyword in fromFileDict.Keys)
+      {
+        if ((!retrievedDict.ContainsKey(keyword)) || (retrievedDict[keyword] != fromFileDict[keyword]))
+        {
+          unmatching.Add(keyword);
+        }
+      }
+
+      Assert.AreEqual(0, unmatching.Count());
+      
     }
 
     //Reception test
