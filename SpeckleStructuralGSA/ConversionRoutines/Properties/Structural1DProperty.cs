@@ -72,7 +72,8 @@ namespace SpeckleStructuralGSA
 
       var prop = this.Value as Structural1DProperty;
 
-      if (prop.Profile == null && string.IsNullOrEmpty(prop.CatalogueName))
+      if (prop.ApplicationId == null)
+      //if (prop.Profile == null && string.IsNullOrEmpty(prop.CatalogueName))
         return "";
 
       var keyword = typeof(GSA1DProperty).GetGSAKeyword();
@@ -371,7 +372,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        // TODO: IMPLEMENT ALL SECTIONS
+        Initialiser.AppUI.Message("1D section profile string (" + type + ") is not supported", prop.ApplicationId);  // TODO: IMPLEMENT ALL SECTIONS
       }
 
       return prop;

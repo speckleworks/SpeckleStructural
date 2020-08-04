@@ -152,8 +152,12 @@ namespace SpeckleStructuralGSA
 
       var index = Initialiser.Cache.ResolveIndex(keyword, element.ApplicationId);
 
-      var propKeyword = typeof(GSA1DProperty).GetGSAKeyword();
+      var propKeyword = (element.ElementType == Structural1DElementType.Spring)
+        ? typeof(GSASpringProperty).GetGSAKeyword()
+        : typeof(GSA1DProperty).GetGSAKeyword();
+
       var indexResult = Initialiser.Cache.LookupIndex(propKeyword, element.PropertyRef);
+
       //If the reference can't be found, then reserve a new index so that it at least doesn't point to any other existing record
       var propRef = indexResult ?? Initialiser.Cache.ResolveIndex(propKeyword, element.PropertyRef);
       if (indexResult == null && element.ApplicationId != null)
@@ -324,8 +328,8 @@ namespace SpeckleStructuralGSA
         obj.ElementType = Structural1DElementType.Generic;
 
       counter++; // exposure - fire property e.g. TOP_BOT - not currently supported
-
-      obj.PropertyRef = Helper.GetApplicationId(typeof(GSA1DProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++])); // prop
+      var propId = Convert.ToInt32(pieces[counter++]);
+      
       this.Group = Convert.ToInt32(pieces[counter++]); // group - Keep group for load targetting
 
       // topology
@@ -360,7 +364,17 @@ namespace SpeckleStructuralGSA
       obj.GSAMeshSize = Convert.ToDouble(pieces[counter++]);
 
       counter++; // is_intersector
-      counter++; // analysis_type
+      var analysisType = pieces[counter++]; // analysis_type
+      if (analysisType == "SPRING")
+      {
+        obj.ElementType = Structural1DElementType.Spring;
+      }
+
+      obj.PropertyRef = Helper.GetApplicationId((obj.ElementType == Structural1DElementType.Spring ) 
+        ? typeof(GSASpringProperty).GetGSAKeyword()
+        : typeof(GSA1DProperty).GetGSAKeyword(), propId); // prop
+
+
       counter++; // fire
       counter++; // limiting temperature
       counter++; // time[] 1
@@ -373,8 +387,6 @@ namespace SpeckleStructuralGSA
         obj.GSADummy = true;
       else
         obj.GSADummy = false;
-
-      counter += 9; //Skip to end conditions
 
       // end releases
       List<StructuralVectorBoolSix> releases = new List<StructuralVectorBoolSix>();
@@ -400,12 +412,12 @@ namespace SpeckleStructuralGSA
       }
 
       // skip to offsets
-      if(pieces.Last().ToLower() == "yes")
+      if(pieces.Last().ToLower() != "no")
       {
         // this approach ignores the auto / manual distinction in GSA
         // which may affect the true offset
         
-        counter = pieces.Length - 3;
+        counter = pieces.Length - 4;
 
         var offsets = new List<StructuralVectorThree>
         {
