@@ -25,17 +25,14 @@ namespace SpeckleStructuralGSA
 
       var pieces = this.GWACommand.ListSplit("\t");
 
-      int commandVersion = 16;
-      int.TryParse(pieces[0].Split(new[] { '.' }).Last(), out commandVersion);
-
       var counter = 1; // Skip identifier
       
       this.GSAId = Convert.ToInt32(pieces[counter++]);
       obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
-      counter++; // MAT.8
+      counter++; // MAT.10
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
-      counter++; // Unlocked
       obj.YoungsModulus = Convert.ToDouble(pieces[counter++]);
+      counter++; // strength
       obj.PoissonsRatio = Convert.ToDouble(pieces[counter++]);
       obj.ShearModulus = Convert.ToDouble(pieces[counter++]);
       obj.Density = Convert.ToDouble(pieces[counter++]);
