@@ -62,7 +62,7 @@ namespace SpeckleStructuralGSA.Test
     }
 
     [Ignore("Just used for debugging at this stage, will be finished in the future as a test")]
-    [TestCase(GSATargetLayer.Analysis, "8V_CIKfmt.json")]
+    [TestCase(GSATargetLayer.Design, "58T0dgF0P.json")]
     //[TestCase(GSATargetLayer.Analysis, "S5pNxjmUH.json")]
     public void ReceiverTestForDebug(GSATargetLayer layer, string fileName)
     {
@@ -96,77 +96,6 @@ namespace SpeckleStructuralGSA.Test
 
         var actualUniqueApplicationIds = actualGwaRecordsForKeyword.Where(r => !string.IsNullOrEmpty(r.ApplicationId)).Select(r => r.ApplicationId).Distinct();
       }
-    }
-
-    [Test]
-    public void ReceiverGsaValidation()
-    {
-      Initialiser.Interface = new GSAProxy();
-      Initialiser.Cache = new GSACache();
-      Initialiser.AppUI = new SpeckleAppUI();
-      Initialiser.Interface.NewFile(false);
-
-      var receiverProcessor = new ReceiverProcessor(TestDataDirectory, gsaInterfacer, gsaCache);
-
-      //Run conversion to GWA keywords
-      receiverProcessor.JsonSpeckleStreamsToGwaRecords(savedJsonFileNames, out var gwaRecordsFromFile, GSATargetLayer.Design);
-
-      //Run conversion to GWA keywords
-      Assert.IsNotNull(gwaRecordsFromFile);
-      Assert.IsNotEmpty(gwaRecordsFromFile);
-
-      var designTypeHierarchy = Helper.GetTypeCastPriority(ioDirection.Receive, GSATargetLayer.Design, false);
-      var analysisTypeHierarchy = Helper.GetTypeCastPriority(ioDirection.Receive, GSATargetLayer.Analysis, false);
-      var keywords = designTypeHierarchy.Select(i => i.Key.GetGSAKeyword()).ToList();
-      keywords.AddRange(designTypeHierarchy.SelectMany(i => i.Key.GetSubGSAKeyword()));
-      keywords.AddRange(analysisTypeHierarchy.Select(i => i.Key.GetGSAKeyword()));
-      keywords.AddRange(analysisTypeHierarchy.SelectMany(i => i.Key.GetSubGSAKeyword()));
-      keywords = keywords.Distinct().ToList();
-
-      foreach (var gwa in gwaRecordsFromFile.Select(r => r.GwaCommand))
-      {
-        Initialiser.Interface.SetGwa(gwa);
-      }
-
-      Initialiser.Interface.Sync();
-
-      var retrievedGwa = Initialiser.Interface.GetGwaData(keywords, true);
-
-      var retrievedDict = new Dictionary<string, List<string>>();
-      foreach (var gwa in retrievedGwa)
-      {
-        Initialiser.Interface.ParseGeneralGwa(gwa.GwaWithoutSet, out string keyword, out _, out _, out _, out _, out _);
-        if (!retrievedDict.ContainsKey(keyword))
-        {
-          retrievedDict.Add(keyword, new List<string>());
-        }
-        retrievedDict[keyword].Add(gwa.GwaWithoutSet);
-      }
-
-      var fromFileDict = new Dictionary<string, List<string>>();
-      foreach (var r in gwaRecordsFromFile)
-      {
-        Initialiser.Interface.ParseGeneralGwa(r.GwaCommand, out string keyword, out _, out _, out _, out _, out _);
-        if (!fromFileDict.ContainsKey(keyword))
-        {
-          fromFileDict.Add(keyword, new List<string>());
-        }
-        fromFileDict[keyword].Add(r.GwaCommand);
-      }
-
-      Initialiser.Interface.Close();
-
-      var unmatching = new Dictionary<string, (List<string> retrieved, List<string> fromFile)>();
-      foreach (var keyword in fromFileDict.Keys)
-      {
-        if ((!retrievedDict.ContainsKey(keyword)) || (retrievedDict[keyword].Count != fromFileDict[keyword].Count))
-        {
-          unmatching[keyword] = (retrievedDict.ContainsKey(keyword) ? retrievedDict[keyword] : null, fromFileDict.ContainsKey(keyword) ? fromFileDict[keyword] : null);
-        }
-      }
-
-      Assert.AreEqual(0, unmatching.Count());
-      
     }
 
     //Reception test
