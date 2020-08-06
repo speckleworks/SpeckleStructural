@@ -139,14 +139,21 @@ namespace SpeckleStructuralGSA
       // restraint
       try
       {
-        string restraint = "";
-        restraint += node.Restraint.Value[0] ? "x" : "";
-        restraint += node.Restraint.Value[1] ? "y" : "";
-        restraint += node.Restraint.Value[2] ? "z" : "";
-        restraint += node.Restraint.Value[3] ? "xx" : "";
-        restraint += node.Restraint.Value[4] ? "yy" : "";
-        restraint += node.Restraint.Value[5] ? "zz" : "";
-        ls.Add(restraint);
+        if (node.Restraint != null)
+        {
+          string restraint = "";
+          restraint += node.Restraint.Value[0] ? "x" : "";
+          restraint += node.Restraint.Value[1] ? "y" : "";
+          restraint += node.Restraint.Value[2] ? "z" : "";
+          restraint += node.Restraint.Value[3] ? "xx" : "";
+          restraint += node.Restraint.Value[4] ? "yy" : "";
+          restraint += node.Restraint.Value[5] ? "zz" : "";
+          ls.Add(restraint);
+        }
+        else
+        {
+          ls.Add("free");
+        }
       }
       catch { ls.Add("free"); }
 
