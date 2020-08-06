@@ -69,6 +69,7 @@ namespace SpeckleStructuralGSA
         index.ToString(),
         "MAT.10",
         mat.Name == null || mat.Name == "" ? " " : mat.Name,
+        mat.CompressiveStrength.ToString(), // Design Strength (Pa) <-- need to check units here
         (mat.YoungsModulus*1000).ToString(), // E
         mat.PoissonsRatio.ToString(), // nu
         mat.ShearModulus.ToString(), // G
@@ -115,6 +116,7 @@ namespace SpeckleStructuralGSA
         "1", // Material factor on strength
         "1", // Material factor on elastic modulus
         "0", // Cost
+        "Concrete",
         "CYLINDER", // Strength type
         "N", // Cement class
         mat.CompressiveStrength.ToString(), // Concrete strength
