@@ -24,6 +24,13 @@ namespace SpeckleStructuralGSA.Test
     [Test]
     public void ReceiverGsaValidation()
     {
+      // Takes a saved Speckle stream with structural objects
+      // converts to GWA and sends to GSA
+      // then reads the data back out of GSA
+      // and compares the two sets of GWA
+      // if successful then there will be the same number
+      // of each of the keywords in as out
+
       SpeckleInitializer.Initialize();
       gsaInterfacer = new GSAProxy();
       gsaCache = new GSACache();
@@ -36,6 +43,7 @@ namespace SpeckleStructuralGSA.Test
       var receiverProcessor = new ReceiverProcessor(TestDataDirectory, gsaInterfacer, gsaCache);
 
       //Run conversion to GWA keywords
+      // Note that this is one model split over several json files
       receiverProcessor.JsonSpeckleStreamsToGwaRecords(ReceiverTests.savedJsonFileNames, out var gwaRecordsFromFile, GSATargetLayer.Design);
 
       //Run conversion to GWA keywords
@@ -55,9 +63,12 @@ namespace SpeckleStructuralGSA.Test
         Initialiser.Interface.SetGwa(gwa);
       }
 
-      Initialiser.Interface.Sync();
+      Initialiser.Interface.Sync(); // send GWA to GSA
 
-      var retrievedGwa = Initialiser.Interface.GetGwaData(keywords, true);
+      // When saved and opened in VS code there are no duplicated entries for MAT_CONCRETE.17
+      // Initialiser.Interface.SaveAs(@"C:\Users\Hugh.Groves\Desktop\fromTests.gwa");
+
+      var retrievedGwa = Initialiser.Interface.GetGwaData(keywords, true); // read GWA from GSA
 
       var retrievedDict = new Dictionary<string, List<string>>();
       foreach (var gwa in retrievedGwa)
@@ -94,6 +105,7 @@ namespace SpeckleStructuralGSA.Test
 
       Assert.AreEqual(0, unmatching.Count());
 
+      // GSA sometimes forgets the SID - should check that this has passed through correctly here
     }
   }
 }
