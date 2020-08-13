@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,12 @@ namespace SpeckleStructuralGSA.Test
     public void BeforeEachTest()
     {
       Initialiser.Settings = new Settings();
+    }
+
+    internal class UnmatchedData
+    {
+      public List<string> Retrieved;
+      public List<string> FromFile;
     }
 
     [Test]
@@ -56,12 +63,7 @@ namespace SpeckleStructuralGSA.Test
       keywords.AddRange(designTypeHierarchy.SelectMany(i => i.Key.GetSubGSAKeyword()));
       keywords.AddRange(analysisTypeHierarchy.Select(i => i.Key.GetGSAKeyword()));
       keywords.AddRange(analysisTypeHierarchy.SelectMany(i => i.Key.GetSubGSAKeyword()));
-      keywords = keywords.Distinct().ToList();
-
-      foreach (var gwa in gwaRecordsFromFile.Select(r => r.GwaCommand))
-      {
-        Initialiser.Interface.SetGwa(gwa);
-      }
+      keywords = keywords.Where(k => k.Length > 0).Distinct().ToList();
 
       Initialiser.Interface.Sync(); // send GWA to GSA
 
@@ -94,12 +96,18 @@ namespace SpeckleStructuralGSA.Test
 
       Initialiser.Interface.Close();
 
-      var unmatching = new Dictionary<string, (List<string> retrieved, List<string> fromFile)>();
+      //var unmatching = new Dictionary<string, (List<string> retrieved, List<string> fromFile)>();
+      var unmatching = new Dictionary<string, UnmatchedData>();
       foreach (var keyword in fromFileDict.Keys)
       {
-        if ((!retrievedDict.ContainsKey(keyword)) || (retrievedDict[keyword].Count != fromFileDict[keyword].Count))
+        if (!retrievedDict.ContainsKey(keyword))
         {
-          unmatching[keyword] = (retrievedDict.ContainsKey(keyword) ? retrievedDict[keyword] : null, fromFileDict.ContainsKey(keyword) ? fromFileDict[keyword] : null);
+          unmatching.Add(keyword, new UnmatchedData());
+        }
+        if (retrievedDict[keyword].Count != fromFileDict[keyword].Count)
+        {
+          unmatching[keyword].Retrieved = (retrievedDict.ContainsKey(keyword)) ? retrievedDict[keyword] : null;
+          unmatching[keyword].FromFile = fromFileDict[keyword];
         }
       }
 

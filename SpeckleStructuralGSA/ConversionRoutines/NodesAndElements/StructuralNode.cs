@@ -188,7 +188,7 @@ namespace SpeckleStructuralGSA
     }
   }
 
-  [GSAObject("EL.3", new string[] { "PROP_MASS.2" }, "elements", true, false, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode) })]
+  [GSAObject("EL.4", new string[] { "PROP_MASS.2" }, "elements", true, false, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode) })]
   public class GSA0DElement : IGSASpeckleContainer
   {
     public int GSAId { get; set; }
