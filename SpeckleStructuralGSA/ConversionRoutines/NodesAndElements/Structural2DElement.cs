@@ -97,9 +97,11 @@ namespace SpeckleStructuralGSA
 
       obj.Offset = offset;
 
-      if (String.IsNullOrEmpty(pieces[counter++]) == false)
-        Member = pieces[counter++]; // no references to this piece of data, why do we store it rather than just skipping over?
-
+      if (pieces.Count() < counter)
+      {
+        if (String.IsNullOrEmpty(pieces[counter++]) == false)
+          Member = pieces[counter++]; // no references to this piece of data, why do we store it rather than just skipping over?
+      }
       counter++; // Dummy
 
       this.Value = obj;
