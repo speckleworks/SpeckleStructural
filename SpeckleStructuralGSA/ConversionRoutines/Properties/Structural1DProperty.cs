@@ -104,10 +104,11 @@ namespace SpeckleStructuralGSA
         materialType = "GENERIC";
       }
 
+      var sid = Helper.GenerateSID(prop);
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + Helper.GenerateSID(prop),
+        keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
         index.ToString(),
         prop.Name == null || prop.Name == "" ? " " : prop.Name,
         "NO_RGB",

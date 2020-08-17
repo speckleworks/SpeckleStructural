@@ -27,8 +27,8 @@ namespace SpeckleStructuralGSA
       var pieces = this.GWACommand.ListSplit("\t");
 
       var counter = 1; // Skip identifier
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
-
       var targetNodeRefs = Initialiser.Interface.ConvertGSAList(pieces[counter++], SpeckleGSAInterfaces.GSAEntity.NODE);
 
       if (nodes != null)
@@ -122,8 +122,9 @@ namespace SpeckleStructuralGSA
 
         ls.Add("SET_AT");
         ls.Add(index.ToString());
-        ls.Add(keyword + ":" + Helper.GenerateSID(load));
-        ls.Add(load.Name == null || load.Name == "" ? " " : load.Name);
+        var sid = Helper.GenerateSID(load);
+        ls.Add(keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid));
+        ls.Add((load.Name == null || load.Name == "") ? " " : load.Name + (load.Name.All(char.IsDigit) ? " " : ""));
         ls.Add(string.Join(" ", nodeRefs));
         ls.Add(loadCaseRef.ToString());
         ls.Add("GLOBAL"); // Axis
@@ -158,7 +159,7 @@ namespace SpeckleStructuralGSA
 
         // Placeholder load object to get list of nodes and load values
         // Need to transform to axis so one load definition may be transformed to many
-        var initLoad = new GSA0DLoad() { GWACommand = p };
+        var initLoad = new GSA0DLoad() { GWACommand = p, GSAId = k };
 
         try
         {
@@ -184,6 +185,7 @@ namespace SpeckleStructuralGSA
             SubGWACommand = new List<string>(initLoad.SubGWACommand)
           };
           load.Value.Name = initLoad.Value.Name;
+          load.Value.ApplicationId = initLoad.Value.ApplicationId;
           load.Value.LoadCaseRef = initLoad.Value.LoadCaseRef;
 
           // Transform load to defined axis
@@ -199,13 +201,17 @@ namespace SpeckleStructuralGSA
           {
             match.Value.NodeRefs.Add(nRef);
             if (gwaRecord != null)
+            {
               match.SubGWACommand.Add(gwaRecord);
+            }
           }
           else
           {
             load.Value.NodeRefs = new List<string>() { nRef };
             if (gwaRecord != null)
+            {
               load.SubGWACommand.Add(gwaRecord);
+            }
             loadSubList.Add(load);
           }
         }

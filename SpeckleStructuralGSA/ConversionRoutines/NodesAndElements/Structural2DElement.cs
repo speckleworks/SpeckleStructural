@@ -140,10 +140,11 @@ namespace SpeckleStructuralGSA
         }
       }
 
+      var sid = Helper.GenerateSID(mesh);
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + Helper.GenerateSID(mesh),
+        keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
         index.ToString(),
         mesh.Name == null || mesh.Name == "" ? " " : mesh.Name,
         mesh.Colors == null || mesh.Colors.Count() < 1 ? "NO_RGB" : mesh.Colors[0].ArgbToHexColor().ToString(),
@@ -293,13 +294,23 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      obj.GSAMeshSize = Convert.ToDouble(pieces[counter++]); // mesh_size
+      //Since this is a GSA-specific property, only set if not default
+      var meshSize = Convert.ToDouble(pieces[counter++]);
+      if (meshSize > 0)
+      {
+        obj.GSAMeshSize = meshSize; // mesh_size
+      }
 
       counter++; // intersector
       counter++; // analysis type
 
       counter = counter+=6; // skip fire bits to get to dummy status
-      obj.GSADummy = pieces[counter++] == "DUMMY" ? true : false;
+      //Since this is a GSA-specific property, only set if true;
+      var dummy = (pieces[counter++] == "DUMMY");
+      if (dummy)
+      {
+        obj.GSADummy = dummy;
+      }
 
       Initialiser.Interface.GetGSATotal2DElementOffset(propertyGSAId, Convert.ToDouble(pieces[counter++]), out var offset, out var offsetRec);
       this.SubGWACommand.Add(offsetRec);

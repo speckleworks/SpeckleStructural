@@ -121,13 +121,13 @@ namespace SpeckleStructuralGSA
 
       var index = Initialiser.Cache.ResolveIndex(keyword, springProp.ApplicationId);
 
-      var gwaAxisCommand = "";
       var gwaCommands = new List<string>();
 
+      var sid = Helper.GenerateSID(springProp);
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + Helper.GenerateSID(springProp),
+        keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
         index.ToString(),
         string.IsNullOrEmpty(springProp.Name) ? "" : springProp.Name,
         "NO_RGB"

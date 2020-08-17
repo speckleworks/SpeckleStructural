@@ -88,11 +88,12 @@ namespace SpeckleStructuralGSA
         stageDefStr = string.Join(" ", stageDefIndices);
       }
 
+      var sid = Helper.GenerateSID(obj);
       var ls = new List<string>
       {
         "SET_AT",
         index.ToString(),
-        keyword + ":" + Helper.GenerateSID(obj),
+        keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
 				string.IsNullOrEmpty(obj.Name) ? " " : obj.Name
 			};
 

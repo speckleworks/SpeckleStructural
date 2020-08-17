@@ -126,10 +126,11 @@ namespace SpeckleStructuralGSA
 
       var index = Helper.NodeAt(node.Value[0], node.Value[1], node.Value[2], Initialiser.Settings.CoincidentNodeAllowance);
 
+      var sid = Helper.GenerateSID(node);
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + Helper.GenerateSID(node),
+        keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
         index.ToString(), // num
         node.Name == null || node.Name == "" ? " " : node.Name, // name
         "NO_RGB", // colour
@@ -241,10 +242,11 @@ namespace SpeckleStructuralGSA
 
       var gwaCommands = new List<string>();
 
+      var sid = Helper.GenerateSID(node);
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + Helper.GenerateSID(node),
+        keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
         index.ToString(),
         node.Name == null || node.Name == "" ? " " : node.Name,
         "NO_RGB",

@@ -212,7 +212,8 @@ namespace SpeckleStructuralGSA
       // Set ANAL
       ls.Clear();
       ls.Add("SET");
-      ls.Add(keyword + ":" + Helper.GenerateSID(loadTask));
+      var sid = Helper.GenerateSID(loadTask);
+      ls.Add(keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid));
       ls.Add(index.ToString());
       ls.Add(loadTask.Name == null || loadTask.Name == "" ? " " : loadTask.Name);
       ls.Add(taskIndex.ToString());
@@ -261,7 +262,7 @@ namespace SpeckleStructuralGSA
       foreach (var k in newLines.Keys)
       {
         var p = newLines[k];
-        var task = new GSALoadTask() { GWACommand = p };
+        var task = new GSALoadTask() { GWACommand = p, GSAId = k };
         try
         {
           task.ParseGWACommand();

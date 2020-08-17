@@ -232,10 +232,11 @@ namespace SpeckleStructuralGSA
           subLs.Add("(" + Math.Round(transformed[j],4).ToString() + "," + Math.Round(transformed[j + 1],4).ToString() + ")");
         }
 
+        var sid = Helper.GenerateSID(load);
         ls.AddRange(new string[] { 
           "SET_AT",
           index.ToString(),
-          keyword + ":" + Helper.GenerateSID(load),
+          keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
           load.Name == null || load.Name == "" ? " " : load.Name,
           gridSurfaceIndex.ToString(),
           "POLYGON",

@@ -129,13 +129,15 @@ namespace SpeckleStructuralGSA
 
       var direction = new string[6] { "X", "Y", "Z", "XX", "YY", "ZZ" };
 
+      //This will cause multiple GWA lines to have the same application Id - might need a review
+      var sid = Helper.GenerateSID(infl);
       for (var i = 0; i < infl.Directions.Value.Count(); i++)
       {
         var ls = new List<string>
         {
           "SET_AT",
           index.ToString(),
-          keyword + ":" + Helper.GenerateSID(infl),
+          keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
           infl.Name == null || infl.Name == "" ? " " : infl.Name,
           infl.GSAEffectGroup.ToString(),
           nodeRef.Value.ToString(),

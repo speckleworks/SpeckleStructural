@@ -86,10 +86,11 @@ namespace SpeckleStructuralGSA
       var line = new Line2D(new Point2D(gridLine.Value[0], gridLine.Value[1]), new Point2D(gridLine.Value[3], gridLine.Value[4]));
       var angleDegrees = (new Vector2D(1, 0)).AngleTo(line.Direction).Degrees;
 
+      var sid = Helper.GenerateSID(gridLine);
       var ls = new List<string>
         {
           "SET",
-          keyword + ":" + Helper.GenerateSID(gridLine),
+          keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
           index.ToString(),
           string.IsNullOrEmpty(gridLine.Name) ? "" : gridLine.Name,
           "LINE",

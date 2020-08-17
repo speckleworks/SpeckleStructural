@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using Microsoft.Expression.Interactivity.Media;
 using Moq;
 using NUnit.Framework;
 using SpeckleCore;
@@ -59,6 +60,52 @@ namespace SpeckleStructuralGSA.Test
     public void ReceiverTestDesignLayer(GSATargetLayer layer)
     {
       RunReceiverTest(savedJsonFileNames, expectedGwaPerIdsFileName, layer);
+    }
+    //EC_mxfJ2p.json
+
+    [TestCase(GSATargetLayer.Design, "EC_mxfJ2p.json", 2, 2, 2, 2, 4)]
+    [TestCase(GSATargetLayer.Analysis, "EC_mxfJ2p.json", 2, 2, 2, 2, 4)]
+    public void ReceiverTestLoadRelated(GSATargetLayer layer, string fileName,
+      int expectedNum0DLoads, int expectedNum2DBeamLoads, int expectedNum2dFaceLoads, int expectedNumLoadTasks, int expectedLoadCombos)
+    {
+      var json = Helper.ReadFile(fileName, TestDataDirectory);
+
+      var mockGsaCom = SetupMockGsaCom();
+      gsaInterfacer.OpenFile("", false, mockGsaCom.Object);
+
+      var receiverProcessor = new ReceiverProcessor(TestDataDirectory, gsaInterfacer, gsaCache);
+
+      //Run conversion to GWA keywords
+      receiverProcessor.JsonSpeckleStreamsToGwaRecords(new[] { fileName }, out var actualGwaRecords, layer);
+      Assert.IsNotNull(actualGwaRecords);
+      Assert.IsNotEmpty(actualGwaRecords);
+
+      var keywords = Helper.GetTypeCastPriority(ioDirection.Receive, layer, false).Select(i => i.Key.GetGSAKeyword()).Distinct().ToList();
+
+      //Log outcome to file
+
+      var actualGwaRecordsForKeyword = new Dictionary<string, List<string>>();
+      for (var i = 0; i < actualGwaRecords.Count(); i++)
+      {
+        Initialiser.Interface.ParseGeneralGwa(actualGwaRecords[i].GwaCommand, out var recordKeyword, out var foundIndex, out var foundStreamId, out string foundApplicationId, out var gwaWithoutSet, out var gwaSetCommandType);
+        if (!actualGwaRecordsForKeyword.ContainsKey(recordKeyword))
+        {
+          actualGwaRecordsForKeyword.Add(recordKeyword, new List<string>());
+        }
+        actualGwaRecordsForKeyword[recordKeyword].Add(actualGwaRecords[i].GwaCommand);
+      }
+
+      Assert.AreEqual(expectedNum0DLoads, actualGwaRecords.Where(r => r.GwaCommand.Contains("LOAD_NODE.2")).Count());
+      Assert.AreEqual(expectedNum2DBeamLoads, actualGwaRecords.Where(r => r.GwaCommand.Contains("LOAD_BEAM_UDL.2")).Count());
+      Assert.AreEqual(expectedNum2dFaceLoads, actualGwaRecords.Where(r => r.GwaCommand.Contains("LOAD_2D_FACE.2")).Count());
+      Assert.AreEqual(expectedNumLoadTasks, actualGwaRecords.Where(r => r.GwaCommand.Contains("TASK.1")).Count());
+      Assert.AreEqual(expectedLoadCombos, actualGwaRecords.Where(r => r.GwaCommand.Contains("COMBINATION.1")).Count());
+      /*
+      Assert.AreEqual(expectedNum2DBeamLoads, actualGwaRecordsForKeyword["LOAD_BEAM_UDL.2"].Distinct().Count());
+      Assert.AreEqual(expectedNum2dFaceLoads, actualGwaRecordsForKeyword["LOAD_2D_FACE.2"].Distinct().Count());
+      Assert.AreEqual(expectedNumLoadTasks, actualGwaRecordsForKeyword["TASK.1"].Distinct().Count());
+      Assert.AreEqual(expectedLoadCombos, actualGwaRecordsForKeyword["COMBINATION.1"].Distinct().Count());
+      */
     }
 
     [Ignore("Just used for debugging at this stage, will be finished in the future as a test")]

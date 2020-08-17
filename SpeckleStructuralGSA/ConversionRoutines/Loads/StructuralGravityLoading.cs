@@ -28,7 +28,7 @@ namespace SpeckleStructuralGSA
 
       var counter = 1; // Skip identifier
       obj.Name = pieces[counter++].Trim(new char[] { '"' }); // name
-
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       counter++; // elemlist - Skip elements - assumed to always be "all" at this point in time
       counter++; // nodelist - also skipped
 
@@ -74,11 +74,12 @@ namespace SpeckleStructuralGSA
 
       var index = Initialiser.Cache.ResolveIndex(typeof(GSAGravityLoading).GetGSAKeyword());
 
+      var sid = Helper.GenerateSID(load);
       var ls = new List<string>
         {
           "SET_AT",
           index.ToString(),
-          keyword + ":" + Helper.GenerateSID(load),
+          keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
           string.IsNullOrEmpty(load.Name) ? "" : load.Name,
           "all",
           "all",
@@ -109,7 +110,7 @@ namespace SpeckleStructuralGSA
       foreach (var k in newLines.Keys)
       {
         var p = newLines[k];
-        var load = new GSAGravityLoading() { GWACommand = p };
+        var load = new GSAGravityLoading() { GWACommand = p, GSAId = k };
         try
         {
           load.ParseGWACommand();

@@ -94,7 +94,7 @@ namespace SpeckleStructuralGSA.Test
               GSAInterfacer.SetGwa(gwaCommands[j]);
 
               //Only cache the object against, the top-level GWA command, not the sub-commands
-              GSACache.Upsert(keyword, foundIndex.Value, gwaWithoutSet, applicationId: foundApplicationId, so: (foundApplicationId == obj.ApplicationId) ? obj : null);
+              GSACache.Upsert(keyword, foundIndex.Value, gwaWithoutSet, applicationId: foundApplicationId, so: (foundApplicationId == obj.ApplicationId) ? obj : null, gwaSetCommandType: gwaSetCommandType.Value);
             }
           }
 

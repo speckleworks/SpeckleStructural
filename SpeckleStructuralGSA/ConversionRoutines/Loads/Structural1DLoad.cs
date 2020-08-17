@@ -24,7 +24,7 @@ namespace SpeckleStructuralGSA
         return;
 
       var obj = new Structural1DLoad();
-
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       var pieces = this.GWACommand.ListSplit("\t");
 
       var counter = 0; // Skip identifier
@@ -191,8 +191,9 @@ namespace SpeckleStructuralGSA
 
         ls.Add("SET_AT");
         ls.Add(index.ToString());
-        ls.Add("LOAD_BEAM_UDL" + ":" + Helper.GenerateSID(load)); // TODO: Only writes to UDL load
-        ls.Add(load.Name == null || load.Name == "" ? " " : load.Name);
+        var sid = Helper.GenerateSID(load);
+        ls.Add("LOAD_BEAM_UDL.2" + (string.IsNullOrEmpty(sid) ? "" : ":" + sid)); // TODO: Only writes to UDL load
+        ls.Add(load.Name == null || load.Name == "" ? " " : load.Name + (load.Name.All(char.IsDigit) ? " " : ""));
         // TODO: This is a hack.
         ls.Add(string.Join(" ", elementRefs.Select(x => x.ToString()).Concat(groupRefs.Select(x => "G" + x.ToString())).OrderBy(e => e)));
         ls.Add(loadCaseRef.ToString());
@@ -259,7 +260,7 @@ namespace SpeckleStructuralGSA
 
         // Placeholder load object to get list of elements and load values
         // Need to transform to axis so one load definition may be transformed to many
-        var initLoad = new GSA1DLoadAnalysisLayer() { GWACommand = p };
+        var initLoad = new GSA1DLoadAnalysisLayer() { GWACommand = p, GSAId = k };
         try
         {
           initLoad.ParseGWACommand(elements);
@@ -278,6 +279,7 @@ namespace SpeckleStructuralGSA
             SubGWACommand = new List<string>(initLoad.SubGWACommand)
           };
           load.Value.Name = initLoad.Value.Name;
+          load.Value.ApplicationId = initLoad.Value.ApplicationId;
           load.Value.LoadCaseRef = initLoad.Value.LoadCaseRef;
 
           // Transform load to defined axis
@@ -343,7 +345,7 @@ namespace SpeckleStructuralGSA
 
         // Placeholder load object to get list of elements and load values
         // Need to transform to axis so one load definition may be transformed to many
-        var initLoad = new GSA1DLoadDesignLayer() { GWACommand = p };
+        var initLoad = new GSA1DLoadDesignLayer() { GWACommand = p, GSAId = k };
         try
         {
           initLoad.ParseGWACommand(members);
@@ -362,6 +364,7 @@ namespace SpeckleStructuralGSA
             SubGWACommand = new List<string>(initLoad.SubGWACommand)
           };
           load.Value.Name = initLoad.Value.Name;
+          load.Value.ApplicationId = initLoad.Value.ApplicationId;
           load.Value.LoadCaseRef = initLoad.Value.LoadCaseRef;
 
           // Transform load to defined axis

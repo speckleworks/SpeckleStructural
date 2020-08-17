@@ -64,10 +64,11 @@ namespace SpeckleStructuralGSA
         ? path.Gauge 
         : (path.Offsets == null || path.Offsets.Count() == 0) ? 0 : path.Offsets.Last();
 
+      var sid = Helper.GenerateSID(path);
       var ls = new List<string>
         {
           "SET",
-          keyword + ":" + Helper.GenerateSID(path),
+          keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
           index.ToString(),
           string.IsNullOrEmpty(path.Name) ? "" : path.Name,
           PathTypeToGWAString(path.PathType),
