@@ -27,7 +27,7 @@ namespace SpeckleStructuralGSA
       var pieces = this.GWACommand.ListSplit("\t");
 
       var counter = 1; // Skip identifier
-
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
 
       if (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
@@ -144,12 +144,13 @@ namespace SpeckleStructuralGSA
 
         var index = Initialiser.Cache.ResolveIndex(keyword);
 
+        var sid = Helper.GenerateSID(load);
         var ls = new List<string>
         {
           "SET_AT",
           index.ToString(),
-          keyword + ":" + Helper.GenerateSID(load),
-          load.Name == null || load.Name == "" ? " " : load.Name,
+          keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
+          load.Name == null || load.Name == "" ? " " : load.Name + (load.Name.All(char.IsDigit) ? " " : ""),
           // TODO: This is a hack.
           string.Join(" ", elementRefs.Select(x => x.ToString()).Concat(groupRefs.Select(x => "G" + x.ToString()))),
           loadCaseRef.ToString(),
@@ -167,7 +168,7 @@ namespace SpeckleStructuralGSA
     }
   }
 
-  [GSAObject("LOAD_2D_FACE.2", new string[] { "EL.3" }, "loads", true, false, new Type[] { typeof(GSA2DElementMesh), typeof(GSA2DElement) }, new Type[] { typeof(GSA2DElement), typeof(GSA2DElementMesh) })]
+  [GSAObject("LOAD_2D_FACE.2", new string[] { "EL.4" }, "loads", true, false, new Type[] { typeof(GSA2DElementMesh), typeof(GSA2DElement) }, new Type[] { typeof(GSA2DElement), typeof(GSA2DElementMesh) })]
   public class GSA2DLoadAnalysisLayer : GSA2DLoadBase, IGSASpeckleContainer
   {
     public void ParseGWACommand(List<GSA2DElement> elements)
@@ -181,7 +182,7 @@ namespace SpeckleStructuralGSA
     }
   }
 
-  [GSAObject("LOAD_2D_FACE.2", new string[] { "MEMB.7" }, "loads", false, true, new Type[] {typeof(GSA2DMember) }, new Type[] {typeof(GSA2DMember)})]
+  [GSAObject("LOAD_2D_FACE.2", new string[] { "MEMB.8" }, "loads", false, true, new Type[] {typeof(GSA2DMember) }, new Type[] {typeof(GSA2DMember)})]
   public class GSA2DLoadDesignLayer : GSA2DLoadBase, IGSASpeckleContainer
   {
     public void ParseGWACommand(List<GSA2DMember> members)
@@ -207,64 +208,40 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA2DLoadAnalysisLayer dummyObject)
     {
       var newLines = ToSpeckleBase<GSA2DLoadAnalysisLayer>();
-
+      var typeName = dummyObject.GetType().Name;
       var loads = new List<GSA2DLoadAnalysisLayer>();
       var elements = Initialiser.GSASenderObjects.Get<GSA2DElement>();
+      var loadLock = new object();
 
-      foreach (var p in newLines.Values)
+#if DEBUG
+      foreach (var k in newLines.Keys)
+#else
+      Parallel.ForEach(newLines.Keys, k =>
+#endif
       {
+        var p = newLines[k];
         var loadSubList = new List<GSA2DLoadAnalysisLayer>();
 
         // Placeholder load object to get list of elements and load values
         // Need to transform to axis so one load definition may be transformed to many
-        var initLoad = new GSA2DLoadAnalysisLayer() { GWACommand = p };
-        initLoad.ParseGWACommand(elements);
-
-        // Create load for each element applied
-        foreach (string nRef in initLoad.Value.ElementRefs)
+        var initLoad = new GSA2DLoadAnalysisLayer() { GWACommand = p, GSAId = k };
+        try
         {
-          var load = new GSA2DLoadAnalysisLayer
-          {
-            GWACommand = initLoad.GWACommand,
-            SubGWACommand = new List<string>(initLoad.SubGWACommand)
-          };
-          load.Value.Name = initLoad.Value.Name;
-          load.Value.LoadCaseRef = initLoad.Value.LoadCaseRef;
-
-          // Transform load to defined axis
-          var elem = elements.Where(e => e.Value.ApplicationId == nRef).First();
-          StructuralAxis loadAxis = null;
-          try
-          { 
-            loadAxis = Helper.Parse2DAxis(elem.Value.Vertices.ToArray(), 0, load.Axis != 0); // Assumes if not global, local
-          }
-          catch
-          {
-            Initialiser.AppUI.Message("Generating axis from coordinates for element ref for 2D load", nRef);
-          }
-          load.Value.Loading = initLoad.Value.Loading;
-
-          // Perform projection
-          if (load.Projected)
-          {
-            load.Value.Loading.Value[0] = 0;
-            load.Value.Loading.Value[1] = 0;
-          }
-          load.Value.Loading.TransformOntoAxis(loadAxis);
-
-          // If the loading already exists, add element ref to list
-          var match = loadSubList.Count() > 0 ? loadSubList.Where(l => l.Value.Loading.Equals(load.Value.Loading)).First() : null;
-          if (match != null)
-            match.Value.ElementRefs.Add(nRef);
-          else
-          {
-            load.Value.ElementRefs = new List<string>() { nRef };
-            loadSubList.Add(load);
-          }
+          initLoad.ParseGWACommand(elements);
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
         }
 
-        loads.AddRange(loadSubList);
+        lock (loadLock)
+        {
+          loads.Add(initLoad);
+        }
       }
+#if !DEBUG
+      );
+#endif
 
       Initialiser.GSASenderObjects.AddRange(loads);
 
@@ -274,66 +251,40 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA2DLoadDesignLayer dummyObject)
     {
       var newLines = ToSpeckleBase<GSA2DLoadDesignLayer>();
-
+      var typeName = dummyObject.GetType().Name;
       var loads = new List<GSA2DLoadDesignLayer>();
       var members = Initialiser.GSASenderObjects.Get<GSA2DMember>();
+      var loadLock = new object();
 
-      foreach (var p in newLines.Values)
+#if DEBUG
+      foreach (var k in newLines.Keys)
+#else
+      Parallel.ForEach(newLines.Keys, k =>
+#endif
       {
+        var p = newLines[k];
         var loadSubList = new List<GSA2DLoadDesignLayer>();
 
         // Placeholder load object to get list of elements and load values
         // Need to transform to axis so one load definition may be transformed to many
-        var initLoad = new GSA2DLoadDesignLayer() { GWACommand = p };
-        initLoad.ParseGWACommand(members);
-
-        // Create load for each element applied
-        foreach (string nRef in initLoad.Value.ElementRefs)
+        var initLoad = new GSA2DLoadDesignLayer() { GWACommand = p, GSAId = k };
+        try
         {
-          var load = new GSA2DLoadDesignLayer
-          {
-            GWACommand = initLoad.GWACommand,
-            SubGWACommand = new List<string>(initLoad.SubGWACommand),
-          };
-          load.Value.Name = initLoad.Value.Name;
-          load.Value.LoadCaseRef = initLoad.Value.LoadCaseRef;
-
-          // Transform load to defined axis
-          var memb = members.Where(e => e.Value.ApplicationId == nRef).First();
-          StructuralAxis loadAxis = null;
-          try
-          {
-            loadAxis = Helper.Parse2DAxis(memb.Value.Vertices.ToArray(), 0, load.Axis != 0); // Assumes if not global, local
-          }
-          catch
-          {
-            Initialiser.AppUI.Message("Generating axis from coordinates for 2D laod", loadAxis.ApplicationId);
-          }
-          load.Value.Loading = initLoad.Value.Loading;
-          load.Value.Loading.TransformOntoAxis(loadAxis);
-
-          // Perform projection
-          if (load.Projected)
-          {
-            load.Value.Loading.Value[0] = 0;
-            load.Value.Loading.Value[1] = 0;
-          }
-          load.Value.Loading.TransformOntoAxis(loadAxis);
-
-          // If the loading already exists, add element ref to list
-          var match = loadSubList.Count() > 0 ? loadSubList.Where(l => (l.Value.Loading.Value as List<double>).SequenceEqual(load.Value.Loading.Value as List<double>)).First() : null;
-          if (match != null)
-            match.Value.ElementRefs.Add(nRef);
-          else
-          {
-            load.Value.ElementRefs = new List<string>() { nRef };
-            loadSubList.Add(load);
-          }
+          initLoad.ParseGWACommand(members);
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
         }
 
-
-        loads.AddRange(loadSubList);
+        lock (loadLock)
+        {
+          loads.Add(initLoad);
+        }
       }
+ #if !DEBUG
+      );
+#endif
 
       Initialiser.GSASenderObjects.AddRange(loads);
 

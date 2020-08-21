@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MathNet.Spatial.Euclidean;
 
@@ -68,6 +69,18 @@ namespace SpeckleStructuralGSA
         pts.Add(new Point3D(coordsArray[i * 3], coordsArray[(i * 3) + 1], coordsArray[(i * 3) + 2]));
       }
       return pts;
+    }
+
+    public static int ToInt(this string v)
+    {
+      try
+      {
+        return Convert.ToInt32(v);
+      }
+      catch
+      {
+        return 0;
+      }
     }
 
     public static bool IsOnLine(this Line3D l, Point3D p)

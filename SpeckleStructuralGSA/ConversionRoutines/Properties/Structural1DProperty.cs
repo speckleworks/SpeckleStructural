@@ -11,7 +11,7 @@ using SQLite;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("PROP_SEC.3", new string[] { "MAT_STEEL.3", "MAT_CONCRETE.16" }, "properties", true, true, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) }, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) })]
+  [GSAObject("PROP_SEC.3", new string[] { "MAT_STEEL.3", "MAT_CONCRETE.17" }, "properties", true, true, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) }, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) })]
   public class GSA1DProperty : IGSASpeckleContainer
   {
     public int GSAId { get; set; }
@@ -72,7 +72,8 @@ namespace SpeckleStructuralGSA
 
       var prop = this.Value as Structural1DProperty;
 
-      if (prop.Profile == null && string.IsNullOrEmpty(prop.CatalogueName))
+      if (prop.ApplicationId == null)
+      //if (prop.Profile == null && string.IsNullOrEmpty(prop.CatalogueName))
         return "";
 
       var keyword = typeof(GSA1DProperty).GetGSAKeyword();
@@ -103,10 +104,11 @@ namespace SpeckleStructuralGSA
         materialType = "GENERIC";
       }
 
+      var sid = Helper.GenerateSID(prop);
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + Helper.GenerateSID(prop),
+        keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
         index.ToString(),
         prop.Name == null || prop.Name == "" ? " " : prop.Name,
         "NO_RGB",
@@ -371,7 +373,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        // TODO: IMPLEMENT ALL SECTIONS
+        Initialiser.AppUI.Message("1D section profile string (" + type + ") is not supported", prop.ApplicationId);  // TODO: IMPLEMENT ALL SECTIONS
       }
 
       return prop;
@@ -714,7 +716,7 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA1DProperty dummyObject)
     {
       var newLines = ToSpeckleBase<GSA1DProperty>();
-
+      var typeName = dummyObject.GetType().Name;
       var propsLock = new object();
       var props = new List<GSA1DProperty>();
       var steels = Initialiser.GSASenderObjects.Get<GSAMaterialSteel>();      
@@ -722,6 +724,8 @@ namespace SpeckleStructuralGSA
 
       Parallel.ForEach(newLines.Values, p =>
       {
+        var pPieces = p.ListSplit("\t");
+        var gsaId = pPieces[1];
         try
         {
           var prop = new GSA1DProperty() { GWACommand = p };
@@ -731,7 +735,10 @@ namespace SpeckleStructuralGSA
             props.Add(prop);
           }
         }
-        catch { }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+        }
       });
 
       Initialiser.GSASenderObjects.AddRange(props);

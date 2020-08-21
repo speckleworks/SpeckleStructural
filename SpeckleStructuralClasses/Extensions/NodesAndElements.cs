@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MathNet.Spatial.Euclidean;
 
 namespace SpeckleStructuralClasses
 {
@@ -254,20 +253,11 @@ namespace SpeckleStructuralClasses
       {
         Properties = properties;
       }
-      Vertices = edgeVertices.ToList();
 
-      // Perform mesh making
-      var faces = SplitMesh(
-          edgeVertices.ToArray(),
-          (Enumerable.Range(0, edgeVertices.Count() / 3).ToArray()));
-
-      Faces = new List<int>();
-
-      foreach (var face in faces)
-      {
-        Faces.Add(face.Count() - 3);
-        Faces.AddRange(face);
-      }
+      var pm = new PolygonMesher.PolygonMesher();
+      pm.Init(edgeVertices);
+      Faces = pm.Faces().ToList();
+      Vertices = pm.Coordinates.ToList();
 
       Colors = (color == null) ? new List<int>() : Enumerable.Repeat(color.Value, Vertices.Count() / 3).ToList();
 
@@ -455,145 +445,6 @@ namespace SpeckleStructuralClasses
       GenerateHash();
     }
 
-    //TODO: These methods need to be disintegrated 
-    #region Mesh Generation Helper Functions
-    private static List<List<int>> SplitMesh(double[] coordinates, int[] mesh)
-    {
-      if (mesh.Length <= 3) return new List<List<int>>() { mesh.ToList() };
-
-      // Need to ensure same area!
-      var currArea = IntegrateHasher(coordinates, mesh);
-
-      // Assume area doesn't twist on itself
-      if (currArea < 0)
-      {
-        mesh = mesh.Reverse().ToArray();
-        currArea *= -1;
-      }
-
-      var indexToCut = 0;
-      var numCut = 3;
-      var bestCost = currArea * 10; // TODO: figure out a better way
-      var newFace1 = new List<int>();
-      var newFace2 = new List<int>();
-
-      do
-      {
-        var face1 = mesh.Take(numCut).ToList();
-        var face2 = mesh.Skip(numCut - 1).ToList();
-        face2.Add(mesh[0]);
-
-        var cost1 = IntegrateHasher(coordinates, face1.ToArray());
-        var cost2 = IntegrateHasher(coordinates, face2.ToArray());
-
-        if (cost1 > 0 && cost2 > 0)
-        {
-          // Check to make sure that the new region does not encompass the other's points
-          var flag = false;
-          for (var i = 1; i < face2.Count() - 1; i++)
-          {
-            if (InTri(coordinates, face1.ToArray(), face2[i]))
-            {
-              flag = true;
-              break;
-            }
-          }
-
-          if (!flag)
-          {
-            var cost = Math.Abs(cost1 + cost2 - currArea);
-            if (bestCost > cost)
-            {
-              // Track best solution
-              bestCost = cost;
-              newFace1 = face1;
-              newFace2 = face2;
-            }
-          }
-        }
-
-        mesh = mesh.Skip(1).Take(mesh.Count() - 1).Concat(new int[] { mesh[0] }).ToArray();
-        indexToCut++;
-
-        if (indexToCut >= mesh.Count())
-          break;
-
-      } while (bestCost > 1e-10);
-
-      var returnVals = new List<List<int>>();
-      if (newFace1.Count() > 0)
-        returnVals.AddRange(SplitMesh(coordinates, newFace1.ToArray()));
-      if (newFace2.Count() > 0)
-        returnVals.AddRange(SplitMesh(coordinates, newFace2.ToArray()));
-      return returnVals;
-    }
-
-    private static double IntegrateHasher(double[] coordinates, int[] vertices)
-    {
-      // Get coordinates
-      var x = new List<double>();
-      var y = new List<double>();
-      var z = new List<double>();
-
-      foreach (var e in vertices)
-      {
-        x.Add(coordinates[e * 3]);
-        y.Add(coordinates[e * 3 + 1]);
-        z.Add(coordinates[e * 3 + 2]);
-      }
-
-      // Close the loop
-      x.Add(x[0]);
-      y.Add(y[0]);
-      z.Add(z[0]);
-
-      //Integrate
-      double area1 = 0;
-      for (var i = 0; i < x.Count() - 1; i++)
-        area1 += x[i] * y[i + 1] - y[i] * x[i + 1];
-
-      if (Math.Abs(area1) > 1e-16) return area1;
-
-      //Integrate
-      double area2 = 0;
-      for (var i = 0; i < x.Count() - 1; i++)
-        area2 += x[i] * z[i + 1] - z[i] * x[i + 1];
-
-      if (Math.Abs(area2) > 1e-16) return area2;
-
-      //Integrate
-      double area3 = 0;
-      for (var i = 0; i < y.Count() - 1; i++)
-        area3 += y[i] * z[i + 1] - z[i] * y[i + 1];
-
-      if (Math.Abs(area3) > 1e-16) return area3;
-
-      return 0;
-    }
-
-    public static bool InTri(double[] coordinates, int[] tri, int point)
-    {
-      // Get coordinates
-      var p0 = new Point3D(coordinates[tri[0] * 3], coordinates[tri[0] * 3 + 1], coordinates[tri[0] * 3 + 2]);
-      var p1 = new Point3D(coordinates[tri[1] * 3], coordinates[tri[1] * 3 + 1], coordinates[tri[1] * 3 + 2]);
-      var p2 = new Point3D(coordinates[tri[2] * 3], coordinates[tri[2] * 3 + 1], coordinates[tri[2] * 3 + 2]);
-      var p = new Point3D(coordinates[point * 3], coordinates[point * 3 + 1], coordinates[point * 3 + 2]);
-
-      var u = p1 - p0;
-      var v = p2 - p0;
-      var n = u.CrossProduct(v);
-      var w = p - p0;
-
-      var gamma = u.CrossProduct(w).DotProduct(n) / (n.Length * n.Length);
-      var beta = w.CrossProduct(v).DotProduct(n) / (n.Length * n.Length);
-      var alpha = 1 - gamma - beta;
-
-      if (alpha >= 0 && beta >= 0 && gamma >= 0 && alpha <= 1 && beta <= 1 && gamma <= 1)
-        return true;
-      else
-        return false;
-    }
-    #endregion
   }
 
   public partial class Structural2DVoid
@@ -622,25 +473,20 @@ namespace SpeckleStructuralClasses
       {
         Properties = properties;
       }
-      Vertices = edgeVertices.ToList();
 
-      // Perform mesh making
-      var faces = SplitMesh(
-          edgeVertices,
-          (Enumerable.Range(0, edgeVertices.Count() / 3).ToArray()));
-
-      Faces = new List<int>();
-
-      foreach (var face in faces)
-      {
-        Faces.Add(face.Count() - 3);
-        Faces.AddRange(face);
-      }
+      var pm = new PolygonMesher.PolygonMesher();
+      pm.Init(edgeVertices);
+      Faces = pm.Faces().ToList();
+      Vertices = pm.Coordinates.ToList();
 
       if (color != null)
+      {
         Colors = Enumerable.Repeat(color.Value, Vertices.Count() / 3).ToList();
+      }
       else
+      {
         Colors = new List<int>();
+      }
 
       ApplicationId = applicationId;
 
@@ -770,145 +616,5 @@ namespace SpeckleStructuralClasses
       Helper.ScaleProperties(Properties, factor);
       GenerateHash();
     }
-
-    //TODO: These methods need to be disintegrated 
-    #region Mesh Generation Helper Functions
-    private static List<List<int>> SplitMesh(double[] coordinates, int[] mesh)
-    {
-      if (mesh.Length <= 3) return new List<List<int>>() { mesh.ToList() };
-
-      // Need to ensure same area!
-      var currArea = IntegrateHasher(coordinates, mesh);
-
-      // Assume area doesn't twist on itself
-      if (currArea < 0)
-      {
-        mesh = mesh.Reverse().ToArray();
-        currArea *= -1;
-      }
-
-      var indexToCut = 0;
-      var numCut = 3;
-      var bestCost = currArea * 10; // TODO: figure out a better way
-      var newFace1 = new List<int>();
-      var newFace2 = new List<int>();
-
-      do
-      {
-        var face1 = mesh.Take(numCut).ToList();
-        var face2 = mesh.Skip(numCut - 1).ToList();
-        face2.Add(mesh[0]);
-
-        var cost1 = IntegrateHasher(coordinates, face1.ToArray());
-        var cost2 = IntegrateHasher(coordinates, face2.ToArray());
-
-        if (cost1 > 0 && cost2 > 0)
-        {
-          // Check to make sure that the new region does not encompass the other's points
-          var flag = false;
-          for (var i = 1; i < face2.Count() - 1; i++)
-          {
-            if (InTri(coordinates, face1.ToArray(), face2[i]))
-            {
-              flag = true;
-              break;
-            }
-          }
-
-          if (!flag)
-          {
-            var cost = Math.Abs(cost1 + cost2 - currArea);
-            if (bestCost > cost)
-            {
-              // Track best solution
-              bestCost = cost;
-              newFace1 = face1;
-              newFace2 = face2;
-            }
-          }
-        }
-
-        mesh = mesh.Skip(1).Take(mesh.Count() - 1).Concat(new int[] { mesh[0] }).ToArray();
-        indexToCut++;
-
-        if (indexToCut >= mesh.Count())
-          break;
-
-      } while (bestCost > 1e-10);
-
-      var returnVals = new List<List<int>>();
-      if (newFace1.Count() > 0)
-        returnVals.AddRange(SplitMesh(coordinates, newFace1.ToArray()));
-      if (newFace2.Count() > 0)
-        returnVals.AddRange(SplitMesh(coordinates, newFace2.ToArray()));
-      return returnVals;
-    }
-
-    private static double IntegrateHasher(double[] coordinates, int[] vertices)
-    {
-      // Get coordinates
-      var x = new List<double>();
-      var y = new List<double>();
-      var z = new List<double>();
-
-      foreach (var e in vertices)
-      {
-        x.Add(coordinates[e * 3]);
-        y.Add(coordinates[e * 3 + 1]);
-        z.Add(coordinates[e * 3 + 2]);
-      }
-
-      // Close the loop
-      x.Add(x[0]);
-      y.Add(y[0]);
-      z.Add(z[0]);
-
-      //Integrate
-      double area1 = 0;
-      for (var i = 0; i < x.Count() - 1; i++)
-        area1 += x[i] * y[i + 1] - y[i] * x[i + 1];
-
-      if (Math.Abs(area1) > 1e-16) return area1;
-
-      //Integrate
-      double area2 = 0;
-      for (var i = 0; i < x.Count() - 1; i++)
-        area2 += x[i] * z[i + 1] - z[i] * y[i + 1];
-
-      if (Math.Abs(area2) > 1e-16) return area2;
-
-      //Integrate
-      double area3 = 0;
-      for (var i = 0; i < y.Count() - 1; i++)
-        area3 += y[i] * z[i + 1] - z[i] * y[i + 1];
-
-      if (Math.Abs(area3) > 1e-16) return area3;
-
-      return 0;
-    }
-
-    public static bool InTri(double[] coordinates, int[] tri, int point)
-    {
-      // Get coordinates
-      var p0 = new Point3D(coordinates[tri[0] * 3], coordinates[tri[0] * 3 + 1], coordinates[tri[0] * 3 + 2]);
-      var p1 = new Point3D(coordinates[tri[1] * 3], coordinates[tri[1] * 3 + 1], coordinates[tri[1] * 3 + 2]);
-      var p2 = new Point3D(coordinates[tri[2] * 3], coordinates[tri[2] * 3 + 1], coordinates[tri[2] * 3 + 2]);
-      var p = new Point3D(coordinates[point * 3], coordinates[point * 3 + 1], coordinates[point * 3 + 2]);
-
-      var u = p1 - p0;
-      var v = p2 - p0;
-      var n = u.CrossProduct(v);
-      var w = p - p0;
-
-      var gamma = u.CrossProduct(w).DotProduct(n) / (n.Length * n.Length);
-      var beta = w.CrossProduct(v).DotProduct(n) / (n.Length * n.Length);
-      var alpha = 1 - gamma - beta;
-
-      if (alpha >= 0 & beta >= 0 & gamma >= 0 & alpha <= 1 & beta <= 1 & gamma <= 1)
-        return true;
-      else
-        return false;
-    }
-    #endregion
   }
 }

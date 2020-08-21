@@ -43,11 +43,9 @@
       <HintPath>..\packages\DeviceId.4.3.0\lib\net40\DeviceId.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Interop.Gsa_10_0">
-      <HintPath>.\Interop.Gsa_10_0.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <Aliases>global</Aliases>
-      <Private>False</Private>
+    <Reference Include="Interop.Gsa_10_1">
+      <HintPath>..\Resource\Interop.Gsa_10_1.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="MathNet.Numerics, Version=4.9.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MathNet.Numerics.4.9.1\lib\net461\MathNet.Numerics.dll</HintPath>
@@ -80,7 +78,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="SpeckleGSAInterfaces">
-      <HintPath>.\SpeckleGSAInterfaces.dll</HintPath>
+      <HintPath>..\Resource\SpeckleGSAInterfaces.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SQLite-net, Version=1.5.231.0, Culture=neutral, processorArchitecture=MSIL">
@@ -138,13 +136,14 @@
     <Compile Include="ConversionRoutines\Loads\StructuralLoadPlane.cs" />
     <Compile Include="ConversionRoutines\Loads\StructuralLoadTask.cs" />
     <Compile Include="ConversionRoutines\Loads\StructuralLoadTaskBuckling.cs" />
-    <Compile Include="ConversionRoutines\Loads\StructuralStorey.cs" />
+    <Compile Include="ConversionRoutines\Miscellaneous\StructuralStorey.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\Structural1DInfluenceEffect.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\StructuralAssembly.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\StructuralBridgeAlignment.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\StructuralBridgePath.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\StructuralBridgeVehicle.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\StructuralConstructionStage.cs" />
+    <Compile Include="ConversionRoutines\Miscellaneous\StructuralReferenceLine.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\StructuralNodalInfluenceEffect.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\StructuralRigidConstraints.cs" />
     <Compile Include="ConversionRoutines\Miscellaneous\StructuralStagedNodalRestraints.cs" />

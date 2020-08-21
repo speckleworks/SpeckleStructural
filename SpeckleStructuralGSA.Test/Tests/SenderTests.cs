@@ -19,7 +19,7 @@ namespace SpeckleStructuralGSA.Test
     public static string[] resultTypes = new[] { "Nodal Reaction", "1D Element Strain Energy Density", "1D Element Force", "Nodal Displacements", "1D Element Stress" };
     public static string[] loadCases = new[] { "A2", "C1" };
     public const string gsaFileNameWithResults = "20180906 - Existing structure GSA_V7_modified.gwb";
-    public const string gsaFileNameWithoutResults = "Structural Demo 191004.gwb";
+    public const string gsaFileNameWithoutResults = "Structural Demo 200630.gwb";
 
     [OneTimeSetUp]
     public void SetupTests()
@@ -33,6 +33,7 @@ namespace SpeckleStructuralGSA.Test
       Initialiser.Cache = gsaCache;
       Initialiser.Interface = gsaInterfacer;
       Initialiser.Settings = new Settings();
+      Initialiser.AppUI = new SpeckleAppUI();
     }
 
     [TestCase("TxSpeckleObjectsDesignLayer.json", GSATargetLayer.Design, false, true, gsaFileNameWithResults)]
@@ -155,16 +156,17 @@ namespace SpeckleStructuralGSA.Test
       );
 
       gsaInterfacer.Close();
-
+      Assert.IsFalse(actual.Keys.Any(a => !a.Type.ToLower().EndsWith("result") && string.IsNullOrEmpty(a.ApplicationId)));
       Assert.AreEqual(actual.Count(), matched.Count());
       Assert.IsEmpty(unmatching, unmatching.Count().ToString() + " unmatched objects");
     }
 
     [Ignore("There is an equivalent test in SpeckleGSA repo, so this one might be removed")]
     [TestCase(GSATargetLayer.Design, false, false, "sjc.gwb")]
+    //[TestCase(GSATargetLayer.Analysis, false, false, @"C:\Users\Nic.Burgers\OneDrive - Arup\Issues\Jason Chen\db\TestModel.gwb")]
     public void TransmissionTestForDebug(GSATargetLayer layer, bool resultsOnly, bool embedResults, string gsaFileName)
     {
-      gsaInterfacer.OpenFile(Helper.ResolveFullPath(gsaFileName, TestDataDirectory));
+      gsaInterfacer.OpenFile(gsaFileName.Contains("\\") ? gsaFileName : Helper.ResolveFullPath(gsaFileName, TestDataDirectory));
 
       var actualObjects = ModelToSpeckleObjects(layer, resultsOnly, embedResults, loadCases, resultTypes);
       Assert.IsNotNull(actualObjects);

@@ -54,8 +54,9 @@ namespace SpeckleStructuralGSA
 
       var ls = new List<string>();
 
+      var sid = Helper.GenerateSID(plane);
       ls.AddRange(new[] {"SET",
-        keyword + ":" + Helper.GenerateSID(plane),
+        keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
         index.ToString(),
         plane.Name == null || plane.Name == "" ? " " : plane.Name,
         gridPlaneIndex.ToString(),
@@ -82,15 +83,23 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSAGridSurface dummyObject)
     {
       var newLines = ToSpeckleBase<GSAGridSurface>();
-
+      var typeName = dummyObject.GetType().Name;
       var planes = new List<GSAGridSurface>();
 
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
       {
-        var plane = new GSAGridSurface() { GWACommand = p };
-        if (plane.ParseGWACommand())
+        var p = newLines[k];
+        var plane = new GSAGridSurface() { GWACommand = p, GSAId = k };
+        try
         {
-          planes.Add(plane);
+          if (plane.ParseGWACommand())
+          {
+            planes.Add(plane);
+          }
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
         }
       }
 

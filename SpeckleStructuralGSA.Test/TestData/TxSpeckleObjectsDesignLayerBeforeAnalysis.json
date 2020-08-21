@@ -13,16 +13,12 @@
     "name": "New spring 4",
     "properties": {
       "structural": {
-        "elementType": "Generic",
-        "propertyRef": "columnProp",
+        "elementType": "Spring",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "gh/0e14ea030d377c1860dc6b72453e58fc",
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
         ]
       }
     }
@@ -42,15 +38,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -70,15 +62,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
+        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.901001668042815,-0.43381562233748849,5.1755868573277141E-08],"hash":"e5a16dfce3e1e194acfb7387dadead89","properties":{}},
         "propertyRef": "columnProp",
-        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.9010016680428149,-0.43381562233748844,5.1755868573277141E-08],"hash":"8644ee15ea17786cb4e0e8a094863723","properties":{}},
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -98,15 +86,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -126,15 +110,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
+        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.90100167267678077,-0.43381561271309793,5.1755868307090142E-08],"hash":"66e9576c8f8dfd19c4a80d887eb321ba","properties":{}},
         "propertyRef": "columnProp",
-        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.90100167267678077,-0.43381561271309793,5.1755868307090149E-08],"hash":"bc84e0ef5095c1bf17ed0a4bc150252a","properties":{}},
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -154,15 +134,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -182,15 +158,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -210,15 +182,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
+        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.90700896021304522,-0.42111132268468854,5.3317267285020938E-08],"hash":"3c55fd9215f31b45ce786427b7e8674f","properties":{}},
         "propertyRef": "columnProp",
-        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.90700896021304511,-0.42111132268468854,5.3317267285020938E-08],"hash":"08054313bb4bfbafe5f4d28fa74364bf","properties":{}},
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -238,15 +206,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -266,15 +230,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -294,15 +254,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -322,15 +278,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -349,16 +301,12 @@
     "name": "New spring 2",
     "properties": {
       "structural": {
-        "elementType": "Generic",
-        "propertyRef": "columnProp",
+        "elementType": "Spring",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "gh/0e14ea030d377c1860dc6b72453e58fc",
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
         ]
       }
     }
@@ -378,15 +326,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -406,15 +350,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -434,15 +374,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -462,15 +398,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
+        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.90700896766993688,-0.42111130662369156,5.3317267861433172E-08],"hash":"ca34aa08ad71b8ed2b48bc40686faee7","properties":{}},
         "propertyRef": "columnProp",
-        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.90700896766993677,-0.42111130662369162,5.3317267861433165E-08],"hash":"ff60b176c12ebc5a0ff977f4d07d1873","properties":{}},
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -490,15 +422,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -518,15 +446,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
+        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.89824366892044161,-0.43949779435662872,5.3837551830563736E-08],"hash":"4d3d584de4aa78e3f14f4f76a30d7367","properties":{}},
         "propertyRef": "columnProp",
-        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.89824366892044138,-0.43949779435662856,5.383755183056371E-08],"hash":"6fd5624f76e9bb5206a886c35465ca36","properties":{}},
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -545,16 +469,12 @@
     "name": "New spring 6",
     "properties": {
       "structural": {
-        "elementType": "Generic",
-        "propertyRef": "columnProp",
+        "elementType": "Spring",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "gh/0e14ea030d377c1860dc6b72453e58fc",
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
         ]
       }
     }
@@ -574,15 +494,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
+        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.90700897308599482,-0.42111129495833588,5.3317267881309462E-08],"hash":"0b00b47cff66ac1c1ef4b2390de6240f","properties":{}},
         "propertyRef": "columnProp",
-        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.9070089730859946,-0.42111129495833588,5.3317267881309455E-08],"hash":"1cf0e6a553eb66b10d8d95e518a2f013","properties":{}},
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -602,15 +518,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -630,15 +542,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -657,16 +565,12 @@
     "name": "New spring 3",
     "properties": {
       "structural": {
-        "elementType": "Generic",
-        "propertyRef": "columnProp",
+        "elementType": "Spring",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "gh/0e14ea030d377c1860dc6b72453e58fc",
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
         ]
       }
     }
@@ -686,15 +590,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -714,15 +614,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -742,15 +638,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -769,16 +661,12 @@
     "name": "New spring 0",
     "properties": {
       "structural": {
-        "elementType": "Generic",
-        "propertyRef": "columnProp",
+        "elementType": "Spring",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "gh/0e14ea030d377c1860dc6b72453e58fc",
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
         ]
       }
     }
@@ -797,16 +685,12 @@
     "name": "New spring 5",
     "properties": {
       "structural": {
-        "elementType": "Generic",
-        "propertyRef": "columnProp",
+        "elementType": "Spring",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "gh/0e14ea030d377c1860dc6b72453e58fc",
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
         ]
       }
     }
@@ -826,15 +710,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -854,15 +734,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
+        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.89824366561825941,-0.43949780110561371,5.3837551003827313E-08],"hash":"186bdc84fbc795eefd6672f56a6472e6","properties":{}},
         "propertyRef": "columnProp",
-        "zAxis": {"type":"Vector/StructuralVectorThree","value":[-0.89824366561825952,-0.43949780110561376,5.383755100382732E-08],"hash":"1253f48892d560ca3c39317ff9d70ed2","properties":{}},
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -882,15 +758,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -909,16 +781,12 @@
     "name": "New spring 1",
     "properties": {
       "structural": {
-        "elementType": "Generic",
-        "propertyRef": "columnProp",
+        "elementType": "Spring",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "gh/0e14ea030d377c1860dc6b72453e58fc",
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
         ]
       }
     }
@@ -938,15 +806,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -966,15 +830,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -994,15 +854,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -1022,15 +878,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -1050,15 +902,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -1078,15 +926,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -1106,15 +950,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -1134,15 +974,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -1162,15 +998,11 @@
     "properties": {
       "structural": {
         "elementType": "Column",
-        "propertyRef": "columnProp",
         "zAxis": {"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},
+        "propertyRef": "columnProp",
         "endRelease": [
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
-          {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
-        ],
-        "offset": [
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}},
-          {"type":"Vector/StructuralVectorThree","value":[0.0,0.0,0.0],"hash":"868a70337da5f8c1470c607c48f6a5bd","properties":{}}
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
+          {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
         ]
       }
     }
@@ -1202,25 +1034,25 @@
     ],
     "faces": [
       0,
-      6,
-      5,
-      4,
       0,
-      4,
+      1,
       3,
-      2,
       0,
-      1,
       0,
+      5,
       6,
       0,
-      6,
+      0,
+      3,
       4,
-      2,
       0,
-      2,
+      0,
+      4,
+      5,
+      0,
       1,
-      6
+      2,
+      3
     ],
     "colors": [],
     "applicationId": "Slab0",
@@ -1236,6 +1068,7 @@
           {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"da7bcbb310400e1e0d61a7b2df3fb89a","properties":{}},
           {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"da7bcbb310400e1e0d61a7b2df3fb89a","properties":{}}
         ],
+        "gsaMeshSize": 5.0,
         "offset": [
           0.0,
           0.0,
@@ -1273,25 +1106,25 @@
     ],
     "faces": [
       0,
-      6,
-      5,
-      4,
       0,
-      4,
+      1,
       3,
-      2,
       0,
-      1,
       0,
+      5,
       6,
       0,
-      6,
+      0,
+      3,
       4,
-      2,
       0,
-      2,
+      0,
+      4,
+      5,
+      0,
       1,
-      6
+      2,
+      3
     ],
     "colors": [],
     "applicationId": "Slab1",
@@ -1307,6 +1140,7 @@
           {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"da7bcbb310400e1e0d61a7b2df3fb89a","properties":{}},
           {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"da7bcbb310400e1e0d61a7b2df3fb89a","properties":{}}
         ],
+        "gsaMeshSize": 5.0,
         "offset": [
           0.0,
           0.0,
@@ -1344,25 +1178,25 @@
     ],
     "faces": [
       0,
-      6,
-      5,
-      4,
       0,
-      4,
+      1,
       3,
-      2,
       0,
-      1,
       0,
+      5,
       6,
       0,
-      6,
+      0,
+      3,
       4,
-      2,
       0,
-      2,
+      0,
+      4,
+      5,
+      0,
       1,
-      6
+      2,
+      3
     ],
     "colors": [],
     "applicationId": "Slab2",
@@ -1378,6 +1212,7 @@
           {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"da7bcbb310400e1e0d61a7b2df3fb89a","properties":{}},
           {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"da7bcbb310400e1e0d61a7b2df3fb89a","properties":{}}
         ],
+        "gsaMeshSize": 5.0,
         "offset": [
           0.0,
           0.0,
@@ -1415,25 +1250,25 @@
     ],
     "faces": [
       0,
-      6,
-      5,
-      4,
       0,
-      4,
+      1,
       3,
-      2,
       0,
-      1,
       0,
+      5,
       6,
       0,
-      6,
+      0,
+      3,
       4,
-      2,
       0,
-      2,
+      0,
+      4,
+      5,
+      0,
       1,
-      6
+      2,
+      3
     ],
     "colors": [],
     "applicationId": "Slab3",
@@ -1449,6 +1284,7 @@
           {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"da7bcbb310400e1e0d61a7b2df3fb89a","properties":{}},
           {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"da7bcbb310400e1e0d61a7b2df3fb89a","properties":{}}
         ],
+        "gsaMeshSize": 5.0,
         "offset": [
           0.0,
           0.0,
@@ -1486,25 +1322,25 @@
     ],
     "faces": [
       0,
-      6,
-      5,
-      4,
       0,
-      4,
+      1,
       3,
-      2,
       0,
-      1,
       0,
+      5,
       6,
       0,
-      6,
+      0,
+      3,
       4,
-      2,
       0,
-      2,
+      0,
+      4,
+      5,
+      0,
       1,
-      6
+      2,
+      3
     ],
     "colors": [],
     "applicationId": "Slab4",
@@ -1520,6 +1356,7 @@
           {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"da7bcbb310400e1e0d61a7b2df3fb89a","properties":{}},
           {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"da7bcbb310400e1e0d61a7b2df3fb89a","properties":{}}
         ],
+        "gsaMeshSize": 5.0,
         "offset": [
           0.0,
           0.0,
@@ -1557,25 +1394,25 @@
     ],
     "faces": [
       0,
-      6,
-      5,
-      4,
       0,
-      4,
+      1,
       3,
-      2,
       0,
-      1,
       0,
+      5,
       6,
       0,
-      6,
+      0,
+      3,
       4,
-      2,
       0,
-      2,
+      0,
+      4,
+      5,
+      0,
       1,
-      6
+      2,
+      3
     ],
     "colors": [],
     "applicationId": "gh/42d2b51094c7c16a565d883dd5dd7a59",
@@ -1609,25 +1446,25 @@
     ],
     "faces": [
       0,
-      6,
-      5,
-      4,
       0,
-      4,
+      1,
       3,
-      2,
       0,
-      1,
       0,
+      5,
       6,
       0,
-      6,
+      0,
+      3,
       4,
-      2,
       0,
-      2,
+      0,
+      4,
+      5,
+      0,
       1,
-      6
+      2,
+      3
     ],
     "colors": [],
     "applicationId": "gh/51e8d0bc5b67257aea4d3f733dc153a2",
@@ -1661,25 +1498,25 @@
     ],
     "faces": [
       0,
-      6,
-      5,
-      4,
       0,
-      4,
+      1,
       3,
-      2,
       0,
-      1,
       0,
+      5,
       6,
       0,
-      6,
+      0,
+      3,
       4,
-      2,
       0,
-      2,
+      0,
+      4,
+      5,
+      0,
       1,
-      6
+      2,
+      3
     ],
     "colors": [],
     "applicationId": "gh/8471296211afb5f5eebbffa4e899dbec",
@@ -1713,25 +1550,25 @@
     ],
     "faces": [
       0,
-      6,
-      5,
-      4,
       0,
-      4,
+      1,
       3,
-      2,
       0,
-      1,
       0,
+      5,
       6,
       0,
-      6,
+      0,
+      3,
       4,
-      2,
       0,
-      2,
+      0,
+      4,
+      5,
+      0,
       1,
-      6
+      2,
+      3
     ],
     "colors": [],
     "applicationId": "gh/a461ec766c5e867d96a5036dc53c811a",
@@ -1765,25 +1602,25 @@
     ],
     "faces": [
       0,
-      6,
-      5,
-      4,
       0,
-      4,
+      1,
       3,
-      2,
       0,
-      1,
       0,
+      5,
       6,
       0,
-      6,
+      0,
+      3,
       4,
-      2,
       0,
-      2,
+      0,
+      4,
+      5,
+      0,
       1,
-      6
+      2,
+      3
     ],
     "colors": [],
     "applicationId": "gh/ff7c29fdcbfb53eed7b95b268e72cc35",
@@ -1801,8 +1638,7 @@
     "name": "",
     "properties": {
       "structural": {
-        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"da7bcbb310400e1e0d61a7b2df3fb89a","properties":{}},
-        "restraint": {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
+        "restraint": {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
       }
     }
   },
@@ -1817,8 +1653,7 @@
     "name": "",
     "properties": {
       "structural": {
-        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"da7bcbb310400e1e0d61a7b2df3fb89a","properties":{}},
-        "restraint": {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
+        "restraint": {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
       }
     }
   },
@@ -1833,8 +1668,7 @@
     "name": "",
     "properties": {
       "structural": {
-        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"da7bcbb310400e1e0d61a7b2df3fb89a","properties":{}},
-        "restraint": {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
+        "restraint": {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
       }
     }
   },
@@ -1849,8 +1683,10 @@
     "name": "",
     "properties": {
       "structural": {
+        "restraint": {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}},
         "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"da7bcbb310400e1e0d61a7b2df3fb89a","properties":{}},
-        "restraint": {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
+        "gsaLocalMeshSize": 0.0,
+        "stiffness": {"type":"StructuralVectorSix","value":[12.0,15.0,20.0,25.0,30.0,38.0],"hash":"ae836cd82b24e2d7fb085a6d2abfd17e","properties":{}}
       }
     }
   },
@@ -1865,8 +1701,7 @@
     "name": "",
     "properties": {
       "structural": {
-        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"da7bcbb310400e1e0d61a7b2df3fb89a","properties":{}},
-        "restraint": {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
+        "restraint": {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
       }
     }
   },
@@ -1881,8 +1716,7 @@
     "name": "",
     "properties": {
       "structural": {
-        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"da7bcbb310400e1e0d61a7b2df3fb89a","properties":{}},
-        "restraint": {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
+        "restraint": {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
       }
     }
   },
@@ -1897,8 +1731,7 @@
     "name": "",
     "properties": {
       "structural": {
-        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"da7bcbb310400e1e0d61a7b2df3fb89a","properties":{}},
-        "restraint": {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
+        "restraint": {"type":"StructuralVectorBoolSix","value":[true,true,true,true,true,true],"hash":"4d8dc7866fe2f80672e65c3a2620ae93","properties":{}}
       }
     }
   },
@@ -1909,7 +1742,7 @@
       37.55664063,
       5.79
     ],
-    "applicationId": "gsa/NODE.2_1",
+    "applicationId": "gsa/NODE.3_1",
     "name": "",
     "properties": {}
   },
@@ -1920,7 +1753,7 @@
       57.35664063,
       11.58
     ],
-    "applicationId": "gsa/NODE.2_10",
+    "applicationId": "gsa/NODE.3_10",
     "name": "",
     "properties": {}
   },
@@ -1931,7 +1764,7 @@
       7.856641602,
       11.58
     ],
-    "applicationId": "gsa/NODE.2_11",
+    "applicationId": "gsa/NODE.3_11",
     "name": "",
     "properties": {}
   },
@@ -1942,7 +1775,7 @@
       7.856641602,
       11.58
     ],
-    "applicationId": "gsa/NODE.2_12",
+    "applicationId": "gsa/NODE.3_12",
     "name": "",
     "properties": {}
   },
@@ -1953,7 +1786,7 @@
       -2.043358276,
       11.58
     ],
-    "applicationId": "gsa/NODE.2_13",
+    "applicationId": "gsa/NODE.3_13",
     "name": "",
     "properties": {}
   },
@@ -1964,7 +1797,7 @@
       -2.043358276,
       11.58
     ],
-    "applicationId": "gsa/NODE.2_14",
+    "applicationId": "gsa/NODE.3_14",
     "name": "",
     "properties": {}
   },
@@ -1975,7 +1808,7 @@
       37.55664063,
       17.37
     ],
-    "applicationId": "gsa/NODE.2_15",
+    "applicationId": "gsa/NODE.3_15",
     "name": "",
     "properties": {}
   },
@@ -1986,7 +1819,7 @@
       37.55664063,
       17.37
     ],
-    "applicationId": "gsa/NODE.2_16",
+    "applicationId": "gsa/NODE.3_16",
     "name": "",
     "properties": {}
   },
@@ -1997,7 +1830,7 @@
       57.35664063,
       17.37
     ],
-    "applicationId": "gsa/NODE.2_17",
+    "applicationId": "gsa/NODE.3_17",
     "name": "",
     "properties": {}
   },
@@ -2008,7 +1841,7 @@
       7.856641602,
       17.37
     ],
-    "applicationId": "gsa/NODE.2_18",
+    "applicationId": "gsa/NODE.3_18",
     "name": "",
     "properties": {}
   },
@@ -2019,7 +1852,7 @@
       7.856641602,
       17.37
     ],
-    "applicationId": "gsa/NODE.2_19",
+    "applicationId": "gsa/NODE.3_19",
     "name": "",
     "properties": {}
   },
@@ -2030,7 +1863,7 @@
       37.55664063,
       5.79
     ],
-    "applicationId": "gsa/NODE.2_2",
+    "applicationId": "gsa/NODE.3_2",
     "name": "",
     "properties": {}
   },
@@ -2041,7 +1874,7 @@
       -2.043358276,
       17.37
     ],
-    "applicationId": "gsa/NODE.2_20",
+    "applicationId": "gsa/NODE.3_20",
     "name": "",
     "properties": {}
   },
@@ -2052,7 +1885,7 @@
       -2.043358276,
       17.37
     ],
-    "applicationId": "gsa/NODE.2_21",
+    "applicationId": "gsa/NODE.3_21",
     "name": "",
     "properties": {}
   },
@@ -2063,7 +1896,7 @@
       31.42857227,
       23.551
     ],
-    "applicationId": "gsa/NODE.2_22",
+    "applicationId": "gsa/NODE.3_22",
     "name": "",
     "properties": {}
   },
@@ -2074,7 +1907,7 @@
       31.42857227,
       23.551
     ],
-    "applicationId": "gsa/NODE.2_23",
+    "applicationId": "gsa/NODE.3_23",
     "name": "",
     "properties": {}
   },
@@ -2085,7 +1918,7 @@
       41.42857031,
       23.551
     ],
-    "applicationId": "gsa/NODE.2_24",
+    "applicationId": "gsa/NODE.3_24",
     "name": "",
     "properties": {}
   },
@@ -2096,7 +1929,7 @@
       16.42857227,
       23.551
     ],
-    "applicationId": "gsa/NODE.2_25",
+    "applicationId": "gsa/NODE.3_25",
     "name": "",
     "properties": {}
   },
@@ -2107,7 +1940,7 @@
       16.42857227,
       23.551
     ],
-    "applicationId": "gsa/NODE.2_26",
+    "applicationId": "gsa/NODE.3_26",
     "name": "",
     "properties": {}
   },
@@ -2118,7 +1951,7 @@
       11.42857129,
       23.551
     ],
-    "applicationId": "gsa/NODE.2_27",
+    "applicationId": "gsa/NODE.3_27",
     "name": "",
     "properties": {}
   },
@@ -2129,7 +1962,7 @@
       11.42857129,
       23.551
     ],
-    "applicationId": "gsa/NODE.2_28",
+    "applicationId": "gsa/NODE.3_28",
     "name": "",
     "properties": {}
   },
@@ -2140,7 +1973,7 @@
       31.42857227,
       29.732
     ],
-    "applicationId": "gsa/NODE.2_29",
+    "applicationId": "gsa/NODE.3_29",
     "name": "",
     "properties": {}
   },
@@ -2151,7 +1984,7 @@
       57.35664063,
       5.79
     ],
-    "applicationId": "gsa/NODE.2_3",
+    "applicationId": "gsa/NODE.3_3",
     "name": "",
     "properties": {}
   },
@@ -2162,7 +1995,7 @@
       31.42857227,
       29.732
     ],
-    "applicationId": "gsa/NODE.2_30",
+    "applicationId": "gsa/NODE.3_30",
     "name": "",
     "properties": {}
   },
@@ -2173,7 +2006,7 @@
       41.42857031,
       29.732
     ],
-    "applicationId": "gsa/NODE.2_31",
+    "applicationId": "gsa/NODE.3_31",
     "name": "",
     "properties": {}
   },
@@ -2184,7 +2017,7 @@
       16.42857227,
       29.732
     ],
-    "applicationId": "gsa/NODE.2_32",
+    "applicationId": "gsa/NODE.3_32",
     "name": "",
     "properties": {}
   },
@@ -2195,7 +2028,7 @@
       16.42857227,
       29.732
     ],
-    "applicationId": "gsa/NODE.2_33",
+    "applicationId": "gsa/NODE.3_33",
     "name": "",
     "properties": {}
   },
@@ -2206,7 +2039,7 @@
       11.42857129,
       29.732
     ],
-    "applicationId": "gsa/NODE.2_34",
+    "applicationId": "gsa/NODE.3_34",
     "name": "",
     "properties": {}
   },
@@ -2217,7 +2050,7 @@
       11.42857129,
       29.732
     ],
-    "applicationId": "gsa/NODE.2_35",
+    "applicationId": "gsa/NODE.3_35",
     "name": "",
     "properties": {}
   },
@@ -2228,7 +2061,7 @@
       54.52807031,
       5.79
     ],
-    "applicationId": "gsa/NODE.2_36",
+    "applicationId": "gsa/NODE.3_36",
     "name": "",
     "properties": {}
   },
@@ -2239,7 +2072,7 @@
       54.52807031,
       5.79
     ],
-    "applicationId": "gsa/NODE.2_37",
+    "applicationId": "gsa/NODE.3_37",
     "name": "",
     "properties": {}
   },
@@ -2250,7 +2083,7 @@
       94.12807031,
       5.79
     ],
-    "applicationId": "gsa/NODE.2_38",
+    "applicationId": "gsa/NODE.3_38",
     "name": "",
     "properties": {}
   },
@@ -2261,7 +2094,7 @@
       -4.871929688,
       5.79
     ],
-    "applicationId": "gsa/NODE.2_39",
+    "applicationId": "gsa/NODE.3_39",
     "name": "",
     "properties": {}
   },
@@ -2272,7 +2105,7 @@
       7.856641602,
       5.79
     ],
-    "applicationId": "gsa/NODE.2_4",
+    "applicationId": "gsa/NODE.3_4",
     "name": "",
     "properties": {}
   },
@@ -2283,7 +2116,7 @@
       -4.871929688,
       5.79
     ],
-    "applicationId": "gsa/NODE.2_40",
+    "applicationId": "gsa/NODE.3_40",
     "name": "",
     "properties": {}
   },
@@ -2294,7 +2127,7 @@
       -24.67192969,
       5.79
     ],
-    "applicationId": "gsa/NODE.2_41",
+    "applicationId": "gsa/NODE.3_41",
     "name": "",
     "properties": {}
   },
@@ -2305,7 +2138,7 @@
       -24.67192969,
       5.79
     ],
-    "applicationId": "gsa/NODE.2_42",
+    "applicationId": "gsa/NODE.3_42",
     "name": "",
     "properties": {}
   },
@@ -2316,7 +2149,7 @@
       54.52807031,
       11.58
     ],
-    "applicationId": "gsa/NODE.2_43",
+    "applicationId": "gsa/NODE.3_43",
     "name": "",
     "properties": {}
   },
@@ -2327,7 +2160,7 @@
       54.52807031,
       11.58
     ],
-    "applicationId": "gsa/NODE.2_44",
+    "applicationId": "gsa/NODE.3_44",
     "name": "",
     "properties": {}
   },
@@ -2338,7 +2171,7 @@
       94.12807031,
       11.58
     ],
-    "applicationId": "gsa/NODE.2_45",
+    "applicationId": "gsa/NODE.3_45",
     "name": "",
     "properties": {}
   },
@@ -2349,7 +2182,7 @@
       -4.871929688,
       11.58
     ],
-    "applicationId": "gsa/NODE.2_46",
+    "applicationId": "gsa/NODE.3_46",
     "name": "",
     "properties": {}
   },
@@ -2360,7 +2193,7 @@
       -4.871929688,
       11.58
     ],
-    "applicationId": "gsa/NODE.2_47",
+    "applicationId": "gsa/NODE.3_47",
     "name": "",
     "properties": {}
   },
@@ -2371,7 +2204,7 @@
       -24.67192969,
       11.58
     ],
-    "applicationId": "gsa/NODE.2_48",
+    "applicationId": "gsa/NODE.3_48",
     "name": "",
     "properties": {}
   },
@@ -2382,7 +2215,7 @@
       -24.67192969,
       11.58
     ],
-    "applicationId": "gsa/NODE.2_49",
+    "applicationId": "gsa/NODE.3_49",
     "name": "",
     "properties": {}
   },
@@ -2393,7 +2226,7 @@
       7.856641602,
       5.79
     ],
-    "applicationId": "gsa/NODE.2_5",
+    "applicationId": "gsa/NODE.3_5",
     "name": "",
     "properties": {}
   },
@@ -2404,7 +2237,7 @@
       54.52807031,
       17.37
     ],
-    "applicationId": "gsa/NODE.2_50",
+    "applicationId": "gsa/NODE.3_50",
     "name": "",
     "properties": {}
   },
@@ -2415,7 +2248,7 @@
       54.52807031,
       17.37
     ],
-    "applicationId": "gsa/NODE.2_51",
+    "applicationId": "gsa/NODE.3_51",
     "name": "",
     "properties": {}
   },
@@ -2426,7 +2259,7 @@
       94.12807031,
       17.37
     ],
-    "applicationId": "gsa/NODE.2_52",
+    "applicationId": "gsa/NODE.3_52",
     "name": "",
     "properties": {}
   },
@@ -2437,7 +2270,7 @@
       -4.871929688,
       17.37
     ],
-    "applicationId": "gsa/NODE.2_53",
+    "applicationId": "gsa/NODE.3_53",
     "name": "",
     "properties": {}
   },
@@ -2448,7 +2281,7 @@
       -4.871929688,
       17.37
     ],
-    "applicationId": "gsa/NODE.2_54",
+    "applicationId": "gsa/NODE.3_54",
     "name": "",
     "properties": {}
   },
@@ -2459,7 +2292,7 @@
       -24.67192969,
       17.37
     ],
-    "applicationId": "gsa/NODE.2_55",
+    "applicationId": "gsa/NODE.3_55",
     "name": "",
     "properties": {}
   },
@@ -2470,7 +2303,7 @@
       -24.67192969,
       17.37
     ],
-    "applicationId": "gsa/NODE.2_56",
+    "applicationId": "gsa/NODE.3_56",
     "name": "",
     "properties": {}
   },
@@ -2481,7 +2314,7 @@
       40.0,
       23.551
     ],
-    "applicationId": "gsa/NODE.2_57",
+    "applicationId": "gsa/NODE.3_57",
     "name": "",
     "properties": {}
   },
@@ -2492,7 +2325,7 @@
       40.0,
       23.551
     ],
-    "applicationId": "gsa/NODE.2_58",
+    "applicationId": "gsa/NODE.3_58",
     "name": "",
     "properties": {}
   },
@@ -2503,7 +2336,7 @@
       60.0,
       23.551
     ],
-    "applicationId": "gsa/NODE.2_59",
+    "applicationId": "gsa/NODE.3_59",
     "name": "",
     "properties": {}
   },
@@ -2514,7 +2347,7 @@
       -2.043358276,
       5.79
     ],
-    "applicationId": "gsa/NODE.2_6",
+    "applicationId": "gsa/NODE.3_6",
     "name": "",
     "properties": {}
   },
@@ -2525,7 +2358,7 @@
       10.0,
       23.551
     ],
-    "applicationId": "gsa/NODE.2_60",
+    "applicationId": "gsa/NODE.3_60",
     "name": "",
     "properties": {}
   },
@@ -2536,7 +2369,7 @@
       10.0,
       23.551
     ],
-    "applicationId": "gsa/NODE.2_61",
+    "applicationId": "gsa/NODE.3_61",
     "name": "",
     "properties": {}
   },
@@ -2547,7 +2380,7 @@
       0.0,
       23.551
     ],
-    "applicationId": "gsa/NODE.2_62",
+    "applicationId": "gsa/NODE.3_62",
     "name": "",
     "properties": {}
   },
@@ -2558,7 +2391,7 @@
       0.0,
       23.551
     ],
-    "applicationId": "gsa/NODE.2_63",
+    "applicationId": "gsa/NODE.3_63",
     "name": "",
     "properties": {}
   },
@@ -2569,7 +2402,7 @@
       40.0,
       29.732
     ],
-    "applicationId": "gsa/NODE.2_64",
+    "applicationId": "gsa/NODE.3_64",
     "name": "",
     "properties": {}
   },
@@ -2580,7 +2413,7 @@
       40.0,
       29.732
     ],
-    "applicationId": "gsa/NODE.2_65",
+    "applicationId": "gsa/NODE.3_65",
     "name": "",
     "properties": {}
   },
@@ -2591,7 +2424,7 @@
       60.0,
       29.732
     ],
-    "applicationId": "gsa/NODE.2_66",
+    "applicationId": "gsa/NODE.3_66",
     "name": "",
     "properties": {}
   },
@@ -2602,7 +2435,7 @@
       10.0,
       29.732
     ],
-    "applicationId": "gsa/NODE.2_67",
+    "applicationId": "gsa/NODE.3_67",
     "name": "",
     "properties": {}
   },
@@ -2613,7 +2446,7 @@
       10.0,
       29.732
     ],
-    "applicationId": "gsa/NODE.2_68",
+    "applicationId": "gsa/NODE.3_68",
     "name": "",
     "properties": {}
   },
@@ -2624,7 +2457,7 @@
       0.0,
       29.732
     ],
-    "applicationId": "gsa/NODE.2_69",
+    "applicationId": "gsa/NODE.3_69",
     "name": "",
     "properties": {}
   },
@@ -2635,7 +2468,7 @@
       -2.043358276,
       5.79
     ],
-    "applicationId": "gsa/NODE.2_7",
+    "applicationId": "gsa/NODE.3_7",
     "name": "",
     "properties": {}
   },
@@ -2646,7 +2479,7 @@
       0.0,
       29.732
     ],
-    "applicationId": "gsa/NODE.2_70",
+    "applicationId": "gsa/NODE.3_70",
     "name": "",
     "properties": {}
   },
@@ -2657,7 +2490,7 @@
       10.0,
       17.37
     ],
-    "applicationId": "gsa/NODE.2_72",
+    "applicationId": "gsa/NODE.3_72",
     "name": "",
     "properties": {}
   },
@@ -2668,7 +2501,7 @@
       10.0,
       17.37
     ],
-    "applicationId": "gsa/NODE.2_74",
+    "applicationId": "gsa/NODE.3_74",
     "name": "",
     "properties": {}
   },
@@ -2679,7 +2512,7 @@
       60.0,
       17.37
     ],
-    "applicationId": "gsa/NODE.2_76",
+    "applicationId": "gsa/NODE.3_76",
     "name": "",
     "properties": {}
   },
@@ -2690,7 +2523,7 @@
       40.0,
       17.37
     ],
-    "applicationId": "gsa/NODE.2_78",
+    "applicationId": "gsa/NODE.3_78",
     "name": "",
     "properties": {}
   },
@@ -2701,7 +2534,7 @@
       37.55664063,
       11.58
     ],
-    "applicationId": "gsa/NODE.2_8",
+    "applicationId": "gsa/NODE.3_8",
     "name": "",
     "properties": {}
   },
@@ -2712,7 +2545,7 @@
       40.0,
       17.37
     ],
-    "applicationId": "gsa/NODE.2_80",
+    "applicationId": "gsa/NODE.3_80",
     "name": "",
     "properties": {}
   },
@@ -2723,7 +2556,7 @@
       0.0,
       17.37
     ],
-    "applicationId": "gsa/NODE.2_82",
+    "applicationId": "gsa/NODE.3_82",
     "name": "",
     "properties": {}
   },
@@ -2734,7 +2567,7 @@
       0.0,
       17.37
     ],
-    "applicationId": "gsa/NODE.2_84",
+    "applicationId": "gsa/NODE.3_84",
     "name": "",
     "properties": {}
   },
@@ -2745,7 +2578,7 @@
       -4.871929825,
       -0.2
     ],
-    "applicationId": "gsa/NODE.2_85",
+    "applicationId": "gsa/NODE.3_85",
     "name": "",
     "properties": {}
   },
@@ -2756,7 +2589,7 @@
       -4.871929825,
       -0.2
     ],
-    "applicationId": "gsa/NODE.2_86",
+    "applicationId": "gsa/NODE.3_86",
     "name": "",
     "properties": {}
   },
@@ -2767,7 +2600,7 @@
       94.12807018,
       -0.2
     ],
-    "applicationId": "gsa/NODE.2_87",
+    "applicationId": "gsa/NODE.3_87",
     "name": "",
     "properties": {}
   },
@@ -2778,7 +2611,7 @@
       54.52807018,
       -0.2
     ],
-    "applicationId": "gsa/NODE.2_88",
+    "applicationId": "gsa/NODE.3_88",
     "name": "",
     "properties": {}
   },
@@ -2789,7 +2622,7 @@
       54.52807018,
       -0.2
     ],
-    "applicationId": "gsa/NODE.2_89",
+    "applicationId": "gsa/NODE.3_89",
     "name": "",
     "properties": {}
   },
@@ -2800,7 +2633,7 @@
       37.55664063,
       11.58
     ],
-    "applicationId": "gsa/NODE.2_9",
+    "applicationId": "gsa/NODE.3_9",
     "name": "",
     "properties": {}
   },
@@ -2811,7 +2644,7 @@
       -24.67192982,
       -0.2
     ],
-    "applicationId": "gsa/NODE.2_90",
+    "applicationId": "gsa/NODE.3_90",
     "name": "",
     "properties": {}
   },
@@ -2822,7 +2655,7 @@
       -24.67192982,
       -0.2
     ],
-    "applicationId": "gsa/NODE.2_91",
+    "applicationId": "gsa/NODE.3_91",
     "name": "",
     "properties": {}
   },
@@ -2833,7 +2666,7 @@
       74.32807031,
       11.58
     ],
-    "applicationId": "gsa/NODE.2_92",
+    "applicationId": "gsa/NODE.3_92",
     "name": "",
     "properties": {}
   },
@@ -2844,7 +2677,7 @@
       -4.871929688,
       11.58
     ],
-    "applicationId": "gsa/NODE.2_93",
+    "applicationId": "gsa/NODE.3_93",
     "name": "",
     "properties": {}
   },
@@ -2855,7 +2688,7 @@
       16.62698299,
       11.58
     ],
-    "applicationId": "gsa/NODE.2_94",
+    "applicationId": "gsa/NODE.3_94",
     "name": "",
     "properties": {}
   },
@@ -2866,7 +2699,7 @@
       23.11736934,
       11.58
     ],
-    "applicationId": "gsa/NODE.2_95",
+    "applicationId": "gsa/NODE.3_95",
     "name": "",
     "properties": {}
   },
@@ -3170,6 +3003,34 @@
     "properties": {}
   },
   {
+    "type": "StructuralReferenceLine",
+    "value": [
+      10.0,
+      0.0,
+      0.0,
+      50.0,
+      0.0,
+      0.0
+    ],
+    "applicationId": "gsa/GRID_LINE.1_1",
+    "name": "Level",
+    "properties": {}
+  },
+  {
+    "type": "StructuralReferenceLine",
+    "value": [
+      5.0,
+      60.0,
+      0.0,
+      34.641016151377549,
+      19.999999999999996,
+      0.0
+    ],
+    "applicationId": "gsa/GRID_LINE.1_2",
+    "name": "Angled",
+    "properties": {}
+  },
+  {
     "type": "StructuralRigidConstraints",
     "constraints": {
       "type": "StructuralVectorBoolSix",
@@ -3206,7 +3067,6 @@
     "name": "LSP-General",
     "properties": {
       "structural": {
-        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"da7bcbb310400e1e0d61a7b2df3fb89a","properties":{}},
         "springType": "General",
         "stiffness": {"type":"StructuralVectorSix","value":[12.0,15.0,20.0,25.0,30.0,38.0],"hash":"ae836cd82b24e2d7fb085a6d2abfd17e","properties":{}},
         "dampingRatio": 0.21
@@ -3219,7 +3079,6 @@
     "name": "LSP-Compression",
     "properties": {
       "structural": {
-        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"da7bcbb310400e1e0d61a7b2df3fb89a","properties":{}},
         "springType": "Compression",
         "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
         "dampingRatio": 0.21
@@ -3232,7 +3091,6 @@
     "name": "LSP-Axial",
     "properties": {
       "structural": {
-        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"da7bcbb310400e1e0d61a7b2df3fb89a","properties":{}},
         "springType": "Axial",
         "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
         "dampingRatio": 0.21
@@ -3245,7 +3103,6 @@
     "name": "LSP-Lockup",
     "properties": {
       "structural": {
-        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"da7bcbb310400e1e0d61a7b2df3fb89a","properties":{}},
         "springType": "Lockup",
         "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
         "dampingRatio": 0.21
@@ -3258,7 +3115,6 @@
     "name": "LSP-Gap",
     "properties": {
       "structural": {
-        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"da7bcbb310400e1e0d61a7b2df3fb89a","properties":{}},
         "springType": "Gap",
         "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
         "dampingRatio": 0.21
@@ -3271,7 +3127,6 @@
     "name": "LSP-Friction",
     "properties": {
       "structural": {
-        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"da7bcbb310400e1e0d61a7b2df3fb89a","properties":{}},
         "springType": "Friction",
         "stiffness": {"type":"StructuralVectorSix","value":[12.0,15.0,20.0,0.0,0.0,0.0],"hash":"859fa9f418bc114832e1f243fb3f8c61","properties":{}},
         "dampingRatio": 0.21
@@ -3284,7 +3139,6 @@
     "name": "LSP-Torsional",
     "properties": {
       "structural": {
-        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"da7bcbb310400e1e0d61a7b2df3fb89a","properties":{}},
         "springType": "Torsional",
         "stiffness": {"type":"StructuralVectorSix","value":[0.0,0.0,0.0,25.0,0.0,0.0],"hash":"98d1640829ffe5e2dffe3ba3ed4b7659","properties":{}},
         "dampingRatio": 0.21
@@ -3297,7 +3151,6 @@
     "name": "LSP-Tension",
     "properties": {
       "structural": {
-        "axis": {"type":"Plane/StructuralAxis","normal":{"type":"Vector/StructuralVectorThree","value":[0.0,0.0,1.0],"hash":"e1b3c2b2815370776062b19029833d00","properties":{}},"xdir":{"type":"Vector/StructuralVectorThree","value":[1.0,0.0,0.0],"hash":"369b3fdb4aeb3f1552d866fc8e090ff8","properties":{}},"ydir":{"type":"Vector/StructuralVectorThree","value":[0.0,1.0,0.0],"hash":"82274609f5264484684a26028c804d66","properties":{}},"hash":"da7bcbb310400e1e0d61a7b2df3fb89a","properties":{}},
         "springType": "Tension",
         "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
         "dampingRatio": 0.21

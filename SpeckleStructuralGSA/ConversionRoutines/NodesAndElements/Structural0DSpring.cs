@@ -8,7 +8,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("EL.4", new string[] { "NODE.2" }, "elements", true, false, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode), typeof(GSA1DProperty) })]
+  [GSAObject("EL.4", new string[] { "NODE.3" }, "elements", true, false, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode), typeof(GSA1DProperty) })]
   public class GSA0DSpring : IGSASpeckleContainer
   {
     public string Member;
@@ -21,6 +21,11 @@ namespace SpeckleStructuralGSA
     //Sending
     public void ParseGWACommand(List<GSANode> nodes)
     {
+      // GWA command from 10.1 docs
+      // EL.4 | num | name | colour | type | prop | group | topo() | orient_node | orient_angle |
+      // is_rls { | rls { | k } }
+      // off_x1 | off_x2 | off_y | off_z | parent_member | dummy
+
       if (this.GWACommand == null)
         return;
 
@@ -30,9 +35,9 @@ namespace SpeckleStructuralGSA
 
       var counter = 1; // Skip identifier
 
-      this.GSAId = Convert.ToInt32(pieces[counter++]);
+      this.GSAId = Convert.ToInt32(pieces[counter++]); // num
       obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
-      obj.Name = pieces[counter++].Trim(new char[] { '"' });
+      obj.Name = pieces[counter++].Trim(new char[] { '"' }); // name
       counter++; // Colour
       counter++; // Type
       obj.PropertyRef = Helper.GetApplicationId(typeof(GSASpringProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
@@ -53,13 +58,11 @@ namespace SpeckleStructuralGSA
       var orientationNodeRef = pieces[counter++];
       var rotationAngle = Convert.ToDouble(pieces[counter++]);
 
-      //counter++; // Action // TODO: EL.4 SUPPORT
+      if (String.IsNullOrEmpty(pieces[counter++]) == false)
+        Member = pieces[counter++]; // no references to this piece of data, why do we store it rather than just skipping over?
+
       counter++; // Dummy
 
-      if (counter < pieces.Length)
-      {
-        Member = pieces[counter++];
-      }
       this.Value = obj;
     }
 
@@ -92,10 +95,11 @@ namespace SpeckleStructuralGSA
         }
       }
 
+      var sid = Helper.GenerateSID(spring);
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + Helper.GenerateSID(spring),
+        keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
         index.ToString(),
         spring.Name == null || spring.Name == "" ? " " : spring.Name,
         "NO_RGB",
@@ -120,7 +124,8 @@ namespace SpeckleStructuralGSA
       ls.Add("0");
       ls.Add("0");
 
-      //ls.Add("NORMAL"); // Action // TODO: EL.4 SUPPORT
+      ls.Add(""); // parent_member
+
       ls.Add((spring.Dummy.HasValue && spring.Dummy.Value) ? "DUMMY" : "");
 
       return (string.Join("\t", ls));
@@ -138,6 +143,7 @@ namespace SpeckleStructuralGSA
     //Sending to Speckle, search through a
     public static SpeckleObject ToSpeckle(this GSA0DSpring dummyObject)
     {
+      var typeName = dummyObject.GetType().Name;
       var newSpringLines = ToSpeckleBase<GSA0DSpring>();
       var newNodeLines = ToSpeckleBase<GSANode>();
       var newLines = new List<Tuple<int, string>>();
@@ -160,11 +166,19 @@ namespace SpeckleStructuralGSA
         var pPieces = p.ListSplit("\t");
         if (pPieces[4] == "GRD_SPRING")
         {
+          var gsaId = pPieces[1];
           var spring = new GSA0DSpring() { GWACommand = p };
-          spring.ParseGWACommand(nodes);
-          lock (springsLock)
+          try
           {
-            springs.Add(spring);
+            spring.ParseGWACommand(nodes);
+            lock (springsLock)
+            {
+              springs.Add(spring);
+            }
+          }
+          catch (Exception ex)
+          {
+            Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
           }
         }
       });

@@ -78,11 +78,11 @@ namespace SpeckleStructuralGSA
       var keyword = typeof(GSALoadCase).GetGSAKeyword();
 
       var index = Initialiser.Cache.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), loadCase.ApplicationId);
-
+      var sid = Helper.GenerateSID(loadCase);
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + Helper.GenerateSID(loadCase),
+        keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
         index.ToString(),
         loadCase.Name == null || loadCase.Name == "" ? " " : loadCase.Name
       };
@@ -132,13 +132,21 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSALoadCase dummyObject)
     {
       var newLines = ToSpeckleBase<GSALoadCase>();
-
+      var typeName = dummyObject.GetType().Name;
       var loadCases = new List<GSALoadCase>();
 
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
       {
-        var loadCase = new GSALoadCase() { GWACommand = p };
-        loadCase.ParseGWACommand();
+        var p = newLines[k];
+        var loadCase = new GSALoadCase() { GWACommand = p, GSAId = k };
+        try
+        {
+          loadCase.ParseGWACommand();
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+        }
         loadCases.Add(loadCase);
       }
 

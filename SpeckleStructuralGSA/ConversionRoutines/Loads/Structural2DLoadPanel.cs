@@ -232,10 +232,11 @@ namespace SpeckleStructuralGSA
           subLs.Add("(" + Math.Round(transformed[j],4).ToString() + "," + Math.Round(transformed[j + 1],4).ToString() + ")");
         }
 
+        var sid = Helper.GenerateSID(load);
         ls.AddRange(new string[] { 
           "SET_AT",
           index.ToString(),
-          keyword + ":" + Helper.GenerateSID(load),
+          keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
           load.Name == null || load.Name == "" ? " " : load.Name,
           gridSurfaceIndex.ToString(),
           "POLYGON",
@@ -264,11 +265,20 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSAGridAreaLoad>();
       var loads = new List<GSAGridAreaLoad>();
+      var typeName = dummyObject.GetType().Name;
 
       foreach (var k in newLines.Keys)
       {
         var load = new GSAGridAreaLoad() { GSAId = k, GWACommand = newLines[k] };
-        load.ParseGWACommand();
+        try
+        {
+          load.ParseGWACommand();
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+        }
+
         loads.Add(load);
       }
 
