@@ -81,7 +81,7 @@ namespace SpeckleStructuralClasses
       {
         return StructuralProperties.ValueAsTypedList<double>("pointdistances");
       }
-      set { if (value != null) StructuralProperties["pointdistances"] = value; }
+      set { if (value != null && value.Count() > 0) StructuralProperties["pointdistances"] = value; }
     }
 
     /// <summary>Base SpeckleLine.</summary>
@@ -118,7 +118,7 @@ namespace SpeckleStructuralClasses
       {
         return StructuralProperties.ValueAsTypedList<string>("elementRefs");
       }
-      set { if (value != null) StructuralProperties["elementRefs"] = value; }
+      set { if (value != null && value.Count() > 0) StructuralProperties["elementRefs"] = value; }
     }
   }
 
@@ -170,7 +170,7 @@ namespace SpeckleStructuralClasses
       {
         return StructuralProperties.ValueAsTypedList<StructuralBridgeAlignmentNode>("nodes");
       }
-      set { if (value != null) StructuralProperties["nodes"] = value; }
+      set { if (value != null && value.Count() > 0) StructuralProperties["nodes"] = value; }
     }
 
     [JsonIgnore]
@@ -250,7 +250,7 @@ namespace SpeckleStructuralClasses
       {
         return StructuralProperties.ValueAsTypedList<StructuralBridgeVehicleAxle>("axles");
       }
-      set { if (value != null) StructuralProperties["axles"] = value; }
+      set { if (value != null && value.Count() > 0) StructuralProperties["axles"] = value; }
     }
 
     [JsonIgnore]
@@ -377,5 +377,46 @@ namespace SpeckleStructuralClasses
     /// <summary>GSA grouping of influence effects to combine effects.</summary>
     [JsonProperty("gsaEffectGroup", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
     public int? GSAEffectGroup { get; set; }
+  }
+
+  [Serializable]
+  public partial class StructuralReferenceLine : SpeckleLine, IStructural
+  {
+    public override string Type { get => "StructuralReferenceLine"; }
+
+    [JsonIgnore]
+    public string Group
+    {
+      get => StructuralProperties.ContainsKey("group") ? (StructuralProperties["group"] as string) : null;
+      set { if (value != null) StructuralProperties["group"] = value; }
+    }
+
+    [JsonIgnore]
+    private Dictionary<string, object> StructuralProperties
+    {
+      get
+      {
+        if (base.Properties == null)
+        {
+          base.Properties = new Dictionary<string, object>();
+        }
+
+        if (!base.Properties.ContainsKey("structural"))
+        {
+          base.Properties["structural"] = new Dictionary<string, object>();
+        }
+
+        return base.Properties["structural"] as Dictionary<string, object>;
+      }
+      set
+      {
+        if (base.Properties == null)
+        {
+          base.Properties = new Dictionary<string, object>();
+        }
+
+        base.Properties["structural"] = value;
+      }
+    }
   }
 }

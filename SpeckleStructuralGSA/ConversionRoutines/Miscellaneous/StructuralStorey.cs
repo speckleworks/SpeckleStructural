@@ -69,15 +69,22 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSAStorey dummyObject)
     {
       var newLines = ToSpeckleBase<GSAStorey>();
-
+      var typeName = dummyObject.GetType().Name;
       var storeys = new List<GSAStorey>();
 
       foreach (var k in newLines.Keys)
       {
         var storey = new GSAStorey() { GWACommand = newLines[k] };
-        if (storey.ParseGWACommand())
+        try
         {
-          storeys.Add(storey);
+          if (storey.ParseGWACommand())
+          {
+            storeys.Add(storey);
+          }
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
         }
       }
 

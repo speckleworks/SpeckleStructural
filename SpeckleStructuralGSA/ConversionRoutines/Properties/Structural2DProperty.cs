@@ -8,7 +8,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("PROP_2D.5", new string[] { "MAT_STEEL.3", "MAT_CONCRETE.16" }, "properties", true, true, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) }, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) })]
+  [GSAObject("PROP_2D.6", new string[] { "MAT_STEEL.3", "MAT_CONCRETE.17" }, "properties", true, true, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) }, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) })]
   public class GSA2DProperty : IGSASpeckleContainer
   {
     public bool IsAxisLocal;
@@ -58,8 +58,8 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      counter++; // Analysis material
-      obj.Thickness = Convert.ToDouble(pieces[counter++]);
+      counter++; // design property
+      obj.Thickness = Convert.ToDouble(pieces[counter++]); // version 5 and 6 of this command are meant to include 'profile' but it does not yet seem functional and so only thickness is recorded
 
       switch (pieces[counter++])
       {
@@ -112,10 +112,11 @@ namespace SpeckleStructuralGSA
         }
       }
 
+      var sid = Helper.GenerateSID(prop);
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + Helper.GenerateSID(prop),
+        keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
         index.ToString(),
         prop.Name == null || prop.Name == "" ? " " : prop.Name,
         "NO_RGB",
@@ -165,7 +166,7 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA2DProperty dummyObject)
     {
       var newLines = ToSpeckleBase<GSA2DProperty>();
-
+      var typeName = dummyObject.GetType().Name;
       var propsLock = new object();
       var props = new List<GSA2DProperty>();
       var steels = Initialiser.GSASenderObjects.Get<GSAMaterialSteel>();
@@ -173,6 +174,8 @@ namespace SpeckleStructuralGSA
 
       Parallel.ForEach(newLines.Values, p =>
       {
+        var pPieces = p.ListSplit("\t");
+        var gsaId = pPieces[1];
         try
         {
           var prop = new GSA2DProperty() { GWACommand = p };
@@ -182,7 +185,10 @@ namespace SpeckleStructuralGSA
             props.Add(prop);
           }
         }
-        catch { }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+        }
       });
 
       Initialiser.GSASenderObjects.AddRange(props);

@@ -82,10 +82,11 @@ namespace SpeckleStructuralGSA
 
       var index = Initialiser.Cache.ResolveIndex(typeof(GSALoadCombo).GetGSAKeyword(), loadCombo.ApplicationId);
 
+      var sid = Helper.GenerateSID(loadCombo);
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + Helper.GenerateSID(loadCombo),
+        keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
         index.ToString(),
         loadCombo.Name == null || loadCombo.Name == "" ? " " : loadCombo.Name
       };
@@ -148,13 +149,21 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSALoadCombo dummyObject)
     {
       var newLines = ToSpeckleBase<GSALoadCombo>();
-
+      var typeName = dummyObject.GetType().Name;
       var loadCombos = new List<GSALoadCombo>();
 
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
       {
-        var combo = new GSALoadCombo() { GWACommand = p };
-        combo.ParseGWACommand();
+        var p = newLines[k];
+        var combo = new GSALoadCombo() { GWACommand = p, GSAId = k };
+        try
+        {
+          combo.ParseGWACommand();
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+        }
         loadCombos.Add(combo);
       }
 

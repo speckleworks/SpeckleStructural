@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralGSA.Test;
@@ -27,6 +29,8 @@ namespace SpeckleStructuralGSA.TestPrep
       {
         Console.WriteLine("Prepared reception test data for the blank refs rx design layer test");
       }
+      //Don't print any error related to blank references - they're expected
+      PrintAnyErrorMessages((TestAppUI)Initialiser.AppUI, new List<string> { "blank" });
 
       receiverTestPrep = new ReceiverTestPrep(TestDataDirectory);
       receiverTestPrep.SetupContext();
@@ -38,6 +42,7 @@ namespace SpeckleStructuralGSA.TestPrep
       {
         Console.WriteLine("Prepared reception test data for the rx design layer test");
       }
+      PrintAnyErrorMessages((TestAppUI)Initialiser.AppUI);
 
       var senderTestPrep = new SenderTestPrep(TestDataDirectory);
 
@@ -59,6 +64,7 @@ namespace SpeckleStructuralGSA.TestPrep
       {
         senderTestPrep.TearDownContext();
       }
+      PrintAnyErrorMessages((TestAppUI)Initialiser.AppUI);
 
       //Next the sender tests using a file with results already generated
       senderTestPrep.SetupContext(SenderTests.gsaFileNameWithResults);
@@ -94,9 +100,28 @@ namespace SpeckleStructuralGSA.TestPrep
       {
         senderTestPrep.TearDownContext();
       }
+      PrintAnyErrorMessages((TestAppUI)Initialiser.AppUI);
 
       Console.WriteLine("Press any key to exit ...");
       Console.ReadKey();
+    }
+
+    private static void PrintAnyErrorMessages(TestAppUI testAppUI, List<string> excludeWords = null)
+    {
+      if (testAppUI.Messages.Keys.Count > 0)
+      {
+        foreach (var k in testAppUI.Messages.Keys)
+        {
+          if (excludeWords == null || !excludeWords.Any(ew => k.ToLower().Contains(ew.ToLower())))
+          {
+            foreach (var d in testAppUI.Messages[k])
+            {
+              Console.WriteLine("Error: " + k + " - " + d);
+            }
+          }
+        }
+        testAppUI.Messages.Clear();
+      }
     }
   }
 }

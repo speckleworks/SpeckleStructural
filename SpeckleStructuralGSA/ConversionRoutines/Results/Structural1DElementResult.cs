@@ -50,15 +50,27 @@ namespace SpeckleStructuralGSA
                 ? "local" : "global", Initialiser.Settings.Result1DNumPosition);
 
               if (resultExport == null)
+              {
                 continue;
+              }
 
-              if (!entity.Value.Result.ContainsKey(loadCase))
-                entity.Value.Result[loadCase] = new Structural1DElementResult()
-                {
-                  TargetRef = Helper.GetApplicationId(typeof(GSA1DElement).GetGSAKeyword(), id),
-                  LoadCaseRef = loadCase,
-                  Value = new Dictionary<string, object>()
-                };
+              var newResult = new Structural1DElementResult()
+              {
+                TargetRef = Helper.GetApplicationId(typeof(GSA1DElement).GetGSAKeyword(), id),
+                LoadCaseRef = loadCase,
+                Value = new Dictionary<string, object>()
+              };
+
+              //The setter of entity.Value.Result won't accept a value if there are no keys (to avoid issues during merging), so
+              //setting a value here needs to be done with at least one key in it
+              if (entity.Value.Result == null)
+              {
+                entity.Value.Result = new Dictionary<string, object>() { { loadCase, newResult }};
+              }
+              else if (!entity.Value.Result.ContainsKey(loadCase))
+              {
+                entity.Value.Result[loadCase] = newResult;
+              }
 
               (entity.Value.Result[loadCase] as Structural1DElementResult).Value[kvp.Key] = resultExport;
             }

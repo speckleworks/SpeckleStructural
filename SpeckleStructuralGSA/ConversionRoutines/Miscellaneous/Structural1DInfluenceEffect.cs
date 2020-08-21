@@ -124,13 +124,16 @@ namespace SpeckleStructuralGSA
 
       var gwaCommands = new List<string>();
 
+      //This causes multiple lines to have the same application ID - might need a review
+      var sid = Helper.GenerateSID(infl);
+
       for (var i = 0; i < infl.Directions.Value.Count(); i++)
       {
         var ls = new List<string>
         {
           "SET_AT",
           index.ToString(),
-          keyword + ":" + Helper.GenerateSID(infl),
+          keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
           infl.Name == null || infl.Name == "" ? " " : infl.Name,
           infl.GSAEffectGroup.ToString(),
           elementRef.Value.ToString(),
@@ -166,16 +169,17 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA1DInfluenceEffect dummyObject)
     {
       var newLines = ToSpeckleBase<GSA1DInfluenceEffect>();
-
+      var typeName = dummyObject.GetType().Name;
       var e1Ds = Initialiser.GSASenderObjects.Get<GSA1DElement>();
 
       var inflsLock = new object();
       var infls = new List<GSA1DInfluenceEffect>();
 
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
       {
         try
         {
+          var p = newLines[k];
           var infl = new GSA1DInfluenceEffect() { GWACommand = p };
           infl.ParseGWACommand(e1Ds);
           lock (inflsLock)
@@ -183,7 +187,10 @@ namespace SpeckleStructuralGSA
             infls.Add(infl);
           }
         }
-        catch { }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+        }
       });
 
       Initialiser.GSASenderObjects.AddRange(infls);

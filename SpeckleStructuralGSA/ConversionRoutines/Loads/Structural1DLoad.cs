@@ -24,7 +24,7 @@ namespace SpeckleStructuralGSA
         return;
 
       var obj = new Structural1DLoad();
-
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       var pieces = this.GWACommand.ListSplit("\t");
 
       var counter = 0; // Skip identifier
@@ -191,8 +191,9 @@ namespace SpeckleStructuralGSA
 
         ls.Add("SET_AT");
         ls.Add(index.ToString());
-        ls.Add("LOAD_BEAM_UDL" + ":" + Helper.GenerateSID(load)); // TODO: Only writes to UDL load
-        ls.Add(load.Name == null || load.Name == "" ? " " : load.Name);
+        var sid = Helper.GenerateSID(load);
+        ls.Add("LOAD_BEAM_UDL.2" + (string.IsNullOrEmpty(sid) ? "" : ":" + sid)); // TODO: Only writes to UDL load
+        ls.Add(load.Name == null || load.Name == "" ? " " : load.Name + (load.Name.All(char.IsDigit) ? " " : ""));
         // TODO: This is a hack.
         ls.Add(string.Join(" ", elementRefs.Select(x => x.ToString()).Concat(groupRefs.Select(x => "G" + x.ToString())).OrderBy(e => e)));
         ls.Add(loadCaseRef.ToString());
@@ -208,7 +209,7 @@ namespace SpeckleStructuralGSA
     }
   }
 
-  [GSAObject("LOAD_BEAM", new string[] { "EL.3" }, "loads", true, false, new Type[] { typeof(GSA1DElement) }, new Type[] { typeof(GSA1DElement), typeof(GSA1DElementPolyline) })]
+  [GSAObject("LOAD_BEAM", new string[] { "EL.4" }, "loads", true, false, new Type[] { typeof(GSA1DElement) }, new Type[] { typeof(GSA1DElement), typeof(GSA1DElementPolyline) })]
   public class GSA1DLoadAnalysisLayer : GSA1DLoadBase, IGSASpeckleContainer
   {
     public void ParseGWACommand(List<GSA1DElement> elements)
@@ -222,7 +223,7 @@ namespace SpeckleStructuralGSA
     }
   }
 
-  [GSAObject("LOAD_BEAM", new string[] { "MEMB.7" }, "loads", false, true, new Type[] { typeof(GSA1DMember) }, new Type[] { typeof(GSA1DMember) })]
+  [GSAObject("LOAD_BEAM", new string[] { "MEMB.8" }, "loads", false, true, new Type[] { typeof(GSA1DMember) }, new Type[] { typeof(GSA1DMember) })]
   public class GSA1DLoadDesignLayer : GSA1DLoadBase, IGSASpeckleContainer
   {
     public void ParseGWACommand(List<GSA1DMember> members)
@@ -248,18 +249,26 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA1DLoadAnalysisLayer dummyObject)
     {
       var newLines = ToSpeckleBase<GSA1DLoadAnalysisLayer>();
-
+      var typeName = dummyObject.GetType().Name;
       var loads = new List<GSA1DLoadAnalysisLayer>();
       var elements = Initialiser.GSASenderObjects.Get<GSA1DElement>();
 
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
       {
+        var p = newLines[k];
         var loadSubList = new List<GSA1DLoadAnalysisLayer>();
 
         // Placeholder load object to get list of elements and load values
         // Need to transform to axis so one load definition may be transformed to many
-        var initLoad = new GSA1DLoadAnalysisLayer() { GWACommand = p };
-        initLoad.ParseGWACommand(elements);
+        var initLoad = new GSA1DLoadAnalysisLayer() { GWACommand = p, GSAId = k };
+        try
+        {
+          initLoad.ParseGWACommand(elements);
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+        }
 
         // Create load for each element applied
         foreach (string nRef in initLoad.Value.ElementRefs)
@@ -270,6 +279,7 @@ namespace SpeckleStructuralGSA
             SubGWACommand = new List<string>(initLoad.SubGWACommand)
           };
           load.Value.Name = initLoad.Value.Name;
+          load.Value.ApplicationId = initLoad.Value.ApplicationId;
           load.Value.LoadCaseRef = initLoad.Value.LoadCaseRef;
 
           // Transform load to defined axis
@@ -323,19 +333,27 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA1DLoadDesignLayer dummyObject)
     {
       var newLines = ToSpeckleBase<GSA1DLoadDesignLayer>();
-
+      var typeName = dummyObject.GetType().Name;
       var loads = new List<GSA1DLoadDesignLayer>();
       //var members = Initialiser.GSASenderObjects.Get<GSA1DMember)].Cast<GSA1DMember>().ToList();
       var members = Initialiser.GSASenderObjects.Get<GSA1DMember>();
 
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
       {
+        var p = newLines[k];
         var loadSubList = new List<GSA1DLoadDesignLayer>();
 
         // Placeholder load object to get list of elements and load values
         // Need to transform to axis so one load definition may be transformed to many
-        var initLoad = new GSA1DLoadDesignLayer() { GWACommand = p };
-        initLoad.ParseGWACommand(members);
+        var initLoad = new GSA1DLoadDesignLayer() { GWACommand = p, GSAId = k };
+        try
+        {
+          initLoad.ParseGWACommand(members);
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+        }
 
         // Create load for each element applied
         foreach (string nRef in initLoad.Value.ElementRefs)
@@ -346,6 +364,7 @@ namespace SpeckleStructuralGSA
             SubGWACommand = new List<string>(initLoad.SubGWACommand)
           };
           load.Value.Name = initLoad.Value.Name;
+          load.Value.ApplicationId = initLoad.Value.ApplicationId;
           load.Value.LoadCaseRef = initLoad.Value.LoadCaseRef;
 
           // Transform load to defined axis

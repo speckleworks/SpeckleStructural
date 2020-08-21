@@ -7,7 +7,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("LOAD_GRID_POINT.2", new string[] { "NODE.2", "AXIS.1" }, "loads", true, true, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSAGridSurface), typeof(GSAStorey), typeof(GSALoadCase), typeof(GSANode) })]
+  [GSAObject("LOAD_GRID_POINT.2", new string[] { "NODE.3", "AXIS.1" }, "loads", true, true, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSAGridSurface), typeof(GSAStorey), typeof(GSALoadCase), typeof(GSANode) })]
   public class GSA0DLoadPoint : IGSASpeckleContainer
   {
     public int Axis; // Store this temporarily to generate other loads
@@ -23,7 +23,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural0DLoadPoint();
       var pieces = this.GWACommand.ListSplit("\t");
-
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       var counter = 1; // Skip identifier
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
 
@@ -151,8 +151,9 @@ namespace SpeckleStructuralGSA
 
         ls.Add("SET_AT");
         ls.Add(index.ToString());
-        ls.Add(keyword + ":" + Helper.GenerateSID(load));
-        ls.Add(load.Name == null || load.Name == "" ? " " : load.Name);
+        var sid = Helper.GenerateSID(load);
+        ls.Add(keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid));
+        ls.Add(load.Name == null || load.Name == "" ? " " : load.Name + (load.Name.All(char.IsDigit) ? " " : ""));
         ls.Add(gridSurfaceIndex.ToString()); // Grid Surface
         ls.Add(x.ToString()); // X coordinate
         ls.Add(y.ToString()); // Y coordinate
@@ -183,15 +184,23 @@ namespace SpeckleStructuralGSA
 
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
-
-      foreach (var p in newPoints.Values)
+      var typeName = dummyObject.GetType().Name;
+      foreach (var k in newPoints.Keys)
       {
+        var p = newPoints[k];
         var loadSubList = new List<GSA0DLoadPoint>();
 
         // Placeholder load object to get list of nodes and load values
         // Need to transform to axis so one load definition may be transformed to many
-        var initLoad = new GSA0DLoadPoint() { GWACommand = p };
-        initLoad.ParseGWACommand();
+        var initLoad = new GSA0DLoadPoint() { GWACommand = p, GSAId = k };
+        try
+        {
+          initLoad.ParseGWACommand();
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+        }
 
         // Raise node flag to make sure it gets sent
         foreach (var n in nodes.Where(n => initLoad.Value.NodeRefs.Contains(n.Value.ApplicationId)))

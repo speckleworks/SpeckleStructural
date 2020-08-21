@@ -50,8 +50,8 @@
     <Reference Include="geometry3Sharp, Version=1.0.324.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\geometry3Sharp.1.0.324\lib\net45\geometry3Sharp.dll</HintPath>
     </Reference>
-    <Reference Include="Interop.Gsa_10_0">
-      <HintPath>..\SpeckleStructuralGSA\Interop.Gsa_10_0.dll</HintPath>
+    <Reference Include="Interop.Gsa_10_1">
+      <HintPath>..\Resource\Interop.Gsa_10_1.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="MathNet.Numerics, Version=4.9.1.0, Culture=neutral, processorArchitecture=MSIL">
@@ -97,12 +97,11 @@
       <HintPath>..\packages\SpeckleCoreGeometry.1.2.8\lib\net461\SpeckleCoreGeometryClasses.dll</HintPath>
     </Reference>
     <Reference Include="SpeckleGSAInterfaces">
-      <HintPath>..\SpeckleStructuralGSA\SpeckleGSAInterfaces.dll</HintPath>
-      <Private>True</Private>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>..\Resource\SpeckleGSAInterfaces.dll</HintPath>
     </Reference>
-    <Reference Include="SpeckleGSAProxy">
-      <HintPath>.\SpeckleGSAProxy.dll</HintPath>
+    <Reference Include="SpeckleGSAProxy, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resource\SpeckleGSAProxy.dll</HintPath>
     </Reference>
     <Reference Include="SpeckleUtil, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -153,16 +152,16 @@
     <Compile Include="Other\Enums.cs" />
     <Compile Include="Other\GwaRecord.cs" />
     <Compile Include="Other\Helper.cs" />
+    <Compile Include="Other\TestAppUI.cs" />
     <Compile Include="Tests\FileComparison.cs" />
-    <Compile Include="Tests\GeometryTests.cs" />
-    <Compile Include="Tests\MeshTests.cs" />
     <Compile Include="Tests\MergingTests.cs" />
     <Compile Include="Base\ProcessorBase.cs" />
     <Compile Include="Other\ReceiverProcessor.cs" />
     <Compile Include="Other\Result.cs" />
     <Compile Include="Other\SenderProcessor.cs" />
+    <Compile Include="Tests\MeshTests.cs" />
+    <Compile Include="Tests\ModelValidationTests.cs" />
     <Compile Include="Tests\ReceiverTests.cs" />
-    <Compile Include="Tests\ScalingTests.cs" />
     <Compile Include="Tests\SenderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Other\Settings.cs" />
@@ -171,6 +170,17 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="TestData\lfsaIEYkR.json" />
+    <None Include="TestData\nagwSLyPE.json" />
+    <None Include="TestData\NaJD7d5kq.json" />
+    <None Include="TestData\P40rt5c8I.json" />
+    <None Include="TestData\TxSpeckleObjectsDesignLayer.json" />
+    <None Include="TestData\TxSpeckleObjectsDesignLayerBeforeAnalysis.json" />
+    <None Include="TestData\TxSpeckleObjectsEmbedded.json" />
+    <None Include="TestData\TxSpeckleObjectsNotEmbedded.json" />
+    <None Include="TestData\TxSpeckleObjectsResultsOnly.json" />
+    <None Include="TestData\U7ntEJkzdZ.json" />
+    <None Include="TestData\UNg87ieJG.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SpeckleStructuralClasses\SpeckleStructuralClasses.csproj">
