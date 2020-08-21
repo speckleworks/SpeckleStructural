@@ -211,8 +211,13 @@ namespace SpeckleStructuralGSA
       var typeName = dummyObject.GetType().Name;
       var loads = new List<GSA2DLoadAnalysisLayer>();
       var elements = Initialiser.GSASenderObjects.Get<GSA2DElement>();
+      var loadLock = new object();
 
+#if DEBUG
       foreach (var k in newLines.Keys)
+#else
+      Parallel.ForEach(newLines.Keys, k =>
+#endif
       {
         var p = newLines[k];
         var loadSubList = new List<GSA2DLoadAnalysisLayer>();
@@ -229,52 +234,14 @@ namespace SpeckleStructuralGSA
           Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
         }
 
-        // Create load for each element applied
-        foreach (string nRef in initLoad.Value.ElementRefs)
+        lock (loadLock)
         {
-          var load = new GSA2DLoadAnalysisLayer
-          {
-            GWACommand = initLoad.GWACommand,
-            SubGWACommand = new List<string>(initLoad.SubGWACommand)
-          };
-          load.Value.Name = initLoad.Value.Name;
-          load.Value.ApplicationId = initLoad.Value.ApplicationId;
-          load.Value.LoadCaseRef = initLoad.Value.LoadCaseRef;
-
-          // Transform load to defined axis
-          var elem = elements.Where(e => e.Value.ApplicationId == nRef).First();
-          StructuralAxis loadAxis = null;
-          try
-          { 
-            loadAxis = Helper.Parse2DAxis(elem.Value.Vertices.ToArray(), 0, load.Axis != 0); // Assumes if not global, local
-          }
-          catch
-          {
-            Initialiser.AppUI.Message("Generating axis from coordinates for element ref for 2D load", nRef);
-          }
-          load.Value.Loading = initLoad.Value.Loading;
-
-          // Perform projection
-          if (load.Projected)
-          {
-            load.Value.Loading.Value[0] = 0;
-            load.Value.Loading.Value[1] = 0;
-          }
-          load.Value.Loading.TransformOntoAxis(loadAxis);
-
-          // If the loading already exists, add element ref to list
-          var match = loadSubList.Count() > 0 ? loadSubList.Where(l => l.Value.Loading.Equals(load.Value.Loading)).First() : null;
-          if (match != null)
-            match.Value.ElementRefs.Add(nRef);
-          else
-          {
-            load.Value.ElementRefs = new List<string>() { nRef };
-            loadSubList.Add(load);
-          }
+          loads.Add(initLoad);
         }
-
-        loads.AddRange(loadSubList);
       }
+#if !DEBUG
+      );
+#endif
 
       Initialiser.GSASenderObjects.AddRange(loads);
 
@@ -287,8 +254,13 @@ namespace SpeckleStructuralGSA
       var typeName = dummyObject.GetType().Name;
       var loads = new List<GSA2DLoadDesignLayer>();
       var members = Initialiser.GSASenderObjects.Get<GSA2DMember>();
+      var loadLock = new object();
 
+#if DEBUG
       foreach (var k in newLines.Keys)
+#else
+      Parallel.ForEach(newLines.Keys, k =>
+#endif
       {
         var p = newLines[k];
         var loadSubList = new List<GSA2DLoadDesignLayer>();
@@ -305,54 +277,14 @@ namespace SpeckleStructuralGSA
           Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
         }
 
-        // Create load for each element applied
-        foreach (string nRef in initLoad.Value.ElementRefs)
+        lock (loadLock)
         {
-          var load = new GSA2DLoadDesignLayer
-          {
-            GWACommand = initLoad.GWACommand,
-            SubGWACommand = new List<string>(initLoad.SubGWACommand),
-          };
-          load.Value.Name = initLoad.Value.Name;
-          load.Value.ApplicationId = initLoad.Value.ApplicationId;
-          load.Value.LoadCaseRef = initLoad.Value.LoadCaseRef;
-
-          // Transform load to defined axis
-          var memb = members.Where(e => e.Value.ApplicationId == nRef).First();
-          StructuralAxis loadAxis = null;
-          try
-          {
-            loadAxis = Helper.Parse2DAxis(memb.Value.Vertices.ToArray(), 0, load.Axis != 0); // Assumes if not global, local
-          }
-          catch
-          {
-            Initialiser.AppUI.Message("Generating axis from coordinates for 2D laod", loadAxis.ApplicationId);
-          }
-          load.Value.Loading = initLoad.Value.Loading;
-          load.Value.Loading.TransformOntoAxis(loadAxis);
-
-          // Perform projection
-          if (load.Projected)
-          {
-            load.Value.Loading.Value[0] = 0;
-            load.Value.Loading.Value[1] = 0;
-          }
-          load.Value.Loading.TransformOntoAxis(loadAxis);
-
-          // If the loading already exists, add element ref to list
-          var match = loadSubList.Count() > 0 ? loadSubList.Where(l => (l.Value.Loading.Value as List<double>).SequenceEqual(load.Value.Loading.Value as List<double>)).First() : null;
-          if (match != null)
-            match.Value.ElementRefs.Add(nRef);
-          else
-          {
-            load.Value.ElementRefs = new List<string>() { nRef };
-            loadSubList.Add(load);
-          }
+          loads.Add(initLoad);
         }
-
-
-        loads.AddRange(loadSubList);
       }
+ #if !DEBUG
+      );
+#endif
 
       Initialiser.GSASenderObjects.AddRange(loads);
 
