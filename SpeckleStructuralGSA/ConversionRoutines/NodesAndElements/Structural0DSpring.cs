@@ -95,10 +95,11 @@ namespace SpeckleStructuralGSA
         }
       }
 
+      var sid = Helper.GenerateSID(spring);
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + Helper.GenerateSID(spring),
+        keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
         index.ToString(),
         spring.Name == null || spring.Name == "" ? " " : spring.Name,
         "NO_RGB",

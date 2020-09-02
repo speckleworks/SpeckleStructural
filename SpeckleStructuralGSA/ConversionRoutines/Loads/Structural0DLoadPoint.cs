@@ -23,7 +23,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural0DLoadPoint();
       var pieces = this.GWACommand.ListSplit("\t");
-
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       var counter = 1; // Skip identifier
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
 
@@ -151,8 +151,9 @@ namespace SpeckleStructuralGSA
 
         ls.Add("SET_AT");
         ls.Add(index.ToString());
-        ls.Add(keyword + ":" + Helper.GenerateSID(load));
-        ls.Add(load.Name == null || load.Name == "" ? " " : load.Name);
+        var sid = Helper.GenerateSID(load);
+        ls.Add(keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid));
+        ls.Add(load.Name == null || load.Name == "" ? " " : load.Name + (load.Name.All(char.IsDigit) ? " " : ""));
         ls.Add(gridSurfaceIndex.ToString()); // Grid Surface
         ls.Add(x.ToString()); // X coordinate
         ls.Add(y.ToString()); // Y coordinate
@@ -191,7 +192,7 @@ namespace SpeckleStructuralGSA
 
         // Placeholder load object to get list of nodes and load values
         // Need to transform to axis so one load definition may be transformed to many
-        var initLoad = new GSA0DLoadPoint() { GWACommand = p };
+        var initLoad = new GSA0DLoadPoint() { GWACommand = p, GSAId = k };
         try
         {
           initLoad.ParseGWACommand();

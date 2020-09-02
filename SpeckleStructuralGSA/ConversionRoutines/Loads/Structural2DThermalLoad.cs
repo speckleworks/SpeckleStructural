@@ -144,11 +144,12 @@ namespace SpeckleStructuralGSA
 
       var loadingName = string.IsNullOrEmpty(load.Name) ? " " : load.Name;
 
+      var sid = Helper.GenerateSID(load);
       var ls = new List<string>
         {
           "SET_AT",
           index.ToString(),
-          keyword + ":" + Helper.GenerateSID(load),
+          keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
           loadingName, // Name
           targetString, //Elements
 					loadCaseRef.ToString(),

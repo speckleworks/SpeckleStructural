@@ -122,11 +122,12 @@ namespace SpeckleStructuralGSA
 
       var stageName = string.IsNullOrEmpty(stageDef.Name) ? " " : stageDef.Name;
 
+      var sid = Helper.GenerateSID(stageDef);
       var ls = new List<string>
         {
           // Set ANAL_STAGE
           "SET",
-          keyword + ":" + Helper.GenerateSID(stageDef),
+          keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
           index.ToString(),
           stageName, // Name
           "NO_RGB", // Colour

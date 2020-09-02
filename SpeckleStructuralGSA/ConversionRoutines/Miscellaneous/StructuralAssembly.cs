@@ -167,10 +167,11 @@ namespace SpeckleStructuralGSA
         ? new SpecklePoint(0, 0, 0)
         : assembly.OrientationPoint;
 
+      var sid = Helper.GenerateSID(assembly);
       var ls = new List<string>
         {
           "SET",
-          keyword + ":" + Helper.GenerateSID(assembly),
+          keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
           index.ToString(),
           string.IsNullOrEmpty(assembly.Name) ? "" : assembly.Name,
           // TODO: Once assemblies can properly target members, this should target members explicitly
@@ -243,7 +244,7 @@ namespace SpeckleStructuralGSA
         try
         {
           var p = newLines[k];
-          var assembly = new GSAAssembly() { GWACommand = p };
+          var assembly = new GSAAssembly() { GWACommand = p, GSAId = k };
           //Pass in ALL the nodes and members - the Parse_ method will search through them
           assembly.ParseGWACommand(nodes, e1Ds, e2Ds, m1Ds, m2Ds);
 

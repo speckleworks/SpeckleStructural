@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Interop.Gsa_10_1;
 using Moq;
 using Newtonsoft.Json;
@@ -74,10 +75,35 @@ namespace SpeckleStructuralGSA.Test
       return speckleObjects;
     }
 
+    protected string RemoveKeywordVersion(string js)
+    {
+      if (!string.IsNullOrEmpty(js))
+      {
+        var appIdIndex = js.IndexOf("gsa/");
+        if (appIdIndex >= 0)
+        {
+          var dotIndex = js.IndexOf(".", appIdIndex);
+          var underscoreIndex = js.IndexOf("_", dotIndex);
+          js = js.Substring(0, dotIndex) + js.Substring(underscoreIndex);
+        }
+      }
+      
+      //return (origAppId != null && origAppId.Length > 0) ? Regex.Replace(origAppId, @"(?<=\.)(.*)(?=_)", "") : "";
+      return js;
+    }
+
     protected bool JsonCompareAreEqual(string j1, string j2)
     {
       try
       {
+        if (j1.Contains("gsa/"))
+        {
+          j1 = RemoveKeywordVersion(j1);
+        }
+        if (j2.Contains("gsa/"))
+        {
+          j2 = RemoveKeywordVersion(j2);
+        }
         var jt1 = JToken.Parse(j1);
         var jt2 = JToken.Parse(j2);
 

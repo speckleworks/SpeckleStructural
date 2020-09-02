@@ -156,16 +156,17 @@ namespace SpeckleStructuralGSA.Test
       );
 
       gsaInterfacer.Close();
-
+      Assert.IsFalse(actual.Keys.Any(a => !a.Type.ToLower().EndsWith("result") && string.IsNullOrEmpty(a.ApplicationId)));
       Assert.AreEqual(actual.Count(), matched.Count());
       Assert.IsEmpty(unmatching, unmatching.Count().ToString() + " unmatched objects");
     }
 
     [Ignore("There is an equivalent test in SpeckleGSA repo, so this one might be removed")]
     [TestCase(GSATargetLayer.Design, false, false, "sjc.gwb")]
+    //[TestCase(GSATargetLayer.Analysis, false, false, @"C:\Users\Nic.Burgers\OneDrive - Arup\Issues\Jason Chen\db\TestModel.gwb")]
     public void TransmissionTestForDebug(GSATargetLayer layer, bool resultsOnly, bool embedResults, string gsaFileName)
     {
-      gsaInterfacer.OpenFile(Helper.ResolveFullPath(gsaFileName, TestDataDirectory));
+      gsaInterfacer.OpenFile(gsaFileName.Contains("\\") ? gsaFileName : Helper.ResolveFullPath(gsaFileName, TestDataDirectory));
 
       var actualObjects = ModelToSpeckleObjects(layer, resultsOnly, embedResults, loadCases, resultTypes);
       Assert.IsNotNull(actualObjects);

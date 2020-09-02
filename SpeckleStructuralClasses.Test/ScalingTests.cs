@@ -7,7 +7,7 @@ using NUnit.Framework;
 using SpeckleCoreGeometryClasses;
 using SpeckleStructuralClasses;
 
-namespace SpeckleStructuralGSA.Test
+namespace SpeckleStructuralClasses.Test
 {
   [TestFixture]
   public class ScalingTests

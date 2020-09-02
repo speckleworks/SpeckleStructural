@@ -172,10 +172,11 @@ namespace SpeckleStructuralGSA
         }
       }
 
+      var sid = Helper.GenerateSID(element);
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + Helper.GenerateSID(element),
+        keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
         index.ToString(),
         element.Name == null || element.Name == "" ? " " : element.Name,
         "NO_RGB",
@@ -361,7 +362,12 @@ namespace SpeckleStructuralGSA
       else
         obj.ZAxis = Helper.Parse1DAxis(obj.Value.ToArray(), rotationAngle).Normal as StructuralVectorThree;
 
-      obj.GSAMeshSize = Convert.ToDouble(pieces[counter++]);
+      var meshSize = Convert.ToDouble(pieces[counter++]);
+      // since this is a nullable GSA-specific property(and therefore needs a review), only set if not default
+      if (meshSize > 0)
+      {
+        obj.GSAMeshSize = Convert.ToDouble(pieces[counter++]);
+      }
 
       counter++; // is_intersector
       var analysisType = pieces[counter++]; // analysis_type
@@ -382,14 +388,14 @@ namespace SpeckleStructuralGSA
       counter++; // time[] 3
       counter++; // time[] 4
 
-      // dummy
+      // dummy - since this is a nullable GSA-specific property (and therefore needs a review), only set if true
       if (pieces[counter++].ToLower() == "dummy")
+      {
         obj.GSADummy = true;
-      else
-        obj.GSADummy = false;
+      }
 
       // end releases
-      List<StructuralVectorBoolSix> releases = new List<StructuralVectorBoolSix>();
+      var releases = new List<StructuralVectorBoolSix>();
       var endReleases = new List<StructuralVectorBoolSix>();
       if (counter < pieces.Length)
       {
@@ -469,10 +475,11 @@ namespace SpeckleStructuralGSA
         }
       }
 
+      var sid = Helper.GenerateSID(member);
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + Helper.GenerateSID(member),
+        keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
         index.ToString(),
         member.Name == null || member.Name == "" ? " " : member.Name,
         "NO_RGB"

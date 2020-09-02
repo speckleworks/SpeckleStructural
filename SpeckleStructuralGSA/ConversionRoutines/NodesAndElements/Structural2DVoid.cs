@@ -80,10 +80,11 @@ namespace SpeckleStructuralGSA
 
       var index = Initialiser.Cache.ResolveIndex(keyword, v.ApplicationId);
 
+      var sid = Helper.GenerateSID(v);
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + Helper.GenerateSID(v),
+        keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
         index.ToString(),
         v.Name == null || v.Name == "" ? " " : v.Name,
         v.Colors == null || v.Colors.Count() < 1 ? "NO_RGB" : v.Colors[0].ArgbToHexColor().ToString(),

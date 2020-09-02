@@ -57,10 +57,13 @@ namespace SpeckleStructuralGSA
       //The width parameter is intentionally not being used here as the meaning doesn't map to the y coordinate parameter of the ASSEMBLY keyword
       //It is therefore to be ignored here for GSA purposes.
 
+      var sid = Helper.GenerateSID(vehicle);
+      //the sid shouldn't be blank because the applicationId never being negative due to the test earlier, but the check below
+      //has been included for consistency with other conversion code
       var ls = new List<string>
         {
           "SET",
-          keyword + ":" + Helper.GenerateSID(vehicle),
+          keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),  
           index.ToString(),
           string.IsNullOrEmpty(vehicle.Name) ? "" : vehicle.Name,
           ((vehicle.Width == null) ? 0 : vehicle.Width).ToString(),

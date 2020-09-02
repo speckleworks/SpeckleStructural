@@ -1273,41 +1273,62 @@ namespace SpeckleStructuralGSA
       {
         var fixities = new bool[6];
 
-        if (code.Contains("xxx"))
+        var codeRemaining = code;
+        int prevLength = code.Length;
+        do
         {
-          fixities[0] = true;
-          fixities[3] = true;
-        }
-        else if (code.Contains("xx"))
-        {
-          fixities[3] = true;
-        }
-        else if (code.Contains("x"))
-          fixities[0] = true;
+          prevLength = codeRemaining.Length;
+          if (codeRemaining.Contains("xxx"))
+          {
+            fixities[0] = true;
+            fixities[3] = true;
+            codeRemaining = codeRemaining.Replace("xxx", "");
+          }
+          else if (codeRemaining.Contains("xx"))
+          {
+            fixities[3] = true;
+            codeRemaining = codeRemaining.Replace("xx", "");
+          }
+          else if (codeRemaining.Contains("x"))
+          {
+            fixities[0] = true;
+            codeRemaining = codeRemaining.Replace("x", "");
+          }
 
-        if (code.Contains("yyy"))
-        {
-          fixities[1] = true;
-          fixities[4] = true;
-        }
-        else if (code.Contains("yy"))
-        {
-          fixities[4] = true;
-        }
-        else if (code.Contains("y"))
-          fixities[1] = true;
+          if (codeRemaining.Contains("yyy"))
+          {
+            fixities[1] = true;
+            fixities[4] = true;
+            codeRemaining = codeRemaining.Replace("yyy", "");
+          }
+          else if (codeRemaining.Contains("yy"))
+          {
+            fixities[4] = true;
+            codeRemaining = codeRemaining.Replace("yy", "");
+          }
+          else if (codeRemaining.Contains("y"))
+          {
+            fixities[1] = true;
+            codeRemaining = codeRemaining.Replace("y", "");
+          }
 
-        if (code.Contains("zzz"))
-        {
-          fixities[2] = true;
-          fixities[5] = true;
-        }
-        else if (code.Contains("zz"))
-        {
-          fixities[5] = true;
-        }
-        else if (code.Contains("z"))
-          fixities[2] = true;
+          if (codeRemaining.Contains("zzz"))
+          {
+            fixities[2] = true;
+            fixities[5] = true;
+            codeRemaining = codeRemaining.Replace("zzz", "");
+          }
+          else if (codeRemaining.Contains("zz"))
+          {
+            fixities[5] = true;
+            codeRemaining = codeRemaining.Replace("zz", "");
+          }
+          else if (codeRemaining.Contains("z"))
+          {
+            fixities[2] = true;
+            codeRemaining = codeRemaining.Replace("z", "");
+          }
+        } while (codeRemaining.Length > 0 && (codeRemaining.Length < prevLength));
 
         return new StructuralVectorBoolSix(fixities);
       }
