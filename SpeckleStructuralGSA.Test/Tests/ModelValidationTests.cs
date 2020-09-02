@@ -30,7 +30,7 @@ namespace SpeckleStructuralGSA.Test
     }
 
     [Test]
-    //[TestCase("NB")]
+    [TestCase("NB")]
     [TestCase("Simple")]
     public void ReceiverGsaValidation(string subdir)
     {
@@ -59,8 +59,8 @@ namespace SpeckleStructuralGSA.Test
 
       var receiverProcessor = new ReceiverProcessor(dir, gsaInterfacer, gsaCache);
 
-      //Run conversion to GWA keywords
-      // Note that this is one model split over several json files
+      // Run conversion to GWA keywords
+      // Note that it can be one model split over several json files
       receiverProcessor.JsonSpeckleStreamsToGwaRecords(Directory.GetFiles(dir,"*.json").Select(Path.GetFileName), out var gwaRecordsFromFile, GSATargetLayer.Design);
 
       //Run conversion to GWA keywords
@@ -76,9 +76,6 @@ namespace SpeckleStructuralGSA.Test
       keywords = keywords.Where(k => k.Length > 0).Distinct().ToList();
 
       Initialiser.Interface.Sync(); // send GWA to GSA
-
-      // When saved and opened in VS code there are no duplicated entries for MAT_CONCRETE.17
-      // Initialiser.Interface.SaveAs(@"C:\Users\Hugh.Groves\Desktop\fromTests.gwa");
 
       var retrievedGwa = Initialiser.Interface.GetGwaData(keywords, true); // read GWA from GSA
 
@@ -106,13 +103,13 @@ namespace SpeckleStructuralGSA.Test
 
       Initialiser.Interface.Close();
 
-      //var unmatching = new Dictionary<string, (List<string> retrieved, List<string> fromFile)>();
       var unmatching = new Dictionary<string, UnmatchedData>();
       foreach (var keyword in fromFileDict.Keys)
       {
         if (!retrievedDict.ContainsKey(keyword))
         {
-          unmatching.Add(keyword, new UnmatchedData());
+          unmatching[keyword] = new UnmatchedData();
+          unmatching[keyword].FromFile = fromFileDict[keyword];
         }
         else if (retrievedDict[keyword].Count != fromFileDict[keyword].Count)
         {
