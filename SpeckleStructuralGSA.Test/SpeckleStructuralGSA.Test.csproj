@@ -170,17 +170,18 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="TestData\lfsaIEYkR.json" />
+    <None Include="TestData\Simple\gMu-Xgpc.json" />
+    <None Include="TestData\NB\lfsaIEYkR.json" />
     <None Include="TestData\nagwSLyPE.json" />
-    <None Include="TestData\NaJD7d5kq.json" />
+    <None Include="TestData\NB\NaJD7d5kq.json" />
     <None Include="TestData\P40rt5c8I.json" />
     <None Include="TestData\TxSpeckleObjectsDesignLayer.json" />
     <None Include="TestData\TxSpeckleObjectsDesignLayerBeforeAnalysis.json" />
     <None Include="TestData\TxSpeckleObjectsEmbedded.json" />
     <None Include="TestData\TxSpeckleObjectsNotEmbedded.json" />
     <None Include="TestData\TxSpeckleObjectsResultsOnly.json" />
-    <None Include="TestData\U7ntEJkzdZ.json" />
-    <None Include="TestData\UNg87ieJG.json" />
+    <None Include="TestData\NB\U7ntEJkzdZ.json" />
+    <None Include="TestData\NB\UNg87ieJG.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SpeckleStructuralClasses\SpeckleStructuralClasses.csproj">

@@ -61,8 +61,8 @@ namespace SpeckleStructuralGSA.Test
       RunReceiverTest(savedJsonFileNames, expectedGwaPerIdsFileName, layer);
     }
 
-    [Ignore("Just used for debugging at this stage, will be finished in the future as a test")]
-    [TestCase(GSATargetLayer.Design, "58T0dgF0P.json")]
+    //[Ignore("Just used for debugging at this stage, will be finished in the future as a test")]
+    [TestCase(GSATargetLayer.Design, "gMu-Xgpc.json")]
     //[TestCase(GSATargetLayer.Analysis, "S5pNxjmUH.json")]
     public void ReceiverTestForDebug(GSATargetLayer layer, string fileName)
     {

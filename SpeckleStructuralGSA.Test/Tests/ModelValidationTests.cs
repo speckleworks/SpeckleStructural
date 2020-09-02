@@ -8,6 +8,7 @@ using NUnit.Framework;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleGSAProxy;
+using System.IO;
 
 namespace SpeckleStructuralGSA.Test
 {
@@ -29,7 +30,9 @@ namespace SpeckleStructuralGSA.Test
     }
 
     [Test]
-    public void ReceiverGsaValidation()
+    //[TestCase("NB")]
+    [TestCase("Simple")]
+    public void ReceiverGsaValidation(string subdir)
     {
       // Takes a saved Speckle stream with structural objects
       // converts to GWA and sends to GSA
@@ -47,11 +50,18 @@ namespace SpeckleStructuralGSA.Test
       Initialiser.AppUI = new SpeckleAppUI();
       gsaInterfacer.NewFile(false);
 
-      var receiverProcessor = new ReceiverProcessor(TestDataDirectory, gsaInterfacer, gsaCache);
+      var dir = TestDataDirectory;
+      if (subdir != String.Empty)
+      {
+        dir = Path.Combine(TestDataDirectory, subdir);
+        dir = dir + @"\"; // TestDataDirectory setup unconvetionally with trailing seperator - follow suit
+      }
+
+      var receiverProcessor = new ReceiverProcessor(dir, gsaInterfacer, gsaCache);
 
       //Run conversion to GWA keywords
       // Note that this is one model split over several json files
-      receiverProcessor.JsonSpeckleStreamsToGwaRecords(ReceiverTests.savedJsonFileNames, out var gwaRecordsFromFile, GSATargetLayer.Design);
+      receiverProcessor.JsonSpeckleStreamsToGwaRecords(Directory.GetFiles(dir,"*.json").Select(Path.GetFileName), out var gwaRecordsFromFile, GSATargetLayer.Design);
 
       //Run conversion to GWA keywords
       Assert.IsNotNull(gwaRecordsFromFile);
@@ -104,8 +114,9 @@ namespace SpeckleStructuralGSA.Test
         {
           unmatching.Add(keyword, new UnmatchedData());
         }
-        if (retrievedDict[keyword].Count != fromFileDict[keyword].Count)
+        else if (retrievedDict[keyword].Count != fromFileDict[keyword].Count)
         {
+          unmatching[keyword] = new UnmatchedData();
           unmatching[keyword].Retrieved = (retrievedDict.ContainsKey(keyword)) ? retrievedDict[keyword] : null;
           unmatching[keyword].FromFile = fromFileDict[keyword];
         }
