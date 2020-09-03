@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
@@ -282,7 +283,7 @@ namespace SpeckleStructuralGSA
           loads.Add(initLoad);
         }
       }
- #if !DEBUG
+#if !DEBUG
       );
 #endif
 
