@@ -10,7 +10,7 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   //TO DO: check why everything except GSA1DElement is needed as read prerequisites 
-  [GSAObject("MEMB.8", new string[] { }, "elements", true, false, new Type[] { typeof(GSA1DElement), typeof(GSA1DLoadAnalysisLayer), typeof(GSA1DElementResult), typeof(GSAAssembly), typeof(GSAConstructionStage), typeof(GSA1DInfluenceEffect) }, new Type[] { typeof(GSA1DElement) })]
+  [GSAObject("MEMB.8", new string[] { }, "elements", true, true, new Type[] { typeof(GSA1DElement), typeof(GSA1DLoadAnalysisLayer), typeof(GSA1DElementResult), typeof(GSAAssembly), typeof(GSAConstructionStage), typeof(GSA1DInfluenceEffect) }, new Type[] { typeof(GSA1DElement) })]
   public class GSA1DElementPolyline : IGSASpeckleContainer
   {
     public int GSAId { get; set; }
