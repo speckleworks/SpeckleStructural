@@ -100,7 +100,7 @@ namespace SpeckleStructuralGSA.Test
       byte[] buffer;
       //Directory should have a trailing slash
      
-      var fileStream = new FileStream(directory + testDataFileName, FileMode.Open, FileAccess.Read);
+      var fileStream = new FileStream(Path.Combine(directory, testDataFileName), FileMode.Open, FileAccess.Read);
       try
       {
         var length = (int)fileStream.Length;  // get file length
@@ -121,13 +121,6 @@ namespace SpeckleStructuralGSA.Test
       return Encoding.UTF8.GetString(buffer);
     }
 
-    public static string ResolveFullPath(string fileName, string directory)
-    {
-      //Directory should have a trailing slash
-
-      return (directory + fileName);
-    }
-
     public static void WriteFile(string data, string fileName, string directory)
     {
       var stream = new MemoryStream();
@@ -138,7 +131,7 @@ namespace SpeckleStructuralGSA.Test
       stream.Position = 0;
       stream.Seek(0, SeekOrigin.Begin);
 
-      var fileStream = File.Create(ResolveFullPath(fileName, directory));
+      var fileStream = File.Create(Path.Combine(directory, fileName));
       stream.CopyTo(fileStream);
       fileStream.Close();
     }

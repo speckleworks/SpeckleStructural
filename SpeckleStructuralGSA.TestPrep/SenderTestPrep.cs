@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
@@ -19,7 +20,7 @@ namespace SpeckleStructuralGSA.TestPrep
       Initialiser.Cache = gsaCache;
       Initialiser.Settings = new Settings();
       Initialiser.AppUI = new TestAppUI();
-      gsaInterfacer.OpenFile(Test.Helper.ResolveFullPath(gsaFileName, TestDataDirectory));
+      gsaInterfacer.OpenFile(Path.Combine(TestDataDirectory, gsaFileName));
     }
 
     public bool SetUpTransmissionTestData(string outputJsonFileName, GSATargetLayer layer,

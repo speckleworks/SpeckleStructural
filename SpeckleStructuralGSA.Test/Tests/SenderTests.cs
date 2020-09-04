@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -43,7 +44,7 @@ namespace SpeckleStructuralGSA.Test
     [TestCase("TxSpeckleObjectsNotEmbedded.json", GSATargetLayer.Analysis, false, false, gsaFileNameWithResults)]
     public void TransmissionTest(string inputJsonFileName, GSATargetLayer layer, bool resultsOnly, bool embedResults, string gsaFileName)
     {
-      gsaInterfacer.OpenFile(Helper.ResolveFullPath(gsaFileName, TestDataDirectory));
+      gsaInterfacer.OpenFile(Path.Combine(TestDataDirectory, gsaFileName));
 
       //Deserialise into Speckle Objects so that these can be compared in any order
 
@@ -166,7 +167,7 @@ namespace SpeckleStructuralGSA.Test
     //[TestCase(GSATargetLayer.Analysis, false, false, @"C:\Users\Nic.Burgers\OneDrive - Arup\Issues\Jason Chen\db\TestModel.gwb")]
     public void TransmissionTestForDebug(GSATargetLayer layer, bool resultsOnly, bool embedResults, string gsaFileName)
     {
-      gsaInterfacer.OpenFile(gsaFileName.Contains("\\") ? gsaFileName : Helper.ResolveFullPath(gsaFileName, TestDataDirectory));
+      gsaInterfacer.OpenFile(gsaFileName.Contains("\\") ? gsaFileName : Path.Combine(TestDataDirectory, gsaFileName));
 
       var actualObjects = ModelToSpeckleObjects(layer, resultsOnly, embedResults, loadCases, resultTypes);
       Assert.IsNotNull(actualObjects);
