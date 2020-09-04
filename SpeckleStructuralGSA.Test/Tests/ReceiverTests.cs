@@ -14,15 +14,6 @@ namespace SpeckleStructuralGSA.Test
   [TestFixture]
   public class ReceiverTests : TestBase
   {
-    public static string[] savedJsonFileNames = new[] { "lfsaIEYkR.json", "NaJD7d5kq.json", "U7ntEJkzdZ.json", "UNg87ieJG.json" };
-    public static string expectedGwaPerIdsFileName = "TestGwaRecords.json";
-
-    public static string[] savedBlankRefsJsonFileNames = new[] { "P40rt5c8I.json" };
-    public static string expectedBlankRefsGwaPerIdsFileName = "BlankRefsGwaRefords.json";
-
-    public static string[] savedSharedLoadPlaneJsonFileNames = new[] { "nagwSLyPE.json" };
-    public static string expectedSharedLoadPlaneGwaPerIdsFileName = "SharedLoadPlaneGwaRefords.json";
-
     public ReceiverTests() : base(AppDomain.CurrentDomain.BaseDirectory.TrimEnd(new[] { '\\' }) + @"\..\..\TestData\") { }
 
     [OneTimeSetUp]
@@ -59,7 +50,7 @@ namespace SpeckleStructuralGSA.Test
     [TestCase(GSATargetLayer.Design)]
     public void ReceiverTestDesignLayer(GSATargetLayer layer)
     {
-      RunReceiverTest(savedJsonFileNames, expectedGwaPerIdsFileName, "NB",layer);
+      RunReceiverTest(savedJsonFileNames, expectedGwaPerIdsFileName, "NB", layer);
     }
 
     [TestCase(GSATargetLayer.Design, "EC_mxfJ2p.json", 2, 2, 2, 2, 4)]

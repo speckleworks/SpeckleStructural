@@ -10,6 +10,7 @@ using SpeckleGSAProxy;
 using SpeckleStructuralClasses;
 using MathNet.Spatial;
 using MathNet.Spatial.Euclidean;
+using System.IO;
 
 namespace SpeckleStructuralGSA.Test
 {
@@ -45,7 +46,7 @@ namespace SpeckleStructuralGSA.Test
     [Test]
     public void MeshTest()
     {
-      gsaInterfacer.OpenFile(Helper.ResolveFullPath("sjc.gwb", TestDataDirectory));
+      gsaInterfacer.OpenFile(Path.Combine(TestDataDirectory, "sjc.gwb"));
 
       var data = gsaInterfacer.GetGwaData(new[] { "NODE.2", "MEMB.7" }, false);
       Assert.IsNotNull(data);

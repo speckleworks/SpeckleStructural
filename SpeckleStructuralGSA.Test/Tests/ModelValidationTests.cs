@@ -30,9 +30,18 @@ namespace SpeckleStructuralGSA.Test
     }
 
     [Test]
-    [TestCase("NB")]
-    [TestCase("Simple")]
-    public void ReceiverGsaValidation(string subdir)
+    public void ReceiverGsaValidationSimple()
+    {
+      ReceiverGsaValidation("Simple", simpleDataJsonFileNames, GSATargetLayer.Design);
+    }
+
+    [Test]
+    public void ReceiverGsaValidationNb()
+    {
+      ReceiverGsaValidation("NB", savedJsonFileNames, GSATargetLayer.Design);
+    }
+
+    private void ReceiverGsaValidation(string subdir, string[] jsonFiles, GSATargetLayer layer)
     {
       // Takes a saved Speckle stream with structural objects
       // converts to GWA and sends to GSA
@@ -61,7 +70,7 @@ namespace SpeckleStructuralGSA.Test
 
       // Run conversion to GWA keywords
       // Note that it can be one model split over several json files
-      receiverProcessor.JsonSpeckleStreamsToGwaRecords(Directory.GetFiles(dir,"*.json").Select(Path.GetFileName), out var gwaRecordsFromFile, GSATargetLayer.Design);
+      receiverProcessor.JsonSpeckleStreamsToGwaRecords(jsonFiles, out var gwaRecordsFromFile, layer);
 
       //Run conversion to GWA keywords
       Assert.IsNotNull(gwaRecordsFromFile);
