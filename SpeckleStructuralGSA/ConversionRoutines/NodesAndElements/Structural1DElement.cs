@@ -41,7 +41,17 @@ namespace SpeckleStructuralGSA
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; // Colour
       counter++; // Type
-      obj.PropertyRef = Helper.GetApplicationId(typeof(GSA1DProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
+      var propRef = pieces[counter++];
+      //Sometimes the property ref argument seems to have a relative length span attached to it:
+      //e.g. 1[0.245882:0.491765] where 1 is the actual property reference
+      var propRefNumerical = "";
+      var index = 0;
+      while (char.IsDigit(propRef[index]))
+      {
+        propRefNumerical += propRef[index++];
+      }
+      
+      obj.PropertyRef = Helper.GetApplicationId(typeof(GSA1DProperty).GetGSAKeyword(), Convert.ToInt32(propRefNumerical));
       counter++; // Group
 
       obj.Value = new List<double>();
@@ -546,6 +556,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
+        ls.Add("YES");
         ls.Add("MAN");
         ls.Add("MAN");
         try
