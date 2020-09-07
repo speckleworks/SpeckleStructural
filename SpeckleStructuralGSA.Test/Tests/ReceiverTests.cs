@@ -14,15 +14,6 @@ namespace SpeckleStructuralGSA.Test
   [TestFixture]
   public class ReceiverTests : TestBase
   {
-    public static string[] savedJsonFileNames = new[] { "lfsaIEYkR.json", "NaJD7d5kq.json", "U7ntEJkzdZ.json", "UNg87ieJG.json" };
-    public static string expectedGwaPerIdsFileName = "TestGwaRecords.json";
-
-    public static string[] savedBlankRefsJsonFileNames = new[] { "P40rt5c8I.json" };
-    public static string expectedBlankRefsGwaPerIdsFileName = "BlankRefsGwaRefords.json";
-
-    public static string[] savedSharedLoadPlaneJsonFileNames = new[] { "nagwSLyPE.json" };
-    public static string expectedSharedLoadPlaneGwaPerIdsFileName = "SharedLoadPlaneGwaRefords.json";
-
     public ReceiverTests() : base(AppDomain.CurrentDomain.BaseDirectory.TrimEnd(new[] { '\\' }) + @"\..\..\TestData\") { }
 
     [OneTimeSetUp]
@@ -59,9 +50,8 @@ namespace SpeckleStructuralGSA.Test
     [TestCase(GSATargetLayer.Design)]
     public void ReceiverTestDesignLayer(GSATargetLayer layer)
     {
-      RunReceiverTest(savedJsonFileNames, expectedGwaPerIdsFileName, layer);
+      RunReceiverTest(savedJsonFileNames, expectedGwaPerIdsFileName, "NB", layer);
     }
-    //EC_mxfJ2p.json
 
     [TestCase(GSATargetLayer.Design, "EC_mxfJ2p.json", 2, 2, 2, 2, 4)]
     [TestCase(GSATargetLayer.Analysis, "EC_mxfJ2p.json", 2, 2, 2, 2, 4)]
@@ -109,7 +99,7 @@ namespace SpeckleStructuralGSA.Test
     }
 
     [Ignore("Just used for debugging at this stage, will be finished in the future as a test")]
-    [TestCase(GSATargetLayer.Design, "58T0dgF0P.json")]
+    [TestCase(GSATargetLayer.Design, "gMu-Xgpc.json")]
     //[TestCase(GSATargetLayer.Analysis, "S5pNxjmUH.json")]
     public void ReceiverTestForDebug(GSATargetLayer layer, string fileName)
     {
@@ -150,18 +140,20 @@ namespace SpeckleStructuralGSA.Test
     [TestCase(GSATargetLayer.Design)]
     public void ReceiverTestBlankRefsDesignLayer(GSATargetLayer layer)
     {
-      RunReceiverTest(savedBlankRefsJsonFileNames, expectedBlankRefsGwaPerIdsFileName, layer);
+      RunReceiverTest(savedBlankRefsJsonFileNames, expectedBlankRefsGwaPerIdsFileName, "Blank",layer);
     }
 
-    private void RunReceiverTest(string[] savedJsonFileNames, string expectedGwaPerIdsFile, GSATargetLayer layer)
+    private void RunReceiverTest(string[] savedJsonFileNames, string expectedGwaPerIdsFile, string subdir,GSATargetLayer layer)
     {
-      var expectedJson = Helper.ReadFile(expectedGwaPerIdsFile, TestDataDirectory);
+      var dir = System.IO.Path.Combine(TestDataDirectory, subdir) + "\\";
+      
+      var expectedJson = Helper.ReadFile(expectedGwaPerIdsFile, dir);
       var expectedGwaRecords = Helper.DeserialiseJson<List<GwaRecord>>(expectedJson);
 
       var mockGsaCom = SetupMockGsaCom();
       gsaInterfacer.OpenFile("", false, mockGsaCom.Object);
 
-      var receiverProcessor = new ReceiverProcessor(TestDataDirectory, gsaInterfacer, gsaCache);
+      var receiverProcessor = new ReceiverProcessor(dir, gsaInterfacer, gsaCache);
 
       //Run conversion to GWA keywords
       receiverProcessor.JsonSpeckleStreamsToGwaRecords(savedJsonFileNames, out var actualGwaRecords, layer);

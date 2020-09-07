@@ -74,6 +74,7 @@ namespace SpeckleStructuralGSA
         "MAT.10",
         mat.Name == null || mat.Name == "" ? " " : mat.Name,
         mat.YoungsModulus.ToString(), // E
+        mat.YieldStrength.ToString(), // f (fy for steel)
         mat.PoissonsRatio.ToString(), // nu
         mat.ShearModulus.ToString(), // G
         mat.Density.ToString(), // rho
@@ -107,7 +108,7 @@ namespace SpeckleStructuralGSA
         "0.05",
         "1", // Material factor on strength
         "1", // Material factor on elastic modulus
-        "MAT_CURVE_PARAM.2",
+        "MAT_CURVE_PARAM.3",
         "",
         "ELAS_PLAS",
         "0",
@@ -119,6 +120,7 @@ namespace SpeckleStructuralGSA
         "1", // Material factor on strength
         "1", // Material factor on elastic modulus
         "0", // Cost
+        "Steel",
         mat.YieldStrength.ToString(), // Yield strength
         mat.UltimateStrength.ToString(), // Ultimate strength
         "0", // Perfectly plastic strain limit

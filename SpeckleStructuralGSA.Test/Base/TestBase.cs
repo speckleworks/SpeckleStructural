@@ -14,6 +14,17 @@ namespace SpeckleStructuralGSA.Test
 {
   public abstract class TestBase
   {
+    public static string[] savedJsonFileNames = new[] { "lfsaIEYkR.json", "NaJD7d5kq.json", "U7ntEJkzdZ.json", "UNg87ieJG.json" };
+    public static string expectedGwaPerIdsFileName = "TestGwaRecords.json";
+
+    public static string[] savedBlankRefsJsonFileNames = new[] { "P40rt5c8I.json" };
+    public static string expectedBlankRefsGwaPerIdsFileName = "BlankRefsGwaRecords.json";
+
+    public static string[] savedSharedLoadPlaneJsonFileNames = new[] { "nagwSLyPE.json" };
+    public static string expectedSharedLoadPlaneGwaPerIdsFileName = "SharedLoadPlaneGwaRefords.json";
+
+    public static string[] simpleDataJsonFileNames = new[] { "gMu-Xgpc.json" };
+
     protected IComAuto comAuto;
 
     protected GSAProxy gsaInterfacer;
