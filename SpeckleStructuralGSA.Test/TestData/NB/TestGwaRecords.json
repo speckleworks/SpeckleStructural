@@ -169,171 +169,171 @@
   },
   {
     "ApplicationId": "gh/71aeda7ba88bbbc6dc8f8966d24045bc",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/71aeda7ba88bbbc6dc8f8966d24045bc}\t6\tColumn 0\tNO_RGB\tCOLUMN\tALL\t1\t6\t43 44\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/71aeda7ba88bbbc6dc8f8966d24045bc}\t6\tColumn 0\tNO_RGB\tCOLUMN\tALL\t1\t6\t43 44\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/467503d3bf98b641d3fb7d507c365e53",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/467503d3bf98b641d3fb7d507c365e53}\t7\tColumn 1\tNO_RGB\tCOLUMN\tALL\t1\t7\t45 46\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/467503d3bf98b641d3fb7d507c365e53}\t7\tColumn 1\tNO_RGB\tCOLUMN\tALL\t1\t7\t45 46\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/5971550242e77e8b899d33d8f65a9681",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/5971550242e77e8b899d33d8f65a9681}\t8\tColumn 2\tNO_RGB\tCOLUMN\tALL\t1\t8\t47 48\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/5971550242e77e8b899d33d8f65a9681}\t8\tColumn 2\tNO_RGB\tCOLUMN\tALL\t1\t8\t47 48\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/7a63661a22286943500cc7b165312546",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/7a63661a22286943500cc7b165312546}\t9\tColumn 3\tNO_RGB\tCOLUMN\tALL\t1\t9\t49 50\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/7a63661a22286943500cc7b165312546}\t9\tColumn 3\tNO_RGB\tCOLUMN\tALL\t1\t9\t49 50\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/a933d1f9bc5f97bc2e9166dcc2accd2b",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/a933d1f9bc5f97bc2e9166dcc2accd2b}\t10\tColumn 4\tNO_RGB\tCOLUMN\tALL\t1\t10\t51 52\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/a933d1f9bc5f97bc2e9166dcc2accd2b}\t10\tColumn 4\tNO_RGB\tCOLUMN\tALL\t1\t10\t51 52\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/9ee222aeacd6a783edd7996781351117",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/9ee222aeacd6a783edd7996781351117}\t11\tColumn 5\tNO_RGB\tCOLUMN\tALL\t1\t11\t53 54\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/9ee222aeacd6a783edd7996781351117}\t11\tColumn 5\tNO_RGB\tCOLUMN\tALL\t1\t11\t53 54\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/154de130d058e883b9f30eed45a72895",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/154de130d058e883b9f30eed45a72895}\t12\tColumn 6\tNO_RGB\tCOLUMN\tALL\t1\t12\t55 56\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/154de130d058e883b9f30eed45a72895}\t12\tColumn 6\tNO_RGB\tCOLUMN\tALL\t1\t12\t55 56\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/43cfc7591b81b59602d4cc46ee20d226",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/43cfc7591b81b59602d4cc46ee20d226}\t13\tColumn 7\tNO_RGB\tCOLUMN\tALL\t1\t13\t57 58\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/43cfc7591b81b59602d4cc46ee20d226}\t13\tColumn 7\tNO_RGB\tCOLUMN\tALL\t1\t13\t57 58\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/fe643881343fd0ba26070cc52e91246c",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/fe643881343fd0ba26070cc52e91246c}\t14\tColumn 8\tNO_RGB\tCOLUMN\tALL\t1\t14\t59 60\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/fe643881343fd0ba26070cc52e91246c}\t14\tColumn 8\tNO_RGB\tCOLUMN\tALL\t1\t14\t59 60\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/e7a4f495bea0d044febe1328ec2eb0df",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/e7a4f495bea0d044febe1328ec2eb0df}\t15\tColumn 9\tNO_RGB\tCOLUMN\tALL\t1\t15\t61 62\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/e7a4f495bea0d044febe1328ec2eb0df}\t15\tColumn 9\tNO_RGB\tCOLUMN\tALL\t1\t15\t61 62\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/37d3376f7550f4d01c5ae2b44eeffd93",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/37d3376f7550f4d01c5ae2b44eeffd93}\t16\tColumn 10\tNO_RGB\tCOLUMN\tALL\t1\t16\t63 64\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/37d3376f7550f4d01c5ae2b44eeffd93}\t16\tColumn 10\tNO_RGB\tCOLUMN\tALL\t1\t16\t63 64\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/98777989964c2c0822154abc9ad1a7b5",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/98777989964c2c0822154abc9ad1a7b5}\t17\tColumn 11\tNO_RGB\tCOLUMN\tALL\t1\t17\t65 66\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/98777989964c2c0822154abc9ad1a7b5}\t17\tColumn 11\tNO_RGB\tCOLUMN\tALL\t1\t17\t65 66\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/5389b96a589a41cd85610ca769831649",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/5389b96a589a41cd85610ca769831649}\t18\tColumn 12\tNO_RGB\tCOLUMN\tALL\t1\t18\t67 68\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/5389b96a589a41cd85610ca769831649}\t18\tColumn 12\tNO_RGB\tCOLUMN\tALL\t1\t18\t67 68\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/ec93ebcab0f587089747a2d7445c1039",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/ec93ebcab0f587089747a2d7445c1039}\t19\tColumn 13\tNO_RGB\tCOLUMN\tALL\t1\t19\t69 70\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/ec93ebcab0f587089747a2d7445c1039}\t19\tColumn 13\tNO_RGB\tCOLUMN\tALL\t1\t19\t69 70\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/e9e01e24eb57e21b087a365ddbe22484",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/e9e01e24eb57e21b087a365ddbe22484}\t20\tColumn 14\tNO_RGB\tCOLUMN\tALL\t1\t20\t71 72\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/e9e01e24eb57e21b087a365ddbe22484}\t20\tColumn 14\tNO_RGB\tCOLUMN\tALL\t1\t20\t71 72\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/79e56706e96ae448c95f28548e2e8521",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/79e56706e96ae448c95f28548e2e8521}\t21\tColumn 15\tNO_RGB\tCOLUMN\tALL\t1\t21\t73 74\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/79e56706e96ae448c95f28548e2e8521}\t21\tColumn 15\tNO_RGB\tCOLUMN\tALL\t1\t21\t73 74\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/30b8049b34cc22b6add3f3565129b6f9",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/30b8049b34cc22b6add3f3565129b6f9}\t22\tColumn 16\tNO_RGB\tCOLUMN\tALL\t1\t22\t75 76\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/30b8049b34cc22b6add3f3565129b6f9}\t22\tColumn 16\tNO_RGB\tCOLUMN\tALL\t1\t22\t75 76\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/da62f5ea397543274e1f71c0f04e9f0e",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/da62f5ea397543274e1f71c0f04e9f0e}\t23\tColumn 17\tNO_RGB\tCOLUMN\tALL\t1\t23\t77 78\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/da62f5ea397543274e1f71c0f04e9f0e}\t23\tColumn 17\tNO_RGB\tCOLUMN\tALL\t1\t23\t77 78\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/7edb8fba34a7d36b41634d06d5c7a2e9",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/7edb8fba34a7d36b41634d06d5c7a2e9}\t24\tColumn 18\tNO_RGB\tCOLUMN\tALL\t1\t24\t79 80\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/7edb8fba34a7d36b41634d06d5c7a2e9}\t24\tColumn 18\tNO_RGB\tCOLUMN\tALL\t1\t24\t79 80\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/d65a448739a36232438e08af84d49a29",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/d65a448739a36232438e08af84d49a29}\t25\tColumn 19\tNO_RGB\tCOLUMN\tALL\t1\t25\t81 82\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/d65a448739a36232438e08af84d49a29}\t25\tColumn 19\tNO_RGB\tCOLUMN\tALL\t1\t25\t81 82\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/2f568fb93557d7e1c5accf5fdaf8b158",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/2f568fb93557d7e1c5accf5fdaf8b158}\t26\tColumn 20\tNO_RGB\tCOLUMN\tALL\t1\t26\t83 84\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/2f568fb93557d7e1c5accf5fdaf8b158}\t26\tColumn 20\tNO_RGB\tCOLUMN\tALL\t1\t26\t83 84\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/61c3aac7cd02baa986a8e6bea2a5a71c",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/61c3aac7cd02baa986a8e6bea2a5a71c}\t27\tColumn 21\tNO_RGB\tCOLUMN\tALL\t1\t27\t85 86\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/61c3aac7cd02baa986a8e6bea2a5a71c}\t27\tColumn 21\tNO_RGB\tCOLUMN\tALL\t1\t27\t85 86\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/36a426efd9c31c0ce970a9d7543010de",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/36a426efd9c31c0ce970a9d7543010de}\t28\tColumn 22\tNO_RGB\tCOLUMN\tALL\t1\t28\t87 88\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/36a426efd9c31c0ce970a9d7543010de}\t28\tColumn 22\tNO_RGB\tCOLUMN\tALL\t1\t28\t87 88\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/a793eef6a72dbd78839e5c8ce6d67982",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/a793eef6a72dbd78839e5c8ce6d67982}\t29\tColumn 23\tNO_RGB\tCOLUMN\tALL\t1\t29\t89 90\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/a793eef6a72dbd78839e5c8ce6d67982}\t29\tColumn 23\tNO_RGB\tCOLUMN\tALL\t1\t29\t89 90\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/63cd77ed5483f86e5657568dee4876c8",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/63cd77ed5483f86e5657568dee4876c8}\t30\tColumn 24\tNO_RGB\tCOLUMN\tALL\t1\t30\t91 92\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/63cd77ed5483f86e5657568dee4876c8}\t30\tColumn 24\tNO_RGB\tCOLUMN\tALL\t1\t30\t91 92\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/1e3d7853e300b8fa54294c3badb3b424",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/1e3d7853e300b8fa54294c3badb3b424}\t31\tColumn 25\tNO_RGB\tCOLUMN\tALL\t1\t31\t93 94\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/1e3d7853e300b8fa54294c3badb3b424}\t31\tColumn 25\tNO_RGB\tCOLUMN\tALL\t1\t31\t93 94\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/7a6723674cbd08c5a5cc9eabfc2958ea",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/7a6723674cbd08c5a5cc9eabfc2958ea}\t32\tColumn 26\tNO_RGB\tCOLUMN\tALL\t1\t32\t95 96\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/7a6723674cbd08c5a5cc9eabfc2958ea}\t32\tColumn 26\tNO_RGB\tCOLUMN\tALL\t1\t32\t95 96\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/f6b828cfbbe6dfa459744822105192c4",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/f6b828cfbbe6dfa459744822105192c4}\t33\tColumn 27\tNO_RGB\tCOLUMN\tALL\t1\t33\t97 98\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/f6b828cfbbe6dfa459744822105192c4}\t33\tColumn 27\tNO_RGB\tCOLUMN\tALL\t1\t33\t97 98\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/dcf4ad9e8994895a42dcfa5431a4bd31",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/dcf4ad9e8994895a42dcfa5431a4bd31}\t34\tColumn 28\tNO_RGB\tCOLUMN\tALL\t1\t34\t99 100\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/dcf4ad9e8994895a42dcfa5431a4bd31}\t34\tColumn 28\tNO_RGB\tCOLUMN\tALL\t1\t34\t99 100\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/83e4d528ae20104b72e69211e3c21e93",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/83e4d528ae20104b72e69211e3c21e93}\t35\tColumn 29\tNO_RGB\tCOLUMN\tALL\t1\t35\t101 102\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/83e4d528ae20104b72e69211e3c21e93}\t35\tColumn 29\tNO_RGB\tCOLUMN\tALL\t1\t35\t101 102\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/65f4e171aed320cb78cfe8a585045bb6",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/65f4e171aed320cb78cfe8a585045bb6}\t36\tColumn 30\tNO_RGB\tCOLUMN\tALL\t1\t36\t103 104\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/65f4e171aed320cb78cfe8a585045bb6}\t36\tColumn 30\tNO_RGB\tCOLUMN\tALL\t1\t36\t103 104\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/2a555bdfd01233946d31ddd4b072aaf7",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/2a555bdfd01233946d31ddd4b072aaf7}\t37\tColumn 31\tNO_RGB\tCOLUMN\tALL\t1\t37\t105 106\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/2a555bdfd01233946d31ddd4b072aaf7}\t37\tColumn 31\tNO_RGB\tCOLUMN\tALL\t1\t37\t105 106\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/6e7446596bc26cd0f0fd9c7f78d99a98",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/6e7446596bc26cd0f0fd9c7f78d99a98}\t38\tColumn 32\tNO_RGB\tCOLUMN\tALL\t1\t38\t107 108\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/6e7446596bc26cd0f0fd9c7f78d99a98}\t38\tColumn 32\tNO_RGB\tCOLUMN\tALL\t1\t38\t107 108\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/452a6f3af50a7c9626411fe6f5f1d9c2",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/452a6f3af50a7c9626411fe6f5f1d9c2}\t39\tColumn 33\tNO_RGB\tCOLUMN\tALL\t1\t39\t109 110\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/452a6f3af50a7c9626411fe6f5f1d9c2}\t39\tColumn 33\tNO_RGB\tCOLUMN\tALL\t1\t39\t109 110\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/832132ef28d937d055d53c0c6fad70ac",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/832132ef28d937d055d53c0c6fad70ac}\t40\tColumn 34\tNO_RGB\tCOLUMN\tALL\t1\t40\t111 112\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/832132ef28d937d055d53c0c6fad70ac}\t40\tColumn 34\tNO_RGB\tCOLUMN\tALL\t1\t40\t111 112\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/bfdbe99cfde1f26362f14b144b0f3141",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/bfdbe99cfde1f26362f14b144b0f3141}\t41\tNew spring 0\tNO_RGB\t1D_GENERIC\tALL\t1\t41\t113 114\t0\t0\t0\tYES\tSPRING\t0\t0\t0\t0\t0\t0\tACTIVE\tFFFFFF\tFFFFFF\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/bfdbe99cfde1f26362f14b144b0f3141}\t41\tNew spring 0\tNO_RGB\t1D_GENERIC\tALL\t1\t41\t113 114\t0\t0\t0\tYES\tSPRING\t0\t0\t0\t0\t0\t0\tACTIVE\tFFFFFF\tFFFFFF\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/a6d0397fdad99d3455d5b125b2523a09",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/a6d0397fdad99d3455d5b125b2523a09}\t42\tNew spring 1\tNO_RGB\t1D_GENERIC\tALL\t1\t42\t115 116\t0\t0\t0\tYES\tSPRING\t0\t0\t0\t0\t0\t0\tACTIVE\tFFFFFF\tFFFFFF\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/a6d0397fdad99d3455d5b125b2523a09}\t42\tNew spring 1\tNO_RGB\t1D_GENERIC\tALL\t1\t42\t115 116\t0\t0\t0\tYES\tSPRING\t0\t0\t0\t0\t0\t0\tACTIVE\tFFFFFF\tFFFFFF\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/04812414ed54e44b3372e04b6ab20556",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/04812414ed54e44b3372e04b6ab20556}\t43\tNew spring 2\tNO_RGB\t1D_GENERIC\tALL\t1\t43\t117 118\t0\t0\t0\tYES\tSPRING\t0\t0\t0\t0\t0\t0\tACTIVE\tFFFFFF\tFFFFFF\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/04812414ed54e44b3372e04b6ab20556}\t43\tNew spring 2\tNO_RGB\t1D_GENERIC\tALL\t1\t43\t117 118\t0\t0\t0\tYES\tSPRING\t0\t0\t0\t0\t0\t0\tACTIVE\tFFFFFF\tFFFFFF\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/e1d3bfa1c104d2cbac83c00c5a5a91bf",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/e1d3bfa1c104d2cbac83c00c5a5a91bf}\t44\tNew spring 3\tNO_RGB\t1D_GENERIC\tALL\t1\t44\t119 120\t0\t0\t0\tYES\tSPRING\t0\t0\t0\t0\t0\t0\tACTIVE\tFFFFFF\tFFFFFF\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/e1d3bfa1c104d2cbac83c00c5a5a91bf}\t44\tNew spring 3\tNO_RGB\t1D_GENERIC\tALL\t1\t44\t119 120\t0\t0\t0\tYES\tSPRING\t0\t0\t0\t0\t0\t0\tACTIVE\tFFFFFF\tFFFFFF\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/fe78ca20d5fa53527e7bb7809138c819",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/fe78ca20d5fa53527e7bb7809138c819}\t45\tNew spring 4\tNO_RGB\t1D_GENERIC\tALL\t1\t45\t121 122\t0\t0\t0\tYES\tSPRING\t0\t0\t0\t0\t0\t0\tACTIVE\tFFFFFF\tFFFFFF\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/fe78ca20d5fa53527e7bb7809138c819}\t45\tNew spring 4\tNO_RGB\t1D_GENERIC\tALL\t1\t45\t121 122\t0\t0\t0\tYES\tSPRING\t0\t0\t0\t0\t0\t0\tACTIVE\tFFFFFF\tFFFFFF\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/77ee0b345f17f46ac0677947d0d1c70b",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/77ee0b345f17f46ac0677947d0d1c70b}\t46\tNew spring 5\tNO_RGB\t1D_GENERIC\tALL\t1\t46\t123 124\t0\t0\t0\tYES\tSPRING\t0\t0\t0\t0\t0\t0\tACTIVE\tFFFFFF\tFFFFFF\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/77ee0b345f17f46ac0677947d0d1c70b}\t46\tNew spring 5\tNO_RGB\t1D_GENERIC\tALL\t1\t46\t123 124\t0\t0\t0\tYES\tSPRING\t0\t0\t0\t0\t0\t0\tACTIVE\tFFFFFF\tFFFFFF\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/9718df1338e56a0746cfdbe383fd2a60",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/9718df1338e56a0746cfdbe383fd2a60}\t47\tNew spring 6\tNO_RGB\t1D_GENERIC\tALL\t1\t47\t125 126\t0\t0\t0\tYES\tSPRING\t0\t0\t0\t0\t0\t0\tACTIVE\tFFFFFF\tFFFFFF\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/9718df1338e56a0746cfdbe383fd2a60}\t47\tNew spring 6\tNO_RGB\t1D_GENERIC\tALL\t1\t47\t125 126\t0\t0\t0\tYES\tSPRING\t0\t0\t0\t0\t0\t0\tACTIVE\tFFFFFF\tFFFFFF\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "Slab0",
