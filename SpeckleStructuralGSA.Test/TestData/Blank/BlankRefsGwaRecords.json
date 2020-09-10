@@ -59,11 +59,11 @@
   },
   {
     "ApplicationId": "gh/2820605e9ba104099b09ff511bdc6ad9",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/2820605e9ba104099b09ff511bdc6ad9}\t1\t \tNO_RGB\t1D_GENERIC\tALL\t3\t1\t1 2\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tFFFFFF\tFFFFFF\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/2820605e9ba104099b09ff511bdc6ad9}\t1\t \tNO_RGB\t1D_GENERIC\tALL\t3\t1\t1 2\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tFFFFFF\tFFFFFF\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/52677cfc805fc3cef037ad49da0d5023",
-    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/52677cfc805fc3cef037ad49da0d5023}\t2\t \tNO_RGB\t1D_GENERIC\tALL\t4\t2\t3 4\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tFFFFFF\tFFFFFF\tFree\tFree\t0\t0\t0\tNO"
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/52677cfc805fc3cef037ad49da0d5023}\t2\t \tNO_RGB\t1D_GENERIC\tALL\t4\t2\t3 4\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tFFFFFF\tFFFFFF\tFree\tFree\t0\t0\t0\tNO_OFF"
   },
   {
     "ApplicationId": "gh/e3eee0bed82020568bcd3a80a929c558",

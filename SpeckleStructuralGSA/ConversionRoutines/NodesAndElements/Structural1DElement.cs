@@ -46,7 +46,7 @@ namespace SpeckleStructuralGSA
       //e.g. 1[0.245882:0.491765] where 1 is the actual property reference
       var propRefNumerical = "";
       var index = 0;
-      while (char.IsDigit(propRef[index]))
+      while (index < propRef.Length && char.IsDigit(propRef[index]))
       {
         propRefNumerical += propRef[index++];
       }
@@ -428,7 +428,7 @@ namespace SpeckleStructuralGSA
       }
 
       // skip to offsets
-      if(pieces.Last().ToLower() != "no")
+      if(!pieces.Last().ToLower().StartsWith("no"))
       {
         // this approach ignores the auto / manual distinction in GSA
         // which may affect the true offset
@@ -552,7 +552,7 @@ namespace SpeckleStructuralGSA
 
       if (member.Offset == null)
       {
-        ls.Add("NO");
+        ls.Add("NO_OFF");
       }
       else
       {
