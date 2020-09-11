@@ -546,7 +546,7 @@ namespace SpeckleStructuralGSA
     {
       var pieces = description.ListSplit("%");
 
-      var DbPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ProgramFiles) + @"\Oasys\GSA 10.0\sectlib.db3";
+      var DbPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ProgramFiles) + @"\Oasys\GSA 10.1\sectlib.db3";
 
       try
       {
@@ -627,7 +627,7 @@ namespace SpeckleStructuralGSA
     /// <returns>GSA section description or null if error.</returns>
     public string GetGSACategorySection(string name)
     {
-      var DbPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ProgramFiles) + @"\Oasys\GSA 10.0\sectlib.db3";
+      var DbPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ProgramFiles) + @"\Oasys\GSA 10.1\sectlib.db3";
 
       try
       {
