@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
@@ -37,6 +38,9 @@ namespace SpeckleStructuralGSA
 
         foreach (var kvp in Initialiser.Settings.NodalResults)
         {
+          var resultType = kvp.Key;
+          var columns = resultType.ToNodeResultCsvColumns();
+
           foreach (var loadCase in Initialiser.Settings.ResultCases)
           {
             if (!Initialiser.Interface.CaseExist(loadCase)) continue;
@@ -50,9 +54,9 @@ namespace SpeckleStructuralGSA
                 node.Value.Result = new Dictionary<string, object>();
               }
 
-              var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
-
-              if (resultExport == null || resultExport.Count() == 0)
+              //var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
+              if (!Initialiser.ResultsContext.Query("result_node", columns, new[] { loadCase }, out var results, new[] { id })
+                || results == null || results.GetLength(0) == 0 || results.GetLength(1) == 0)
               {
                 continue;
               }
@@ -61,7 +65,7 @@ namespace SpeckleStructuralGSA
               {
                 LoadCaseRef = loadCase,
                 TargetRef = Helper.GetApplicationId(typeof(GSANode).GetGSAKeyword(), id),
-                Value = new Dictionary<string, object>()
+                Value = new Dictionary<string, object>(),
               };
 
               //The setter of node.Value.Result won't accept a value if there are no keys (to avoid issues during merging), so
@@ -75,7 +79,8 @@ namespace SpeckleStructuralGSA
                 node.Value.Result[loadCase] = newResult;
               }
 
-              (node.Value.Result[loadCase] as StructuralNodeResult).Value[kvp.Key] = resultExport.ToDictionary(x => x.Key, x => (x.Value as List<double>)[0] as object);
+              (node.Value.Result[loadCase] as StructuralNodeResult).Value[kvp.Key] = results.ToNodeResultValue(resultType, columns);
+              //(node.Value.Result[loadCase] as StructuralNodeResult).Value[kvp.Key] = resultExport.ToDictionary(x => x.Key, x => (x.Value as List<double>)[0] as object);
 
               node.ForceSend = true;
             }
@@ -92,6 +97,9 @@ namespace SpeckleStructuralGSA
 
         foreach (var kvp in Initialiser.Settings.NodalResults)
         {
+          var resultType = kvp.Key;
+          var columns = resultType.ToNodeResultCsvColumns();
+
           foreach (var loadCase in Initialiser.Settings.ResultCases)
           {
             if (!Initialiser.Interface.CaseExist(loadCase)) continue;
@@ -100,13 +108,13 @@ namespace SpeckleStructuralGSA
             {
               var id = indices[i];
 
-              var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
-
-              if (resultExport == null || resultExport.Count() == 0)
+              //var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
+              if (!Initialiser.ResultsContext.Query("result_node", columns, new[] { loadCase }, out var resultExport, new[] { id })
+                || results == null || resultExport.GetLength(0) == 0 || resultExport.GetLength(1) == 0)
               {
-                id++;
                 continue;
               }
+
               var existingRes = results.FirstOrDefault(x => x.Value.TargetRef == id.ToString());
               if (existingRes == null)
               {
@@ -117,7 +125,7 @@ namespace SpeckleStructuralGSA
                   IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
                   LoadCaseRef = loadCase
                 };
-                newRes.Value[kvp.Key] = resultExport;
+                newRes.Value[kvp.Key] = resultExport.ToNodeResultValue(resultType, columns);
 
                 newRes.GenerateHash();
 
@@ -125,7 +133,7 @@ namespace SpeckleStructuralGSA
               }
               else
               {
-                existingRes.Value.Value[kvp.Key] = resultExport;
+                existingRes.Value.Value[kvp.Key] = resultExport.ToNodeResultValue(resultType, columns);
               }
             }
           }

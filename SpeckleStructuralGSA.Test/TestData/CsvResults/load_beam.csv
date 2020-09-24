@@ -1,0 +1,2 @@
+load_id,type,topology,load_case_id,axis_id,is_projected,direction,values,name
+1,"UNIFORM","all",5,0,FALSE,"Z",-999.99993896484,""

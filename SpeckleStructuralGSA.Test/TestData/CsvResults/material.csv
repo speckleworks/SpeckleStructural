@@ -1,0 +1,4 @@
+id,name,colour,strength,elastic_modulus,poissons_ratio,density,thermal_expansivity
+1,"WEIGHTLESS CONC","#000000",0.0,204999999488.0,0.30000001192093,7850.0,1.200000042445e-05
+2,"TEST","#000000",0.0,204999999488.0,0.30000001192093,7850.0,1.200000042445e-05
+3,"Concrete short term","#000000",0.0,28000000000.0,0.2,2400.0,1.0e-05

@@ -9,6 +9,7 @@ using NUnit.Framework;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleGSAProxy;
+using SpeckleGSAResults;
 
 namespace SpeckleStructuralGSA.Test
 {
@@ -35,6 +36,7 @@ namespace SpeckleStructuralGSA.Test
       Initialiser.Interface = gsaInterfacer;
       Initialiser.Settings = new Settings();
       Initialiser.AppUI = new SpeckleAppUI();
+      Initialiser.ResultsContext = new SpeckleGSAResultsContext(Path.Combine(TestDataDirectory, "CsvResults"));
     }
 
     [TestCase("TxSpeckleObjectsDesignLayer.json", GSATargetLayer.Design, false, true, gsaFileNameWithResults)]
@@ -44,6 +46,14 @@ namespace SpeckleStructuralGSA.Test
     [TestCase("TxSpeckleObjectsNotEmbedded.json", GSATargetLayer.Analysis, false, false, gsaFileNameWithResults)]
     public void TransmissionTest(string inputJsonFileName, GSATargetLayer layer, bool resultsOnly, bool embedResults, string gsaFileName)
     {
+      if (resultsOnly || embedResults)
+      {
+        //The gsaFileNameWithResults file used doesn't have 2D members
+        Initialiser.ResultsContext.ImportResultsFromFile("result_node", "case_id", "node_id");
+        Initialiser.ResultsContext.ImportResultsFromFile("result_element_section", "case_id", "element_id");
+        Initialiser.ResultsContext.ImportResultsFromFile("result_global", "case_id");
+      }
+
       gsaInterfacer.OpenFile(Path.Combine(TestDataDirectory, gsaFileName));
 
       //Deserialise into Speckle Objects so that these can be compared in any order

@@ -1,0 +1,6 @@
+id,name,elevation,type,axis
+-13,"Global cylindrical grid",0.0,"PLANE",-13
+0,"Global grid",0.0,"PLANE",0
+-11,"X elev. grid",0.0,"PLANE",-11
+-12,"Y elev. grid",0.0,"PLANE",-12
+1,"londoner [plane]",0.0,"PLANE",1
