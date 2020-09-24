@@ -170,6 +170,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="TestData\DD\A03nHmFTD.json" />
     <None Include="TestData\Simple\gMu-Xgpc.json" />
     <None Include="TestData\NB\lfsaIEYkR.json" />
     <None Include="TestData\ShareLoadPlane\nagwSLyPE.json" />

@@ -25,6 +25,8 @@ namespace SpeckleStructuralGSA.Test
 
     public static string[] simpleDataJsonFileNames = new[] { "gMu-Xgpc.json" };
 
+    public static string[] ddDataJsonFileNames = new[] { "A03nHmFTD.json" };
+
     protected IComAuto comAuto;
 
     protected GSAProxy gsaInterfacer;

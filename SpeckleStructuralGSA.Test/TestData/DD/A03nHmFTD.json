@@ -1,0 +1,1692 @@
+{
+  "success": true,
+  "resources": [
+    {
+      "private": false,
+      "canRead": [
+      ],
+      "canWrite": [
+      ],
+      "anonymousComments": false,
+      "comments": [
+      ],
+      "name": "KSS Generic Material",
+      "geometryHash": null,
+      "hash": "8a36881d447e7b7c920f89b2c1de793f",
+      "applicationId": "458d0054-216d-45de-94ee-69c612f26d04-000c64aa",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+      ],
+      "ancestors": [
+      ],
+      "_id": "5f6b41e3d576a079a56717a1",
+      "type": "StructuralMaterialSteel",
+      "owner": "5f6b3a02e0abf84321ca1610",
+      "__v": 0,
+      "createdAt": "2020-09-23T12:38:59.165Z",
+      "updatedAt": "2020-09-23T12:38:59.166Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+      ],
+      "canWrite": [
+      ],
+      "anonymousComments": false,
+      "comments": [
+      ],
+      "name": "Arup_Floor_Generic150mm",
+      "geometryHash": null,
+      "hash": "ac9b5b109b8aeac5a36b06fa75994a68",
+      "applicationId": "458d0054-216d-45de-94ee-69c612f26d04-000c64a8",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+      ],
+      "ancestors": [
+      ],
+      "_id": "5f6b41e3d576a079a56717a2",
+      "type": "Structural2DProperty",
+      "thickness": 149.999999772,
+      "materialRef": "458d0054-216d-45de-94ee-69c612f26d04-000c64aa",
+      "referenceSurface": 0,
+      "owner": "5f6b3a02e0abf84321ca1610",
+      "__v": 0,
+      "createdAt": "2020-09-23T12:38:59.166Z",
+      "updatedAt": "2020-09-23T12:38:59.166Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+      ],
+      "canWrite": [
+      ],
+      "anonymousComments": false,
+      "comments": [
+      ],
+      "name": null,
+      "geometryHash": null,
+      "hash": "2d13035f25ee273b9a1f821d2c3713b2",
+      "applicationId": "ed3ed6e8-541f-4cba-9995-091cb5a6c5a0-000c89b8_0",
+      "properties": {
+        "structural": {
+          "elementType": "Slab",
+          "propertyRef": "458d0054-216d-45de-94ee-69c612f26d04-000c64a8",
+          "axis": [
+            {
+              "type": "Plane/StructuralAxis",
+              "normal": {
+                "type": "Vector/StructuralVectorThree",
+                "value": [
+                  0,
+                  0,
+                  1
+                ],
+                "hash": "89731fc1ed9553b99eaa5d49ab4d5492"
+              },
+              "xdir": {
+                "type": "Vector/StructuralVectorThree",
+                "value": [
+                  1,
+                  0,
+                  0
+                ],
+                "hash": "8aff5b186b4c65f087f9799a995df2da"
+              },
+              "ydir": {
+                "type": "Vector/StructuralVectorThree",
+                "value": [
+                  0,
+                  1,
+                  0
+                ],
+                "hash": "7c983b4f32f57fcb3b14fdef2903cb0b"
+              },
+              "hash": "ef42fbd89e1f718e007c30052b0bf7a9"
+            },
+            {
+              "type": "Plane/StructuralAxis",
+              "normal": {
+                "type": "Vector/StructuralVectorThree",
+                "value": [
+                  0,
+                  0,
+                  1
+                ],
+                "hash": "89731fc1ed9553b99eaa5d49ab4d5492"
+              },
+              "xdir": {
+                "type": "Vector/StructuralVectorThree",
+                "value": [
+                  1,
+                  0,
+                  0
+                ],
+                "hash": "8aff5b186b4c65f087f9799a995df2da"
+              },
+              "ydir": {
+                "type": "Vector/StructuralVectorThree",
+                "value": [
+                  0,
+                  1,
+                  0
+                ],
+                "hash": "7c983b4f32f57fcb3b14fdef2903cb0b"
+              },
+              "hash": "ef42fbd89e1f718e007c30052b0bf7a9"
+            }
+          ],
+          "offset": [
+            0,
+            0
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+      ],
+      "ancestors": [
+      ],
+      "_id": "5f6b41e3d576a079a56717a3",
+      "type": "Mesh/Structural2DElementMesh",
+      "vertices": [
+        16204.348,
+        19805.2764,
+        0,
+        6204.348,
+        19805.2764,
+        0,
+        6204.348,
+        3805.2764,
+        0,
+        16204.348,
+        3805.2764,
+        0
+      ],
+      "faces": [
+        0,
+        0,
+        1,
+        2,
+        0,
+        0,
+        2,
+        3
+      ],
+      "colors": [
+      ],
+      "owner": "5f6b3a02e0abf84321ca1610",
+      "__v": 0,
+      "createdAt": "2020-09-23T12:38:59.166Z",
+      "updatedAt": "2020-09-23T12:38:59.166Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+      ],
+      "canWrite": [
+      ],
+      "anonymousComments": false,
+      "comments": [
+      ],
+      "name": null,
+      "geometryHash": "65664787affaf34ed7ebc811ade1cd45",
+      "hash": "65664787affaf34ed7ebc811ade1cd45",
+      "applicationId": null,
+      "properties": {
+        "ShowNormalReferencePlaneOnly": true,
+        "CoordinatePlaneVisibility": 0,
+        "Visible": false,
+        "Position": {
+          "type": "Point",
+          "value": [
+            16204.34795024897,
+            3805.2764160838715,
+            0
+          ],
+          "hash": "7958de4daf1eaa78a1fb48a313e56961"
+        },
+        "Name": "",
+        "DemolishedPhaseId": {
+          "type": "Abstract",
+          "_type": "ElementId",
+          "_assembly": "RevitAPI, Version=20.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "hash": "95f2c56ca40c0201cd0f63b02ca5f8cb",
+          "geometryHash": "95f2c56ca40c0201cd0f63b02ca5f8cb"
+        },
+        "CreatedPhaseId": {
+          "type": "Abstract",
+          "_type": "ref",
+          "_ref": "root/DemolishedPhaseId"
+        },
+        "Pinned": false
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+      ],
+      "ancestors": [
+      ],
+      "_id": "5f6b41e3d576a079a56717a4",
+      "type": "Abstract",
+      "_type": "ReferencePoint",
+      "_assembly": "RevitAPI, Version=20.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "owner": "5f6b3a02e0abf84321ca1610",
+      "__v": 0,
+      "createdAt": "2020-09-23T12:38:59.167Z",
+      "updatedAt": "2020-09-23T12:38:59.167Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+      ],
+      "canWrite": [
+      ],
+      "anonymousComments": false,
+      "comments": [
+      ],
+      "name": null,
+      "geometryHash": "111e11809778867b0c8066e08088c123",
+      "hash": "111e11809778867b0c8066e08088c123",
+      "applicationId": null,
+      "properties": {
+        "ShowNormalReferencePlaneOnly": true,
+        "CoordinatePlaneVisibility": 0,
+        "Visible": false,
+        "Position": {
+          "type": "Point",
+          "value": [
+            16204.34795024897,
+            19805.276391763873,
+            0
+          ],
+          "hash": "7125f84756458d3cce8e5fa98472acd3"
+        },
+        "Name": "",
+        "DemolishedPhaseId": {
+          "type": "Abstract",
+          "_type": "ElementId",
+          "_assembly": "RevitAPI, Version=20.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "hash": "95f2c56ca40c0201cd0f63b02ca5f8cb",
+          "geometryHash": "95f2c56ca40c0201cd0f63b02ca5f8cb"
+        },
+        "CreatedPhaseId": {
+          "type": "Abstract",
+          "_type": "ref",
+          "_ref": "root/DemolishedPhaseId"
+        },
+        "Pinned": false
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+      ],
+      "ancestors": [
+      ],
+      "_id": "5f6b41e3d576a079a56717a5",
+      "type": "Abstract",
+      "_type": "ReferencePoint",
+      "_assembly": "RevitAPI, Version=20.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "owner": "5f6b3a02e0abf84321ca1610",
+      "__v": 0,
+      "createdAt": "2020-09-23T12:38:59.167Z",
+      "updatedAt": "2020-09-23T12:38:59.167Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+      ],
+      "canWrite": [
+      ],
+      "anonymousComments": false,
+      "comments": [
+      ],
+      "name": null,
+      "geometryHash": "d2283449549252556bf5a3873aceca44",
+      "hash": "d2283449549252556bf5a3873aceca44",
+      "applicationId": null,
+      "properties": {
+        "ShowNormalReferencePlaneOnly": true,
+        "CoordinatePlaneVisibility": 0,
+        "Visible": false,
+        "Position": {
+          "type": "Point",
+          "value": [
+            6204.347965448969,
+            19805.276391763873,
+            0
+          ],
+          "hash": "537368ea76def73217cc822a6b5a4dbc"
+        },
+        "Name": "",
+        "DemolishedPhaseId": {
+          "type": "Abstract",
+          "_type": "ElementId",
+          "_assembly": "RevitAPI, Version=20.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "hash": "95f2c56ca40c0201cd0f63b02ca5f8cb",
+          "geometryHash": "95f2c56ca40c0201cd0f63b02ca5f8cb"
+        },
+        "CreatedPhaseId": {
+          "type": "Abstract",
+          "_type": "ref",
+          "_ref": "root/DemolishedPhaseId"
+        },
+        "Pinned": false
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+      ],
+      "ancestors": [
+      ],
+      "_id": "5f6b41e3d576a079a56717a6",
+      "type": "Abstract",
+      "_type": "ReferencePoint",
+      "_assembly": "RevitAPI, Version=20.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "owner": "5f6b3a02e0abf84321ca1610",
+      "__v": 0,
+      "createdAt": "2020-09-23T12:38:59.167Z",
+      "updatedAt": "2020-09-23T12:38:59.167Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+      ],
+      "canWrite": [
+      ],
+      "anonymousComments": false,
+      "comments": [
+      ],
+      "name": null,
+      "geometryHash": "9b12a09fbc16876f17dbd0971a453d84",
+      "hash": "9b12a09fbc16876f17dbd0971a453d84",
+      "applicationId": null,
+      "properties": {
+        "ShowNormalReferencePlaneOnly": true,
+        "CoordinatePlaneVisibility": 0,
+        "Visible": false,
+        "Position": {
+          "type": "Point",
+          "value": [
+            6204.347965448969,
+            3805.2764160838715,
+            0
+          ],
+          "hash": "c5c829abdd761f444360b6c983db72a1"
+        },
+        "Name": "",
+        "DemolishedPhaseId": {
+          "type": "Abstract",
+          "_type": "ElementId",
+          "_assembly": "RevitAPI, Version=20.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "hash": "95f2c56ca40c0201cd0f63b02ca5f8cb",
+          "geometryHash": "95f2c56ca40c0201cd0f63b02ca5f8cb"
+        },
+        "CreatedPhaseId": {
+          "type": "Abstract",
+          "_type": "ref",
+          "_ref": "root/DemolishedPhaseId"
+        },
+        "Pinned": false
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+      ],
+      "ancestors": [
+      ],
+      "_id": "5f6b41e3d576a079a56717a7",
+      "type": "Abstract",
+      "_type": "ReferencePoint",
+      "_assembly": "RevitAPI, Version=20.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "owner": "5f6b3a02e0abf84321ca1610",
+      "__v": 0,
+      "createdAt": "2020-09-23T12:38:59.167Z",
+      "updatedAt": "2020-09-23T12:38:59.167Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+      ],
+      "canWrite": [
+      ],
+      "anonymousComments": false,
+      "comments": [
+      ],
+      "name": "Area Load 1",
+      "geometryHash": null,
+      "hash": "af133f4879c553bc0a3e056491af93f6",
+      "applicationId": "ed3ed6e8-541f-4cba-9995-091cb5a6c5a0-000c89e0_0",
+      "properties": {
+        "structural": {
+          "loading": {
+            "type": "Vector/StructuralVectorThree",
+            "value": [
+              0,
+              0,
+              -609.6
+            ],
+            "hash": "e692d640376b4b8bdbdfad915a5a9083"
+          },
+          "loadCaseRef": "cde3fe26-3474-4c33-bbbf-de8e41d00f43-00000709"
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+      ],
+      "ancestors": [
+      ],
+      "_id": "5f6b41e3d576a079a56717a8",
+      "type": "Polyline/Structural2DLoadPanel",
+      "value": [
+        16204.34795024897,
+        3805.2764160838715,
+        0,
+        16204.34795024897,
+        19805.276391763873,
+        0,
+        6204.347965448969,
+        19805.276391763873,
+        0,
+        6204.347965448969,
+        3805.2764160838715,
+        0
+      ],
+      "closed": true,
+      "owner": "5f6b3a02e0abf84321ca1610",
+      "__v": 0,
+      "createdAt": "2020-09-23T12:38:59.167Z",
+      "updatedAt": "2020-09-23T12:38:59.167Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+      ],
+      "canWrite": [
+      ],
+      "anonymousComments": false,
+      "comments": [
+      ],
+      "name": "DL1",
+      "geometryHash": null,
+      "hash": "2c6fad2bb636ea37ba0c6bfe32c01a25",
+      "applicationId": "cde3fe26-3474-4c33-bbbf-de8e41d00f43-00000709",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+      ],
+      "ancestors": [
+      ],
+      "_id": "5f6b41e3d576a079a56717a9",
+      "type": "StructuralLoadCase",
+      "caseType": "Dead",
+      "owner": "5f6b3a02e0abf84321ca1610",
+      "__v": 0,
+      "createdAt": "2020-09-23T12:38:59.168Z",
+      "updatedAt": "2020-09-23T12:38:59.168Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+      ],
+      "canWrite": [
+      ],
+      "anonymousComments": false,
+      "comments": [
+      ],
+      "name": "600 x 750mm",
+      "geometryHash": null,
+      "hash": "75c7121a651c46e6a718dec09dc07d4a",
+      "applicationId": "9e3fa201-2c4b-4b12-8310-359abe27f002-000c9282",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+      ],
+      "ancestors": [
+      ],
+      "_id": "5f6b4873d576a079a56717bf",
+      "type": "Structural1DProperty",
+      "profile": {
+        "type": "Polyline",
+        "value": [
+          299.999999544,
+          374.99999943,
+          0,
+          299.999999544,
+          -374.99999943,
+          0,
+          -299.999999544,
+          -374.99999943,
+          0,
+          -299.999999544,
+          374.99999943,
+          0
+        ],
+        "closed": true,
+        "hash": "720cb304d6b80c42dab196369cefbe64"
+      },
+      "shape": "Rectangular",
+      "hollow": false,
+      "owner": "5f6b3a02e0abf84321ca1610",
+      "__v": 0,
+      "createdAt": "2020-09-23T13:06:59.903Z",
+      "updatedAt": "2020-09-23T13:06:59.903Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+      ],
+      "canWrite": [
+      ],
+      "anonymousComments": false,
+      "comments": [
+      ],
+      "name": null,
+      "geometryHash": null,
+      "hash": "8bdeb404955c877bcf2ce7d2e7d7eb55",
+      "applicationId": "2c75a01f-1520-4afb-b808-8122c4e90c58-000c9298",
+      "properties": {
+        "structural": {
+          "resultVertices": [
+            16204.34795024897,
+            3805.2764160838715,
+            -2499.9999961999993,
+            16204.34795024897,
+            3805.2764160838715,
+            0
+          ],
+          "zAxis": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                1,
+                0
+              ],
+              "hash": "7c983b4f32f57fcb3b14fdef2903cb0b"
+            }
+          ],
+          "offset": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "e692d640376b4b8bdbdfad915a5a9083"
+            },
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "e692d640376b4b8bdbdfad915a5a9083"
+            }
+          ],
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                false,
+                false,
+                false,
+                true,
+                true,
+                true
+              ],
+              "hash": "205fb3bd87e75e78294b511bc241a1db"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              "hash": "b1d35bda2432ae64e36cb133c277be27"
+            }
+          ],
+          "propertyRef": "9e3fa201-2c4b-4b12-8310-359abe27f002-000c9282"
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+      ],
+      "ancestors": [
+      ],
+      "_id": "5f6b5154e0abf84321ca16de",
+      "type": "Polyline/Structural1DElementPolyline",
+      "value": [
+        16204.34795024897,
+        3805.2764160838715,
+        -2499.9999961999993,
+        16204.34795024897,
+        3805.2764160838715,
+        0
+      ],
+      "closed": false,
+      "owner": "5f6b3a02e0abf84321ca1610",
+      "__v": 0,
+      "createdAt": "2020-09-23T13:44:52.071Z",
+      "updatedAt": "2020-09-23T13:44:52.071Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+      ],
+      "canWrite": [
+      ],
+      "anonymousComments": false,
+      "comments": [
+      ],
+      "name": null,
+      "geometryHash": "16184a79196275ab8f59070328ab3212",
+      "hash": "16184a79196275ab8f59070328ab3212",
+      "applicationId": null,
+      "properties": {
+        "ShowNormalReferencePlaneOnly": true,
+        "CoordinatePlaneVisibility": 0,
+        "Visible": false,
+        "Position": {
+          "type": "Point",
+          "value": [
+            16204.34795024897,
+            3805.2764160838715,
+            -2499.9999961999993
+          ],
+          "hash": "89e96ff8918fe22fb31554ad625a7f1f"
+        },
+        "Name": "",
+        "DemolishedPhaseId": {
+          "type": "Abstract",
+          "_type": "ElementId",
+          "_assembly": "RevitAPI, Version=20.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "hash": "95f2c56ca40c0201cd0f63b02ca5f8cb",
+          "geometryHash": "95f2c56ca40c0201cd0f63b02ca5f8cb"
+        },
+        "CreatedPhaseId": {
+          "type": "Abstract",
+          "_type": "ref",
+          "_ref": "root/DemolishedPhaseId"
+        },
+        "Pinned": false
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+      ],
+      "ancestors": [
+      ],
+      "_id": "5f6b4873d576a079a56717b8",
+      "type": "Abstract",
+      "_type": "ReferencePoint",
+      "_assembly": "RevitAPI, Version=20.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "owner": "5f6b3a02e0abf84321ca1610",
+      "__v": 0,
+      "createdAt": "2020-09-23T13:06:59.901Z",
+      "updatedAt": "2020-09-23T13:06:59.901Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+      ],
+      "canWrite": [
+      ],
+      "anonymousComments": false,
+      "comments": [
+      ],
+      "name": "600 x 750mm",
+      "geometryHash": null,
+      "hash": "75c7121a651c46e6a718dec09dc07d4a",
+      "applicationId": "9e3fa201-2c4b-4b12-8310-359abe27f002-000c9282",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+      ],
+      "ancestors": [
+      ],
+      "_id": "5f6b4873d576a079a56717bf",
+      "type": "Structural1DProperty",
+      "profile": {
+        "type": "Polyline",
+        "value": [
+          299.999999544,
+          374.99999943,
+          0,
+          299.999999544,
+          -374.99999943,
+          0,
+          -299.999999544,
+          -374.99999943,
+          0,
+          -299.999999544,
+          374.99999943,
+          0
+        ],
+        "closed": true,
+        "hash": "720cb304d6b80c42dab196369cefbe64"
+      },
+      "shape": "Rectangular",
+      "hollow": false,
+      "owner": "5f6b3a02e0abf84321ca1610",
+      "__v": 0,
+      "createdAt": "2020-09-23T13:06:59.903Z",
+      "updatedAt": "2020-09-23T13:06:59.903Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+      ],
+      "canWrite": [
+      ],
+      "anonymousComments": false,
+      "comments": [
+      ],
+      "name": null,
+      "geometryHash": null,
+      "hash": "fc473d971420fbadd135ba8ca3d9e88e",
+      "applicationId": "2c75a01f-1520-4afb-b808-8122c4e90c58-000c92b7",
+      "properties": {
+        "structural": {
+          "resultVertices": [
+            6204.347965448969,
+            3805.2764160839038,
+            -2499.9999961999993,
+            6204.347965448969,
+            3805.2764160839038,
+            0
+          ],
+          "zAxis": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                1,
+                0
+              ],
+              "hash": "7c983b4f32f57fcb3b14fdef2903cb0b"
+            }
+          ],
+          "offset": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "e692d640376b4b8bdbdfad915a5a9083"
+            },
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "e692d640376b4b8bdbdfad915a5a9083"
+            }
+          ],
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              "hash": "b1d35bda2432ae64e36cb133c277be27"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              "hash": "b1d35bda2432ae64e36cb133c277be27"
+            }
+          ],
+          "propertyRef": "9e3fa201-2c4b-4b12-8310-359abe27f002-000c9282"
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+      ],
+      "ancestors": [
+      ],
+      "_id": "5f6b4873d576a079a56717ba",
+      "type": "Polyline/Structural1DElementPolyline",
+      "value": [
+        6204.347965448969,
+        3805.2764160839038,
+        -2499.9999961999993,
+        6204.347965448969,
+        3805.2764160839038,
+        0
+      ],
+      "closed": false,
+      "owner": "5f6b3a02e0abf84321ca1610",
+      "__v": 0,
+      "createdAt": "2020-09-23T13:06:59.901Z",
+      "updatedAt": "2020-09-23T13:06:59.902Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+      ],
+      "canWrite": [
+      ],
+      "anonymousComments": false,
+      "comments": [
+      ],
+      "name": null,
+      "geometryHash": "e5eede6c1e76e31a02015c7122031f74",
+      "hash": "e5eede6c1e76e31a02015c7122031f74",
+      "applicationId": null,
+      "properties": {
+        "ShowNormalReferencePlaneOnly": true,
+        "CoordinatePlaneVisibility": 0,
+        "Visible": false,
+        "Position": {
+          "type": "Point",
+          "value": [
+            6204.347965448969,
+            3805.2764160839038,
+            -2499.9999961999993
+          ],
+          "hash": "c61917258c18f21b8a5634da9ef475dd"
+        },
+        "Name": "",
+        "DemolishedPhaseId": {
+          "type": "Abstract",
+          "_type": "ElementId",
+          "_assembly": "RevitAPI, Version=20.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "hash": "95f2c56ca40c0201cd0f63b02ca5f8cb",
+          "geometryHash": "95f2c56ca40c0201cd0f63b02ca5f8cb"
+        },
+        "CreatedPhaseId": {
+          "type": "Abstract",
+          "_type": "ref",
+          "_ref": "root/DemolishedPhaseId"
+        },
+        "Pinned": false
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+      ],
+      "ancestors": [
+      ],
+      "_id": "5f6b4873d576a079a56717bb",
+      "type": "Abstract",
+      "_type": "ReferencePoint",
+      "_assembly": "RevitAPI, Version=20.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "owner": "5f6b3a02e0abf84321ca1610",
+      "__v": 0,
+      "createdAt": "2020-09-23T13:06:59.902Z",
+      "updatedAt": "2020-09-23T13:06:59.902Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+      ],
+      "canWrite": [
+      ],
+      "anonymousComments": false,
+      "comments": [
+      ],
+      "name": "600 x 750mm",
+      "geometryHash": null,
+      "hash": "75c7121a651c46e6a718dec09dc07d4a",
+      "applicationId": "9e3fa201-2c4b-4b12-8310-359abe27f002-000c9282",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+      ],
+      "ancestors": [
+      ],
+      "_id": "5f6b4873d576a079a56717bf",
+      "type": "Structural1DProperty",
+      "profile": {
+        "type": "Polyline",
+        "value": [
+          299.999999544,
+          374.99999943,
+          0,
+          299.999999544,
+          -374.99999943,
+          0,
+          -299.999999544,
+          -374.99999943,
+          0,
+          -299.999999544,
+          374.99999943,
+          0
+        ],
+        "closed": true,
+        "hash": "720cb304d6b80c42dab196369cefbe64"
+      },
+      "shape": "Rectangular",
+      "hollow": false,
+      "owner": "5f6b3a02e0abf84321ca1610",
+      "__v": 0,
+      "createdAt": "2020-09-23T13:06:59.903Z",
+      "updatedAt": "2020-09-23T13:06:59.903Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+      ],
+      "canWrite": [
+      ],
+      "anonymousComments": false,
+      "comments": [
+      ],
+      "name": null,
+      "geometryHash": null,
+      "hash": "40f1410a1f932c7c95fcdb2b34f71e04",
+      "applicationId": "2c75a01f-1520-4afb-b808-8122c4e90c58-000c92c3",
+      "properties": {
+        "structural": {
+          "resultVertices": [
+            6204.347965448995,
+            19805.276391763873,
+            -2499.9999961999993,
+            6204.347965448995,
+            19805.276391763873,
+            0
+          ],
+          "zAxis": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                1,
+                0
+              ],
+              "hash": "7c983b4f32f57fcb3b14fdef2903cb0b"
+            }
+          ],
+          "offset": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "e692d640376b4b8bdbdfad915a5a9083"
+            },
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "e692d640376b4b8bdbdfad915a5a9083"
+            }
+          ],
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              "hash": "b1d35bda2432ae64e36cb133c277be27"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              "hash": "b1d35bda2432ae64e36cb133c277be27"
+            }
+          ],
+          "propertyRef": "9e3fa201-2c4b-4b12-8310-359abe27f002-000c9282"
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+      ],
+      "ancestors": [
+      ],
+      "_id": "5f6b4873d576a079a56717bd",
+      "type": "Polyline/Structural1DElementPolyline",
+      "value": [
+        6204.347965448995,
+        19805.276391763873,
+        -2499.9999961999993,
+        6204.347965448995,
+        19805.276391763873,
+        0
+      ],
+      "closed": false,
+      "owner": "5f6b3a02e0abf84321ca1610",
+      "__v": 0,
+      "createdAt": "2020-09-23T13:06:59.903Z",
+      "updatedAt": "2020-09-23T13:06:59.903Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+      ],
+      "canWrite": [
+      ],
+      "anonymousComments": false,
+      "comments": [
+      ],
+      "name": null,
+      "geometryHash": "b052b1d317433bb612016500329033d5",
+      "hash": "b052b1d317433bb612016500329033d5",
+      "applicationId": null,
+      "properties": {
+        "ShowNormalReferencePlaneOnly": true,
+        "CoordinatePlaneVisibility": 0,
+        "Visible": false,
+        "Position": {
+          "type": "Point",
+          "value": [
+            6204.347965448995,
+            19805.276391763873,
+            -2499.9999961999993
+          ],
+          "hash": "0d85faf507888c03e5bb0c52abf616bf"
+        },
+        "Name": "",
+        "DemolishedPhaseId": {
+          "type": "Abstract",
+          "_type": "ElementId",
+          "_assembly": "RevitAPI, Version=20.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "hash": "95f2c56ca40c0201cd0f63b02ca5f8cb",
+          "geometryHash": "95f2c56ca40c0201cd0f63b02ca5f8cb"
+        },
+        "CreatedPhaseId": {
+          "type": "Abstract",
+          "_type": "ref",
+          "_ref": "root/DemolishedPhaseId"
+        },
+        "Pinned": false
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+      ],
+      "ancestors": [
+      ],
+      "_id": "5f6b4873d576a079a56717be",
+      "type": "Abstract",
+      "_type": "ReferencePoint",
+      "_assembly": "RevitAPI, Version=20.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "owner": "5f6b3a02e0abf84321ca1610",
+      "__v": 0,
+      "createdAt": "2020-09-23T13:06:59.903Z",
+      "updatedAt": "2020-09-23T13:06:59.903Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+      ],
+      "canWrite": [
+      ],
+      "anonymousComments": false,
+      "comments": [
+      ],
+      "name": "600 x 750mm",
+      "geometryHash": null,
+      "hash": "75c7121a651c46e6a718dec09dc07d4a",
+      "applicationId": "9e3fa201-2c4b-4b12-8310-359abe27f002-000c9282",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+      ],
+      "ancestors": [
+      ],
+      "_id": "5f6b4873d576a079a56717bf",
+      "type": "Structural1DProperty",
+      "profile": {
+        "type": "Polyline",
+        "value": [
+          299.999999544,
+          374.99999943,
+          0,
+          299.999999544,
+          -374.99999943,
+          0,
+          -299.999999544,
+          -374.99999943,
+          0,
+          -299.999999544,
+          374.99999943,
+          0
+        ],
+        "closed": true,
+        "hash": "720cb304d6b80c42dab196369cefbe64"
+      },
+      "shape": "Rectangular",
+      "hollow": false,
+      "owner": "5f6b3a02e0abf84321ca1610",
+      "__v": 0,
+      "createdAt": "2020-09-23T13:06:59.903Z",
+      "updatedAt": "2020-09-23T13:06:59.903Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+      ],
+      "canWrite": [
+      ],
+      "anonymousComments": false,
+      "comments": [
+      ],
+      "name": null,
+      "geometryHash": null,
+      "hash": "27768c0377d1e1d85ba2410006d79e88",
+      "applicationId": "2c75a01f-1520-4afb-b808-8122c4e90c58-000c92d1",
+      "properties": {
+        "structural": {
+          "resultVertices": [
+            16204.34795024897,
+            19805.27639176384,
+            -2499.9999961999993,
+            16204.34795024897,
+            19805.27639176384,
+            0
+          ],
+          "zAxis": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                1,
+                0
+              ],
+              "hash": "7c983b4f32f57fcb3b14fdef2903cb0b"
+            }
+          ],
+          "offset": [
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "e692d640376b4b8bdbdfad915a5a9083"
+            },
+            {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "hash": "e692d640376b4b8bdbdfad915a5a9083"
+            }
+          ],
+          "endRelease": [
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                false,
+                false,
+                false,
+                true,
+                true,
+                true
+              ],
+              "hash": "205fb3bd87e75e78294b511bc241a1db"
+            },
+            {
+              "type": "StructuralVectorBoolSix",
+              "value": [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              "hash": "b1d35bda2432ae64e36cb133c277be27"
+            }
+          ],
+          "propertyRef": "9e3fa201-2c4b-4b12-8310-359abe27f002-000c9282"
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+      ],
+      "ancestors": [
+      ],
+      "_id": "5f6b5154e0abf84321ca16df",
+      "type": "Polyline/Structural1DElementPolyline",
+      "value": [
+        16204.34795024897,
+        19805.27639176384,
+        -2499.9999961999993,
+        16204.34795024897,
+        19805.27639176384,
+        0
+      ],
+      "closed": false,
+      "owner": "5f6b3a02e0abf84321ca1610",
+      "__v": 0,
+      "createdAt": "2020-09-23T13:44:52.072Z",
+      "updatedAt": "2020-09-23T13:44:52.072Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+      ],
+      "canWrite": [
+      ],
+      "anonymousComments": false,
+      "comments": [
+      ],
+      "name": null,
+      "geometryHash": "8e789635c5c2238ccea51ca0c1f2ab8a",
+      "hash": "8e789635c5c2238ccea51ca0c1f2ab8a",
+      "applicationId": null,
+      "properties": {
+        "ShowNormalReferencePlaneOnly": true,
+        "CoordinatePlaneVisibility": 0,
+        "Visible": false,
+        "Position": {
+          "type": "Point",
+          "value": [
+            16204.34795024897,
+            19805.27639176384,
+            -2499.9999961999993
+          ],
+          "hash": "dd1f25e1529df78a68fd3829265a5846"
+        },
+        "Name": "",
+        "DemolishedPhaseId": {
+          "type": "Abstract",
+          "_type": "ElementId",
+          "_assembly": "RevitAPI, Version=20.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "hash": "95f2c56ca40c0201cd0f63b02ca5f8cb",
+          "geometryHash": "95f2c56ca40c0201cd0f63b02ca5f8cb"
+        },
+        "CreatedPhaseId": {
+          "type": "Abstract",
+          "_type": "ref",
+          "_ref": "root/DemolishedPhaseId"
+        },
+        "Pinned": false
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+      ],
+      "ancestors": [
+      ],
+      "_id": "5f6b4873d576a079a56717c1",
+      "type": "Abstract",
+      "_type": "ReferencePoint",
+      "_assembly": "RevitAPI, Version=20.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "owner": "5f6b3a02e0abf84321ca1610",
+      "__v": 0,
+      "createdAt": "2020-09-23T13:06:59.904Z",
+      "updatedAt": "2020-09-23T13:06:59.904Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+      ],
+      "canWrite": [
+      ],
+      "anonymousComments": false,
+      "comments": [
+      ],
+      "name": null,
+      "geometryHash": null,
+      "hash": "42c8dd6dc4ab18afa9e188b1e43b008d",
+      "applicationId": null,
+      "properties": {
+        "structural": {
+          "axis": {
+            "type": "Plane/StructuralAxis",
+            "normal": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                1
+              ],
+              "hash": "89731fc1ed9553b99eaa5d49ab4d5492"
+            },
+            "xdir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                1,
+                0,
+                0
+              ],
+              "hash": "8aff5b186b4c65f087f9799a995df2da"
+            },
+            "ydir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                1,
+                0
+              ],
+              "hash": "7c983b4f32f57fcb3b14fdef2903cb0b"
+            },
+            "hash": "ef42fbd89e1f718e007c30052b0bf7a9"
+          },
+          "restraint": {
+            "type": "StructuralVectorBoolSix",
+            "value": [
+              true,
+              true,
+              true,
+              false,
+              false,
+              false
+            ],
+            "hash": "10415a26d7449df26813ba15f5a78ff1"
+          },
+          "stiffness": {
+            "type": "StructuralVectorSix",
+            "value": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "hash": "3c09804cdb0c8a054f4b6333c938b796"
+          }
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+      ],
+      "ancestors": [
+      ],
+      "_id": "5f6b4873d576a079a56717c5",
+      "type": "Point/StructuralNode",
+      "value": [
+        6204.347965448995,
+        19805.276391763873,
+        -2499.9999961999993
+      ],
+      "owner": "5f6b3a02e0abf84321ca1610",
+      "__v": 0,
+      "createdAt": "2020-09-23T13:06:59.905Z",
+      "updatedAt": "2020-09-23T13:06:59.905Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+      ],
+      "canWrite": [
+      ],
+      "anonymousComments": false,
+      "comments": [
+      ],
+      "name": null,
+      "geometryHash": null,
+      "hash": "3faa72d532f2dd8d01dd3fd68c3c8987",
+      "applicationId": null,
+      "properties": {
+        "structural": {
+          "axis": {
+            "type": "Plane/StructuralAxis",
+            "normal": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                1
+              ],
+              "hash": "89731fc1ed9553b99eaa5d49ab4d5492"
+            },
+            "xdir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                1,
+                0,
+                0
+              ],
+              "hash": "8aff5b186b4c65f087f9799a995df2da"
+            },
+            "ydir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                1,
+                0
+              ],
+              "hash": "7c983b4f32f57fcb3b14fdef2903cb0b"
+            },
+            "hash": "ef42fbd89e1f718e007c30052b0bf7a9"
+          },
+          "restraint": {
+            "type": "StructuralVectorBoolSix",
+            "value": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ],
+            "hash": "aa97937e2c0a20001e202058b516287e"
+          },
+          "stiffness": {
+            "type": "StructuralVectorSix",
+            "value": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "hash": "3c09804cdb0c8a054f4b6333c938b796"
+          }
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+      ],
+      "ancestors": [
+      ],
+      "_id": "5f6b495ed576a079a56717ca",
+      "type": "Point/StructuralNode",
+      "value": [
+        16204.34795024897,
+        3805.2764160838715,
+        -2499.9999961999993
+      ],
+      "owner": "5f6b3a02e0abf84321ca1610",
+      "__v": 0,
+      "createdAt": "2020-09-23T13:10:54.431Z",
+      "updatedAt": "2020-09-23T13:10:54.431Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+      ],
+      "canWrite": [
+      ],
+      "anonymousComments": false,
+      "comments": [
+      ],
+      "name": null,
+      "geometryHash": null,
+      "hash": "744d3fded54f980d89088ed5df94c807",
+      "applicationId": null,
+      "properties": {
+        "structural": {
+          "axis": {
+            "type": "Plane/StructuralAxis",
+            "normal": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                1
+              ],
+              "hash": "89731fc1ed9553b99eaa5d49ab4d5492"
+            },
+            "xdir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                1,
+                0,
+                0
+              ],
+              "hash": "8aff5b186b4c65f087f9799a995df2da"
+            },
+            "ydir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                1,
+                0
+              ],
+              "hash": "7c983b4f32f57fcb3b14fdef2903cb0b"
+            },
+            "hash": "ef42fbd89e1f718e007c30052b0bf7a9"
+          },
+          "restraint": {
+            "type": "StructuralVectorBoolSix",
+            "value": [
+              false,
+              false,
+              true,
+              false,
+              false,
+              false
+            ],
+            "hash": "3d80521913b9269f34ea41ca027873b1"
+          },
+          "stiffness": {
+            "type": "StructuralVectorSix",
+            "value": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "hash": "3c09804cdb0c8a054f4b6333c938b796"
+          }
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+      ],
+      "ancestors": [
+      ],
+      "_id": "5f6b533de0abf84321ca16e2",
+      "type": "Point/StructuralNode",
+      "value": [
+        6204.347965448969,
+        3805.2764160839038,
+        -2499.9999961999993
+      ],
+      "owner": "5f6b3a02e0abf84321ca1610",
+      "__v": 0,
+      "createdAt": "2020-09-23T13:53:01.174Z",
+      "updatedAt": "2020-09-23T13:53:01.174Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+      ],
+      "canWrite": [
+      ],
+      "anonymousComments": false,
+      "comments": [
+      ],
+      "name": null,
+      "geometryHash": null,
+      "hash": "974899009edbeee04ff56c766b669030",
+      "applicationId": null,
+      "properties": {
+        "structural": {
+          "axis": {
+            "type": "Plane/StructuralAxis",
+            "normal": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                0,
+                1
+              ],
+              "hash": "89731fc1ed9553b99eaa5d49ab4d5492"
+            },
+            "xdir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                1,
+                0,
+                0
+              ],
+              "hash": "8aff5b186b4c65f087f9799a995df2da"
+            },
+            "ydir": {
+              "type": "Vector/StructuralVectorThree",
+              "value": [
+                0,
+                1,
+                0
+              ],
+              "hash": "7c983b4f32f57fcb3b14fdef2903cb0b"
+            },
+            "hash": "ef42fbd89e1f718e007c30052b0bf7a9"
+          },
+          "restraint": {
+            "type": "StructuralVectorBoolSix",
+            "value": [
+              false,
+              true,
+              true,
+              false,
+              false,
+              false
+            ],
+            "hash": "b6fbe4ef21f7cbe3a9ca5922f023f4c9"
+          },
+          "stiffness": {
+            "type": "StructuralVectorSix",
+            "value": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "hash": "3c09804cdb0c8a054f4b6333c938b796"
+          }
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [
+      ],
+      "ancestors": [
+      ],
+      "_id": "5f6b533de0abf84321ca16e3",
+      "type": "Point/StructuralNode",
+      "value": [
+        16204.34795024897,
+        19805.27639176384,
+        -2499.9999961999993
+      ],
+      "owner": "5f6b3a02e0abf84321ca1610",
+      "__v": 0,
+      "createdAt": "2020-09-23T13:53:01.175Z",
+      "updatedAt": "2020-09-23T13:53:01.175Z"
+    }
+  ],
+  "message": "Object list returned. If querying, duplication of objects in list will not be respected."
+}

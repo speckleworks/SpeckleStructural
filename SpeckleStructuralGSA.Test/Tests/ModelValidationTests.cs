@@ -41,6 +41,12 @@ namespace SpeckleStructuralGSA.Test
       ReceiverGsaValidation("NB", savedJsonFileNames, GSATargetLayer.Design);
     }
 
+    [Test]
+    public void ReceiverGsaValidationDd()
+    {
+      ReceiverGsaValidation("DD", ddDataJsonFileNames, GSATargetLayer.Design);
+    }
+
     private void ReceiverGsaValidation(string subdir, string[] jsonFiles, GSATargetLayer layer)
     {
       // Takes a saved Speckle stream with structural objects
