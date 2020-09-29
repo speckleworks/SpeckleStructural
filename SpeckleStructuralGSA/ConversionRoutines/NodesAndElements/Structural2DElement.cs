@@ -97,10 +97,16 @@ namespace SpeckleStructuralGSA
 
       obj.Offset = offset;
 
-      if (pieces.Count() < counter)
+      counter++; //Debug flag
+
+      //Process the parent member ID, if present
+      if (counter < pieces.Count() && !string.IsNullOrEmpty(pieces[counter]))
       {
-        if (String.IsNullOrEmpty(pieces[counter++]) == false)
-          Member = pieces[counter++]; // no references to this piece of data, why do we store it rather than just skipping over?
+        Member = pieces[counter++]; // no references to this piece of data, why do we store it rather than just skipping over?
+        if (int.TryParse(Member, out var memberIndex))
+        {
+          obj.ApplicationId = Helper.GetApplicationId(typeof(GSA2DMember).GetGSAKeyword(), memberIndex) + "_" + GSAId;
+        }
       }
       counter++; // Dummy
 
