@@ -11,16 +11,13 @@ namespace SpeckleStructuralGSA.Test
 {
   public class SenderProcessor : ProcessorBase
   {
-    public SenderProcessor(string directory, GSAProxy gsaInterfacer, GSACache gsaCache, GSATargetLayer layer, bool embedResults, string[] cases = null, string[] resultsToSend = null) : base(directory)
+    public SenderProcessor(string directory, GSAProxy gsaInterfacer, GSACache gsaCache, GSATargetLayer layer, bool embedResults, string[] resultsToSend = null) : base(directory)
     {
       GSAInterfacer = gsaInterfacer;
       Initialiser.Settings.TargetLayer = layer;
 
       Initialiser.Settings.EmbedResults = embedResults;
-      if (cases != null)
-      {
-        Initialiser.Settings.ResultCases = cases.ToList();
-      }
+      
       if (resultsToSend != null)
       {
         processResultLabels(resultsToSend);

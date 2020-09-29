@@ -56,6 +56,11 @@ namespace SpeckleStructuralGSA.Test
       return mockGsaCom;
     }
 
+    protected List<SpeckleObject> ModelToSpeckleObjects(GSATargetLayer layer, bool resultsOnly, bool embedResults, string loadCase, string[] resultsToSend = null)
+    {
+      return ModelToSpeckleObjects(layer, resultsOnly, embedResults, new string[] { loadCase }, resultsToSend);
+    }
+
     protected List<SpeckleObject> ModelToSpeckleObjects(GSATargetLayer layer, bool resultsOnly, bool embedResults, string[] cases = null, string[] resultsToSend = null)
     {
       gsaCache.Clear();
@@ -64,7 +69,7 @@ namespace SpeckleStructuralGSA.Test
       Initialiser.GSASenderObjects.Clear();
 
       //Compile all GWA commands with application IDs
-      var senderProcessor = new SenderProcessor(TestDataDirectory, gsaInterfacer, gsaCache, layer, embedResults, cases, resultsToSend);
+      var senderProcessor = new SenderProcessor(TestDataDirectory, gsaInterfacer, gsaCache, layer, embedResults, resultsToSend);
 
       var keywords = senderProcessor.GetKeywords(layer);
       var data = gsaInterfacer.GetGwaData(keywords, false);
@@ -79,6 +84,12 @@ namespace SpeckleStructuralGSA.Test
           gwaSetCommandType: data[i].GwaSetType,
           streamId: data[i].StreamId
           );
+      }
+
+      if (cases != null)
+      {
+        var expandedCases = ((IGSACache)Initialiser.Cache).ExpandLoadCasesAndCombinations(string.Join(" ", cases));
+        Initialiser.Settings.ResultCases = expandedCases;
       }
 
       senderProcessor.GsaInstanceToSpeckleObjects(layer, out var speckleObjects, resultsOnly);

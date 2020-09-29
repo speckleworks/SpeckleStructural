@@ -36,7 +36,6 @@ namespace SpeckleStructuralGSA.Test
       Initialiser.Interface = gsaInterfacer;
       Initialiser.Settings = new Settings();
       Initialiser.AppUI = new SpeckleAppUI();
-      Initialiser.ResultsContext = new SpeckleGSAResultsContext(Path.Combine(TestDataDirectory, "CsvResults"));
     }
 
     [TestCase("TxSpeckleObjectsDesignLayer.json", GSATargetLayer.Design, false, true, gsaFileNameWithResults)]
@@ -48,6 +47,8 @@ namespace SpeckleStructuralGSA.Test
     {
       if (resultsOnly || embedResults)
       {
+        Initialiser.ResultsContext = new SpeckleGSAResultsContext(Path.Combine(TestDataDirectory, "CsvResults"));
+
         //The gsaFileNameWithResults file used doesn't have 2D members
         Initialiser.ResultsContext.ImportResultsFromFile("result_node", "case_id", "node_id");
         Initialiser.ResultsContext.ImportResultsFromFile("result_element_section", "case_id", "element_id");
@@ -172,18 +173,32 @@ namespace SpeckleStructuralGSA.Test
       Assert.IsEmpty(unmatching, unmatching.Count().ToString() + " unmatched objects");
     }
 
-    [Ignore("There is an equivalent test in SpeckleGSA repo, so this one might be removed")]
-    [TestCase(GSATargetLayer.Design, false, false, "sjc.gwb")]
-    //[TestCase(GSATargetLayer.Analysis, false, false, @"C:\Users\Nic.Burgers\OneDrive - Arup\Issues\Jason Chen\db\TestModel.gwb")]
-    public void TransmissionTestForDebug(GSATargetLayer layer, bool resultsOnly, bool embedResults, string gsaFileName)
+    //[Ignore("There is an equivalent test in SpeckleGSA repo, so this one might be removed")]
+    [TestCase(GSATargetLayer.Analysis, true, false, @"C:\Temp\ResultsTest.gwb", @"C:\Temp\ResultsTest")]
+    public void TransmissionTestForDebug(GSATargetLayer layer, bool resultsOnly, bool embedResults, string gsaFileName, string resultsDirectory = "")
     {
-      gsaInterfacer.OpenFile(gsaFileName.Contains("\\") ? gsaFileName : Path.Combine(TestDataDirectory, gsaFileName));
+      if (resultsOnly || embedResults)
+      {
+        Initialiser.ResultsContext = new SpeckleGSAResultsContext(resultsDirectory ?? Path.Combine(TestDataDirectory, "CsvResults"));
+        //The gsaFileNameWithResults file used doesn't have 2D members
+        Initialiser.ResultsContext.ImportResultsFromFile("result_node", "case_id", "node_id");
+        Initialiser.ResultsContext.ImportResultsFromFile("result_element_section", "case_id", "element_id");
+        Initialiser.ResultsContext.ImportResultsFromFile("result_element_2d", "case_id", "element_id");
+        Initialiser.ResultsContext.ImportResultsFromFile("result_global", "case_id");
+      }
 
-      var actualObjects = ModelToSpeckleObjects(layer, resultsOnly, embedResults, loadCases, resultTypes);
+      gsaInterfacer.OpenFile(Path.Combine(TestDataDirectory, gsaFileName));
+
+      var contextResultTypes = new string[] { "Nodal Displacements", "Nodal Velocity", "Nodal Acceleration", "Nodal Reaction", "Constraint Forces",
+          "1D Element Force",
+          "2D Element Projected Moment", "2D Element Projected Force",
+          "2D Element Projected Stress - Bottom", "2D Element Projected Stress - Middle", "2D Element Projected Stress - Top"};
+
+      var actualObjects = ModelToSpeckleObjects(layer, resultsOnly, embedResults, "all", contextResultTypes);
+      gsaInterfacer.Close();
+
       Assert.IsNotNull(actualObjects);
       actualObjects = actualObjects.OrderBy(a => a.ApplicationId).ToList();
-
-      var objectsByType = actualObjects.GroupBy(o => o.GetType());
 
       var actual = new Dictionary<SpeckleObject, string>();
       foreach (var actualObject in actualObjects)
@@ -195,10 +210,6 @@ namespace SpeckleStructuralGSA.Test
 
         actual.Add(actualObject, actualJson);
       }
-
-      var matched = new List<SpeckleObject>();
-
-      gsaInterfacer.Close();
     }
   }
 }
