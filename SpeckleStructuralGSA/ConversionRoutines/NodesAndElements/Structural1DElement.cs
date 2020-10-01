@@ -9,7 +9,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("EL.4", new string[] { "NODE.3" }, "elements", true, false, new Type[] { typeof(GSANode), typeof(GSA1DProperty), typeof(GSASpringProperty) }, new Type[] { typeof(GSANode), typeof(GSA1DProperty), typeof(GSASpringProperty) })]
+  [GSAObject("EL.4", new string[] { "NODE.3" }, "model", true, false, new Type[] { typeof(GSANode), typeof(GSA1DProperty), typeof(GSASpringProperty) }, new Type[] { typeof(GSANode), typeof(GSA1DProperty), typeof(GSASpringProperty) })]
   public class GSA1DElement : IGSASpeckleContainer
   {
     public string Member;
@@ -146,7 +146,7 @@ namespace SpeckleStructuralGSA
         Member = pieces[counter++]; // no references to this piece of data, why do we store it rather than just skipping over?
         if (int.TryParse(Member, out var memberIndex))
         {
-          obj.ApplicationId = Helper.GetApplicationId(typeof(GSA1DMember).GetGSAKeyword(), memberIndex);
+          obj.ApplicationId = Helper.GetApplicationId(typeof(GSA1DMember).GetGSAKeyword(), memberIndex) + "_" + this.GSAId;
         }
       }
       this.Value = obj;
@@ -296,7 +296,7 @@ namespace SpeckleStructuralGSA
     }
   }
 
-  [GSAObject("MEMB.8", new string[] { "NODE.3" }, "elements", false, true, new Type[] { typeof(GSA1DProperty), typeof(GSANode), typeof(GSASpringProperty) }, new Type[] { typeof(GSA1DProperty), typeof(GSANode), typeof(GSASpringProperty) })]
+  [GSAObject("MEMB.8", new string[] { "NODE.3" }, "model", false, true, new Type[] { typeof(GSA1DProperty), typeof(GSANode), typeof(GSASpringProperty) }, new Type[] { typeof(GSA1DProperty), typeof(GSANode), typeof(GSASpringProperty) })]
   public class GSA1DMember : IGSASpeckleContainer
   {
     public int Group; // Keep for load targetting

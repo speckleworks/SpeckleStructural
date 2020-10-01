@@ -8,7 +8,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("INF_BEAM.1", new string[] { }, "misc", true, false, new Type[] { typeof(GSA1DElement) }, new Type[] { typeof(GSA1DElement) })]
+  [GSAObject("INF_BEAM.1", new string[] { }, "model", true, false, new Type[] { typeof(GSA1DElement) }, new Type[] { typeof(GSA1DElement) })]
   public class GSA1DInfluenceEffect : IGSASpeckleContainer
   {
     public int GSAId { get; set; }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("EL.4", new string[] { "NODE.3", "PROP_2D.6" }, "elements", true, false, new Type[] { typeof(GSANode), typeof(GSA2DProperty) }, new Type[] { typeof(GSANode), typeof(GSA2DProperty) })]
+  [GSAObject("EL.4", new string[] { "NODE.3", "PROP_2D.6" }, "model", true, false, new Type[] { typeof(GSANode), typeof(GSA2DProperty) }, new Type[] { typeof(GSANode), typeof(GSA2DProperty) })]
   public class GSA2DElement : IGSASpeckleContainer
   {
     public string Member;
@@ -194,7 +194,7 @@ namespace SpeckleStructuralGSA
 
   }
 
-  [GSAObject("MEMB.8", new string[] { "NODE.3" }, "elements", false, true, new Type[] { typeof(GSANode), typeof(GSA2DProperty) }, new Type[] { typeof(GSANode), typeof(GSA2DProperty) })]
+  [GSAObject("MEMB.8", new string[] { "NODE.3" }, "model", false, true, new Type[] { typeof(GSANode), typeof(GSA2DProperty) }, new Type[] { typeof(GSANode), typeof(GSA2DProperty) })]
   public class GSA2DMember : IGSASpeckleContainer
   {
     public int Group; // Keep for load targetting
