@@ -275,7 +275,7 @@ namespace SpeckleStructuralGSA
       var polylines = new List<GSA1DElementPolyline>();
       var typeName = dummyObject.GetType().Name;
       // Perform mesh merging
-      var uniqueMembers = new List<string>(Initialiser.GSASenderObjects.Get<GSA1DElement>().Select(x => (x as GSA1DElement).Member).Where(m => Convert.ToInt32(m) > 0).Distinct());
+      var uniqueMembers = new List<int>(Initialiser.GSASenderObjects.Get<GSA1DElement>().Select(x => x.Member).Where(m => m > 0).Distinct());
       uniqueMembers.Sort();  //Just for readability and testing
 
       //This loop has been left as serial for now, considering the fact that the sender objects are retrieved and removed-from with each iteration
@@ -284,20 +284,22 @@ namespace SpeckleStructuralGSA
         try
         {
           var all1dElements = Initialiser.GSASenderObjects.Get<GSA1DElement>();
-          var matching1dElementList = all1dElements.Where(x => (x as GSA1DElement).Member == member).OrderBy(m => m.GSAId).ToList();
-
-          var poly = new GSA1DElementPolyline() { GSAId = Convert.ToInt32(member) };
-          try
+          var matching1dElementList = all1dElements.Where(x => x.Member == member).OrderBy(m => m.GSAId).ToList();
+          if (matching1dElementList.Count() > 1)
           {
-            poly.ParseGWACommand(matching1dElementList);
-            polylines.Add(poly);
-          }
-          catch (Exception ex)
-          {
-            Initialiser.AppUI.Message(typeName + ": " + ex.Message, member);
-          }
+            var poly = new GSA1DElementPolyline() { GSAId = Convert.ToInt32(member) };
+            try
+            {
+              poly.ParseGWACommand(matching1dElementList);
+              polylines.Add(poly);
+            }
+            catch (Exception ex)
+            {
+              Initialiser.AppUI.Message(typeName + ": " + ex.Message, member.ToString());
+            }
 
-          Initialiser.GSASenderObjects.RemoveAll(matching1dElementList);
+            Initialiser.GSASenderObjects.RemoveAll(matching1dElementList);
+          }
         }
         catch { }
       }

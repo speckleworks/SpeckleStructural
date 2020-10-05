@@ -70,12 +70,14 @@ namespace SpeckleStructuralGSA.Test
       var data = gsaInterfacer.GetGwaData(keywords, false);
       for (int i = 0; i < data.Count(); i++)
       {
+        var applicationId = string.IsNullOrEmpty(data[i].ApplicationId) ? null : data[i].ApplicationId;
         gsaCache.Upsert(
           data[i].Keyword, 
           data[i].Index, 
           data[i].GwaWithoutSet,
+          applicationId: applicationId,
           //This needs to be revised as this logic is in the kit too
-          applicationId: (string.IsNullOrEmpty(data[i].ApplicationId)) ? ("gsa/" + data[i].Keyword + "_" + data[i].Index.ToString()) : data[i].ApplicationId, 
+          //applicationId: (string.IsNullOrEmpty(data[i].ApplicationId)) ? ("gsa/" + data[i].Keyword + "_" + data[i].Index.ToString()) : data[i].ApplicationId, 
           gwaSetCommandType: data[i].GwaSetType,
           streamId: data[i].StreamId
           );

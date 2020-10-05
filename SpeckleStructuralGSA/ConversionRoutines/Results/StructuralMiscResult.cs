@@ -7,7 +7,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("", new string[] { "ASSEMBLY.3" }, "results", true, false, new Type[] { }, new Type[] { })]
+  [GSAObject("", new string[] { "ASSEMBLY.3" }, "results", true, false, new Type[] { typeof(GSAAssembly) }, new Type[] { })]
   public class GSAMiscResult : IGSASpeckleContainer
   {
     public int GSAId { get; set; }
@@ -20,30 +20,27 @@ namespace SpeckleStructuralGSA
   {
     public static SpeckleObject ToSpeckle(this GSAMiscResult dummyObject)
     {
-      if (Initialiser.Settings.MiscResults.Count() == 0)
+      var keyword = typeof(GSAAssembly).GetGSAKeyword();
+      if (Initialiser.Settings.MiscResults.Count() == 0 || !Initialiser.Cache.GetKeywordRecordsSummary(keyword, out var gwa, out var indices, out var applicationIds))
+      {
         return new SpeckleNull();
+      }
 
       var results = new List<GSAMiscResult>();
 
-      var indices = Initialiser.Cache.LookupIndices(typeof(GSAAssembly).GetGSAKeyword()).Where(i => i.HasValue).Select(i => i.Value).ToList();
-
+      //Unlike embedding, separate results doesn't necessarily mean that there is a Speckle object created for each assembly.  There is always though
+      //some GWA loaded into the cache
       foreach (var kvp in Initialiser.Settings.MiscResults)
       {
-        foreach (var loadCase in Initialiser.Settings.ResultCases)
+        foreach (var loadCase in Initialiser.Settings.ResultCases.Where(rc => Initialiser.Interface.CaseExist(rc)))
         {
-          if (!Initialiser.Interface.CaseExist(loadCase)) continue;
-
-          var id = 0;
-
           for (var i = 0; i < indices.Count(); i++)
           {
-            id = indices[i];
-
-            var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item2, kvp.Value.Item3, kvp.Value.Item4, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
+            var resultExport = Initialiser.Interface.GetGSAResult(indices[i], kvp.Value.Item2, kvp.Value.Item3, kvp.Value.Item4, loadCase, 
+              Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
 
             if (resultExport == null || resultExport.Count() == 0)
             {
-              id++;
               continue;
             }
 
@@ -52,15 +49,11 @@ namespace SpeckleStructuralGSA
               Description = kvp.Key,
               IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
               Value = resultExport,
-              LoadCaseRef = loadCase
+              LoadCaseRef = loadCase,
+              TargetRef = string.IsNullOrEmpty(applicationIds[i]) ? Helper.GetApplicationId(keyword, indices[i]) : applicationIds[i]
             };
-
-            if (id != 0)
-            {
-              newRes.TargetRef = Helper.GetApplicationId(kvp.Value.Item1, id);
-            }
             newRes.GenerateHash();
-            results.Add(new GSAMiscResult() { Value = newRes });
+            results.Add(new GSAMiscResult() { Value = newRes, GSAId = indices[i] });
           }
         }
       }

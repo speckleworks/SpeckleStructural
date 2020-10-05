@@ -1185,6 +1185,17 @@ namespace SpeckleStructuralGSA
       return taskType;
     }
 
+    public static bool GetElementParentId(string gwa, out int id)
+    {
+      var pieces = gwa.ListSplit("\t");
+      if (pieces.Length >= 18)
+      {
+        return int.TryParse(pieces.Last(), out id);
+      }
+      id = 0;
+      return false;
+    }
+
     public static string GetApplicationId(string keyword, int id)
     {
       //Fill with SID
