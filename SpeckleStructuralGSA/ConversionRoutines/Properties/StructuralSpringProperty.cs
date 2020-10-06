@@ -8,7 +8,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("PROP_SPR.4", new string[] { }, "properties", true, true, new Type[] { }, new Type[] { })]
+  [GSAObject("PROP_SPR.4", new string[] { }, "model", true, true, new Type[] { }, new Type[] { })]
   public class GSASpringProperty : IGSASpeckleContainer
   {
     public int GSAId { get; set; }

@@ -9,10 +9,13 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("EL.4", new string[] { "NODE.3" }, "elements", true, false, new Type[] { typeof(GSANode), typeof(GSA1DProperty), typeof(GSASpringProperty) }, new Type[] { typeof(GSANode), typeof(GSA1DProperty), typeof(GSASpringProperty) })]
+  //Elements can have parent members and the application IDs should be based on that of their parents, so they need to be read first, hence the inclusion of that as a read prerequisite
+  [GSAObject("EL.4", new string[] { "NODE.3" }, "model", true, false, 
+    new Type[] { typeof(GSANode), typeof(GSA1DProperty), typeof(GSASpringProperty), typeof(GSA1DMember) }, 
+    new Type[] { typeof(GSANode), typeof(GSA1DProperty), typeof(GSASpringProperty) })]
   public class GSA1DElement : IGSASpeckleContainer
   {
-    public string Member;
+    public int Member;
     
     public int GSAId { get; set; }
     public string GWACommand { get; set; }
@@ -27,7 +30,11 @@ namespace SpeckleStructuralGSA
       // off_x1 | off_x2 | off_y | off_z | parent_member | dummy
 
       if (this.GWACommand == null)
+      {
         return;
+      }
+
+      var keyword = this.GetGSAKeyword();
 
       var obj = new Structural1DElement();
 
@@ -36,7 +43,7 @@ namespace SpeckleStructuralGSA
       var counter = 1; // Skip identifier
 
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(keyword, this.GSAId);
 
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; // Colour
@@ -141,11 +148,15 @@ namespace SpeckleStructuralGSA
 
       counter++; // Dummy
 
-      if (counter < pieces.Length)
+      if (Helper.GetElementParentIdFromGwa(this.GWACommand, out int memberIndex))
       {
-        Member = pieces[counter++]; // no references to this piece of data, why do we store it rather than just skipping over?
+        Member = memberIndex;
+        obj.ApplicationId = SpeckleStructuralClasses.Helper.CreateChildApplicationId(this.GSAId, Helper.GetApplicationId(typeof(GSA1DMember).GetGSAKeyword(), memberIndex));
       }
+
       this.Value = obj;
+
+      Initialiser.Cache.SetApplicationId(keyword, this.GSAId, obj.ApplicationId);
     }
 
     public string SetGWACommand(int group = 0)
@@ -292,7 +303,7 @@ namespace SpeckleStructuralGSA
     }
   }
 
-  [GSAObject("MEMB.8", new string[] { "NODE.3" }, "elements", false, true, new Type[] { typeof(GSA1DProperty), typeof(GSANode), typeof(GSASpringProperty) }, new Type[] { typeof(GSA1DProperty), typeof(GSANode), typeof(GSASpringProperty) })]
+  [GSAObject("MEMB.8", new string[] { "NODE.3" }, "model", false, true, new Type[] { typeof(GSA1DProperty), typeof(GSANode), typeof(GSASpringProperty) }, new Type[] { typeof(GSA1DProperty), typeof(GSANode), typeof(GSASpringProperty) })]
   public class GSA1DMember : IGSASpeckleContainer
   {
     public int Group; // Keep for load targetting

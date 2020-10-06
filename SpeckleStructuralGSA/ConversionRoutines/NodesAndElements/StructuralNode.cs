@@ -10,7 +10,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("NODE.3", new string[] { "AXIS.1", "PROP_SPR.4", "PROP_MASS.2" }, "nodes", true, true, new Type[] { }, new Type[] { })]
+  [GSAObject("NODE.3", new string[] { "AXIS.1", "PROP_SPR.4", "PROP_MASS.2" }, "model", true, true, new Type[] { }, new Type[] { })]
   public class GSANode : IGSASpeckleContainer
   {
     public bool ForceSend; // This is to filter only "important" nodes
@@ -189,7 +189,7 @@ namespace SpeckleStructuralGSA
     }
   }
 
-  [GSAObject("EL.4", new string[] { "PROP_MASS.2" }, "elements", true, false, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode) })]
+  [GSAObject("EL.4", new string[] { "PROP_MASS.2" }, "model", true, false, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode) })]
   public class GSA0DElement : IGSASpeckleContainer
   {
     public int GSAId { get; set; }

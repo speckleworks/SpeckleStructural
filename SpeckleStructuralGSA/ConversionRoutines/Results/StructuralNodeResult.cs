@@ -21,12 +21,7 @@ namespace SpeckleStructuralGSA
   {
     public static SpeckleObject ToSpeckle(this GSANodeResult dummyObject)
     {
-      if (Initialiser.Settings.NodalResults.Count() == 0)
-      {
-        return new SpeckleNull();
-      }
-
-      if (Initialiser.Settings.EmbedResults && Initialiser.GSASenderObjects.Count<GSANode>() == 0)
+      if (Initialiser.Settings.NodalResults.Count() == 0 || Initialiser.Settings.EmbedResults && Initialiser.GSASenderObjects.Count<GSANode>() == 0)
       {
         return new SpeckleNull();
       }
@@ -37,17 +32,16 @@ namespace SpeckleStructuralGSA
 
         foreach (var kvp in Initialiser.Settings.NodalResults)
         {
-          foreach (var loadCase in Initialiser.Settings.ResultCases)
+          foreach (var loadCase in Initialiser.Settings.ResultCases.Where(rc => Initialiser.Interface.CaseExist(rc)))
           {
-            if (!Initialiser.Interface.CaseExist(loadCase)) continue;
-
             foreach (var node in nodes)
             {
               var id = node.GSAId;
+              var obj = (StructuralNode)node.Value;
 
-              if (node.Value.Result == null)
+              if (obj.Result == null)
               {
-                node.Value.Result = new Dictionary<string, object>();
+                obj.Result = new Dictionary<string, object>();
               }
 
               var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
@@ -60,22 +54,22 @@ namespace SpeckleStructuralGSA
               var newResult = new StructuralNodeResult()
               {
                 LoadCaseRef = loadCase,
-                TargetRef = Helper.GetApplicationId(typeof(GSANode).GetGSAKeyword(), id),
+                TargetRef = obj.ApplicationId,
                 Value = new Dictionary<string, object>()
               };
 
-              //The setter of node.Value.Result won't accept a value if there are no keys (to avoid issues during merging), so
+              //The setter of obj.Result won't accept a value if there are no keys (to avoid issues during merging), so
               //setting a value here needs to be done with at least one key in it
-              if (node.Value.Result == null)
+              if (obj.Result == null)
               {
-                node.Value.Result = new Dictionary<string, object>() { { loadCase, newResult } };
+                obj.Result = new Dictionary<string, object>() { { loadCase, newResult } };
               }
-              else if (!node.Value.Result.ContainsKey(loadCase))
+              else if (!obj.Result.ContainsKey(loadCase))
               {
-                node.Value.Result[loadCase] = newResult;
+                obj.Result[loadCase] = newResult;
               }
 
-              (node.Value.Result[loadCase] as StructuralNodeResult).Value[kvp.Key] = resultExport.ToDictionary(x => x.Key, x => (x.Value as List<double>)[0] as object);
+              (obj.Result[loadCase] as StructuralNodeResult).Value[kvp.Key] = resultExport.ToDictionary(x => x.Key, x => (x.Value as List<double>)[0] as object);
 
               node.ForceSend = true;
             }
@@ -88,32 +82,37 @@ namespace SpeckleStructuralGSA
 
         var keyword = Helper.GetGSAKeyword(typeof(GSANode));
 
-        var indices = Initialiser.Cache.LookupIndices(keyword).Where(i => i.HasValue).Select(i => i.Value).ToList();
+        //Unlike embedding, separate results doesn't necessarily mean that there is a Speckle object created for each node.  There is always though
+        //some GWA loaded into the cache
+        if (!Initialiser.Cache.GetKeywordRecordsSummary(keyword, out var gwa, out var indices, out var applicationIds))
+        {
+          return new SpeckleNull();
+        }
 
         foreach (var kvp in Initialiser.Settings.NodalResults)
         {
-          foreach (var loadCase in Initialiser.Settings.ResultCases)
+          foreach (var loadCase in Initialiser.Settings.ResultCases.Where(rc => Initialiser.Interface.CaseExist(rc)))
           {
-            if (!Initialiser.Interface.CaseExist(loadCase)) continue;
-
             for (var i = 0; i < indices.Count(); i++)
             {
-              var id = indices[i];
-
-              var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
+              var resultExport = Initialiser.Interface.GetGSAResult(indices[i], kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, 
+                Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
 
               if (resultExport == null || resultExport.Count() == 0)
               {
-                id++;
                 continue;
               }
-              var existingRes = results.FirstOrDefault(x => x.Value.TargetRef == id.ToString());
+              var targetRef = string.IsNullOrEmpty(applicationIds[i]) ? Helper.GetApplicationId(typeof(GSANode).GetGSAKeyword(), indices[i]) : applicationIds[i];
+
+              var existingRes = results.FirstOrDefault(x => ((StructuralResultBase)x.Value).TargetRef == targetRef
+                && ((StructuralResultBase)x.Value).LoadCaseRef == loadCase);
+
               if (existingRes == null)
               {
                 var newRes = new StructuralNodeResult()
                 {
                   Value = new Dictionary<string, object>(),
-                  TargetRef = Helper.GetApplicationId(typeof(GSANode).GetGSAKeyword(), id),
+                  TargetRef = targetRef,
                   IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
                   LoadCaseRef = loadCase
                 };
@@ -121,7 +120,7 @@ namespace SpeckleStructuralGSA
 
                 newRes.GenerateHash();
 
-                results.Add(new GSANodeResult() { Value = newRes });
+                results.Add(new GSANodeResult() { Value = newRes, GSAId = indices[i] });
               }
               else
               {

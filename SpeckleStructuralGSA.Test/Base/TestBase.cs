@@ -56,7 +56,7 @@ namespace SpeckleStructuralGSA.Test
       return mockGsaCom;
     }
 
-    protected List<SpeckleObject> ModelToSpeckleObjects(GSATargetLayer layer, bool resultsOnly, bool embedResults, string[] cases = null, string[] resultsToSend = null)
+    protected List<SpeckleObject> ModelToSpeckleObjects(GSATargetLayer layer, bool resultsOnly, bool embedResults, string[] cases, string[] resultsToSend = null)
     {
       gsaCache.Clear();
 
@@ -70,12 +70,12 @@ namespace SpeckleStructuralGSA.Test
       var data = gsaInterfacer.GetGwaData(keywords, false);
       for (int i = 0; i < data.Count(); i++)
       {
+        var applicationId = string.IsNullOrEmpty(data[i].ApplicationId) ? null : data[i].ApplicationId;
         gsaCache.Upsert(
           data[i].Keyword, 
           data[i].Index, 
           data[i].GwaWithoutSet,
-          //This needs to be revised as this logic is in the kit too
-          applicationId: (string.IsNullOrEmpty(data[i].ApplicationId)) ? ("gsa/" + data[i].Keyword + "_" + data[i].Index.ToString()) : data[i].ApplicationId, 
+          applicationId: applicationId,
           gwaSetCommandType: data[i].GwaSetType,
           streamId: data[i].StreamId
           );
@@ -94,12 +94,11 @@ namespace SpeckleStructuralGSA.Test
         if (appIdIndex >= 0)
         {
           var dotIndex = js.IndexOf(".", appIdIndex);
-          var underscoreIndex = js.IndexOf("_", dotIndex);
+          var underscoreIndex = js.IndexOf("-", dotIndex);
           js = js.Substring(0, dotIndex) + js.Substring(underscoreIndex);
         }
       }
       
-      //return (origAppId != null && origAppId.Length > 0) ? Regex.Replace(origAppId, @"(?<=\.)(.*)(?=_)", "") : "";
       return js;
     }
 

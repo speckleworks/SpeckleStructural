@@ -75,10 +75,12 @@ namespace SpeckleStructuralRevit
 
         forces = new StructuralVectorThree(new double[] { fx, fy, fz });
       }
-      
-      var myLoadCase = new StructuralLoadCase();
-      myLoadCase.Name = myAreaLoad.LoadCaseName;
-      myLoadCase.ApplicationId = myAreaLoad.LoadCase.UniqueId;
+
+      var myLoadCase = new StructuralLoadCase
+      {
+        Name = myAreaLoad.LoadCaseName,
+        ApplicationId = myAreaLoad.LoadCase.UniqueId
+      };
       switch (myAreaLoad.LoadCategoryName)
       {
         case "Dead Loads":
@@ -106,14 +108,16 @@ namespace SpeckleStructuralRevit
       var counter = 0;
       foreach (var vals in polylines)
       {
-        var myLoad = new Structural2DLoadPanel();
-        myLoad.Name = myAreaLoad.Name;
-        myLoad.Value = vals.ToList();
-        myLoad.Loading = forces;
-        myLoad.LoadCaseRef = myLoadCase.ApplicationId;
-        myLoad.Closed = true;
+        var myLoad = new Structural2DLoadPanel
+        {
+          Name = myAreaLoad.Name,
+          Value = vals.ToList(),
+          Loading = forces,
+          LoadCaseRef = myLoadCase.ApplicationId,
+          Closed = true,
 
-        myLoad.ApplicationId = myAreaLoad.UniqueId + "_" + (counter++).ToString();
+          ApplicationId = Helper.CreateChildApplicationId(counter++, myAreaLoad.UniqueId)
+        };
 
         myLoads.Add(myLoad);
       }

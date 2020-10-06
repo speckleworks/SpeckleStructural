@@ -16,9 +16,10 @@ namespace SpeckleStructuralRevit
 
     public static List<SpeckleObject> ToSpeckle(this LineLoad myLineLoad)
     {
-      var myLoad = new Structural1DLoadLine();
-
-      myLoad.Name = myLineLoad.Name;
+      var myLoad = new Structural1DLoadLine
+      {
+        Name = myLineLoad.Name
+      };
 
       var points = myLineLoad.GetCurve().Tessellate();
 
@@ -77,9 +78,11 @@ namespace SpeckleStructuralRevit
 
       myLoad.Loading = forces;
 
-      var myLoadCase = new StructuralLoadCase();
-      myLoadCase.Name = myLineLoad.LoadCaseName;
-      myLoadCase.ApplicationId = myLineLoad.LoadCase.UniqueId;
+      var myLoadCase = new StructuralLoadCase
+      {
+        Name = myLineLoad.LoadCaseName,
+        ApplicationId = myLineLoad.LoadCase.UniqueId
+      };
       switch (myLineLoad.LoadCategoryName)
       {
         case "Dead Loads":

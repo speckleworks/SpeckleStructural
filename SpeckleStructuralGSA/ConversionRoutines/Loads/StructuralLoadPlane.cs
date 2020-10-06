@@ -7,7 +7,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("GRID_SURFACE.1", new string[] { "POLYLINE.1", "GRID_PLANE.4", "AXIS.1" }, "loads", true, true, new Type[] { }, new Type[] { typeof(GSAStorey) })]
+  [GSAObject("GRID_SURFACE.1", new string[] { "POLYLINE.1", "GRID_PLANE.4", "AXIS.1" }, "model", true, true, new Type[] { }, new Type[] { typeof(GSAStorey) })]
   public class GSAGridSurface : GSAGridPlaneBase, IGSASpeckleContainer
   {
     public int GSAId { get; set; }

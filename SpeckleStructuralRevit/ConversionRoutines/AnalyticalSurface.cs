@@ -224,7 +224,7 @@ namespace SpeckleStructuralRevit
         mesh.Offset = Enumerable.Repeat(0.0, numFaces).Cast<double>().ToList(); //TODO
 
         mesh.GenerateHash();
-        mesh.ApplicationId = mySurface.UniqueId + "_" + (counter++).ToString();
+        mesh.ApplicationId = Helper.CreateChildApplicationId(counter++, mySurface.UniqueId);
 
         returnObjects.Add(mesh);
       }

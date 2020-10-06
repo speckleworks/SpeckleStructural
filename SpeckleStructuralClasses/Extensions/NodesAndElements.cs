@@ -157,10 +157,12 @@ namespace SpeckleStructuralClasses
             ZAxis == null || ZAxis.Count() <= i ? null : ZAxis[i],
             EndRelease == null || EndRelease.Count() < i * 2 + 2 ? null : EndRelease.Skip(i * 2).Take(2).ToArray(),
             Offset == null || Offset.Count() < i * 2 + 2 ? null : Offset.Skip(i * 2).Take(2).ToArray(),
-            ElementApplicationId != null && ElementApplicationId.Count() > i ? ElementApplicationId[i] : ApplicationId + "_" + i.ToString()
-        );
-        element.GSADummy = GSADummy;
-        element.GSAMeshSize = GSAMeshSize;
+            ElementApplicationId != null && ElementApplicationId.Count() > i ? ElementApplicationId[i] : Helper.CreateChildApplicationId(i, ApplicationId)
+        )
+        {
+          GSADummy = GSADummy,
+          GSAMeshSize = GSAMeshSize
+        };
         elements.Add(element);
       }
 
@@ -308,10 +310,14 @@ namespace SpeckleStructuralClasses
             PropertyRef,
             Axis != null && Axis.Count() > faceCounter ? Axis[faceCounter] : null,
             Offset != null && Offset.Count() > faceCounter ? Offset[faceCounter] : 0,
-            ElementApplicationId != null && ElementApplicationId.Count() > faceCounter ? ElementApplicationId[faceCounter] : ApplicationId + "_" + faceCounter.ToString()
-        );
-        element.GSADummy = GSADummy;
-        element.GSAMeshSize = GSAMeshSize;
+            ElementApplicationId != null && ElementApplicationId.Count() > faceCounter
+              ? ElementApplicationId[faceCounter]
+              : Helper.CreateChildApplicationId(i, ApplicationId + "-" + faceCounter.ToString())
+        )
+        {
+          GSADummy = GSADummy,
+          GSAMeshSize = GSAMeshSize
+        };
         elements.Add(element);
 
         faceCounter++;
