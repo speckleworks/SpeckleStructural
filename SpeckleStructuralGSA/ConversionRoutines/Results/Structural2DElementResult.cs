@@ -7,8 +7,10 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  //GSA2DMember is also listed as a read prerequisite as the application ID could come from the member (if the element is derived from a parent member)
-  [GSAObject("", new string[] { "EL.4" }, "results", true, false, new Type[] { typeof(GSA2DElement), typeof(GSA2DMember) }, new Type[] { })]
+  //Because the application ID could come from the member (if the element is derived from a parent member)"
+  // - GSADMember is also listed as a read prerequisite
+  // - MEMB.8 is listed as a subkeyword
+  [GSAObject("", new string[] { "EL.4", "MEMB.8" }, "results", true, false, new Type[] { typeof(GSA2DElement), typeof(GSA2DMember) }, new Type[] { })]
   public class GSA2DElementResult : IGSASpeckleContainer
   {
     public int GSAId { get; set; }
