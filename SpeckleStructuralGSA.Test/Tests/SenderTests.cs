@@ -162,9 +162,9 @@ namespace SpeckleStructuralGSA.Test
       Assert.IsEmpty(unmatching, unmatching.Count().ToString() + " unmatched objects");
     }
 
-    //[Ignore("There is an equivalent test in SpeckleGSA repo, so this one might be removed")]
-    //[TestCase(GSATargetLayer.Design, false, false, "sjc.gwb")]
-    [TestCase(GSATargetLayer.Analysis, true, false, @"C:\Temp\ResultsTest.gwb", "1D Element Displacement")]
+    [Ignore("There is an equivalent test in SpeckleGSA repo, so this one might be removed")]
+    [TestCase(GSATargetLayer.Design, false, false, "sjc.gwb")]
+    //[TestCase(GSATargetLayer.Analysis, true, false, @"C:\Temp\ResultsTest.gwb", "1D Element Displacement")]
     public void TransmissionTestForDebug(GSATargetLayer layer, bool resultsOnly, bool embedResults, string gsaFileName, string overrideResultType = "")
     {
       gsaInterfacer.OpenFile(gsaFileName.Contains("\\") ? gsaFileName : Path.Combine(TestDataDirectory, gsaFileName));
