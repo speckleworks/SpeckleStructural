@@ -148,10 +148,10 @@ namespace SpeckleStructuralGSA
 
       counter++; // Dummy
 
-      if (Helper.GetElementParentId(this.GWACommand, out int memberIndex))
+      if (Helper.GetElementParentIdFromGwa(this.GWACommand, out int memberIndex))
       {
         Member = memberIndex;
-        obj.ApplicationId = Helper.GetApplicationId(typeof(GSA1DMember).GetGSAKeyword(), memberIndex) + "_" + this.GSAId;
+        obj.ApplicationId = SpeckleStructuralClasses.Helper.CreateChildApplicationId(this.GSAId, Helper.GetApplicationId(typeof(GSA1DMember).GetGSAKeyword(), memberIndex));
       }
 
       this.Value = obj;

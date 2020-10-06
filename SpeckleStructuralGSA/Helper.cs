@@ -1185,10 +1185,11 @@ namespace SpeckleStructuralGSA
       return taskType;
     }
 
-    public static bool GetElementParentId(string gwa, out int id)
+    public static bool GetElementParentIdFromGwa(string gwa, out int id)
     {
       var pieces = gwa.ListSplit("\t");
-      if (pieces.Length >= 18)
+      var dummyIndex = pieces.Count() - 2;
+      if (pieces.Length >= 18 && (pieces[dummyIndex] == "" || pieces[dummyIndex] == "DUMMY"))
       {
         return int.TryParse(pieces.Last(), out id);
       }
@@ -1200,7 +1201,7 @@ namespace SpeckleStructuralGSA
     {
       //Fill with SID
       var applicationId = Initialiser.Cache.GetApplicationId(keyword, id);
-      return (string.IsNullOrEmpty(applicationId)) ? ("gsa/" + keyword + "_" + id.ToString()) : applicationId;
+      return (string.IsNullOrEmpty(applicationId)) ? ("gsa/" + keyword + "-" + id.ToString()) : applicationId;
     }
 
     public static int NodeAt(double x, double y, double z, double coincidentNodeAllowance, string applicationId = null, string streamId = null)

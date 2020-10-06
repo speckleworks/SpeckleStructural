@@ -100,7 +100,7 @@ namespace SpeckleStructuralRevit
         var myPoint = (SpeckleCoreGeometryClasses.SpecklePoint)Converter.Serialise(points[i]);
         var myNode = new StructuralNode
         {
-          ApplicationId = baseAppId + "_" + i,
+          ApplicationId = Helper.CreateChildApplicationId(i, baseAppId),
           basePoint = myPoint,
           Axis = axis,
           Restraint = restraint,

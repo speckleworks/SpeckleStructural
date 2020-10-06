@@ -62,7 +62,9 @@ namespace SpeckleStructuralGSA.Test
           data[i].Index,
           data[i].GwaWithoutSet,
           //This needs to be revised as this logic is in the kit too
-          applicationId: (string.IsNullOrEmpty(data[i].ApplicationId)) ? ("gsa/" + data[i].Keyword + "_" + data[i].Index.ToString()) : data[i].ApplicationId,
+          applicationId: (string.IsNullOrEmpty(data[i].ApplicationId))
+            ? SpeckleStructuralClasses.Helper.CreateChildApplicationId(data[i].Index, SpeckleStructuralGSA.Helper.GetApplicationId(data[i].Keyword, data[i].Index)) 
+            : data[i].ApplicationId,
           gwaSetCommandType: data[i].GwaSetType,
           streamId: data[i].StreamId
           );

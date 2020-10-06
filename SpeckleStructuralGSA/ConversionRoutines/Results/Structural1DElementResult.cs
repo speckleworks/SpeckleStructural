@@ -136,9 +136,9 @@ namespace SpeckleStructuralGSA
                 //The call to ToSpeckle() for 1D element would create application Ids in the cache, but when this isn't called (like for results-only sending)
                 //then the cache would be filled with elements' and members' GWA commands but not their non-Speckle-originated (i.e. stored in SIDs) application IDs, 
                 //and so in that case the application ID would need to be calculated in the same way as what would happen as a result of the ToSpeckle() call
-                if (Helper.GetElementParentId(gwa[i], out var memberIndex) && memberIndex > 0)
+                if (Helper.GetElementParentIdFromGwa(gwa[i], out var memberIndex) && memberIndex > 0)
                 {
-                  targetRef = Helper.GetApplicationId(typeof(GSA1DMember).GetGSAKeyword(), memberIndex) + "_" + indices[i];
+                  targetRef = SpeckleStructuralClasses.Helper.CreateChildApplicationId(indices[i], Helper.GetApplicationId(typeof(GSA1DMember).GetGSAKeyword(), memberIndex));
                 }
                 else
                 {
@@ -146,7 +146,9 @@ namespace SpeckleStructuralGSA
                 }
               }
 
-              var existingRes = results.FirstOrDefault(x => x.Value.TargetRef == targetRef);
+              var existingRes = results.FirstOrDefault(x => ((StructuralResultBase)x.Value).TargetRef == targetRef
+                && ((StructuralResultBase)x.Value).LoadCaseRef == loadCase);
+
               if (existingRes == null)
               {
                 var newRes = new Structural1DElementResult()

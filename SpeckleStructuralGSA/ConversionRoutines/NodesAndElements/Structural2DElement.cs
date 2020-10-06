@@ -111,7 +111,7 @@ namespace SpeckleStructuralGSA
         Member = pieces[counter++]; // no references to this piece of data, why do we store it rather than just skipping over?
         if (int.TryParse(Member, out var memberIndex))
         {
-          obj.ApplicationId = Helper.GetApplicationId(typeof(GSA2DMember).GetGSAKeyword(), memberIndex) + "_" + GSAId;
+          obj.ApplicationId = SpeckleStructuralClasses.Helper.CreateChildApplicationId(this.GSAId, Helper.GetApplicationId(typeof(GSA2DMember).GetGSAKeyword(), memberIndex));
         }
       }
       counter++; // Dummy

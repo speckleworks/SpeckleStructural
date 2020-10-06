@@ -11,6 +11,11 @@ namespace SpeckleStructuralClasses
       ScaleDictionary(ref dict, factor);
     }
 
+    public static string CreateChildApplicationId(int elementGsaId, string parentMemberApplicationId)
+    {
+      return string.Join("_", new[] { parentMemberApplicationId, elementGsaId.ToString() });
+    }
+
     private static void ScaleDictionary(ref Dictionary<string, object> dict, double factor)
     {
       var keys = dict.Keys.ToList();

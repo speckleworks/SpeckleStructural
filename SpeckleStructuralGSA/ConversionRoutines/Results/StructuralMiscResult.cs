@@ -44,16 +44,28 @@ namespace SpeckleStructuralGSA
               continue;
             }
 
-            var newRes = new StructuralMiscResult
+            var targetRef = (string.IsNullOrEmpty(applicationIds[i])) ? Helper.GetApplicationId(keyword, indices[i]) : applicationIds[i];
+
+            var existingRes = results.FirstOrDefault(x => ((StructuralResultBase)x.Value).TargetRef == targetRef
+                && ((StructuralResultBase)x.Value).LoadCaseRef == loadCase);
+
+            if (existingRes == null)
             {
-              Description = kvp.Key,
-              IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
-              Value = resultExport,
-              LoadCaseRef = loadCase,
-              TargetRef = string.IsNullOrEmpty(applicationIds[i]) ? Helper.GetApplicationId(keyword, indices[i]) : applicationIds[i]
-            };
-            newRes.GenerateHash();
-            results.Add(new GSAMiscResult() { Value = newRes, GSAId = indices[i] });
+              var newRes = new StructuralMiscResult
+              {
+                Description = kvp.Key,
+                IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
+                Value = resultExport,
+                LoadCaseRef = loadCase,
+                TargetRef = string.IsNullOrEmpty(applicationIds[i]) ? Helper.GetApplicationId(keyword, indices[i]) : applicationIds[i]
+              };
+              newRes.GenerateHash();
+              results.Add(new GSAMiscResult() { Value = newRes, GSAId = indices[i] });
+            }
+            else
+            {
+              existingRes.Value.Value[kvp.Key] = resultExport;
+            }
           }
         }
       }

@@ -103,7 +103,10 @@ namespace SpeckleStructuralGSA
                 continue;
               }
               var targetRef = string.IsNullOrEmpty(applicationIds[i]) ? Helper.GetApplicationId(typeof(GSANode).GetGSAKeyword(), indices[i]) : applicationIds[i];
-              var existingRes = results.FirstOrDefault(x => x.Value.TargetRef == targetRef);
+
+              var existingRes = results.FirstOrDefault(x => ((StructuralResultBase)x.Value).TargetRef == targetRef
+                && ((StructuralResultBase)x.Value).LoadCaseRef == loadCase);
+
               if (existingRes == null)
               {
                 var newRes = new StructuralNodeResult()
