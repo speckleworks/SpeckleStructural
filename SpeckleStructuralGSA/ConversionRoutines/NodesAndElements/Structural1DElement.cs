@@ -154,6 +154,12 @@ namespace SpeckleStructuralGSA
         obj.ApplicationId = SpeckleStructuralClasses.Helper.CreateChildApplicationId(this.GSAId, Helper.GetApplicationId(typeof(GSA1DMember).GetGSAKeyword(), memberIndex));
       }
 
+      if (!obj.Properties.ContainsKey("structural"))
+      {
+        obj.Properties.Add("structural", new Dictionary<string, object>());
+      }
+      ((Dictionary<string, object>)obj.Properties["structural"]).Add("GsaId", this.GSAId);
+
       this.Value = obj;
 
       Initialiser.Cache.SetApplicationId(keyword, this.GSAId, obj.ApplicationId);

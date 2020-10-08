@@ -168,8 +168,9 @@ namespace SpeckleStructuralGSA
     {
       var meshes = new List<GSA2DElementMesh>();
       var typeName = dummyObject.GetType().Name;
+
       // Perform mesh merging
-      var uniqueMembers = new List<string>(Initialiser.GSASenderObjects.Get<GSA2DElement>().Select(x => (x as GSA2DElement).Member).Where(m => Convert.ToInt32(m) > 0).Distinct());
+      var uniqueMembers = Initialiser.GSASenderObjects.Get<GSA2DElement>().Select(x => x.Member).Where(m => m > 0).Distinct().ToList();
 
       //This loop has been left as serial for now, considering the fact that the sender objects are retrieved and removed-from with each iteration
       foreach (var member in uniqueMembers)
@@ -177,7 +178,7 @@ namespace SpeckleStructuralGSA
         try
         {
           var all2dElements = Initialiser.GSASenderObjects.Get<GSA2DElement>();
-          var matching2dElementList = all2dElements.Where(x => (x as GSA2DElement).Member == member).Cast<GSA2DElement>().ToList();
+          var matching2dElementList = all2dElements.Where(x => x.Member == member).Cast<GSA2DElement>().ToList();
           var mesh = new GSA2DElementMesh() { GSAId = Convert.ToInt32(member) };
           mesh.ParseGWACommand(matching2dElementList);
           meshes.Add(mesh);
@@ -186,7 +187,7 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppUI.Message(typeName + ": " + ex.Message, member);
+          Initialiser.AppUI.Message(typeName + ": " + ex.Message, member.ToString());
         }
       }
 

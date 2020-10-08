@@ -47,6 +47,12 @@ namespace SpeckleStructuralGSA
       obj.YieldStrength = Convert.ToDouble(pieces[counter++]);
       obj.UltimateStrength = Convert.ToDouble(pieces[counter++]);
 
+      if (!obj.Properties.ContainsKey("structural"))
+      {
+        obj.Properties.Add("structural", new Dictionary<string, object>());
+      }
+      ((Dictionary<string, object>)obj.Properties["structural"]).Add("GsaId", this.GSAId);
+
       this.Value = obj;
     }
 

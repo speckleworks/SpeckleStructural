@@ -40,6 +40,15 @@ namespace SpeckleStructuralGSA
         ResultVertices = new List<double>()
       };
 
+      if (obj.Properties == null)
+      {
+        obj.Properties = new Dictionary<string, object>();
+      }
+      if (!obj.Properties.ContainsKey("structural"))
+      {
+        obj.Properties.Add("structural", new Dictionary<string, object>());
+      }
+
       Dictionary<string, object> results = null;
       if (Initialiser.Settings.Element1DResults.Count > 0 && Initialiser.Settings.EmbedResults)
         results = new Dictionary<string, object>();
@@ -67,6 +76,7 @@ namespace SpeckleStructuralGSA
         obj.ElementApplicationId = new List<string>();
       }
       var elementAppIds = obj.ElementApplicationId ?? new List<string>();
+      var gsaIds = new List<int>();
       var zAxes = obj.ZAxis ?? new List<StructuralVectorThree>();
       var endReleases = obj.EndRelease ?? new List<StructuralVectorBoolSix>();
       var offsets = obj.Offset ?? new List<StructuralVectorThree>();
@@ -89,6 +99,13 @@ namespace SpeckleStructuralGSA
         Structural1DElement element = gsaElement.Value;
 
         elementAppIds.Add(element.ApplicationId);
+        try
+        {
+          if (int.TryParse(((Dictionary<string, object>)element.Properties["structural"])["GsaId"].ToString(), out int gsaId))
+          gsaIds.Add(gsaId);
+        }
+        catch { }
+
         zAxes.Add(element.ZAxis);
 
         if (obj.Value.Count == 0)
@@ -213,6 +230,9 @@ namespace SpeckleStructuralGSA
       obj.Offset = offsets;
       obj.ResultVertices = resultVertices;
       obj.Result = results;
+
+      ((Dictionary<string, object>)obj.Properties["structural"]).Add("GsaIds", gsaIds);
+
       this.Value = obj;
     }
 
