@@ -54,14 +54,23 @@ namespace SpeckleStructuralGSA
                 continue;
               }
 
-              if (!obj.Result.ContainsKey(loadCase))
+              var newResult = new Structural2DElementResult()
               {
-                obj.Result[loadCase] = new Structural2DElementResult()
-                {
-                  TargetRef = obj.ApplicationId,
-                  LoadCaseRef = loadCase,
-                  Value = new Dictionary<string, object>()
-                };
+                TargetRef = obj.ApplicationId,
+                Value = new Dictionary<string, object>(),
+                IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
+                LoadCaseRef = loadCase
+              };
+
+              //The setter of entity.Value.Result won't accept a value if there are no keys (to avoid issues during merging), so
+              //setting a value here needs to be done with at least one key in it
+              if (obj.Result == null)
+              {
+                obj.Result = new Dictionary<string, object>() { { loadCase, newResult } };
+              }
+              else if (!obj.Result.ContainsKey(loadCase))
+              {
+                obj.Result[loadCase] = newResult;
               }
 
               // Let's split the dictionary into xxx_face and xxx_vertex
