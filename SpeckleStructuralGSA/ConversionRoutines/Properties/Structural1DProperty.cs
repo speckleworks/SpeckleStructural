@@ -66,8 +66,8 @@ namespace SpeckleStructuralGSA
       {
         obj.Properties.Add("structural", new Dictionary<string, object>());
       }
-      ((Dictionary<string, object>)obj.Properties["structural"]).Add("GsaId", this.GSAId);
-      ((Dictionary<string, object>)obj.Properties["structural"]).Add("GsaSectionProfile", shapeDesc);
+      ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeId", this.GSAId);
+      ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeSectionProfile", shapeDesc);
 
       this.Value = obj;
     }

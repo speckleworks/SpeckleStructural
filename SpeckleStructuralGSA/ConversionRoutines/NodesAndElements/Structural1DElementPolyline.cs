@@ -101,7 +101,7 @@ namespace SpeckleStructuralGSA
         elementAppIds.Add(element.ApplicationId);
         try
         {
-          if (int.TryParse(((Dictionary<string, object>)element.Properties["structural"])["GsaId"].ToString(), out int gsaId))
+          if (int.TryParse(((Dictionary<string, object>)element.Properties["structural"])["NativeId"].ToString(), out int gsaId))
           gsaIds.Add(gsaId);
         }
         catch { }
