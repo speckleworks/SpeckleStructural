@@ -11,7 +11,7 @@ namespace SpeckleStructuralGSA
   [GSAObject("EL.4", new string[] { "NODE.3" }, "model", true, false, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode), typeof(GSA1DProperty) })]
   public class GSA0DSpring : IGSASpeckleContainer
   {
-    public string Member;
+    public int Member;
 
     public int GSAId { get; set; }
     public string GWACommand { get; set; }
@@ -46,7 +46,7 @@ namespace SpeckleStructuralGSA
       obj.Value = new List<double>();
 
       var key = pieces[counter++];
-      if (int.TryParse(key, out int nodeIndex))
+      if (int.TryParse(key, out var nodeIndex))
       {
         if (nodeIndex > 0)
         {
@@ -58,8 +58,11 @@ namespace SpeckleStructuralGSA
       var orientationNodeRef = pieces[counter++];
       var rotationAngle = Convert.ToDouble(pieces[counter++]);
 
-      if (String.IsNullOrEmpty(pieces[counter++]) == false)
-        Member = pieces[counter++]; // no references to this piece of data, why do we store it rather than just skipping over?
+      var memberStr = pieces[counter++];
+      if (string.IsNullOrEmpty(memberStr) == false)
+      {
+        int.TryParse(memberStr, out Member);
+      }
 
       counter++; // Dummy
 

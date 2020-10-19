@@ -231,7 +231,7 @@ namespace SpeckleStructuralGSA
       obj.ResultVertices = resultVertices;
       obj.Result = results;
 
-      ((Dictionary<string, object>)obj.Properties["structural"]).Add("GsaIds", gsaIds);
+      ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeIds", gsaIds.Select(gid => gid.ToString()).ToList());
 
       this.Value = obj;
     }

@@ -19,7 +19,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "50"
       }
     }
   },
@@ -43,7 +44,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "17"
       }
     }
   },
@@ -67,7 +69,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "36"
       }
     }
   },
@@ -91,7 +94,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "42"
       }
     }
   },
@@ -115,7 +119,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "31"
       }
     }
   },
@@ -139,7 +144,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "27"
       }
     }
   },
@@ -163,7 +169,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "33"
       }
     }
   },
@@ -187,7 +194,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "21"
       }
     }
   },
@@ -211,7 +219,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "18"
       }
     }
   },
@@ -235,7 +244,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "44"
       }
     }
   },
@@ -259,7 +269,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "12"
       }
     }
   },
@@ -283,7 +294,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "23"
       }
     }
   },
@@ -307,7 +319,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "48"
       }
     }
   },
@@ -331,7 +344,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "13"
       }
     }
   },
@@ -355,7 +369,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "32"
       }
     }
   },
@@ -379,7 +394,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "35"
       }
     }
   },
@@ -403,7 +419,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "41"
       }
     }
   },
@@ -427,7 +444,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "43"
       }
     }
   },
@@ -451,7 +469,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "11"
       }
     }
   },
@@ -475,7 +494,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "52"
       }
     }
   },
@@ -499,7 +519,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "26"
       }
     }
   },
@@ -523,7 +544,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "14"
       }
     }
   },
@@ -547,7 +569,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "37"
       }
     }
   },
@@ -571,7 +594,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "49"
       }
     }
   },
@@ -595,7 +619,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "29"
       }
     }
   },
@@ -619,7 +644,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "45"
       }
     }
   },
@@ -643,7 +669,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "40"
       }
     }
   },
@@ -667,7 +694,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "46"
       }
     }
   },
@@ -691,7 +719,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "51"
       }
     }
   },
@@ -715,7 +744,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "22"
       }
     }
   },
@@ -739,7 +769,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "16"
       }
     }
   },
@@ -763,7 +794,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "34"
       }
     }
   },
@@ -787,7 +819,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "47"
       }
     }
   },
@@ -811,7 +844,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "15"
       }
     }
   },
@@ -835,7 +869,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "30"
       }
     }
   },
@@ -859,7 +894,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "28"
       }
     }
   },
@@ -883,7 +919,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "39"
       }
     }
   },
@@ -907,7 +944,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "20"
       }
     }
   },
@@ -931,7 +969,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "25"
       }
     }
   },
@@ -955,7 +994,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "24"
       }
     }
   },
@@ -979,7 +1019,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "38"
       }
     }
   },
@@ -1003,7 +1044,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "19"
       }
     }
   },
@@ -1075,7 +1117,8 @@
           0.0,
           0.0,
           0.0
-        ]
+        ],
+        "NativeId": "6"
       }
     }
   },
@@ -1147,7 +1190,8 @@
           0.0,
           0.0,
           0.0
-        ]
+        ],
+        "NativeId": "7"
       }
     }
   },
@@ -1219,7 +1263,8 @@
           0.0,
           0.0,
           0.0
-        ]
+        ],
+        "NativeId": "8"
       }
     }
   },
@@ -1291,7 +1336,8 @@
           0.0,
           0.0,
           0.0
-        ]
+        ],
+        "NativeId": "9"
       }
     }
   },
@@ -1363,7 +1409,8 @@
           0.0,
           0.0,
           0.0
-        ]
+        ],
+        "NativeId": "10"
       }
     }
   },
@@ -1417,7 +1464,11 @@
     "colors": [],
     "applicationId": "gh/42d2b51094c7c16a565d883dd5dd7a59",
     "name": "",
-    "properties": {}
+    "properties": {
+      "structural": {
+        "NativeId": "4"
+      }
+    }
   },
   {
     "type": "Mesh/Structural2DVoid",
@@ -1469,7 +1520,11 @@
     "colors": [],
     "applicationId": "gh/51e8d0bc5b67257aea4d3f733dc153a2",
     "name": "",
-    "properties": {}
+    "properties": {
+      "structural": {
+        "NativeId": "3"
+      }
+    }
   },
   {
     "type": "Mesh/Structural2DVoid",
@@ -1521,7 +1576,11 @@
     "colors": [],
     "applicationId": "gh/8471296211afb5f5eebbffa4e899dbec",
     "name": "",
-    "properties": {}
+    "properties": {
+      "structural": {
+        "NativeId": "1"
+      }
+    }
   },
   {
     "type": "Mesh/Structural2DVoid",
@@ -1573,7 +1632,11 @@
     "colors": [],
     "applicationId": "gh/a461ec766c5e867d96a5036dc53c811a",
     "name": "",
-    "properties": {}
+    "properties": {
+      "structural": {
+        "NativeId": "5"
+      }
+    }
   },
   {
     "type": "Mesh/Structural2DVoid",
@@ -1625,7 +1688,11 @@
     "colors": [],
     "applicationId": "gh/ff7c29fdcbfb53eed7b95b268e72cc35",
     "name": "",
-    "properties": {}
+    "properties": {
+      "structural": {
+        "NativeId": "2"
+      }
+    }
   },
   {
     "type": "Point/StructuralNode",
@@ -2802,7 +2869,12 @@
     "materialRef": "gsa/MAT_CONCRETE.17-1",
     "applicationId": "columnProp",
     "name": "Column property",
-    "properties": {}
+    "properties": {
+      "structural": {
+        "NativeId": "1",
+        "NativeSectionProfile": "GEO%P(m)%M(-0.836|-1.141)%L(-3.799|3.396)%L(1.71|0.992)%L(0.931|-0.92)%M(-1.881|1.512)%L(-0.247|1.195)%L(-0.431|-0.418)%M(1.313|0.588)%L(1.098|0.683)%L(1.115|0.273)%L(1.24|0.259)"
+      }
+    }
   },
   {
     "type": "Structural2DProperty",
@@ -2811,7 +2883,11 @@
     "referenceSurface": 2,
     "applicationId": "slabProp",
     "name": "Slab property",
-    "properties": {}
+    "properties": {
+      "structural": {
+        "NativeId": "1"
+      }
+    }
   },
   {
     "type": "Structural2DThermalLoad",
@@ -3000,7 +3076,11 @@
     "aggragateSize": 0.02,
     "applicationId": "gsa/MAT_CONCRETE.17-1",
     "name": "Concrete",
-    "properties": {}
+    "properties": {
+      "structural": {
+        "NativeId": "1"
+      }
+    }
   },
   {
     "type": "StructuralReferenceLine",
@@ -3069,7 +3149,8 @@
       "structural": {
         "springType": "General",
         "stiffness": {"type":"StructuralVectorSix","value":[12.0,15.0,20.0,25.0,30.0,38.0],"hash":"ae836cd82b24e2d7fb085a6d2abfd17e","properties":{}},
-        "dampingRatio": 0.21
+        "dampingRatio": 0.21,
+        "NativeId": "1"
       }
     }
   },
@@ -3081,7 +3162,8 @@
       "structural": {
         "springType": "Compression",
         "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
-        "dampingRatio": 0.21
+        "dampingRatio": 0.21,
+        "NativeId": "4"
       }
     }
   },
@@ -3093,7 +3175,8 @@
       "structural": {
         "springType": "Axial",
         "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
-        "dampingRatio": 0.21
+        "dampingRatio": 0.21,
+        "NativeId": "2"
       }
     }
   },
@@ -3105,7 +3188,8 @@
       "structural": {
         "springType": "Lockup",
         "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
-        "dampingRatio": 0.21
+        "dampingRatio": 0.21,
+        "NativeId": "6"
       }
     }
   },
@@ -3117,7 +3201,8 @@
       "structural": {
         "springType": "Gap",
         "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
-        "dampingRatio": 0.21
+        "dampingRatio": 0.21,
+        "NativeId": "7"
       }
     }
   },
@@ -3129,7 +3214,8 @@
       "structural": {
         "springType": "Friction",
         "stiffness": {"type":"StructuralVectorSix","value":[12.0,15.0,20.0,0.0,0.0,0.0],"hash":"859fa9f418bc114832e1f243fb3f8c61","properties":{}},
-        "dampingRatio": 0.21
+        "dampingRatio": 0.21,
+        "NativeId": "8"
       }
     }
   },
@@ -3141,7 +3227,8 @@
       "structural": {
         "springType": "Torsional",
         "stiffness": {"type":"StructuralVectorSix","value":[0.0,0.0,0.0,25.0,0.0,0.0],"hash":"98d1640829ffe5e2dffe3ba3ed4b7659","properties":{}},
-        "dampingRatio": 0.21
+        "dampingRatio": 0.21,
+        "NativeId": "3"
       }
     }
   },
@@ -3153,7 +3240,8 @@
       "structural": {
         "springType": "Tension",
         "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
-        "dampingRatio": 0.21
+        "dampingRatio": 0.21,
+        "NativeId": "5"
       }
     }
   },

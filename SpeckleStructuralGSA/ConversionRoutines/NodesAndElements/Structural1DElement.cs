@@ -158,7 +158,7 @@ namespace SpeckleStructuralGSA
       {
         obj.Properties.Add("structural", new Dictionary<string, object>());
       }
-      ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeId", this.GSAId);
+      ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeId", this.GSAId.ToString());
 
       this.Value = obj;
 
@@ -393,7 +393,7 @@ namespace SpeckleStructuralGSA
       // since this is a nullable GSA-specific property(and therefore needs a review), only set if not default
       if (meshSize > 0)
       {
-        obj.GSAMeshSize = Convert.ToDouble(pieces[counter++]);
+        obj.GSAMeshSize = meshSize;
       }
 
       counter++; // is_intersector
@@ -469,6 +469,12 @@ namespace SpeckleStructuralGSA
 
         obj.Offset = offsets;
       }
+
+      if (!obj.Properties.ContainsKey("structural"))
+      {
+        obj.Properties.Add("structural", new Dictionary<string, object>());
+      }
+      ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeId", this.GSAId.ToString());
 
       this.Value = obj;
     }

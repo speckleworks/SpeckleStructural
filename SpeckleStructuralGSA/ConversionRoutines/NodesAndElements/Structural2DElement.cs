@@ -120,10 +120,10 @@ namespace SpeckleStructuralGSA
       {
         obj.Properties.Add("structural", new Dictionary<string, object>());
       }
-      ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeId", this.GSAId);
+      ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeId", this.GSAId.ToString());
       if (this.Member > 0)
       {
-        ((Dictionary<string, object>)obj.Properties["structural"]).Add("GsaParentId", this.GSAId);
+        ((Dictionary<string, object>)obj.Properties["structural"]).Add("GsaParentId", this.Member.ToString());
       }
 
       this.Value = obj;
@@ -347,7 +347,7 @@ namespace SpeckleStructuralGSA
       {
         obj.Properties.Add("structural", new Dictionary<string, object>());
       }
-      ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeId", this.GSAId);
+      ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeId", this.GSAId.ToString());
 
       this.Value = obj;
     }

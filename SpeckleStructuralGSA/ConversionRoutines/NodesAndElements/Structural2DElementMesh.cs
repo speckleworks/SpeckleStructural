@@ -37,11 +37,13 @@ namespace SpeckleStructuralGSA
       };
 
       if (Initialiser.Settings.Element2DResults.Count > 0 && Initialiser.Settings.EmbedResults)
+      {
         obj.Result = new Dictionary<string, object>();
+      }
 
-      var axes = obj.Axis;
-      var offsets = obj.Offset;
-      var elementAppIds = obj.ElementApplicationId;
+      var axes = obj.Axis ?? new List<StructuralAxis>();
+      var offsets = obj.Offset ?? new List<double>();
+      var elementAppIds = obj.ElementApplicationId ?? new List<string>();
 
       foreach (var e in elements)
       {
@@ -63,15 +65,15 @@ namespace SpeckleStructuralGSA
             foreach (string loadCase in e.Value.Result.Keys)
             {
               if (!obj.Result.ContainsKey(loadCase))
+              {
                 obj.Result[loadCase] = new Structural2DElementResult()
                 {
                   Value = new Dictionary<string, object>(),
                   IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
                 };
+              }
 
-              var resultExport = e.Value.Result[loadCase] as Structural2DElementResult;
-
-              if (resultExport != null)
+              if (e.Value.Result[loadCase] is Structural2DElementResult resultExport)
               {
                 foreach (var key in resultExport.Value.Keys)
                 {
