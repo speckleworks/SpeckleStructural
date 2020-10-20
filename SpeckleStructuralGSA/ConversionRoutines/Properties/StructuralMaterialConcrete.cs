@@ -44,6 +44,12 @@ namespace SpeckleStructuralGSA
 
       obj.AggragateSize = Convert.ToDouble(pieces[70]);
 
+      if (!obj.Properties.ContainsKey("structural"))
+      {
+        obj.Properties.Add("structural", new Dictionary<string, object>());
+      }
+      ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeId", this.GSAId.ToString());
+
       this.Value = obj;
     }
 

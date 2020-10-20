@@ -14,7 +14,7 @@ namespace SpeckleStructuralGSA
   [GSAObject("EL.4", new string[] { "NODE.3", "PROP_2D.6" }, "model", true, false, new Type[] { typeof(GSANode), typeof(GSA2DProperty), typeof(GSA2DMember) }, new Type[] { typeof(GSANode), typeof(GSA2DProperty) })]
   public class GSA2DElement : IGSASpeckleContainer
   {
-    public string Member;
+    public int Member;
 
     public int GSAId { get; set; }
     public string GWACommand { get; set; }
@@ -108,13 +108,23 @@ namespace SpeckleStructuralGSA
       //Process the parent member ID, if present
       if (counter < pieces.Count() && !string.IsNullOrEmpty(pieces[counter]))
       {
-        Member = pieces[counter++]; // no references to this piece of data, why do we store it rather than just skipping over?
-        if (int.TryParse(Member, out var memberIndex))
+        var memberStr = pieces[counter++]; // no references to this piece of data, why do we store it rather than just skipping over?
+        if (int.TryParse(memberStr, out Member))
         {
-          obj.ApplicationId = SpeckleStructuralClasses.Helper.CreateChildApplicationId(this.GSAId, Helper.GetApplicationId(typeof(GSA2DMember).GetGSAKeyword(), memberIndex));
+          obj.ApplicationId = SpeckleStructuralClasses.Helper.CreateChildApplicationId(this.GSAId, Helper.GetApplicationId(typeof(GSA2DMember).GetGSAKeyword(), Member));
         }
       }
       counter++; // Dummy
+
+      if (!obj.Properties.ContainsKey("structural"))
+      {
+        obj.Properties.Add("structural", new Dictionary<string, object>());
+      }
+      ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeId", this.GSAId.ToString());
+      if (this.Member > 0)
+      {
+        ((Dictionary<string, object>)obj.Properties["structural"]).Add("GsaParentId", this.Member.ToString());
+      }
 
       this.Value = obj;
 
@@ -332,6 +342,12 @@ namespace SpeckleStructuralGSA
       obj.Offset = Enumerable.Repeat(offset, numFaces).ToList();
 
       // skip remaining commands
+
+      if (!obj.Properties.ContainsKey("structural"))
+      {
+        obj.Properties.Add("structural", new Dictionary<string, object>());
+      }
+      ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeId", this.GSAId.ToString());
 
       this.Value = obj;
     }
