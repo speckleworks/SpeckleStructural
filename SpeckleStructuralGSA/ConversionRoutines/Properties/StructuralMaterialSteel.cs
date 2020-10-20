@@ -8,7 +8,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("MAT_STEEL.3", new string[] { }, "properties", true, true, new Type[] { }, new Type[] { })]
+  [GSAObject("MAT_STEEL.3", new string[] { }, "model", true, true, new Type[] { }, new Type[] { })]
   public class GSAMaterialSteel : IGSASpeckleContainer
   {
     public int GSAId { get; set; }
@@ -46,6 +46,12 @@ namespace SpeckleStructuralGSA
       counter = pieces.Count() - 4;
       obj.YieldStrength = Convert.ToDouble(pieces[counter++]);
       obj.UltimateStrength = Convert.ToDouble(pieces[counter++]);
+
+      if (!obj.Properties.ContainsKey("structural"))
+      {
+        obj.Properties.Add("structural", new Dictionary<string, object>());
+      }
+      ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeId", this.GSAId.ToString());
 
       this.Value = obj;
     }

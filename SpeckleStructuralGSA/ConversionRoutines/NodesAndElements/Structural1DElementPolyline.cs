@@ -10,7 +10,7 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   //TO DO: check why everything except GSA1DElement is needed as read prerequisites 
-  [GSAObject("MEMB.8", new string[] { }, "elements", true, true, new Type[] { typeof(GSA1DElement), typeof(GSA1DLoadAnalysisLayer), typeof(GSA1DElementResult), typeof(GSAAssembly), typeof(GSAConstructionStage), typeof(GSA1DInfluenceEffect) }, new Type[] { typeof(GSA1DElement) })]
+  [GSAObject("MEMB.8", new string[] { }, "model", true, true, new Type[] { typeof(GSA1DElement), typeof(GSA1DLoadAnalysisLayer), typeof(GSA1DElementResult), typeof(GSAAssembly), typeof(GSAConstructionStage), typeof(GSA1DInfluenceEffect) }, new Type[] { typeof(GSA1DElement) })]
   public class GSA1DElementPolyline : IGSASpeckleContainer
   {
     public int GSAId { get; set; }
@@ -40,6 +40,15 @@ namespace SpeckleStructuralGSA
         ResultVertices = new List<double>()
       };
 
+      if (obj.Properties == null)
+      {
+        obj.Properties = new Dictionary<string, object>();
+      }
+      if (!obj.Properties.ContainsKey("structural"))
+      {
+        obj.Properties.Add("structural", new Dictionary<string, object>());
+      }
+
       Dictionary<string, object> results = null;
       if (Initialiser.Settings.Element1DResults.Count > 0 && Initialiser.Settings.EmbedResults)
         results = new Dictionary<string, object>();
@@ -67,6 +76,7 @@ namespace SpeckleStructuralGSA
         obj.ElementApplicationId = new List<string>();
       }
       var elementAppIds = obj.ElementApplicationId ?? new List<string>();
+      var gsaIds = new List<int>();
       var zAxes = obj.ZAxis ?? new List<StructuralVectorThree>();
       var endReleases = obj.EndRelease ?? new List<StructuralVectorBoolSix>();
       var offsets = obj.Offset ?? new List<StructuralVectorThree>();
@@ -89,6 +99,13 @@ namespace SpeckleStructuralGSA
         Structural1DElement element = gsaElement.Value;
 
         elementAppIds.Add(element.ApplicationId);
+        try
+        {
+          if (int.TryParse(((Dictionary<string, object>)element.Properties["structural"])["NativeId"].ToString(), out int gsaId))
+          gsaIds.Add(gsaId);
+        }
+        catch { }
+
         zAxes.Add(element.ZAxis);
 
         if (obj.Value.Count == 0)
@@ -213,6 +230,9 @@ namespace SpeckleStructuralGSA
       obj.Offset = offsets;
       obj.ResultVertices = resultVertices;
       obj.Result = results;
+
+      ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeIds", gsaIds.Select(gid => gid.ToString()).ToList());
+
       this.Value = obj;
     }
 
@@ -275,7 +295,7 @@ namespace SpeckleStructuralGSA
       var polylines = new List<GSA1DElementPolyline>();
       var typeName = dummyObject.GetType().Name;
       // Perform mesh merging
-      var uniqueMembers = new List<string>(Initialiser.GSASenderObjects.Get<GSA1DElement>().Select(x => (x as GSA1DElement).Member).Where(m => Convert.ToInt32(m) > 0).Distinct());
+      var uniqueMembers = new List<int>(Initialiser.GSASenderObjects.Get<GSA1DElement>().Select(x => x.Member).Where(m => m > 0).Distinct());
       uniqueMembers.Sort();  //Just for readability and testing
 
       //This loop has been left as serial for now, considering the fact that the sender objects are retrieved and removed-from with each iteration
@@ -284,20 +304,22 @@ namespace SpeckleStructuralGSA
         try
         {
           var all1dElements = Initialiser.GSASenderObjects.Get<GSA1DElement>();
-          var matching1dElementList = all1dElements.Where(x => (x as GSA1DElement).Member == member).OrderBy(m => m.GSAId).ToList();
-
-          var poly = new GSA1DElementPolyline() { GSAId = Convert.ToInt32(member) };
-          try
+          var matching1dElementList = all1dElements.Where(x => x.Member == member).OrderBy(m => m.GSAId).ToList();
+          if (matching1dElementList.Count() > 1)
           {
-            poly.ParseGWACommand(matching1dElementList);
-            polylines.Add(poly);
-          }
-          catch (Exception ex)
-          {
-            Initialiser.AppUI.Message(typeName + ": " + ex.Message, member);
-          }
+            var poly = new GSA1DElementPolyline() { GSAId = Convert.ToInt32(member) };
+            try
+            {
+              poly.ParseGWACommand(matching1dElementList);
+              polylines.Add(poly);
+            }
+            catch (Exception ex)
+            {
+              Initialiser.AppUI.Message(typeName + ": " + ex.Message, member.ToString());
+            }
 
-          Initialiser.GSASenderObjects.RemoveAll(matching1dElementList);
+            Initialiser.GSASenderObjects.RemoveAll(matching1dElementList);
+          }
         }
         catch { }
       }

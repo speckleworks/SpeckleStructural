@@ -10,25 +10,29 @@ using System.Threading.Tasks;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("EL.4", new string[] { "NODE.3", "PROP_2D.6" }, "elements", true, false, new Type[] { typeof(GSANode), typeof(GSA2DProperty) }, new Type[] { typeof(GSANode), typeof(GSA2DProperty) })]
+  //Elements can have parent members and the application IDs should be based on that of their parents, so they need to be read first, hence the inclusion of that as a read prerequisite
+  [GSAObject("EL.4", new string[] { "NODE.3", "PROP_2D.6" }, "model", true, false, new Type[] { typeof(GSANode), typeof(GSA2DProperty), typeof(GSA2DMember) }, new Type[] { typeof(GSANode), typeof(GSA2DProperty) })]
   public class GSA2DElement : IGSASpeckleContainer
   {
-    public string Member;
+    public int Member;
 
     public int GSAId { get; set; }
     public string GWACommand { get; set; }
     public List<string> SubGWACommand { get; set; } = new List<string>();
     public dynamic Value { get; set; } = new Structural2DElement();
 
-    public void ParseGWACommand( List<GSANode> nodes, List<GSA2DProperty> props)
+    public void ParseGWACommand(List<GSANode> nodes, List<GSA2DProperty> props)
     {
       // GWA command from 10.1 docs
       // EL.4 | num | name | colour | type | prop | group | topo() | orient_node | orient_angle |
       // is_rls { | rls { | k } }
       // off_x1 | off_x2 | off_y | off_z | parent_member | dummy
-      
+
       if (this.GWACommand == null)
+      {
         return;
+      }
+      var keyword = this.GetGSAKeyword();
 
       var obj = new Structural2DElement();
 
@@ -36,7 +40,7 @@ namespace SpeckleStructuralGSA
 
       var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
-      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      obj.ApplicationId = Helper.GetApplicationId(keyword, this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       var color = pieces[counter++].ParseGSAColor();
 
@@ -70,7 +74,7 @@ namespace SpeckleStructuralGSA
       {
         obj.Axis = Helper.Parse2DAxis(obj.Vertices.ToArray(),
             Convert.ToDouble(pieces[counter++]),
-            prop == null ? false : (prop as GSA2DProperty).IsAxisLocal);
+            prop != null && prop.IsAxisLocal);
       }
       catch
       {
@@ -78,7 +82,9 @@ namespace SpeckleStructuralGSA
       }
 
       if (prop != null)
+      {
         this.SubGWACommand.Add(prop.GWACommand);
+      }
 
       if (pieces[counter++] != "NO_RLS")
       {
@@ -97,14 +103,32 @@ namespace SpeckleStructuralGSA
 
       obj.Offset = offset;
 
-      if (pieces.Count() < counter)
+      counter++; //Debug flag
+
+      //Process the parent member ID, if present
+      if (counter < pieces.Count() && !string.IsNullOrEmpty(pieces[counter]))
       {
-        if (String.IsNullOrEmpty(pieces[counter++]) == false)
-          Member = pieces[counter++]; // no references to this piece of data, why do we store it rather than just skipping over?
+        var memberStr = pieces[counter++]; // no references to this piece of data, why do we store it rather than just skipping over?
+        if (int.TryParse(memberStr, out Member))
+        {
+          obj.ApplicationId = SpeckleStructuralClasses.Helper.CreateChildApplicationId(this.GSAId, Helper.GetApplicationId(typeof(GSA2DMember).GetGSAKeyword(), Member));
+        }
       }
       counter++; // Dummy
 
+      if (!obj.Properties.ContainsKey("structural"))
+      {
+        obj.Properties.Add("structural", new Dictionary<string, object>());
+      }
+      ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeId", this.GSAId.ToString());
+      if (this.Member > 0)
+      {
+        ((Dictionary<string, object>)obj.Properties["structural"]).Add("GsaParentId", this.Member.ToString());
+      }
+
       this.Value = obj;
+
+      Initialiser.Cache.SetApplicationId(keyword, this.GSAId, obj.ApplicationId);
     }
 
     public string SetGWACommand(int group = 0)
@@ -188,7 +212,7 @@ namespace SpeckleStructuralGSA
 
   }
 
-  [GSAObject("MEMB.8", new string[] { "NODE.3" }, "elements", false, true, new Type[] { typeof(GSANode), typeof(GSA2DProperty) }, new Type[] { typeof(GSANode), typeof(GSA2DProperty) })]
+  [GSAObject("MEMB.8", new string[] { "NODE.3" }, "model", false, true, new Type[] { typeof(GSANode), typeof(GSA2DProperty) }, new Type[] { typeof(GSANode), typeof(GSA2DProperty) })]
   public class GSA2DMember : IGSASpeckleContainer
   {
     public int Group; // Keep for load targetting
@@ -318,6 +342,12 @@ namespace SpeckleStructuralGSA
       obj.Offset = Enumerable.Repeat(offset, numFaces).ToList();
 
       // skip remaining commands
+
+      if (!obj.Properties.ContainsKey("structural"))
+      {
+        obj.Properties.Add("structural", new Dictionary<string, object>());
+      }
+      ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeId", this.GSAId.ToString());
 
       this.Value = obj;
     }

@@ -873,7 +873,9 @@ namespace SpeckleStructuralGSA
       var coor = fullCoords.Essential();
 
       for (var i = 0; i < coor.Length; i += 3)
+      {
         nodes.Add(new Vector3D(coor[i], coor[i + 1], coor[i + 2]));
+      }
 
       if (isLocalAxis)
       {
@@ -894,15 +896,18 @@ namespace SpeckleStructuralGSA
       else
       {
         x = (nodes[1] - nodes[0]).Normalize();
+        //The z is the normal to the plane of the coordinates
         z = x.CrossProduct(nodes[2] - nodes[0]).Normalize();
 
         if ((x - (x.DotProduct(z) * z)).Length == 0)
         {
+          //Z is parallel to z, which happens when nodes[2] is in line with [0] and [1]
           x = (new Vector3D(0, z.X > 0 ? -1 : 1, 0)).Normalize();
         }
-        else
+        else if (!z.IsParallelTo(UnitVector3D.XAxis))
         {
-          x = (new Vector3D(1, 0, 0)).Normalize();
+          x = UnitVector3D.XAxis;
+          //This ensures that the x vector is right-angles to the z vector
           x = (x - (x.DotProduct(z) * z)).Normalize();
         }
 
@@ -1180,11 +1185,23 @@ namespace SpeckleStructuralGSA
       return taskType;
     }
 
+    public static bool GetElementParentIdFromGwa(string gwa, out int id)
+    {
+      var pieces = gwa.ListSplit("\t");
+      var dummyIndex = pieces.Count() - 2;
+      if (pieces.Length >= 18 && (pieces[dummyIndex] == "" || pieces[dummyIndex] == "DUMMY"))
+      {
+        return int.TryParse(pieces.Last(), out id);
+      }
+      id = 0;
+      return false;
+    }
+
     public static string GetApplicationId(string keyword, int id)
     {
       //Fill with SID
       var applicationId = Initialiser.Cache.GetApplicationId(keyword, id);
-      return (string.IsNullOrEmpty(applicationId)) ? ("gsa/" + keyword + "_" + id.ToString()) : applicationId;
+      return (string.IsNullOrEmpty(applicationId)) ? ("gsa/" + keyword + "-" + id.ToString()) : applicationId;
     }
 
     public static int NodeAt(double x, double y, double z, double coincidentNodeAllowance, string applicationId = null, string streamId = null)

@@ -8,7 +8,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("PROP_SPR.4", new string[] { }, "properties", true, true, new Type[] { }, new Type[] { })]
+  [GSAObject("PROP_SPR.4", new string[] { }, "model", true, true, new Type[] { }, new Type[] { })]
   public class GSASpringProperty : IGSASpeckleContainer
   {
     public int GSAId { get; set; }
@@ -102,6 +102,12 @@ namespace SpeckleStructuralGSA
       double.TryParse(pieces[counter++], out dampingRatio);
       //Found some extremely small floating point issues so rounding to (arbitrarily-chosen) 4 digits
       obj.DampingRatio = Math.Round(dampingRatio, 4);
+
+      if (!obj.Properties.ContainsKey("structural"))
+      {
+        obj.Properties.Add("structural", new Dictionary<string, object>());
+      }
+      ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeId", this.GSAId.ToString());
 
       this.Value = obj;
     }

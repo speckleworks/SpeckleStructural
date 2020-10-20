@@ -19,7 +19,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "50"
       }
     }
   },
@@ -43,7 +44,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "17"
       }
     }
   },
@@ -67,7 +69,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "36"
       }
     }
   },
@@ -91,7 +94,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "42"
       }
     }
   },
@@ -115,7 +119,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "31"
       }
     }
   },
@@ -139,7 +144,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "27"
       }
     }
   },
@@ -163,7 +169,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "33"
       }
     }
   },
@@ -187,7 +194,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "21"
       }
     }
   },
@@ -211,7 +219,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "18"
       }
     }
   },
@@ -235,7 +244,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "44"
       }
     }
   },
@@ -259,7 +269,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "12"
       }
     }
   },
@@ -283,7 +294,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "23"
       }
     }
   },
@@ -307,7 +319,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "48"
       }
     }
   },
@@ -331,7 +344,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "13"
       }
     }
   },
@@ -355,7 +369,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "32"
       }
     }
   },
@@ -379,7 +394,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "35"
       }
     }
   },
@@ -403,7 +419,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "41"
       }
     }
   },
@@ -427,7 +444,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "43"
       }
     }
   },
@@ -451,7 +469,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "11"
       }
     }
   },
@@ -475,7 +494,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "52"
       }
     }
   },
@@ -499,7 +519,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "26"
       }
     }
   },
@@ -523,7 +544,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "14"
       }
     }
   },
@@ -547,7 +569,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "37"
       }
     }
   },
@@ -571,7 +594,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "49"
       }
     }
   },
@@ -595,7 +619,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "29"
       }
     }
   },
@@ -619,7 +644,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "45"
       }
     }
   },
@@ -643,7 +669,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "40"
       }
     }
   },
@@ -667,7 +694,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "46"
       }
     }
   },
@@ -691,7 +719,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "51"
       }
     }
   },
@@ -715,7 +744,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "22"
       }
     }
   },
@@ -739,7 +769,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "16"
       }
     }
   },
@@ -763,7 +794,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "34"
       }
     }
   },
@@ -787,7 +819,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "47"
       }
     }
   },
@@ -811,7 +844,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "15"
       }
     }
   },
@@ -835,7 +869,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "30"
       }
     }
   },
@@ -859,7 +894,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "28"
       }
     }
   },
@@ -883,7 +919,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "39"
       }
     }
   },
@@ -907,7 +944,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "20"
       }
     }
   },
@@ -931,7 +969,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "25"
       }
     }
   },
@@ -955,7 +994,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "24"
       }
     }
   },
@@ -979,7 +1019,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "38"
       }
     }
   },
@@ -1003,7 +1044,8 @@
         "endRelease": [
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}},
           {"type":"StructuralVectorBoolSix","value":[false,false,false,false,false,false],"hash":"0b6aec53a3d142b8be1b7619c8f2c0f3","properties":{}}
-        ]
+        ],
+        "NativeId": "19"
       }
     }
   },
@@ -1075,7 +1117,8 @@
           0.0,
           0.0,
           0.0
-        ]
+        ],
+        "NativeId": "6"
       }
     }
   },
@@ -1147,7 +1190,8 @@
           0.0,
           0.0,
           0.0
-        ]
+        ],
+        "NativeId": "7"
       }
     }
   },
@@ -1219,7 +1263,8 @@
           0.0,
           0.0,
           0.0
-        ]
+        ],
+        "NativeId": "8"
       }
     }
   },
@@ -1291,7 +1336,8 @@
           0.0,
           0.0,
           0.0
-        ]
+        ],
+        "NativeId": "9"
       }
     }
   },
@@ -1363,7 +1409,8 @@
           0.0,
           0.0,
           0.0
-        ]
+        ],
+        "NativeId": "10"
       }
     }
   },
@@ -1417,7 +1464,11 @@
     "colors": [],
     "applicationId": "gh/42d2b51094c7c16a565d883dd5dd7a59",
     "name": "",
-    "properties": {}
+    "properties": {
+      "structural": {
+        "NativeId": "4"
+      }
+    }
   },
   {
     "type": "Mesh/Structural2DVoid",
@@ -1469,7 +1520,11 @@
     "colors": [],
     "applicationId": "gh/51e8d0bc5b67257aea4d3f733dc153a2",
     "name": "",
-    "properties": {}
+    "properties": {
+      "structural": {
+        "NativeId": "3"
+      }
+    }
   },
   {
     "type": "Mesh/Structural2DVoid",
@@ -1521,7 +1576,11 @@
     "colors": [],
     "applicationId": "gh/8471296211afb5f5eebbffa4e899dbec",
     "name": "",
-    "properties": {}
+    "properties": {
+      "structural": {
+        "NativeId": "1"
+      }
+    }
   },
   {
     "type": "Mesh/Structural2DVoid",
@@ -1573,7 +1632,11 @@
     "colors": [],
     "applicationId": "gh/a461ec766c5e867d96a5036dc53c811a",
     "name": "",
-    "properties": {}
+    "properties": {
+      "structural": {
+        "NativeId": "5"
+      }
+    }
   },
   {
     "type": "Mesh/Structural2DVoid",
@@ -1625,7 +1688,11 @@
     "colors": [],
     "applicationId": "gh/ff7c29fdcbfb53eed7b95b268e72cc35",
     "name": "",
-    "properties": {}
+    "properties": {
+      "structural": {
+        "NativeId": "2"
+      }
+    }
   },
   {
     "type": "Point/StructuralNode",
@@ -1742,7 +1809,7 @@
       37.55664063,
       5.79
     ],
-    "applicationId": "gsa/NODE.3_1",
+    "applicationId": "gsa/NODE.3-1",
     "name": "",
     "properties": {}
   },
@@ -1753,7 +1820,7 @@
       57.35664063,
       11.58
     ],
-    "applicationId": "gsa/NODE.3_10",
+    "applicationId": "gsa/NODE.3-10",
     "name": "",
     "properties": {}
   },
@@ -1764,7 +1831,7 @@
       7.856641602,
       11.58
     ],
-    "applicationId": "gsa/NODE.3_11",
+    "applicationId": "gsa/NODE.3-11",
     "name": "",
     "properties": {}
   },
@@ -1775,7 +1842,7 @@
       7.856641602,
       11.58
     ],
-    "applicationId": "gsa/NODE.3_12",
+    "applicationId": "gsa/NODE.3-12",
     "name": "",
     "properties": {}
   },
@@ -1786,7 +1853,7 @@
       -2.043358276,
       11.58
     ],
-    "applicationId": "gsa/NODE.3_13",
+    "applicationId": "gsa/NODE.3-13",
     "name": "",
     "properties": {}
   },
@@ -1797,7 +1864,7 @@
       -2.043358276,
       11.58
     ],
-    "applicationId": "gsa/NODE.3_14",
+    "applicationId": "gsa/NODE.3-14",
     "name": "",
     "properties": {}
   },
@@ -1808,7 +1875,7 @@
       37.55664063,
       17.37
     ],
-    "applicationId": "gsa/NODE.3_15",
+    "applicationId": "gsa/NODE.3-15",
     "name": "",
     "properties": {}
   },
@@ -1819,7 +1886,7 @@
       37.55664063,
       17.37
     ],
-    "applicationId": "gsa/NODE.3_16",
+    "applicationId": "gsa/NODE.3-16",
     "name": "",
     "properties": {}
   },
@@ -1830,7 +1897,7 @@
       57.35664063,
       17.37
     ],
-    "applicationId": "gsa/NODE.3_17",
+    "applicationId": "gsa/NODE.3-17",
     "name": "",
     "properties": {}
   },
@@ -1841,7 +1908,7 @@
       7.856641602,
       17.37
     ],
-    "applicationId": "gsa/NODE.3_18",
+    "applicationId": "gsa/NODE.3-18",
     "name": "",
     "properties": {}
   },
@@ -1852,7 +1919,7 @@
       7.856641602,
       17.37
     ],
-    "applicationId": "gsa/NODE.3_19",
+    "applicationId": "gsa/NODE.3-19",
     "name": "",
     "properties": {}
   },
@@ -1863,7 +1930,7 @@
       37.55664063,
       5.79
     ],
-    "applicationId": "gsa/NODE.3_2",
+    "applicationId": "gsa/NODE.3-2",
     "name": "",
     "properties": {}
   },
@@ -1874,7 +1941,7 @@
       -2.043358276,
       17.37
     ],
-    "applicationId": "gsa/NODE.3_20",
+    "applicationId": "gsa/NODE.3-20",
     "name": "",
     "properties": {}
   },
@@ -1885,7 +1952,7 @@
       -2.043358276,
       17.37
     ],
-    "applicationId": "gsa/NODE.3_21",
+    "applicationId": "gsa/NODE.3-21",
     "name": "",
     "properties": {}
   },
@@ -1896,7 +1963,7 @@
       31.42857227,
       23.551
     ],
-    "applicationId": "gsa/NODE.3_22",
+    "applicationId": "gsa/NODE.3-22",
     "name": "",
     "properties": {}
   },
@@ -1907,7 +1974,7 @@
       31.42857227,
       23.551
     ],
-    "applicationId": "gsa/NODE.3_23",
+    "applicationId": "gsa/NODE.3-23",
     "name": "",
     "properties": {}
   },
@@ -1918,7 +1985,7 @@
       41.42857031,
       23.551
     ],
-    "applicationId": "gsa/NODE.3_24",
+    "applicationId": "gsa/NODE.3-24",
     "name": "",
     "properties": {}
   },
@@ -1929,7 +1996,7 @@
       16.42857227,
       23.551
     ],
-    "applicationId": "gsa/NODE.3_25",
+    "applicationId": "gsa/NODE.3-25",
     "name": "",
     "properties": {}
   },
@@ -1940,7 +2007,7 @@
       16.42857227,
       23.551
     ],
-    "applicationId": "gsa/NODE.3_26",
+    "applicationId": "gsa/NODE.3-26",
     "name": "",
     "properties": {}
   },
@@ -1951,7 +2018,7 @@
       11.42857129,
       23.551
     ],
-    "applicationId": "gsa/NODE.3_27",
+    "applicationId": "gsa/NODE.3-27",
     "name": "",
     "properties": {}
   },
@@ -1962,7 +2029,7 @@
       11.42857129,
       23.551
     ],
-    "applicationId": "gsa/NODE.3_28",
+    "applicationId": "gsa/NODE.3-28",
     "name": "",
     "properties": {}
   },
@@ -1973,7 +2040,7 @@
       31.42857227,
       29.732
     ],
-    "applicationId": "gsa/NODE.3_29",
+    "applicationId": "gsa/NODE.3-29",
     "name": "",
     "properties": {}
   },
@@ -1984,7 +2051,7 @@
       57.35664063,
       5.79
     ],
-    "applicationId": "gsa/NODE.3_3",
+    "applicationId": "gsa/NODE.3-3",
     "name": "",
     "properties": {}
   },
@@ -1995,7 +2062,7 @@
       31.42857227,
       29.732
     ],
-    "applicationId": "gsa/NODE.3_30",
+    "applicationId": "gsa/NODE.3-30",
     "name": "",
     "properties": {}
   },
@@ -2006,7 +2073,7 @@
       41.42857031,
       29.732
     ],
-    "applicationId": "gsa/NODE.3_31",
+    "applicationId": "gsa/NODE.3-31",
     "name": "",
     "properties": {}
   },
@@ -2017,7 +2084,7 @@
       16.42857227,
       29.732
     ],
-    "applicationId": "gsa/NODE.3_32",
+    "applicationId": "gsa/NODE.3-32",
     "name": "",
     "properties": {}
   },
@@ -2028,7 +2095,7 @@
       16.42857227,
       29.732
     ],
-    "applicationId": "gsa/NODE.3_33",
+    "applicationId": "gsa/NODE.3-33",
     "name": "",
     "properties": {}
   },
@@ -2039,7 +2106,7 @@
       11.42857129,
       29.732
     ],
-    "applicationId": "gsa/NODE.3_34",
+    "applicationId": "gsa/NODE.3-34",
     "name": "",
     "properties": {}
   },
@@ -2050,7 +2117,7 @@
       11.42857129,
       29.732
     ],
-    "applicationId": "gsa/NODE.3_35",
+    "applicationId": "gsa/NODE.3-35",
     "name": "",
     "properties": {}
   },
@@ -2061,7 +2128,7 @@
       54.52807031,
       5.79
     ],
-    "applicationId": "gsa/NODE.3_36",
+    "applicationId": "gsa/NODE.3-36",
     "name": "",
     "properties": {}
   },
@@ -2072,7 +2139,7 @@
       54.52807031,
       5.79
     ],
-    "applicationId": "gsa/NODE.3_37",
+    "applicationId": "gsa/NODE.3-37",
     "name": "",
     "properties": {}
   },
@@ -2083,7 +2150,7 @@
       94.12807031,
       5.79
     ],
-    "applicationId": "gsa/NODE.3_38",
+    "applicationId": "gsa/NODE.3-38",
     "name": "",
     "properties": {}
   },
@@ -2094,7 +2161,7 @@
       -4.871929688,
       5.79
     ],
-    "applicationId": "gsa/NODE.3_39",
+    "applicationId": "gsa/NODE.3-39",
     "name": "",
     "properties": {}
   },
@@ -2105,7 +2172,7 @@
       7.856641602,
       5.79
     ],
-    "applicationId": "gsa/NODE.3_4",
+    "applicationId": "gsa/NODE.3-4",
     "name": "",
     "properties": {}
   },
@@ -2116,7 +2183,7 @@
       -4.871929688,
       5.79
     ],
-    "applicationId": "gsa/NODE.3_40",
+    "applicationId": "gsa/NODE.3-40",
     "name": "",
     "properties": {}
   },
@@ -2127,7 +2194,7 @@
       -24.67192969,
       5.79
     ],
-    "applicationId": "gsa/NODE.3_41",
+    "applicationId": "gsa/NODE.3-41",
     "name": "",
     "properties": {}
   },
@@ -2138,7 +2205,7 @@
       -24.67192969,
       5.79
     ],
-    "applicationId": "gsa/NODE.3_42",
+    "applicationId": "gsa/NODE.3-42",
     "name": "",
     "properties": {}
   },
@@ -2149,7 +2216,7 @@
       54.52807031,
       11.58
     ],
-    "applicationId": "gsa/NODE.3_43",
+    "applicationId": "gsa/NODE.3-43",
     "name": "",
     "properties": {}
   },
@@ -2160,7 +2227,7 @@
       54.52807031,
       11.58
     ],
-    "applicationId": "gsa/NODE.3_44",
+    "applicationId": "gsa/NODE.3-44",
     "name": "",
     "properties": {}
   },
@@ -2171,7 +2238,7 @@
       94.12807031,
       11.58
     ],
-    "applicationId": "gsa/NODE.3_45",
+    "applicationId": "gsa/NODE.3-45",
     "name": "",
     "properties": {}
   },
@@ -2182,7 +2249,7 @@
       -4.871929688,
       11.58
     ],
-    "applicationId": "gsa/NODE.3_46",
+    "applicationId": "gsa/NODE.3-46",
     "name": "",
     "properties": {}
   },
@@ -2193,7 +2260,7 @@
       -4.871929688,
       11.58
     ],
-    "applicationId": "gsa/NODE.3_47",
+    "applicationId": "gsa/NODE.3-47",
     "name": "",
     "properties": {}
   },
@@ -2204,7 +2271,7 @@
       -24.67192969,
       11.58
     ],
-    "applicationId": "gsa/NODE.3_48",
+    "applicationId": "gsa/NODE.3-48",
     "name": "",
     "properties": {}
   },
@@ -2215,7 +2282,7 @@
       -24.67192969,
       11.58
     ],
-    "applicationId": "gsa/NODE.3_49",
+    "applicationId": "gsa/NODE.3-49",
     "name": "",
     "properties": {}
   },
@@ -2226,7 +2293,7 @@
       7.856641602,
       5.79
     ],
-    "applicationId": "gsa/NODE.3_5",
+    "applicationId": "gsa/NODE.3-5",
     "name": "",
     "properties": {}
   },
@@ -2237,7 +2304,7 @@
       54.52807031,
       17.37
     ],
-    "applicationId": "gsa/NODE.3_50",
+    "applicationId": "gsa/NODE.3-50",
     "name": "",
     "properties": {}
   },
@@ -2248,7 +2315,7 @@
       54.52807031,
       17.37
     ],
-    "applicationId": "gsa/NODE.3_51",
+    "applicationId": "gsa/NODE.3-51",
     "name": "",
     "properties": {}
   },
@@ -2259,7 +2326,7 @@
       94.12807031,
       17.37
     ],
-    "applicationId": "gsa/NODE.3_52",
+    "applicationId": "gsa/NODE.3-52",
     "name": "",
     "properties": {}
   },
@@ -2270,7 +2337,7 @@
       -4.871929688,
       17.37
     ],
-    "applicationId": "gsa/NODE.3_53",
+    "applicationId": "gsa/NODE.3-53",
     "name": "",
     "properties": {}
   },
@@ -2281,7 +2348,7 @@
       -4.871929688,
       17.37
     ],
-    "applicationId": "gsa/NODE.3_54",
+    "applicationId": "gsa/NODE.3-54",
     "name": "",
     "properties": {}
   },
@@ -2292,7 +2359,7 @@
       -24.67192969,
       17.37
     ],
-    "applicationId": "gsa/NODE.3_55",
+    "applicationId": "gsa/NODE.3-55",
     "name": "",
     "properties": {}
   },
@@ -2303,7 +2370,7 @@
       -24.67192969,
       17.37
     ],
-    "applicationId": "gsa/NODE.3_56",
+    "applicationId": "gsa/NODE.3-56",
     "name": "",
     "properties": {}
   },
@@ -2314,7 +2381,7 @@
       40.0,
       23.551
     ],
-    "applicationId": "gsa/NODE.3_57",
+    "applicationId": "gsa/NODE.3-57",
     "name": "",
     "properties": {}
   },
@@ -2325,7 +2392,7 @@
       40.0,
       23.551
     ],
-    "applicationId": "gsa/NODE.3_58",
+    "applicationId": "gsa/NODE.3-58",
     "name": "",
     "properties": {}
   },
@@ -2336,7 +2403,7 @@
       60.0,
       23.551
     ],
-    "applicationId": "gsa/NODE.3_59",
+    "applicationId": "gsa/NODE.3-59",
     "name": "",
     "properties": {}
   },
@@ -2347,7 +2414,7 @@
       -2.043358276,
       5.79
     ],
-    "applicationId": "gsa/NODE.3_6",
+    "applicationId": "gsa/NODE.3-6",
     "name": "",
     "properties": {}
   },
@@ -2358,7 +2425,7 @@
       10.0,
       23.551
     ],
-    "applicationId": "gsa/NODE.3_60",
+    "applicationId": "gsa/NODE.3-60",
     "name": "",
     "properties": {}
   },
@@ -2369,7 +2436,7 @@
       10.0,
       23.551
     ],
-    "applicationId": "gsa/NODE.3_61",
+    "applicationId": "gsa/NODE.3-61",
     "name": "",
     "properties": {}
   },
@@ -2380,7 +2447,7 @@
       0.0,
       23.551
     ],
-    "applicationId": "gsa/NODE.3_62",
+    "applicationId": "gsa/NODE.3-62",
     "name": "",
     "properties": {}
   },
@@ -2391,7 +2458,7 @@
       0.0,
       23.551
     ],
-    "applicationId": "gsa/NODE.3_63",
+    "applicationId": "gsa/NODE.3-63",
     "name": "",
     "properties": {}
   },
@@ -2402,7 +2469,7 @@
       40.0,
       29.732
     ],
-    "applicationId": "gsa/NODE.3_64",
+    "applicationId": "gsa/NODE.3-64",
     "name": "",
     "properties": {}
   },
@@ -2413,7 +2480,7 @@
       40.0,
       29.732
     ],
-    "applicationId": "gsa/NODE.3_65",
+    "applicationId": "gsa/NODE.3-65",
     "name": "",
     "properties": {}
   },
@@ -2424,7 +2491,7 @@
       60.0,
       29.732
     ],
-    "applicationId": "gsa/NODE.3_66",
+    "applicationId": "gsa/NODE.3-66",
     "name": "",
     "properties": {}
   },
@@ -2435,7 +2502,7 @@
       10.0,
       29.732
     ],
-    "applicationId": "gsa/NODE.3_67",
+    "applicationId": "gsa/NODE.3-67",
     "name": "",
     "properties": {}
   },
@@ -2446,7 +2513,7 @@
       10.0,
       29.732
     ],
-    "applicationId": "gsa/NODE.3_68",
+    "applicationId": "gsa/NODE.3-68",
     "name": "",
     "properties": {}
   },
@@ -2457,7 +2524,7 @@
       0.0,
       29.732
     ],
-    "applicationId": "gsa/NODE.3_69",
+    "applicationId": "gsa/NODE.3-69",
     "name": "",
     "properties": {}
   },
@@ -2468,7 +2535,7 @@
       -2.043358276,
       5.79
     ],
-    "applicationId": "gsa/NODE.3_7",
+    "applicationId": "gsa/NODE.3-7",
     "name": "",
     "properties": {}
   },
@@ -2479,7 +2546,7 @@
       0.0,
       29.732
     ],
-    "applicationId": "gsa/NODE.3_70",
+    "applicationId": "gsa/NODE.3-70",
     "name": "",
     "properties": {}
   },
@@ -2490,7 +2557,7 @@
       10.0,
       17.37
     ],
-    "applicationId": "gsa/NODE.3_72",
+    "applicationId": "gsa/NODE.3-72",
     "name": "",
     "properties": {}
   },
@@ -2501,7 +2568,7 @@
       10.0,
       17.37
     ],
-    "applicationId": "gsa/NODE.3_74",
+    "applicationId": "gsa/NODE.3-74",
     "name": "",
     "properties": {}
   },
@@ -2512,7 +2579,7 @@
       60.0,
       17.37
     ],
-    "applicationId": "gsa/NODE.3_76",
+    "applicationId": "gsa/NODE.3-76",
     "name": "",
     "properties": {}
   },
@@ -2523,7 +2590,7 @@
       40.0,
       17.37
     ],
-    "applicationId": "gsa/NODE.3_78",
+    "applicationId": "gsa/NODE.3-78",
     "name": "",
     "properties": {}
   },
@@ -2534,7 +2601,7 @@
       37.55664063,
       11.58
     ],
-    "applicationId": "gsa/NODE.3_8",
+    "applicationId": "gsa/NODE.3-8",
     "name": "",
     "properties": {}
   },
@@ -2545,7 +2612,7 @@
       40.0,
       17.37
     ],
-    "applicationId": "gsa/NODE.3_80",
+    "applicationId": "gsa/NODE.3-80",
     "name": "",
     "properties": {}
   },
@@ -2556,7 +2623,7 @@
       0.0,
       17.37
     ],
-    "applicationId": "gsa/NODE.3_82",
+    "applicationId": "gsa/NODE.3-82",
     "name": "",
     "properties": {}
   },
@@ -2567,7 +2634,7 @@
       0.0,
       17.37
     ],
-    "applicationId": "gsa/NODE.3_84",
+    "applicationId": "gsa/NODE.3-84",
     "name": "",
     "properties": {}
   },
@@ -2578,7 +2645,7 @@
       -4.871929825,
       -0.2
     ],
-    "applicationId": "gsa/NODE.3_85",
+    "applicationId": "gsa/NODE.3-85",
     "name": "",
     "properties": {}
   },
@@ -2589,7 +2656,7 @@
       -4.871929825,
       -0.2
     ],
-    "applicationId": "gsa/NODE.3_86",
+    "applicationId": "gsa/NODE.3-86",
     "name": "",
     "properties": {}
   },
@@ -2600,7 +2667,7 @@
       94.12807018,
       -0.2
     ],
-    "applicationId": "gsa/NODE.3_87",
+    "applicationId": "gsa/NODE.3-87",
     "name": "",
     "properties": {}
   },
@@ -2611,7 +2678,7 @@
       54.52807018,
       -0.2
     ],
-    "applicationId": "gsa/NODE.3_88",
+    "applicationId": "gsa/NODE.3-88",
     "name": "",
     "properties": {}
   },
@@ -2622,7 +2689,7 @@
       54.52807018,
       -0.2
     ],
-    "applicationId": "gsa/NODE.3_89",
+    "applicationId": "gsa/NODE.3-89",
     "name": "",
     "properties": {}
   },
@@ -2633,7 +2700,7 @@
       37.55664063,
       11.58
     ],
-    "applicationId": "gsa/NODE.3_9",
+    "applicationId": "gsa/NODE.3-9",
     "name": "",
     "properties": {}
   },
@@ -2644,7 +2711,7 @@
       -24.67192982,
       -0.2
     ],
-    "applicationId": "gsa/NODE.3_90",
+    "applicationId": "gsa/NODE.3-90",
     "name": "",
     "properties": {}
   },
@@ -2655,7 +2722,7 @@
       -24.67192982,
       -0.2
     ],
-    "applicationId": "gsa/NODE.3_91",
+    "applicationId": "gsa/NODE.3-91",
     "name": "",
     "properties": {}
   },
@@ -2666,7 +2733,7 @@
       74.32807031,
       11.58
     ],
-    "applicationId": "gsa/NODE.3_92",
+    "applicationId": "gsa/NODE.3-92",
     "name": "",
     "properties": {}
   },
@@ -2677,7 +2744,7 @@
       -4.871929688,
       11.58
     ],
-    "applicationId": "gsa/NODE.3_93",
+    "applicationId": "gsa/NODE.3-93",
     "name": "",
     "properties": {}
   },
@@ -2688,7 +2755,7 @@
       16.62698299,
       11.58
     ],
-    "applicationId": "gsa/NODE.3_94",
+    "applicationId": "gsa/NODE.3-94",
     "name": "",
     "properties": {}
   },
@@ -2699,7 +2766,7 @@
       23.11736934,
       11.58
     ],
-    "applicationId": "gsa/NODE.3_95",
+    "applicationId": "gsa/NODE.3-95",
     "name": "",
     "properties": {}
   },
@@ -2799,19 +2866,28 @@
     },
     "shape": "Generic",
     "hollow": false,
-    "materialRef": "gsa/MAT_CONCRETE.17_1",
+    "materialRef": "gsa/MAT_CONCRETE.17-1",
     "applicationId": "columnProp",
     "name": "Column property",
-    "properties": {}
+    "properties": {
+      "structural": {
+        "NativeId": "1",
+        "NativeSectionProfile": "GEO%P(m)%M(-0.836|-1.141)%L(-3.799|3.396)%L(1.71|0.992)%L(0.931|-0.92)%M(-1.881|1.512)%L(-0.247|1.195)%L(-0.431|-0.418)%M(1.313|0.588)%L(1.098|0.683)%L(1.115|0.273)%L(1.24|0.259)"
+      }
+    }
   },
   {
     "type": "Structural2DProperty",
     "thickness": 0.3,
-    "materialRef": "gsa/MAT_CONCRETE.17_1",
+    "materialRef": "gsa/MAT_CONCRETE.17-1",
     "referenceSurface": 2,
     "applicationId": "slabProp",
     "name": "Slab property",
-    "properties": {}
+    "properties": {
+      "structural": {
+        "NativeId": "1"
+      }
+    }
   },
   {
     "type": "Structural2DThermalLoad",
@@ -2941,8 +3017,8 @@
     "type": "StructuralLoadCombo",
     "comboType": "LinearAdd",
     "loadTaskRefs": [
-      "gsa/ANAL.1_1",
-      "gsa/ANAL.1_2"
+      "gsa/ANAL.1-1",
+      "gsa/ANAL.1-2"
     ],
     "loadTaskFactors": [
       1.5,
@@ -2967,7 +3043,7 @@
       1.0,
       1.0
     ],
-    "applicationId": "gsa/ANAL.1_1",
+    "applicationId": "gsa/ANAL.1-1",
     "name": "Load task 1",
     "properties": {}
   },
@@ -2984,7 +3060,7 @@
       1.0,
       1.0
     ],
-    "applicationId": "gsa/ANAL.1_2",
+    "applicationId": "gsa/ANAL.1-2",
     "name": "Load task 2",
     "properties": {}
   },
@@ -2998,9 +3074,13 @@
     "compressiveStrength": 40000000.0,
     "maxStrain": 0.003,
     "aggragateSize": 0.02,
-    "applicationId": "gsa/MAT_CONCRETE.17_1",
+    "applicationId": "gsa/MAT_CONCRETE.17-1",
     "name": "Concrete",
-    "properties": {}
+    "properties": {
+      "structural": {
+        "NativeId": "1"
+      }
+    }
   },
   {
     "type": "StructuralReferenceLine",
@@ -3012,7 +3092,7 @@
       0.0,
       0.0
     ],
-    "applicationId": "gsa/GRID_LINE.1_1",
+    "applicationId": "gsa/GRID_LINE.1-1",
     "name": "Level",
     "properties": {}
   },
@@ -3026,7 +3106,7 @@
       19.999999999999996,
       0.0
     ],
-    "applicationId": "gsa/GRID_LINE.1_2",
+    "applicationId": "gsa/GRID_LINE.1-2",
     "name": "Angled",
     "properties": {}
   },
@@ -3069,7 +3149,8 @@
       "structural": {
         "springType": "General",
         "stiffness": {"type":"StructuralVectorSix","value":[12.0,15.0,20.0,25.0,30.0,38.0],"hash":"ae836cd82b24e2d7fb085a6d2abfd17e","properties":{}},
-        "dampingRatio": 0.21
+        "dampingRatio": 0.21,
+        "NativeId": "1"
       }
     }
   },
@@ -3081,7 +3162,8 @@
       "structural": {
         "springType": "Compression",
         "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
-        "dampingRatio": 0.21
+        "dampingRatio": 0.21,
+        "NativeId": "4"
       }
     }
   },
@@ -3093,7 +3175,8 @@
       "structural": {
         "springType": "Axial",
         "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
-        "dampingRatio": 0.21
+        "dampingRatio": 0.21,
+        "NativeId": "2"
       }
     }
   },
@@ -3105,7 +3188,8 @@
       "structural": {
         "springType": "Lockup",
         "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
-        "dampingRatio": 0.21
+        "dampingRatio": 0.21,
+        "NativeId": "6"
       }
     }
   },
@@ -3117,7 +3201,8 @@
       "structural": {
         "springType": "Gap",
         "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
-        "dampingRatio": 0.21
+        "dampingRatio": 0.21,
+        "NativeId": "7"
       }
     }
   },
@@ -3129,7 +3214,8 @@
       "structural": {
         "springType": "Friction",
         "stiffness": {"type":"StructuralVectorSix","value":[12.0,15.0,20.0,0.0,0.0,0.0],"hash":"859fa9f418bc114832e1f243fb3f8c61","properties":{}},
-        "dampingRatio": 0.21
+        "dampingRatio": 0.21,
+        "NativeId": "8"
       }
     }
   },
@@ -3141,7 +3227,8 @@
       "structural": {
         "springType": "Torsional",
         "stiffness": {"type":"StructuralVectorSix","value":[0.0,0.0,0.0,25.0,0.0,0.0],"hash":"98d1640829ffe5e2dffe3ba3ed4b7659","properties":{}},
-        "dampingRatio": 0.21
+        "dampingRatio": 0.21,
+        "NativeId": "3"
       }
     }
   },
@@ -3153,7 +3240,8 @@
       "structural": {
         "springType": "Tension",
         "stiffness": {"type":"StructuralVectorSix","value":[12.0,0.0,0.0,0.0,0.0,0.0],"hash":"ffeefecc6aca0e25bd8b2d11edf5c9b8","properties":{}},
-        "dampingRatio": 0.21
+        "dampingRatio": 0.21,
+        "NativeId": "5"
       }
     }
   },

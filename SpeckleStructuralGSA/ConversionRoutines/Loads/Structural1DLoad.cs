@@ -209,7 +209,7 @@ namespace SpeckleStructuralGSA
     }
   }
 
-  [GSAObject("LOAD_BEAM", new string[] { "EL.4" }, "loads", true, false, new Type[] { typeof(GSA1DElement) }, new Type[] { typeof(GSA1DElement), typeof(GSA1DElementPolyline) })]
+  [GSAObject("LOAD_BEAM", new string[] { "EL.4" }, "model", true, false, new Type[] { typeof(GSA1DElement) }, new Type[] { typeof(GSA1DElement), typeof(GSA1DElementPolyline) })]
   public class GSA1DLoadAnalysisLayer : GSA1DLoadBase, IGSASpeckleContainer
   {
     public void ParseGWACommand(List<GSA1DElement> elements)
@@ -223,7 +223,7 @@ namespace SpeckleStructuralGSA
     }
   }
 
-  [GSAObject("LOAD_BEAM", new string[] { "MEMB.8" }, "loads", false, true, new Type[] { typeof(GSA1DMember) }, new Type[] { typeof(GSA1DMember) })]
+  [GSAObject("LOAD_BEAM", new string[] { "MEMB.8" }, "model", false, true, new Type[] { typeof(GSA1DMember) }, new Type[] { typeof(GSA1DMember) })]
   public class GSA1DLoadDesignLayer : GSA1DLoadBase, IGSASpeckleContainer
   {
     public void ParseGWACommand(List<GSA1DMember> members)
