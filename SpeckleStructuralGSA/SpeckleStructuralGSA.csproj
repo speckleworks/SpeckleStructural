@@ -163,11 +163,22 @@
     <Compile Include="ConversionRoutines\Results\Structural2DElementResult.cs" />
     <Compile Include="ConversionRoutines\Results\StructuralMiscResult.cs" />
     <Compile Include="ConversionRoutines\Results\StructuralNodeResult.cs" />
+    <Compile Include="SchemaConversion\Helper.cs" />
+    <Compile Include="SchemaConversion\SchemaToSpeckle.cs" />
     <Compile Include="Enum.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Schema\Enums.cs" />
+    <Compile Include="Schema\Loads\Gsa0dLoad.cs" />
     <Compile Include="GSASenderDictionary.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Initialiser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Schema\Geometry\GsaAxis.cs" />
+    <Compile Include="Schema\Loads\GsaLoadCase.cs" />
+    <Compile Include="Schema\Geometry\GsaNode.cs" />
+    <Compile Include="Schema\GsaRecord.cs" />
+    <Compile Include="Schema\GsaType.cs" />
+    <Compile Include="Schema\StringValue.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

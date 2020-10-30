@@ -70,6 +70,10 @@ namespace SpeckleStructuralGSA
         return "";
 
       var loadTask = this.Value as StructuralLoadTask;
+      if (string.IsNullOrEmpty(loadTask.ApplicationId))
+      {
+        return "";
+      }
 
       var keyword = typeof(GSALoadTask).GetGSAKeyword();
 

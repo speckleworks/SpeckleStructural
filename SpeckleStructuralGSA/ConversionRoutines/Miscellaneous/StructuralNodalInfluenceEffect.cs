@@ -63,7 +63,7 @@ namespace SpeckleStructuralGSA
       var axis = pieces[counter++];
       if (axis == "GLOBAL")
       {
-        obj.Axis = Helper.Parse0DAxis(0, Initialiser.Interface, out var temp);
+        obj.Axis = Helper.Parse0DAxis(0, out var temp);
       }
       else if (axis == "LOCAL")
       {
@@ -71,7 +71,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        obj.Axis = Helper.Parse0DAxis(Convert.ToInt32(axis), Initialiser.Interface, out string rec, targetNode.Value.Value.ToArray());
+        obj.Axis = Helper.Parse0DAxis(Convert.ToInt32(axis), out string rec, targetNode.Value.Value.ToArray());
         if (rec != null)
           this.SubGWACommand.Add(rec);
       }

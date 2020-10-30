@@ -53,6 +53,10 @@ namespace SpeckleStructuralGSA
       var destType = typeof(GSABridgePath);
 
       var path = this.Value as StructuralBridgePath;
+      if (string.IsNullOrEmpty(path.ApplicationId))
+      {
+        return "";
+      }
 
       var keyword = destType.GetGSAKeyword();
 

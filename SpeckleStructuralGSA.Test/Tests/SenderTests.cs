@@ -162,15 +162,19 @@ namespace SpeckleStructuralGSA.Test
       Assert.IsEmpty(unmatching, unmatching.Count().ToString() + " unmatched objects");
     }
 
-    [Ignore("There is an equivalent test in SpeckleGSA repo, so this one might be removed")]
-    [TestCase(GSATargetLayer.Design, false, false, "sjc.gwb")]
-    //[TestCase(GSATargetLayer.Analysis, true, false, @"C:\Temp\ResultsTest.gwb", "1D Element Displacement")]
-    public void TransmissionTestForDebug(GSATargetLayer layer, bool resultsOnly, bool embedResults, string gsaFileName, string overrideResultType = "")
+    //[Ignore("There is an equivalent test in SpeckleGSA repo, so this one might be removed")]
+    //[TestCase(GSATargetLayer.Design, false, false, "sjc.gwb")]
+    [TestCase(GSATargetLayer.Analysis, false, false, @"C:\Temp\ResultsTest.gwb", "", "")]
+    //[TestCase(GSATargetLayer.Analysis, false, true, @"C:\Users\Nic.Burgers\OneDrive - Arup\Issues\Nguyen Le\2D result\shear wall system-seismic v10.1.gwb", 
+    //  "2D Element Projected Force", "A1 A2" )]
+    public void TransmissionTestForDebug(GSATargetLayer layer, bool resultsOnly, bool embedResults, string gsaFileName, 
+      string overrideResultType = null, string loadCasesOverride = null)
     {
       gsaInterfacer.OpenFile(gsaFileName.Contains("\\") ? gsaFileName : Path.Combine(TestDataDirectory, gsaFileName));
 
-      var actualObjects = ModelToSpeckleObjects(layer, resultsOnly, embedResults, loadCases,
-        string.IsNullOrEmpty(overrideResultType) ? resultTypes : new[] { overrideResultType });
+      var actualObjects = ModelToSpeckleObjects(layer, resultsOnly, embedResults,
+        (loadCasesOverride == null) ? loadCases : loadCasesOverride.ListSplit(" "),
+        (overrideResultType == null) ? resultTypes : new[] { overrideResultType });
 
       Assert.IsNotNull(actualObjects);
       actualObjects = actualObjects.OrderBy(a => a.ApplicationId).ToList();

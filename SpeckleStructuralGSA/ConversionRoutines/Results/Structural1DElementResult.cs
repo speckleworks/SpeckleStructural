@@ -29,7 +29,7 @@ namespace SpeckleStructuralGSA
         return new SpeckleNull();
       }
 
-      var keyword = Helper.GetGSAKeyword(typeof(GSA1DElement));
+      var keyword = typeof(GSA1DElement).GetGSAKeyword();
 
       if (Initialiser.Settings.EmbedResults)
       {

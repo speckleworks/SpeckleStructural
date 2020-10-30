@@ -77,6 +77,10 @@ namespace SpeckleStructuralGSA
         return "";
 
       var loadCombo = this.Value as StructuralLoadCombo;
+      if (string.IsNullOrEmpty(loadCombo.ApplicationId))
+      {
+        return "";
+      }
 
       var keyword = typeof(GSALoadCombo).GetGSAKeyword();
 

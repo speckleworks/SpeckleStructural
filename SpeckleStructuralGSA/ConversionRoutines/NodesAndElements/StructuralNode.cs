@@ -65,7 +65,7 @@ namespace SpeckleStructuralGSA
         else
         {
           string gwaRec = null;
-          obj.Axis = Helper.Parse0DAxis(Convert.ToInt32(axis), Initialiser.Interface, out gwaRec, obj.Value.ToArray());
+          obj.Axis = Helper.Parse0DAxis(Convert.ToInt32(axis), out gwaRec, obj.Value.ToArray());
           if (gwaRec != null)
           {
             this.SubGWACommand.Add(gwaRec);

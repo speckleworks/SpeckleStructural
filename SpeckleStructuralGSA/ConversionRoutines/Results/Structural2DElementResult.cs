@@ -91,7 +91,7 @@ namespace SpeckleStructuralGSA
       {
         var results = new List<GSA2DElementResult>();
 
-        var keyword = Helper.GetGSAKeyword(typeof(GSA2DElement));
+        var keyword = typeof(GSA2DElement).GetGSAKeyword();
 
         //Unlike embedding, separate results doesn't necessarily mean that there is a Speckle object created for each 1d element.  There is always though
         //some GWA loaded into the cache

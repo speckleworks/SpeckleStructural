@@ -35,7 +35,7 @@ namespace SpeckleStructuralGSA
       this.SubGWACommand.Add(gridPlaneRec);
 
       string gwaRec = null;
-      var axis = Helper.Parse0DAxis(gridPlaneAxis, Initialiser.Interface, out gwaRec);
+      var axis = Helper.Parse0DAxis(gridPlaneAxis, out gwaRec);
       if (gwaRec != null)
         this.SubGWACommand.Add(gwaRec);
       double elevation = gridPlaneElevation;
@@ -79,7 +79,7 @@ namespace SpeckleStructuralGSA
       else
       {
         loadAxisId = loadAxisData == "GLOBAL" ? 0 : Convert.ToInt32(loadAxisData);
-        loadAxis = Helper.Parse0DAxis(loadAxisId, Initialiser.Interface, out gwaRec);
+        loadAxis = Helper.Parse0DAxis(loadAxisId, out gwaRec);
         if (gwaRec != null)
           this.SubGWACommand.Add(gwaRec);
       }

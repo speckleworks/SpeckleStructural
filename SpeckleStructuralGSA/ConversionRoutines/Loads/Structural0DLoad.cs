@@ -10,7 +10,7 @@ namespace SpeckleStructuralGSA
   [GSAObject("LOAD_NODE.2", new string[] { "NODE.3", "AXIS.1" }, "model", true, true, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode) })]
   public class GSA0DLoad : IGSASpeckleContainer
   {
-    public int Axis; // Store this temporarily to generate other loads
+    public int AxisId; // Store this temporarily to generate other loads
 
     public int GSAId { get; set; }
     public string GWACommand { get; set; }
@@ -27,9 +27,11 @@ namespace SpeckleStructuralGSA
       var pieces = this.GWACommand.ListSplit("\t");
 
       var counter = 1; // Skip identifier
-      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      //Since this method is just called once to create an object, the application ID that the parent (single Structural0DLoad object) would have had.
+      //This is based on the fact that one Strutural0DLoad object received previously would have created multiple LOAD_NODE lines in GSA
+      obj.ApplicationId = SpeckleStructuralClasses.Helper.ExtractParentApplicationId(Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId));
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
-      var targetNodeRefs = Initialiser.Interface.ConvertGSAList(pieces[counter++], SpeckleGSAInterfaces.GSAEntity.NODE);
+      var targetNodeRefs = Initialiser.Interface.ConvertGSAList(pieces[counter++], GSAEntity.NODE);
 
       if (nodes != null)
       {
@@ -46,7 +48,7 @@ namespace SpeckleStructuralGSA
       obj.LoadCaseRef = Helper.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
 
       var axis = pieces[counter++];
-      this.Axis = axis == "GLOBAL" ? 0 : Convert.ToInt32(axis);
+      this.AxisId = axis == "GLOBAL" ? 0 : Convert.ToInt32(axis);
 
       obj.Loading = new StructuralVectorSix(new double[6]);
       var direction = pieces[counter++].ToLower();
@@ -118,11 +120,13 @@ namespace SpeckleStructuralGSA
 
         if (load.Loading.Value[i] == 0) continue;
 
-        var index = Initialiser.Cache.ResolveIndex(typeof(GSA0DLoad).GetGSAKeyword());
+        var loadDirectionAppId = SpeckleStructuralClasses.Helper.CreateChildApplicationId(direction[i], load.ApplicationId);
+        var index = Initialiser.Cache.ResolveIndex(keyword, loadDirectionAppId);
 
         ls.Add("SET_AT");
         ls.Add(index.ToString());
-        var sid = Helper.GenerateSID(load);
+        
+        var sid = Helper.GenerateSID(loadDirectionAppId);
         ls.Add(keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid));
         ls.Add((load.Name == null || load.Name == "") ? " " : load.Name + (load.Name.All(char.IsDigit) ? " " : ""));
         ls.Add(string.Join(" ", nodeRefs));
@@ -152,6 +156,7 @@ namespace SpeckleStructuralGSA
 
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
+      //Multiple lines may result in just one 
       foreach (var k in newLines.Keys)
       {
         var p = newLines[k];
@@ -191,7 +196,7 @@ namespace SpeckleStructuralGSA
           // Transform load to defined axis
           var node = nodes.Where(n => (n.Value.ApplicationId == nRef)).First();
 
-          var loadAxis = Helper.Parse0DAxis(initLoad.Axis, Initialiser.Interface, out string gwaRecord, node.Value.Value.ToArray());
+          var loadAxis = Helper.Parse0DAxis(initLoad.AxisId, out string gwaRecord, node.Value.Value.ToArray());
           load.Value.Loading = initLoad.Value.Loading;
           load.Value.Loading.TransformOntoAxis(loadAxis);
 

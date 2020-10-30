@@ -81,6 +81,10 @@ namespace SpeckleStructuralGSA
         return "";
 
       var stageDef = this.Value as StructuralConstructionStage;
+      if (string.IsNullOrEmpty(stageDef.ApplicationId))
+      {
+        return "";
+      }
 
       var sourceType = stageDef.Type;
 
