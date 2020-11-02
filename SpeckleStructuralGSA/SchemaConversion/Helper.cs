@@ -48,7 +48,8 @@ namespace SpeckleStructuralGSA.SchemaConversion
     public static List<U> GetNewFromCache<T, U>() where U : GsaRecord  //T = old type, U = new schema type
     {
       //Convert all raw GWA into GSA schema objects
-      var newLines = Initialiser.Cache.GetGwaToSerialise(typeof(T).GetGSAKeyword());
+      var keyword = typeof(T).GetGSAKeyword().Split('.').First();
+      var newLines = Initialiser.Cache.GetGwaToSerialise(keyword);
       var schemaObjs = new List<U>();
       foreach (var index in newLines.Keys)
       {

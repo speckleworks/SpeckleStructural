@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using SpeckleGSAInterfaces;
 
 namespace SpeckleStructuralGSA.Schema
@@ -36,18 +37,19 @@ namespace SpeckleStructuralGSA.Schema
       return true;
     }
 
-    public override bool Gwa(out string gwa, bool includeSet = false)
+    public override bool Gwa(out List<string> gwa, bool includeSet = false)
     {
       if (!InitialiseGwa(includeSet, out var items))
       {
-        gwa = "";
+        gwa = new List<string>();
         return false;
       }
 
       //NODE.3 | num | name | colour | x | y | z | restraint | axis | mesh_size | springProperty | massProperty | damperProperty
       AddItems(ref items, Name, "NO_RGB", X, Y, Z);
 
-      return Join(items, out gwa);
+      gwa = (Join(items, out var gwaLine)) ? new List<string>() { gwaLine } : new List<string>();
+      return gwa.Count() > 0;
     }
   }
 }

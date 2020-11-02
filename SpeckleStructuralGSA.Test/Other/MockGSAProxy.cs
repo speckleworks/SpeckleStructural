@@ -8,7 +8,7 @@ namespace SpeckleStructuralGSA.Test
 {
   public static class MockGSAProxy
   {
-    public delegate void ParseCallback(string fullGwa, out string keyword, out int? index, out string streamId, out string applicationId, out string gwaWithoutSet, out GwaSetCommandType? gwaSetCommandType);
+    public delegate void ParseCallback(string fullGwa, out string keyword, out int? index, out string streamId, out string applicationId, out string gwaWithoutSet, out GwaSetCommandType? gwaSetCommandType, bool includeKwVersion = false);
 
     public static int nodeIndex = 0;
     //Copied over from the GSAProxy
@@ -52,7 +52,7 @@ namespace SpeckleStructuralGSA.Test
       return FormatStreamIdSidTag(streamId) + FormatApplicationIdSidTag(applicationId);
     }
 
-    public static void ParseGeneralGwa(string fullGwa, out string keyword, out int? index, out string streamId, out string applicationId, out string gwaWithoutSet, out GwaSetCommandType? gwaSetCommandType)
+    public static void ParseGeneralGwa(string fullGwa, out string keyword, out int? index, out string streamId, out string applicationId, out string gwaWithoutSet, out GwaSetCommandType? gwaSetCommandType, bool includeKwVersion = false)
     {
       var pieces = fullGwa.ListSplit("\t").ToList();
       keyword = "";
@@ -125,6 +125,11 @@ namespace SpeckleStructuralGSA.Test
           keyword = groupKeyword;
           break;
         }
+      }
+
+      if (!includeKwVersion)
+      {
+        keyword = keyword.Split('.').First();
       }
 
       gwaWithoutSet = string.Join("\t", pieces);

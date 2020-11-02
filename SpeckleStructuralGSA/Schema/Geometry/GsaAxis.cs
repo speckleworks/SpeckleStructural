@@ -56,18 +56,19 @@ namespace SpeckleStructuralGSA.Schema
       return true;
     }
 
-    public override bool Gwa(out string gwa, bool includeSet = false)
+    public override bool Gwa(out List<string> gwa, bool includeSet = false)
     {
       if (!InitialiseGwa(includeSet, out var items))
       {
-        gwa = "";
+        gwa = new List<string>();
         return false;
       }
 
       //AXIS.1 | num | name | type | Ox | Oy | Oz | Xx | Xy | Xz | XYx | XYy | Xyz
       AddItems(ref items, Name, "CART", OriginX, OriginY, OriginZ, XDirX, XDirY, XDirZ, XYDirX, XYDirY, XYDirZ);
 
-      return Join(items, out gwa);
+      gwa = (Join(items, out var gwaLine)) ? new List<string>() { gwaLine } : new List<string>();
+      return gwa.Count() > 0;
     }
   }
 }

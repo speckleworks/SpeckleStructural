@@ -81,7 +81,8 @@ namespace SpeckleStructuralGSA
       if (counter < pieces.Length)
       {
         // springProperty
-        var springPropsGwa = Initialiser.Cache.GetGwa(typeof(GSASpringProperty).GetGSAKeyword(), Convert.ToInt32(pieces[counter++])); // not sure how this could ever return multiple?
+        var spKeyword = typeof(GSASpringProperty).GetGSAKeyword().Split('.').First();
+        var springPropsGwa = Initialiser.Cache.GetGwa(spKeyword, Convert.ToInt32(pieces[counter++])); // not sure how this could ever return multiple?
         if (springPropsGwa.Count > 0)
         {
           var springPropGWA = springPropsGwa[0];
@@ -96,7 +97,7 @@ namespace SpeckleStructuralGSA
       {
         // massProperty
         // Speckle node currently only supports single mass, rather than the more complicated PROP_MASS in GSA
-        var massPropsGwa = Initialiser.Cache.GetGwa("PROP_MASS.2", Convert.ToInt32(pieces[counter++]));
+        var massPropsGwa = Initialiser.Cache.GetGwa("PROP_MASS", Convert.ToInt32(pieces[counter++]));
         if (massPropsGwa.Count > 0)
         {
           var massPropGwa = massPropsGwa[0];
@@ -301,7 +302,7 @@ namespace SpeckleStructuralGSA
 
     private double GetGSAMass(int propertyIndex)
     {
-      var gwa = Initialiser.Cache.GetGwa("PROP_MASS.2", propertyIndex).FirstOrDefault();
+      var gwa = Initialiser.Cache.GetGwa("PROP_MASS", propertyIndex).FirstOrDefault();
       var pieces = gwa.ListSplit("\t");
 
       this.SubGWACommand.Add(gwa);

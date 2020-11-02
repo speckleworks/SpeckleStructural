@@ -8,6 +8,7 @@ using SpeckleGSAInterfaces;
 using SpeckleGSAProxy;
 using SpeckleStructuralClasses;
 using SpeckleCoreGeometryClasses;
+using SpeckleStructuralGSA.SchemaConversion;
 
 namespace SpeckleStructuralGSA.Test
 {
@@ -19,7 +20,7 @@ namespace SpeckleStructuralGSA.Test
     {
       var mockGSAObject = new Mock<IGSAProxy>();
 
-      mockGSAObject.Setup(x => x.ParseGeneralGwa(It.IsAny<string>(), out It.Ref<string>.IsAny, out It.Ref<int?>.IsAny, out It.Ref<string>.IsAny, out It.Ref<string>.IsAny, out It.Ref<string>.IsAny, out It.Ref<GwaSetCommandType?>.IsAny))
+      mockGSAObject.Setup(x => x.ParseGeneralGwa(It.IsAny<string>(), out It.Ref<string>.IsAny, out It.Ref<int?>.IsAny, out It.Ref<string>.IsAny, out It.Ref<string>.IsAny, out It.Ref<string>.IsAny, out It.Ref<GwaSetCommandType?>.IsAny, It.IsAny<bool>()))
       .Callback(new MockGSAProxy.ParseCallback(MockGSAProxy.ParseGeneralGwa));
       mockGSAObject.Setup(x => x.NodeAt(It.IsAny<double>(), It.IsAny<double>(), It.IsAny<double>(), It.IsAny<double>()))
         .Returns(new Func<double, double, double, double, int>(MockGSAProxy.NodeAt));
@@ -62,7 +63,7 @@ namespace SpeckleStructuralGSA.Test
         NodeRefs = new List<string> { "Node1", "Node2" },
         LoadCaseRef = "LoadCase1"
       };
-      GwaToCache(Conversions.ToNative(receivedObj), streamID);
+      GwaToCache(Structural0DLoadToNative.ToNative(receivedObj), streamID);
 
       ((IGSACache)Initialiser.Cache).Snapshot(streamID);
 

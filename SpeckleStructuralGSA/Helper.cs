@@ -361,7 +361,7 @@ namespace SpeckleStructuralGSA
       {
         return;
       }
-      var res = Initialiser.Cache.ResolveIndex("AXIS.1");
+      var res = Initialiser.Cache.ResolveIndex("AXIS");
 
       var originCoords = (axis.Origin == null || axis.Origin.Value == null) ? new List<double> { 0, 0, 0 } : axis.Origin.Value;
 
@@ -466,7 +466,7 @@ namespace SpeckleStructuralGSA
     public static void SetAxis(SpeckleVector xVector, SpeckleVector xyVector, SpecklePoint origin, out int index, out string gwaCommand, string name = "")
     {
       gwaCommand = "";
-      index = Initialiser.Cache.ResolveIndex("AXIS.1");
+      index = Initialiser.Cache.ResolveIndex("AXIS");
 
       var gwaCommands = new List<string>();
 
@@ -787,7 +787,7 @@ namespace SpeckleStructuralGSA
               new StructuralVectorThree(new double[] { z.X, z.Y, z.Z })
           );
         default:
-          var res = Initialiser.Cache.GetGwa("AXIS.1", axis).First();
+          var res = Initialiser.Cache.GetGwa("AXIS", axis).First();
           gwaRecord = res;
 
           var pieces = res.Split(new char[] { '\t' });
@@ -1025,7 +1025,7 @@ namespace SpeckleStructuralGSA
 
     public static void GetGridPlaneData(int gridPlaneIndex, out int gridPlaneAxisIndex, out double gridPlaneElevation, out string gwa)
     {
-      var gwas = Initialiser.Cache.GetGwa("GRID_PLANE.4", gridPlaneIndex);
+      var gwas = Initialiser.Cache.GetGwa("GRID_PLANE", gridPlaneIndex);
       if (gwas == null || gwas.Count() == 0)
       {
         gridPlaneAxisIndex = 0;
@@ -1042,7 +1042,7 @@ namespace SpeckleStructuralGSA
 
     public static void GetGridPlaneRef(int gridSurfaceIndex, out int gridPlaneIndex, out string gwa)
     {
-      var gwas = Initialiser.Cache.GetGwa("GRID_SURFACE.1", gridSurfaceIndex);
+      var gwas = Initialiser.Cache.GetGwa("GRID_SURFACE", gridSurfaceIndex);
       if (gwas == null || gwas.Count() == 0)
       {
         gridPlaneIndex = 0;
@@ -1056,7 +1056,7 @@ namespace SpeckleStructuralGSA
 
     public static void GetPolylineDesc(int polylineIndex, out string desc, out string gwa)
     {
-      var gwas = Initialiser.Cache.GetGwa("tPOLYLINE.1", polylineIndex);
+      var gwas = Initialiser.Cache.GetGwa("tPOLYLINE", polylineIndex);
       if (gwas == null || gwas.Count() == 0)
       {
         desc = "";

@@ -5,7 +5,6 @@ using SpeckleCoreGeometryClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace SpeckleStructuralClasses
 {
@@ -13,7 +12,7 @@ namespace SpeckleStructuralClasses
   {
     public StructuralVectorThree() { }
 
-    public StructuralVectorThree(double[] value, string applicationId = null, Dictionary<string, object> properties = null)
+    public StructuralVectorThree(IEnumerable<double> value, string applicationId = null, Dictionary<string, object> properties = null)
     {
       this.Value = value.ToList();
       this.ApplicationId = applicationId;
@@ -86,7 +85,7 @@ namespace SpeckleStructuralClasses
   {
     public StructuralVectorBoolThree() { }
 
-    public StructuralVectorBoolThree(bool[] value, string applicationId = null, Dictionary<string, object> properties = null)
+    public StructuralVectorBoolThree(IEnumerable<bool> value, string applicationId = null, Dictionary<string, object> properties = null)
     {
       this.Value = value.ToList();
       this.ApplicationId = applicationId;
@@ -120,7 +119,7 @@ namespace SpeckleStructuralClasses
   {
     public StructuralVectorSix() { }
 
-    public StructuralVectorSix(double[] value, string applicationId = null, Dictionary<string, object> properties = null)
+    public StructuralVectorSix(IEnumerable<double> value, string applicationId = null, Dictionary<string, object> properties = null)
     {
       this.Value = value.ToList();
       this.ApplicationId = applicationId;
@@ -187,7 +186,7 @@ namespace SpeckleStructuralClasses
   {
     public StructuralVectorBoolSix() { }
 
-    public StructuralVectorBoolSix(bool[] value, string applicationId = null, Dictionary<string, object> properties = null)
+    public StructuralVectorBoolSix(IEnumerable<bool> value, string applicationId = null, Dictionary<string, object> properties = null)
     {
       this.Value = value.ToList();
       this.ApplicationId = applicationId;

@@ -36,18 +36,19 @@ namespace SpeckleStructuralGSA.Schema
     }
 
     //Doesn't take version into account yet
-    public override bool Gwa(out string gwa, bool includeSet = false)
+    public override bool Gwa(out List<string> gwa, bool includeSet = false)
     {
       if (!InitialiseGwa(includeSet, out var items))
       {
-        gwa = "";
+        gwa = new List<string>();
         return false;
       }
 
       //LOAD_NODE.2 | name | list | case | axis | dir | value
       AddItems(ref items, Name, List(NodeIndices), LoadCaseIndex, (GlobalAxis ? "GLOBAL" : (object)AxisIndex), LoadDirection, Value);
 
-      return Join(items, out gwa);
+      gwa = Join(items, out var gwaLine) ? new List<string>() { gwaLine } : new List<string>();
+      return (gwa.Count() > 0);
     }
 
     #region from_gwa_fns
@@ -83,7 +84,7 @@ namespace SpeckleStructuralGSA.Schema
 
     private bool AddValue(string v)
     {
-      Value = (double.TryParse(v, out var value) && value > 0) ? (double?)value : null;
+      Value = (double.TryParse(v, out var value) && value != 0) ? (double?)value : null;
       return true;
     }
     #endregion

@@ -32,7 +32,7 @@ namespace SpeckleStructuralGSA
 
       //Find task type
       int.TryParse(pieces[counter++], out int taskRef);
-      var taskRec = Initialiser.Cache.GetGwa("TASK.1", taskRef).First();
+      var taskRec = Initialiser.Cache.GetGwa("TASK", taskRef).First();
       obj.TaskType = Helper.GetLoadTaskType(taskRec);
       this.SubGWACommand.Add(taskRec);
 

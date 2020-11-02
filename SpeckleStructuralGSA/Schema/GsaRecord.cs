@@ -29,7 +29,7 @@ namespace SpeckleStructuralGSA.Schema
 
     public abstract bool FromGwa(string gwa);
 
-    public abstract bool Gwa(out string gwa, bool includeSet = false);
+    public abstract bool Gwa(out List<string> gwa, bool includeSet = false);
 
     public GsaRecord()
     {

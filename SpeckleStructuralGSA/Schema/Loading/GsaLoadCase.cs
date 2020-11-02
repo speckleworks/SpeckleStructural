@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 
@@ -44,11 +45,11 @@ namespace SpeckleStructuralGSA.Schema
       return true;
     }
 
-    public override bool Gwa(out string gwa, bool includeSet = false)
+    public override bool Gwa(out List<string> gwa, bool includeSet = false)
     {
       if (!InitialiseGwa(includeSet, out var items))
       {
-        gwa = "";
+        gwa = new List<string>();
         return false;
       }
 
@@ -56,7 +57,8 @@ namespace SpeckleStructuralGSA.Schema
       //Note: case will be serialised from the Index field
       AddItems(ref items, Title, SchemaConversion.Helper.LoadCaseTypeToString(CaseType), 1, "~", "NONE", "INC_BOTH");
 
-      return Join(items, out gwa);
+      gwa = (Join(items, out var gwaLine)) ? new List<string>() { gwaLine } : new List<string>();
+      return gwa.Count() > 0;
     }
 
 
