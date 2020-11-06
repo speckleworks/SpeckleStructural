@@ -33,6 +33,7 @@ namespace SpeckleStructuralGSA
       var type = pieces[counter++];
       switch (type)
       {
+        case "LC_PERM_SELF":
         case "DEAD":
           obj.CaseType = StructuralLoadCaseType.Dead;
           break;
@@ -89,7 +90,7 @@ namespace SpeckleStructuralGSA
       switch (loadCase.CaseType)
       {
         case StructuralLoadCaseType.Dead:
-          ls.Add("DEAD");
+          ls.Add("LC_PERM_SELF");
           break;
         case StructuralLoadCaseType.Live:
           ls.Add("LC_VAR_IMP");

@@ -65,7 +65,7 @@ namespace SpeckleStructuralGSA.Schema
       }
 
       //AXIS.1 | num | name | type | Ox | Oy | Oz | Xx | Xy | Xz | XYx | XYy | Xyz
-      AddItems(ref items, Name, "CART", OriginX, OriginY, OriginZ, XDirX, XDirY, XDirZ, XYDirX, XYDirY, XYDirZ);
+      AddItems(ref items, Name, "CART", OriginX, OriginY, OriginZ, XDirX ?? 0, XDirY ?? 0, XDirZ ?? 0, XYDirX ?? 0, XYDirY ?? 0, XYDirZ ?? 0);
 
       gwa = (Join(items, out var gwaLine)) ? new List<string>() { gwaLine } : new List<string>();
       return gwa.Count() > 0;

@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SpeckleGSAInterfaces;
+using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
@@ -14,6 +15,11 @@ namespace SpeckleStructuralGSA
     public static bool ValidNonZero(this double? v)
     {
       return v.HasValue && v > 0;
+    }
+
+    public static bool ValidNonZero(this StructuralAxis axis)
+    {
+      return (axis != null && axis.Xdir != null && axis.Ydir != null && axis.Xdir.Value.Any(v => v != 0) && axis.Ydir.Value.Any(v => v != 0));
     }
 
     public static bool ValidNonZero(this int? v)

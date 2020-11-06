@@ -13,9 +13,25 @@ namespace SpeckleStructuralGSA.Schema
     public StreamBucket StreamBucket { get; protected set; }
     public bool AnalysisLayer { get; protected set; }
     public bool DesignLayer { get; protected set; }
+    public GwaKeyword[] DesignLayerOnlyReferencedKeywords { get; protected set; }
+    public GwaKeyword[] AnalysisLayerOnlyReferencedKeywords { get; protected set; }
+    //These are keywords to use regardless of the layer
     public GwaKeyword[] ReferencedKeywords { get; protected set; }
 
-    public GsaType(GwaKeyword keyword, GwaSetCommandType setCommandType, StreamBucket streamBucket, bool analysisLayer, bool designLayer, params GwaKeyword[] referencedKeywords)
+    public GsaType(GwaKeyword keyword, GwaSetCommandType setCommandType, StreamBucket streamBucket, bool designLayer, bool analysisLayer, GwaKeyword[] designLayerOnlyKw, GwaKeyword[] analysisLayerOnlyKw, params GwaKeyword[] referencedKeywords)
+    {
+      this.Keyword = keyword;
+      this.TableSharedKeywords = new GwaKeyword[0];
+      this.SetCommandType = setCommandType;
+      this.StreamBucket = streamBucket;
+      this.AnalysisLayer = analysisLayer;
+      this.DesignLayer = designLayer;
+      this.DesignLayerOnlyReferencedKeywords = designLayerOnlyKw;
+      this.AnalysisLayerOnlyReferencedKeywords = analysisLayerOnlyKw;
+      this.ReferencedKeywords = referencedKeywords;
+    }
+
+    public GsaType(GwaKeyword keyword, GwaSetCommandType setCommandType, StreamBucket streamBucket, bool designLayer, bool analysisLayer, params GwaKeyword[] referencedKeywords)
     {
       this.Keyword = keyword;
       this.TableSharedKeywords = new GwaKeyword[0];

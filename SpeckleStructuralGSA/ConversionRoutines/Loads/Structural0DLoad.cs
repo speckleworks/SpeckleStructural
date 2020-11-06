@@ -26,7 +26,7 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA0DLoad dummyObject)
     {
       //Reminder: the SpeckleSA application won't find this on its own because the type (Gsa0dLoad) isn't marked as a IGSASpeckleContainer
-      return (new Gsa0dLoad()).ToSpeckle();
+      return (new GsaLoadNode()).ToSpeckle();
     }
   }
 }

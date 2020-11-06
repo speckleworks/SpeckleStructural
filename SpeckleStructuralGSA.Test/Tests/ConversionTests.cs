@@ -49,9 +49,9 @@ namespace SpeckleStructuralGSA.Test
       var node1 = new StructuralNode() { ApplicationId = "Node1", Name = "Node One", basePoint = new SpecklePoint(1, 2, 3) };
       var node2 = new StructuralNode() { ApplicationId = "Node2", Name = "Node Two", basePoint = new SpecklePoint(4, 5, 6) };
       var loadcase = new StructuralLoadCase() { ApplicationId = "LoadCase1", Name = "Load Case One", CaseType = StructuralLoadCaseType.Dead };
-      GwaToCache(Conversions.ToNative(node1), streamID);
-      GwaToCache(Conversions.ToNative(node2), streamID);
-      GwaToCache(Conversions.ToNative(loadcase), streamID);
+      Helper.GwaToCache(Conversions.ToNative(node1), streamID);
+      Helper.GwaToCache(Conversions.ToNative(node2), streamID);
+      Helper.GwaToCache(Conversions.ToNative(loadcase), streamID);
 
       //OBJECT UNDER TEST - CONVERT TO GSA
 
@@ -63,7 +63,7 @@ namespace SpeckleStructuralGSA.Test
         NodeRefs = new List<string> { "Node1", "Node2" },
         LoadCaseRef = "LoadCase1"
       };
-      GwaToCache(Structural0DLoadToNative.ToNative(receivedObj), streamID);
+      Helper.GwaToCache(Structural0DLoadToNative.ToNative(receivedObj), streamID);
 
       ((IGSACache)Initialiser.Cache).Snapshot(streamID);
 
@@ -82,32 +82,6 @@ namespace SpeckleStructuralGSA.Test
       var sentObjs = sentObjectsDict[typeof(GSA0DLoad)].Select(o => ((IGSASpeckleContainer)o).Value).Cast<Structural0DLoad>().ToList();
       Assert.AreEqual(1, sentObjs.Count());
       Assert.IsTrue(sentObjs.First().Loading.Value.SequenceEqual(loading));
-    }
-
-    //Copied and modified from Receiver in SpeckleGSA - the Speckle object isn't copied to the cache here because that's only used for merging
-    private bool GwaToCache(string gwaCommand, string streamId)
-    {
-      var lines = gwaCommand.Split(new[] { '\n' }).Where(l => !string.IsNullOrEmpty(l)).ToList();
-      foreach (var l in lines)
-      {
-        //At this point the SID will be filled with the application ID
-        Initialiser.Interface.ParseGeneralGwa(l, out var keyword, out var foundIndex,
-          out var foundStreamId, out var foundApplicationId, out var gwaWithoutSet, out var gwaSetCommandType);
-
-        var originalSid = Initialiser.Interface.FormatSidTags(foundStreamId, foundApplicationId);
-        var newSid = Initialiser.Interface.FormatSidTags(streamId, foundApplicationId);
-
-        //If the SID tag has been set then update it with the stream
-        gwaWithoutSet = (string.IsNullOrEmpty(originalSid))
-            ? gwaWithoutSet.Replace(keyword, keyword + ":" + newSid)
-            : gwaWithoutSet.Replace(originalSid, newSid);
-
-        if (!Initialiser.Cache.Upsert(keyword, foundIndex.Value, gwaWithoutSet, streamId, foundApplicationId, gwaSetCommandType.Value))
-        {
-          return false;
-        }
-      }
-      return true;
     }
 
   }

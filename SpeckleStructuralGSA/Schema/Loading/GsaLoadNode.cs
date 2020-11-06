@@ -6,7 +6,7 @@ using SpeckleGSAInterfaces;
 namespace SpeckleStructuralGSA.Schema
 {
   [GsaType(GwaKeyword.LOAD_NODE, GwaSetCommandType.SetAt, StreamBucket.Model, true, true, GwaKeyword.NODE, GwaKeyword.AXIS)]
-  public class Gsa0dLoad : GsaRecord
+  public class GsaLoadNode : GsaRecord
   {
     //As many of these should be nullable, or in the case of enums, a "NotSet" option, to facilitate merging objects received from Speckle 
     //with existing objects in the GSA model
@@ -15,10 +15,10 @@ namespace SpeckleStructuralGSA.Schema
     public int? LoadCaseIndex;
     public bool GlobalAxis;
     public int? AxisIndex;
-    public LoadDirection LoadDirection;
+    public LoadDirection6 LoadDirection;
     public double? Value;
 
-    public Gsa0dLoad(): base()
+    public GsaLoadNode(): base()
     {
       //Defaults
       Version = 2;
@@ -45,11 +45,18 @@ namespace SpeckleStructuralGSA.Schema
       }
 
       //LOAD_NODE.2 | name | list | case | axis | dir | value
-      AddItems(ref items, Name, List(NodeIndices), LoadCaseIndex, (GlobalAxis ? "GLOBAL" : (object)AxisIndex), LoadDirection, Value);
+      AddItems(ref items, Name, List(NodeIndices), LoadCaseIndex ?? 0, (GlobalAxis ? "GLOBAL" : (object)AxisIndex), AddLoadDirection(), Value);
 
       gwa = Join(items, out var gwaLine) ? new List<string>() { gwaLine } : new List<string>();
       return (gwa.Count() > 0);
     }
+
+    #region to_gwa_fns
+    private string AddLoadDirection()
+    {
+      return (LoadDirection == LoadDirection6.NotSet) ? "X" : LoadDirection.ToString();
+    }
+    #endregion
 
     #region from_gwa_fns
     private bool AddList(string v)

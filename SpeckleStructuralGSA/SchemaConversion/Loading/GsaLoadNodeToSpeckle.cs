@@ -1,5 +1,4 @@
-﻿using System.CodeDom;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using SpeckleCore;
 using SpeckleStructuralClasses;
@@ -7,12 +6,12 @@ using SpeckleStructuralGSA.Schema;
 
 namespace SpeckleStructuralGSA.SchemaConversion
 {
-  public static class Gsa0dLoadToSpeckle
+  public static class GsaLoadNodeToSpeckle
   {
-    public static SpeckleObject ToSpeckle(this Gsa0dLoad dummyObject)
+    public static SpeckleObject ToSpeckle(this GsaLoadNode dummyObject)
     {
       var typeName = dummyObject.GetType().Name;
-      var gsaLoads = Helper.GetNewFromCache<GSA0DLoad, Gsa0dLoad>();
+      var gsaLoads = Helper.GetNewFromCache<GSA0DLoad, GsaLoadNode>();
       if (gsaLoads.Count() == 0)
       {
         return new SpeckleObject();
@@ -20,7 +19,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
       var gsaNodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
-      var keyword = GsaRecord.Keyword<Gsa0dLoad>();
+      var keyword = GsaRecord.Keyword<GsaLoadNode>();
       var nodeKeyword = GsaRecord.Keyword<GsaNode>();
       var loadCaseKeyword = GsaRecord.Keyword<GsaLoadCase>();
 
@@ -72,7 +71,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
       }
     }
 
-    private static bool Add0dLoadsWithoutAppId(string keyword, string nodeKeyword, string loadCaseKeyword, IEnumerable<Schema.Gsa0dLoad> gsaLoads,
+    private static bool Add0dLoadsWithoutAppId(string keyword, string nodeKeyword, string loadCaseKeyword, IEnumerable<Schema.GsaLoadNode> gsaLoads,
       List<GSANode> gsaNodes, ref List<Structural0DLoad> structural0DLoads, ref List<int> nodeIndicesReferenced)
     {
       var summaries = new List<D0LoadingSummary>();
@@ -138,7 +137,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
       return true;
     }
 
-    private static bool Add0dLoadsWithAppId(string keyword, string nodeKeyword, string loadCaseKeyword, IEnumerable<Gsa0dLoad> gsaLoads,
+    private static bool Add0dLoadsWithAppId(string keyword, string nodeKeyword, string loadCaseKeyword, IEnumerable<GsaLoadNode> gsaLoads,
       List<GSANode> gsaNodes, ref List<Structural0DLoad> structural0DLoads, ref List<int> nodeIndicesReferenced)
     {
       var summaries = new List<D0LoadingSummary>();

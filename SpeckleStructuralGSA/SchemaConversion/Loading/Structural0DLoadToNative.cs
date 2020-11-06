@@ -7,7 +7,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
 {
   public static class Structural0DLoadToNative
   {
-    private static readonly LoadDirection[] loadDirSeq = new LoadDirection[] { LoadDirection.X, LoadDirection.Y, LoadDirection.Z, LoadDirection.XX, LoadDirection.YY, LoadDirection.ZZ };
+    private static readonly LoadDirection6[] loadDirSeq = new LoadDirection6[] { LoadDirection6.X, LoadDirection6.Y, LoadDirection6.Z, LoadDirection6.XX, LoadDirection6.YY, LoadDirection6.ZZ };
 
     public static string ToNative(this Structural0DLoad speckleLoad)
     {
@@ -16,7 +16,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
         return "";
       }
 
-      var keyword = GsaRecord.Keyword<Schema.Gsa0dLoad>();
+      var keyword = GsaRecord.Keyword<Schema.GsaLoadNode>();
       var nodeKeyword = GsaRecord.Keyword<GsaNode>();
       var loadCaseKeyword = GsaRecord.Keyword<GsaLoadCase>();
 
@@ -28,7 +28,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
       var loadingDict = ExplodeLoading(speckleLoad.Loading);
       foreach (var k in loadingDict.Keys)
       {
-        var gsaLoad = new Gsa0dLoad()
+        var gsaLoad = new GsaLoadNode()
         {
           ApplicationId = string.Join("_", speckleLoad.ApplicationId, k.ToString()),
           Name = speckleLoad.Name,
@@ -38,7 +38,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
           NodeIndices = nodeIndices,
           LoadCaseIndex = loadCaseIndex
         };
-        if (gsaLoad.Gwa(out var gwa))
+        if (gsaLoad.Gwa(out var gwa, true))
         {
           gwaList.AddRange(gwa);
         }
@@ -47,9 +47,9 @@ namespace SpeckleStructuralGSA.SchemaConversion
       return string.Join("\n", gwaList);
     }
 
-    private static Dictionary<LoadDirection, double> ExplodeLoading(StructuralVectorSix loading)
+    private static Dictionary<LoadDirection6, double> ExplodeLoading(StructuralVectorSix loading)
     {
-      var valueByDir = new Dictionary<LoadDirection, double>();
+      var valueByDir = new Dictionary<LoadDirection6, double>();
 
       for (var i = 0; i < loadDirSeq.Count(); i++)
       {

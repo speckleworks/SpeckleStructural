@@ -199,6 +199,10 @@ namespace SpeckleStructuralGSA.Schema
           {
             items.Add("");
           }
+          else if (l is Func<string>)
+          {
+            items.Add(((Func<string>)l)());
+          }
           else
           {
             items.Add(l.ToString());

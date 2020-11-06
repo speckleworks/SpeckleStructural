@@ -99,7 +99,7 @@ namespace SpeckleStructuralGSA.Test
     {
       byte[] buffer;
       //Directory should have a trailing slash
-     
+
       var fileStream = new FileStream(Path.Combine(directory, testDataFileName), FileMode.Open, FileAccess.Read);
       try
       {
@@ -170,6 +170,44 @@ namespace SpeckleStructuralGSA.Test
       }
 
       return false;
+    }
+
+    public static bool GwaToCache(IEnumerable<string> gwaCommands, string streamId)
+    {
+      foreach (var c in gwaCommands)
+      {
+        if (!GwaToCache(c, streamId))
+        {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    //Copied and modified from Receiver in SpeckleGSA - the Speckle object isn't copied to the cache here because that's only used for merging
+    public static bool GwaToCache(string gwaCommand, string streamId)
+    {
+      var lines = gwaCommand.Split(new[] { '\n' }).Where(l => !string.IsNullOrEmpty(l)).ToList();
+      foreach (var l in lines)
+      {
+        //At this point the SID will be filled with the application ID
+        Initialiser.Interface.ParseGeneralGwa(l, out var keyword, out var foundIndex,
+          out var foundStreamId, out var foundApplicationId, out var gwaWithoutSet, out var gwaSetCommandType);
+
+        var originalSid = Initialiser.Interface.FormatSidTags(foundStreamId, foundApplicationId);
+        var newSid = Initialiser.Interface.FormatSidTags(streamId, foundApplicationId);
+
+        //If the SID tag has been set then update it with the stream
+        gwaWithoutSet = (string.IsNullOrEmpty(originalSid))
+            ? gwaWithoutSet.Replace(keyword, keyword + ":" + newSid)
+            : gwaWithoutSet.Replace(originalSid, newSid);
+
+        if (!Initialiser.Cache.Upsert(keyword, foundIndex.Value, gwaWithoutSet, streamId, foundApplicationId, gwaSetCommandType.Value))
+        {
+          return false;
+        }
+      }
+      return true;
     }
   }
 }

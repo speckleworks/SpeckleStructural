@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Management;
 using SpeckleStructuralClasses;
 using SpeckleStructuralGSA.Schema;
 
@@ -15,11 +16,35 @@ namespace SpeckleStructuralGSA.SchemaConversion
       return (bp.Xdir.Value.SequenceEqual(zeroVector) && bp.Ydir.Value.SequenceEqual(zeroVector));
     }
 
+    public static string GridExpansionToString(GridExpansion expansion)
+    {
+      switch(expansion)
+      {
+        case GridExpansion.PlaneAspect: return "PLANE_ASPECT";
+        case GridExpansion.PlaneSmooth: return "PLANE_SMOOTH";
+        case GridExpansion.PlaneCorner: return "PLANE_CORNER";
+        default: return "LEGACY";
+      }
+    }
+
+    public static GridExpansion StringToGridExpansion(string expansion)
+    {
+      switch (expansion)
+      {
+        case "PLANE_ASPECT": return GridExpansion.PlaneAspect;
+        case "PLANE_SMOOTH":  return GridExpansion.PlaneSmooth;
+        case "PLANE_CORNER": return GridExpansion.PlaneCorner;
+        default: return GridExpansion.Legacy;
+      }
+    }
+
     public static StructuralLoadCaseType StringToLoadCaseType(string type)
     {
       switch (type)
       {
-        case "DEAD": return StructuralLoadCaseType.Dead;
+        case "DEAD":
+        case "LC_PERM_SELF": 
+          return StructuralLoadCaseType.Dead;
         case "LC_VAR_IMP": return StructuralLoadCaseType.Live;
         case "WIND": return StructuralLoadCaseType.Wind;
         case "SNOW": return StructuralLoadCaseType.Snow;
@@ -34,7 +59,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
     {
       switch (caseType)
       {
-        case StructuralLoadCaseType.Dead: return ("DEAD");
+        case StructuralLoadCaseType.Dead: return ("LC_PERM_SELF");
         case StructuralLoadCaseType.Live: return ("LC_VAR_IMP");
         case StructuralLoadCaseType.Wind: return ("WIND");
         case StructuralLoadCaseType.Snow: return ("SNOW");
@@ -86,16 +111,16 @@ namespace SpeckleStructuralGSA.SchemaConversion
       return schemaObjs;
     }
 
-    public static StructuralVectorSix GsaLoadToLoading(LoadDirection ld, double value)
+    public static StructuralVectorSix GsaLoadToLoading(LoadDirection6 ld, double value)
     {
       switch (ld)
       {
-        case LoadDirection.X: return new StructuralVectorSix(value, 0, 0, 0, 0, 0);
-        case LoadDirection.Y: return new StructuralVectorSix(0, value, 0, 0, 0, 0);
-        case LoadDirection.Z: return new StructuralVectorSix(0, 0, value, 0, 0, 0);
-        case LoadDirection.XX: return new StructuralVectorSix(0, 0, 0, value, 0, 0);
-        case LoadDirection.YY: return new StructuralVectorSix(0, 0, 0, 0, value, 0);
-        case LoadDirection.ZZ: return new StructuralVectorSix(0, 0, 0, 0, 0, value);
+        case LoadDirection6.X: return new StructuralVectorSix(value, 0, 0, 0, 0, 0);
+        case LoadDirection6.Y: return new StructuralVectorSix(0, value, 0, 0, 0, 0);
+        case LoadDirection6.Z: return new StructuralVectorSix(0, 0, value, 0, 0, 0);
+        case LoadDirection6.XX: return new StructuralVectorSix(0, 0, 0, value, 0, 0);
+        case LoadDirection6.YY: return new StructuralVectorSix(0, 0, 0, 0, value, 0);
+        case LoadDirection6.ZZ: return new StructuralVectorSix(0, 0, 0, 0, 0, value);
         default: return null;
       }
     }
