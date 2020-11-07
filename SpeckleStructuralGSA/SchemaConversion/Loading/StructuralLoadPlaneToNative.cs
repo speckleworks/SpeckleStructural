@@ -2,6 +2,7 @@
 using SpeckleStructuralGSA.Schema;
 using SpeckleGSAInterfaces;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SpeckleStructuralGSA.SchemaConversion
 {
@@ -13,15 +14,17 @@ namespace SpeckleStructuralGSA.SchemaConversion
       var gwaCommands = new List<string>();
 
       var keyword = GsaRecord.Keyword<GsaGridSurface>();
+      var storeyKeyword = GsaRecord.Keyword<GsaGridPlane>();
 
       var index = Initialiser.Cache.ResolveIndex(keyword, loadPlane.ApplicationId);
       var gsaGridSurface = new GsaGridSurface()
       {
+        ApplicationId = loadPlane.ApplicationId,
         Index = index,
         Name = loadPlane.Name,
         Tolerance = loadPlane.Tolerance,
         Angle = loadPlane.SpanAngle,
-        
+
         Type = (loadPlane.ElementDimension.HasValue && loadPlane.ElementDimension.Value == 1)
           ? GridSurfaceElementsType.OneD
           : (loadPlane.ElementDimension.HasValue && loadPlane.ElementDimension.Value == 2)
@@ -42,7 +45,17 @@ namespace SpeckleStructuralGSA.SchemaConversion
         Expansion = GridExpansion.Legacy
       };
 
-      if (loadPlane.Axis.ValidNonZero())
+      if (!string.IsNullOrEmpty(loadPlane.StoreyRef))
+      {
+        var gridPlaneIndex = Initialiser.Cache.LookupIndex(storeyKeyword, loadPlane.StoreyRef);
+
+        if (gridPlaneIndex.ValidNonZero())
+        {
+          gsaGridSurface.PlaneRefType = GridPlaneAxisRefType.Reference;
+          gsaGridSurface.PlaneIndex = gridPlaneIndex;
+        }
+      }
+      else if (loadPlane.Axis.ValidNonZero())
       {
         gsaGridSurface.PlaneRefType = GridPlaneAxisRefType.Reference;
 
@@ -71,6 +84,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
         {
           gwaCommands.AddRange(gsaPlaneGwas);
         }
+        gsaGridSurface.PlaneIndex = planeIndex;
       }
       else
       {

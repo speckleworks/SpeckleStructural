@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using SpeckleCoreGeometryClasses;
+﻿using SpeckleCoreGeometryClasses;
 using SpeckleStructuralClasses;
 using SpeckleStructuralGSA.Schema;
 

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 using SpeckleStructuralGSA.Schema;
@@ -41,11 +39,18 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
       var gridSurfaceKeyword = GsaRecord.Keyword<GsaGridSurface>();
       var gridPlaneKeyword = GsaRecord.Keyword<GsaGridPlane>();
+      var axisKeyword = GsaRecord.Keyword<GsaAxis>();
 
       StructuralAxis axis = null;
       int gridSurfaceIndex = 0;
       if (string.IsNullOrEmpty(loadPanel.LoadPlaneRef))
       {
+        //If there is no load plane (corresponding to GRID_SURFACE in GSA terms) specified, then at minimum a GRID_SURFACE still needs
+        //to be created but it doesn't need to refer to a GRID_PLANE because that load plane can just have "GLOBAL" set for its plane.
+        
+        //HOWEVER, the approach taken here - which could be reviewed - is to create one anyway, whose X and y axes are based on the polyline
+        //so that an elevation value can be set in the GRID_PLANE
+
         //Create axis based on the polyline
         try
         {
@@ -104,35 +109,51 @@ namespace SpeckleStructuralGSA.SchemaConversion
         //2.  the StructuralLoadPlane references a StructuralStorey, which has an axis
 
         gridSurfaceIndex = Initialiser.Cache.ResolveIndex(gridSurfaceKeyword, loadPanel.LoadPlaneRef);
-        var loadPlanes = Initialiser.GSASenderObjects.Get<GSAGridSurface>();
-        var matchingLoadPlanes = loadPlanes.Where(lp => lp.GSAId == gridSurfaceIndex);
-        if (matchingLoadPlanes.Count() == 0)
-        {
-          Initialiser.AppUI.Message("Unable to resolve load plane reference", loadPanel.ApplicationId);
-        }
-        else
-        {
-          var loadPlane = ((StructuralLoadPlane)matchingLoadPlanes.First().Value);
-          if (loadPlane.Axis == null)
-          {
-            var storeyIndex = Initialiser.Cache.ResolveIndex(gridPlaneKeyword, loadPlane.StoreyRef);
+        var gsaGridSurfaceGwa = Initialiser.Cache.GetGwa(gridSurfaceKeyword, gridSurfaceIndex).First();
 
-            var storeys = Initialiser.GSASenderObjects.Get<GSAStorey>();
-            var matchingStoreys = storeys.Where(s => s.GSAId == storeyIndex);
-            if (matchingStoreys.Count() == 0)
+        var gsaGridSurface = new GsaGridSurface();
+        if (gsaGridSurface.FromGwa(gsaGridSurfaceGwa))
+        {
+          if (gsaGridSurface.PlaneRefType == GridPlaneAxisRefType.Reference && gsaGridSurface.PlaneIndex.ValidNonZero())
+          {
+            var gsaGridPlaneGwa = Initialiser.Cache.GetGwa(gridPlaneKeyword, gsaGridSurface.PlaneIndex.Value).First();
+
+            var gsaGridPlane = new GsaGridPlane();
+            if (gsaGridPlane.FromGwa(gsaGridPlaneGwa))
             {
-              Initialiser.AppUI.Message("Unable to resolve load plane -> storey reference", loadPanel.ApplicationId);
+              if (gsaGridPlane.AxisRefType == GridPlaneAxisRefType.Reference && gsaGridPlane.AxisIndex.ValidNonZero())
+              {
+                var axisIndex = gsaGridPlane.AxisIndex.Value;
+
+                var gsaAxisGwa = Initialiser.Cache.GetGwa(axisKeyword, axisIndex).First();
+                var gsaAxis = new GsaAxis();
+                if (gsaAxis.FromGwa(gsaAxisGwa))
+                {
+                  axis = (StructuralAxis)gsaAxis.ToSpeckle();
+                }
+                else
+                {
+                  Initialiser.AppUI.Message("Unable to parse AXIS GWA", loadPanel.ApplicationId);
+                }
+              }
+              else
+              {
+                Initialiser.AppUI.Message("Invalid AXIS reference", loadPanel.ApplicationId);
+              }
             }
             else
             {
-              var storey = ((StructuralStorey)matchingStoreys.First().Value);
-              axis = storey.Axis;
+              Initialiser.AppUI.Message("Unable to parse GRID_PLANE GWA", loadPanel.ApplicationId);
             }
           }
           else
           {
-            axis = loadPlane.Axis;
+            Initialiser.AppUI.Message("Invalid GRID_PLANE reference", loadPanel.ApplicationId);
           }
+        }
+        else
+        {
+          Initialiser.AppUI.Message("Unable to parse GRID_SURFACE GWA", loadPanel.ApplicationId);
         }
       }
 

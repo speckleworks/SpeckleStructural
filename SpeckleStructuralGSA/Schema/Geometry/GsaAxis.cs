@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using SpeckleGSAInterfaces;
 
@@ -37,6 +38,14 @@ namespace SpeckleStructuralGSA.Schema
       FromGwaByFuncs(items, out remainingItems, AddName);
       items = remainingItems;
 
+      if (!items[0].ToLower().StartsWith("cart"))
+      {
+        //Only cartesian axes are supported at this stage
+        return false;
+      }
+
+      items = items.Skip(1).ToList();
+
       //Zero values are valid for origin, but not for vectors below
       OriginX = items[0].ToDouble();
       OriginY = items[1].ToDouble();
@@ -46,12 +55,18 @@ namespace SpeckleStructuralGSA.Schema
       //Zero values aren't valid for vectors - so these are to be treated as nullable
       var values = items.Select(i => (double.TryParse(i, out var d) && d > 0) ? (double?)d : null).ToArray();
 
-      XDirX = values[0];
-      XDirY = values[1];
-      XDirZ = values[2];
-      XYDirX = values[3];
-      XYDirY = values[4];
-      XYDirZ = values[5];
+      if (values.Take(3).Any(v => v.ValidNonZero()))
+      {
+        XDirX = values[0] ?? 0;
+        XDirY = values[1] ?? 0;
+        XDirZ = values[2] ?? 0;
+      }
+      if (values.Skip(3).Take(3).Any(v => v.ValidNonZero()))
+      {
+        XYDirX = values[3] ?? 0;
+        XYDirY = values[4] ?? 0;
+        XYDirZ = values[5] ?? 0;
+      }
 
       return true;
     }
