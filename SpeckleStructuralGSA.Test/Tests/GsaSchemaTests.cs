@@ -122,7 +122,7 @@ namespace SpeckleStructuralGSA.Test.Tests
       Helper.GwaToCache(loadCase1Gwas, streamId1);
 
       var polylineCoords = CreateFlatRectangleCoords(0, 0, 0, 30, 5, 5);
-      var loading = new StructuralVectorThree(new double[] { 0, 0, -5 });
+      var loading = new StructuralVectorThree(new double[] { 0, -10, -5 });
       var load2dPanelWithoutPlane = new Structural2DLoadPanel(polylineCoords, loading, "LcDead", "loadpanel1");
       var load2dGwa1s = Structural2DLoadPanelToNative.ToNative(load2dPanelWithoutPlane).Split('\n');
       Helper.GwaToCache(load2dGwa1s, streamId1);
@@ -151,9 +151,9 @@ namespace SpeckleStructuralGSA.Test.Tests
           { GsaRecord.Keyword<GsaLoadCase>(), 1 },
           { GsaRecord.Keyword<GsaGridPlane>(), 3 } ,
           { GsaRecord.Keyword<GsaGridSurface>(), 3 },
-          { GsaRecord.Keyword<GsaLoadGridArea>(), 3 }
+          { GsaRecord.Keyword<GsaLoadGridArea>(), 6 }
         },
-        out var mismatchByKw));
+        out var mismatchByKw, visible: true));
       Assert.Zero(mismatchByKw.Keys.Count());
       Assert.Zero(((SpeckleAppUI)Initialiser.AppUI).GroupMessages().Count());
     }
@@ -341,19 +341,22 @@ namespace SpeckleStructuralGSA.Test.Tests
     }
 
     //It's assumed the gwa comands are in the correct order
-    private bool ModelValidation(IEnumerable<string> gwaCommands, Dictionary<string, int> expectedCountByKw, out Dictionary<string, int> mismatchByKw, bool nodesWithAppIdOnly = false)
+    private bool ModelValidation(IEnumerable<string> gwaCommands, Dictionary<string, int> expectedCountByKw, out Dictionary<string, int> mismatchByKw, bool nodesWithAppIdOnly = false, bool visible = false)
     {
       mismatchByKw = new Dictionary<string, int>();
 
       //Use a real proxy, not the mock one used elsewhere in tests
       var gsaProxy = new GSAProxy();
-      gsaProxy.NewFile(false);
+      gsaProxy.NewFile(visible);
       foreach (var gwaC in gwaCommands)
       {
         gsaProxy.SetGwa(gwaC);
       }
       gsaProxy.Sync();
-      //gsaProxy.UpdateViews();
+      if (visible)
+      {
+        gsaProxy.UpdateViews();
+      }
       var lines =  gsaProxy.GetGwaData(expectedCountByKw.Keys, nodesWithAppIdOnly);
       gsaProxy.Close();
 
