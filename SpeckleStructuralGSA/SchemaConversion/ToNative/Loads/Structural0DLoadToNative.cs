@@ -9,29 +9,31 @@ namespace SpeckleStructuralGSA.SchemaConversion
   {
     private static readonly LoadDirection6[] loadDirSeq = new LoadDirection6[] { LoadDirection6.X, LoadDirection6.Y, LoadDirection6.Z, LoadDirection6.XX, LoadDirection6.YY, LoadDirection6.ZZ };
 
-    public static string ToNative(this Structural0DLoad speckleLoad)
+    public static string ToNative(this Structural0DLoad load)
     {
-      if (!IsValidLoading(speckleLoad.Loading))
+      if (string.IsNullOrEmpty(load.ApplicationId) && !IsValidLoading(load.Loading))
       {
         return "";
       }
 
-      var keyword = GsaRecord.Keyword<Schema.GsaLoadNode>();
+      var keyword = GsaRecord.Keyword<GsaLoadNode>();
       var nodeKeyword = GsaRecord.Keyword<GsaNode>();
       var loadCaseKeyword = GsaRecord.Keyword<GsaLoadCase>();
 
-      var nodeIndices = Initialiser.Cache.LookupIndices(nodeKeyword, speckleLoad.NodeRefs).Where(x => x.HasValue).Select(x => x.Value).OrderBy(i => i).ToList();
-      var indexResult = Initialiser.Cache.LookupIndex(loadCaseKeyword, speckleLoad.LoadCaseRef);
-      var loadCaseIndex = indexResult ?? Initialiser.Cache.ResolveIndex(loadCaseKeyword, speckleLoad.LoadCaseRef);
+      var nodeIndices = Initialiser.Cache.LookupIndices(nodeKeyword, load.NodeRefs).Where(x => x.HasValue).Select(x => x.Value).OrderBy(i => i).ToList();
+      var loadCaseIndex = Initialiser.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
 
       var gwaList = new List<string>();
-      var loadingDict = ExplodeLoading(speckleLoad.Loading);
+      var loadingDict = ExplodeLoading(load.Loading);
       foreach (var k in loadingDict.Keys)
       {
+        var applicationId = string.Join("_", load.ApplicationId, k.ToString());
+        var index = Initialiser.Cache.ResolveIndex(keyword, applicationId);
         var gsaLoad = new GsaLoadNode()
         {
-          ApplicationId = string.Join("_", speckleLoad.ApplicationId, k.ToString()),
-          Name = speckleLoad.Name,
+          Index = index,
+          ApplicationId = applicationId,
+          Name = load.Name,
           LoadDirection = k,
           Value = loadingDict[k],
           GlobalAxis = true,

@@ -12,7 +12,7 @@ using SpeckleStructuralGSA.Schema;
 using SpeckleStructuralGSA.SchemaConversion;
 using SpeckleCoreGeometryClasses;
 
-namespace SpeckleStructuralGSA.Test.Tests
+namespace SpeckleStructuralGSA.Test
 {
   [TestFixture]
   public class GsaSchemaTests

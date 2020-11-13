@@ -222,7 +222,7 @@ namespace SpeckleStructuralClasses
 
     public StructuralAxis(StructuralVectorThree xdir, StructuralVectorThree ydir, StructuralVectorThree normal, string applicationId = null, Dictionary<string, object> properties = null)
     {
-      this.Origin = new SpecklePoint(0, 0, 0);
+      //this.Origin = new SpecklePoint(0, 0, 0);
       this.Normal = normal;
       this.Xdir = xdir;
       this.Ydir = ydir;

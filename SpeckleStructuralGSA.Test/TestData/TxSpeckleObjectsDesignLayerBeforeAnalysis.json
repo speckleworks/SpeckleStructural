@@ -3001,7 +3001,7 @@
   },
   {
     "type": "StructuralLoadCase",
-    "caseType": "Generic",
+    "caseType": "Dead",
     "applicationId": "LC2",
     "name": "Dead load case",
     "properties": {}

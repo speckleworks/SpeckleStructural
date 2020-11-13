@@ -23,9 +23,13 @@ namespace SpeckleStructuralGSA.SchemaConversion
       //The x axis is assumed to be the , but the XY vector is not necessarily 
       var speckleAxis = new StructuralAxis(axisX, axisY, axisNormal, gsaAxis.ApplicationId)
       {
-        Origin = new SpecklePoint(gsaAxis.OriginX, gsaAxis.OriginY, gsaAxis.OriginZ),
         Name = gsaAxis.Name
       };
+      
+      if (gsaAxis.OriginX > 0 || gsaAxis.OriginY > 0 || gsaAxis.OriginZ > 0)
+      {
+        speckleAxis.Origin = new SpecklePoint(gsaAxis.OriginX, gsaAxis.OriginY, gsaAxis.OriginZ);
+      }
 
       return speckleAxis;
     }

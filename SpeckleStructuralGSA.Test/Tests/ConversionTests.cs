@@ -51,7 +51,7 @@ namespace SpeckleStructuralGSA.Test
       var loadcase = new StructuralLoadCase() { ApplicationId = "LoadCase1", Name = "Load Case One", CaseType = StructuralLoadCaseType.Dead };
       Helper.GwaToCache(Conversions.ToNative(node1), streamID);
       Helper.GwaToCache(Conversions.ToNative(node2), streamID);
-      Helper.GwaToCache(Conversions.ToNative(loadcase), streamID);
+      Helper.GwaToCache(StructuralLoadCaseToNative.ToNative(loadcase), streamID);
 
       //OBJECT UNDER TEST - CONVERT TO GSA
 

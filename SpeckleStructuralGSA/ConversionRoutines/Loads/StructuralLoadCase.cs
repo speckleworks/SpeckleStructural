@@ -64,71 +64,11 @@ namespace SpeckleStructuralGSA
 
       this.Value = obj;
     }
-
-    public string SetGWACommand()
-    {
-      if (this.Value == null)
-        return "";
-
-      var loadCase = this.Value as StructuralLoadCase;
-      if (loadCase.ApplicationId == null)
-      {
-        return "";
-      }
-
-      var keyword = typeof(GSALoadCase).GetGSAKeyword();
-
-      var index = Initialiser.Cache.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), loadCase.ApplicationId);
-      var sid = Helper.GenerateSID(loadCase);
-      var ls = new List<string>
-      {
-        "SET",
-        keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
-        index.ToString(),
-        loadCase.Name == null || loadCase.Name == "" ? " " : loadCase.Name
-      };
-      switch (loadCase.CaseType)
-      {
-        case StructuralLoadCaseType.Dead:
-          ls.Add("LC_PERM_SELF");
-          break;
-        case StructuralLoadCaseType.Live:
-          ls.Add("LC_VAR_IMP");
-          break;
-        case StructuralLoadCaseType.Wind:
-          ls.Add("WIND");
-          break;
-        case StructuralLoadCaseType.Snow:
-          ls.Add("SNOW");
-          break;
-        case StructuralLoadCaseType.Earthquake:
-          ls.Add("SEISMIC");
-          break;
-        case StructuralLoadCaseType.Soil:
-          ls.Add("LC_PERM_SOIL");
-          break;
-        case StructuralLoadCaseType.Thermal:
-          ls.Add("LC_VAR_TEMP");
-          break;
-        default:
-          ls.Add("LC_UNDEF");
-          break;
-      }
-      ls.Add("1"); // Source
-      ls.Add("~"); // Category
-      ls.Add("NONE"); // Direction
-      ls.Add("INC_BOTH"); // Include
-
-      return (string.Join("\t", ls));
-    }
   }
 
   public static partial class Conversions
   {
-    public static string ToNative(this StructuralLoadCase load)
-    {
-      return new GSALoadCase() { Value = load }.SetGWACommand();
-    }
+    //The ToNative() method is in the new schema conversion folder hierarchy
 
     public static SpeckleObject ToSpeckle(this GSALoadCase dummyObject)
     {

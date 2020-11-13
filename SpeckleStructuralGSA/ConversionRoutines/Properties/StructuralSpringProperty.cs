@@ -209,7 +209,11 @@ namespace SpeckleStructuralGSA
       //Get all relevant GSA entities in this entire model
       var springProperties = new List<GSASpringProperty>();
 
+#if DEBUG
+      foreach (var p in newLines.Values)
+#else
       Parallel.ForEach(newLines.Values, p =>
+#endif
       {
         var pPieces = p.ListSplit("\t");
         var gsaId = pPieces[1];
@@ -226,7 +230,10 @@ namespace SpeckleStructuralGSA
         {
           Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
         }
-      });
+      }
+#if !DEBUG
+      );
+#endif
 
       Initialiser.GSASenderObjects.AddRange(springProperties);
 

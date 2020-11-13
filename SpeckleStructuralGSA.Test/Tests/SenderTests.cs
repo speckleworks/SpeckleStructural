@@ -9,6 +9,7 @@ using NUnit.Framework;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleGSAProxy;
+using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA.Test
 {
@@ -58,7 +59,8 @@ namespace SpeckleStructuralGSA.Test
 
       var expected = new Dictionary<Type, List<Tuple<string, SpeckleObject, string>>>();
       var expectedLock = new object();
-      Parallel.ForEach(expectedObjects, expectedObject =>
+      //Parallel.ForEach(expectedObjects, expectedObject =>
+      foreach(var expectedObject in expectedObjects)
       {
         var expectedJson = JsonConvert.SerializeObject(expectedObject, jsonSettings);
 
@@ -72,9 +74,11 @@ namespace SpeckleStructuralGSA.Test
           {
             expected[type] = new List<Tuple<string, SpeckleObject, string>>();
           }
-          expected[type].Add(new Tuple<string, SpeckleObject, string>(expectedObject.ApplicationId, expectedObject, expectedJson));
+          var expectedObjectAppId = SafeApplicationId(expectedObject);
+          expected[type].Add(new Tuple<string, SpeckleObject, string>(expectedObjectAppId, expectedObject, expectedJson));
         }
-      });
+      }
+      //);
 
       var actualObjects = ModelToSpeckleObjects(layer, resultsOnly, embedResults, loadCases, resultTypes);
       Assert.IsNotNull(actualObjects);
@@ -96,8 +100,8 @@ namespace SpeckleStructuralGSA.Test
       var unmatching = new List<Tuple<string, string, List<string>>>();
       var unmatchingLock = new object();
       //Compare each object
-
-      Parallel.ForEach(actual.Keys, actualObject =>
+      foreach(var actualObject in actual.Keys)
+      //Parallel.ForEach(actual.Keys, actualObject =>
       {
         var actualJson = actual[actualObject];
         var actualType = actualObject.GetType();
@@ -111,9 +115,10 @@ namespace SpeckleStructuralGSA.Test
         if (containsKey)
         {
           List<Tuple<string, SpeckleObject, string>> matchingTypeAndId;
+          var actualObjectAppId = SafeApplicationId(actualObject);
           lock (expectedLock)
           {
-            matchingTypeAndId = expected[actualType].Where(tup => tup.Item1 == actualObject.ApplicationId).ToList();
+            matchingTypeAndId = expected[actualType].Where(tup => tup.Item1 == actualObjectAppId).ToList();
           }
           matchingExpected = matchingTypeAndId.Where(tup => JsonCompareAreEqual(tup.Item3, actualJson)).ToList();
 
@@ -154,7 +159,7 @@ namespace SpeckleStructuralGSA.Test
           }
         }
       }
-      );
+      //);
 
       gsaInterfacer.Close();
       Assert.IsFalse(actual.Keys.Any(a => !a.Type.ToLower().EndsWith("result") && string.IsNullOrEmpty(a.ApplicationId)));
@@ -162,7 +167,18 @@ namespace SpeckleStructuralGSA.Test
       Assert.IsEmpty(unmatching, unmatching.Count().ToString() + " unmatched objects");
     }
 
-    //[Ignore("There is an equivalent test in SpeckleGSA repo, so this one might be removed")]
+    //To cope with result objects not having an application Id
+    private string SafeApplicationId(SpeckleObject so)
+    {
+      if (so is StructuralResultBase)
+      {
+        var resultObj = (StructuralResultBase)so;
+        return (resultObj.TargetRef ?? "") + (resultObj.LoadCaseRef ?? "") + (resultObj.ResultSource ?? "") + (resultObj.Description ?? "");
+      }
+      return RemoveKeywordVersion(so.ApplicationId ?? "");
+    }
+
+    [Ignore("There is an equivalent test in SpeckleGSA repo, so this one might be removed")]
     //[TestCase(GSATargetLayer.Design, false, false, "sjc.gwb")]
     [TestCase(GSATargetLayer.Analysis, false, false, @"C:\Temp\ResultsTest.gwb", "", "")]
     //[TestCase(GSATargetLayer.Analysis, false, true, @"C:\Users\Nic.Burgers\OneDrive - Arup\Issues\Nguyen Le\2D result\shear wall system-seismic v10.1.gwb", 

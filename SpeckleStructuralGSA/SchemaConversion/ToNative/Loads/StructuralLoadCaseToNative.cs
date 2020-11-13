@@ -6,15 +6,20 @@ namespace SpeckleStructuralGSA.SchemaConversion
   //Note: LOAD_TITLE is one of the keywords that forgets SID between setting and retrieving from the GSA model
   public static class StructuralLoadCaseToNative
   {
-    public static string ToNative(this StructuralLoadCase speckleLoad)
+    public static string ToNative(this StructuralLoadCase loadCase)
     {
+      if (string.IsNullOrEmpty(loadCase.ApplicationId))
+      {
+        return "";
+      }
+
       var keyword = GsaRecord.Keyword<GsaLoadCase>();
       var gsaLoad = new GsaLoadCase()
       {
-        ApplicationId = speckleLoad.ApplicationId,
-        Title = speckleLoad.Name,
-        Index = Initialiser.Cache.ResolveIndex(keyword, speckleLoad.ApplicationId),
-        CaseType = speckleLoad.CaseType
+        ApplicationId = loadCase.ApplicationId,
+        Title = loadCase.Name,
+        Index = Initialiser.Cache.ResolveIndex(keyword, loadCase.ApplicationId),
+        CaseType = loadCase.CaseType
       };
 
       if (gsaLoad.Gwa(out var gwaLines, true))

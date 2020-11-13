@@ -11,6 +11,11 @@ namespace SpeckleStructuralGSA.SchemaConversion
   {
     public static string ToNative(this StructuralLoadPlane loadPlane)
     {
+      if (string.IsNullOrEmpty(loadPlane.ApplicationId))
+      {
+        return "";
+      }
+
       var gwaCommands = new List<string>();
 
       var keyword = GsaRecord.Keyword<GsaGridSurface>();

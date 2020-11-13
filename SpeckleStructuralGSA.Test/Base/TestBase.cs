@@ -86,20 +86,18 @@ namespace SpeckleStructuralGSA.Test
       return speckleObjects;
     }
 
-    protected string RemoveKeywordVersion(string js)
+    public string RemoveKeywordVersion(string gwa)
     {
-      if (!string.IsNullOrEmpty(js))
+      var matches = Regex.Matches(gwa, @"(gsa/[A-Z_]+)\.[0-9]{1,2}");
+      if (matches.Count > 0)
       {
-        var appIdIndex = js.IndexOf("gsa/");
-        if (appIdIndex >= 0)
+        var matched = matches.Cast<System.Text.RegularExpressions.Match>().Select(m => m.Value).Distinct().ToList();
+        foreach (var m in matched)
         {
-          var dotIndex = js.IndexOf(".", appIdIndex);
-          var underscoreIndex = js.IndexOf("-", dotIndex);
-          js = js.Substring(0, dotIndex) + js.Substring(underscoreIndex);
+          gwa = gwa.Replace(m, m.Split('.').First());
         }
       }
-      
-      return js;
+      return gwa;
     }
 
     protected bool JsonCompareAreEqual(string j1, string j2)

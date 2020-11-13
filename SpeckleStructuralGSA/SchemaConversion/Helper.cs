@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SpeckleCore;
 using SpeckleStructuralClasses;
 using SpeckleStructuralGSA.Schema;
 
@@ -8,6 +9,15 @@ namespace SpeckleStructuralGSA.SchemaConversion
 {
   public static class Helper
   {
+    public static void AddCustomStructuralProperty(SpeckleObject obj, string key, object value)
+    {
+      if (!obj.Properties.ContainsKey("structural"))
+      {
+        obj.Properties.Add("structural", new Dictionary<string, object>());
+      }
+      ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeId", value);
+    }
+
     public static bool IsZeroAxis(StructuralAxis axis)
     {
       var bp = axis.basePlane;

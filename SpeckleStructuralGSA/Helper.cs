@@ -1003,6 +1003,8 @@ namespace SpeckleStructuralGSA
 
     public static string GetApplicationId(string keyword, int id)
     {
+      //Ensure keyword version is left out
+      keyword = keyword.Split('.').First();
       //Fill with SID
       var applicationId = Initialiser.Cache.GetApplicationId(keyword, id);
       return (string.IsNullOrEmpty(applicationId)) ? FormatApplicationId(keyword, id) : applicationId;

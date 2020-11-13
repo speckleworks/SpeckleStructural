@@ -52,24 +52,6 @@ namespace SpeckleStructuralGSA.SchemaConversion
     }
 
     #region 0dLoad_methods
-    //This is a class used as a container type used in queries to group data into groups which will map to Gsa0dLoad objects
-    //D0__ because class names can't start with numbers ..
-    private class D0LoadingSummary
-    {
-      public int Index;
-      public int? LoadCaseIndex;
-      public int? NodeIndex;
-      public int? UniqueLoadingIndex;
-      public string Name;
-      public string ApplicationId;
-
-      public D0LoadingSummary(int index, int? loadCaseIndex, int? nodeIndex)
-      {
-        Index = index;
-        LoadCaseIndex = loadCaseIndex;
-        NodeIndex = nodeIndex;
-      }
-    }
 
     private static bool Add0dLoadsWithoutAppId(string keyword, string nodeKeyword, string loadCaseKeyword, IEnumerable<Schema.GsaLoadNode> gsaLoads,
       List<GSANode> gsaNodes, ref List<Structural0DLoad> structural0DLoads, ref List<int> nodeIndicesReferenced)
@@ -120,7 +102,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
         var indices = group.Select(i => i.Index).Distinct().ToList();
         var nodeIndices = group.Select(i => i.NodeIndex).Where(i => i != null).Distinct().ToList();
         allNodeIndices.AddRange(nodeIndices.Where(ni => ni.HasValue && !allNodeIndices.Contains(ni.Value)).Select(ni => ni.Value));
-        var nodeRefs = nodeIndices.Select(ni => SpeckleStructuralGSA.Helper.GetApplicationId(nodeKeyword, ni.Value)).ToList();
+        var nodeRefs = nodeIndices.Select(ni => SpeckleStructuralGSA.Helper.GetApplicationId(nodeKeyword, ni.Value)).OrderBy(r => r).ToList();
         var loadCaseRef = SpeckleStructuralGSA.Helper.GetApplicationId(loadCaseKeyword, group.First().LoadCaseIndex.Value);
         var applicationId = SpeckleStructuralGSA.Helper.FormatApplicationId(keyword, indices);
         var name = string.Join("-", group.Where(i => !string.IsNullOrEmpty(i.Name)).Select(i => i.Name));
@@ -130,6 +112,8 @@ namespace SpeckleStructuralGSA.SchemaConversion
         {
           obj.Name = name;
         }
+        Helper.AddCustomStructuralProperty(obj, indices.Count() == 1 ? "NativeId" : "NativeIds", 
+          indices.Count() == 1 ? (object)indices.First().ToString() : indices.Select(i => i.ToString()).ToList());
         structural0DLoads.Add(obj);
       }
 
@@ -163,7 +147,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
         var indices = group.Select(i => i.Index).Distinct().ToList();
         var nodeIndices = group.Select(i => i.NodeIndex).Where(i => i != null).Distinct().ToList();
         allNodeIndices.AddRange(nodeIndices.Where(ni => ni.HasValue && !allNodeIndices.Contains(ni.Value)).Select(ni => ni.Value));
-        var nodeRefs = nodeIndices.Select(ni => SpeckleStructuralGSA.Helper.GetApplicationId(nodeKeyword, ni.Value)).ToList();
+        var nodeRefs = nodeIndices.Select(ni => SpeckleStructuralGSA.Helper.GetApplicationId(nodeKeyword, ni.Value)).OrderBy(r => r).ToList();
         var loadCaseRef = SpeckleStructuralGSA.Helper.GetApplicationId(loadCaseKeyword, group.First().LoadCaseIndex.Value);
         var applicationId = group.First().ApplicationId;
         var name = string.Join("-", group.Where(i => !string.IsNullOrEmpty(i.Name)).Select(i => i.Name));
@@ -174,12 +158,33 @@ namespace SpeckleStructuralGSA.SchemaConversion
         {
           obj.Name = name;
         }
+        Helper.AddCustomStructuralProperty(obj, indices.Count() == 1 ? "NativeId" : "NativeIds",
+          indices.Count() == 1 ? (object)indices.First().ToString() : indices.Select(i => i.ToString()).ToList());
         structural0DLoads.Add(obj);
       }
 
       nodeIndicesReferenced = allNodeIndices;
 
       return true;
+    }
+
+    //This is a class used as a container type used in queries to group data into groups which will map to Gsa0dLoad objects
+    //D0__ because class names can't start with numbers ..
+    private class D0LoadingSummary
+    {
+      public int Index;
+      public int? LoadCaseIndex;
+      public int? NodeIndex;
+      public int? UniqueLoadingIndex;
+      public string Name;
+      public string ApplicationId;
+
+      public D0LoadingSummary(int index, int? loadCaseIndex, int? nodeIndex)
+      {
+        Index = index;
+        LoadCaseIndex = loadCaseIndex;
+        NodeIndex = nodeIndex;
+      }
     }
     #endregion
   }

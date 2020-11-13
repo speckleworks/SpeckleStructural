@@ -283,6 +283,7 @@ namespace SpeckleStructuralGSA
           null,
           null);
 
+
       obj.Vertices = temp.Vertices;
       obj.Faces = temp.Faces;
       obj.Colors = temp.Colors;
@@ -439,9 +440,7 @@ namespace SpeckleStructuralGSA
       ls.Add(propIndex.ToString());
       ls.Add(group != 0 ? group.ToString() : index.ToString()); // TODO: This allows for targeting of elements from members group
       
-      // topo
-      var topo = "";
-      var prevNodeIndex = -1;
+      mesh.Consolidate();
       var connectivities = mesh.Edges();
 
       if (connectivities == null || connectivities.Count() == 0)
@@ -454,13 +453,24 @@ namespace SpeckleStructuralGSA
       foreach (var c in connectivities[0])
       {
         coor.AddRange(baseMesh.Vertices.Skip(c * 3).Take(3));
-        var currIndex = Helper.NodeAt(baseMesh.Vertices[c * 3], baseMesh.Vertices[c * 3 + 1], baseMesh.Vertices[c * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance);
+      }
+      coor = coor.Essential().ToList();
+      var coorPts = Enumerable.Range(0, coor.Count() / 3).Select(i => new double[] { coor[i * 3], coor[i * 3 + 1], coor[i * 3 + 2] }).ToList();
+
+      //Use these reduced coordinates to call NodeAt and create a topo string
+      // topo
+      var topo = "";
+      var prevNodeIndex = -1;
+      foreach (var coorPt in coorPts)
+      {
+        var currIndex = Helper.NodeAt(coorPt[0], coorPt[1], coorPt[2], Initialiser.Settings.CoincidentNodeAllowance);
         if (prevNodeIndex != currIndex)
         {
           topo += currIndex.ToString() + " ";
         }
         prevNodeIndex = currIndex;
       }
+
       ls.Add(topo.Trim());
       
       ls.Add("0"); // Orientation node

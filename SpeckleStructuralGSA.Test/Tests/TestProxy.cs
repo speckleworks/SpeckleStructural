@@ -1,13 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Interop.Gsa_10_1;
 using Moq;
+using NUnit.Framework;
 using SpeckleGSAInterfaces;
 using SpeckleGSAProxy;
 
 namespace SpeckleStructuralGSA.Test
 {
+  [TestFixture]
+  public class TempTest
+  {
+    [Test]
+    public void RegExpTest()
+    {
+      var gwa = "{\"type\":\"StructuralLoadCombo\",\"comboType\":\"LinearAdd\",\"loadTaskRefs\":[\"gsa/ANA_L.1-1\",\"gsa/ANAL.2-2\"],\"loadTaskFactors\":[1.5,1.25],\"loadComboRefs\":[],\"loadComboFactors\":[],\"applicationId\":\"ComboOne\",\"name\":\"Combo One\",\"properties\":{}}";
+      var replacedGwa = RemoveKeywordVersions(gwa);
+    }
+
+    public string RemoveKeywordVersions(string gwa)
+    {
+      var matches = Regex.Matches(gwa, @"(gsa/[A-Z_]+)\.[0-9]");
+      if (matches.Count > 0)
+      {
+        var matched = matches.Cast<System.Text.RegularExpressions.Match>().Select(m => m.Value).Distinct().ToList();
+        foreach (var m in matched)
+        {
+          gwa = gwa.Replace(m, m.Split('.').First());
+        }
+      }
+      return gwa;
+    }
+  }
   /*
   public class TestProxy : IGSAProxy
   {
