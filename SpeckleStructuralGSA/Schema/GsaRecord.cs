@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
-using System.Threading;
 using SpeckleGSAInterfaces;
 
 namespace SpeckleStructuralGSA.Schema
@@ -25,7 +23,6 @@ namespace SpeckleStructuralGSA.Schema
 
     protected static readonly string SID_APPID_TAG = "speckle_app_id";
     protected static readonly string SID_STRID_TAG = "speckle_stream_id";
-    protected static readonly string delim = "\t";
 
     public abstract bool FromGwa(string gwa);
 
@@ -156,7 +153,7 @@ namespace SpeckleStructuralGSA.Schema
     {
       try
       {
-        return gwa.ListSplit(delim).ToList();
+        return gwa.ListSplit(Initialiser.Interface.GwaDelimiter).ToList();
       }
       catch
       {
@@ -166,7 +163,7 @@ namespace SpeckleStructuralGSA.Schema
 
     protected bool Join(List<string> items, out string joined)
     {
-      joined = string.Join(delim, items);
+      joined = string.Join(Initialiser.Interface.GwaDelimiter.ToString(), items);
       return (joined.Length > 0);
     }
 

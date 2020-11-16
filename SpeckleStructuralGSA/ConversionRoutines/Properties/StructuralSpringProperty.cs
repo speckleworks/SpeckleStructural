@@ -24,7 +24,7 @@ namespace SpeckleStructuralGSA
       if (this.GWACommand == null)
         return;
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
 
       var obj = new StructuralSpringProperty();
 
@@ -141,7 +141,7 @@ namespace SpeckleStructuralGSA
 
       ls.AddRange(SpringTypeCommandPieces(springProp.SpringType, springProp.Stiffness, springProp.DampingRatio ?? 0));
 
-      gwaCommands.Add(string.Join("\t", ls));
+      gwaCommands.Add(string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
 
       return string.Join("\n", gwaCommands);
     }
@@ -215,7 +215,7 @@ namespace SpeckleStructuralGSA
       Parallel.ForEach(newLines.Values, p =>
 #endif
       {
-        var pPieces = p.ListSplit("\t");
+        var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
         var gsaId = pPieces[1];
         try
         {

@@ -55,6 +55,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
         try
         {
           axis = SpeckleStructuralGSA.Helper.Parse2DAxis(originalPolyline);
+          axis.Name = loadPanel.Name;
           var gsaAxisGwa = StructuralAxisToNative.ToNative(axis);
           gwaList.Add(gsaAxisGwa);
 
@@ -82,6 +83,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
           var gsaGridSurface = new GsaGridSurface()
           {
             Index = gridSurfaceIndex,
+            PlaneRefType = GridPlaneAxisRefType.Reference,
             PlaneIndex = gridPlaneIndex,
             Name = loadPanel.Name,
             AllIndices = true,
@@ -89,7 +91,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
             Span = GridSurfaceSpan.One,
             Angle = 0,
             Tolerance = 0.01,
-            Expansion = GridExpansion.Legacy
+            Expansion = GridExpansion.PlaneCorner
           };
           if (gsaGridSurface.Gwa(out var gsaGridSurfaceGwas, true))
           {

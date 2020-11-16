@@ -23,7 +23,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralMaterialSteel();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
 
       var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
@@ -133,7 +133,7 @@ namespace SpeckleStructuralGSA
         "0" // Hardening modulus
       };
 
-      return (string.Join("\t", ls));
+      return (string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
     }
   }
 
@@ -153,7 +153,7 @@ namespace SpeckleStructuralGSA
 
       Parallel.ForEach(newLines.Values, p =>
       {
-        var pPieces = p.ListSplit("\t");
+        var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
         var gsaId = pPieces[1];
         try
         {

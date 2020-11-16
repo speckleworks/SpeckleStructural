@@ -66,6 +66,7 @@ namespace SpeckleStructuralGSA.Test
 
         expectedJson = Regex.Replace(expectedJson, jsonDecSearch, "$1");
         expectedJson = Regex.Replace(expectedJson, jsonHashSearch, jsonHashReplace);
+        expectedJson = RemoveKeywordVersion(expectedJson);
 
         var type = expectedObject.GetType();
         lock (expectedLock)
@@ -91,6 +92,7 @@ namespace SpeckleStructuralGSA.Test
 
         actualJson = Regex.Replace(actualJson, jsonDecSearch, "$1");
         actualJson = Regex.Replace(actualJson, jsonHashSearch, jsonHashReplace);
+        actualJson = RemoveKeywordVersion(actualJson);
 
         actual.Add(actualObject, actualJson);
       }
@@ -170,12 +172,17 @@ namespace SpeckleStructuralGSA.Test
     //To cope with result objects not having an application Id
     private string SafeApplicationId(SpeckleObject so)
     {
+      var appId = "";
       if (so is StructuralResultBase)
       {
         var resultObj = (StructuralResultBase)so;
-        return (resultObj.TargetRef ?? "") + (resultObj.LoadCaseRef ?? "") + (resultObj.ResultSource ?? "") + (resultObj.Description ?? "");
+        appId = (resultObj.TargetRef ?? "") + (resultObj.LoadCaseRef ?? "") + (resultObj.ResultSource ?? "") + (resultObj.Description ?? "");
       }
-      return RemoveKeywordVersion(so.ApplicationId ?? "");
+      else
+      {
+        appId = so.ApplicationId ?? "";
+      }
+      return RemoveKeywordVersion(appId);
     }
 
     [Ignore("There is an equivalent test in SpeckleGSA repo, so this one might be removed")]

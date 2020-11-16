@@ -25,7 +25,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural1DLoad();
       obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
 
       var counter = 0; // Skip identifier
       var identifier = pieces[counter++];
@@ -202,7 +202,7 @@ namespace SpeckleStructuralGSA
         ls.Add(direction[i]);
         ls.Add(load.Loading.Value[i].ToString());
 
-        gwaCommands.Add(string.Join("\t", ls));
+        gwaCommands.Add(string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
       }
 
       return string.Join("\n", gwaCommands);

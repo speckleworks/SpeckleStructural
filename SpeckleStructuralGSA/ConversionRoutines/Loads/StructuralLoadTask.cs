@@ -22,7 +22,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralLoadTask();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
 
       var counter = 1; // Skip identifier
 
@@ -211,7 +211,7 @@ namespace SpeckleStructuralGSA
           ls.Add("0");
           break;
       }
-      gwaCommands.Add(string.Join("\t", ls));
+      gwaCommands.Add(string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
 
       // Set ANAL
       ls.Clear();
@@ -245,7 +245,7 @@ namespace SpeckleStructuralGSA
           ls.Add(string.Join(" + ", subLs));
         }
       }
-      gwaCommands.Add(string.Join("\t", ls));
+      gwaCommands.Add(string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
       return string.Join("\n", gwaCommands);
     }
   }

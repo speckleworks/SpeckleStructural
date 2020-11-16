@@ -22,7 +22,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural2DLoadPanel();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
 
       var counter = 1; // Skip identifier
       obj.Name = pieces[counter++].Trim(new char[] { '"' });

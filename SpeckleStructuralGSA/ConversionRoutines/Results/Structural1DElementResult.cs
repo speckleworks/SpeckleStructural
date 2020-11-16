@@ -118,7 +118,7 @@ namespace SpeckleStructuralGSA
           {
             for (var i = 0; i < indices.Count(); i++)
             {
-              var pPieces = gwa[i].ListSplit("\t");
+              var pPieces = gwa[i].ListSplit(Initialiser.Interface.GwaDelimiter);
               if (pPieces[4].ParseElementNumNodes() != 2 || indices[i] == 0)
               {
                 continue;

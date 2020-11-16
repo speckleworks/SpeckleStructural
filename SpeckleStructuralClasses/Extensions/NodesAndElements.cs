@@ -341,9 +341,10 @@ namespace SpeckleStructuralClasses
       var i = 0;
       do
       {
-        var numInFace = (Faces[i++] == 0) ? 3 : 4;
+        var numInFace = (Faces[i] == 0) ? 3 : 4;
         if ((i + numInFace) < Faces.Count())
         {
+          i++;
           for (var v = 0; v < numInFace; v++)
           {
             var pair = (new int[] { Faces[i + v], Faces[((v + 1) == numInFace) ? i : i + v + 1] }).OrderBy(n => n).ToArray();

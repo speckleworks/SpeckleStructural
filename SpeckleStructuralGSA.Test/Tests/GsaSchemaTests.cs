@@ -32,6 +32,7 @@ namespace SpeckleStructuralGSA.Test
         .Returns(new Func<double, double, double, double, int>(MockGSAProxy.NodeAt));
       mockGSAObject.Setup(x => x.ConvertGSAList(It.IsAny<string>(), It.IsAny<GSAEntity>()))
         .Returns(new Func<string, GSAEntity, int[]>(MockGSAProxy.ConvertGSAList));
+      mockGSAObject.SetupGet(x => x.GwaDelimiter).Returns(GSAProxy.GwaDelimiter);
 
       Initialiser.Interface = mockGSAObject.Object;
       Initialiser.Cache = new GSACache();
@@ -42,10 +43,13 @@ namespace SpeckleStructuralGSA.Test
     public void GsaLoadCaseToNative()
     {
       var load1 = new StructuralLoadCase() { CaseType = StructuralLoadCaseType.Generic, ApplicationId = "lc1", Name = "LoadCaseOne" };
-      var load2 = new StructuralLoadCase() { CaseType = StructuralLoadCaseType.Dead, Name = "LoadCaseTwo" };
+      var load2 = new StructuralLoadCase() { CaseType = StructuralLoadCaseType.Dead, ApplicationId = "lc2", Name = "LoadCaseTwo" };
 
       var load1gwa = StructuralLoadCaseToNative.ToNative(load1);
       var load2gwa = StructuralLoadCaseToNative.ToNative(load2);
+
+      Assert.IsFalse(string.IsNullOrEmpty(load1gwa));
+      Assert.IsFalse(string.IsNullOrEmpty(load2gwa));
 
       Assert.IsTrue(ModelValidation(new string[] { load1gwa, load2gwa }, new Dictionary<string, int> { { GsaRecord.Keyword<GsaLoadCase>(), 2 } }, out var mismatchByKw));
       Assert.Zero(mismatchByKw.Keys.Count());
@@ -157,7 +161,6 @@ namespace SpeckleStructuralGSA.Test
       Assert.Zero(mismatchByKw.Keys.Count());
       Assert.Zero(((SpeckleAppUI)Initialiser.AppUI).GroupMessages().Count());
     }
-    
 
     [Test]
     public void GsaLoadNodeSimple()

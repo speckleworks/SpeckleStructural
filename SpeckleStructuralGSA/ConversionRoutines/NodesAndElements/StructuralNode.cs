@@ -30,7 +30,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralNode();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
 
       var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]); // num
@@ -101,7 +101,7 @@ namespace SpeckleStructuralGSA
         if (massPropsGwa.Count > 0)
         {
           var massPropGwa = massPropsGwa[0];
-          var massPropPieces = massPropGwa.ListSplit("\t");
+          var massPropPieces = massPropGwa.ListSplit(Initialiser.Interface.GwaDelimiter);
           obj.Mass = Convert.ToDouble(massPropPieces[5]);
         }
       }
@@ -135,7 +135,7 @@ namespace SpeckleStructuralGSA
         index.ToString(), // num
         node.Name == null || node.Name == "" ? " " : node.Name, // name
         "NO_RGB", // colour
-        string.Join("\t", node.Value.Select(v => Math.Round(v, 8)).ToArray()), // x y z - GSA seems to round to 8 here
+        string.Join(Initialiser.Interface.GwaDelimiter.ToString(), node.Value.Select(v => Math.Round(v, 8)).ToArray()), // x y z - GSA seems to round to 8 here
       };
 
       // restraint
@@ -184,7 +184,7 @@ namespace SpeckleStructuralGSA
       
       // damperProperty - not supported
 
-      gwaCommands.Add(string.Join("\t", ls));
+      gwaCommands.Add(string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
 
       return string.Join("\n", gwaCommands);
     }
@@ -205,7 +205,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralNode();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
 
       var counter = 1; // Skip identifier
       counter++; // Reference
@@ -271,7 +271,7 @@ namespace SpeckleStructuralGSA
         "" //Dummy
       };
 
-      gwaCommands.Add(string.Join("\t", ls));
+      gwaCommands.Add(string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
 
       ls = new List<string>
       {
@@ -295,7 +295,7 @@ namespace SpeckleStructuralGSA
         "100%"
       };
 
-      gwaCommands.Add(string.Join("\t", ls));
+      gwaCommands.Add(string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
 
       return string.Join("\n", gwaCommands);
     }
@@ -303,7 +303,7 @@ namespace SpeckleStructuralGSA
     private double GetGSAMass(int propertyIndex)
     {
       var gwa = Initialiser.Cache.GetGwa("PROP_MASS", propertyIndex).FirstOrDefault();
-      var pieces = gwa.ListSplit("\t");
+      var pieces = gwa.ListSplit(Initialiser.Interface.GwaDelimiter);
 
       this.SubGWACommand.Add(gwa);
 
@@ -341,7 +341,7 @@ namespace SpeckleStructuralGSA
 
       Parallel.ForEach(newLines.Values, p =>
       {
-        var pPieces = p.ListSplit("\t");
+        var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
         var gsaId = pPieces[1];
         var node = new GSANode { GWACommand = p };
         try
@@ -378,7 +378,7 @@ namespace SpeckleStructuralGSA
 
       Parallel.ForEach(newLines.Values, p =>
       {
-        var pPieces = p.ListSplit("\t");
+        var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
         var gsaId = pPieces[1];
         if (pPieces[4].ParseElementNumNodes() == 1)
         {

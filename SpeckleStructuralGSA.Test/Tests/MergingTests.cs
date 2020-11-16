@@ -120,7 +120,7 @@ namespace SpeckleStructuralGSA.Test
     public void MergeTestGSA_WithMerger()
     {
       var ls1 = new object[] { "PROP_SPR.4:{speckle_app_id:gh/a}", 1, "LSPxGeneral", "NO_RGB", "GLOBAL", "GENERAL", 0, 16, 0, 17, 0, 18, 0, 19, 0, 20, 0, 21, 0.21 };
-      var gwa1 = string.Join("\t", ls1.Select(l => l.ToString()));
+      var gwa1 = string.Join(GSAProxy.GwaDelimiter.ToString(), ls1.Select(l => l.ToString()));
 
       PrepareInterfacerForGwaToSpeckle<GSASpringProperty>(gwa1, "PROP_SPR", "gh/a");
 
@@ -165,7 +165,7 @@ namespace SpeckleStructuralGSA.Test
     public void MergeTestGSA()
     {
       var ls1 = new object[] { "PROP_SPR.4:{speckle_app_id:gh/a}", 1, "LSPxGeneral", "NO_RGB", "GLOBAL", "GENERAL", 0, 16, 0, 17, 0, 18, 0, 19, 0, 20, 0, 21, 0.21 };
-      var gwa1 = string.Join("\t", ls1.Select(l => l.ToString()));
+      var gwa1 = string.Join(GSAProxy.GwaDelimiter.ToString(), ls1.Select(l => l.ToString()));
 
       PrepareInterfacerForGwaToSpeckle<GSASpringProperty>(gwa1, "PROP_SPR", "gh/a");
 

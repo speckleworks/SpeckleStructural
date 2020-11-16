@@ -108,7 +108,7 @@ namespace SpeckleStructuralGSA
             {
               var record = gwa[i];
 
-              var pPieces = record.ListSplit("\t");
+              var pPieces = record.ListSplit(Initialiser.Interface.GwaDelimiter);
               if ((pPieces[4].ParseElementNumNodes() != 3 && pPieces[4].ParseElementNumNodes() != 4) || indices[i] == 0)
               {
                 continue;

@@ -5,7 +5,7 @@
   },
   {
     "ApplicationId": "LC2",
-    "GwaCommand": "SET\tLOAD_TITLE.2:{speckle_app_id:LC2}\t2\tDead load case\tDEAD\t1\t~\tNONE\tINC_BOTH"
+    "GwaCommand": "SET\tLOAD_TITLE.2:{speckle_app_id:LC2}\t2\tDead load case\tLC_PERM_SELF\t1\t~\tNONE\tINC_BOTH"
   },
   {
     "ApplicationId": "LC3",
@@ -24,10 +24,10 @@
     "GwaCommand": "SET\tGRID_SURFACE.1\t1\tAlignment One\t1\t2\tall\t0.01\tONE\t0"
   },
   {
-    "GwaCommand": "SET\tGRID_SURFACE.1\t2\tLive load panel\t2\t2\tall\t0.01\tONE\t0"
+    "GwaCommand": "SET\tGRID_SURFACE.1\t2\tLive load panel\t2\t2\tall\t0.01\tONE\t0\tPLANE_CORNER"
   },
   {
-    "GwaCommand": "SET\tGRID_SURFACE.1\t3\tDead load panel\t3\t2\tall\t0.01\tONE\t0"
+    "GwaCommand": "SET\tGRID_SURFACE.1\t3\tDead load panel\t3\t2\tall\t0.01\tONE\t0\tPLANE_CORNER"
   },
   {
     "ApplicationId": "AL1",
@@ -116,12 +116,12 @@
     "GwaCommand": "SET\tAXIS.1\t2\tDead load panel\tCART\t0\t0\t0\t1\t0\t0\t0\t-1\t0"
   },
   {
-    "ApplicationId": "Live",
-    "GwaCommand": "SET_AT\t1\tLOAD_GRID_AREA.2:{speckle_app_id:Live}\tLive load panel\t2\tPOLYGON\t\"(14.7561,24.6719) (-24.8439,24.6719) (-24.8439,-2.5272) (14.7561,4.8719)(m)\"\t1\tGLOBAL\tNO\tZ\t-0.0048"
+    "ApplicationId": "Live_Z",
+    "GwaCommand": "SET_AT\t1\tLOAD_GRID_AREA.2:{speckle_app_id:Live_Z}\tLive load panel\t2\tPOLYGON\t\"(14.7561,24.6719) (-24.8439,24.6719) (-24.8439,-2.5272) (14.7561,4.8719)(m)\"\t1\tGLOBAL\tNO\tZ\t-0.0048"
   },
   {
-    "ApplicationId": "SDL",
-    "GwaCommand": "SET_AT\t2\tLOAD_GRID_AREA.2:{speckle_app_id:SDL}\tDead load panel\t3\tPOLYGON\t\"(44.4561,4.8719) (54.3561,-74.3281) (74.1561,-67.7348) (74.1561,4.8719)(m)\"\t2\tGLOBAL\tNO\tZ\t-0.0012"
+    "ApplicationId": "SDL_Z",
+    "GwaCommand": "SET_AT\t2\tLOAD_GRID_AREA.2:{speckle_app_id:SDL_Z}\tDead load panel\t3\tPOLYGON\t\"(44.4561,4.8719) (54.3561,-74.3281) (74.1561,-67.7348) (74.1561,4.8719)(m)\"\t2\tGLOBAL\tNO\tZ\t-0.0012"
   },
   {
     "ApplicationId": "LT1",

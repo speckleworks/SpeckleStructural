@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using SpeckleGSAInterfaces;
+using SpeckleGSAProxy;
 
 namespace SpeckleStructuralGSA.Test
 {
@@ -54,7 +55,7 @@ namespace SpeckleStructuralGSA.Test
 
     public static void ParseGeneralGwa(string fullGwa, out string keyword, out int? index, out string streamId, out string applicationId, out string gwaWithoutSet, out GwaSetCommandType? gwaSetCommandType, bool includeKwVersion = false)
     {
-      var pieces = fullGwa.ListSplit("\t").ToList();
+      var pieces = fullGwa.ListSplit(GSAProxy.GwaDelimiter).ToList();
       keyword = "";
       streamId = "";
       applicationId = "";
@@ -132,7 +133,7 @@ namespace SpeckleStructuralGSA.Test
         keyword = keyword.Split('.').First();
       }
 
-      gwaWithoutSet = string.Join("\t", pieces);
+      gwaWithoutSet = string.Join(GSAProxy.GwaDelimiter.ToString(), pieces);
       return;
     }
   }

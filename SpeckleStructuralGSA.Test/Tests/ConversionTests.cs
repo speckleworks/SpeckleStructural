@@ -30,6 +30,7 @@ namespace SpeckleStructuralGSA.Test
         .Returns(new Func<string, string, string>(MockGSAProxy.FormatSidTags));
       mockGSAObject.Setup(x => x.ConvertGSAList(It.IsAny<string>(), It.IsAny<GSAEntity>()))
         .Returns(new Func<string, GSAEntity, int[]>(MockGSAProxy.ConvertGSAList));
+      mockGSAObject.SetupGet(x => x.GwaDelimiter).Returns(GSAProxy.GwaDelimiter);
 
       Initialiser.Cache = new GSACache();
       Initialiser.Interface = mockGSAObject.Object;

@@ -22,7 +22,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural1DLoadLine();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
 
       var counter = 1; // Skip identifier
       obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
@@ -216,7 +216,7 @@ namespace SpeckleStructuralGSA
         elevation.ToString(),
         "0", // Elevation above
         "0"}); // Elevation below
-        gwaCommands.Add(string.Join("\t", ls));
+        gwaCommands.Add(string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
 
         ls.Clear();
         ls.AddRange(new[] {"SET",
@@ -229,7 +229,7 @@ namespace SpeckleStructuralGSA
         "0.01", // Tolerance
         "TWO_SIMPLE", // Span option
         "0"}); // Span angle
-        gwaCommands.Add(string.Join("\t", ls));
+        gwaCommands.Add(string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
       }
       else //LoadPlaneRef is not empty/null
       {
@@ -310,7 +310,7 @@ namespace SpeckleStructuralGSA
           load.Loading.Value[i].ToString(),
           load.LoadingEnd == null ? load.Loading.Value[i].ToString() : load.LoadingEnd.Value[i].ToString()});
 
-        gwaCommands.Add(string.Join("\t", ls));
+        gwaCommands.Add(string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
       }
 
       return string.Join("\n", gwaCommands);

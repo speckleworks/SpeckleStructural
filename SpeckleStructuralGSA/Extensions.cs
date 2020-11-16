@@ -103,6 +103,11 @@ namespace SpeckleStructuralGSA
       return Regex.Split(list, delimiter + "(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
     }
 
+    public static string[] ListSplit(this string list, char delimiter)
+    {
+      return Regex.Split(list, delimiter + "(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+    }
+
     /// <summary>
     /// Returns the GWA keyword from GSAObject objects or type.
     /// </summary>

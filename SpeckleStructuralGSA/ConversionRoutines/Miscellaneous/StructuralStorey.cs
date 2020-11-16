@@ -20,7 +20,7 @@ namespace SpeckleStructuralGSA
       if (this.GWACommand == null)
         return false;
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
 
       if (pieces[3].ToLower() != "storey")
       {

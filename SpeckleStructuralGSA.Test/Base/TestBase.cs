@@ -51,7 +51,7 @@ namespace SpeckleStructuralGSA.Test
       //The new cache is stricter about duplicates so just generate a new index every time so no duplicate entries with same index and different GWAs are tried to be cached
       mockGsaCom.Setup(x => x.Gen_NodeAt(It.IsAny<double>(), It.IsAny<double>(), It.IsAny<double>(), It.IsAny<double>())).Returns((double x, double y, double z, double coin) => { NodeIndex++; return NodeIndex; });
       mockGsaCom.Setup(x => x.GwaCommand(It.IsAny<string>())).Returns((string x) => { return x.Contains("GET") ? (object)"" : (object)1; });
-      mockGsaCom.Setup(x => x.VersionString()).Returns("Test\t1");
+      mockGsaCom.Setup(x => x.VersionString()).Returns("Test" + GSAProxy.GwaDelimiter + "1");
       mockGsaCom.Setup(x => x.LogFeatureUsage(It.IsAny<string>()));
       return mockGsaCom;
     }
@@ -104,14 +104,6 @@ namespace SpeckleStructuralGSA.Test
     {
       try
       {
-        if (j1.Contains("gsa/"))
-        {
-          j1 = RemoveKeywordVersion(j1);
-        }
-        if (j2.Contains("gsa/"))
-        {
-          j2 = RemoveKeywordVersion(j2);
-        }
         var jt1 = JToken.Parse(j1);
         var jt2 = JToken.Parse(j2);
 

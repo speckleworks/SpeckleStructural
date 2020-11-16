@@ -47,7 +47,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
         //There is no support for this argument in the Structural schema, and was even omitted from the GWA 
         //in the previous version of the ToNative code
-        Expansion = GridExpansion.Legacy
+        Expansion = GridExpansion.PlaneCorner
       };
 
       if (!string.IsNullOrEmpty(loadPlane.StoreyRef))

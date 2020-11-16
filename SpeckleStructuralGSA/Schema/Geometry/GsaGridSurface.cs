@@ -65,7 +65,7 @@ namespace SpeckleStructuralGSA.Schema
         case GridPlaneAxisRefType.XElevation: return (-11).ToString();
         case GridPlaneAxisRefType.YElevation: return (-12).ToString();
         case GridPlaneAxisRefType.GlobalCylindrical: return (-13).ToString();
-        default: return 0.ToString();
+        default: return 0.ToString();  //This is for global
       }
     }
 

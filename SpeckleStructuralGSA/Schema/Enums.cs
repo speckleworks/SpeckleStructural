@@ -50,10 +50,10 @@
   public enum GridPlaneAxisRefType
   {
     NotSet = 0,
-    Global = 1,
-    XElevation = 2,
-    YElevation = 3,
-    GlobalCylindrical = 4,
+    Global,
+    XElevation,
+    YElevation,
+    GlobalCylindrical,
     Reference
   }
 
