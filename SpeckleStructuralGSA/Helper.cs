@@ -200,9 +200,12 @@ namespace SpeckleStructuralGSA
     public static bool IsDigits(this string str)
     {
       foreach (var c in str)
+      {
         if (c < '0' || c > '9')
+        {
           return false;
-
+        }
+      }
       return true;
     }
     #endregion

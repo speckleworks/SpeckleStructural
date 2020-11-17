@@ -5,21 +5,19 @@ using SpeckleStructuralGSA.Schema;
 
 namespace SpeckleStructuralGSA.SchemaConversion
 {
-  public static class Structural0DLoadToNative
+  public static class Structural1DLoadToNative
   {
-    public static string ToNative(this Structural0DLoad load)
+    public static string ToNative(this Structural1DLoad load)
     {
       if (string.IsNullOrEmpty(load.ApplicationId) && !Helper.IsValidLoading(load.Loading))
       {
         return "";
       }
 
+      //Note: only LOAD_BEAM_UDL is supported at this stage
       var keyword = GsaRecord.Keyword<GsaLoadNode>();
-      var nodeKeyword = GsaRecord.Keyword<GsaNode>();
-      var loadCaseKeyword = GsaRecord.Keyword<GsaLoadCase>();
 
-      var nodeIndices = Initialiser.Cache.LookupIndices(nodeKeyword, load.NodeRefs).Where(x => x.HasValue).Select(x => x.Value).OrderBy(i => i).ToList();
-      var loadCaseIndex = Initialiser.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
+      var loadCaseIndex = Initialiser.Cache.LookupIndex(GsaRecord.Keyword<GsaLoadCase>(), load.LoadCaseRef);
 
       var gwaList = new List<string>();
       var loadingDict = Helper.ExplodeLoading(load.Loading);
@@ -27,15 +25,15 @@ namespace SpeckleStructuralGSA.SchemaConversion
       {
         var applicationId = string.Join("_", load.ApplicationId, k.ToString());
         var index = Initialiser.Cache.ResolveIndex(keyword, applicationId);
-        var gsaLoad = new GsaLoadNode()
+        var gsaLoad = new GsaLoadBeamUdl()
         {
           Index = index,
           ApplicationId = applicationId,
           Name = load.Name,
           LoadDirection = k,
-          Value = loadingDict[k],
-          GlobalAxis = true,
-          NodeIndices = nodeIndices,
+          Load = loadingDict[k],
+          Projected = false,
+          AxisRefType = LoadBeamAxisRefType.Global,
           LoadCaseIndex = loadCaseIndex
         };
         if (gsaLoad.Gwa(out var gwa, true))

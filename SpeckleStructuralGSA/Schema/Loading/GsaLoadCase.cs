@@ -30,9 +30,7 @@ namespace SpeckleStructuralGSA.Schema
       //Only basic level of support is offered now - the arguments after type are ignored
       //LOAD_TITLE.2 | case | title | type | source | category | dir | include | bridge
       //Note: case is deserialised into the Index field
-      FromGwaByFuncs(items, out remainingItems, AddTitle, AddType);
-      
-      return true;
+      return FromGwaByFuncs(items, out _, AddTitle, AddType);
     }
 
     public bool AddTitle(string v)

@@ -7,7 +7,7 @@ using SpeckleGSAInterfaces;
 namespace SpeckleStructuralGSA.Schema
 {
   //polygon references not supported yet
-  [GsaType(GwaKeyword.GRID_SURFACE, GwaSetCommandType.Set, StreamBucket.Model, true, true, new[] { GwaKeyword.MEMB }, new[] { GwaKeyword.EL }, GwaKeyword.GRID_PLANE)]
+  [GsaType(GwaKeyword.GRID_SURFACE, GwaSetCommandType.Set, StreamBucket.Model, true, true, new[] { GwaKeyword.MEMB, GwaKeyword.EL, GwaKeyword.GRID_PLANE })]
   public class GsaGridSurface : GsaRecord
   {
     public string Name { get => name; set { name = value; } }
@@ -47,7 +47,13 @@ namespace SpeckleStructuralGSA.Schema
       }
 
       //GRID_SURFACE.1 | num | name | plane | type | elements | tol | span | angle | grid
-      AddItems(ref items, Name, AddPlane(), AddType(), AllIndices ? "all" : List(EntityIndices), Tolerance ?? 0, AddSpan(), Angle ?? 0, SchemaConversion.Helper.GridExpansionToString(Expansion));
+      AddItems(ref items, Name, 
+        AddPlane(), 
+        ((Type == GridSurfaceElementsType.OneD) ? 1 : 2).ToString(), 
+        AllIndices ? "all" : List(EntityIndices), 
+        Tolerance ?? 0, AddSpan(), 
+        Angle ?? 0, 
+        SchemaConversion.Helper.GridExpansionToString(Expansion));
 
       gwa = Join(items, out var gwaLine) ? new List<string>() { gwaLine } : new List<string>();
       return (gwa.Count() > 0);
@@ -67,12 +73,6 @@ namespace SpeckleStructuralGSA.Schema
         case GridPlaneAxisRefType.GlobalCylindrical: return (-13).ToString();
         default: return 0.ToString();  //This is for global
       }
-    }
-
-    private string AddType()
-    {
-      var intVal = (Type == GridSurfaceElementsType.OneD) ? 1 : 2;
-      return intVal.ToString();
     }
 
     private string AddSpan()
@@ -147,13 +147,13 @@ namespace SpeckleStructuralGSA.Schema
 
     private bool AddAngle(string v)
     {
-      Angle = (double.TryParse(v, out var angle)) ? (double?)angle : 0;
+      Angle = (double.TryParse(v, out var angle)) ? angle : 0;
       return true;
     }
 
     private bool AddGrid(string v)
     {
-      SchemaConversion.Helper.StringToGridExpansion(v);
+      Expansion = SchemaConversion.Helper.StringToGridExpansion(v);
       return true;
     }
     #endregion

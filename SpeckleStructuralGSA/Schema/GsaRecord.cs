@@ -34,7 +34,8 @@ namespace SpeckleStructuralGSA.Schema
       Enum.TryParse(GetType().GetAttribute<GsaType>("SetCommandType").ToString(), out gwaSetCommandType);
     }
 
-    protected bool InitialiseGwa(bool includeSet, out List<string> items)
+    //The keywordOverride is mainly used for the LOAD_BEAM case
+    protected bool InitialiseGwa(bool includeSet, out List<string> items, string keywordOverride = "")
     {
       items = new List<string>();
       if (includeSet)
@@ -49,7 +50,7 @@ namespace SpeckleStructuralGSA.Schema
         }
       }
       var sid = FormatSidTags(StreamId, ApplicationId);
-      items.Add(keyword + "." + Version + ((string.IsNullOrEmpty(sid)) ? "" : ":" + sid));
+      items.Add((string.IsNullOrEmpty(keywordOverride) ? keyword : keywordOverride) + "." + Version + ((string.IsNullOrEmpty(sid)) ? "" : ":" + sid));
       if (gwaSetCommandType == GwaSetCommandType.Set)
       {
         items.Add(Index.ToString());
@@ -58,7 +59,7 @@ namespace SpeckleStructuralGSA.Schema
     }
 
     //Designed to be called after ProcessGwa - and can handle the SET or SET_AT being included
-    protected bool BasicFromGwa(string gwa, out List<string> remainingItems)
+    protected bool BasicFromGwa(string gwa, out List<string> remainingItems, string keywordOverride = "")
     {
       var items = Split(gwa);
       remainingItems = new List<string>();
@@ -109,8 +110,8 @@ namespace SpeckleStructuralGSA.Schema
       }
 
       var kwSplit = keywordAndVersion.Split(new[] { '.' });
-      var keyword = kwSplit[0];
-      if (!keyword.Equals(keyword, StringComparison.InvariantCultureIgnoreCase))
+      var foundKeyword = kwSplit[0];
+      if (!foundKeyword.Equals(string.IsNullOrEmpty(keywordOverride) ? keyword : keywordOverride, StringComparison.InvariantCultureIgnoreCase))
       {
         return false;
       }
@@ -161,6 +162,26 @@ namespace SpeckleStructuralGSA.Schema
       }
     }
 
+    protected bool AddNullableIndex(string v, out int? dest)
+    {
+      dest = int.TryParse(v, out var n) && n > 0 ? (int?)n : null;
+      return true;
+    }
+
+    //For when you need to read a value from GWA that is stored in a nullable double member
+    protected bool AddNullableDoubleValue(string v, out double? dest)
+    {
+      dest = double.TryParse(v, out var n) ? (double?)n : null;
+      return true;
+    }
+
+    //For when you need to read a value from GWA that is stored in a nullable integer member
+    protected bool AddNullableIntValue(string v, out int? dest)
+    {
+      dest = int.TryParse(v, out var n) ? (int?)n : null;
+      return true;
+    }
+
     protected bool Join(List<string> items, out string joined)
     {
       joined = string.Join(Initialiser.Interface.GwaDelimiter.ToString(), items);
@@ -170,6 +191,32 @@ namespace SpeckleStructuralGSA.Schema
     protected string List(List<int> indices)
     {
       return string.Join(" ", indices);
+    }
+
+    protected List<int> StringToIntList(string s, char delim = ' ')
+    {
+      var retList = new List<int>();
+      foreach (var i in s.Split(delim).Where(i => i.IsDigits()))
+      {
+        if (int.TryParse(i, out var result))
+        {
+          retList.Add(result);
+        }
+      }
+      return retList;
+    }
+
+    protected List<double> StringToDoubleList(string s, char delim = ' ')
+    {
+      var retList = new List<double>();
+      foreach (var i in s.Split(delim).Where(i => i.IsDigits()))
+      {
+        if (double.TryParse(i, out var result))
+        {
+          retList.Add(result);
+        }
+      }
+      return retList;
     }
 
     protected bool EnumParse<T>(string s, out T v)

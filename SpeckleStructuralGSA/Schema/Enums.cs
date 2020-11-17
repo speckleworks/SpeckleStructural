@@ -21,6 +21,36 @@
     EL,
     [StringValue("MEMB")]
     MEMB,
+    [StringValue("LOAD_BEAM")]
+    LOAD_BEAM,
+    [StringValue("LOAD_BEAM_POINT")]
+    LOAD_BEAM_POINT,
+    [StringValue("LOAD_BEAM_UDL")]
+    LOAD_BEAM_UDL,
+    [StringValue("LOAD_BEAM_LINE")]
+    LOAD_BEAM_LINE,
+    [StringValue("LOAD_BEAM_PATCH")]
+    LOAD_BEAM_PATCH,
+    [StringValue("LOAD_BEAM_TRILIN")]
+    LOAD_BEAM_TRILIN,
+    [StringValue("ASSEMBLY")]
+    ASSEMBLY
+  }
+
+  public enum CurveType
+  {
+    NotSet = 0,
+    Lagrange,
+    Circular
+  }
+
+  public enum PointDefinition
+  {
+    NotSet = 0,
+    Point,
+    Spacing,
+    Storey,
+    Explicit
   }
 
   public enum GridExpansion
@@ -67,9 +97,18 @@
   public enum AxisRefType
   {
     NotSet = 0,
-    Global = 1,
-    Local = 2,
-    Reference = 3
+    Global,
+    Local,
+    Reference
+  }
+
+  public enum LoadBeamAxisRefType
+  {
+    NotSet = 0,
+    Global,
+    Local,
+    Natural,
+    Reference
   }
 
   public enum LoadDirection3
@@ -83,25 +122,25 @@
   public enum LoadDirection6
   {
     NotSet = 0,
-    X = 1,
-    Y = 2,
-    Z = 3,
-    XX = 4,
-    YY = 5,
-    ZZ = 6
+    X,
+    Y,
+    Z,
+    XX,
+    YY,
+    ZZ
   }
 
   public enum LoadAreaOption
   {
     NotSet = 0,
-    Plane = 1,
-    PolyRef = 2,
-    Polygon = 3
+    Plane,
+    PolyRef,
+    Polygon
   }
 
   public enum StreamBucket
   {
-    Model = 0,
-    Results = 1
+    Model ,
+    Results
   }
 }

@@ -75,7 +75,11 @@ namespace SpeckleStructuralGSA
     {
       try
       {
-        return Convert.ToInt32(v);
+        if (int.TryParse(v, out int result))
+        {
+          return result;
+        }
+        return 0;
       }
       catch
       {

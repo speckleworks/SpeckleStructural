@@ -9,6 +9,30 @@ namespace SpeckleStructuralGSA.SchemaConversion
 {
   public static class Helper
   {
+    #region loading
+    public static readonly LoadDirection6[] loadDirSeq = new LoadDirection6[] { LoadDirection6.X, LoadDirection6.Y, LoadDirection6.Z, LoadDirection6.XX, LoadDirection6.YY, LoadDirection6.ZZ };
+
+    public static bool IsValidLoading(StructuralVectorSix loading)
+    {
+      return (loading != null && loading.Value != null && loading.Value.Count() == loadDirSeq.Count() && loading.Value.Any(v => v != 0));
+    }
+
+    public static Dictionary<LoadDirection6, double> ExplodeLoading(StructuralVectorSix loading)
+    {
+      var valueByDir = new Dictionary<LoadDirection6, double>();
+
+      for (var i = 0; i < Helper.loadDirSeq.Count(); i++)
+      {
+        if (loading.Value[i] != 0)
+        {
+          valueByDir.Add(Helper.loadDirSeq[i], loading.Value[i]);
+        }
+      }
+
+      return valueByDir;
+    }
+    #endregion
+
     public static void AddCustomStructuralProperty(SpeckleObject obj, string key, object value)
     {
       if (!obj.Properties.ContainsKey("structural"))
