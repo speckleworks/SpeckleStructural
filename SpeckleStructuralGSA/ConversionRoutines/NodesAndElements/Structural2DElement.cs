@@ -240,12 +240,7 @@ namespace SpeckleStructuralGSA
       var color = pieces[counter++].ParseGSAColor(); // colour
 
       var type = pieces[counter++];
-      if (type == "SLAB")
-        obj.ElementType = Structural2DElementType.Slab;
-      else if (type == "WALL")
-        obj.ElementType = Structural2DElementType.Wall;
-      else
-        obj.ElementType = Structural2DElementType.Generic;
+      obj.ElementType = (type == "SLAB") ? Structural2DElementType.Slab : (type == "WALL") ? Structural2DElementType.Wall : Structural2DElementType.Generic;
 
       counter++; // exposure - fire property
 
@@ -259,8 +254,9 @@ namespace SpeckleStructuralGSA
       var nodeRefsFull = pieces[counter++];
 
       //Remove the specification of internal nodes
-      // TODO: remove V (void) and L (line) nodes as well if they cause problems
       var nodeRefsWithoutInternalNodes = Regex.Replace(nodeRefsFull, @"P\([0-9]*(.*?)\)", "");
+      nodeRefsWithoutInternalNodes = Regex.Replace(nodeRefsWithoutInternalNodes, @"L\([0-9]*(.*?)\)", "");
+      nodeRefsWithoutInternalNodes = Regex.Replace(nodeRefsWithoutInternalNodes, @"V\([0-9]*(.*?)\)", "");
 
       var nodeRefs = nodeRefsWithoutInternalNodes.Trim().ListSplit(" ");
       for (var i = 0; i < nodeRefs.Length; i++)
