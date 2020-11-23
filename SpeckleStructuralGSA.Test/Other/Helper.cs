@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using SpeckleGSAInterfaces;
@@ -12,6 +13,25 @@ namespace SpeckleStructuralGSA.Test
 {
   public static class Helper
   {
+    public static string RemoveKeywordVersionFromApplicationIds(string gwa)
+    {
+      var matches = Regex.Matches(gwa, @"(gsa/[A-Z_]+)\.[0-9]{1,2}");
+      if (matches.Count > 0)
+      {
+        var matched = matches.Cast<Match>().Select(m => m.Value).Distinct().ToList();
+        foreach (var m in matched)
+        {
+          gwa = gwa.Replace(m, m.Split('.').First());
+        }
+      }
+      return gwa;
+    }
+
+    public static string RemoveVersionFromKeyword(string keyword)
+    {
+      return keyword.Split('.').First();
+    }
+
     //made public so that the sender tests can use it to know which keywords to use to hydrate the cache
     public static Dictionary<Type, List<Type>> GetTypeCastPriority(ioDirection ioDirection, GSATargetLayer layer, bool resultsOnly)
     {

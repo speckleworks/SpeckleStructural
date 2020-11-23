@@ -56,7 +56,7 @@ namespace SpeckleStructuralGSA.Schema
       }
 
       //ASSEMBLY.3 | num | name | type | entity | topo_1 | topo_2 | orient_node | int_topo | size_y | size_z | curve_type | curve_order | point_defn | points
-      AddItems(ref items, Name, AddType(), Topo1, Topo2, OrientNode, IntTopo, SizeY, SizeZ, AddCurveType(), CurveOrder, AddPointDefn(), AddPoints());
+      AddItems(ref items, Name, AddType(), AddEntities(), Topo1, Topo2, OrientNode, AddIntTopo(), SizeY, SizeZ, AddCurveType(), CurveOrder, AddPointDefn(), AddPoints());
 
       gwa = (Join(items, out var gwaLine)) ? new List<string>() { gwaLine } : new List<string>();
       return gwa.Count() > 0;
@@ -83,6 +83,26 @@ namespace SpeckleStructuralGSA.Schema
       }
     }
 
+    public string AddEntities()
+    {
+      //The old mechanism of using "G_" in the entities field to signify members is understood to be superseded by the inclusion of the entity type
+      //parameter as of version 3.
+
+      var allIndices = Initialiser.Cache.LookupIndices(Type == GSAEntity.MEMBER ? Keyword<GsaMemb>() : Keyword<GsaEl>())
+        .Where(i => i.HasValue).Select(i => i.Value).Distinct().OrderBy(i => i).ToList();
+
+      if (Entities.Distinct().OrderBy(i => i).SequenceEqual(allIndices))
+      {
+        return "all";
+      }
+      return string.Join(" ", Entities);
+    }
+
+    private string AddIntTopo()
+    {
+      return string.Join(" ", IntTopo);
+    }
+
     private string AddCurveType()
     {
       return (CurveType == CurveType.Circular) ? "CIRCULAR" : "LAGRANGE";
@@ -90,7 +110,7 @@ namespace SpeckleStructuralGSA.Schema
 
     private string AddPointDefn()
     {
-      var pd = (PointDefn == PointDefinition.NotSet) ? PointDefinition.Point : PointDefn;   //Default to points
+      var pd = (PointDefn == PointDefinition.NotSet) ? PointDefinition.Points : PointDefn;   //Default to points
       return pd.ToString().ToUpper();
     }
 
@@ -171,7 +191,7 @@ namespace SpeckleStructuralGSA.Schema
     private bool AddEntities(string v)
     {
       Entities = Initialiser.Interface.ConvertGSAList(v.Replace("G", ""), Type).ToList();
-      return Entities != null && Entities.Count() > 0;
+      return Entities != null;
     }
 
     private bool AddIntTopo(string v)

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using SpeckleStructuralClasses;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralGSA.Schema;
 
 namespace SpeckleStructuralGSA.SchemaConversion
@@ -15,11 +16,15 @@ namespace SpeckleStructuralGSA.SchemaConversion
       }
 
       //Note: only LOAD_BEAM_UDL is supported at this stage
-      var keyword = GsaRecord.Keyword<GsaLoadNode>();
+      var keyword = GsaRecord.Keyword<GsaLoadBeam>();
+      var gwaSetCommandType = GsaRecord.GetGwaSetCommandType<GsaLoadBeam>();
+      var streamId = Initialiser.Cache.LookupStream(load.ApplicationId);
 
       var loadCaseIndex = Initialiser.Cache.LookupIndex(GsaRecord.Keyword<GsaLoadCase>(), load.LoadCaseRef);
 
-      var gwaList = new List<string>();
+      var entityKeyword = (Initialiser.Settings.TargetLayer == GSATargetLayer.Design) ? GsaRecord.Keyword<GsaMemb>() : GsaRecord.Keyword<GsaEl>();
+      var entityIndices = Initialiser.Cache.LookupIndices(entityKeyword, load.ElementRefs).Where(i => i.HasValue).Select(i => i.Value).ToList();
+
       var loadingDict = Helper.ExplodeLoading(load.Loading);
       foreach (var k in loadingDict.Keys)
       {
@@ -29,20 +34,26 @@ namespace SpeckleStructuralGSA.SchemaConversion
         {
           Index = index,
           ApplicationId = applicationId,
+          StreamId = streamId,
           Name = load.Name,
           LoadDirection = k,
           Load = loadingDict[k],
           Projected = false,
           AxisRefType = LoadBeamAxisRefType.Global,
-          LoadCaseIndex = loadCaseIndex
+          LoadCaseIndex = loadCaseIndex,
+          Entities = entityIndices
         };
-        if (gsaLoad.Gwa(out var gwa, true))
+
+        if (gsaLoad.Gwa(out var gwa, false))
         {
-          gwaList.AddRange(gwa);
+          foreach (var gwaLine in gwa)
+          {
+            Initialiser.Cache.Upsert(keyword, index, gwaLine, streamId, applicationId, gwaSetCommandType);
+          }
         }
       }
 
-      return string.Join("\n", gwaList);
+      return "";
     }
   }
 }

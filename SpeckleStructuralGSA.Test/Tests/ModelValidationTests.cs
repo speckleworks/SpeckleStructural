@@ -57,7 +57,7 @@ namespace SpeckleStructuralGSA.Test
       Initialiser.Cache = gsaCache;
       Initialiser.Interface = gsaInterfacer;
       Initialiser.AppUI = new SpeckleAppUI();
-      gsaInterfacer.NewFile(false);
+      gsaInterfacer.NewFile(true);
 
       var dir = TestDataDirectory;
       if (subdir != String.Empty)
@@ -82,7 +82,7 @@ namespace SpeckleStructuralGSA.Test
       keywords.AddRange(designTypeHierarchy.SelectMany(i => i.Key.GetSubGSAKeyword()));
       keywords.AddRange(analysisTypeHierarchy.Select(i => i.Key.GetGSAKeyword()));
       keywords.AddRange(analysisTypeHierarchy.SelectMany(i => i.Key.GetSubGSAKeyword()));
-      keywords = keywords.Where(k => k.Length > 0).Distinct().ToList();
+      keywords = keywords.Where(k => k.Length > 0).Select(k => Helper.RemoveVersionFromKeyword(k)).Distinct().ToList();
 
       Initialiser.Interface.Sync(); // send GWA to GSA
 
@@ -102,12 +102,12 @@ namespace SpeckleStructuralGSA.Test
       var fromFileDict = new Dictionary<string, List<string>>();
       foreach (var r in gwaRecordsFromFile)
       {
-        Initialiser.Interface.ParseGeneralGwa(r.GwaCommand, out string keyword, out _, out _, out _, out _, out _);
+        Initialiser.Interface.ParseGeneralGwa(r.GwaCommand, out string keyword, out _, out _, out _, out string gwaWithoutSet, out _);
         if (!fromFileDict.ContainsKey(keyword))
         {
           fromFileDict.Add(keyword, new List<string>());
         }
-        fromFileDict[keyword].Add(r.GwaCommand);
+        fromFileDict[keyword].Add(gwaWithoutSet);
       }
 
       Initialiser.Interface.Close();

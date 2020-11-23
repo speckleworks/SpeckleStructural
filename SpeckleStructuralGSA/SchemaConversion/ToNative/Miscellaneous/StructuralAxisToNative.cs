@@ -1,4 +1,5 @@
-﻿using SpeckleCoreGeometryClasses;
+﻿using System.Linq;
+using SpeckleCoreGeometryClasses;
 using SpeckleStructuralClasses;
 using SpeckleStructuralGSA.Schema;
 
@@ -6,12 +7,25 @@ namespace SpeckleStructuralGSA.SchemaConversion
 {
   public static class StructuralAxisToNative
   {
-    //Currently this is only used by other ToNative methods if they need to create axes
-    public static string ToNative(StructuralAxis axis)
+    //These methods are structured slightly differently as currently an axis is a special case - it's not directly part of the structural schema
+    //and only called as part of ToNative calls for other higher-level types which create axes as necessary
+
+    public static string ToNative(this GsaAxis gsaAxis)
+    {
+      var keyword = GsaRecord.Keyword<GsaAxis>();
+
+      if (gsaAxis.Gwa(out var gwaLines, false))
+      {
+        //axes currently never have a stream nor an application ID
+        Initialiser.Cache.Upsert(keyword, gsaAxis.Index.Value, gwaLines.First(), "", "", GsaRecord.GetGwaSetCommandType<GsaAxis>());
+      }
+      return "";
+    }
+
+    public static GsaAxis ToNativeSchema(this StructuralAxis axis)
     {
       var keyword = GsaRecord.Keyword<GsaAxis>();
       var index = Initialiser.Cache.ResolveIndex(keyword);
-
       var origin = (Valid(axis.Origin)) ? axis.Origin : new SpecklePoint(0, 0, 0);
       var gsaAxis = new GsaAxis()
       {
@@ -27,11 +41,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
         XYDirY = axis.Ydir.Value[1],
         XYDirZ = axis.Ydir.Value[2]
       };
-      if (gsaAxis.Gwa(out var gwaLines, true))
-      {
-        return string.Join("\n", gwaLines);
-      }
-      return "";
+      return gsaAxis;
     }
 
     private static bool Valid(SpecklePoint p)

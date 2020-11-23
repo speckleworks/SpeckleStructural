@@ -91,8 +91,6 @@ namespace SpeckleStructuralGSA.Test
             {
               Initialiser.Interface.ParseGeneralGwa(gwaCommands[j], out keyword, out int? foundIndex, out string foundStreamId, out string foundApplicationId, out string gwaWithoutSet, out GwaSetCommandType? gwaSetCommandType);
 
-              GSAInterfacer.SetGwa(gwaCommands[j]);
-
               //Only cache the object against, the top-level GWA command, not the sub-commands
               GSACache.Upsert(keyword, foundIndex.Value, gwaWithoutSet, applicationId: foundApplicationId, so: (foundApplicationId == obj.ApplicationId) ? obj : null, gwaSetCommandType: gwaSetCommandType.Value);
             }
@@ -102,6 +100,12 @@ namespace SpeckleStructuralGSA.Test
           traversedTypes.Add(t);
         }
       } while (currentBatch.Count > 0);
+
+      var toBeAddedGwa = GSACache.GetNewGwaSetCommands();
+      for (int i = 0; i < toBeAddedGwa.Count(); i++)
+      {
+        Initialiser.Interface.SetGwa(toBeAddedGwa[i]);
+      }
     }
 
     public List<Tuple<string, SpeckleObject>> ExtractObjects(string fileName, string directory)

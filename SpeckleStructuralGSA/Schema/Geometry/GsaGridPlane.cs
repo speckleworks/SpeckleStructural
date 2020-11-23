@@ -8,7 +8,7 @@ namespace SpeckleStructuralGSA.Schema
   public class GsaGridPlane : GsaRecord
   {
     public string Name { get => name; set { name = value; } }
-    public GridPlaneType   Type;
+    public GridPlaneType Type;
     public GridPlaneAxisRefType AxisRefType;
     public int? AxisIndex;
     public double? Elevation;

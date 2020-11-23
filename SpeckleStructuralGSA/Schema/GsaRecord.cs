@@ -209,7 +209,7 @@ namespace SpeckleStructuralGSA.Schema
     protected List<double> StringToDoubleList(string s, char delim = ' ')
     {
       var retList = new List<double>();
-      foreach (var i in s.Split(delim).Where(i => i.IsDigits()))
+      foreach (var i in s.Split(delim).Where(i => Regex.IsMatch(i, @"\d+\.?\d*")))
       {
         if (double.TryParse(i, out var result))
         {
@@ -309,6 +309,11 @@ namespace SpeckleStructuralGSA.Schema
     public static string Keyword<T>()
     {
       return typeof(T).GetAttribute<GsaType>("Keyword").ToString();
+    }
+
+    public static GwaSetCommandType GetGwaSetCommandType<T>()
+    {
+      return (GwaSetCommandType)typeof(T).GetAttribute<GsaType>("SetCommandType");
     }
     #endregion
 

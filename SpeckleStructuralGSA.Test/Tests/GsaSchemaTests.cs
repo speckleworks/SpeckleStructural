@@ -26,17 +26,28 @@ namespace SpeckleStructuralGSA.Test
     public void SetUp()
     {
       var mockGSAObject = new Mock<IGSAProxy>();
+
       mockGSAObject.Setup(x => x.ParseGeneralGwa(It.IsAny<string>(), out It.Ref<string>.IsAny, out It.Ref<int?>.IsAny, out It.Ref<string>.IsAny, out It.Ref<string>.IsAny, out It.Ref<string>.IsAny, out It.Ref<GwaSetCommandType?>.IsAny, It.IsAny<bool>()))
-       .Callback(new MockGSAProxy.ParseCallback(MockGSAProxy.ParseGeneralGwa));
+      .Callback(new MockGSAProxy.ParseCallback(MockGSAProxy.ParseGeneralGwa));
       mockGSAObject.Setup(x => x.NodeAt(It.IsAny<double>(), It.IsAny<double>(), It.IsAny<double>(), It.IsAny<double>()))
         .Returns(new Func<double, double, double, double, int>(MockGSAProxy.NodeAt));
+      mockGSAObject.Setup(x => x.FormatApplicationIdSidTag(It.IsAny<string>()))
+        .Returns(new Func<string, string>(MockGSAProxy.FormatApplicationIdSidTag));
+      mockGSAObject.Setup(x => x.FormatSidTags(It.IsAny<string>(), It.IsAny<string>()))
+        .Returns(new Func<string, string, string>(MockGSAProxy.FormatSidTags));
       mockGSAObject.Setup(x => x.ConvertGSAList(It.IsAny<string>(), It.IsAny<GSAEntity>()))
         .Returns(new Func<string, GSAEntity, int[]>(MockGSAProxy.ConvertGSAList));
       mockGSAObject.SetupGet(x => x.GwaDelimiter).Returns(GSAProxy.GwaDelimiter);
+      mockGSAObject.Setup(x => x.GetUnits()).Returns("m");
 
-      Initialiser.Interface = mockGSAObject.Object;
       Initialiser.Cache = new GSACache();
+      Initialiser.Interface = mockGSAObject.Object;
       Initialiser.AppUI = new SpeckleAppUI();
+      Initialiser.GSASenderObjects.Clear();
+      Initialiser.Settings = new Settings
+      {
+        Units = "m"
+      };
     }
 
     [Test]
@@ -45,24 +56,61 @@ namespace SpeckleStructuralGSA.Test
       var load1 = new StructuralLoadCase() { CaseType = StructuralLoadCaseType.Generic, ApplicationId = "lc1", Name = "LoadCaseOne" };
       var load2 = new StructuralLoadCase() { CaseType = StructuralLoadCaseType.Dead, ApplicationId = "lc2", Name = "LoadCaseTwo" };
 
-      var load1gwa = StructuralLoadCaseToNative.ToNative(load1);
-      var load2gwa = StructuralLoadCaseToNative.ToNative(load2);
+      StructuralLoadCaseToNative.ToNative(load1);
+      StructuralLoadCaseToNative.ToNative(load2);
 
-      Assert.IsFalse(string.IsNullOrEmpty(load1gwa));
-      Assert.IsFalse(string.IsNullOrEmpty(load2gwa));
+      var gwa = Initialiser.Cache.GetGwa(GsaRecord.Keyword<GsaLoadCase>());
+      Assert.AreEqual(2, gwa.Count());
+      Assert.False(gwa.Any(g => string.IsNullOrEmpty(g)));
 
-      Assert.IsTrue(ModelValidation(new string[] { load1gwa, load2gwa }, new Dictionary<string, int> { { GsaRecord.Keyword<GsaLoadCase>(), 2 } }, out var mismatchByKw));
+      Assert.IsTrue(ModelValidation(gwa, new Dictionary<string, int> { { GsaRecord.Keyword<GsaLoadCase>(), 2 } }, out var mismatchByKw));
       Assert.Zero(mismatchByKw.Keys.Count());
 
       var gsaLoadCase1 = new GsaLoadCase();
       var gsaLoadCase2 = new GsaLoadCase();
-      Assert.IsTrue(gsaLoadCase1.FromGwa(load1gwa));
-      Assert.IsTrue(gsaLoadCase2.FromGwa(load2gwa));
+      Assert.IsTrue(gsaLoadCase1.FromGwa(gwa[0]));
+      Assert.IsTrue(gsaLoadCase2.FromGwa(gwa[1]));
+    }
+
+    [Test]
+    public void StructuralAssembly()
+    {
+      var assembly1 = new StructuralAssembly() { ApplicationId = "gh/d73615b388a8c37b6322a607a2ed5e60", Name = "C1W3S3_L5" };
+      assembly1.BaseLine = new SpeckleLine(new List<double> { 41.6, 20.5, 27.25, 40.6, 20.5, 27.25 });
+      assembly1.PointDistances = new List<double>() { 0.5500000000000043, 0.5500000000000043, 0.5500000000000043,
+        0.5499999999999972, 0.5499999999999972, 0.5499999999999972,
+        0.5, 0.5, 0.5,
+        1.5007648109742667, 1.5007648109742667, 1.5007648109742667,
+        0.7503825000000006, 0.7503825000000006, 0.7503825000000006,
+        0.5, 0.5, 0.5};
+      assembly1.OrientationPoint = new SpecklePoint(41.6, 20.5, 26.5);
+      assembly1.Width = 1.5;
+      assembly1.ElementRefs = new List<string>() { "A", "B", "C" };
+
+      var assembly2 = new StructuralAssembly() { ApplicationId = "gh/7fc46bbaaa572ce40c6205d1602677f9", Name = "C1W1P1" };
+      assembly2.BaseLine = new SpeckleLine(new List<double> { 40.333333499999998, 11.5, 0, 40.333333499999998, 11.5, 48 });
+      assembly2.PointDistances = new List<double>() { 0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48 };
+      assembly2.OrientationPoint = new SpecklePoint(39.6, 11.5, 48);
+      assembly2.Width = 1.466666999999994;
+      assembly2.ElementRefs = new List<string>() { "D", "E", "F" };
+
+      StructuralAssemblyToNative.ToNative(assembly1);
+      StructuralAssemblyToNative.ToNative(assembly2);
+
+      var gwa = Initialiser.Cache.GetGwa(GsaRecord.Keyword<GsaAssembly>());
+      Assert.AreEqual(2, gwa.Count());
+      Assert.False(gwa.Any(g => string.IsNullOrEmpty(g)));
+
+      Assert.IsTrue(ModelValidation(gwa, new Dictionary<string, int> { { GsaRecord.Keyword<GsaAssembly>(), 2 } }, out var mismatchByKw, visible: true));
+      Assert.Zero(mismatchByKw.Keys.Count());
+
+      var gsaAssembly1 = new GsaAssembly();
+      Assert.IsTrue(gsaAssembly1.FromGwa(gwa[0]));
     }
 
     //This just tests transitions from the GSA schema to GWA commands, and back again, since there is no need at the moment for a ToNative() method for StructuralAxis
     [Test]
-    public void GsaAxis()
+    public void GsaAxisSimple()
     {
       Assert.IsTrue(gsaAxis1.Gwa(out var axis1gwa));
       Assert.IsTrue(gsaAxis2.Gwa(out var axis2gwa));
@@ -72,94 +120,6 @@ namespace SpeckleStructuralGSA.Test
       
       Assert.IsTrue(gsaAxis1.FromGwa(axis1gwa.First()));
       Assert.IsTrue(gsaAxis2.FromGwa(axis2gwa.First()));
-    }
-
-    //Note for understanding:
-    //StructuralStorey <-> GRID_PLANE
-    //StructuralLoadPlane <-> GRID_SURFACE, which references GRID_PLANEs
-    [Test]
-    public void GsaLoadPanelHierarchyToNative()
-    {
-      var gsaElevatedAxis = new GsaAxis() { Index = 1, ApplicationId = "Axis1", Name = "StandardAxis", XDirX = 1, XDirY = 0, XDirZ = 0, XYDirX = 0, XYDirY = 1, XYDirZ = 0, OriginX = 10, OriginY = 20, OriginZ = 30 };
-      var gsaRotatedAxis = new GsaAxis() { Index = 2, ApplicationId = "Axis2", Name = "AngledAxis", XDirX = 1, XDirY = 1, XDirZ = 0, XYDirX = -1, XYDirY = 1, XYDirZ = 0 };
-
-      var storey1 = new StructuralStorey()
-      {
-        ApplicationId = "TestStorey",
-        Name = "Test Storey",
-        Axis = (StructuralAxis)gsaRotatedAxis.ToSpeckle(),
-        Elevation = 10,
-        ToleranceAbove = 5,
-        ToleranceBelow = 6
-      };
-      var storeyGwas = StructuralStoreyToNative.ToNative(storey1).Split('\n');
-      Helper.GwaToCache(storeyGwas, streamId1);
-
-      //Without storey reference, but with an axis (must have one or the other) - should be written as GLOBAL
-      //There is no way currently to specify X elevation, Y elevation etc
-      var plane1 = new StructuralLoadPlane()
-      {
-        ApplicationId = "lp1",
-        Axis = (StructuralAxis)gsaElevatedAxis.ToSpeckle(),
-        ElementDimension = 2,
-        Tolerance = 0.1,
-        Span = 2,
-        SpanAngle = 30,
-      };
-      var plane1Gwas = StructuralLoadPlaneToNative.ToNative(plane1).Split('\n');
-      Helper.GwaToCache(plane1Gwas, streamId1);
-
-      var plane2 = new StructuralLoadPlane()
-      {
-        ApplicationId = "lp2",
-        ElementDimension = 1,
-        Tolerance = 0.1,
-        Span = 1,
-        SpanAngle = 0,
-        StoreyRef = "TestStorey"
-      };
-      var plane2Gwas = StructuralLoadPlaneToNative.ToNative(plane2).Split('\n');
-      Helper.GwaToCache(plane2Gwas, streamId1);
-
-      var loadCase1 = new StructuralLoadCase() { CaseType = StructuralLoadCaseType.Dead, ApplicationId = "LcDead", Name = "Dead Load Case" };
-      var loadCase1Gwas = StructuralLoadCaseToNative.ToNative(loadCase1).Split('\n');
-      Helper.GwaToCache(loadCase1Gwas, streamId1);
-
-      var polylineCoords = CreateFlatRectangleCoords(0, 0, 0, 30, 5, 5);
-      var loading = new StructuralVectorThree(new double[] { 0, -10, -5 });
-      var load2dPanelWithoutPlane = new Structural2DLoadPanel(polylineCoords, loading, "LcDead", "loadpanel1");
-      var load2dGwa1s = Structural2DLoadPanelToNative.ToNative(load2dPanelWithoutPlane).Split('\n');
-      Helper.GwaToCache(load2dGwa1s, streamId1);
-
-      var load2dPanelWithPlane1 = new Structural2DLoadPanel(polylineCoords, loading, "LcDead", "loadpanel2") { LoadPlaneRef = "lp1" };
-      var load2dGwa2s = Structural2DLoadPanelToNative.ToNative(load2dPanelWithPlane1).Split('\n');
-      Helper.GwaToCache(load2dGwa2s, streamId1);
-
-      var load2dPanelWithPlane2 = new Structural2DLoadPanel(polylineCoords, loading, "LcDead", "loadpanel3") { LoadPlaneRef = "lp2" };
-      var load2dGwa3s = Structural2DLoadPanelToNative.ToNative(load2dPanelWithPlane2).Split('\n');
-      Helper.GwaToCache(load2dGwa3s, streamId1);
-
-      var allGwa = new List<string>();
-      allGwa.AddRange(storeyGwas);
-      allGwa.AddRange(plane1Gwas);
-      allGwa.AddRange(plane2Gwas);
-      allGwa.AddRange(loadCase1Gwas);
-      allGwa.AddRange(load2dGwa1s);
-      allGwa.AddRange(load2dGwa2s);
-      allGwa.AddRange(load2dGwa3s);
-
-      //Try all the entities' GWA commands to check if the 
-      Assert.IsTrue(ModelValidation(allGwa,
-        new Dictionary<string, int> {
-          { GsaRecord.Keyword<GsaAxis>(), 3 },
-          { GsaRecord.Keyword<GsaLoadCase>(), 1 },
-          { GsaRecord.Keyword<GsaGridPlane>(), 3 } ,
-          { GsaRecord.Keyword<GsaGridSurface>(), 3 },
-          { GsaRecord.Keyword<GsaLoadGridArea>(), 6 }
-        },
-        out var mismatchByKw, visible: true));
-      Assert.Zero(mismatchByKw.Keys.Count());
-      Assert.Zero(((SpeckleAppUI)Initialiser.AppUI).GroupMessages().Count());
     }
 
     [Test]
@@ -182,6 +142,81 @@ namespace SpeckleStructuralGSA.Test
       Assert.IsTrue(ModelValidation(gwa, GsaRecord.Keyword<GsaLoadNode>(), 1, out var _));
     }
 
+
+    //Note for understanding:
+    //StructuralStorey <-> GRID_PLANE
+    //StructuralLoadPlane <-> GRID_SURFACE, which references GRID_PLANEs
+    [Test]
+    public void GsaLoadPanelHierarchyToNative()
+    {
+      var gsaElevatedAxis = new GsaAxis() { Index = 1, ApplicationId = "Axis1", Name = "StandardAxis", XDirX = 1, XDirY = 0, XDirZ = 0, XYDirX = 0, XYDirY = 1, XYDirZ = 0, OriginX = 10, OriginY = 20, OriginZ = 30 };
+      var gsaRotatedAxis = new GsaAxis() { Index = 2, ApplicationId = "Axis2", Name = "AngledAxis", XDirX = 1, XDirY = 1, XDirZ = 0, XYDirX = -1, XYDirY = 1, XYDirZ = 0 };
+
+      var storey1 = new StructuralStorey()
+      {
+        ApplicationId = "TestStorey",
+        Name = "Test Storey",
+        Axis = (StructuralAxis)gsaRotatedAxis.ToSpeckle(),
+        Elevation = 10,
+        ToleranceAbove = 5,
+        ToleranceBelow = 6
+      };
+      StructuralStoreyToNative.ToNative(storey1).Split('\n');
+
+      //Without storey reference, but with an axis (must have one or the other) - should be written as GLOBAL
+      //There is no way currently to specify X elevation, Y elevation etc
+      var plane1 = new StructuralLoadPlane()
+      {
+        ApplicationId = "lp1",
+        Axis = (StructuralAxis)gsaElevatedAxis.ToSpeckle(),
+        ElementDimension = 2,
+        Tolerance = 0.1,
+        Span = 2,
+        SpanAngle = 30,
+      };
+      StructuralLoadPlaneToNative.ToNative(plane1).Split('\n');
+
+      var plane2 = new StructuralLoadPlane()
+      {
+        ApplicationId = "lp2",
+        ElementDimension = 1,
+        Tolerance = 0.1,
+        Span = 1,
+        SpanAngle = 0,
+        StoreyRef = "TestStorey"
+      };
+      StructuralLoadPlaneToNative.ToNative(plane2).Split('\n');
+
+      var loadCase1 = new StructuralLoadCase() { CaseType = StructuralLoadCaseType.Dead, ApplicationId = "LcDead", Name = "Dead Load Case" };
+      StructuralLoadCaseToNative.ToNative(loadCase1);
+
+      var polylineCoords = CreateFlatRectangleCoords(0, 0, 0, 30, 5, 5);
+      var loading = new StructuralVectorThree(new double[] { 0, -10, -5 });
+      var load2dPanelWithoutPlane = new Structural2DLoadPanel(polylineCoords, loading, "LcDead", "loadpanel1");
+      Structural2DLoadPanelToNative.ToNative(load2dPanelWithoutPlane);
+
+      var load2dPanelWithPlane1 = new Structural2DLoadPanel(polylineCoords, loading, "LcDead", "loadpanel2") { LoadPlaneRef = "lp1" };
+      Structural2DLoadPanelToNative.ToNative(load2dPanelWithPlane1);
+
+      var load2dPanelWithPlane2 = new Structural2DLoadPanel(polylineCoords, loading, "LcDead", "loadpanel3") { LoadPlaneRef = "lp2" };
+      Structural2DLoadPanelToNative.ToNative(load2dPanelWithPlane2);
+
+      var allGwa = ((IGSACache)Initialiser.Cache).GetCurrentGwa();
+
+      //Try all the entities' GWA commands to check if the 
+      Assert.IsTrue(ModelValidation(allGwa,
+        new Dictionary<string, int> {
+          { GsaRecord.Keyword<GsaAxis>(), 3 },
+          { GsaRecord.Keyword<GsaLoadCase>(), 1 },
+          { GsaRecord.Keyword<GsaGridPlane>(), 3 } ,
+          { GsaRecord.Keyword<GsaGridSurface>(), 3 },
+          { GsaRecord.Keyword<GsaLoadGridArea>(), 6 }
+        },
+        out var mismatchByKw, visible: true));
+      Assert.Zero(mismatchByKw.Keys.Count());
+      Assert.Zero(((SpeckleAppUI)Initialiser.AppUI).GroupMessages().Count());
+    }
+    
     [Test]
     public void GsaLoadGridAreaToNative()
     {
@@ -192,6 +227,7 @@ namespace SpeckleStructuralGSA.Test
         ApplicationId = loadCaseAppId,
         CaseType = StructuralLoadCaseType.Dead
       };
+      StructuralLoadCaseToNative.ToNative(loadCase);
 
       var loadPanel = new Structural2DLoadPanel
       {
@@ -200,10 +236,10 @@ namespace SpeckleStructuralGSA.Test
         Loading = new StructuralVectorThree(new double[] { 0, 0, 10000000 }),
         LoadCaseRef = "LoadCase1"
       };
+      Structural2DLoadPanelToNative.ToNative(loadPanel).Split('\n');
 
-      var LoadCaseGwa = loadCase.ToNative();
-      var LoadPanelGwa = Structural2DLoadPanelToNative.ToNative(loadPanel).Split('\n');
-      Assert.AreEqual(4, LoadPanelGwa.Count()); //should be an axis, plane surface and a load panel
+      var LoadPanelGwa = ((IGSACache)Initialiser.Cache).GetCurrentGwa();
+      Assert.AreEqual(5, LoadPanelGwa.Count()); //should be a load case, axis, plane, surface and a load panel
 
       var gsaLoadCase = new GsaLoadCase() { ApplicationId = loadCaseAppId, CaseType = StructuralLoadCaseType.Dead, Index = 1 };
       var gsaAxis = new GsaAxis() { Index = 1, OriginX = 10, OriginY = 10, OriginZ = 10, XDirX = Math.Sqrt(2), XDirY = Math.Sqrt(2), XYDirX = -Math.Sqrt(2), XYDirY = Math.Sqrt(2) };
@@ -212,6 +248,146 @@ namespace SpeckleStructuralGSA.Test
       Assert.IsTrue(gsaAxis.Gwa(out var gsaAxisGwa));
       Assert.IsTrue(gsaLoadCase.Gwa(out var gsaLoadCaseGwa));
       Assert.IsTrue(gsa2dLoadPanel.Gwa(out var gsa2dLoadPanelGwa));
+    }
+
+    [Test]
+    public void Structural0DLoad()
+    {
+      //PREREQUISITES/REFERENCES - CONVERT TO GSA
+
+      var node1 = new StructuralNode() { ApplicationId = "Node1", Name = "Node One", basePoint = new SpecklePoint(1, 2, 3) };
+      var node2 = new StructuralNode() { ApplicationId = "Node2", Name = "Node Two", basePoint = new SpecklePoint(4, 5, 6) };
+      var loadcase = new StructuralLoadCase() { ApplicationId = "LoadCase1", Name = "Load Case One", CaseType = StructuralLoadCaseType.Dead };
+      Helper.GwaToCache(Conversions.ToNative(node1), streamId1);
+      Helper.GwaToCache(Conversions.ToNative(node2), streamId1);
+      StructuralLoadCaseToNative.ToNative(loadcase);
+
+      //OBJECT UNDER TEST - CONVERT TO GSA
+
+      var loading = new double[] { 10, 20, 30, 40, 50, 60 };
+      var receivedObj = new Structural0DLoad()
+      {
+        ApplicationId = "Test0DLoad",
+        Loading = new StructuralVectorSix(loading),
+        NodeRefs = new List<string> { "Node1", "Node2" },
+        LoadCaseRef = "LoadCase1"
+      };
+      Structural0DLoadToNative.ToNative(receivedObj);
+
+      ((IGSACache)Initialiser.Cache).Snapshot(streamId1);
+
+      //PREREQUISITES/REFERENCES - CONVERT TO SPECKLE
+
+      Conversions.ToSpeckle(new GSANode());
+      Conversions.ToSpeckle(new GSALoadCase());
+
+      //OBJECT UNDER TEST - CONVERT TO SPECKLE
+
+      Conversions.ToSpeckle(new GSA0DLoad());
+
+      var sentObjectsDict = Initialiser.GSASenderObjects.GetAll();
+      Assert.IsTrue(sentObjectsDict.ContainsKey(typeof(GSA0DLoad)));
+
+      var sentObjs = sentObjectsDict[typeof(GSA0DLoad)].Select(o => ((IGSASpeckleContainer)o).Value).Cast<Structural0DLoad>().ToList();
+      Assert.AreEqual(1, sentObjs.Count());
+      Assert.IsTrue(sentObjs.First().Loading.Value.SequenceEqual(loading));
+    }
+
+    [TestCase(GSATargetLayer.Design)]
+    [TestCase(GSATargetLayer.Analysis)]
+    public void Structural1DLoad(GSATargetLayer layer)
+    {
+      Initialiser.Settings.TargetLayer = layer;
+
+      var loadCase = new StructuralLoadCase()
+      {
+        ApplicationId = "gh/16c5d83d5f6226cc18c0a6489689fc90",
+        CaseType = StructuralLoadCaseType.Live,
+        Name = "Live Loads"
+      };
+      StructuralLoadCaseToNative.ToNative(loadCase);
+
+      var materialSteel = new StructuralMaterialSteel()
+      {
+        ApplicationId = "gh/3eef066b812432a598be446180b74195"
+      };
+      Helper.GwaToCache(Conversions.ToNative(materialSteel), streamId1);
+
+      var prop1d = new Structural1DProperty()
+      {
+        ApplicationId = "gh/d55f6475ea931e3ebfe0d81065486370",
+        Profile = new SpecklePolyline(new double[] { 0, 0, 0, 500, 0, 0, 500, 500, 0, 0, 500, 0 }),
+        Shape = Structural1DPropertyShape.Rectangular,
+        MaterialRef = "gh/3eef066b812432a598be446180b74195",
+      };
+      Helper.GwaToCache(Conversions.ToNative(prop1d), streamId1);
+
+      var elements = new List<Structural1DElement>
+      {
+        new Structural1DElement()
+        {
+          ApplicationId = "gh/b4db9f1651ca1189a64582098de85d37",
+          Value = new List<double>() { 18742.85535595166, -98509.31912320339, 0, 31898.525787319068, -52834.7904308187, 0 },
+          PropertyRef = "gh/d55f6475ea931e3ebfe0d81065486370",
+          ElementType = Structural1DElementType.Beam
+        },
+        new Structural1DElement()
+        {
+          ApplicationId = "gh/3c73c2754d2b24f42ec0bdea51133372",
+          Value = new List<double>() { -5900.5943603799719, -38540.61268631692, 0, 18177.8512833416, 39670.54271647791, 0 },
+          PropertyRef = "gh/d55f6475ea931e3ebfe0d81065486370",
+          ElementType = Structural1DElementType.Beam
+        },
+        new Structural1DElement()
+        {
+          ApplicationId = "gh/169aa416831dd4c282ec7050156037c4",
+          Value = new List<double>() { -30544.044076711598, 21428.093750569555, 0, 4457.17677936413, 132175.8758637745, 0 },
+          PropertyRef = "gh/d55f6475ea931e3ebfe0d81065486370",
+          ElementType = Structural1DElementType.Beam
+        }
+      };
+      foreach (var e in elements)
+      {
+        Helper.GwaToCache(Conversions.ToNative(e), streamId1);
+      }
+
+      //Based on YEKd4q0p9 on Canada server - not sure why the loading has an application ID!
+      var loading = new StructuralVectorSix(new double[] { 0, 0, -8, 0, 0, 0 }, "gh/7c2df985ad21853a345f7a85edd3b47f");
+      var load = new Structural1DLoad()
+      {
+        ApplicationId = "gh/44d23deb343b84e0a7fc95ce37604314",
+        Loading = loading,
+        ElementRefs = new List<string>
+        {
+          "gh/b4db9f1651ca1189a64582098de85d37",
+          "gh/3c73c2754d2b24f42ec0bdea51133372",
+          "gh/169aa416831dd4c282ec7050156037c4"
+        },
+        LoadCaseRef = "gh/16c5d83d5f6226cc18c0a6489689fc90"
+      };
+
+      Structural1DLoadToNative.ToNative(load);
+      var allGwa = ((IGSACache)Initialiser.Cache).GetNewGwaSetCommands();
+
+      ((IGSACache)Initialiser.Cache).Snapshot(streamId1);
+
+      var entityKeyword = (layer == GSATargetLayer.Design) ? GsaRecord.Keyword<GsaMemb>() : GsaRecord.Keyword<GsaEl>();
+      var loadBeamKeyword = GsaRecord.Keyword<GsaLoadBeam>();
+      Assert.IsTrue(Initialiser.Cache.GetKeywordRecordsSummary(entityKeyword, out var gwaEntities, out var _, out var _));
+      Assert.AreEqual(3, gwaEntities.Count());
+      Assert.IsTrue(Initialiser.Cache.GetKeywordRecordsSummary(typeof(GSA1DProperty).GetGSAKeyword(), out var gwa1dProp, out var _, out var _));
+      Assert.AreEqual(1, gwa1dProp.Count());
+      Assert.IsTrue(Initialiser.Cache.GetKeywordRecordsSummary(loadBeamKeyword, out var gwaLoadBeam, out var _, out var _));
+      Assert.AreEqual(1, gwaLoadBeam.Count());
+
+      var expectedCountByKw = new Dictionary<string, int>()
+      {
+        { loadBeamKeyword, 1}, 
+        { "SECTION", 1 }, //PROP_SEC is written but SECTION is returned by GSA
+        { entityKeyword, 3 } 
+      };
+      Assert.IsTrue(ModelValidation(allGwa, expectedCountByKw, out var mismatchByKw, false, true));
+      Assert.AreEqual(0, mismatchByKw.Keys.Count());
     }
 
     [Test]
@@ -260,6 +436,9 @@ namespace SpeckleStructuralGSA.Test
       Assert.AreEqual(2, sos.Count(o => o.NodeRefs.SequenceEqual(new[] { "gsa/NODE-1", "gsa/NODE-2" }) && o.LoadCaseRef.Equals("gsa/LOAD_TITLE-1")));
       Assert.AreEqual(2, sos.Count(o => o.NodeRefs.SequenceEqual(new[] { "gsa/NODE-1", "gsa/NODE-2" }) && o.LoadCaseRef.Equals("gsa/LOAD_TITLE-2")));
     }
+    
+
+    #region other_methods
 
     private double[] CreateFlatRectangleCoords(double x, double y, double z, double angleDegrees, double width, double depth)
     {
@@ -326,6 +505,7 @@ namespace SpeckleStructuralGSA.Test
       }
       return gwaLines;
     }
+    #endregion
 
     #region model_validation_fns
     //It's assumed the gwa comands are in the correct order
@@ -361,6 +541,7 @@ namespace SpeckleStructuralGSA.Test
         gsaProxy.UpdateViews();
       }
       var lines =  gsaProxy.GetGwaData(expectedCountByKw.Keys, nodesWithAppIdOnly);
+      lines.ForEach(l => l.Keyword = Helper.RemoveVersionFromKeyword(l.Keyword));
       gsaProxy.Close();
 
       foreach (var k in expectedCountByKw.Keys)

@@ -47,7 +47,7 @@
   public enum PointDefinition
   {
     NotSet = 0,
-    Point,
+    Points,
     Spacing,
     Storey,
     Explicit

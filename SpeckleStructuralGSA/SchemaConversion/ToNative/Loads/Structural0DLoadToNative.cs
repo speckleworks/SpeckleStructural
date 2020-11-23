@@ -20,6 +20,8 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
       var nodeIndices = Initialiser.Cache.LookupIndices(nodeKeyword, load.NodeRefs).Where(x => x.HasValue).Select(x => x.Value).OrderBy(i => i).ToList();
       var loadCaseIndex = Initialiser.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
+      var streamId = Initialiser.Cache.LookupStream(load.ApplicationId);
+      var gwaSetCommandType = GsaRecord.GetGwaSetCommandType<GsaLoadNode>();
 
       var gwaList = new List<string>();
       var loadingDict = Helper.ExplodeLoading(load.Loading);
@@ -31,6 +33,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
         {
           Index = index,
           ApplicationId = applicationId,
+          StreamId = streamId,
           Name = load.Name,
           LoadDirection = k,
           Value = loadingDict[k],
@@ -38,13 +41,13 @@ namespace SpeckleStructuralGSA.SchemaConversion
           NodeIndices = nodeIndices,
           LoadCaseIndex = loadCaseIndex
         };
-        if (gsaLoad.Gwa(out var gwa, true))
+        if (gsaLoad.Gwa(out var gwa, false))
         {
-          gwaList.AddRange(gwa);
+          Initialiser.Cache.Upsert(keyword, index, gwa.First(), streamId, applicationId, gwaSetCommandType);
         }
       }
 
-      return string.Join("\n", gwaList);
+      return "";
     }
   }
 }

@@ -6,6 +6,8 @@ namespace SpeckleStructuralClasses
 {
   public static class Helper
   {
+    public static double PointComparisonEpsilon = 0.0001;
+
     public static void ScaleProperties(Dictionary<string, object> dict, double factor)
     {
       ScaleDictionary(ref dict, factor);

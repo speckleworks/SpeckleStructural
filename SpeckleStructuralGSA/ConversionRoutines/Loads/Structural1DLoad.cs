@@ -239,12 +239,7 @@ namespace SpeckleStructuralGSA
 
   public static partial class Conversions
   {
-    public static string ToNative(this Structural1DLoad load)
-    {
-      return (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
-        ? new GSA1DLoadAnalysisLayer() { Value = load }.SetGWACommand()
-        : new GSA1DLoadDesignLayer() { Value = load }.SetGWACommand();
-    }
+    //The ToNative() method is in the new schema conversion folder hierarchy
 
     public static SpeckleObject ToSpeckle(this GSA1DLoadAnalysisLayer dummyObject)
     {

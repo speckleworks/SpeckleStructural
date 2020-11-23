@@ -1,4 +1,5 @@
-﻿using SpeckleStructuralClasses;
+﻿using System.Linq;
+using SpeckleStructuralClasses;
 using SpeckleStructuralGSA.Schema;
 
 namespace SpeckleStructuralGSA.SchemaConversion
@@ -14,17 +15,20 @@ namespace SpeckleStructuralGSA.SchemaConversion
       }
 
       var keyword = GsaRecord.Keyword<GsaLoadCase>();
+      var index = Initialiser.Cache.ResolveIndex(keyword, loadCase.ApplicationId);
+      var streamId = Initialiser.Cache.LookupStream(loadCase.ApplicationId);
       var gsaLoad = new GsaLoadCase()
       {
         ApplicationId = loadCase.ApplicationId,
+        Index = index,
+        StreamId = streamId,
         Title = loadCase.Name,
-        Index = Initialiser.Cache.ResolveIndex(keyword, loadCase.ApplicationId),
         CaseType = loadCase.CaseType
       };
 
-      if (gsaLoad.Gwa(out var gwaLines, true))
+      if (gsaLoad.Gwa(out var gwaLines, false))
       {
-        return string.Join("\n", gwaLines);
+        Initialiser.Cache.Upsert(keyword, index, gwaLines.First(), streamId, loadCase.ApplicationId, GsaRecord.GetGwaSetCommandType<GsaLoadCase>());
       }
       //TO DO: add to error messages shown on UI
       return "";

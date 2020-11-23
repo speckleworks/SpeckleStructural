@@ -404,7 +404,7 @@ namespace SpeckleStructuralClasses
         var found = false;
         for (int j = 0; j < newPts.Count(); j++)
         {
-          if (vPts[i].Equals(newPts[j], 0.0001))
+          if (vPts[i].Equals(newPts[j], Helper.PointComparisonEpsilon))
           {
             indexConsolidateMappings.Add(i, j);
             found = true;
@@ -423,9 +423,10 @@ namespace SpeckleStructuralClasses
       var f = 0;
       do
       {
-        var numInFace = (newFaces[f++] == 0) ? 3 : 4;
+        var numInFace = (newFaces[f] == 0) ? 3 : 4;
         if ((f + numInFace) < newFaces.Count())
         {
+          f++;
           for (var v = 0; v < numInFace; v++)
           {
             if (indexConsolidateMappings.ContainsKey(newFaces[f + v]))
@@ -498,6 +499,7 @@ namespace SpeckleStructuralClasses
         lengthsOfLoops.Add(length);
       }
 
+      //Assumption: the longest length loop is the outer loop
       //Sort by loop length
       var ordered = lengthsOfLoops
         .Select((x, i) => new KeyValuePair<double, int>(x, i))

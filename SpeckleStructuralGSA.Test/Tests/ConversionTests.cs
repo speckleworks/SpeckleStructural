@@ -40,50 +40,7 @@ namespace SpeckleStructuralGSA.Test
     }
 
     //Just for the unusual ones - where there is no 1:1 relationship between GWA line and Speckle object
-    [Test]
-    public void Structural0DLoad()
-    {
-      var streamID = "testStream";
-
-      //PREREQUISITES/REFERENCES - CONVERT TO GSA
-
-      var node1 = new StructuralNode() { ApplicationId = "Node1", Name = "Node One", basePoint = new SpecklePoint(1, 2, 3) };
-      var node2 = new StructuralNode() { ApplicationId = "Node2", Name = "Node Two", basePoint = new SpecklePoint(4, 5, 6) };
-      var loadcase = new StructuralLoadCase() { ApplicationId = "LoadCase1", Name = "Load Case One", CaseType = StructuralLoadCaseType.Dead };
-      Helper.GwaToCache(Conversions.ToNative(node1), streamID);
-      Helper.GwaToCache(Conversions.ToNative(node2), streamID);
-      Helper.GwaToCache(StructuralLoadCaseToNative.ToNative(loadcase), streamID);
-
-      //OBJECT UNDER TEST - CONVERT TO GSA
-
-      var loading = new double[] { 10, 20, 30, 40, 50, 60 };
-      var receivedObj = new Structural0DLoad()
-      {
-        ApplicationId = "Test0DLoad",
-        Loading = new StructuralVectorSix(loading),
-        NodeRefs = new List<string> { "Node1", "Node2" },
-        LoadCaseRef = "LoadCase1"
-      };
-      Helper.GwaToCache(Structural0DLoadToNative.ToNative(receivedObj), streamID);
-
-      ((IGSACache)Initialiser.Cache).Snapshot(streamID);
-
-      //PREREQUISITES/REFERENCES - CONVERT TO SPECKLE
-
-      Conversions.ToSpeckle(new GSANode());
-      Conversions.ToSpeckle(new GSALoadCase());
-
-      //OBJECT UNDER TEST - CONVERT TO SPECKLE
-
-      Conversions.ToSpeckle(new GSA0DLoad());
-
-      var sentObjectsDict = Initialiser.GSASenderObjects.GetAll();
-      Assert.IsTrue(sentObjectsDict.ContainsKey(typeof(GSA0DLoad)));
-
-      var sentObjs = sentObjectsDict[typeof(GSA0DLoad)].Select(o => ((IGSASpeckleContainer)o).Value).Cast<Structural0DLoad>().ToList();
-      Assert.AreEqual(1, sentObjs.Count());
-      Assert.IsTrue(sentObjs.First().Loading.Value.SequenceEqual(loading));
-    }
+    
 
   }
 }

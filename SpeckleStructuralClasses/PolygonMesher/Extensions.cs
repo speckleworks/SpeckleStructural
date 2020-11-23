@@ -182,7 +182,7 @@ namespace SpeckleStructuralClasses.PolygonMesher
     public static bool IsOnLine(this Line3D l, Point3D p)
     {
       var closest = l.ClosestPointTo(p, true);
-      var ret = (closest.Equals(p, 0.001));
+      var ret = (closest.Equals(p, Helper.PointComparisonEpsilon));
       return ret;
     }
 

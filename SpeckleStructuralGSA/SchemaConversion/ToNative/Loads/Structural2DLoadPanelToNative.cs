@@ -20,11 +20,12 @@ namespace SpeckleStructuralGSA.SchemaConversion
       }
 
       var keyword = GsaRecord.Keyword<GsaLoadGridArea>();
+      var gwaSetCommandType = GsaRecord.GetGwaSetCommandType<GsaLoadGridArea>();
+      var streamId = Initialiser.Cache.LookupStream(loadPanel.ApplicationId);
 
       var loadCaseKeyword = GsaRecord.Keyword<GsaLoadCase>();
       var loadCaseIndex = Initialiser.Cache.ResolveIndex(loadCaseKeyword, loadPanel.LoadCaseRef);
 
-      var gwaList = new List<string>();
       var loadingDict = ExplodeLoading(loadPanel.Loading);
       var originalPolyline = loadPanel.Value.ToArray();
 
@@ -56,11 +57,8 @@ namespace SpeckleStructuralGSA.SchemaConversion
         {
           axis = SpeckleStructuralGSA.Helper.Parse2DAxis(originalPolyline);
           axis.Name = loadPanel.Name;
-          var gsaAxisGwa = StructuralAxisToNative.ToNative(axis);
-          gwaList.Add(gsaAxisGwa);
-
-          // TO DO: review ways around having to parse here to get the newly - created axis index
-          Initialiser.Interface.ParseGeneralGwa(gsaAxisGwa, out string _, out int? axisIndex, out string _, out string _, out string _, out GwaSetCommandType? _);
+          var gsaAxis = StructuralAxisToNative.ToNativeSchema(axis);
+          StructuralAxisToNative.ToNative(gsaAxis);
 
           var gridPlaneIndex = Initialiser.Cache.ResolveIndex(gridPlaneKeyword);
           var gsaGridPlane = new GsaGridPlane()
@@ -68,15 +66,15 @@ namespace SpeckleStructuralGSA.SchemaConversion
             Index = gridPlaneIndex,
             Name = loadPanel.Name,
             AxisRefType = GridPlaneAxisRefType.Reference,
-            AxisIndex = axisIndex,
+            AxisIndex = gsaAxis.Index,
             Elevation = AxisElevation(axis, originalPolyline),
             Type = GridPlaneType.General,
             StoreyToleranceAboveAuto = true,
             StoreyToleranceBelowAuto = true
           };
-          if (gsaGridPlane.Gwa(out var gsaGridPlaneGwas, true))
+          if (gsaGridPlane.Gwa(out var gsaGridPlaneGwas, false))
           {
-            gwaList.AddRange(gsaGridPlaneGwas);
+            Initialiser.Cache.Upsert(gridPlaneKeyword, gridPlaneIndex, gsaGridPlaneGwas.First(), "", "", GsaRecord.GetGwaSetCommandType<GsaGridPlane>());
           }
 
           gridSurfaceIndex = Initialiser.Cache.ResolveIndex(gridSurfaceKeyword);
@@ -93,9 +91,9 @@ namespace SpeckleStructuralGSA.SchemaConversion
             Tolerance = 0.01,
             Expansion = GridExpansion.PlaneCorner
           };
-          if (gsaGridSurface.Gwa(out var gsaGridSurfaceGwas, true))
+          if (gsaGridSurface.Gwa(out var gsaGridSurfaceGwas, false))
           {
-            gwaList.AddRange(gsaGridSurfaceGwas);
+            Initialiser.Cache.Upsert(gridSurfaceKeyword, gridSurfaceIndex, gsaGridSurfaceGwas.First(), "", "", GsaRecord.GetGwaSetCommandType<GsaGridSurface>());
           }
         }
         catch
@@ -172,6 +170,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
         {
           Index = index,
           ApplicationId = applicationId,
+          StreamId = streamId,
           Name = loadPanel.Name,
           Value = loadingDict[k],
           GridSurfaceIndex = gridSurfaceIndex,
@@ -184,13 +183,13 @@ namespace SpeckleStructuralGSA.SchemaConversion
           Polygon = PolylineCoordsToGwaPolygon(polyline),
           Projected = false
         };
-        if (gsaLoadPanel.Gwa(out var gsaLoadPanelGwas, true))
+        if (gsaLoadPanel.Gwa(out var gsaLoadPanelGwas, false))
         {
-          gwaList.AddRange(gsaLoadPanelGwas);
+          Initialiser.Cache.Upsert(keyword, index, gsaLoadPanelGwas.First(), streamId, applicationId, GsaRecord.GetGwaSetCommandType<GsaLoadGridArea>());
         }
       }
 
-      return string.Join("\n", gwaList);
+      return "";
     }
 
     private static double AxisElevation(StructuralAxis axis, double[] polylineCoords)

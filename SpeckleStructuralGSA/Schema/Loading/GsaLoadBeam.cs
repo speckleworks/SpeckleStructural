@@ -84,11 +84,18 @@ namespace SpeckleStructuralGSA.Schema
 
     public string AddEntities()
     {
+      //Unlike other keywords which have entity type as a parameter, this keyword (at least for version 2) still has "element list" which means, for members,
+      //the group is used
+
       var allIndices = Initialiser.Cache.LookupIndices(
         (Initialiser.Settings.TargetLayer == GSATargetLayer.Design) ? Keyword<GsaMemb>() : Keyword<GsaEl>())
         .Where(i => i.HasValue).Select(i => i.Value).Distinct().OrderBy(i => i).ToList();
 
-      return (Entities.Distinct().OrderBy(i => i).SequenceEqual(allIndices)) ? "all" : string.Join(" ", Entities);
+      if (Entities.Distinct().OrderBy(i => i).SequenceEqual(allIndices))
+      {
+        return "all";
+      }
+      return (Initialiser.Settings.TargetLayer == GSATargetLayer.Design) ? string.Join(" ", Entities.Select(i => "G" + i)) : string.Join(" ",  Entities);
     }
     #endregion
 
@@ -121,10 +128,20 @@ namespace SpeckleStructuralGSA.Schema
 
     public bool AddEntities(string v)
     {
-      Entities = (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
-        ? Initialiser.Interface.ConvertGSAList(v.Replace("G", ""), GSAEntity.MEMBER).ToList()
-        : Initialiser.Interface.ConvertGSAList(v, GSAEntity.ELEMENT).ToList();
-      return Entities.Count() > 0;
+      var entityItems = v.Split(' ');
+      if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
+      {
+        //Only recognise the groups, as these represent the members
+        //TO DO: for all elements, find if they have parents and include them
+        var members = string.Join(" ", entityItems.Where(ei => ei.StartsWith("G")).Select(ei => ei.Substring(1)));
+        Entities = Initialiser.Interface.ConvertGSAList(members, GSAEntity.MEMBER).ToList();
+      }
+      else
+      {
+        Entities = Initialiser.Interface.ConvertGSAList(v, GSAEntity.ELEMENT).ToList();
+      }
+
+      return Entities != null;
     }
 
     private bool AddProj(string v)

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 using SpeckleStructuralGSA.Schema;
@@ -10,13 +11,20 @@ namespace SpeckleStructuralGSA.SchemaConversion
   {
     public static string ToNative(this StructuralStorey storey)
     {
+      if (string.IsNullOrEmpty(storey.ApplicationId) && storey.Axis == null)
+      {
+        return "";
+      }
+
       var keyword = GsaRecord.Keyword<GsaGridPlane>();
       var index = Initialiser.Cache.ResolveIndex(keyword, storey.ApplicationId);
-      var gwaCommands = new List<string>();
+      var streamId = Initialiser.Cache.LookupStream(storey.ApplicationId);
+
       var gsaPlane = new GsaGridPlane()
       {
         Index = index,
         ApplicationId = storey.ApplicationId,
+        StreamId = streamId,
         Name = storey.Name,
         Elevation = storey.Elevation,
         Type = GridPlaneType.Storey,
@@ -37,12 +45,10 @@ namespace SpeckleStructuralGSA.SchemaConversion
       {
         gsaPlane.AxisRefType = GridPlaneAxisRefType.Reference;
         //Create new axis on the fly here
-        var gsaAxisGwa = StructuralAxisToNative.ToNative(storey.Axis);
-        gwaCommands.Add(gsaAxisGwa);
+        var gsaAxis = StructuralAxisToNative.ToNativeSchema(storey.Axis);
+        StructuralAxisToNative.ToNative(gsaAxis);
 
-        //TO DO: review ways around having to parse here to get the newly-created axis index
-        Initialiser.Interface.ParseGeneralGwa(gsaAxisGwa, out string _, out int? axisIndex, out string _, out string _, out string _, out GwaSetCommandType? _);
-        gsaPlane.AxisIndex = axisIndex;
+        gsaPlane.AxisIndex = gsaAxis.Index;
       }
       else
       {
@@ -51,13 +57,10 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
       if (gsaPlane.Gwa(out var gsaPlaneGwaLines, true))
       {
-        gwaCommands.AddRange(gsaPlaneGwaLines);
-        return string.Join("\n", gwaCommands);
+        Initialiser.Cache.Upsert(keyword, index, gsaPlaneGwaLines.First(), streamId, storey.ApplicationId, GsaRecord.GetGwaSetCommandType<GsaLoadCase>());
       }
-      else
-      {
-        return "";
-      }
+
+      return "";
     }
   }
 }
