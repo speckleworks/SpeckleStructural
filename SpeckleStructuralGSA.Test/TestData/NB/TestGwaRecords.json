@@ -373,11 +373,11 @@
   },
   {
     "ApplicationId": "gh/818c27d7c19b886a4cd9f03048cb26eb",
-    "GwaCommand": "SET\tASSEMBLY.3:{speckle_app_id:gh/818c27d7c19b886a4cd9f03048cb26eb}\t1\tAssembly One\tELEMENT\tG49\t162\t163\t164\t\t12.5\t0\tLAGRANGE\t0\tPOINTS\t14"
+    "GwaCommand": "SET\tASSEMBLY.3:{speckle_app_id:gh/818c27d7c19b886a4cd9f03048cb26eb}\t1\tAssembly One\tMEMBER\t49\t162\t163\t164\t\t12.5\t0\tLAGRANGE\t\tPOINTS\t2"
   },
   {
     "ApplicationId": "gh/2c4635a46bc0aa4f0403ca1ac751e2c4",
-    "GwaCommand": "SET\tASSEMBLY.3:{speckle_app_id:gh/2c4635a46bc0aa4f0403ca1ac751e2c4}\t2\tAssembly two\tELEMENT\tG49\t165\t166\t167\t\t20.1\t0\tLAGRANGE\t0\tPOINTS\t14"
+    "GwaCommand": "SET\tASSEMBLY.3:{speckle_app_id:gh/2c4635a46bc0aa4f0403ca1ac751e2c4}\t2\tAssembly two\tMEMBER\t49\t165\t166\t167\t\t20.1\t0\tLAGRANGE\t\tPOINTS\t2"
   },
   {
     "ApplicationId": "Stage1",

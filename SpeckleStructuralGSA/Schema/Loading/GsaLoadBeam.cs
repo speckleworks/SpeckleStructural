@@ -59,8 +59,8 @@ namespace SpeckleStructuralGSA.Schema
 
       //Common fields across all of them: name | list | case | axis | proj | dir
       AddItems(ref items, Name, AddEntities(), 
-        LoadCaseIndex ?? 0, 
-        AxisIndex ?? 0, 
+        LoadCaseIndex ?? 0,
+        AddAxis(), 
         Projected ? "YES" : "NO", 
         (LoadDirection == LoadDirection6.NotSet) ? "X" : LoadDirection.ToString());
       if (extra.Count() > 0)

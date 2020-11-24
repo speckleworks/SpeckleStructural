@@ -20,7 +20,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
       var gwaSetCommandType = GsaRecord.GetGwaSetCommandType<GsaLoadBeam>();
       var streamId = Initialiser.Cache.LookupStream(load.ApplicationId);
 
-      var loadCaseIndex = Initialiser.Cache.LookupIndex(GsaRecord.Keyword<GsaLoadCase>(), load.LoadCaseRef);
+      var loadCaseIndex = Initialiser.Cache.ResolveIndex(GsaRecord.Keyword<GsaLoadCase>(), load.LoadCaseRef);
 
       var entityKeyword = (Initialiser.Settings.TargetLayer == GSATargetLayer.Design) ? GsaRecord.Keyword<GsaMemb>() : GsaRecord.Keyword<GsaEl>();
       var entityIndices = Initialiser.Cache.LookupIndices(entityKeyword, load.ElementRefs).Where(i => i.HasValue).Select(i => i.Value).ToList();

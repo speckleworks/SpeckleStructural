@@ -14,8 +14,13 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
     public static string ToNative(this Structural2DLoadPanel loadPanel)
     {
+      if (string.IsNullOrEmpty(loadPanel.ApplicationId))
+      {
+        return "";
+      }
       if (loadPanel.Loading == null || loadPanel.Loading.Value == null || loadPanel.Loading.Value.All(v => v == 0))
       {
+        Initialiser.AppUI.Message("Structural2DLoadPanel with no loading", loadPanel.ApplicationId);
         return "";
       }
 

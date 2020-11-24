@@ -20,7 +20,7 @@
     "GwaCommand": "SET\tGRID_PLANE.4\t2\t \tGENERAL\t2\t0\t0\t0"
   },
   {
-    "GwaCommand": "SET\tGRID_SURFACE.1\t1\t\t0\t2\tall\t0.01\tONE\t0\tPLANE_CORNER"
+    "GwaCommand": "SET\tGRID_SURFACE.1\t1\t\t1\t2\tall\t0.01\tONE\t0\tPLANE_CORNER"
   },
   {
     "GwaCommand": "SET\tGRID_SURFACE.1\t2\t \t2\t1\tall\t0.01\tTWO_SIMPLE\t0"
@@ -70,12 +70,12 @@
     "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/e3eee0bed82020568bcd3a80a929c558}\t3\t \tNO_RGB\tWALL\tALL\t2\t3\t5 6 7 8\t0\t0\t\tYES\tLINEAR\t0\t0\t0\t0\t0\t0\tACTIVE\t0\tNO"
   },
   {
-    "ApplicationId": "gh/4f4a92a779808a3c7eb7dbb647ed2296",
-    "GwaCommand": "SET_AT\t1\tLOAD_BEAM_UDL.2:{speckle_app_id:gh/4f4a92a779808a3c7eb7dbb647ed2296}\t \t\t5\tGLOBAL\tNO\tX\t10"
+    "ApplicationId": "gh/4f4a92a779808a3c7eb7dbb647ed2296_X",
+    "GwaCommand": "SET_AT\t1\tLOAD_BEAM_UDL.2:{speckle_app_id:gh/4f4a92a779808a3c7eb7dbb647ed2296_X}\t\t\t5\tGLOBAL\tNO\tX\t10"
   },
   {
-    "ApplicationId": "gh/4f4a92a779808a3c7eb7dbb647ed2296",
-    "GwaCommand": "SET_AT\t2\tLOAD_BEAM_UDL.2:{speckle_app_id:gh/4f4a92a779808a3c7eb7dbb647ed2296}\t \t\t5\tGLOBAL\tNO\tY\t20"
+    "ApplicationId": "gh/4f4a92a779808a3c7eb7dbb647ed2296_Y",
+    "GwaCommand": "SET_AT\t2\tLOAD_BEAM_UDL.2:{speckle_app_id:gh/4f4a92a779808a3c7eb7dbb647ed2296_Y}\t\t\t5\tGLOBAL\tNO\tY\t20"
   },
   {
     "ApplicationId": "gh/0934be14d1531d49eab2a19be7a91480",
