@@ -18,8 +18,10 @@ namespace SpeckleStructuralGSA.Schema
     public List<int> EntityIndices = new List<int>();
     public double? Tolerance;
     public GridSurfaceSpan Span;
-    public double? Angle;
+    public double? Angle;  //Degrees
     public GridExpansion Expansion;
+
+    private static double multiplePerAngleDegree = 57.2957795;
 
     public GsaGridSurface() : base()
     {
@@ -51,8 +53,8 @@ namespace SpeckleStructuralGSA.Schema
         AddPlane(), 
         ((Type == GridSurfaceElementsType.OneD) ? 1 : 2).ToString(), 
         AllIndices ? "all" : List(EntityIndices), 
-        Tolerance ?? 0, AddSpan(), 
-        Angle ?? 0, 
+        Tolerance ?? 0, AddSpan(),
+        AddAngle(), 
         SchemaConversion.Helper.GridExpansionToString(Expansion));
 
       gwa = Join(items, out var gwaLine) ? new List<string>() { gwaLine } : new List<string>();
@@ -73,6 +75,11 @@ namespace SpeckleStructuralGSA.Schema
         case GridPlaneAxisRefType.GlobalCylindrical: return (-13).ToString();
         default: return 0.ToString();  //This is for global
       }
+    }
+
+    private string AddAngle()
+    {
+      return ((Angle ?? 0) * multiplePerAngleDegree).ToString();
     }
 
     private string AddSpan()
@@ -147,7 +154,8 @@ namespace SpeckleStructuralGSA.Schema
 
     private bool AddAngle(string v)
     {
-      Angle = (double.TryParse(v, out var angle)) ? angle : 0;
+      var gwaAngle = (double.TryParse(v, out var angle)) ? angle : 0;
+      Angle = gwaAngle / multiplePerAngleDegree;
       return true;
     }
 

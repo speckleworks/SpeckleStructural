@@ -51,13 +51,13 @@ namespace SpeckleStructuralGSA.Test
     }
 
     [Test]
-    public void GsaLoadCaseToNative()
+    public void StructuralLoadCaseToNative()
     {
       var load1 = new StructuralLoadCase() { CaseType = StructuralLoadCaseType.Generic, ApplicationId = "lc1", Name = "LoadCaseOne" };
       var load2 = new StructuralLoadCase() { CaseType = StructuralLoadCaseType.Dead, ApplicationId = "lc2", Name = "LoadCaseTwo" };
 
-      StructuralLoadCaseToNative.ToNative(load1);
-      StructuralLoadCaseToNative.ToNative(load2);
+      SchemaConversion.StructuralLoadCaseToNative.ToNative(load1);
+      SchemaConversion.StructuralLoadCaseToNative.ToNative(load2);
 
       var gwa = Initialiser.Cache.GetGwa(GsaRecord.Keyword<GsaLoadCase>());
       Assert.AreEqual(2, gwa.Count());
@@ -120,6 +120,31 @@ namespace SpeckleStructuralGSA.Test
       
       Assert.IsTrue(gsaAxis1.FromGwa(axis1gwa.First()));
       Assert.IsTrue(gsaAxis2.FromGwa(axis2gwa.First()));
+    }
+
+    [Test]
+    public void GsaGridSurfaceAngles()
+    {
+      var gsaGridSurface1 = new GsaGridSurface()
+      {
+        Name = "Surface1",
+        ApplicationId = "lgs1",
+        Index = 1,
+        PlaneRefType = GridPlaneAxisRefType.Global,
+        Type = GridSurfaceElementsType.OneD,
+        AllIndices = true,
+        Tolerance = 0.01,
+        Span = GridSurfaceSpan.One,
+        Angle = 30,
+        Expansion = GridExpansion.PlaneCorner
+      };
+
+      Assert.IsTrue(gsaGridSurface1.Gwa(out var gwa, false));
+      Assert.IsNotNull(gwa);
+      Assert.Greater(gwa.Count(), 0);
+      Assert.IsFalse(string.IsNullOrEmpty(gwa.First()));
+      Assert.IsTrue(ModelValidation(gwa.First(), GsaRecord.Keyword<GsaGridSurface>(), 1, out var mismatch, visible: true));
+      Assert.AreEqual(0, mismatch);
     }
 
     [Test]
@@ -188,18 +213,18 @@ namespace SpeckleStructuralGSA.Test
       StructuralLoadPlaneToNative.ToNative(plane2).Split('\n');
 
       var loadCase1 = new StructuralLoadCase() { CaseType = StructuralLoadCaseType.Dead, ApplicationId = "LcDead", Name = "Dead Load Case" };
-      StructuralLoadCaseToNative.ToNative(loadCase1);
+      SchemaConversion.StructuralLoadCaseToNative.ToNative(loadCase1);
 
       var polylineCoords = CreateFlatRectangleCoords(0, 0, 0, 30, 5, 5);
       var loading = new StructuralVectorThree(new double[] { 0, -10, -5 });
       var load2dPanelWithoutPlane = new Structural2DLoadPanel(polylineCoords, loading, "LcDead", "loadpanel1");
-      Structural2DLoadPanelToNative.ToNative(load2dPanelWithoutPlane);
+      SchemaConversion.Structural2DLoadPanelToNative.ToNative(load2dPanelWithoutPlane);
 
       var load2dPanelWithPlane1 = new Structural2DLoadPanel(polylineCoords, loading, "LcDead", "loadpanel2") { LoadPlaneRef = "lp1" };
-      Structural2DLoadPanelToNative.ToNative(load2dPanelWithPlane1);
+      SchemaConversion.Structural2DLoadPanelToNative.ToNative(load2dPanelWithPlane1);
 
       var load2dPanelWithPlane2 = new Structural2DLoadPanel(polylineCoords, loading, "LcDead", "loadpanel3") { LoadPlaneRef = "lp2" };
-      Structural2DLoadPanelToNative.ToNative(load2dPanelWithPlane2);
+      SchemaConversion.Structural2DLoadPanelToNative.ToNative(load2dPanelWithPlane2);
 
       var allGwa = ((IGSACache)Initialiser.Cache).GetCurrentGwa();
 
@@ -218,7 +243,7 @@ namespace SpeckleStructuralGSA.Test
     }
     
     [Test]
-    public void GsaLoadGridAreaToNative()
+    public void Structural2DLoadPanelToNative()
     {
       var loadCaseAppId = "LoadCase1";
       var loadPanelAppId = "LoadPanel1";
@@ -227,7 +252,7 @@ namespace SpeckleStructuralGSA.Test
         ApplicationId = loadCaseAppId,
         CaseType = StructuralLoadCaseType.Dead
       };
-      StructuralLoadCaseToNative.ToNative(loadCase);
+      SchemaConversion.StructuralLoadCaseToNative.ToNative(loadCase);
 
       var loadPanel = new Structural2DLoadPanel
       {
@@ -236,7 +261,7 @@ namespace SpeckleStructuralGSA.Test
         Loading = new StructuralVectorThree(new double[] { 0, 0, 10000000 }),
         LoadCaseRef = "LoadCase1"
       };
-      Structural2DLoadPanelToNative.ToNative(loadPanel).Split('\n');
+      SchemaConversion.Structural2DLoadPanelToNative.ToNative(loadPanel).Split('\n');
 
       var LoadPanelGwa = ((IGSACache)Initialiser.Cache).GetCurrentGwa();
       Assert.AreEqual(5, LoadPanelGwa.Count()); //should be a load case, axis, plane, surface and a load panel
@@ -260,7 +285,7 @@ namespace SpeckleStructuralGSA.Test
       var loadcase = new StructuralLoadCase() { ApplicationId = "LoadCase1", Name = "Load Case One", CaseType = StructuralLoadCaseType.Dead };
       Helper.GwaToCache(Conversions.ToNative(node1), streamId1);
       Helper.GwaToCache(Conversions.ToNative(node2), streamId1);
-      StructuralLoadCaseToNative.ToNative(loadcase);
+      SchemaConversion.StructuralLoadCaseToNative.ToNative(loadcase);
 
       //OBJECT UNDER TEST - CONVERT TO GSA
 
@@ -305,7 +330,7 @@ namespace SpeckleStructuralGSA.Test
         CaseType = StructuralLoadCaseType.Live,
         Name = "Live Loads"
       };
-      StructuralLoadCaseToNative.ToNative(loadCase);
+      SchemaConversion.StructuralLoadCaseToNative.ToNative(loadCase);
 
       var materialSteel = new StructuralMaterialSteel()
       {
@@ -509,16 +534,16 @@ namespace SpeckleStructuralGSA.Test
 
     #region model_validation_fns
     //It's assumed the gwa comands are in the correct order
-    private bool ModelValidation(string gwaCommand, string keyword, int expectedCount, out int mismatch, bool nodesWithAppIdOnly = false)
+    private bool ModelValidation(string gwaCommand, string keyword, int expectedCount, out int mismatch, bool nodesWithAppIdOnly = false, bool visible = false)
     {
-      var result = ModelValidation(new string[] { gwaCommand }, new Dictionary<string, int>() { { keyword, expectedCount } }, out var mismatchByKw, nodesWithAppIdOnly);
+      var result = ModelValidation(new string[] { gwaCommand }, new Dictionary<string, int>() { { keyword, expectedCount } }, out var mismatchByKw, nodesWithAppIdOnly, visible);
       mismatch = (mismatchByKw == null || mismatchByKw.Keys.Count() == 0) ? 0 : mismatchByKw[keyword];
       return result;
     }
 
-    private bool ModelValidation(IEnumerable<string> gwaCommands, string keyword, int expectedCount, out int mismatch, bool nodesWithAppIdOnly = false)
+    private bool ModelValidation(IEnumerable<string> gwaCommands, string keyword, int expectedCount, out int mismatch, bool nodesWithAppIdOnly = false, bool visible = false)
     {
-      var result = ModelValidation(gwaCommands, new Dictionary<string, int>() { { keyword, expectedCount } }, out var mismatchByKw, nodesWithAppIdOnly);
+      var result = ModelValidation(gwaCommands, new Dictionary<string, int>() { { keyword, expectedCount } }, out var mismatchByKw, nodesWithAppIdOnly, visible);
       mismatch = (mismatchByKw == null || mismatchByKw.Keys.Count() == 0) ? 0 : mismatchByKw[keyword];
       return result;
     }
