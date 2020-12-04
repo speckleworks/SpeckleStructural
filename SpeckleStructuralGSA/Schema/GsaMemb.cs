@@ -106,8 +106,8 @@ namespace SpeckleStructuralGSA.Schema
       //MEMB.8 | num | name | colour | type(1D) | exposure | prop | group | topology | node | angle | mesh_size | is_intersector | analysis_type | fire | limiting_temperature | time[4] | dummy | rls_1 { | k_1 } rls_2 { | k_2 } | restraint_end_1 | restraint_end_2 | EFF_LEN | lyy | lzz | llt | load_height | load_ref | is_off { | auto_off_x1 | auto_off_x2 | off_x1 | off_x2 | off_y | off_z }
       //MEMB.8 | num | name | colour | type(1D) | exposure | prop | group | topology | node | angle | mesh_size | is_intersector | analysis_type | fire | limiting_temperature | time[4] | dummy | rls_1 { | k_1 } rls_2 { | k_2 } | restraint_end_1 | restraint_end_2 | EXPLICIT | num_pt | { pt | rest | } | num_span | { span | rest | } load_height | load_ref | is_off { | auto_off_x1 | auto_off_x2 | off_x1 | off_x2 | off_y | off_z }
       AddItems(ref items, Name, Colour.NO_RGB.ToString(), Type.GetStringValue(), Exposure.ToString(), PropertyIndex ?? 0, Group ?? 0,
-        AddTopology(), OrientationNodeIndex ?? 0, Angle, MeshSize ?? 0, IsIntersector ? "YES" : "NO", AnalysisType.ToString(), (int)Fire, LimitingTemperature ?? 0, AddTime(),
-        Dummy ? "DUMMY" : "ACTIVE");
+        AddTopology(), OrientationNodeIndex ?? 0, Angle, MeshSize ?? 0, IsIntersector ? "YES" : "NO", AddAnalysisType(), (int)Fire, LimitingTemperature ?? 0,
+        CreationFromStartDays, StartOfDryingDays, AgeAtLoadingDays, RemovedAtDays, Dummy ? "DUMMY" : "ACTIVE");
       
       AddEndReleaseItems(ref items, Releases1, Stiffnesses1, axisDirs);
       AddEndReleaseItems(ref items, Releases2, Stiffnesses2, axisDirs);
@@ -134,7 +134,8 @@ namespace SpeckleStructuralGSA.Schema
         AddItems(ref items, AddAutoOrMan(End1AutomaticOffset), AddAutoOrMan(End2AutomaticOffset), End1OffsetX ?? 0, End2OffsetX ?? 0, OffsetY ?? 0, OffsetZ ?? 0);
       }
 
-      return true;
+      gwa = (Join(items, out var gwaLine)) ? new List<string>() { gwaLine } : new List<string>();
+      return gwa.Count() > 0;
     }
 
     #region other_Add_x_Items_fns
@@ -144,15 +145,15 @@ namespace SpeckleStructuralGSA.Schema
       var stiffnessIndex = 0;
       foreach (var d in axisDirs)
       {
-        var releaseCode = releases.ContainsKey(d) ? releases[d] : ReleaseCode.Fixed;
+        var releaseCode = (releases != null && releases.Count() > 0 && releases.ContainsKey(d)) ? releases[d] : ReleaseCode.Fixed;
         rls += releaseCode.GetStringValue();
-        if (releaseCode == ReleaseCode.Stiff && releases.ContainsKey(d) && (--stiffnessIndex) < stiffnesses.Count())
+        if (releaseCode == ReleaseCode.Stiff && releases.ContainsKey(d) && (++stiffnessIndex) < stiffnesses.Count())
         {
           stiffnesses.Add(stiffnesses[stiffnessIndex]);
         }
       }
       items.Add(rls);
-      if (stiffnesses.Count() > 0)
+      if (stiffnesses != null && stiffnesses.Count() > 0)
       {
         items.AddRange(stiffnesses.Select(s => s.ToString()));
       }
@@ -181,14 +182,6 @@ namespace SpeckleStructuralGSA.Schema
 
     private string AddTopology()
     {
-      /*
-      public List<int> NodeIndices;           //Perimeter/edge topology
-      public List<List<int>> Voids;           //Void topologies corresponding to the V sections in the GWA string, like in "41 42 43 44 V(45 46 47 48)"
-      public List<int> PointNodeIndices;      //Points to include, corresponding to the P list in the GWA string, like in "41 42 43 44 P(50 55)"
-      public List<int> Polylines;             //Polyline topologies correspoding to the L sections in the GWA string, like in "41 42 43 44 L(71 72 73)"
-      public List<List<int>> AdditionalAreas; //Additional solid area topologies corresponding to the A sections in the GWA string, like in "41 42 43 44 A(45 46 47 48)"
-      */
-
       var topoPortions = new List<string>
       {
         string.Join(" ", NodeIndices)
@@ -229,6 +222,12 @@ namespace SpeckleStructuralGSA.Schema
     private string AddTime()
     {
       return string.Join(" ", new[] { CreationFromStartDays, StartOfDryingDays, AgeAtLoadingDays, RemovedAtDays });
+    }
+
+    private string AddAnalysisType()
+    {
+      //TO DO: some validation here to ensure a valid combination of MemberType and AnalysisType
+      return AnalysisType.ToString();
     }
 
     private string AddAutoOrMan(bool val)

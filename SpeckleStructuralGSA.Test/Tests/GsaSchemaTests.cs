@@ -464,6 +464,121 @@ namespace SpeckleStructuralGSA.Test
       Assert.AreEqual(2, sos.Count(o => o.NodeRefs.SequenceEqual(new[] { "gsa/NODE-1", "gsa/NODE-2" }) && o.LoadCaseRef.Equals("gsa/LOAD_TITLE-2")));
     }
 
+    [Test]
+    public void GsaMemb1dSimple()
+    {
+      //An asterisk next to a row signifies non-obvious values I've specifically changed between all 3 (obvious values are application ID, index and name)
+
+      var gsaMembBeamAuto = new GsaMemb()
+      {
+        ApplicationId = "beamauto",
+        Name = "Beam Auto",
+        Index = 1,
+        Type = MemberType.Beam, //*
+        Exposure = ExposedSurfaces.ALL, //*
+        PropertyIndex = 3,
+        Group = 1,
+        NodeIndices = new List<int>() { 4, 5 },
+        Voids = new List<List<int>>() { new List<int>() { 7, 8, 9 } },
+        OrientationNodeIndex = 6,
+        Angle = 10,
+        MeshSize = 11,
+        IsIntersector = true,
+        AnalysisType = AnalysisType.BEAM, //*
+        Fire = FireResistance.HalfHour, //*
+        LimitingTemperature = 12,
+        CreationFromStartDays = 13,
+        RemovedAtDays = 16,
+        Releases1 = new Dictionary<AxisDirection6, ReleaseCode>() { { AxisDirection6.X, ReleaseCode.Released }, { AxisDirection6.XX, ReleaseCode.Released } }, //*
+        Releases2 = new Dictionary<AxisDirection6, ReleaseCode>() { { AxisDirection6.Y, ReleaseCode.Released }}, //*
+        RestraintEnd1 = Restraint.Fixed, //*
+        RestraintEnd2 = Restraint.Pinned, //*
+        EffectiveLengthType = EffectiveLengthType.AUTOMATIC, //*
+        LoadHeight = 19,
+        LoadHeightReferencePoint = LoadHeightReferencePoint.TopFlange, //*
+        MemberHasOffsets = false
+      };
+      Assert.IsTrue(gsaMembBeamAuto.Gwa(out var gwa1, false));
+
+      var gsaMembColEffLen = new GsaMemb() 
+      { 
+        ApplicationId = "efflencol",
+        Name = "Eff Len Col",
+        Index = 2,
+        Type = MemberType.Column, //*
+        Exposure = ExposedSurfaces.ONE, //*
+        PropertyIndex = 3,
+        Group = 2,
+        NodeIndices = new List<int>() { 4, 5 },
+        Voids = new List<List<int>>() { new List<int>() { 7, 8, 9} },
+        OrientationNodeIndex = 6,
+        Angle = 10,
+        MeshSize = 11,
+        IsIntersector = true,
+        AnalysisType = AnalysisType.BAR, //*
+        Fire = FireResistance.FourHours,//*
+        LimitingTemperature = 12,
+        CreationFromStartDays = 13,
+        RemovedAtDays = 16,
+        Releases1 = new Dictionary<AxisDirection6, ReleaseCode>() { { AxisDirection6.Y, ReleaseCode.Released }, { AxisDirection6.YY, ReleaseCode.Stiff } }, //*
+        Stiffnesses1 = new List<double>() { 17 }, //*
+        RestraintEnd1 = Restraint.FullRotational, //*
+        RestraintEnd2 = Restraint.Pinned, //*
+        EffectiveLengthType = EffectiveLengthType.EFF_LEN, //*
+        EffectiveLengthYY = 18, //*
+        PercentageZZ = 65, //*
+        EffectiveLengthLateralTorsional = 19, //*
+        LoadHeight = 19, //*
+        LoadHeightReferencePoint = LoadHeightReferencePoint.ShearCentre, //*
+        MemberHasOffsets = false
+      };
+      Assert.IsTrue(gsaMembColEffLen.Gwa(out var gwa2, false));
+
+      var gsaMembGeneric1dExplicit = new GsaMemb()
+      {
+        ApplicationId = "explicitcol",
+        Name = "Explicit Generic 1D",
+        Index = 3,
+        Type = MemberType.Generic1d, //*
+        Exposure = ExposedSurfaces.NONE, //*
+        PropertyIndex = 3,
+        Group = 3,
+        NodeIndices = new List<int>() { 4, 5 },
+        Voids = new List<List<int>>() { new List<int>() { 7, 8, 9 } },
+        OrientationNodeIndex = 6,
+        Angle = 10,
+        MeshSize = 11,
+        IsIntersector = true,
+        AnalysisType = AnalysisType.DAMPER, //*
+        Fire = FireResistance.FourHours, //*
+        LimitingTemperature = 12,
+        CreationFromStartDays = 13,
+        RemovedAtDays = 16,
+        Releases1 = new Dictionary<AxisDirection6, ReleaseCode>() { { AxisDirection6.Y, ReleaseCode.Released }, { AxisDirection6.YY, ReleaseCode.Stiff } }, //*
+        Stiffnesses1 = new List<double>() { 17 }, //*
+        RestraintEnd1 = Restraint.FullRotational, //*
+        RestraintEnd2 = Restraint.Pinned, //*
+        EffectiveLengthType = EffectiveLengthType.EXPLICIT, //*
+        PointRestraints = new List<RestraintDefinition>()
+        {
+          new RestraintDefinition() { All = true, Restraint = Restraint.TopFlangeLateral }
+        },  //*
+        SpanRestraints = new List<RestraintDefinition>()
+        {
+          new RestraintDefinition() { Index = 1, Restraint = Restraint.Fixed },
+          new RestraintDefinition() { Index = 3, Restraint = Restraint.PartialRotational }
+        },  //*
+        LoadHeight = 19,
+        LoadHeightReferencePoint = LoadHeightReferencePoint.BottomFlange, //*
+        MemberHasOffsets = false
+      };
+      Assert.IsTrue(gsaMembGeneric1dExplicit.Gwa(out var gwa3, false));
+
+      var gwaToTest = gwa1.Union(gwa2).Union(gwa3).ToList();
+
+      Assert.IsTrue(ModelValidation(gwaToTest, GsaRecord.GetKeyword<GsaMemb>(), 3, out var mismatch, visible: true));
+    }
+
     [TestCase(GSATargetLayer.Design)]
     [TestCase(GSATargetLayer.Analysis)]
     public void GsaLoadBeamToSpeckle(GSATargetLayer layer)

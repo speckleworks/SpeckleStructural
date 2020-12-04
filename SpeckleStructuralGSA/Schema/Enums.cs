@@ -174,9 +174,22 @@
     NONE
   }
 
+  //In keeping with the approach to be as close to the inherent GWA schema as possible, this is kept as one list, and not split up into one for 1D and one for 2D
   public enum AnalysisType
   {
     NotSet = 0,
+    //1D items - when MEMB is set (using MemberType enum above) to one one of the 1D types, then, and only then, is one of the following 10 is valid
+    BEAM,
+    BAR,
+    STRUT,
+    TIE,
+    ROD,
+    LINK,
+    SPRING,
+    CABLE,
+    SPACER,
+    DAMPER,
+    //2D items - when MEMB is set to be a 2D type, then, and only then, are one of the following valid
     EL_TYPE,
     LINEAR,
     QUADRATIC,
