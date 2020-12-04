@@ -10,22 +10,23 @@ namespace SpeckleStructuralGSA.SchemaConversion
   public static class Helper
   {
     #region loading
-    public static readonly LoadDirection6[] loadDirSeq = new LoadDirection6[] { LoadDirection6.X, LoadDirection6.Y, LoadDirection6.Z, LoadDirection6.XX, LoadDirection6.YY, LoadDirection6.ZZ };
+    //public static readonly AxisDirection6[] loadDirSeq = new AxisDirection6[] { AxisDirection6.X, AxisDirection6.Y, AxisDirection6.Z, AxisDirection6.XX, AxisDirection6.YY, AxisDirection6.ZZ };
 
     public static bool IsValidLoading(StructuralVectorSix loading)
     {
-      return (loading != null && loading.Value != null && loading.Value.Count() == loadDirSeq.Count() && loading.Value.Any(v => v != 0));
+      return (loading != null && loading.Value != null && loading.Value.Count() == 6 && loading.Value.Any(v => v != 0));
     }
 
-    public static Dictionary<LoadDirection6, double> ExplodeLoading(StructuralVectorSix loading)
+    public static Dictionary<AxisDirection6, double> ExplodeLoading(StructuralVectorSix loading)
     {
-      var valueByDir = new Dictionary<LoadDirection6, double>();
+      var valueByDir = new Dictionary<AxisDirection6, double>();
+      var loadDirSeq = Enum.GetValues(typeof(AxisDirection6)).Cast<AxisDirection6>().Where(v => v != AxisDirection6.NotSet).ToList();
 
-      for (var i = 0; i < Helper.loadDirSeq.Count(); i++)
+      for (var i = 0; i < loadDirSeq.Count(); i++)
       {
         if (loading.Value[i] != 0)
         {
-          valueByDir.Add(Helper.loadDirSeq[i], loading.Value[i]);
+          valueByDir.Add(loadDirSeq[i], loading.Value[i]);
         }
       }
 
@@ -144,16 +145,16 @@ namespace SpeckleStructuralGSA.SchemaConversion
       return schemaObjs;
     }
 
-    public static StructuralVectorSix GsaLoadToLoading(LoadDirection6 ld, double value)
+    public static StructuralVectorSix GsaLoadToLoading(AxisDirection6 ld, double value)
     {
       switch (ld)
       {
-        case LoadDirection6.X: return new StructuralVectorSix(value, 0, 0, 0, 0, 0);
-        case LoadDirection6.Y: return new StructuralVectorSix(0, value, 0, 0, 0, 0);
-        case LoadDirection6.Z: return new StructuralVectorSix(0, 0, value, 0, 0, 0);
-        case LoadDirection6.XX: return new StructuralVectorSix(0, 0, 0, value, 0, 0);
-        case LoadDirection6.YY: return new StructuralVectorSix(0, 0, 0, 0, value, 0);
-        case LoadDirection6.ZZ: return new StructuralVectorSix(0, 0, 0, 0, 0, value);
+        case AxisDirection6.X: return new StructuralVectorSix(value, 0, 0, 0, 0, 0);
+        case AxisDirection6.Y: return new StructuralVectorSix(0, value, 0, 0, 0, 0);
+        case AxisDirection6.Z: return new StructuralVectorSix(0, 0, value, 0, 0, 0);
+        case AxisDirection6.XX: return new StructuralVectorSix(0, 0, 0, value, 0, 0);
+        case AxisDirection6.YY: return new StructuralVectorSix(0, 0, 0, 0, value, 0);
+        case AxisDirection6.ZZ: return new StructuralVectorSix(0, 0, 0, 0, 0, value);
         default: return null;
       }
     }

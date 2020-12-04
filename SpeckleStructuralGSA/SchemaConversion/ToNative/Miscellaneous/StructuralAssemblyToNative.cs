@@ -21,7 +21,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
       var epsilon = SpeckleStructuralClasses.Helper.PointComparisonEpsilon.ToString();
       var numDecPlaces = epsilon.IndexOf('1') - epsilon.IndexOf('.');
 
-      var keyword = GsaRecord.Keyword<GsaAssembly>();
+      var keyword = GsaRecord.GetKeyword<GsaAssembly>();
       var index = Initialiser.Cache.ResolveIndex(keyword, assembly.ApplicationId);
       var streamId = Initialiser.Cache.LookupStream(assembly.ApplicationId);
 
@@ -33,7 +33,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
       var topo2Index = Initialiser.Interface.NodeAt(topo2Pt.X, topo2Pt.Y, topo2Pt.Z, Initialiser.Settings.CoincidentNodeAllowance);
       var orientPtIndex = Initialiser.Interface.NodeAt(orientPt.X, orientPt.Y, orientPt.Z, Initialiser.Settings.CoincidentNodeAllowance);
 
-      var entityKeyword = (Initialiser.Settings.TargetLayer == GSATargetLayer.Design) ? GsaRecord.Keyword<GsaMemb>() : GsaRecord.Keyword<GsaEl>();
+      var entityKeyword = (Initialiser.Settings.TargetLayer == GSATargetLayer.Design) ? GsaRecord.GetKeyword<GsaMemb>() : GsaRecord.GetKeyword<GsaEl>();
       var entityIndices = Initialiser.Cache.LookupIndices(entityKeyword, assembly.ElementRefs).Where(i => i.HasValue).Select(i => i.Value).ToList();
 
       var gsaAssembly = new GsaAssembly()
@@ -66,7 +66,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
       else if (assembly.StoreyRefs != null && assembly.StoreyRefs.Count() > 0)
       {
         gsaAssembly.PointDefn = PointDefinition.Storey;
-        gsaAssembly.StoreyIndices = Initialiser.Cache.LookupIndices(GsaRecord.Keyword<GsaGridPlane>(), assembly.StoreyRefs).Where(i => i.HasValue).Select(i => i.Value).ToList();
+        gsaAssembly.StoreyIndices = Initialiser.Cache.LookupIndices(GsaRecord.GetKeyword<GsaGridPlane>(), assembly.StoreyRefs).Where(i => i.HasValue).Select(i => i.Value).ToList();
         //Not verifying at the moment that the grid planes are indeed storeys
       }
       else

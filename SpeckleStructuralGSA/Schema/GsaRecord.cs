@@ -21,6 +21,9 @@ namespace SpeckleStructuralGSA.Schema
     protected GwaSetCommandType gwaSetCommandType;
     protected string keyword;  //Useful in string rather than enum form for use in creating GWA commands
 
+    public string Keyword => this.keyword;
+    public GwaSetCommandType GwaSetCommandType => this.gwaSetCommandType;
+
     protected static readonly string SID_APPID_TAG = "speckle_app_id";
     protected static readonly string SID_STRID_TAG = "speckle_stream_id";
 
@@ -306,7 +309,7 @@ namespace SpeckleStructuralGSA.Schema
       return string.IsNullOrEmpty(sidTags) ? null : sidTags;
     }
 
-    public static string Keyword<T>()
+    public static string GetKeyword<T>()
     {
       return typeof(T).GetAttribute<GsaType>("Keyword").ToString();
     }

@@ -16,7 +16,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
         return "";
       }
 
-      var keyword = GsaRecord.Keyword<GsaGridPlane>();
+      var keyword = GsaRecord.GetKeyword<GsaGridPlane>();
       var index = Initialiser.Cache.ResolveIndex(keyword, storey.ApplicationId);
       var streamId = Initialiser.Cache.LookupStream(storey.ApplicationId);
 

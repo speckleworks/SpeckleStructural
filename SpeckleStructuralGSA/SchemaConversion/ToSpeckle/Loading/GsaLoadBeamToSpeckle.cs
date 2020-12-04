@@ -1,0 +1,140 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using SpeckleCore;
+using SpeckleStructuralClasses;
+using SpeckleStructuralGSA.Schema;
+
+namespace SpeckleStructuralGSA.SchemaConversion
+{
+  public static class GsaLoadBeamToSpeckle
+  {
+    public static SpeckleObject ToSpeckle(this GsaLoadBeam dummyObject)
+    {
+      var newLines = Initialiser.Cache.GetGwaToSerialise(dummyObject.Keyword);
+      //This will return ALL load beams, which (in the future) may not be UDLs
+      //Also in the future, the cache will return Gsa schema objects, not just GWA that needs to be converted into Gsa schema objects
+      var allGsaLoadBeams = GwaToGsaLoadBeams(newLines);
+      allGsaLoadBeams = allGsaLoadBeams.Where(l => l.Index.ValidNonZero()).ToList();
+      var gsaLoadsByType = allGsaLoadBeams.GroupBy(l => l.GetType()).ToDictionary(g => g.Key, g => g.ToList());
+
+      var keyword = GsaRecord.GetKeyword<GsaLoadBeamUdl>();
+      var axisKeyword = GsaRecord.GetKeyword<GsaAxis>();
+      var loadCaseKeyword = GsaRecord.GetKeyword<GsaLoadCase>();
+      var entityKeyword = (Initialiser.Settings.TargetLayer == SpeckleGSAInterfaces.GSATargetLayer.Design) ? GsaRecord.GetKeyword<GsaMemb>() : GsaRecord.GetKeyword<GsaEl>();
+
+      //Just to UDL for now
+      var gsaLoads = gsaLoadsByType[typeof(GsaLoadBeamUdl)].Cast<GsaLoadBeamUdl>().ToList();
+
+      var structural1DLoads = new List<Structural1DLoad>();
+
+
+      //The 1D loads are split into two groups:
+      //1. Those which are grouped by Application ID - n:1 ratio (where n <= 6) between GSA objects and Speckle objects
+      //2. Those which are sent out individually - 1:1 ratio between GSA objects and Speckle objects
+      //To avoid complication regarding merging with existing objects: if a 1D load was previously received from Speckle (i.e. it has an application ID)
+      //and it was manually changed from GLOBAL to referencing an axis, then ignore the application ID when sending out (i.e. lump it with group #2)
+      var group1 = gsaLoads.Where(l => !string.IsNullOrEmpty(l.ApplicationId) && l.AxisRefType == LoadBeamAxisRefType.Global);
+      var group2 = gsaLoads.Except(group1);
+
+      Add1dLoadsWithAppId(entityKeyword, loadCaseKeyword, group1, ref structural1DLoads);
+      Add1dLoadsWithoutAppId(group2, ref structural1DLoads);
+
+
+      var loads = ((Initialiser.Settings.TargetLayer == SpeckleGSAInterfaces.GSATargetLayer.Design)
+        ? structural1DLoads.Select(sl => new GSA1DLoadDesignLayer() { Value = sl }).Cast<GSA1DLoadBase>()
+        : structural1DLoads.Select(sl => new GSA1DLoadAnalysisLayer() { Value = sl }).Cast<GSA1DLoadBase>()).ToList();
+
+      Initialiser.GSASenderObjects.AddRange(loads);
+      return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+    }
+
+    private static bool Add1dLoadsWithAppId(string entityKeyword, string loadCaseKeyword, IEnumerable<GsaLoadBeamUdl> gsaLoads, ref List<Structural1DLoad> structural1DLoads)
+    {
+      var gsaGroups = gsaLoads.GroupBy(gl => new { ApplicationId = gl.ApplicationId.Substring(0, gl.ApplicationId.IndexOf("_")), gl.LoadCaseIndex });
+      foreach (var group in gsaGroups)
+      {
+        var gList = group.ToList();
+
+        var applicationId = gList[0].ApplicationId.Substring(0, gList[0].ApplicationId.IndexOf("_"));
+        var name = (gList.Any(gl => !string.IsNullOrEmpty(gl.Name))) ? gList.FirstOrDefault(gl => !string.IsNullOrEmpty(gl.Name)).Name : "";
+        
+        //Assume the element refs are the same for those with application IDs - so just take the indices of the first record and resolve them to application IDs for entities
+        var elementRefs = gList[0].Entities.Select(ei => Initialiser.Cache.GetApplicationId(entityKeyword, ei)).Where(aid => !string.IsNullOrEmpty(aid)).ToList();
+        var loadCaseRef = Initialiser.Cache.GetApplicationId(loadCaseKeyword, gList[0].LoadCaseIndex.Value);
+
+        var loadings = gList.Select(gl => Helper.GsaLoadToLoading(gl.LoadDirection, gl.Load.Value)).ToList();
+        var combinedLoading = new StructuralVectorSix(Enumerable.Range(0, 6).Select(i => loadings.Sum(l => l.Value[i])));
+
+        structural1DLoads.Add(new Structural1DLoad()
+        {
+          ApplicationId = applicationId,
+          Name = name,
+          ElementRefs = elementRefs,
+          LoadCaseRef = loadCaseRef,
+          Loading = combinedLoading
+        });
+      }
+      return true; 
+    }
+
+    private static bool Add1dLoadsWithoutAppId(IEnumerable<GsaLoadBeamUdl> gsaLoads, ref List<Structural1DLoad> structural1DLoads)
+    {
+
+      return true;
+    }
+
+    private static List<GsaLoadBeam> GwaToGsaLoadBeams(Dictionary<int, string> newLines)
+    {
+      var instanceInfo = new Dictionary<GwaKeyword, Type>() {
+        { GwaKeyword.LOAD_BEAM_UDL, typeof(GsaLoadBeamUdl) },
+        { GwaKeyword.LOAD_BEAM_LINE, typeof(GsaLoadBeamLine) },
+        { GwaKeyword.LOAD_BEAM_POINT, typeof(GsaLoadBeamPoint) },
+        { GwaKeyword.LOAD_BEAM_PATCH, typeof(GsaLoadBeamPatch) },
+        { GwaKeyword.LOAD_BEAM_TRILIN, typeof(GsaLoadBeamPatchTrilin) }
+      };
+
+      var schemaObjs = new List<GsaLoadBeam>();
+
+      foreach (var index in newLines.Keys)
+      {
+        GsaLoadBeam obj = null;
+        foreach (var kw in instanceInfo.Keys)
+        {
+          if (newLines[index].Contains(kw.ToString()))
+          {
+            obj = (GsaLoadBeam)Activator.CreateInstance(instanceInfo[kw]);
+            break;
+          }
+        }
+        if (obj != null)
+        {
+          obj.Index = index;
+
+          if (obj.FromGwa(newLines[index]))
+          {
+            schemaObjs.Add(obj);
+          }
+        }
+      }
+      return schemaObjs;
+    }
+
+    private class D1LoadingSummary
+    {
+      public int Index;
+      public int? LoadCaseIndex;
+      public List<int> EntityIndices;
+      public int? UniqueLoadingIndex;
+      public string Name;
+      public string ApplicationId;
+
+      public D1LoadingSummary(int index, int? loadCaseIndex, List<int> entityIndices)
+      {
+        this.Index = index;
+        this.LoadCaseIndex = loadCaseIndex;
+        this.EntityIndices = entityIndices;
+      }
+    }
+  }
+}

@@ -15,7 +15,7 @@ namespace SpeckleStructuralGSA.Schema
     public int? LoadCaseIndex;
     public bool GlobalAxis;
     public int? AxisIndex;
-    public LoadDirection6 LoadDirection;
+    public AxisDirection6 LoadDirection;
     public double? Value;
 
     public GsaLoadNode(): base()
@@ -54,7 +54,7 @@ namespace SpeckleStructuralGSA.Schema
     #region to_gwa_fns
     private string AddLoadDirection()
     {
-      return (LoadDirection == LoadDirection6.NotSet) ? "X" : LoadDirection.ToString();
+      return (LoadDirection == AxisDirection6.NotSet) ? "X" : LoadDirection.ToString();
     }
     #endregion
 

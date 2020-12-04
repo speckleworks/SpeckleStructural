@@ -14,7 +14,7 @@ namespace SpeckleStructuralGSA.Schema
     public LoadBeamAxisRefType AxisRefType;
     public int? AxisIndex;
     public bool Projected;
-    public LoadDirection6 LoadDirection;
+    public AxisDirection6 LoadDirection;
 
     protected GwaKeyword childKeyword;
 
@@ -37,7 +37,7 @@ namespace SpeckleStructuralGSA.Schema
         AddName, 
         AddEntities, 
         (v) => (AddNullableIndex(v, out LoadCaseIndex)),
-        (v) => (AddNullableIndex(v, out AxisIndex)),
+        AddAxis,
         AddProj, 
         (v) => Enum.TryParse(v, true, out LoadDirection))
         && (((extraFns.Count() > 0) && FromGwaByFuncs(remainingItems, out _, extraFns)) || true));
@@ -62,7 +62,7 @@ namespace SpeckleStructuralGSA.Schema
         LoadCaseIndex ?? 0,
         AddAxis(), 
         Projected ? "YES" : "NO", 
-        (LoadDirection == LoadDirection6.NotSet) ? "X" : LoadDirection.ToString());
+        (LoadDirection == AxisDirection6.NotSet) ? "X" : LoadDirection.ToString());
       if (extra.Count() > 0)
       {
         AddItems(ref items, extra);
@@ -88,7 +88,7 @@ namespace SpeckleStructuralGSA.Schema
       //the group is used
 
       var allIndices = Initialiser.Cache.LookupIndices(
-        (Initialiser.Settings.TargetLayer == GSATargetLayer.Design) ? Keyword<GsaMemb>() : Keyword<GsaEl>())
+        (Initialiser.Settings.TargetLayer == GSATargetLayer.Design) ? GetKeyword<GsaMemb>() : GetKeyword<GsaEl>())
         .Where(i => i.HasValue).Select(i => i.Value).Distinct().OrderBy(i => i).ToList();
 
       if (Entities.Distinct().OrderBy(i => i).SequenceEqual(allIndices))

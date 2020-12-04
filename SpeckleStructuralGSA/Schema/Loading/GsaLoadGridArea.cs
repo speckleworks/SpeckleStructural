@@ -18,7 +18,7 @@ namespace SpeckleStructuralGSA.Schema
     public AxisRefType AxisRefType;
     public int? AxisIndex;
     public bool Projected;
-    public LoadDirection3 LoadDirection;
+    public AxisDirection3 LoadDirection;
     public double? Value;
 
     public GsaLoadGridArea() : base()
@@ -88,7 +88,7 @@ namespace SpeckleStructuralGSA.Schema
 
     private string AddLoadDirection()
     {
-      return (LoadDirection == LoadDirection3.NotSet) ? "X" : LoadDirection.ToString();
+      return (LoadDirection == AxisDirection3.NotSet) ? "X" : LoadDirection.ToString();
     }
     #endregion
 
@@ -144,7 +144,7 @@ namespace SpeckleStructuralGSA.Schema
 
     private bool AddDir(string v)
     {
-      LoadDirection = Enum.TryParse<LoadDirection3>(v, true, out var loadDir) ? loadDir : LoadDirection3.NotSet;
+      LoadDirection = Enum.TryParse<AxisDirection3>(v, true, out var loadDir) ? loadDir : AxisDirection3.NotSet;
       return true;
     }
 
