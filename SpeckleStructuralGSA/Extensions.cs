@@ -33,6 +33,18 @@ namespace SpeckleStructuralGSA
       return attribs.Length > 0 ? attribs[0].Value : null;
     }
 
+    public static bool TryParseStringValue<T>(this string v, out T value) where T : Enum
+    {
+      var enumValues = typeof(T).GetEnumValues().OfType<T>().ToDictionary(ev => GetStringValue(ev), ev => ev);
+      if (enumValues.ContainsKey(v))
+      {
+        value = enumValues[v];
+        return true;
+      }
+      value = default;
+      return false;
+    }
+
     public static bool ValidNonZero(this double? v)
     {
       return v.HasValue && v > 0;

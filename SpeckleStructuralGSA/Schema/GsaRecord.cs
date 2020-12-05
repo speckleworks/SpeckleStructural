@@ -139,6 +139,7 @@ namespace SpeckleStructuralGSA.Schema
         {
           return false;
         }
+        Index = index;
         items.Remove(items[0]);
       }
 
@@ -163,6 +164,12 @@ namespace SpeckleStructuralGSA.Schema
       {
         return new List<string>();
       }
+    }
+
+    protected bool AddYesNoBoolean(string v, out bool dest)
+    {
+      dest = (v.Equals("YES", StringComparison.InvariantCultureIgnoreCase)) ? true : false;
+      return true;
     }
 
     protected bool AddNullableIndex(string v, out int? dest)

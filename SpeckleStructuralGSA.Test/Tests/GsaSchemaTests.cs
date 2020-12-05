@@ -11,6 +11,7 @@ using SpeckleStructuralClasses;
 using SpeckleStructuralGSA.Schema;
 using SpeckleStructuralGSA.SchemaConversion;
 using SpeckleCoreGeometryClasses;
+using DeepEqual.Syntax;
 
 namespace SpeckleStructuralGSA.Test
 {
@@ -493,12 +494,16 @@ namespace SpeckleStructuralGSA.Test
         Releases2 = new Dictionary<AxisDirection6, ReleaseCode>() { { AxisDirection6.Y, ReleaseCode.Released }}, //*
         RestraintEnd1 = Restraint.Fixed, //*
         RestraintEnd2 = Restraint.Pinned, //*
-        EffectiveLengthType = EffectiveLengthType.AUTOMATIC, //*
+        EffectiveLengthType = EffectiveLengthType.Automatic, //*
         LoadHeight = 19,
         LoadHeightReferencePoint = LoadHeightReferencePoint.TopFlange, //*
         MemberHasOffsets = false
       };
       Assert.IsTrue(gsaMembBeamAuto.Gwa(out var gwa1, false));
+
+      var gsaMemb = new GsaMemb();
+      Assert.IsTrue(gsaMemb.FromGwa(gwa1.First()));
+      gsaMembBeamAuto.ShouldDeepEqual(gsaMemb);
 
       var gsaMembColEffLen = new GsaMemb() 
       { 
@@ -524,7 +529,7 @@ namespace SpeckleStructuralGSA.Test
         Stiffnesses1 = new List<double>() { 17 }, //*
         RestraintEnd1 = Restraint.FullRotational, //*
         RestraintEnd2 = Restraint.Pinned, //*
-        EffectiveLengthType = EffectiveLengthType.EFF_LEN, //*
+        EffectiveLengthType = EffectiveLengthType.EffectiveLength, //*
         EffectiveLengthYY = 18, //*
         PercentageZZ = 65, //*
         EffectiveLengthLateralTorsional = 19, //*
@@ -533,6 +538,10 @@ namespace SpeckleStructuralGSA.Test
         MemberHasOffsets = false
       };
       Assert.IsTrue(gsaMembColEffLen.Gwa(out var gwa2, false));
+
+      gsaMemb = new GsaMemb();
+      Assert.IsTrue(gsaMemb.FromGwa(gwa2.First()));
+      gsaMembColEffLen.ShouldDeepEqual(gsaMemb);
 
       var gsaMembGeneric1dExplicit = new GsaMemb()
       {
@@ -558,7 +567,7 @@ namespace SpeckleStructuralGSA.Test
         Stiffnesses1 = new List<double>() { 17 }, //*
         RestraintEnd1 = Restraint.FullRotational, //*
         RestraintEnd2 = Restraint.Pinned, //*
-        EffectiveLengthType = EffectiveLengthType.EXPLICIT, //*
+        EffectiveLengthType = EffectiveLengthType.Explicit, //*
         PointRestraints = new List<RestraintDefinition>()
         {
           new RestraintDefinition() { All = true, Restraint = Restraint.TopFlangeLateral }
@@ -573,6 +582,10 @@ namespace SpeckleStructuralGSA.Test
         MemberHasOffsets = false
       };
       Assert.IsTrue(gsaMembGeneric1dExplicit.Gwa(out var gwa3, false));
+
+      gsaMemb = new GsaMemb();
+      Assert.IsTrue(gsaMemb.FromGwa(gwa3.First()));
+      gsaMembGeneric1dExplicit.ShouldDeepEqual(gsaMemb);
 
       var gwaToTest = gwa1.Union(gwa2).Union(gwa3).ToList();
 

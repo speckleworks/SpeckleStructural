@@ -274,9 +274,12 @@
 
   public enum EffectiveLengthType
   {
-    AUTOMATIC,
-    EFF_LEN,
-    EXPLICIT
+    [StringValue("AUTOMATIC")]
+    Automatic,
+    [StringValue("EFF_LEN")]
+    EffectiveLength,
+    [StringValue("EXPLICIT")]
+    Explicit
   }
 
   public enum Colour
