@@ -480,7 +480,6 @@ namespace SpeckleStructuralGSA.Test
         PropertyIndex = 3,
         Group = 1,
         NodeIndices = new List<int>() { 4, 5 },
-        Voids = new List<List<int>>() { new List<int>() { 7, 8, 9 } },
         OrientationNodeIndex = 6,
         Angle = 10,
         MeshSize = 11,
@@ -515,7 +514,6 @@ namespace SpeckleStructuralGSA.Test
         PropertyIndex = 3,
         Group = 2,
         NodeIndices = new List<int>() { 4, 5 },
-        Voids = new List<List<int>>() { new List<int>() { 7, 8, 9} },
         OrientationNodeIndex = 6,
         Angle = 10,
         MeshSize = 11,
@@ -553,7 +551,6 @@ namespace SpeckleStructuralGSA.Test
         PropertyIndex = 3,
         Group = 3,
         NodeIndices = new List<int>() { 4, 5 },
-        Voids = new List<List<int>>() { new List<int>() { 7, 8, 9 } },
         OrientationNodeIndex = 6,
         Angle = 10,
         MeshSize = 11,
@@ -586,6 +583,101 @@ namespace SpeckleStructuralGSA.Test
       gsaMemb = new GsaMemb();
       Assert.IsTrue(gsaMemb.FromGwa(gwa3.First()));
       gsaMembGeneric1dExplicit.ShouldDeepEqual(gsaMemb);
+
+      var gwaToTest = gwa1.Union(gwa2).Union(gwa3).ToList();
+
+      Assert.IsTrue(ModelValidation(gwaToTest, GsaRecord.GetKeyword<GsaMemb>(), 3, out var mismatch, visible: true));
+    }
+
+    [Test]
+    public void GsaMemb2dSimple()
+    {
+      var gsaMembSlabLinear = new GsaMemb()
+      {
+        ApplicationId = "slablinear",
+        Name = "Slab Linear",
+        Index = 1,
+        Type = MemberType.Slab, //*
+        Exposure = ExposedSurfaces.ALL, //*
+        PropertyIndex = 2,
+        Group = 1,
+        NodeIndices = new List<int>() { 4, 5, 6, 7 },
+        Voids = new List<List<int>>() { new List<int>() { 8, 9, 10 } },
+        OrientationNodeIndex = 3,
+        Angle = 11,
+        MeshSize = 12,
+        IsIntersector = true,
+        AnalysisType = AnalysisType.LINEAR, //*
+        Fire = FireResistance.HalfHour, //*
+        LimitingTemperature = 13,
+        CreationFromStartDays = 14,
+        RemovedAtDays = 15,
+        Offset2dZ = 16,
+        OffsetAutomaticInternal = false
+      };
+      Assert.IsTrue(gsaMembSlabLinear.Gwa(out var gwa1, false));
+
+      var gsaMemb = new GsaMemb();
+      Assert.IsTrue(gsaMemb.FromGwa(gwa1.First()));
+      gsaMembSlabLinear.ShouldDeepEqual(gsaMemb);
+
+      var gsaMembWallQuadratic = new GsaMemb()
+      {
+        ApplicationId = "wallquadratic",
+        Name = "Wall Quadratic",
+        Index = 2,
+        Type = MemberType.Wall, //*
+        Exposure = ExposedSurfaces.SIDES, //*
+        PropertyIndex = 2,
+        Group = 2,
+        NodeIndices = new List<int>() { 4, 5, 6, 7 },
+        Voids = new List<List<int>>() { new List<int>() { 8, 9, 10 } },
+        OrientationNodeIndex = 3,
+        Angle = 11,
+        MeshSize = 12,
+        IsIntersector = true,
+        AnalysisType = AnalysisType.QUADRATIC, //*
+        Fire = FireResistance.ThreeHours, //*
+        LimitingTemperature = 13,
+        CreationFromStartDays = 14,
+        RemovedAtDays = 15,
+        Offset2dZ = 16,
+        OffsetAutomaticInternal = false
+      };
+      Assert.IsTrue(gsaMembWallQuadratic.Gwa(out var gwa2, false));
+
+      gsaMemb = new GsaMemb();
+      Assert.IsTrue(gsaMemb.FromGwa(gwa2.First()));
+      gsaMembWallQuadratic.ShouldDeepEqual(gsaMemb);
+
+      var gsaMembGeneric = new GsaMemb()
+      {
+        ApplicationId = "generic2dRigid",
+        Name = "Wall XY Rigid Diaphragm",
+        Index = 3,
+        Type = MemberType.Wall, //*
+        Exposure = ExposedSurfaces.SIDES, //*
+        PropertyIndex = 2,
+        Group = 3,
+        NodeIndices = new List<int>() { 4, 5, 6, 7 },
+        Voids = new List<List<int>>() { new List<int>() { 8, 9, 10 } },
+        OrientationNodeIndex = 3,
+        Angle = 11,
+        MeshSize = 12,
+        IsIntersector = true,
+        AnalysisType = AnalysisType.RIGID, //*
+        Fire = FireResistance.TwoHours, //*
+        LimitingTemperature = 13,
+        CreationFromStartDays = 14,
+        RemovedAtDays = 15,
+        Offset2dZ = 16,
+        OffsetAutomaticInternal = false
+      };
+      Assert.IsTrue(gsaMembGeneric.Gwa(out var gwa3, false));
+
+      gsaMemb = new GsaMemb();
+      Assert.IsTrue(gsaMemb.FromGwa(gwa3.First()));
+      gsaMembGeneric.ShouldDeepEqual(gsaMemb);
 
       var gwaToTest = gwa1.Union(gwa2).Union(gwa3).ToList();
 

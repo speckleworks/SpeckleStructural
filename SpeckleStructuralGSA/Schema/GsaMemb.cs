@@ -74,9 +74,9 @@ namespace SpeckleStructuralGSA.Schema
 
     #region members_2D
     public double? Offset2dZ;
-    public double? OffsetAutomaticInternal;
-    //Stored as string now but some separation into separate members
-    public string Reinforcement;
+    public bool OffsetAutomaticInternal;
+
+    //Rebar not supported yet - more members to be added here in the future to store rebar-related data
     #endregion
 
     #endregion
@@ -94,15 +94,23 @@ namespace SpeckleStructuralGSA.Schema
       }
       var items = remainingItems;
 
-      //First all the common items for 1D members
+      //MEMB.8 | num | name | colour | type (1D) | exposure | prop | group | topology | node | angle | mesh_size | is_intersector | analysis_type | fire | limiting_temperature | time[4] | dummy | rls_1 { | k_1 } rls_2 { | k_2 } | restraint_end_1 | restraint_end_2 | AUTOMATIC | load_height | load_ref | is_off { | auto_off_x1 | auto_off_x2 | off_x1 | off_x2 | off_y | off_z }
+      //MEMB.8 | num | name | colour | type (1D) | exposure | prop | group | topology | node | angle | mesh_size | is_intersector | analysis_type | fire | limiting_temperature | time[4] | dummy | rls_1 { | k_1 } rls_2 { | k_2 } | restraint_end_1 | restraint_end_2 | EFF_LEN | lyy | lzz | llt | load_height | load_ref | is_off { | auto_off_x1 | auto_off_x2 | off_x1 | off_x2 | off_y | off_z }
+      //MEMB.8 | num | name | colour | type (1D) | exposure | prop | group | topology | node | angle | mesh_size | is_intersector | analysis_type | fire | limiting_temperature | time[4] | dummy | rls_1 { | k_1 } rls_2 { | k_2 } | restraint_end_1 | restraint_end_2 | EXPLICIT | num_pt | { pt | rest | } | num_span | { span | rest | } load_height | load_ref | is_off { | auto_off_x1 | auto_off_x2 | off_x1 | off_x2 | off_y | off_z }
+      //MEMB.8 | num | name | colour | type (2D) | exposure | prop | group | topology | node | angle | mesh_size | is_intersector | analysis_type | fire | limiting_temperature | time[4] | dummy | off_z | off_auto_internal | reinforcement2d |
+      //MEMB.8 | num | name | colour | type (3D) | prop | group | topology | node | angle | mesh_size | is_intersector | analysis_type | fire | time[4] | dummy |
 
-      //MEMB.8 | num | name | colour | type(1D) | exposure | prop | group | topology | node | angle | mesh_size | is_intersector | analysis_type | fire | limiting_temperature | time[4] | dummy | rls_1 { | k_1 } rls_2 { | k_2 } | restraint_end_1 | restraint_end_2 | AUTOMATIC | load_height | load_ref | is_off { | auto_off_x1 | auto_off_x2 | off_x1 | off_x2 | off_y | off_z }
-      //MEMB.8 | num | name | colour | type(1D) | exposure | prop | group | topology | node | angle | mesh_size | is_intersector | analysis_type | fire | limiting_temperature | time[4] | dummy | rls_1 { | k_1 } rls_2 { | k_2 } | restraint_end_1 | restraint_end_2 | EFF_LEN | lyy | lzz | llt | load_height | load_ref | is_off { | auto_off_x1 | auto_off_x2 | off_x1 | off_x2 | off_y | off_z }
-      //MEMB.8 | num | name | colour | type(1D) | exposure | prop | group | topology | node | angle | mesh_size | is_intersector | analysis_type | fire | limiting_temperature | time[4] | dummy | rls_1 { | k_1 } rls_2 { | k_2 } | restraint_end_1 | restraint_end_2 | EXPLICIT | num_pt | { pt | rest | } | num_span | { span | rest | } load_height | load_ref | is_off { | auto_off_x1 | auto_off_x2 | off_x1 | off_x2 | off_y | off_z }
-      if (!FromGwaByFuncs(items, out remainingItems, AddName, AddColour, (v) => v.TryParseStringValue(out Type), (v) => Enum.TryParse(v, true, out Exposure),
-        (v) => AddNullableIndex(v, out PropertyIndex), (v) => AddNullableIntValue(v, out Group), AddTopology, (v) => AddNullableIndex(v, out OrientationNodeIndex),
-        (v) => AddNullableDoubleValue(v, out Angle), (v) => AddNullableDoubleValue(v, out MeshSize), (v) => AddYesNoBoolean(v, out IsIntersector),
-        (v) => Enum.TryParse(v, true, out AnalysisType), AddFire,
+      //Process enough to determine the type of member it is (i.e 1D, 2D or 3D)
+      if (!FromGwaByFuncs(items, out remainingItems, AddName, AddColour, (v) => v.TryParseStringValue(out Type)) || Type == MemberType.Generic3d)
+      {
+        return false;
+      }
+      items = remainingItems;
+
+      //Now all the common items for 1D and 2D members
+      if (!FromGwaByFuncs(items, out remainingItems, (v) => Enum.TryParse(v, true, out Exposure), (v) => AddNullableIndex(v, out PropertyIndex), 
+        (v) => AddNullableIntValue(v, out Group), AddTopology, (v) => AddNullableIndex(v, out OrientationNodeIndex), (v) => AddNullableDoubleValue(v, out Angle), 
+        (v) => AddNullableDoubleValue(v, out MeshSize), (v) => AddYesNoBoolean(v, out IsIntersector), (v) => Enum.TryParse(v, true, out AnalysisType), AddFire,
         (v) => AddNullableDoubleValue(v, out LimitingTemperature), (v) => int.TryParse(v, out CreationFromStartDays), (v) => int.TryParse(v, out StartOfDryingDays),
         (v) => int.TryParse(v, out AgeAtLoadingDays), (v) => int.TryParse(v, out RemovedAtDays), AddDummy))
       {
@@ -110,50 +118,62 @@ namespace SpeckleStructuralGSA.Schema
       }
       items = remainingItems;
 
-      //This assumes that rls_1 { | k_1 } rls_2 { | k_2 } is at the start of the items list
-      if (!ProcessReleases(items, out remainingItems))
+      if (Type == MemberType.Beam || Type == MemberType.Generic1d || Type == MemberType.Column || Type == MemberType.Void1d)
       {
-        return false;
-      }
-      items = remainingItems;
-
-      if (!FromGwaByFuncs(items, out remainingItems, (v) => v.TryParseStringValue(out RestraintEnd1), (v) => v.TryParseStringValue(out RestraintEnd2),
-          (v) => v.TryParseStringValue(out EffectiveLengthType)))
-      {
-        return false;
-      }
-      items = remainingItems;
-
-      if (EffectiveLengthType == EffectiveLengthType.EffectiveLength)
-      {
-        AddEffectiveLength(items[0], ref EffectiveLengthYY, ref PercentageYY);
-        AddEffectiveLength(items[1], ref EffectiveLengthZZ, ref PercentageZZ);
-        AddEffectiveLength(items[2], ref EffectiveLengthLateralTorsional, ref FractionLateralTorsional);
-        items = items.Skip(3).ToList();
-      }
-      else if (EffectiveLengthType == EffectiveLengthType.Explicit)
-      {
-        if (!ProcessExplicit(items, out remainingItems))
+        //This assumes that rls_1 { | k_1 } rls_2 { | k_2 } is at the start of the items list
+        if (!ProcessReleases(items, out remainingItems))
         {
           return false;
         }
         items = remainingItems;
-      }
 
-      if (!FromGwaByFuncs(items, out remainingItems, (v) => AddNullableDoubleValue(v, out LoadHeight), (v) => v.TryParseStringValue(out LoadHeightReferencePoint), AddIsOffset))
+        if (!FromGwaByFuncs(items, out remainingItems, (v) => v.TryParseStringValue(out RestraintEnd1), (v) => v.TryParseStringValue(out RestraintEnd2),
+            (v) => v.TryParseStringValue(out EffectiveLengthType)))
+        {
+          return false;
+        }
+        items = remainingItems;
+
+        if (EffectiveLengthType == EffectiveLengthType.EffectiveLength)
+        {
+          AddEffectiveLength(items[0], ref EffectiveLengthYY, ref PercentageYY);
+          AddEffectiveLength(items[1], ref EffectiveLengthZZ, ref PercentageZZ);
+          AddEffectiveLength(items[2], ref EffectiveLengthLateralTorsional, ref FractionLateralTorsional);
+          items = items.Skip(3).ToList();
+        }
+        else if (EffectiveLengthType == EffectiveLengthType.Explicit)
+        {
+          if (!ProcessExplicit(items, out remainingItems))
+          {
+            return false;
+          }
+          items = remainingItems;
+        }
+
+        if (!FromGwaByFuncs(items, out remainingItems, (v) => AddNullableDoubleValue(v, out LoadHeight), (v) => v.TryParseStringValue(out LoadHeightReferencePoint), AddIsOffset))
+        {
+          return false;
+        }
+        items = remainingItems;
+
+        return MemberHasOffsets ? ProcessOffsets(items) : true;
+      }
+      else if (Type == MemberType.Generic2d || Type == MemberType.Slab || Type == MemberType.Wall || Type == MemberType.Void2d)
+      {
+        AddItems(ref items, Offset2dZ ?? 0, OffsetAutomaticInternal ? "YES" : "NO", "REBAR_2D.1", 0, 0, 0);
+        return FromGwaByFuncs(items, out _, (v) => AddNullableDoubleValue(v, out Offset2dZ), (v) => AddYesNoBoolean(v, out OffsetAutomaticInternal));
+      }
+      else
       {
         return false;
       }
-      items = remainingItems;
-
-      return MemberHasOffsets ? ProcessOffsets(items) : true;
     }
 
     public override bool Gwa(out List<string> gwa, bool includeSet = false)
     {
       gwa = new List<string>();
       //Just supporting non-void 1D types at this stage
-      if (!(Type == MemberType.Beam || Type == MemberType.Generic1d || Type == MemberType.Column) || !InitialiseGwa(includeSet, out var items))
+      if (Type == MemberType.Generic3d || !InitialiseGwa(includeSet, out var items))
       {
         return false;
       }
@@ -167,29 +187,40 @@ namespace SpeckleStructuralGSA.Schema
         AddTopology(), OrientationNodeIndex ?? 0, Angle, MeshSize ?? 0, IsIntersector ? "YES" : "NO", AddAnalysisType(), (int)Fire, LimitingTemperature ?? 0,
         CreationFromStartDays, StartOfDryingDays, AgeAtLoadingDays, RemovedAtDays, Dummy ? "DUMMY" : "ACTIVE");
 
-      AddEndReleaseItems(ref items, Releases1, Stiffnesses1, axisDirs);
-      AddEndReleaseItems(ref items, Releases2, Stiffnesses2, axisDirs);
-
-      AddItems(ref items, RestraintEnd1.GetStringValue(), RestraintEnd2.GetStringValue(), EffectiveLengthType.GetStringValue());
-
-      if (EffectiveLengthType == EffectiveLengthType.EffectiveLength)
+      if (Type == MemberType.Beam || Type == MemberType.Generic1d || Type == MemberType.Column || Type == MemberType.Void1d)
       {
-        AddItems(ref items,
-          AddEffectiveLength(EffectiveLengthYY, PercentageYY),
-          AddEffectiveLength(EffectiveLengthZZ, PercentageZZ),
-          AddEffectiveLength(EffectiveLengthLateralTorsional, FractionLateralTorsional));
+        AddEndReleaseItems(ref items, Releases1, Stiffnesses1, axisDirs);
+        AddEndReleaseItems(ref items, Releases2, Stiffnesses2, axisDirs);
+
+        AddItems(ref items, RestraintEnd1.GetStringValue(), RestraintEnd2.GetStringValue(), EffectiveLengthType.GetStringValue());
+
+        if (EffectiveLengthType == EffectiveLengthType.EffectiveLength)
+        {
+          AddItems(ref items,
+            AddEffectiveLength(EffectiveLengthYY, PercentageYY),
+            AddEffectiveLength(EffectiveLengthZZ, PercentageZZ),
+            AddEffectiveLength(EffectiveLengthLateralTorsional, FractionLateralTorsional));
+        }
+        else if (EffectiveLengthType == EffectiveLengthType.Explicit)
+        {
+          AddExplicitItems(ref items, PointRestraints);
+          AddExplicitItems(ref items, SpanRestraints);
+        }
+
+        AddItems(ref items, LoadHeight ?? 0, LoadHeightReferencePoint.GetStringValue(), MemberHasOffsets ? "OFF" : "NO_OFF");
+
+        if (MemberHasOffsets)
+        {
+          AddItems(ref items, AddAutoOrMan(End1AutomaticOffset), AddAutoOrMan(End2AutomaticOffset), End1OffsetX ?? 0, End2OffsetX ?? 0, OffsetY ?? 0, OffsetZ ?? 0);
+        }
       }
-      else if (EffectiveLengthType == EffectiveLengthType.Explicit)
+      else if (Type == MemberType.Generic2d || Type == MemberType.Slab || Type == MemberType.Wall || Type == MemberType.Void2d)
       {
-        AddExplicitItems(ref items, PointRestraints);
-        AddExplicitItems(ref items, SpanRestraints);
+        AddItems(ref items, Offset2dZ ?? 0, OffsetAutomaticInternal ? "YES" : "NO", "REBAR_2D.1", 0, 0, 0);
       }
-
-      AddItems(ref items, LoadHeight ?? 0, LoadHeightReferencePoint.GetStringValue(), MemberHasOffsets ? "OFF" : "NO_OFF");
-
-      if (MemberHasOffsets)
+      else
       {
-        AddItems(ref items, AddAutoOrMan(End1AutomaticOffset), AddAutoOrMan(End2AutomaticOffset), End1OffsetX ?? 0, End2OffsetX ?? 0, OffsetY ?? 0, OffsetZ ?? 0);
+        return false;
       }
 
       gwa = (Join(items, out var gwaLine)) ? new List<string>() { gwaLine } : new List<string>();
