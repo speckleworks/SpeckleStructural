@@ -22,7 +22,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralLoadTask();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
 
       var counter = 1; // Skip identifier
 
@@ -32,7 +32,7 @@ namespace SpeckleStructuralGSA
 
       //Find task type
       int.TryParse(pieces[counter++], out int taskRef);
-      var taskRec = Initialiser.Cache.GetGwa("TASK.1", taskRef).First();
+      var taskRec = Initialiser.Cache.GetGwa("TASK", taskRef).First();
       obj.TaskType = Helper.GetLoadTaskType(taskRec);
       this.SubGWACommand.Add(taskRec);
 
@@ -70,6 +70,10 @@ namespace SpeckleStructuralGSA
         return "";
 
       var loadTask = this.Value as StructuralLoadTask;
+      if (string.IsNullOrEmpty(loadTask.ApplicationId))
+      {
+        return "";
+      }
 
       var keyword = typeof(GSALoadTask).GetGSAKeyword();
 
@@ -207,7 +211,7 @@ namespace SpeckleStructuralGSA
           ls.Add("0");
           break;
       }
-      gwaCommands.Add(string.Join("\t", ls));
+      gwaCommands.Add(string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
 
       // Set ANAL
       ls.Clear();
@@ -241,7 +245,7 @@ namespace SpeckleStructuralGSA
           ls.Add(string.Join(" + ", subLs));
         }
       }
-      gwaCommands.Add(string.Join("\t", ls));
+      gwaCommands.Add(string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
       return string.Join("\n", gwaCommands);
     }
   }

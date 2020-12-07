@@ -1809,7 +1809,7 @@
       37.55664063,
       5.79
     ],
-    "applicationId": "gsa/NODE.3-1",
+    "applicationId": "gsa/NODE-1",
     "name": "",
     "properties": {}
   },
@@ -1820,7 +1820,7 @@
       57.35664063,
       11.58
     ],
-    "applicationId": "gsa/NODE.3-10",
+    "applicationId": "gsa/NODE-10",
     "name": "",
     "properties": {}
   },
@@ -1831,7 +1831,7 @@
       7.856641602,
       11.58
     ],
-    "applicationId": "gsa/NODE.3-11",
+    "applicationId": "gsa/NODE-11",
     "name": "",
     "properties": {}
   },
@@ -1842,7 +1842,7 @@
       7.856641602,
       11.58
     ],
-    "applicationId": "gsa/NODE.3-12",
+    "applicationId": "gsa/NODE-12",
     "name": "",
     "properties": {}
   },
@@ -1853,7 +1853,7 @@
       -2.043358276,
       11.58
     ],
-    "applicationId": "gsa/NODE.3-13",
+    "applicationId": "gsa/NODE-13",
     "name": "",
     "properties": {}
   },
@@ -1864,7 +1864,7 @@
       -2.043358276,
       11.58
     ],
-    "applicationId": "gsa/NODE.3-14",
+    "applicationId": "gsa/NODE-14",
     "name": "",
     "properties": {}
   },
@@ -1875,7 +1875,7 @@
       37.55664063,
       17.37
     ],
-    "applicationId": "gsa/NODE.3-15",
+    "applicationId": "gsa/NODE-15",
     "name": "",
     "properties": {}
   },
@@ -1886,7 +1886,7 @@
       37.55664063,
       17.37
     ],
-    "applicationId": "gsa/NODE.3-16",
+    "applicationId": "gsa/NODE-16",
     "name": "",
     "properties": {}
   },
@@ -1897,7 +1897,7 @@
       57.35664063,
       17.37
     ],
-    "applicationId": "gsa/NODE.3-17",
+    "applicationId": "gsa/NODE-17",
     "name": "",
     "properties": {}
   },
@@ -1908,7 +1908,7 @@
       7.856641602,
       17.37
     ],
-    "applicationId": "gsa/NODE.3-18",
+    "applicationId": "gsa/NODE-18",
     "name": "",
     "properties": {}
   },
@@ -1919,7 +1919,7 @@
       7.856641602,
       17.37
     ],
-    "applicationId": "gsa/NODE.3-19",
+    "applicationId": "gsa/NODE-19",
     "name": "",
     "properties": {}
   },
@@ -1930,7 +1930,7 @@
       37.55664063,
       5.79
     ],
-    "applicationId": "gsa/NODE.3-2",
+    "applicationId": "gsa/NODE-2",
     "name": "",
     "properties": {}
   },
@@ -1941,7 +1941,7 @@
       -2.043358276,
       17.37
     ],
-    "applicationId": "gsa/NODE.3-20",
+    "applicationId": "gsa/NODE-20",
     "name": "",
     "properties": {}
   },
@@ -1952,7 +1952,7 @@
       -2.043358276,
       17.37
     ],
-    "applicationId": "gsa/NODE.3-21",
+    "applicationId": "gsa/NODE-21",
     "name": "",
     "properties": {}
   },
@@ -1963,7 +1963,7 @@
       31.42857227,
       23.551
     ],
-    "applicationId": "gsa/NODE.3-22",
+    "applicationId": "gsa/NODE-22",
     "name": "",
     "properties": {}
   },
@@ -1974,7 +1974,7 @@
       31.42857227,
       23.551
     ],
-    "applicationId": "gsa/NODE.3-23",
+    "applicationId": "gsa/NODE-23",
     "name": "",
     "properties": {}
   },
@@ -1985,7 +1985,7 @@
       41.42857031,
       23.551
     ],
-    "applicationId": "gsa/NODE.3-24",
+    "applicationId": "gsa/NODE-24",
     "name": "",
     "properties": {}
   },
@@ -1996,7 +1996,7 @@
       16.42857227,
       23.551
     ],
-    "applicationId": "gsa/NODE.3-25",
+    "applicationId": "gsa/NODE-25",
     "name": "",
     "properties": {}
   },
@@ -2007,7 +2007,7 @@
       16.42857227,
       23.551
     ],
-    "applicationId": "gsa/NODE.3-26",
+    "applicationId": "gsa/NODE-26",
     "name": "",
     "properties": {}
   },
@@ -2018,7 +2018,7 @@
       11.42857129,
       23.551
     ],
-    "applicationId": "gsa/NODE.3-27",
+    "applicationId": "gsa/NODE-27",
     "name": "",
     "properties": {}
   },
@@ -2029,7 +2029,7 @@
       11.42857129,
       23.551
     ],
-    "applicationId": "gsa/NODE.3-28",
+    "applicationId": "gsa/NODE-28",
     "name": "",
     "properties": {}
   },
@@ -2040,7 +2040,7 @@
       31.42857227,
       29.732
     ],
-    "applicationId": "gsa/NODE.3-29",
+    "applicationId": "gsa/NODE-29",
     "name": "",
     "properties": {}
   },
@@ -2051,7 +2051,7 @@
       57.35664063,
       5.79
     ],
-    "applicationId": "gsa/NODE.3-3",
+    "applicationId": "gsa/NODE-3",
     "name": "",
     "properties": {}
   },
@@ -2062,7 +2062,7 @@
       31.42857227,
       29.732
     ],
-    "applicationId": "gsa/NODE.3-30",
+    "applicationId": "gsa/NODE-30",
     "name": "",
     "properties": {}
   },
@@ -2073,7 +2073,7 @@
       41.42857031,
       29.732
     ],
-    "applicationId": "gsa/NODE.3-31",
+    "applicationId": "gsa/NODE-31",
     "name": "",
     "properties": {}
   },
@@ -2084,7 +2084,7 @@
       16.42857227,
       29.732
     ],
-    "applicationId": "gsa/NODE.3-32",
+    "applicationId": "gsa/NODE-32",
     "name": "",
     "properties": {}
   },
@@ -2095,7 +2095,7 @@
       16.42857227,
       29.732
     ],
-    "applicationId": "gsa/NODE.3-33",
+    "applicationId": "gsa/NODE-33",
     "name": "",
     "properties": {}
   },
@@ -2106,7 +2106,7 @@
       11.42857129,
       29.732
     ],
-    "applicationId": "gsa/NODE.3-34",
+    "applicationId": "gsa/NODE-34",
     "name": "",
     "properties": {}
   },
@@ -2117,7 +2117,7 @@
       11.42857129,
       29.732
     ],
-    "applicationId": "gsa/NODE.3-35",
+    "applicationId": "gsa/NODE-35",
     "name": "",
     "properties": {}
   },
@@ -2128,7 +2128,7 @@
       54.52807031,
       5.79
     ],
-    "applicationId": "gsa/NODE.3-36",
+    "applicationId": "gsa/NODE-36",
     "name": "",
     "properties": {}
   },
@@ -2139,7 +2139,7 @@
       54.52807031,
       5.79
     ],
-    "applicationId": "gsa/NODE.3-37",
+    "applicationId": "gsa/NODE-37",
     "name": "",
     "properties": {}
   },
@@ -2150,7 +2150,7 @@
       94.12807031,
       5.79
     ],
-    "applicationId": "gsa/NODE.3-38",
+    "applicationId": "gsa/NODE-38",
     "name": "",
     "properties": {}
   },
@@ -2161,7 +2161,7 @@
       -4.871929688,
       5.79
     ],
-    "applicationId": "gsa/NODE.3-39",
+    "applicationId": "gsa/NODE-39",
     "name": "",
     "properties": {}
   },
@@ -2172,7 +2172,7 @@
       7.856641602,
       5.79
     ],
-    "applicationId": "gsa/NODE.3-4",
+    "applicationId": "gsa/NODE-4",
     "name": "",
     "properties": {}
   },
@@ -2183,7 +2183,7 @@
       -4.871929688,
       5.79
     ],
-    "applicationId": "gsa/NODE.3-40",
+    "applicationId": "gsa/NODE-40",
     "name": "",
     "properties": {}
   },
@@ -2194,7 +2194,7 @@
       -24.67192969,
       5.79
     ],
-    "applicationId": "gsa/NODE.3-41",
+    "applicationId": "gsa/NODE-41",
     "name": "",
     "properties": {}
   },
@@ -2205,7 +2205,7 @@
       -24.67192969,
       5.79
     ],
-    "applicationId": "gsa/NODE.3-42",
+    "applicationId": "gsa/NODE-42",
     "name": "",
     "properties": {}
   },
@@ -2216,7 +2216,7 @@
       54.52807031,
       11.58
     ],
-    "applicationId": "gsa/NODE.3-43",
+    "applicationId": "gsa/NODE-43",
     "name": "",
     "properties": {}
   },
@@ -2227,7 +2227,7 @@
       54.52807031,
       11.58
     ],
-    "applicationId": "gsa/NODE.3-44",
+    "applicationId": "gsa/NODE-44",
     "name": "",
     "properties": {}
   },
@@ -2238,7 +2238,7 @@
       94.12807031,
       11.58
     ],
-    "applicationId": "gsa/NODE.3-45",
+    "applicationId": "gsa/NODE-45",
     "name": "",
     "properties": {}
   },
@@ -2249,7 +2249,7 @@
       -4.871929688,
       11.58
     ],
-    "applicationId": "gsa/NODE.3-46",
+    "applicationId": "gsa/NODE-46",
     "name": "",
     "properties": {}
   },
@@ -2260,7 +2260,7 @@
       -4.871929688,
       11.58
     ],
-    "applicationId": "gsa/NODE.3-47",
+    "applicationId": "gsa/NODE-47",
     "name": "",
     "properties": {}
   },
@@ -2271,7 +2271,7 @@
       -24.67192969,
       11.58
     ],
-    "applicationId": "gsa/NODE.3-48",
+    "applicationId": "gsa/NODE-48",
     "name": "",
     "properties": {}
   },
@@ -2282,7 +2282,7 @@
       -24.67192969,
       11.58
     ],
-    "applicationId": "gsa/NODE.3-49",
+    "applicationId": "gsa/NODE-49",
     "name": "",
     "properties": {}
   },
@@ -2293,7 +2293,7 @@
       7.856641602,
       5.79
     ],
-    "applicationId": "gsa/NODE.3-5",
+    "applicationId": "gsa/NODE-5",
     "name": "",
     "properties": {}
   },
@@ -2304,7 +2304,7 @@
       54.52807031,
       17.37
     ],
-    "applicationId": "gsa/NODE.3-50",
+    "applicationId": "gsa/NODE-50",
     "name": "",
     "properties": {}
   },
@@ -2315,7 +2315,7 @@
       54.52807031,
       17.37
     ],
-    "applicationId": "gsa/NODE.3-51",
+    "applicationId": "gsa/NODE-51",
     "name": "",
     "properties": {}
   },
@@ -2326,7 +2326,7 @@
       94.12807031,
       17.37
     ],
-    "applicationId": "gsa/NODE.3-52",
+    "applicationId": "gsa/NODE-52",
     "name": "",
     "properties": {}
   },
@@ -2337,7 +2337,7 @@
       -4.871929688,
       17.37
     ],
-    "applicationId": "gsa/NODE.3-53",
+    "applicationId": "gsa/NODE-53",
     "name": "",
     "properties": {}
   },
@@ -2348,7 +2348,7 @@
       -4.871929688,
       17.37
     ],
-    "applicationId": "gsa/NODE.3-54",
+    "applicationId": "gsa/NODE-54",
     "name": "",
     "properties": {}
   },
@@ -2359,7 +2359,7 @@
       -24.67192969,
       17.37
     ],
-    "applicationId": "gsa/NODE.3-55",
+    "applicationId": "gsa/NODE-55",
     "name": "",
     "properties": {}
   },
@@ -2370,7 +2370,7 @@
       -24.67192969,
       17.37
     ],
-    "applicationId": "gsa/NODE.3-56",
+    "applicationId": "gsa/NODE-56",
     "name": "",
     "properties": {}
   },
@@ -2381,7 +2381,7 @@
       40.0,
       23.551
     ],
-    "applicationId": "gsa/NODE.3-57",
+    "applicationId": "gsa/NODE-57",
     "name": "",
     "properties": {}
   },
@@ -2392,7 +2392,7 @@
       40.0,
       23.551
     ],
-    "applicationId": "gsa/NODE.3-58",
+    "applicationId": "gsa/NODE-58",
     "name": "",
     "properties": {}
   },
@@ -2403,7 +2403,7 @@
       60.0,
       23.551
     ],
-    "applicationId": "gsa/NODE.3-59",
+    "applicationId": "gsa/NODE-59",
     "name": "",
     "properties": {}
   },
@@ -2414,7 +2414,7 @@
       -2.043358276,
       5.79
     ],
-    "applicationId": "gsa/NODE.3-6",
+    "applicationId": "gsa/NODE-6",
     "name": "",
     "properties": {}
   },
@@ -2425,7 +2425,7 @@
       10.0,
       23.551
     ],
-    "applicationId": "gsa/NODE.3-60",
+    "applicationId": "gsa/NODE-60",
     "name": "",
     "properties": {}
   },
@@ -2436,7 +2436,7 @@
       10.0,
       23.551
     ],
-    "applicationId": "gsa/NODE.3-61",
+    "applicationId": "gsa/NODE-61",
     "name": "",
     "properties": {}
   },
@@ -2447,7 +2447,7 @@
       0.0,
       23.551
     ],
-    "applicationId": "gsa/NODE.3-62",
+    "applicationId": "gsa/NODE-62",
     "name": "",
     "properties": {}
   },
@@ -2458,7 +2458,7 @@
       0.0,
       23.551
     ],
-    "applicationId": "gsa/NODE.3-63",
+    "applicationId": "gsa/NODE-63",
     "name": "",
     "properties": {}
   },
@@ -2469,7 +2469,7 @@
       40.0,
       29.732
     ],
-    "applicationId": "gsa/NODE.3-64",
+    "applicationId": "gsa/NODE-64",
     "name": "",
     "properties": {}
   },
@@ -2480,7 +2480,7 @@
       40.0,
       29.732
     ],
-    "applicationId": "gsa/NODE.3-65",
+    "applicationId": "gsa/NODE-65",
     "name": "",
     "properties": {}
   },
@@ -2491,7 +2491,7 @@
       60.0,
       29.732
     ],
-    "applicationId": "gsa/NODE.3-66",
+    "applicationId": "gsa/NODE-66",
     "name": "",
     "properties": {}
   },
@@ -2502,7 +2502,7 @@
       10.0,
       29.732
     ],
-    "applicationId": "gsa/NODE.3-67",
+    "applicationId": "gsa/NODE-67",
     "name": "",
     "properties": {}
   },
@@ -2513,7 +2513,7 @@
       10.0,
       29.732
     ],
-    "applicationId": "gsa/NODE.3-68",
+    "applicationId": "gsa/NODE-68",
     "name": "",
     "properties": {}
   },
@@ -2524,7 +2524,7 @@
       0.0,
       29.732
     ],
-    "applicationId": "gsa/NODE.3-69",
+    "applicationId": "gsa/NODE-69",
     "name": "",
     "properties": {}
   },
@@ -2535,7 +2535,7 @@
       -2.043358276,
       5.79
     ],
-    "applicationId": "gsa/NODE.3-7",
+    "applicationId": "gsa/NODE-7",
     "name": "",
     "properties": {}
   },
@@ -2546,7 +2546,7 @@
       0.0,
       29.732
     ],
-    "applicationId": "gsa/NODE.3-70",
+    "applicationId": "gsa/NODE-70",
     "name": "",
     "properties": {}
   },
@@ -2557,7 +2557,7 @@
       10.0,
       17.37
     ],
-    "applicationId": "gsa/NODE.3-72",
+    "applicationId": "gsa/NODE-72",
     "name": "",
     "properties": {}
   },
@@ -2568,7 +2568,7 @@
       10.0,
       17.37
     ],
-    "applicationId": "gsa/NODE.3-74",
+    "applicationId": "gsa/NODE-74",
     "name": "",
     "properties": {}
   },
@@ -2579,7 +2579,7 @@
       60.0,
       17.37
     ],
-    "applicationId": "gsa/NODE.3-76",
+    "applicationId": "gsa/NODE-76",
     "name": "",
     "properties": {}
   },
@@ -2590,7 +2590,7 @@
       40.0,
       17.37
     ],
-    "applicationId": "gsa/NODE.3-78",
+    "applicationId": "gsa/NODE-78",
     "name": "",
     "properties": {}
   },
@@ -2601,7 +2601,7 @@
       37.55664063,
       11.58
     ],
-    "applicationId": "gsa/NODE.3-8",
+    "applicationId": "gsa/NODE-8",
     "name": "",
     "properties": {}
   },
@@ -2612,7 +2612,7 @@
       40.0,
       17.37
     ],
-    "applicationId": "gsa/NODE.3-80",
+    "applicationId": "gsa/NODE-80",
     "name": "",
     "properties": {}
   },
@@ -2623,7 +2623,7 @@
       0.0,
       17.37
     ],
-    "applicationId": "gsa/NODE.3-82",
+    "applicationId": "gsa/NODE-82",
     "name": "",
     "properties": {}
   },
@@ -2634,7 +2634,7 @@
       0.0,
       17.37
     ],
-    "applicationId": "gsa/NODE.3-84",
+    "applicationId": "gsa/NODE-84",
     "name": "",
     "properties": {}
   },
@@ -2645,7 +2645,7 @@
       -4.871929825,
       -0.2
     ],
-    "applicationId": "gsa/NODE.3-85",
+    "applicationId": "gsa/NODE-85",
     "name": "",
     "properties": {}
   },
@@ -2656,7 +2656,7 @@
       -4.871929825,
       -0.2
     ],
-    "applicationId": "gsa/NODE.3-86",
+    "applicationId": "gsa/NODE-86",
     "name": "",
     "properties": {}
   },
@@ -2667,7 +2667,7 @@
       94.12807018,
       -0.2
     ],
-    "applicationId": "gsa/NODE.3-87",
+    "applicationId": "gsa/NODE-87",
     "name": "",
     "properties": {}
   },
@@ -2678,7 +2678,7 @@
       54.52807018,
       -0.2
     ],
-    "applicationId": "gsa/NODE.3-88",
+    "applicationId": "gsa/NODE-88",
     "name": "",
     "properties": {}
   },
@@ -2689,7 +2689,7 @@
       54.52807018,
       -0.2
     ],
-    "applicationId": "gsa/NODE.3-89",
+    "applicationId": "gsa/NODE-89",
     "name": "",
     "properties": {}
   },
@@ -2700,7 +2700,7 @@
       37.55664063,
       11.58
     ],
-    "applicationId": "gsa/NODE.3-9",
+    "applicationId": "gsa/NODE-9",
     "name": "",
     "properties": {}
   },
@@ -2711,7 +2711,7 @@
       -24.67192982,
       -0.2
     ],
-    "applicationId": "gsa/NODE.3-90",
+    "applicationId": "gsa/NODE-90",
     "name": "",
     "properties": {}
   },
@@ -2722,7 +2722,7 @@
       -24.67192982,
       -0.2
     ],
-    "applicationId": "gsa/NODE.3-91",
+    "applicationId": "gsa/NODE-91",
     "name": "",
     "properties": {}
   },
@@ -2733,7 +2733,7 @@
       74.32807031,
       11.58
     ],
-    "applicationId": "gsa/NODE.3-92",
+    "applicationId": "gsa/NODE-92",
     "name": "",
     "properties": {}
   },
@@ -2744,7 +2744,7 @@
       -4.871929688,
       11.58
     ],
-    "applicationId": "gsa/NODE.3-93",
+    "applicationId": "gsa/NODE-93",
     "name": "",
     "properties": {}
   },
@@ -2755,7 +2755,7 @@
       16.62698299,
       11.58
     ],
-    "applicationId": "gsa/NODE.3-94",
+    "applicationId": "gsa/NODE-94",
     "name": "",
     "properties": {}
   },
@@ -2766,7 +2766,7 @@
       23.11736934,
       11.58
     ],
-    "applicationId": "gsa/NODE.3-95",
+    "applicationId": "gsa/NODE-95",
     "name": "",
     "properties": {}
   },
@@ -2866,7 +2866,7 @@
     },
     "shape": "Generic",
     "hollow": false,
-    "materialRef": "gsa/MAT_CONCRETE.17-1",
+    "materialRef": "gsa/MAT_CONCRETE-1",
     "applicationId": "columnProp",
     "name": "Column property",
     "properties": {
@@ -2879,7 +2879,7 @@
   {
     "type": "Structural2DProperty",
     "thickness": 0.3,
-    "materialRef": "gsa/MAT_CONCRETE.17-1",
+    "materialRef": "gsa/MAT_CONCRETE-1",
     "referenceSurface": 2,
     "applicationId": "slabProp",
     "name": "Slab property",
@@ -3001,7 +3001,7 @@
   },
   {
     "type": "StructuralLoadCase",
-    "caseType": "Generic",
+    "caseType": "Dead",
     "applicationId": "LC2",
     "name": "Dead load case",
     "properties": {}
@@ -3017,8 +3017,8 @@
     "type": "StructuralLoadCombo",
     "comboType": "LinearAdd",
     "loadTaskRefs": [
-      "gsa/ANAL.1-1",
-      "gsa/ANAL.1-2"
+      "gsa/ANAL-1",
+      "gsa/ANAL-2"
     ],
     "loadTaskFactors": [
       1.5,
@@ -3043,7 +3043,7 @@
       1.0,
       1.0
     ],
-    "applicationId": "gsa/ANAL.1-1",
+    "applicationId": "gsa/ANAL-1",
     "name": "Load task 1",
     "properties": {}
   },
@@ -3060,7 +3060,7 @@
       1.0,
       1.0
     ],
-    "applicationId": "gsa/ANAL.1-2",
+    "applicationId": "gsa/ANAL-2",
     "name": "Load task 2",
     "properties": {}
   },
@@ -3074,7 +3074,7 @@
     "compressiveStrength": 40000000.0,
     "maxStrain": 0.003,
     "aggragateSize": 0.02,
-    "applicationId": "gsa/MAT_CONCRETE.17-1",
+    "applicationId": "gsa/MAT_CONCRETE-1",
     "name": "Concrete",
     "properties": {
       "structural": {
@@ -3092,7 +3092,7 @@
       0.0,
       0.0
     ],
-    "applicationId": "gsa/GRID_LINE.1-1",
+    "applicationId": "gsa/GRID_LINE-1",
     "name": "Level",
     "properties": {}
   },
@@ -3106,7 +3106,7 @@
       19.999999999999996,
       0.0
     ],
-    "applicationId": "gsa/GRID_LINE.1-2",
+    "applicationId": "gsa/GRID_LINE-2",
     "name": "Angled",
     "properties": {}
   },

@@ -24,7 +24,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralAssembly();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
 
       var counter = 1; // Skip identifier
 
@@ -106,113 +106,11 @@ namespace SpeckleStructuralGSA
 
       this.Value = obj;
     }
-
-    public string SetGWACommand()
-    {
-      if (this.Value == null)
-        return "";
-
-      var destType = typeof(GSAAssembly);
-
-      var assembly = this.Value as StructuralAssembly;
-
-      if (assembly.Value == null || assembly.Value.Count() == 0)
-        return "";
-
-      var keyword = destType.GetGSAKeyword();
-
-      var index = Initialiser.Cache.ResolveIndex(keyword, assembly.ApplicationId);
-
-      var targetString = " ";
-
-      if (assembly.ElementRefs != null && assembly.ElementRefs.Count() > 0)
-      {
-        var polylineIndices = Initialiser.Cache.LookupIndices(typeof(GSA1DElementPolyline).GetGSAKeyword(), assembly.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-        if (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
-        {
-          var e1DIndices = Initialiser.Cache.LookupIndices(typeof(GSA1DElement).GetGSAKeyword(), assembly.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-          var e2DIndices = Initialiser.Cache.LookupIndices(typeof(GSA2DElement).GetGSAKeyword(), assembly.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-          var e2DMeshIndices = Initialiser.Cache.LookupIndices(typeof(GSA2DElementMesh).GetGSAKeyword(), assembly.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-
-          var indices = new List<int>(e1DIndices);
-          indices.AddRange(e2DIndices);
-          indices.AddRange(e2DMeshIndices);
-          indices = indices.Distinct().ToList();
-
-          targetString = string.Join(" ", indices.Select(x => x.ToString()));
-        }
-        else if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
-        {
-          var m1DIndices = Initialiser.Cache.LookupIndices(typeof(GSA1DMember).GetGSAKeyword(), assembly.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-          var m2DIndices = Initialiser.Cache.LookupIndices(typeof(GSA2DMember).GetGSAKeyword(), assembly.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-
-          var indices = new List<int>(m1DIndices);
-          indices.AddRange(m2DIndices);
-          indices = indices.Distinct().ToList();
-
-          // TODO: Once assemblies can properly target members, this should target members explicitly
-          targetString = string.Join(" ", indices.Select(i => "G" + i.ToString()));
-        }
-      }
-
-      var nodeIndices = new List<int>();
-      for (var i = 0; i < assembly.Value.Count(); i += 3)
-      {
-        nodeIndices.Add(Helper.NodeAt(assembly.Value[i], assembly.Value[i + 1], assembly.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance));
-      }
-
-      //The width parameter is intentionally not being used here as the meaning doesn't map to the y coordinate parameter of the ASSEMBLY keyword
-      //It is therefore to be ignored here for GSA purposes.
-      var orientationPoint = (assembly.OrientationPoint == null || assembly.OrientationPoint.Value == null || assembly.OrientationPoint.Value.Count < 3)
-        ? new SpecklePoint(0, 0, 0)
-        : assembly.OrientationPoint;
-
-      var sid = Helper.GenerateSID(assembly);
-      var ls = new List<string>
-        {
-          "SET",
-          keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
-          index.ToString(),
-          string.IsNullOrEmpty(assembly.Name) ? "" : assembly.Name,
-          // TODO: Once assemblies can properly target members, this should target members explicitly
-          //Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis ? "ELEMENT" : "MEMBER",
-          "ELEMENT",
-          targetString,
-          nodeIndices[0].ToString(),
-          nodeIndices[1].ToString(),
-          Helper.NodeAt(orientationPoint.Value[0], orientationPoint.Value[1], orientationPoint.Value[2], Initialiser.Settings.CoincidentNodeAllowance).ToString(),
-          "", //Empty list for int_topo as it assumed that the line is never curved
-          assembly.Width.ToString(), //Y
-          "0", //Z
-          "LAGRANGE",
-          "0" //Curve order - reserved for future use according to the documentation
-      };
-
-      if (assembly.NumPoints.HasValue)
-      {
-        var numPoints = (assembly.NumPoints == 0) ? 10 : assembly.NumPoints;
-        ls.AddRange(new[] { "POINTS",
-          numPoints.ToString() //Number of points
-        });
-      }
-      else if (assembly.PointDistances != null && assembly.PointDistances.Count() > 0)
-      {
-        ls.AddRange(new[] { 
-          "EXPLICIT",
-          string.Join(" ", assembly.PointDistances)
-        });
-      }
-
-      return (string.Join("\t", ls));
-    }
   }
 
   public static partial class Conversions
   {
-    public static string ToNative(this StructuralAssembly assembly)
-    {
-      return new GSAAssembly() { Value = assembly }.SetGWACommand();
-    }
+    //The ToNative() method is in the new schema conversion folder hierarchy
 
     public static SpeckleObject ToSpeckle(this GSAAssembly dummyObject)
     {

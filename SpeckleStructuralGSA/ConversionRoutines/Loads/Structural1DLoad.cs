@@ -25,7 +25,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural1DLoad();
       obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
 
       var counter = 0; // Skip identifier
       var identifier = pieces[counter++];
@@ -202,7 +202,7 @@ namespace SpeckleStructuralGSA
         ls.Add(direction[i]);
         ls.Add(load.Loading.Value[i].ToString());
 
-        gwaCommands.Add(string.Join("\t", ls));
+        gwaCommands.Add(string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
       }
 
       return string.Join("\n", gwaCommands);
@@ -239,12 +239,7 @@ namespace SpeckleStructuralGSA
 
   public static partial class Conversions
   {
-    public static string ToNative(this Structural1DLoad load)
-    {
-      return (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
-        ? new GSA1DLoadAnalysisLayer() { Value = load }.SetGWACommand()
-        : new GSA1DLoadDesignLayer() { Value = load }.SetGWACommand();
-    }
+    //The ToNative() method is in the new schema conversion folder hierarchy
 
     public static SpeckleObject ToSpeckle(this GSA1DLoadAnalysisLayer dummyObject)
     {

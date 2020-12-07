@@ -104,7 +104,7 @@ namespace SpeckleStructuralGSA.Test
             
             var nearest = string.IsNullOrEmpty(o.ApplicationId) 
               ? null 
-              : d2.Where(e => RemoveKeywordVersion(e.Key.ApplicationId) == RemoveKeywordVersion(o.ApplicationId)).Select(kvp => kvp.Key).ToList();
+              : d2.Where(e => Helper.RemoveKeywordVersionFromApplicationIds(e.Key.ApplicationId) == Helper.RemoveKeywordVersionFromApplicationIds(o.ApplicationId)).Select(kvp => kvp.Key).ToList();
             lock (lockObj) { ret.Add(o, nearest); }
 
             if (nearest == null || nearest.Count() == 0)

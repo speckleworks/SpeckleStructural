@@ -1,0 +1,42 @@
+﻿using System;
+using SpeckleGSAInterfaces;
+
+namespace SpeckleStructuralGSA.Schema
+{
+  [AttributeUsage(AttributeTargets.Class)]
+  public class GsaType : Attribute
+  {
+    //This is the keyword used in Gwa GET commands, which is not necessarily the keyword of the records themselves.
+    //The keyword used for records is identical to that used for GET commands except for all except the LOAD_BEAM_x set.  
+    //To get all LOAD_BEAM_POINT, LOAD_BEAM_UDL, LOAD_BEAM_LINE, LOAD_BEAM_PATCH and LOAD_BEAM_TRILIN records, which all share the same
+    //table (i.e. index sequence): call GET LOAD_BEAM (this will get them all)
+    public GwaKeyword Keyword { get; protected set; }
+    public GwaSetCommandType SetCommandType { get; protected set; }
+    public StreamBucket StreamBucket { get; protected set; }
+    public bool AnalysisLayer { get; protected set; }
+    public bool DesignLayer { get; protected set; }
+    //These are keywords to use regardless of the layer - because keywords not of the layer in question will be filtered out by the app
+    //This stays true to the actual schema, where references to entities of both layers is possible to be used here
+    public GwaKeyword[] ReferencedKeywords { get; protected set; }
+
+    public GsaType(GwaKeyword keyword, GwaSetCommandType setCommandType, StreamBucket streamBucket, bool designLayer, bool analysisLayer, params GwaKeyword[] referencedKeywords)
+    {
+      this.Keyword = keyword;
+      this.SetCommandType = setCommandType;
+      this.StreamBucket = streamBucket;
+      this.AnalysisLayer = analysisLayer;
+      this.DesignLayer = designLayer;
+      this.ReferencedKeywords = referencedKeywords;
+    }
+
+    public GsaType(GwaKeyword keyword, GwaSetCommandType setCommandType, StreamBucket streamBucket, params GwaKeyword[] referencedKeywords)
+    {
+      this.Keyword = keyword;
+      this.SetCommandType = setCommandType;
+      this.StreamBucket = streamBucket;
+      this.AnalysisLayer = true;
+      this.DesignLayer = true;
+      this.ReferencedKeywords = referencedKeywords == null ? new GwaKeyword[0] : referencedKeywords;
+    }
+  }
+}

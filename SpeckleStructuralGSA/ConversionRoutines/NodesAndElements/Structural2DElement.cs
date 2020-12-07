@@ -36,7 +36,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural2DElement();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
 
       var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
@@ -207,7 +207,7 @@ namespace SpeckleStructuralGSA
 
       ls.Add((mesh.GSADummy.HasValue && mesh.GSADummy.Value) ? "DUMMY" : "");
 
-      return (string.Join("\t", ls));
+      return (string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
     }
 
   }
@@ -231,7 +231,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural2DElementMesh();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
 
       var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
@@ -240,12 +240,7 @@ namespace SpeckleStructuralGSA
       var color = pieces[counter++].ParseGSAColor(); // colour
 
       var type = pieces[counter++];
-      if (type == "SLAB")
-        obj.ElementType = Structural2DElementType.Slab;
-      else if (type == "WALL")
-        obj.ElementType = Structural2DElementType.Wall;
-      else
-        obj.ElementType = Structural2DElementType.Generic;
+      obj.ElementType = (type == "SLAB") ? Structural2DElementType.Slab : (type == "WALL") ? Structural2DElementType.Wall : Structural2DElementType.Generic;
 
       counter++; // exposure - fire property
 
@@ -259,8 +254,9 @@ namespace SpeckleStructuralGSA
       var nodeRefsFull = pieces[counter++];
 
       //Remove the specification of internal nodes
-      // TODO: remove V (void) and L (line) nodes as well if they cause problems
       var nodeRefsWithoutInternalNodes = Regex.Replace(nodeRefsFull, @"P\([0-9]*(.*?)\)", "");
+      nodeRefsWithoutInternalNodes = Regex.Replace(nodeRefsWithoutInternalNodes, @"L\([0-9]*(.*?)\)", "");
+      nodeRefsWithoutInternalNodes = Regex.Replace(nodeRefsWithoutInternalNodes, @"V\([0-9]*(.*?)\)", "");
 
       var nodeRefs = nodeRefsWithoutInternalNodes.Trim().ListSplit(" ");
       for (var i = 0; i < nodeRefs.Length; i++)
@@ -282,6 +278,7 @@ namespace SpeckleStructuralGSA
           obj.ElementType, obj.PropertyRef,
           null,
           null);
+
 
       obj.Vertices = temp.Vertices;
       obj.Faces = temp.Faces;
@@ -439,9 +436,7 @@ namespace SpeckleStructuralGSA
       ls.Add(propIndex.ToString());
       ls.Add(group != 0 ? group.ToString() : index.ToString()); // TODO: This allows for targeting of elements from members group
       
-      // topo
-      var topo = "";
-      var prevNodeIndex = -1;
+      mesh.Consolidate();
       var connectivities = mesh.Edges();
 
       if (connectivities == null || connectivities.Count() == 0)
@@ -454,13 +449,24 @@ namespace SpeckleStructuralGSA
       foreach (var c in connectivities[0])
       {
         coor.AddRange(baseMesh.Vertices.Skip(c * 3).Take(3));
-        var currIndex = Helper.NodeAt(baseMesh.Vertices[c * 3], baseMesh.Vertices[c * 3 + 1], baseMesh.Vertices[c * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance);
+      }
+      coor = coor.Essential().ToList();
+      var coorPts = Enumerable.Range(0, coor.Count() / 3).Select(i => new double[] { coor[i * 3], coor[i * 3 + 1], coor[i * 3 + 2] }).ToList();
+
+      //Use these reduced coordinates to call NodeAt and create a topo string
+      // topo
+      var topo = "";
+      var prevNodeIndex = -1;
+      foreach (var coorPt in coorPts)
+      {
+        var currIndex = Helper.NodeAt(coorPt[0], coorPt[1], coorPt[2], Initialiser.Settings.CoincidentNodeAllowance);
         if (prevNodeIndex != currIndex)
         {
           topo += currIndex.ToString() + " ";
         }
         prevNodeIndex = currIndex;
       }
+
       ls.Add(topo.Trim());
       
       ls.Add("0"); // Orientation node
@@ -492,7 +498,7 @@ namespace SpeckleStructuralGSA
       ls.Add("NO"); // Internal auto offset
       // ignore rebar commands and hope GSA fills in default values
 
-      gwaCommands.Add(string.Join("\t", ls));
+      gwaCommands.Add(string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
 
       return string.Join("\n", gwaCommands);
     }
@@ -543,7 +549,7 @@ namespace SpeckleStructuralGSA
       var newLines = newLinesTuples.Select(nl => nl.Item2);
       Parallel.ForEach(newLines, p =>
       {
-        var pPieces = p.ListSplit("\t");
+        var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
         // Check if void or not an element
         if (!(pPieces[4] == "2D_VOID_CUTTER" || pPieces[4].Is1DMember() || pPieces[4].Is2DMember())
           && (pPieces[4].ParseElementNumNodes() == 3 | pPieces[4].ParseElementNumNodes() == 4))
@@ -585,7 +591,7 @@ namespace SpeckleStructuralGSA
       Parallel.ForEach(newLines.Values, p =>
 #endif
       {
-        var pPieces = p.ListSplit("\t");
+        var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
         if (pPieces[4].Is2DMember())
         {
           // Check if dummy

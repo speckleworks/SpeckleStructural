@@ -22,7 +22,7 @@ namespace SpeckleStructuralGSA
 
       //StructuralLoadTaskBuckling obj = new StructuralLoadTaskBuckling();
 
-      //string[] pieces = this.GWACommand.ListSplit("\t");
+      //string[] pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
 
       //int counter = 1; // Skip identifier
 
@@ -92,7 +92,7 @@ namespace SpeckleStructuralGSA
           "0",
           "1"
         };
-      var command = string.Join("\t", ls);
+      var command = string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls);
 
       gwaCommands.Add(command);
       //Initialiser.Interface.RunGWACommand(command);
@@ -110,7 +110,7 @@ namespace SpeckleStructuralGSA
           taskIndex.ToString().ToString(),
           "M" + (i + 1) //desc
         });
-        command = string.Join("\t", ls);
+        command = string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls);
         //Initialiser.Interface.RunGWACommand(command);
         gwaCommands.Add(command);
       }

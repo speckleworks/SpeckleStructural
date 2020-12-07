@@ -7,7 +7,7 @@ using SpeckleStructuralGSA.Test;
 
 namespace SpeckleStructuralGSA.TestPrep
 {
-  class Program
+  public class Program
   {
     private static bool blankRefs = true;
     private static bool rxDesign = true;

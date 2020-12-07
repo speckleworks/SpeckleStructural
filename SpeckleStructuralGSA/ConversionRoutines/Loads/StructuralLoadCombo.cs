@@ -22,7 +22,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralLoadCombo();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
 
       var counter = 1; // Skip identifier
 
@@ -77,6 +77,10 @@ namespace SpeckleStructuralGSA
         return "";
 
       var loadCombo = this.Value as StructuralLoadCombo;
+      if (string.IsNullOrEmpty(loadCombo.ApplicationId))
+      {
+        return "";
+      }
 
       var keyword = typeof(GSALoadCombo).GetGSAKeyword();
 
@@ -135,7 +139,7 @@ namespace SpeckleStructuralGSA
           break;
       }
 
-      return (string.Join("\t", ls));
+      return (string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
     }
   }
 
