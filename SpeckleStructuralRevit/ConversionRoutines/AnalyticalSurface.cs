@@ -98,7 +98,8 @@ namespace SpeckleStructuralRevit
         var mySection = new Structural2DProperty
         {
           Name = Doc.GetElement(myRevitElement.GetTypeId()).Name,
-          ApplicationId = Doc.GetElement(myRevitElement.GetTypeId()).UniqueId
+          ApplicationId = Doc.GetElement(myRevitElement.GetTypeId()).UniqueId,
+          ReferenceSurface = Structural2DPropertyReferenceSurface.Middle
         };
 
         if (myRevitElement is Floor)
