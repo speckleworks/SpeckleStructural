@@ -693,13 +693,19 @@ namespace SpeckleStructuralGSA.Test
       var gsaPrereqs = new List<GsaRecord>()
       {
         new GsaAxis() { Index = 1, OriginX = 0, OriginY = 0, OriginZ = 0, XDirX = 1, XDirY = 2, XDirZ = 0, XYDirX = -1, XYDirY = 1, XYDirZ = 0 },
-        new GsaLoadCase() { Index = 1, CaseType = StructuralLoadCaseType.Dead },
-        new GsaLoadCase() { Index = 2, CaseType = StructuralLoadCaseType.Live },
+        new GsaLoadCase() { Index = 1, ApplicationId = "LoadCase1", CaseType = StructuralLoadCaseType.Dead },
+        new GsaLoadCase() { Index = 2, ApplicationId = "LoadCase2",  CaseType = StructuralLoadCaseType.Live },
       };
 
       if (layer == GSATargetLayer.Design)
       {
-        //gsaPrereqs.Add(new GsaMemb() { Index = 1, ApplicationId })
+        gsaPrereqs.Add(CreateMembBeam(1, "mb1", "Beam One", 1, new List<int> { 1, 2 }, 3));
+        gsaPrereqs.Add(CreateMembBeam(2, "mb2", "Beam Two", 1, new List<int> { 4, 5 }, 6));
+      }
+      else
+      {
+        //gsaPrereqs.Add(CreateElBeam(1, "eb1", "Beam One", 1, new List<int> { 1, 2 }, 3));
+        //gsaPrereqs.Add(CreateElBeam(2, "eb2", "Beam Two", 1, new List<int> { 4, 5 }, 6));
       }
 
       //Each one is assumed to create just one GWA record each
@@ -723,12 +729,13 @@ namespace SpeckleStructuralGSA.Test
         CreateLoadBeamUdl(2, "", "", new List<int>() { 1 }, 1, AxisDirection6.X, -11, LoadBeamAxisRefType.Global),
         //This one shouldn't be grouped with the first 2 since it has a different load case
         CreateLoadBeamUdl(3, "", "", new List<int>() { 1 }, 2, AxisDirection6.X, -11, LoadBeamAxisRefType.Global),
-        //This one shouldn't be grouped with the first 2 either since, athough it has the same load case, it has a different entities
+        //This one should be grouped with the first 2 either since it has the same loading (although different entities) and the same load case
         CreateLoadBeamUdl(4, "", "", new List<int>() { 1, 2 }, 1, AxisDirection6.X, -11, LoadBeamAxisRefType.Global),
 
         CreateLoadBeamUdl(5, baseAppId1 + "_X", "", new List<int>() { 1, 2 }, 1, AxisDirection6.X, -11, LoadBeamAxisRefType.Global),
         CreateLoadBeamUdl(6, baseAppId1 + "_XX", "", new List<int>() { 1, 2 }, 1, AxisDirection6.XX, 15, LoadBeamAxisRefType.Global),
-        //This one shouldn't be grouped with the previous two since, due to the axis, the loads can't be combined
+        //This one shouldn't be grouped with the previous two since, due to the axis (which is a sign of manual editing after previous Speckle reception), 
+        //the loads can't be combined
         CreateLoadBeamUdl(7, baseAppId1 + "_Z", "", new List<int>() { 1, 2 }, 1, AxisDirection6.Z, -5, LoadBeamAxisRefType.Reference, 1),
         //This one shouldn't be grouped with 5 and 6 either since, although the loads can be combined and the entities are the same, the load case is different
         CreateLoadBeamUdl(8, baseAppId1 + "_XX", "", new List<int>() { 1, 2 }, 2, AxisDirection6.XX, 15, LoadBeamAxisRefType.Global),
@@ -738,36 +745,18 @@ namespace SpeckleStructuralGSA.Test
       };
       Assert.AreEqual(0, gsaLoadBeams.Where(lb => lb == null).Count());
 
-      var gsaLoadBeamPoint = new GsaLoadBeamPoint()
-      {
-        Index = 10,
-        Entities = new List<int>() { 1, 2 },
-        AxisRefType = LoadBeamAxisRefType.Global,
-        Position = 12.5,
-        Load = 20,
-        LoadDirection = AxisDirection6.YY,
-        LoadCaseIndex = 2
-      };
-
       foreach (var gsalb in gsaLoadBeams)
       {
         Assert.IsTrue(gsalb.Gwa(out var lbGwa, false));
         Initialiser.Cache.Upsert(gsalb.Keyword, gsalb.Index.Value, lbGwa.First(), gsalb.StreamId, gsalb.ApplicationId, gsalb.GwaSetCommandType);
       }
 
-      Assert.IsTrue(gsaLoadBeamPoint.Gwa(out var ptGwa, false));
-      Initialiser.Cache.Upsert(gsaLoadBeamPoint.Keyword, gsaLoadBeamPoint.Index.Value, ptGwa.First(), gsaLoadBeamPoint.StreamId, gsaLoadBeamPoint.ApplicationId, 
-        gsaLoadBeamPoint.GwaSetCommandType);
-
       //Still using dummy objects for the ToSpeckle commands - any GsaLoadBeam concrete class can be used here
       Assert.NotNull(SchemaConversion.GsaLoadBeamToSpeckle.ToSpeckle(new GsaLoadBeamUdl()));
 
-      var structural1DLoads = ((layer == GSATargetLayer.Design) 
-        ? Initialiser.GSASenderObjects.Get<GSA1DLoadDesignLayer>().Select(o => o.Value).Cast<Structural1DLoad>() 
-        : Initialiser.GSASenderObjects.Get<GSA1DLoadAnalysisLayer>().Select(o => o.Value)
-        ).ToList();
+      var structural1DLoads = Initialiser.GSASenderObjects.Get<GSA1DLoadBase>().Select(o => o.Value).Cast<Structural1DLoad>().ToList();
       
-      Assert.AreEqual(7, structural1DLoads.Count());
+      Assert.AreEqual(6, structural1DLoads.Count());
     }
 
     #region other_methods
@@ -788,6 +777,30 @@ namespace SpeckleStructuralGSA.Test
         AxisRefType = axisRefType,
         AxisIndex = axisIndex
       };
+    }
+
+    private GsaMemb CreateMembBeam(int index, string applicationId, string name, int propIndex, List<int> nodeIndices, int orientationNodeIndex)
+    {
+      var gsaMemb = new GsaMemb()
+      {
+        ApplicationId = applicationId,
+        Name = name,
+        Index = index,
+        Type = MemberType.Beam,
+        Exposure = ExposedSurfaces.ALL,
+        PropertyIndex = propIndex,
+        Group = index,
+        NodeIndices = nodeIndices,
+        OrientationNodeIndex = orientationNodeIndex,
+        IsIntersector = true,
+        AnalysisType = AnalysisType.BEAM,
+        RestraintEnd1 = Restraint.Fixed,
+        RestraintEnd2 = Restraint.Fixed,
+        EffectiveLengthType = EffectiveLengthType.Automatic,
+        LoadHeightReferencePoint = LoadHeightReferencePoint.ShearCentre,
+        MemberHasOffsets = false
+      };
+      return gsaMemb;
     }
 
     private double[] CreateFlatRectangleCoords(double x, double y, double z, double angleDegrees, double width, double depth)

@@ -38,7 +38,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
       var group2 = gsaLoads.Except(group1);
 
       Add1dLoadsWithAppId(entityKeyword, loadCaseKeyword, group1, ref structural1DLoads);
-      Add1dLoadsWithoutAppId(group2, ref structural1DLoads);
+      Add1dLoadsWithoutAppId(keyword, axisKeyword, entityKeyword, loadCaseKeyword, group2, ref structural1DLoads);
 
 
       var loads = ((Initialiser.Settings.TargetLayer == SpeckleGSAInterfaces.GSATargetLayer.Design)
@@ -78,8 +78,74 @@ namespace SpeckleStructuralGSA.SchemaConversion
       return true; 
     }
 
-    private static bool Add1dLoadsWithoutAppId(IEnumerable<GsaLoadBeamUdl> gsaLoads, ref List<Structural1DLoad> structural1DLoads)
+    private static bool Add1dLoadsWithoutAppId(string keyword, string axisKeyword, string entityKeyword, string loadCaseKeyword, IEnumerable<GsaLoadBeamUdl> gsaLoads, ref List<Structural1DLoad> structural1DLoads)
     {
+      var gsaGroups = gsaLoads.GroupBy(gl => gl.LoadCaseIndex).Select(g => g.OfType<GsaLoadBeamUdl>().ToList()).ToList();
+      foreach (var gsaGroup in gsaGroups)
+      {
+        //This is the group which might have axes, so if this is true, then they need to be transformed
+        var transformedGsaLoads = new List<StructuralVectorSix>();
+        var uniqueLoadings = new List<StructuralVectorSix>();
+        var uniqueToLoadingsList = new Dictionary<int, List<int>>();
+
+        var glByIndex = gsaGroup.Where(gl => gl.Index.HasValue).ToDictionary(gl => gl.Index.Value, gl => gl);
+
+        foreach (var gl in gsaGroup)
+        {
+          if (!gl.Index.HasValue || gl.Index == 0) continue;
+
+          var loading = Helper.GsaLoadToLoading(gl.LoadDirection, gl.Load.Value);
+          if (gl.AxisRefType == LoadBeamAxisRefType.Reference && gl.AxisIndex.HasValue && gl.AxisIndex.Value > 0)
+          {
+
+            var axisGwa = Initialiser.Cache.GetGwa(axisKeyword, gl.AxisIndex.Value);
+            if (axisGwa != null && axisGwa.Count() > 0 && string.IsNullOrEmpty(axisGwa.First()))
+            {
+              return false;
+            }
+            var gsaAxis = new GsaAxis();
+            gsaAxis.FromGwa(axisGwa.First());
+            var loadAxis = (StructuralAxis)gsaAxis.ToSpeckle();
+            //Converts from loads on an axis to their global equivalent
+            loading.TransformOntoAxis(loadAxis);
+          }
+
+          int uniqueLoadingIndex;
+          if (loading != null)
+          {
+            var matching = uniqueLoadings.Where(k => k.Value.SequenceEqual(loading.Value));
+            if (matching.Count() > 0)
+            {
+              uniqueLoadingIndex = uniqueLoadings.IndexOf(matching.First());
+            }
+            else
+            {
+              uniqueLoadingIndex = uniqueLoadings.Count();
+              uniqueLoadings.Add(loading);
+            }
+            if (!uniqueToLoadingsList.ContainsKey(uniqueLoadingIndex))
+            {
+              uniqueToLoadingsList.Add(uniqueLoadingIndex, new List<int>());
+            }
+            uniqueToLoadingsList[uniqueLoadingIndex].Add(gl.Index.Value);
+          }
+        }
+
+        foreach (var ul in uniqueToLoadingsList.Keys)
+        {
+          var entityIndices = uniqueToLoadingsList[ul].SelectMany(ei => glByIndex[ei].Entities).Distinct().OrderBy(n => n).ToList();
+          var elementRefs = entityIndices.Select(ei => Initialiser.Cache.GetApplicationId(entityKeyword, ei)).Where(aid => !string.IsNullOrEmpty(aid)).ToList();
+          var loadCaseRef = (gsaGroup.First().LoadCaseIndex.HasValue) ? Initialiser.Cache.GetApplicationId(loadCaseKeyword, gsaGroup.First().LoadCaseIndex.Value) : null;
+          structural1DLoads.Add(new Structural1DLoad()
+          {
+            ApplicationId = SpeckleStructuralGSA.Helper.FormatApplicationId(keyword, uniqueToLoadingsList[ul]),
+            Name = gsaGroup.First().Name,
+            ElementRefs = elementRefs,
+            LoadCaseRef = loadCaseRef,
+            Loading = uniqueLoadings[ul]
+          });
+        }
+      }
 
       return true;
     }

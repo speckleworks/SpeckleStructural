@@ -131,14 +131,23 @@ namespace SpeckleStructuralGSA.Schema
       var entityItems = v.Split(' ');
       if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
       {
-        //Only recognise the groups, as these represent the members
-        //TO DO: for all elements, find if they have parents and include them
-        var members = string.Join(" ", entityItems.Where(ei => ei.StartsWith("G")).Select(ei => ei.Substring(1)));
-        Entities = Initialiser.Interface.ConvertGSAList(members, GSAEntity.MEMBER).ToList();
+        if (entityItems.Count() == 1 && entityItems.First().Equals("all", StringComparison.InvariantCultureIgnoreCase))
+        {
+          Entities = Initialiser.Cache.LookupIndices(GetKeyword<GsaMemb>()).Where(i => i.HasValue).Select(i => i.Value).ToList();
+        }
+        else
+        {
+          //Only recognise the groups, as these represent the members
+          //TO DO: for all elements, find if they have parents and include them
+          var members = string.Join(" ", entityItems.Where(ei => ei.StartsWith("G")).Select(ei => ei.Substring(1)));
+          Entities = Initialiser.Interface.ConvertGSAList(members, GSAEntity.MEMBER).ToList();
+        }
       }
       else
       {
-        Entities = Initialiser.Interface.ConvertGSAList(v, GSAEntity.ELEMENT).ToList();
+        Entities = (entityItems.Count() == 1 && entityItems.First().Equals("all", StringComparison.InvariantCultureIgnoreCase))
+          ? Entities = Initialiser.Cache.LookupIndices(GetKeyword<GsaEl>()).Where(i => i.HasValue).Select(i => i.Value).ToList()
+          : Initialiser.Interface.ConvertGSAList(v, GSAEntity.ELEMENT).ToList();
       }
 
       return Entities != null;
