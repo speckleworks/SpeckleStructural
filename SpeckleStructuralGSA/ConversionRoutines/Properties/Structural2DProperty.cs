@@ -63,9 +63,6 @@ namespace SpeckleStructuralGSA
 
       switch (pieces[counter++])
       {
-        case "CENTROID":
-          obj.ReferenceSurface = Structural2DPropertyReferenceSurface.Middle;
-          break;
         case "TOP_CENTRE":
           obj.ReferenceSurface = Structural2DPropertyReferenceSurface.Top;
           break;
@@ -93,8 +90,10 @@ namespace SpeckleStructuralGSA
         return "";
 
       var prop = this.Value as Structural2DProperty;
-      if (prop.ReferenceSurface == Structural2DPropertyReferenceSurface.NotSet)
+      if (string.IsNullOrEmpty(prop.ApplicationId))
+      {
         return "";
+      }
 
       var keyword = typeof(GSA2DProperty).GetGSAKeyword();
 
@@ -137,9 +136,6 @@ namespace SpeckleStructuralGSA
 
       switch (prop.ReferenceSurface)
       {
-        case Structural2DPropertyReferenceSurface.Middle:
-          ls.Add("CENTROID");
-          break;
         case Structural2DPropertyReferenceSurface.Top:
           ls.Add("TOP_CENTRE");
           break;

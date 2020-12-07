@@ -238,7 +238,7 @@ namespace SpeckleStructuralGSA.Schema
       }
       catch
       {
-        v = default;
+        v = default(T);
         return false;
       }
     }

@@ -94,7 +94,7 @@ namespace SpeckleStructuralGSA
         }
         else
         {
-          Helper.SafeDisplay("Property references not found:", spring.ApplicationId + " referencing " + spring.PropertyRef);
+          Helper.SafeDisplay("Spring property references not found:", spring.ApplicationId + " referencing " + spring.PropertyRef);
         }
       }
 
