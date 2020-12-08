@@ -24,7 +24,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralBridgeAlignment();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
 
       var counter = 1; // Skip identifier
 
@@ -88,7 +88,7 @@ namespace SpeckleStructuralGSA
         "0", // Elevation above
         "0" }); // Elevation below
 
-      gwaCommands.Add(string.Join("\t", ls));
+      gwaCommands.Add(string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
 
       ls.Clear();
       ls.AddRange(new[] {
@@ -102,7 +102,7 @@ namespace SpeckleStructuralGSA
         "0.01", // Tolerance
         "ONE", // Span option
         "0"}); // Span angle
-      gwaCommands.Add(string.Join("\t", ls));
+      gwaCommands.Add(string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
 
 
       ls.Clear();
@@ -130,7 +130,7 @@ namespace SpeckleStructuralGSA
             ls.Add(((1d / node.Radius) * ((node.Curvature == StructuralBridgeCurvature.RightCurve) ? 1 : -1)).ToString());
           }
         }
-        gwaCommands.Add(string.Join("\t", ls));
+        gwaCommands.Add(string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
       }
 
       return string.Join("\n", gwaCommands);

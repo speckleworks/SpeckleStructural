@@ -31,7 +31,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural0DSpring();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
 
       var counter = 1; // Skip identifier
 
@@ -94,7 +94,7 @@ namespace SpeckleStructuralGSA
         }
         else
         {
-          Helper.SafeDisplay("Property references not found:", spring.ApplicationId + " referencing " + spring.PropertyRef);
+          Helper.SafeDisplay("Spring property references not found:", spring.ApplicationId + " referencing " + spring.PropertyRef);
         }
       }
 
@@ -131,7 +131,7 @@ namespace SpeckleStructuralGSA
 
       ls.Add((spring.Dummy.HasValue && spring.Dummy.Value) ? "DUMMY" : "");
 
-      return (string.Join("\t", ls));
+      return (string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
     }
   }
 
@@ -166,7 +166,7 @@ namespace SpeckleStructuralGSA
 
       Parallel.ForEach(newLines.Select(nl => nl.Item2), p =>
       {
-        var pPieces = p.ListSplit("\t");
+        var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
         if (pPieces[4] == "GRD_SPRING")
         {
           var gsaId = pPieces[1];

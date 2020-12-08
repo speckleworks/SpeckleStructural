@@ -26,7 +26,7 @@ namespace SpeckleStructuralGSA
         return;
       }
 
-      var pieces = gwaGridLineCommand.ListSplit("\t");
+      var pieces = gwaGridLineCommand.ListSplit(Initialiser.Interface.GwaDelimiter);
 
       var counter = 1; // Skip identifier
 
@@ -100,7 +100,7 @@ namespace SpeckleStructuralGSA
           "0" //ignored as the angle is in degrees
       };
 
-      return (string.Join("\t", ls));
+      return (string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
     }
   }
 

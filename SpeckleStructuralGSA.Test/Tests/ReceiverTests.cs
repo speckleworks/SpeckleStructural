@@ -85,11 +85,11 @@ namespace SpeckleStructuralGSA.Test
         actualGwaRecordsForKeyword[recordKeyword].Add(actualGwaRecords[i].GwaCommand);
       }
 
-      Assert.AreEqual(expectedNum0DLoads, actualGwaRecords.Where(r => r.GwaCommand.Contains("LOAD_NODE.2")).Count());
-      Assert.AreEqual(expectedNum2DBeamLoads, actualGwaRecords.Where(r => r.GwaCommand.Contains("LOAD_BEAM_UDL.2")).Count());
-      Assert.AreEqual(expectedNum2dFaceLoads, actualGwaRecords.Where(r => r.GwaCommand.Contains("LOAD_2D_FACE.2")).Count());
-      Assert.AreEqual(expectedNumLoadTasks, actualGwaRecords.Where(r => r.GwaCommand.Contains("TASK.1")).Count());
-      Assert.AreEqual(expectedLoadCombos, actualGwaRecords.Where(r => r.GwaCommand.Contains("COMBINATION.1")).Count());
+      Assert.AreEqual(expectedNum0DLoads, actualGwaRecords.Where(r => r.GwaCommand.Contains("LOAD_NODE")).Count());
+      Assert.AreEqual(expectedNum2DBeamLoads, actualGwaRecords.Where(r => r.GwaCommand.Contains("LOAD_BEAM_UDL")).Count());
+      Assert.AreEqual(expectedNum2dFaceLoads, actualGwaRecords.Where(r => r.GwaCommand.Contains("LOAD_2D_FACE")).Count());
+      Assert.AreEqual(expectedNumLoadTasks, actualGwaRecords.Where(r => r.GwaCommand.Contains("TASK")).Count());
+      Assert.AreEqual(expectedLoadCombos, actualGwaRecords.Where(r => r.GwaCommand.Contains("COMBINATION")).Count());
       /*
       Assert.AreEqual(expectedNum2DBeamLoads, actualGwaRecordsForKeyword["LOAD_BEAM_UDL.2"].Distinct().Count());
       Assert.AreEqual(expectedNum2dFaceLoads, actualGwaRecordsForKeyword["LOAD_2D_FACE.2"].Distinct().Count());

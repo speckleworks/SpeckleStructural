@@ -1,11 +1,11 @@
 [
   {
-    "ApplicationId": "gh/0b93367af932b79b68e7632a31ccbffa",
-    "GwaCommand": "SET_AT\t1\tLOAD_NODE.2:{speckle_app_id:gh/0b93367af932b79b68e7632a31ccbffa}\t \t\t1\tGLOBAL\tX\t10"
+    "ApplicationId": "gh/0b93367af932b79b68e7632a31ccbffa_X",
+    "GwaCommand": "SET_AT\t1\tLOAD_NODE.2:{speckle_app_id:gh/0b93367af932b79b68e7632a31ccbffa_X}\t\t\t1\tGLOBAL\tX\t10"
   },
   {
-    "ApplicationId": "gh/0b93367af932b79b68e7632a31ccbffa",
-    "GwaCommand": "SET_AT\t2\tLOAD_NODE.2:{speckle_app_id:gh/0b93367af932b79b68e7632a31ccbffa}\t \t\t1\tGLOBAL\tY\t20"
+    "ApplicationId": "gh/0b93367af932b79b68e7632a31ccbffa_Y",
+    "GwaCommand": "SET_AT\t2\tLOAD_NODE.2:{speckle_app_id:gh/0b93367af932b79b68e7632a31ccbffa_Y}\t\t\t1\tGLOBAL\tY\t20"
   },
   {
     "GwaCommand": "SET\tAXIS.1\t1\t\tCART\t0\t0\t0\t1\t0\t0\t0\t-1\t0"
@@ -14,24 +14,24 @@
     "GwaCommand": "SET\tAXIS.1\t2\t\tCART\t0\t0\t0\t0.559385512730626\t-0.828907623409928\t0\t0.828907623409928\t0.559385512730626\t0"
   },
   {
-    "GwaCommand": "SET\tGRID_PLANE.4\t1\t \tGENERAL\t1\t0\t0\t0"
+    "GwaCommand": "SET\tGRID_PLANE.4\t1\t\tGENERAL\t1\t0\t0\t0"
   },
   {
     "GwaCommand": "SET\tGRID_PLANE.4\t2\t \tGENERAL\t2\t0\t0\t0"
   },
   {
-    "GwaCommand": "SET\tGRID_SURFACE.1\t1\t \t1\t2\tall\t0.01\tONE\t0"
+    "GwaCommand": "SET\tGRID_SURFACE.1\t1\t\t1\t2\tall\t0.01\tONE\t0\tPLANE_CORNER"
   },
   {
     "GwaCommand": "SET\tGRID_SURFACE.1\t2\t \t2\t1\tall\t0.01\tTWO_SIMPLE\t0"
   },
   {
-    "ApplicationId": "gh/c72c2ee9e400df4db1e0df8ab96e5400",
-    "GwaCommand": "SET_AT\t1\tLOAD_GRID_AREA.2:{speckle_app_id:gh/c72c2ee9e400df4db1e0df8ab96e5400}\t \t1\tPOLYGON\t\"(-0.076,0.074) (-0.114,-0.022) (-0.031,-0.02) (0.003,0.069) (-0.02,0.097)(m)\"\t2\tGLOBAL\tNO\tX\t0.011"
+    "ApplicationId": "gh/c72c2ee9e400df4db1e0df8ab96e5400_X",
+    "GwaCommand": "SET_AT\t1\tLOAD_GRID_AREA.2:{speckle_app_id:gh/c72c2ee9e400df4db1e0df8ab96e5400_X}\t\t1\tPOLYGON\t\"(-0.076,0.074) (-0.114,-0.022) (-0.031,-0.02) (0.003,0.069) (-0.02,0.097)(m)\"\t2\tGLOBAL\tNO\tX\t0.011"
   },
   {
-    "ApplicationId": "gh/c72c2ee9e400df4db1e0df8ab96e5400",
-    "GwaCommand": "SET_AT\t2\tLOAD_GRID_AREA.2:{speckle_app_id:gh/c72c2ee9e400df4db1e0df8ab96e5400}\t \t1\tPOLYGON\t\"(-0.076,0.074) (-0.114,-0.022) (-0.031,-0.02) (0.003,0.069) (-0.02,0.097)(m)\"\t2\tGLOBAL\tNO\tY\t0.022"
+    "ApplicationId": "gh/c72c2ee9e400df4db1e0df8ab96e5400_Y",
+    "GwaCommand": "SET_AT\t2\tLOAD_GRID_AREA.2:{speckle_app_id:gh/c72c2ee9e400df4db1e0df8ab96e5400_Y}\t\t1\tPOLYGON\t\"(-0.076,0.074) (-0.114,-0.022) (-0.031,-0.02) (0.003,0.069) (-0.02,0.097)(m)\"\t2\tGLOBAL\tNO\tY\t0.022"
   },
   {
     "ApplicationId": "gh/277488c39c2d600f86f2b953a808b4b3",
@@ -70,12 +70,12 @@
     "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/e3eee0bed82020568bcd3a80a929c558}\t3\t \tNO_RGB\tWALL\tALL\t2\t3\t5 6 7 8\t0\t0\t\tYES\tLINEAR\t0\t0\t0\t0\t0\t0\tACTIVE\t0\tNO"
   },
   {
-    "ApplicationId": "gh/4f4a92a779808a3c7eb7dbb647ed2296",
-    "GwaCommand": "SET_AT\t1\tLOAD_BEAM_UDL.2:{speckle_app_id:gh/4f4a92a779808a3c7eb7dbb647ed2296}\t \t\t5\tGLOBAL\tNO\tX\t10"
+    "ApplicationId": "gh/4f4a92a779808a3c7eb7dbb647ed2296_X",
+    "GwaCommand": "SET_AT\t1\tLOAD_BEAM_UDL.2:{speckle_app_id:gh/4f4a92a779808a3c7eb7dbb647ed2296_X}\t\t\t5\tGLOBAL\tNO\tX\t10"
   },
   {
-    "ApplicationId": "gh/4f4a92a779808a3c7eb7dbb647ed2296",
-    "GwaCommand": "SET_AT\t2\tLOAD_BEAM_UDL.2:{speckle_app_id:gh/4f4a92a779808a3c7eb7dbb647ed2296}\t \t\t5\tGLOBAL\tNO\tY\t20"
+    "ApplicationId": "gh/4f4a92a779808a3c7eb7dbb647ed2296_Y",
+    "GwaCommand": "SET_AT\t2\tLOAD_BEAM_UDL.2:{speckle_app_id:gh/4f4a92a779808a3c7eb7dbb647ed2296_Y}\t\t\t5\tGLOBAL\tNO\tY\t20"
   },
   {
     "ApplicationId": "gh/0934be14d1531d49eab2a19be7a91480",

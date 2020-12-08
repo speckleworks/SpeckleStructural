@@ -219,7 +219,7 @@ namespace SpeckleStructuralClasses
     [JsonProperty("spanAngle", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
     public double? SpanAngle { get; set; }
 
-    /// <summary>Application IDs of StructuralNodes to apply load.</summary>
+    /// <summary>Application IDs of StructuralStoreys (planes) to apply load.</summary>
     [JsonProperty("storeyRef", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
     public string StoreyRef { get; set; }
 
@@ -442,6 +442,13 @@ namespace SpeckleStructuralClasses
     {
       get => StructuralProperties.ContainsKey("loadCaseRef") ? (StructuralProperties["loadCaseRef"] as string) : null;
       set { if (value != null) StructuralProperties["loadCaseRef"] = value; }
+    }
+
+    [JsonIgnore]
+    public string LoadPlaneRef
+    {
+      get => StructuralProperties.ContainsKey("loadPlaneRef") ? (StructuralProperties["loadPlaneRef"] as string) : null;
+      set { if (value != null) StructuralProperties["loadPlaneRef"] = value; }
     }
   }
 

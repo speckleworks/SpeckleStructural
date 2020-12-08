@@ -23,7 +23,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralNodalInfluenceEffect();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
 
       var counter = 1; // Skip identifier
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
@@ -63,7 +63,7 @@ namespace SpeckleStructuralGSA
       var axis = pieces[counter++];
       if (axis == "GLOBAL")
       {
-        obj.Axis = Helper.Parse0DAxis(0, Initialiser.Interface, out var temp);
+        obj.Axis = Helper.Parse0DAxis(0, out var temp);
       }
       else if (axis == "LOCAL")
       {
@@ -71,7 +71,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        obj.Axis = Helper.Parse0DAxis(Convert.ToInt32(axis), Initialiser.Interface, out string rec, targetNode.Value.Value.ToArray());
+        obj.Axis = Helper.Parse0DAxis(Convert.ToInt32(axis), out string rec, targetNode.Value.Value.ToArray());
         if (rec != null)
           this.SubGWACommand.Add(rec);
       }
@@ -156,7 +156,7 @@ namespace SpeckleStructuralGSA
         }
         ls.Add(axisIndex.ToString());
         ls.Add(direction[i]);
-        gwaCommands.Add(string.Join("\t", ls));
+        gwaCommands.Add(string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
       }
       return string.Join("\n", gwaCommands);
     }

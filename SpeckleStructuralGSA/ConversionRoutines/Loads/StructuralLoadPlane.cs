@@ -20,65 +20,11 @@ namespace SpeckleStructuralGSA
       //TO DO
       return false;
     }
-
-    public string SetGWACommand()
-    {
-      if (this.Value == null)
-        return "";
-
-      var plane = this.Value as StructuralLoadPlane;
-      if (plane.ApplicationId == null)
-      {
-        return "";
-      }
-
-      var keyword = typeof(GSAGridSurface).GetGSAKeyword();
-      var index = Initialiser.Cache.ResolveIndex(keyword);
-
-      int gridPlaneIndex;
-
-      var gwaCommands = new List<string>();
-
-      if (plane.Axis != null)
-      {
-        gwaCommands.AddRange(SetAxisPlaneGWACommands(plane.Axis, plane.Name, out gridPlaneIndex));
-      }
-      else if (plane.Axis == null && !string.IsNullOrEmpty(plane.StoreyRef))
-      {
-        gridPlaneIndex = Initialiser.Cache.ResolveIndex(typeof(GSAStorey).GetGSAKeyword(), plane.StoreyRef);
-      }
-      else
-      {
-        return "";
-      }
-
-      var ls = new List<string>();
-
-      var sid = Helper.GenerateSID(plane);
-      ls.AddRange(new[] {"SET",
-        keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
-        index.ToString(),
-        plane.Name == null || plane.Name == "" ? " " : plane.Name,
-        gridPlaneIndex.ToString(),
-        (plane.ElementDimension ?? 1).ToString() , // Dimension of elements to target
-        "all", // List of elements to target
-        (plane.Tolerance ?? 0.01).ToString(), // Tolerance
-        (plane.Span == null || plane.Span == 2) ? "TWO_SIMPLE" : "ONE", // Span option
-        (plane.SpanAngle ?? 0).ToString()}); // Span angle
-
-      gwaCommands.Add(string.Join("\t", ls));
-
-      return string.Join("\n", gwaCommands);
-    }
-
   }
 
   public static partial class Conversions
   {
-    public static string ToNative(this StructuralLoadPlane plane)
-    {
-      return new GSAGridSurface() { Value = plane }.SetGWACommand();
-    }
+    //The ToNative() method is in the new schema conversion folder hierarchy
 
     public static SpeckleObject ToSpeckle(this GSAGridSurface dummyObject)
     {

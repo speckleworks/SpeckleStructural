@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SpeckleStructuralClasses;
+using SpeckleGSAInterfaces;
 
 namespace SpeckleStructuralGSA
 {
@@ -48,7 +49,7 @@ namespace SpeckleStructuralGSA
         (elevationAbove ?? 0).ToString()
       }); 
 
-      gwaCommands.Add(string.Join("\t", ls));
+      gwaCommands.Add(string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
 
       return gwaCommands;
     }

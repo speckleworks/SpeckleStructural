@@ -218,7 +218,7 @@ namespace SpeckleStructuralClasses
     {
       get
       {
-        return StructuralProperties.ValueAsTypedList<double>("resultVertices");
+        return StructuralProperties.ValueAsDoubleList("resultVertices");
       }
       set { if (value != null && value.Count() > 0) StructuralProperties["resultVertices"] = value; }
     }
@@ -416,7 +416,7 @@ namespace SpeckleStructuralClasses
     {
       get
       {
-        return StructuralProperties.ValueAsTypedList<double>("resultVertices");
+        return StructuralProperties.ValueAsDoubleList("resultVertices");
       }
       set { if (value != null && value.Count() > 0) StructuralProperties["resultVertices"] = value; }
     }
@@ -624,7 +624,7 @@ namespace SpeckleStructuralClasses
     {
       get
       {
-        return StructuralProperties.ValueAsTypedList<double>("offset");
+        return StructuralProperties.ValueAsDoubleList("offset");
       }
       set { if (value != null && value.Count() > 0) StructuralProperties["offset"] = value; }
     }

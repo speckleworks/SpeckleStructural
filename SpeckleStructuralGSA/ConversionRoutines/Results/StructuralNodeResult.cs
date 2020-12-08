@@ -80,7 +80,7 @@ namespace SpeckleStructuralGSA
       {
         var results = new List<GSANodeResult>();
 
-        var keyword = Helper.GetGSAKeyword(typeof(GSANode));
+        var keyword = typeof(GSANode).GetGSAKeyword();
 
         //Unlike embedding, separate results doesn't necessarily mean that there is a Speckle object created for each node.  There is always though
         //some GWA loaded into the cache

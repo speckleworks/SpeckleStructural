@@ -38,7 +38,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural1DElement();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
       
       var counter = 1; // Skip identifier
 
@@ -195,7 +195,7 @@ namespace SpeckleStructuralGSA
         }
         else
         {
-          Helper.SafeDisplay("Property references not found:", element.ApplicationId + " referencing " + element.PropertyRef);
+          Helper.SafeDisplay("1D property references not found:", element.ApplicationId + " referencing " + element.PropertyRef);
         }
       }
 
@@ -290,7 +290,7 @@ namespace SpeckleStructuralGSA
 
       ls.Add((element.GSADummy.HasValue && element.GSADummy.Value) ? "DUMMY" : ""); // dummy
 
-      return (string.Join("\t", ls));
+      return (string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
     }
 
     private static bool ParseEndRelease(char code, string[] pieces, ref int counter)
@@ -336,7 +336,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural1DElement();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
 
       var counter = 1; // num - Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
@@ -504,7 +504,7 @@ namespace SpeckleStructuralGSA
         }
         else
         {
-          Helper.SafeDisplay("Property references not found:", member.ApplicationId + " referencing " + member.PropertyRef);
+          Helper.SafeDisplay("1D property references not found:", member.ApplicationId + " referencing " + member.PropertyRef);
         }
       }
 
@@ -601,7 +601,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      return (string.Join("\t", ls));
+      return (string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
     }
 
     private static StructuralVectorBoolSix ParseEndRelease(string code)
@@ -676,7 +676,7 @@ namespace SpeckleStructuralGSA
       Parallel.ForEach(newLines.Values, p =>
 #endif
       {
-        var pPieces = p.ListSplit("\t");
+        var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
 
         if (pPieces[4] == "BEAM" && pPieces[4].ParseElementNumNodes() == 2)
         {
@@ -719,7 +719,7 @@ namespace SpeckleStructuralGSA
       Parallel.ForEach(newLines.Values, p =>
 #endif
       {
-        var pPieces = p.ListSplit("\t");
+        var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
         var gsaId = pPieces[1];
         if (pPieces[4].Is1DMember())
         {
