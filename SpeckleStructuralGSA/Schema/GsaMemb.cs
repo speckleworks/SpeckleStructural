@@ -121,7 +121,7 @@ namespace SpeckleStructuralGSA.Schema
       if (Type == MemberType.Beam || Type == MemberType.Generic1d || Type == MemberType.Column || Type == MemberType.Void1d)
       {
         //This assumes that rls_1 { | k_1 } rls_2 { | k_2 } is at the start of the items list
-        if (!ProcessReleases(items, out remainingItems))
+        if (!ProcessReleases(items, out remainingItems, ref Releases1, ref Stiffnesses1, ref Releases2, ref Stiffnesses2))
         {
           return false;
         }
@@ -178,8 +178,6 @@ namespace SpeckleStructuralGSA.Schema
         return false;
       }
 
-      var axisDirs = Enum.GetValues(typeof(AxisDirection6)).Cast<AxisDirection6>().Where(v => v != AxisDirection6.NotSet).ToList();
-
       //MEMB.8 | num | name | colour | type(1D) | exposure | prop | group | topology | node | angle | mesh_size | is_intersector | analysis_type | fire | limiting_temperature | time[4] | dummy | rls_1 { | k_1 } rls_2 { | k_2 } | restraint_end_1 | restraint_end_2 | AUTOMATIC | load_height | load_ref | is_off { | auto_off_x1 | auto_off_x2 | off_x1 | off_x2 | off_y | off_z }
       //MEMB.8 | num | name | colour | type(1D) | exposure | prop | group | topology | node | angle | mesh_size | is_intersector | analysis_type | fire | limiting_temperature | time[4] | dummy | rls_1 { | k_1 } rls_2 { | k_2 } | restraint_end_1 | restraint_end_2 | EFF_LEN | lyy | lzz | llt | load_height | load_ref | is_off { | auto_off_x1 | auto_off_x2 | off_x1 | off_x2 | off_y | off_z }
       //MEMB.8 | num | name | colour | type(1D) | exposure | prop | group | topology | node | angle | mesh_size | is_intersector | analysis_type | fire | limiting_temperature | time[4] | dummy | rls_1 { | k_1 } rls_2 { | k_2 } | restraint_end_1 | restraint_end_2 | EXPLICIT | num_pt | { pt | rest | } | num_span | { span | rest | } load_height | load_ref | is_off { | auto_off_x1 | auto_off_x2 | off_x1 | off_x2 | off_y | off_z }
@@ -189,6 +187,7 @@ namespace SpeckleStructuralGSA.Schema
 
       if (Type == MemberType.Beam || Type == MemberType.Generic1d || Type == MemberType.Column || Type == MemberType.Void1d)
       {
+        var axisDirs = Enum.GetValues(typeof(AxisDirection6)).Cast<AxisDirection6>().Where(v => v != AxisDirection6.NotSet).ToList();
         AddEndReleaseItems(ref items, Releases1, Stiffnesses1, axisDirs);
         AddEndReleaseItems(ref items, Releases2, Stiffnesses2, axisDirs);
 
@@ -294,26 +293,6 @@ namespace SpeckleStructuralGSA.Schema
     }
 
     #region other_to_gwa_add_x_Items_fns
-    private void AddEndReleaseItems(ref List<string> items, Dictionary<AxisDirection6, ReleaseCode> releases, List<double> stiffnesses, List<AxisDirection6> axisDirs)
-    {
-      var rls = "";
-      var stiffnessIndex = 0;
-      foreach (var d in axisDirs)
-      {
-        var releaseCode = (releases != null && releases.Count() > 0 && releases.ContainsKey(d)) ? releases[d] : ReleaseCode.Fixed;
-        rls += releaseCode.GetStringValue();
-        if (releaseCode == ReleaseCode.Stiff && releases.ContainsKey(d) && (++stiffnessIndex) < stiffnesses.Count())
-        {
-          stiffnesses.Add(stiffnesses[stiffnessIndex]);
-        }
-      }
-      items.Add(rls);
-      if (stiffnesses != null && stiffnesses.Count() > 0)
-      {
-        items.AddRange(stiffnesses.Select(s => s.ToString()));
-      }
-      return;
-    }
 
     private void AddExplicitItems(ref List<string> items, List<RestraintDefinition> restraintDefinitions)
     {
@@ -404,69 +383,6 @@ namespace SpeckleStructuralGSA.Schema
       return true;
     }
 
-    private bool ProcessReleases(List<string> items, out List<string> remainingItems)
-    {
-      remainingItems = items; //default in case of early exit of this method
-      var axisDirs = Enum.GetValues(typeof(AxisDirection6)).OfType<AxisDirection6>().Where(v => v != AxisDirection6.NotSet).ToList();
-
-      var endReleases = new Dictionary<AxisDirection6, ReleaseCode>[2] { null, null };
-      var endStiffnesses = new List<double>[2];
-
-      var itemIndex = 0;
-      for (var i = 0; i < 2; i++)
-      {
-        endReleases[i] = new Dictionary<AxisDirection6, ReleaseCode>();
-        endStiffnesses[i] = new List<double>();
-
-        var relCodes = items[itemIndex++];
-        if (relCodes.Length < axisDirs.Count())
-        {
-          return false;
-        }
-
-        var numExpectedStiffnesses = 0;
-        for (var j = 0; j < axisDirs.Count(); j++)
-        {
-          var upperCharCode = char.ToUpper(relCodes[j]);
-          if (upperCharCode == 'K')
-          {
-            numExpectedStiffnesses++;
-            endReleases[i].Add(axisDirs[j], ReleaseCode.Stiff);
-          }
-          else if (upperCharCode == 'R')
-          {
-            endReleases[i].Add(axisDirs[j], ReleaseCode.Released);
-          }
-          else
-          {
-            //For now, Fixed values aren't added as it's considered the default
-            //endReleases[i].Add(axisDirs[j], ReleaseCode.Fixed);
-          }
-        }
-
-        if (numExpectedStiffnesses > 0)
-        {
-          for (var k = 0; k < numExpectedStiffnesses; k++)
-          {
-            if (!double.TryParse(items[itemIndex++], out double stiffness))
-            {
-              return false;
-            }
-            endStiffnesses[i].Add(stiffness);
-          }
-        }
-      }
-
-      Releases1 = endReleases[0].Count() > 0 ? endReleases[0] : null;
-      Releases2 = endReleases[1].Count() > 0 ? endReleases[1] : null;
-      Stiffnesses1 = endStiffnesses[0].Count() > 0 ? endStiffnesses[0] : null;
-      Stiffnesses2 = endStiffnesses[1].Count() > 0 ? endStiffnesses[1] : null;
-
-      remainingItems = items.Skip(itemIndex).ToList();
-
-      return true;
-    }
-
     private bool AddEffectiveLength(string v, ref double? el, ref double? perc)
     {
       var val = v.Trim();
@@ -550,11 +466,33 @@ namespace SpeckleStructuralGSA.Schema
       }
       End1AutomaticOffset = items[0].Equals("AUTO", StringComparison.InvariantCultureIgnoreCase);
       End2AutomaticOffset = items[1].Equals("AUTO", StringComparison.InvariantCultureIgnoreCase);
-      return (AddNullableDoubleValue(items[2], out End1OffsetX) && AddNullableDoubleValue(items[3], out End2OffsetX)
-        && AddNullableDoubleValue(items[4], out OffsetY) && AddNullableDoubleValue(items[5], out OffsetZ));
+
+      items = items.Skip(2).ToList();
+
+      var offsets = new double?[4];
+      for (int i = 0; i < 4; i++)
+      {
+        double? val = null;
+        if (!AddNullableDoubleValue(items[i], out val))
+        {
+          return false;
+        }
+        if (val.HasValue && val > 0)
+        {
+          offsets[i] = val;
+        }
+      }
+
+      End1OffsetX = offsets[0];
+      End2OffsetX = offsets[1];
+      OffsetY = offsets[2];
+      OffsetZ = offsets[3];
+
+      return true;
     }
 
     #endregion
+
   }
 
   public struct RestraintDefinition

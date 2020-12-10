@@ -684,6 +684,60 @@ namespace SpeckleStructuralGSA.Test
       Assert.IsTrue(ModelValidation(gwaToTest, GsaRecord.GetKeyword<GsaMemb>(), 3, out var mismatch, visible: true));
     }
 
+    [Test]
+    public void GsaElSimple()
+    {
+      var gsaElBeam = new GsaEl()
+      {
+        ApplicationId = "elbeam",
+        Name = "Beam",
+        Index = 1,
+        Type = ElementType.Beam, //*
+        Group = 1,
+        PropertyIndex = 2,
+        NodeIndices = new List<int> { 3, 4 },
+        OrientationNodeIndex = 5,
+        Angle = 6,
+        ReleaseInclusion = ReleaseInclusion.Included,
+        Releases1 = new Dictionary<AxisDirection6, ReleaseCode>() { { AxisDirection6.Y, ReleaseCode.Released }, { AxisDirection6.YY, ReleaseCode.Stiff } }, //*
+        Stiffnesses1 = new List<double>() { 7 }, //*
+        End1OffsetX = 8,
+        End2OffsetX = 9, 
+        OffsetY = 10,
+        OffsetZ = 11,
+        ParentIndex = 1
+      };
+      Assert.IsTrue(gsaElBeam.Gwa(out var gwa1, false));
+
+      var gsaEl = new GsaEl();
+      Assert.IsTrue(gsaEl.FromGwa(gwa1.First()));
+      gsaElBeam.ShouldDeepEqual(gsaEl);
+
+      var gsaElTri3 = new GsaEl()
+      {
+        ApplicationId = "eltri3",
+        Name = "Triangle 3",
+        Index = 2,
+        Type = ElementType.Triangle3, //*
+        Group = 1,
+        PropertyIndex = 3,
+        NodeIndices = new List<int> { 4, 5, 6 },
+        OrientationNodeIndex = 7,
+        Angle = 8,
+        ReleaseInclusion = ReleaseInclusion.NotIncluded,  //only BEAMs have releases
+        End1OffsetX = 10
+      };
+      Assert.IsTrue(gsaElTri3.Gwa(out var gwa2, false));
+
+      gsaEl = new GsaEl();
+      Assert.IsTrue(gsaEl.FromGwa(gwa2.First()));
+      gsaElTri3.ShouldDeepEqual(gsaEl);
+
+      var gwaToTest = gwa1.Union(gwa2).ToList();
+
+      Assert.IsTrue(ModelValidation(gwaToTest, GsaRecord.GetKeyword<GsaEl>(), 2, out var mismatch, visible: true));
+    }
+
     [TestCase(GSATargetLayer.Design)]
     [TestCase(GSATargetLayer.Analysis)]
     public void GsaLoadBeamToSpeckle(GSATargetLayer layer)

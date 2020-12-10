@@ -261,6 +261,56 @@
     Generic3d
   }
 
+  public enum ElementType
+  {
+    [StringValue("BAR")]
+    Bar,
+    [StringValue("BEAM")]
+    Beam,
+    [StringValue("BRICK8")]
+    Brick8,
+    [StringValue("CABLE")]
+    Cable,
+    [StringValue("DAMPER")]
+    Damper,
+    [StringValue("LINK")]
+    Link,
+    [StringValue("PYRAMID5")]
+    Pyramid5,
+    [StringValue("QUAD4")]
+    Quad4,
+    [StringValue("QUAD8")]
+    Quad8,
+    [StringValue("ROD")]
+    Rod,
+    [StringValue("SPACER")]
+    Spacer,
+    [StringValue("SPRING")]
+    Spring,
+    [StringValue("STRUT")]
+    Strut,
+    [StringValue("TETRA4")]
+    Tetra4,
+    [StringValue("TIE")]
+    Tie,
+    [StringValue("TRI3")]
+    Triangle3,
+    [StringValue("TRI6")]
+    Triangle6,
+    [StringValue("WEDGE6")]
+    Wedge6
+  };
+
+  public enum ReleaseInclusion
+  {
+    [StringValue("NO_RLS")]
+    NotIncluded,
+    [StringValue("RLS")]
+    Included,
+    [StringValue("STIFF")]  //Uncertain if this is actually part of the GWA as implemented in GSA 10.1, as I've not been able to create this in the UI
+    Stiff
+  }
+
   public enum ExposedSurfaces
   {
     NotSet = 0,

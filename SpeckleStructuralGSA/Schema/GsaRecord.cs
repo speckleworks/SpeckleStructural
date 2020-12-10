@@ -154,6 +154,92 @@ namespace SpeckleStructuralGSA.Schema
       return true;
     }
 
+    //Useful helper function for MEMB and EL
+    protected bool ProcessReleases(List<string> items, out List<string> remainingItems, 
+      ref Dictionary<AxisDirection6, ReleaseCode> Releases1, ref List<double> Stiffnesses1, ref Dictionary<AxisDirection6, ReleaseCode> Releases2, ref List<double> Stiffnesses2)
+    {
+      remainingItems = items; //default in case of early exit of this method
+      var axisDirs = Enum.GetValues(typeof(AxisDirection6)).OfType<AxisDirection6>().Where(v => v != AxisDirection6.NotSet).ToList();
+
+      var endReleases = new Dictionary<AxisDirection6, ReleaseCode>[2] { null, null };
+      var endStiffnesses = new List<double>[2];
+
+      var itemIndex = 0;
+      for (var i = 0; i < 2; i++)
+      {
+        endReleases[i] = new Dictionary<AxisDirection6, ReleaseCode>();
+        endStiffnesses[i] = new List<double>();
+
+        var relCodes = items[itemIndex++];
+        if (relCodes.Length < axisDirs.Count())
+        {
+          return false;
+        }
+
+        var numExpectedStiffnesses = 0;
+        for (var j = 0; j < axisDirs.Count(); j++)
+        {
+          var upperCharCode = char.ToUpper(relCodes[j]);
+          if (upperCharCode == 'K')
+          {
+            numExpectedStiffnesses++;
+            endReleases[i].Add(axisDirs[j], ReleaseCode.Stiff);
+          }
+          else if (upperCharCode == 'R')
+          {
+            endReleases[i].Add(axisDirs[j], ReleaseCode.Released);
+          }
+          else
+          {
+            //For now, Fixed values aren't added as it's considered the default
+            //endReleases[i].Add(axisDirs[j], ReleaseCode.Fixed);
+          }
+        }
+
+        if (numExpectedStiffnesses > 0)
+        {
+          for (var k = 0; k < numExpectedStiffnesses; k++)
+          {
+            if (!double.TryParse(items[itemIndex++], out double stiffness))
+            {
+              return false;
+            }
+            endStiffnesses[i].Add(stiffness);
+          }
+        }
+      }
+
+      Releases1 = endReleases[0].Count() > 0 ? endReleases[0] : null;
+      Releases2 = endReleases[1].Count() > 0 ? endReleases[1] : null;
+      Stiffnesses1 = endStiffnesses[0].Count() > 0 ? endStiffnesses[0] : null;
+      Stiffnesses2 = endStiffnesses[1].Count() > 0 ? endStiffnesses[1] : null;
+
+      remainingItems = items.Skip(itemIndex).ToList();
+
+      return true;
+    }
+
+    protected void AddEndReleaseItems(ref List<string> items, Dictionary<AxisDirection6, ReleaseCode> releases, List<double> stiffnesses, List<AxisDirection6> axisDirs)
+    {
+      var rls = "";
+      var stiffnessIndex = 0;
+      foreach (var d in axisDirs)
+      {
+        var releaseCode = (releases != null && releases.Count() > 0 && releases.ContainsKey(d)) ? releases[d] : ReleaseCode.Fixed;
+        rls += releaseCode.GetStringValue();
+        if (releaseCode == ReleaseCode.Stiff && releases.ContainsKey(d) && (++stiffnessIndex) < stiffnesses.Count())
+        {
+          stiffnesses.Add(stiffnesses[stiffnessIndex]);
+        }
+      }
+      items.Add(rls);
+      if (stiffnesses != null && stiffnesses.Count() > 0)
+      {
+        items.AddRange(stiffnesses.Select(s => s.ToString()));
+      }
+      return;
+    }
+
     protected List<string> Split(string gwa)
     {
       try
