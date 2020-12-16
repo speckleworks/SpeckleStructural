@@ -5,7 +5,7 @@ using SpeckleGSAInterfaces;
 
 namespace SpeckleStructuralGSA.Schema
 {
-  [GsaType(GwaKeyword.ASSEMBLY, GwaSetCommandType.Set, StreamBucket.Model, GwaKeyword.NODE, GwaKeyword.MEMB, GwaKeyword.EL, GwaKeyword.GRID_PLANE)]
+  [GsaType(GwaKeyword.ASSEMBLY, GwaSetCommandType.Set, true, StreamBucket.Model, GwaKeyword.NODE, GwaKeyword.MEMB, GwaKeyword.EL, GwaKeyword.GRID_PLANE)]
   public class GsaAssembly : GsaRecord
   {
     public string Name { get => name; set { name = value; } }

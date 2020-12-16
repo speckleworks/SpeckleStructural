@@ -95,6 +95,12 @@ namespace SpeckleStructuralGSA.Schema
         }
       }
 
+      if (ParseKeywordVersionSid(items[0], keywordOverride))
+      {
+        return false;
+      }
+
+      /*
       string keywordAndVersion;
       var delimIndex = items[0].IndexOf(':');
       if (delimIndex > 0)
@@ -129,6 +135,7 @@ namespace SpeckleStructuralGSA.Schema
       {
         Version = 1;
       }
+      */
 
       //Remove keyword
       items.Remove(items[0]);
@@ -145,6 +152,45 @@ namespace SpeckleStructuralGSA.Schema
 
       remainingItems = items;
 
+      return true;
+    }
+
+    protected bool ParseKeywordVersionSid(string v, string keywordOverride = "")
+    {
+      string keywordAndVersion;
+      var delimIndex = v.IndexOf(':');
+      if (delimIndex > 0)
+      {
+        //An SID has been found
+        keywordAndVersion = v.Substring(0, delimIndex);
+        var sidTags = v.Substring(delimIndex);
+        var match = Regex.Match(sidTags, "(?<={" + SID_STRID_TAG + ":).*?(?=})");
+        StreamId = (!string.IsNullOrEmpty(match.Value)) ? match.Value : null;
+        match = Regex.Match(sidTags, "(?<={" + SID_APPID_TAG + ":).*?(?=})");
+        ApplicationId = (!string.IsNullOrEmpty(match.Value)) ? match.Value : null;
+      }
+      else
+      {
+        keywordAndVersion = v;
+      }
+
+      var kwSplit = keywordAndVersion.Split('.');
+      var foundKeyword = kwSplit[0];
+      if (!foundKeyword.Equals(string.IsNullOrEmpty(keywordOverride) ? keyword : keywordOverride, StringComparison.InvariantCultureIgnoreCase))
+      {
+        return false;
+      }
+      if (kwSplit.Count() > 1)
+      {
+        if (!int.TryParse(kwSplit[1], out Version))
+        {
+          return false;
+        }
+      }
+      else
+      {
+        Version = 1;
+      }
       return true;
     }
 

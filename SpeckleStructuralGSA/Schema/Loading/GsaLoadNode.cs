@@ -5,7 +5,7 @@ using SpeckleGSAInterfaces;
 
 namespace SpeckleStructuralGSA.Schema
 {
-  [GsaType(GwaKeyword.LOAD_NODE, GwaSetCommandType.SetAt, StreamBucket.Model, true, true, GwaKeyword.NODE, GwaKeyword.AXIS)]
+  [GsaType(GwaKeyword.LOAD_NODE, GwaSetCommandType.SetAt, true, StreamBucket.Model, true, true, GwaKeyword.NODE, GwaKeyword.AXIS)]
   public class GsaLoadNode : GsaRecord
   {
     //As many of these should be nullable, or in the case of enums, a "NotSet" option, to facilitate merging objects received from Speckle 

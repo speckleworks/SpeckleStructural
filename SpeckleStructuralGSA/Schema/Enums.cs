@@ -34,7 +34,25 @@
     [StringValue("LOAD_BEAM_TRILIN")]
     LOAD_BEAM_TRILIN,
     [StringValue("ASSEMBLY")]
-    ASSEMBLY
+    ASSEMBLY,
+    [StringValue("SECTION")]
+    SECTION,
+    [StringValue("MAT_CONCRETE")]
+    MAT_CONCRETE,
+    [StringValue("MAT_STEEL")]
+    MAT_STEEL,
+    [StringValue("SECTION_COMP")]
+    SECTION_COMP,
+    [StringValue("SECTION_CONC")]
+    SECTION_CONC,
+    [StringValue("SECTION_STEEL")]
+    SECTION_STEEL,
+    [StringValue("SECTION_LINK")]
+    SECTION_LINK,
+    [StringValue("SECTION_COVER")]
+    SECTION_COVER,
+    [StringValue("SECTION_TMPL")]
+    SECTION_TMPL
   }
 
   public enum Restraint
@@ -49,6 +67,17 @@
     PartialRotational,
     [StringValue("Top flange lateral")]
     TopFlangeLateral
+  }
+
+  public enum NodeRestraint
+  {
+    [StringValue("free")]
+    Free,
+    [StringValue("pin")]
+    Pin,
+    [StringValue("fix")]
+    Fix,
+    Custom
   }
 
   public enum CurveType
@@ -300,6 +329,109 @@
     [StringValue("WEDGE6")]
     Wedge6
   };
+
+  public enum Section1dType
+  {
+    [StringValue("GENERIC")]
+    Generic,
+    [StringValue("BEAM")]
+    Beam,
+    [StringValue("COLUMN")]
+    Column,
+    [StringValue("SLAB")]
+    Slab,
+    [StringValue("RIBSLAB")]
+    RibbedSlab,
+    [StringValue("COMPOS")]
+    CompositeBeam,
+    [StringValue("PILE")]
+    Pile,
+    [StringValue("EXPLICIT")]
+    Explicit
+  }
+
+  public enum Section1dMaterialType
+  {
+    GENERIC,
+    STEEL,
+    CONCRETE,
+    FRP,
+    ALUMINIUM,
+    TIMBER,
+    GLASS,
+    REBAR
+  }
+
+  public enum Section1dStandardProfileType
+  {
+    [StringValue("R")] Rectangular,
+    [StringValue("RHS")] RectangularHollow,
+    [StringValue("C")] Circular,
+    [StringValue("CHS")] CircularHollow,
+    [StringValue("I")] ISection,
+    [StringValue("T")] Tee,
+    [StringValue("CH")] Channel,
+    [StringValue("A")] Angle,
+    [StringValue("TR")] Taper,
+    [StringValue("E")] Ellipse,
+    [StringValue("GI")] GeneralISection,
+    [StringValue("TT")] TaperTSection,
+    [StringValue("TA")] TaperAngleSection,
+    [StringValue("RC")] RectoCircular,
+    [StringValue("RE")] RectoEllipse,
+    [StringValue("TI")] TaperISection,
+    [StringValue("SP")] SecantPileSection,
+    [StringValue("SPW")] SecantPileWall,
+    [StringValue("OVAL")] Oval,
+  }
+
+  public enum Section1dProfileGroup
+  {
+    [StringValue("STD")] Standard,
+    [StringValue("CAT")] Catalogue,
+    [StringValue("GEO")] Perimeter,
+    [StringValue("EXP")] Explicit
+  }
+
+  public enum ComponentReflection
+  {
+    NONE,
+    Y_AXIS,
+    Z_AXIS,
+    BOTH
+  }
+
+  public enum Section1dTaperType
+  {
+    NONE,
+    SIMPLE,
+    HOR_TAPER,
+    LINEAR,
+    HAUNCH,
+    FISH_BELLY
+  }
+
+  public enum ReferencePoint
+  {
+    [StringValue("CENTROID")]
+    Centroid,
+    [StringValue("TOP_LEFT")]
+    TopLeft,
+    [StringValue("TOP_CENTRE")]
+    TopCentre,
+    [StringValue("TOP_RIGHT")]
+    TopRight,
+    [StringValue("MIDDLE_LEFT")]
+    MiddleLeft,
+    [StringValue("MIDDLE_RIGHT")]
+    MiddleRight,
+    [StringValue("BOTTOM_LEFT")]
+    BottomLeft,
+    [StringValue("BOTTOM_CENTRE")]
+    BottomCentre,
+    [StringValue("BOTTOM_RIGHT")]
+    BottomRight
+  }
 
   public enum ReleaseInclusion
   {

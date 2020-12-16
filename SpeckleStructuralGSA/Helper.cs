@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace SpeckleStructuralGSA
@@ -18,8 +19,15 @@ namespace SpeckleStructuralGSA
   /// </summary>
   public static class Helper
   {
+    #region Reflection
+    public static IEnumerable<Type> GetEnumerableOfType<T>() where T : class
+    {
+      return Assembly.GetAssembly(typeof(T)).GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(T)));
+    }
+    #endregion
+
     #region Math
-    
+
 
     /// <summary>
     /// Calculates the mean of two numbers.
@@ -1089,18 +1097,29 @@ namespace SpeckleStructuralGSA
 
     public static StructuralVectorBoolSix RestraintFromCode(string code)
     {
+      return new StructuralVectorBoolSix(RestraintBoolArrayFromCode(code));
+    }
+
+    public static bool[] RestraintBoolArrayFromCode(string code)
+    {
       if (code == "free")
-        return new StructuralVectorBoolSix(false, false, false, false, false, false);
+      {
+        return new bool[] { false, false, false, false, false, false };
+      }
       else if (code == "pin")
-        return new StructuralVectorBoolSix(true, true, true, false, false, false);
+      {
+        return new bool[] { true, true, true, false, false, false };
+      }
       else if (code == "fix")
-        return new StructuralVectorBoolSix(true, true, true, true, true, true);
+      {
+        return new bool[] { true, true, true, true, true, true };
+      }
       else
       {
         var fixities = new bool[6];
 
         var codeRemaining = code;
-        int prevLength = code.Length;
+        int prevLength;
         do
         {
           prevLength = codeRemaining.Length;
@@ -1156,7 +1175,7 @@ namespace SpeckleStructuralGSA
           }
         } while (codeRemaining.Length > 0 && (codeRemaining.Length < prevLength));
 
-        return new StructuralVectorBoolSix(fixities);
+        return fixities;
       }
     }
 

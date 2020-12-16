@@ -12,6 +12,9 @@ namespace SpeckleStructuralGSA.Schema
     //table (i.e. index sequence): call GET LOAD_BEAM (this will get them all)
     public GwaKeyword Keyword { get; protected set; }
     public GwaSetCommandType SetCommandType { get; protected set; }
+    //If the object is a child or contained within another object, then this would be false (e.g.: SECTION_COMP in SECTION)
+    //Only self-contained keywords are the subject of a GET_ALL call to populate the cache.
+    public bool SelfContained { get; protected set; }
     public StreamBucket StreamBucket { get; protected set; }
     public bool AnalysisLayer { get; protected set; }
     public bool DesignLayer { get; protected set; }
@@ -19,7 +22,7 @@ namespace SpeckleStructuralGSA.Schema
     //This stays true to the actual schema, where references to entities of both layers is possible to be used here
     public GwaKeyword[] ReferencedKeywords { get; protected set; }
 
-    public GsaType(GwaKeyword keyword, GwaSetCommandType setCommandType, StreamBucket streamBucket, bool designLayer, bool analysisLayer, params GwaKeyword[] referencedKeywords)
+    public GsaType(GwaKeyword keyword, GwaSetCommandType setCommandType, bool selfContained, StreamBucket streamBucket, bool designLayer, bool analysisLayer, params GwaKeyword[] referencedKeywords)
     {
       this.Keyword = keyword;
       this.SetCommandType = setCommandType;
@@ -27,9 +30,10 @@ namespace SpeckleStructuralGSA.Schema
       this.AnalysisLayer = analysisLayer;
       this.DesignLayer = designLayer;
       this.ReferencedKeywords = referencedKeywords;
+      this.SelfContained = selfContained;
     }
 
-    public GsaType(GwaKeyword keyword, GwaSetCommandType setCommandType, StreamBucket streamBucket, params GwaKeyword[] referencedKeywords)
+    public GsaType(GwaKeyword keyword, GwaSetCommandType setCommandType, bool selfContained, StreamBucket streamBucket, params GwaKeyword[] referencedKeywords)
     {
       this.Keyword = keyword;
       this.SetCommandType = setCommandType;
@@ -37,6 +41,7 @@ namespace SpeckleStructuralGSA.Schema
       this.AnalysisLayer = true;
       this.DesignLayer = true;
       this.ReferencedKeywords = referencedKeywords == null ? new GwaKeyword[0] : referencedKeywords;
+      this.SelfContained = selfContained;
     }
   }
 }

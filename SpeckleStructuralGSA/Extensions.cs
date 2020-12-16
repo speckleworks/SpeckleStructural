@@ -36,7 +36,7 @@ namespace SpeckleStructuralGSA
     public static bool TryParseStringValue<T>(this string v, out T value) where T : Enum
     {
       var enumValues = typeof(T).GetEnumValues().OfType<T>().ToDictionary(ev => GetStringValue(ev), ev => ev);
-      if (enumValues.ContainsKey(v))
+      if (enumValues.Keys.Any(k => k.Equals(v, StringComparison.InvariantCultureIgnoreCase)))
       {
         value = enumValues[v];
         return true;

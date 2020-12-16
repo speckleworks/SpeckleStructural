@@ -201,6 +201,8 @@
     <Compile Include="Schema\GsaNode.cs" />
     <Compile Include="Schema\GsaRecord.cs" />
     <Compile Include="Schema\GsaType.cs" />
+    <Compile Include="Schema\Properties\GsaSection.cs" />
+    <Compile Include="Schema\Properties\GsaSectionComp.cs" />
     <Compile Include="Schema\StringValue.cs" />
   </ItemGroup>
   <ItemGroup>
