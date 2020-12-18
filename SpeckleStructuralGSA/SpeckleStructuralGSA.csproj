@@ -203,6 +203,11 @@
     <Compile Include="Schema\GsaType.cs" />
     <Compile Include="Schema\Properties\GsaSection.cs" />
     <Compile Include="Schema\Properties\GsaSectionComp.cs" />
+    <Compile Include="Schema\Properties\GsaSectionConc.cs" />
+    <Compile Include="Schema\Properties\GsaSectionCover.cs" />
+    <Compile Include="Schema\Properties\GsaSectionLink.cs" />
+    <Compile Include="Schema\Properties\GsaSectionSteel.cs" />
+    <Compile Include="Schema\Properties\GsaSectionTmpl.cs" />
     <Compile Include="Schema\StringValue.cs" />
   </ItemGroup>
   <ItemGroup>

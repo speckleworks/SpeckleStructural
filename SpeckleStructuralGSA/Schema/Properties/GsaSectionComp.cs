@@ -4,7 +4,7 @@ using System.Linq;
 using SpeckleGSAInterfaces;
 
 
-namespace SpeckleStructuralGSA.Schema.Properties
+namespace SpeckleStructuralGSA.Schema
 {
   //The term "section component" here is a name applied to both the group as a whole as well as one member of the group, 
   //but the latter is shortened to SectionComp to distinguish them here
@@ -21,8 +21,13 @@ namespace SpeckleStructuralGSA.Schema.Properties
     public double? OffsetZ;
     public double? Rotation;
     public ComponentReflection Reflect;
-    public Section1dTaperType TaperType;
     public int? Pool;
+    //These are mentioned in the docs but only in the parameter glossary, not in the syntax of SECTION_COMP
+    public Section1dTaperType TaperType;
+    public double? TaperPos;
+
+    public Section1dProfileGroup ProfileGroup;
+    public ProfileDetails ProfileDetails;
 
     public SectionComp() : base()
     {
@@ -31,7 +36,7 @@ namespace SpeckleStructuralGSA.Schema.Properties
 
     public override bool FromGwa(string gwa)
     {
-      //SECTION_COMP | ref | name | matAnal | matType | matRef | desc | offset_y | offset_z | rotn | reflect | pool
+      //SECTION_COMP | ref | name | matAnal | matType | matRef | desc | offset_y | offset_z | rotn | reflect | pool | taperType | taperPos
       //Note: the ref argument is missing when the GWA was embedded within a SECTION command, so need to detect this case
       //This also means the BasicFromGwa can't be called here because that does assume an index parameter
       var items = Split(gwa);
@@ -47,7 +52,7 @@ namespace SpeckleStructuralGSA.Schema.Properties
       items = items.Skip(1).ToList();
 
       //Detect presence or absense of ref (record index) argument based on number of items
-      if (items.Count() == 12 && int.TryParse(items[0], out var foundIndex))
+      if (int.TryParse(items[0], out var foundIndex))
       {
         Index = foundIndex;
         items = items.Skip(1).ToList();
@@ -64,11 +69,11 @@ namespace SpeckleStructuralGSA.Schema.Properties
       {
         return false;
       }
-      items = remainingItems;
+      items = items.Skip(1).ToList();
 
       return (FromGwaByFuncs(items, out _, (v) => AddNullableDoubleValue(v, out OffsetY), (v) => AddNullableDoubleValue(v, out OffsetZ),
-        (v) => AddNullableDoubleValue(v, out Rotation), (v) => Enum.TryParse(v, true, out Reflect), (v) => Enum.TryParse(v, true, out TaperType),
-        (v) => AddNullableIntValue(v, out Pool)));
+        (v) => AddNullableDoubleValue(v, out Rotation), (v) => Enum.TryParse(v, true, out Reflect), (v) => AddNullableIntValue(v, out Pool),
+        (v) => Enum.TryParse(v, true, out TaperType), (v) => AddNullableDoubleValue(v, out TaperPos)));
     }
 
     public override bool Gwa(out List<string> gwa, bool includeSet = false)
@@ -81,22 +86,26 @@ namespace SpeckleStructuralGSA.Schema.Properties
     public override bool GwaItems(out List<string> items, bool includeSet = false, bool includeRef = false)
     {
       items = new List<string>();
+
       if (includeSet)
       {
         items.Add("SET");
       }
+      var sid = FormatSidTags(StreamId, ApplicationId);
+      items.Add(keyword + "." + Version + ((string.IsNullOrEmpty(sid)) ? "" : ":" + sid));
+      
       if ((bool)GetType().GetAttribute<GsaType>("SelfContained"))
       {
         items.Add(Index.ToString());
       }
 
-      //SECTION_COMP | ref | name | matAnal | matType | matRef | desc | offset_y | offset_z | rotn | reflect | pool
+      //SECTION_COMP | ref | name | matAnal | matType | matRef | desc | offset_y | offset_z | rotn | reflect | pool | taperType | taperPos
       if (includeRef && !AddItems(ref items, Index ?? 0))
       {
         return false;
       }
       return AddItems(ref items, Name, MatAnalIndex ?? 0, MaterialType.ToString(), MaterialIndex ?? 0, ProfileDetails.ToDesc(),
-        OffsetY ?? 0, OffsetZ ?? 0, Rotation.ToString(), Reflect.ToString(), Pool ?? 0);
+        OffsetY ?? 0, OffsetZ ?? 0, Rotation.ToString(), Reflect.ToString(), Pool ?? 0, TaperType.ToString(), TaperPos ?? 0);
     }
 
     #region from_gwa_fns
@@ -153,12 +162,12 @@ namespace SpeckleStructuralGSA.Schema.Properties
             ProfileDetails = new ProfileDetailsEllipse();
             break;
 
-          case Section1dStandardProfileType.GeneralISection:
+          case Section1dStandardProfileType.GeneralI:
             ProfileDetails = new ProfileDetailsGeneralI();
             break;
 
-          case Section1dStandardProfileType.TaperTSection:
-          case Section1dStandardProfileType.TaperAngleSection:
+          case Section1dStandardProfileType.TaperT:
+          case Section1dStandardProfileType.TaperAngle:
             ProfileDetails = new ProfileDetailsTaperTAngle();
             break;
 
@@ -166,17 +175,34 @@ namespace SpeckleStructuralGSA.Schema.Properties
             ProfileDetails = new ProfileDetailsRectoEllipse();
             break;
 
-          case Section1dStandardProfileType.TaperISection:
+          case Section1dStandardProfileType.TaperI:
             ProfileDetails = new ProfileDetailsTaperI();
             break;
 
-          case Section1dStandardProfileType.SecantPileSection:
+          case Section1dStandardProfileType.SecantPile:
           case Section1dStandardProfileType.SecantPileWall:
             ProfileDetails = new ProfileDetailsSecant();
             break;
 
           case Section1dStandardProfileType.Oval:
             ProfileDetails = new ProfileDetailsOval();
+            break;
+
+          case Section1dStandardProfileType.GenericZ:
+            ProfileDetails = new ProfileDetailsZ();
+            break;
+
+          case Section1dStandardProfileType.Castellated:
+          case Section1dStandardProfileType.Cellular:
+            ProfileDetails = new ProfileDetailsCastellatedCellular();
+            break;
+
+          case Section1dStandardProfileType.AsymmetricCellular:
+            ProfileDetails = new ProfileDetailsAsymmetricCellular();
+            break;
+
+          case Section1dStandardProfileType.SheetPile:
+            ProfileDetails = new ProfileDetailsSheetPile();
             break;
 
           default:
@@ -207,6 +233,11 @@ namespace SpeckleStructuralGSA.Schema.Properties
       {
         return new List<string>();
       }
+    }
+
+    protected double? GetValue(List<double?> values, int index)
+    {
+      return (index < values.Count() ? values[index] : 0);
     }
   }
 
@@ -244,11 +275,19 @@ namespace SpeckleStructuralGSA.Schema.Properties
     {
       throw new NotImplementedException();
     }
-
   }
 
   public class ProfileDetailsExplicit : ProfileDetails
   {
+    public double? Area => GetValue(values, 0);
+    public double? Iyy => GetValue(values, 1);
+    public double? Izz => GetValue(values, 2);
+    public double? J => GetValue(values, 3);
+    public double? Ky => GetValue(values, 4);
+    public double? Kz => GetValue(values, 5);
+
+    private readonly List<double?> values = new List<double?>();
+
     public ProfileDetailsExplicit()
     {
       Group = Section1dProfileGroup.Explicit;
@@ -256,21 +295,29 @@ namespace SpeckleStructuralGSA.Schema.Properties
 
     public override bool FromDesc(string desc)
     {
-      throw new NotImplementedException();
+      var items = Split(desc);
+
+      //Assume first is the EXP string
+      items = items.Skip(1).ToList();
+      for (var i = 0; i < items.Count(); i++)
+      {
+        values.Add((double.TryParse(items[i], out var dVal)) ? (double?)dVal : 0);
+      }
+      return true;
     }
 
     public override string ToDesc()
     {
-      throw new NotImplementedException();
+      var strItems = new List<string>() { Group.GetStringValue() };
+      
+      strItems.AddRange(values.Select(v => (v.HasValue ? v : 0).ToString()));
+      return string.Join(" ", strItems);
     }
   }
 
   public abstract class ProfileDetailsStandard : ProfileDetails
   {
     public Section1dStandardProfileType ProfileType;
-
-    //This one happens to be common among all standard profile details
-    public double? d => GetValue(0);
 
     protected List<double?> values = new List<double?>();
 
@@ -302,91 +349,149 @@ namespace SpeckleStructuralGSA.Schema.Properties
       strItems.AddRange(values.Select(v => (v.HasValue ? v : 0).ToString()));
       return string.Join(" ", strItems);
     }
-
-    protected double? GetValue(int index)
-    {
-      return (index < values.Count() ? values[index] : 0);
-    }
   }
 
   public class ProfileDetailsRectangular : ProfileDetailsStandard
   {
-    public double? b => GetValue(1);
+    public double? d => GetValue(values, 0);
+    public double? b => GetValue(values, 1);
   }
 
   public class ProfileDetailsTwoThickness : ProfileDetailsStandard 
   {
-    public double? b => GetValue(1);
-    public double? tw => GetValue(2);
-    public double? tf => GetValue(3);
+    public double? d => GetValue(values, 0);
+    public double? b => GetValue(values, 1);
+    public double? tw => GetValue(values, 2);
+    public double? tf => GetValue(values, 3);
   }
 
   public class ProfileDetailsCircular : ProfileDetailsStandard 
   {
+    public double? d => GetValue(values, 0);
   }
 
   public class ProfileDetailsCircularHollow : ProfileDetailsStandard 
   {
-    public double? t => GetValue(1); 
+    public double? d => GetValue(values, 0);
+    public double? t => GetValue(values, 1); 
   }
   public class ProfileDetailsTaper : ProfileDetailsStandard
   {
-    public double? bt => GetValue(1); 
-    public double? bb => GetValue(2); 
+    public double? d => GetValue(values, 0);
+    public double? bt => GetValue(values, 1); 
+    public double? bb => GetValue(values, 2); 
   }
   
   public class ProfileDetailsEllipse : ProfileDetailsStandard 
-  { 
-    public double? b => GetValue(1); 
-    public double? k => GetValue(2); 
+  {
+    public double? d => GetValue(values, 0);
+    public double? b => GetValue(values, 1); 
+    public double? k => GetValue(values, 2); 
   }
   
   public class ProfileDetailsGeneralI : ProfileDetailsStandard 
-  { 
-    public double? bt => GetValue(1); 
-    public double? bb => GetValue(2); 
-    public double? tw => GetValue(3); 
-    public double? tft => GetValue(4); 
-    public double? tfb => GetValue(5); 
+  {
+    public double? d => GetValue(values, 0);
+    public double? bt => GetValue(values, 1); 
+    public double? bb => GetValue(values, 2); 
+    public double? tw => GetValue(values, 3); 
+    public double? tft => GetValue(values, 4); 
+    public double? tfb => GetValue(values, 5); 
   }
   
   public class ProfileDetailsTaperTAngle : ProfileDetailsStandard 
-  { 
-    public double? b => GetValue(1); 
-    public double? twt => GetValue(2); 
-    public double? twb => GetValue(3); 
-    public double? tf => GetValue(4); 
+  {
+    public double? d => GetValue(values, 0);
+    public double? b => GetValue(values, 1); 
+    public double? twt => GetValue(values, 2); 
+    public double? twb => GetValue(values, 3); 
+    public double? tf => GetValue(values, 4); 
   }
   
   public class ProfileDetailsRectoEllipse : ProfileDetailsStandard 
-  { 
-    public double? b => GetValue(1); 
-    public double? df => GetValue(2); 
-    public double? bf => GetValue(3); 
-    public double? k => GetValue(4);    
+  {
+    public double? d => GetValue(values, 0);
+    public double? b => GetValue(values, 1); 
+    public double? df => GetValue(values, 2); 
+    public double? bf => GetValue(values, 3); 
+    public double? k => GetValue(values, 4);    
   }
   
   public class ProfileDetailsTaperI : ProfileDetailsStandard 
-  { 
-    public double? b => GetValue(1); 
-    public double? bt => GetValue(2); 
-    public double? bb => GetValue(3); 
-    public double? twt => GetValue(4); 
-    public double? twb => GetValue(5); 
-    public double? tft => GetValue(6); 
-    public double? tfb => GetValue(7); 
+  {
+    public double? d => GetValue(values, 0);
+    public double? b => GetValue(values, 1); 
+    public double? bt => GetValue(values, 2); 
+    public double? bb => GetValue(values, 3); 
+    public double? twt => GetValue(values, 4); 
+    public double? twb => GetValue(values, 5); 
+    public double? tft => GetValue(values, 6); 
+    public double? tfb => GetValue(values, 7); 
   }
   
   public class ProfileDetailsSecant : ProfileDetailsStandard 
-  { 
-    public double? c => GetValue(1); 
-    public double? n => GetValue(2); 
+  {
+    public double? d => GetValue(values, 0);
+    public double? c => GetValue(values, 1); 
+    public double? n => GetValue(values, 2); 
   }
 
   public class ProfileDetailsOval : ProfileDetailsStandard 
-  { 
-    public double? b => GetValue(1); 
-    public double? t => GetValue(2); 
+  {
+    public double? d => GetValue(values, 0);
+    public double? b => GetValue(values, 1); 
+    public double? t => GetValue(values, 2); 
+  }
+
+  public class ProfileDetailsZ: ProfileDetailsStandard
+  {
+    public double? d => GetValue(values, 0);
+    public double? bt => GetValue(values, 1);
+    public double? bb => GetValue(values, 2);
+    public double? dt => GetValue(values, 3);
+    public double? db => GetValue(values, 4);
+    public double? t => GetValue(values, 5);
+  }
+
+  public class ProfileDetailsC: ProfileDetailsStandard
+  {
+    public double? d => GetValue(values, 0);
+    public double? b => GetValue(values, 1);
+    public double? dt => GetValue(values, 2);
+    public double? t => GetValue(values, 3);
+  }
+
+  public class ProfileDetailsCastellatedCellular : ProfileDetailsStandard
+  {
+    public double? d => GetValue(values, 0);
+    public double? b => GetValue(values, 1);
+    public double? tw => GetValue(values, 2);
+    public double? tf => GetValue(values, 3);
+    public double? ds => GetValue(values, 4);
+    public double? p => GetValue(values, 5);
+  }
+
+  public class ProfileDetailsAsymmetricCellular : ProfileDetailsStandard
+  {
+    public double? dt => GetValue(values, 0);
+    public double? bt => GetValue(values, 1);
+    public double? tw => GetValue(values, 2);
+    public double? tft => GetValue(values, 3);
+    public double? db => GetValue(values, 4);
+    public double? bb => GetValue(values, 5);
+    public double? tfb => GetValue(values, 6);
+    public double? ds => GetValue(values, 7);
+    public double? p => GetValue(values, 8);
+  }
+
+  public class ProfileDetailsSheetPile: ProfileDetailsStandard
+  {
+    public double? d => GetValue(values, 0);
+    public double? b => GetValue(values, 1);
+    public double? bt => GetValue(values, 2);
+    public double? bb => GetValue(values, 3);
+    public double? tf => GetValue(values, 4);
+    public double? tw => GetValue(values, 5);
   }
   #endregion
 }

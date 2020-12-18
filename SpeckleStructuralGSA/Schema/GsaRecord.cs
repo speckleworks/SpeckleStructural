@@ -95,7 +95,7 @@ namespace SpeckleStructuralGSA.Schema
         }
       }
 
-      if (ParseKeywordVersionSid(items[0], keywordOverride))
+      if (!ParseKeywordVersionSid(items[0], keywordOverride))
       {
         return false;
       }
@@ -432,7 +432,7 @@ namespace SpeckleStructuralGSA.Schema
       return (string.IsNullOrEmpty(value) ? null : "{" + SID_STRID_TAG + ":" + value.Replace(" ", "") + "}");
     }
 
-    private static string FormatSidTags(string streamId = null, string applicationId = null)
+    protected static string FormatSidTags(string streamId = null, string applicationId = null)
     {
       var streamIdSidTag = FormatStreamIdSidTag(streamId);
       var appIdSidTag = FormatApplicationIdSidTag(applicationId);

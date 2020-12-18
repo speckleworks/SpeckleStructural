@@ -134,7 +134,7 @@
   {
     NotSet = 0,
     General = 1,
-    Storey = 2 
+    Storey = 2
   }
 
   public enum AxisRefType
@@ -332,7 +332,7 @@
 
   public enum Section1dType
   {
-    [StringValue("GENERIC")]
+    [StringValue("1D_GENERIC")]
     Generic,
     [StringValue("BEAM")]
     Beam,
@@ -372,17 +372,25 @@
     [StringValue("T")] Tee,
     [StringValue("CH")] Channel,
     [StringValue("A")] Angle,
+    [StringValue("D")] AngleDoubled,
     [StringValue("TR")] Taper,
     [StringValue("E")] Ellipse,
-    [StringValue("GI")] GeneralISection,
-    [StringValue("TT")] TaperTSection,
-    [StringValue("TA")] TaperAngleSection,
+    [StringValue("GI")] GeneralI,
+    [StringValue("TT")] TaperT,
+    [StringValue("TA")] TaperAngle,
     [StringValue("RC")] RectoCircular,
     [StringValue("RE")] RectoEllipse,
-    [StringValue("TI")] TaperISection,
-    [StringValue("SP")] SecantPileSection,
+    [StringValue("TI")] TaperI,
+    [StringValue("SP")] SecantPile,
     [StringValue("SPW")] SecantPileWall,
     [StringValue("OVAL")] Oval,
+    [StringValue("X")] Cruciform,
+    [StringValue("GZ")] GenericZ,
+    [StringValue("GC")] GenericC,
+    [StringValue("CUB")] Castellated,
+    [StringValue("CB")] Cellular,
+    [StringValue("ACB")] AsymmetricCellular,
+    [StringValue("SHT")] SheetPile
   }
 
   public enum Section1dProfileGroup
@@ -409,6 +417,23 @@
     LINEAR,
     HAUNCH,
     FISH_BELLY
+  }
+
+  public enum SectionSteelSectionType
+  {
+    [StringValue("UNDEF")] Undefined,
+    [StringValue("ROLLED")] HotRolled,
+    [StringValue("WELDED")] Welded,
+    [StringValue("FORMED")] ColdFormed,
+    [StringValue("LWELDED")] LightlyWelded,
+    [StringValue("STRESS")] StressRelieved
+  }
+
+  public enum SectionSteelPlateType
+  {
+    [StringValue("UNDEF")] Undefined,
+    [StringValue("FLAMECUT")] FlameCut,
+    [StringValue("ASROLLED")] AsRolled
   }
 
   public enum ReferencePoint

@@ -813,6 +813,35 @@ namespace SpeckleStructuralGSA.Test
       Assert.AreEqual(6, structural1DLoads.Count());
     }
 
+    [Test]
+    public void GsaSectionSimple()
+    {
+      var gwa1 = "SECTION.7\t3\tNO_RGB\tSTD GZ 10 3 3 1.5 1.6 1\t1D_GENERIC\t0\tCENTROID\t0\t0\t0\t1\t0\t0\t0\t0\t1\tSECTION_COMP.4\t\t0\tGENERIC\t0\tSTD GZ 10 3 3 1.5 1.6 1\t0\t0\t0\tY_AXIS\t0\tNONE\t0\t0\t0\tNO_ENVIRON";
+      var gwa2 = "SECTION.7\t2\tNO_RGB\t150x150x12EA-BtB\t1D_GENERIC\t0\tCENTROID\t0\t0\t0\t1\t0\t0\t0\t0\t1\tSECTION_COMP.4\t\t1\tSTEEL\t1\tSTD D 150 150 12 12\t0\t0\t0\tNONE\t0\tNONE\t0\tSECTION_STEEL.2\t0\t1\t1\t1\t0.4\tNO_LOCK\tROLLED\tUNDEF\t0\t0\tNO_ENVIRON";
+      var gwa3 = "SECTION.7\t7\tNO_RGB\tfgds\t1D_GENERIC\t0\tCENTROID\t0\t0\t0\t1\t0\t0\t0\t0\t1\tSECTION_COMP.4\t\t2\tCONCRETE\t1\tSTD CH 99 60 8 9\t0\t0\t0\tNONE\t0\tSIMPLE\t0\tSECTION_CONC.6\t1\tNO_SLAB\t89.99999998\t0.025\t0\tSECTION_LINK.3\t0\t0\tDISCRETE\tRECT\t0\t\tSECTION_COVER.3\tUNIFORM\t0\t0\tNO_SMEAR\tSECTION_TMPL.4\tUNDEF\t0\t0\t0\t0\t0\t0\tNO_ENVIRON";
+      var gwaExp = "SECTION.7\t2\tNO_RGB\tEXP 1 2 3 4 5 6\t1D_GENERIC\t0\tCENTROID\t0\t0\t0\t1\t0\t0\t0\t0\t1\tSECTION_COMP.4\t\t0\tGENERIC\t0\tEXP 1 2 3 4 5 6\t0\t0\t0\tNONE\t0\tNONE\t0\t0\t0\tNO_ENVIRON";
+
+      var gsaSection1 = new GsaSection();
+      gsaSection1.FromGwa(gwa1);
+      gsaSection1.Gwa(out var gwaOut1);
+      Assert.IsTrue(gwa1.Equals(gwaOut1.First(), StringComparison.InvariantCulture));
+
+      var gsaSection2 = new GsaSection();
+      gsaSection2.FromGwa(gwa2);
+      gsaSection2.Gwa(out var gwaOut2);
+      Assert.IsTrue(gwa2.Equals(gwaOut2.First(), StringComparison.InvariantCulture));
+
+      var gsaSection3 = new GsaSection();
+      gsaSection3.FromGwa(gwa3);
+      gsaSection3.Gwa(out var gwaOut3);
+      Assert.IsTrue(gwa3.Equals(gwaOut3.First(), StringComparison.InvariantCulture));
+
+      var gsaSectionExp = new GsaSection();
+      gsaSectionExp.FromGwa(gwaExp);
+      gsaSectionExp.Gwa(out var gwaOutExp);
+      Assert.IsTrue(gwaExp.Equals(gwaOutExp.First(), StringComparison.InvariantCulture));
+    }
+
     #region other_methods
 
     //Since the classes don't have constructors with parameters (by design, to avoid schema complexity for now), use this method instead
