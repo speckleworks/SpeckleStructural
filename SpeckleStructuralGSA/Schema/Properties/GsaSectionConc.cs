@@ -9,7 +9,7 @@ namespace SpeckleStructuralGSA.Schema
   //The term "section component" here is a name applied to both the group as a whole as well as one member of the group, 
   //but the latter is shortened to SectionComp to distinguish them here
   [GsaType(GwaKeyword.SECTION_CONC, GwaSetCommandType.Set, false, StreamBucket.Model, true, true)]
-  public class SectionConc : SectionComponent
+  public class SectionConc : GsaSectionComponentBase
   {
     //The GWA specifies ref (i.e. record index) and name, but when a SECTION_COMP is inside a SECTION command, 
     //the ref is absent and name is blank (empty string) - so they'll be left out here

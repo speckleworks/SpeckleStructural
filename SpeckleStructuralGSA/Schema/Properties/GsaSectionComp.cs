@@ -9,7 +9,7 @@ namespace SpeckleStructuralGSA.Schema
   //The term "section component" here is a name applied to both the group as a whole as well as one member of the group, 
   //but the latter is shortened to SectionComp to distinguish them here
   [GsaType(GwaKeyword.SECTION_COMP, GwaSetCommandType.Set, false, StreamBucket.Model, true, true)]
-  public class SectionComp : SectionComponent
+  public class SectionComp : GsaSectionComponentBase
   {
     public string Name { get => name; set { name = value; } }
     //The GWA specifies ref (i.e. record index) and name, but when a SECTION_COMP is inside a SECTION command, 
@@ -239,6 +239,51 @@ namespace SpeckleStructuralGSA.Schema
     {
       return (index < values.Count() ? values[index] : 0);
     }
+
+    protected bool SetValue(ref List<double?> values, int index, double? value)
+    {
+      if (values == null)
+      {
+        values = new List<double?>();
+      }
+      if (values.Count() == 0)
+      { 
+        for (var i = 0; i < index; i++)
+        {
+          values.Add(null);
+        }
+        values.Add(value);
+        return true;
+      }
+      try
+      {
+        var lastExistingIndex = values.Count - 1;
+        if (index > lastExistingIndex)
+        {
+          if ((index - lastExistingIndex) > 1)
+          {
+            //Pad out the list with null values until the requested index
+            for (var i = (lastExistingIndex + 1); i < index; i++)
+            {
+              values.Add(null);
+            }
+            lastExistingIndex = index - 1;
+          }
+          if (index <= lastExistingIndex)
+          {
+            values[index] = value;
+          }
+          else
+          {
+            values.Add(value);
+          }
+        }
+      } catch
+      {
+        return false;
+      }
+      return true;
+    }
   }
 
   public class ProfileDetailsCatalogue : ProfileDetails
@@ -279,14 +324,14 @@ namespace SpeckleStructuralGSA.Schema
 
   public class ProfileDetailsExplicit : ProfileDetails
   {
-    public double? Area => GetValue(values, 0);
-    public double? Iyy => GetValue(values, 1);
-    public double? Izz => GetValue(values, 2);
-    public double? J => GetValue(values, 3);
-    public double? Ky => GetValue(values, 4);
-    public double? Kz => GetValue(values, 5);
+    public double? Area { get => GetValue(values, 0); set => SetValue(ref values, 0, value); }
+    public double? Iyy {  get => GetValue(values, 1); set => SetValue(ref values, 1, value); }
+    public double? Izz { get => GetValue(values, 2); set => SetValue(ref values, 2, value); }
+    public double? J { get => GetValue(values, 3); set => SetValue(ref values, 3, value); }
+    public double? Ky { get => GetValue(values, 4); set => SetValue(ref values, 4, value); }
+    public double? Kz { get => GetValue(values, 5); set => SetValue(ref values, 5, value); }
 
-    private readonly List<double?> values = new List<double?>();
+    private List<double?> values = new List<double?>();
 
     public ProfileDetailsExplicit()
     {

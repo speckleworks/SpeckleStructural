@@ -279,6 +279,37 @@ namespace SpeckleStructuralGSA.Test
     }
 
     [Test]
+    public void Structural1DPropertyExplicitToNative()
+    {
+      var steel = new StructuralMaterialSteel(200000, 76923.0769, 0.3, 7850, 0.000012, 300, 440, 0.05, "steel");
+      var concrete = new StructuralMaterialConcrete(29910.2016, 12462.584, 0.2, 2400, 0.00001, 12.8, 0.003, 0.02, "conc");
+
+      var gwaSteel = steel.ToNative();
+      var gwaConcrete = concrete.ToNative();
+      Helper.GwaToCache(gwaSteel, streamId1);
+      Helper.GwaToCache(gwaConcrete, streamId1);
+
+      var propExp1 = new Structural1DPropertyExplicit() { ApplicationId = "propexp1", Name = "PropExp1", MaterialRef = "steel", Area = 11, Iyy = 21, Izz = 31, J = 41, Ky = 51, Kz = 61 };
+      var propExp2 = new Structural1DPropertyExplicit() { ApplicationId = "propexp2", Name = "PropExp2", MaterialRef = "conc", Area = 12, Iyy = 22, Izz = 32, J = 42, Ky = 52, Kz = 62 };
+      var propExp3 = new Structural1DPropertyExplicit() { ApplicationId = "propexp3", Name = "PropExp3", Area = 13, Iyy = 23, Izz = 33, J = 43, Ky = 53, Kz = 63 };
+
+      SchemaConversion.Structural1DPropertyExplicitToNative.ToNative(propExp1);
+      SchemaConversion.Structural1DPropertyExplicitToNative.ToNative(propExp2);
+      SchemaConversion.Structural1DPropertyExplicitToNative.ToNative(propExp3);
+
+      var allGwa = ((IGSACache)Initialiser.Cache).GetNewGwaSetCommands();
+      var expectedCountByKw = new Dictionary<string, int>()
+      {
+        { "MAT_STEEL", 1},
+        { "MAT_CONCRETE", 1 },
+        { "SECTION", 3 }
+      };
+      Assert.IsTrue(ModelValidation(allGwa, expectedCountByKw, out var mismatchByKw, false, true));
+      Assert.AreEqual(0, mismatchByKw.Keys.Count());
+    }
+
+    //Both ToNative and ToSpeckle
+    [Test]
     public void Structural0DLoad()
     {
       //PREREQUISITES/REFERENCES - CONVERT TO GSA

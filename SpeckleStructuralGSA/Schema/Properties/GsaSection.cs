@@ -22,13 +22,13 @@ namespace SpeckleStructuralGSA.Schema
     public double? Left;
     public double? Right;
     public double? Slab;
-    public List<SectionComponent> Components;
+    public List<GsaSectionComponentBase> Components;
     //This would be populated by the final value before environment variables, which is either ENVIRON or NO_ENVIRON
     //- this isn't implemented yet in the FromGwa case
     public bool Environ = false;
 
     //private List<Type> sectionCompTypes = new List<Type>() {  typeof(Section)}
-    private static readonly List<Type> SectionCompTypes = Helper.GetEnumerableOfType<SectionComponent>().ToList();
+    private static readonly List<Type> SectionCompTypes = Helper.GetEnumerableOfType<GsaSectionComponentBase>().ToList();
 
     public GsaSection() : base()
     {
@@ -156,17 +156,17 @@ namespace SpeckleStructuralGSA.Schema
 
       gwaSectionProper = gwaPieces.First();
 
-      var sectionComps = new List<SectionComponent>();
+      var sectionComps = new List<GsaSectionComponentBase>();
       var partitionIndex = 1;
       foreach (var i in orderedComponentStartIndices)
       {
-        var sectionComp = (SectionComponent)Activator.CreateInstance(sectionCompStartIndicesTypes[i]);
+        var sectionComp = (GsaSectionComponentBase)Activator.CreateInstance(sectionCompStartIndicesTypes[i]);
         sectionComp.FromGwa(gwaPieces[partitionIndex++]);
         startIndex = i;
 
         if (Components == null)
         {
-          Components = new List<SectionComponent>();
+          Components = new List<GsaSectionComponentBase>();
         }
         Components.Add(sectionComp);
       }
@@ -175,12 +175,5 @@ namespace SpeckleStructuralGSA.Schema
       return true;
     }
     #endregion
-  }
-
-  public abstract class SectionComponent : GsaRecord
-  {
-    //This is for embedding into SECTION records - returning the unjoined string arguments so that the SECTION
-    //Gwa code can join it
-    public abstract bool GwaItems(out List<string> items, bool includeSet = false, bool includeRef = false);
   }
 }

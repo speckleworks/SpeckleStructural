@@ -166,6 +166,7 @@
     <Compile Include="SchemaConversion\Helper.cs" />
     <Compile Include="SchemaConversion\ToNative\Loads\Structural1DLoadToNative.cs" />
     <Compile Include="SchemaConversion\ToNative\Miscellaneous\StructuralAssemblyToNative.cs" />
+    <Compile Include="SchemaConversion\ToNative\Properties\Structural1DPropertyExplicit.cs" />
     <Compile Include="SchemaConversion\ToSpeckle\Geometry\GsaAxisToSpeckle.cs" />
     <Compile Include="SchemaConversion\ToSpeckle\Geometry\GsaGridPlaneToSpeckle.cs" />
     <Compile Include="SchemaConversion\ToSpeckle\Geometry\GsaGridSurfaceToSpeckle.cs" />
@@ -208,6 +209,7 @@
     <Compile Include="Schema\Properties\GsaSectionLink.cs" />
     <Compile Include="Schema\Properties\GsaSectionSteel.cs" />
     <Compile Include="Schema\Properties\GsaSectionTmpl.cs" />
+    <Compile Include="Schema\Properties\GsaSectionComponentBase.cs" />
     <Compile Include="Schema\StringValue.cs" />
   </ItemGroup>
   <ItemGroup>
