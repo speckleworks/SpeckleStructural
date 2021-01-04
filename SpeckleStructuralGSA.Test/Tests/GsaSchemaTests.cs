@@ -439,7 +439,7 @@ namespace SpeckleStructuralGSA.Test
       var load8 = new GsaLoadNode() { Index = 8, NodeIndices = new List<int> { 1 }, LoadCaseIndex = 2, GlobalAxis = true, LoadDirection = AxisDirection6.Z, Value = -10 };  //Test global without application ID
 
       Assert.IsTrue(ExtractAndValidateGwa(new GsaRecord[] { loadCase1, loadCase2, node1, node2, axis1, axis2, load1, load2, load3, load4, load5, load6, load7, load8 }, 
-        out var gwaCommands, out var mismatchByKw));
+        out var gwaCommands, out var mismatchByKw, visible: true));
 
       Assert.IsTrue(UpsertGwaIntoCache(gwaCommands));
 
@@ -913,7 +913,7 @@ namespace SpeckleStructuralGSA.Test
       return true;
     }
 
-    private bool ExtractAndValidateGwa(IEnumerable<GsaRecord> records, out List<string> gwaLines, out Dictionary<string, int> mismatchByKw)
+    private bool ExtractAndValidateGwa(IEnumerable<GsaRecord> records, out List<string> gwaLines, out Dictionary<string, int> mismatchByKw, bool visible = false)
     {
       gwaLines = new List<string>();
       var numByKw = new Dictionary<string, int>();
@@ -936,7 +936,7 @@ namespace SpeckleStructuralGSA.Test
         }
       }
 
-      return ModelValidation(gwaLines, numByKw, out mismatchByKw);
+      return ModelValidation(gwaLines, numByKw, out mismatchByKw, visible: visible);
     }
 
     private List<string> CollateGwaCommands(IEnumerable<GsaRecord> records)
