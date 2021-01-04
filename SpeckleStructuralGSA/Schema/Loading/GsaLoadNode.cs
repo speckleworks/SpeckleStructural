@@ -5,7 +5,7 @@ using SpeckleGSAInterfaces;
 
 namespace SpeckleStructuralGSA.Schema
 {
-  [GsaType(GwaKeyword.LOAD_NODE, GwaSetCommandType.SetAt, StreamBucket.Model, true, true, GwaKeyword.NODE, GwaKeyword.AXIS)]
+  [GsaType(GwaKeyword.LOAD_NODE, GwaSetCommandType.SetAt, true, StreamBucket.Model, true, true, GwaKeyword.NODE, GwaKeyword.AXIS)]
   public class GsaLoadNode : GsaRecord
   {
     //As many of these should be nullable, or in the case of enums, a "NotSet" option, to facilitate merging objects received from Speckle 
@@ -15,7 +15,7 @@ namespace SpeckleStructuralGSA.Schema
     public int? LoadCaseIndex;
     public bool GlobalAxis;
     public int? AxisIndex;
-    public LoadDirection6 LoadDirection;
+    public AxisDirection6 LoadDirection;
     public double? Value;
 
     public GsaLoadNode(): base()
@@ -54,7 +54,7 @@ namespace SpeckleStructuralGSA.Schema
     #region to_gwa_fns
     private string AddLoadDirection()
     {
-      return (LoadDirection == LoadDirection6.NotSet) ? "X" : LoadDirection.ToString();
+      return (LoadDirection == AxisDirection6.NotSet) ? "X" : LoadDirection.ToString();
     }
     #endregion
 

@@ -171,6 +171,7 @@
     <Compile Include="SchemaConversion\ToSpeckle\Geometry\GsaGridSurfaceToSpeckle.cs" />
     <Compile Include="SchemaConversion\ToSpeckle\GsaAssemblyToSpeckle.cs" />
     <Compile Include="SchemaConversion\ToSpeckle\GsaNodeToSpeckle.cs" />
+    <Compile Include="SchemaConversion\ToSpeckle\Loading\GsaLoadBeamToSpeckle.cs" />
     <Compile Include="SchemaConversion\ToSpeckle\Loading\GsaLoadCaseToSpeckle.cs" />
     <Compile Include="SchemaConversion\ToSpeckle\Loading\GsaLoadGridAreaToSpeckle.cs" />
     <Compile Include="SchemaConversion\ToSpeckle\Loading\GsaLoadNodeToSpeckle.cs" />
@@ -200,6 +201,13 @@
     <Compile Include="Schema\GsaNode.cs" />
     <Compile Include="Schema\GsaRecord.cs" />
     <Compile Include="Schema\GsaType.cs" />
+    <Compile Include="Schema\Properties\GsaSection.cs" />
+    <Compile Include="Schema\Properties\GsaSectionComp.cs" />
+    <Compile Include="Schema\Properties\GsaSectionConc.cs" />
+    <Compile Include="Schema\Properties\GsaSectionCover.cs" />
+    <Compile Include="Schema\Properties\GsaSectionLink.cs" />
+    <Compile Include="Schema\Properties\GsaSectionSteel.cs" />
+    <Compile Include="Schema\Properties\GsaSectionTmpl.cs" />
     <Compile Include="Schema\StringValue.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -214,7 +222,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Schema\Notes.txt" />
+    <None Include="Schema\README.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets" Condition="Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" />

@@ -10,7 +10,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
   //Corresponds to LOAD_GRID_AREA
   public static class Structural2DLoadPanelToNative
   {
-    private static readonly LoadDirection3[] loadDirSeq = new LoadDirection3[] { LoadDirection3.X, LoadDirection3.Y, LoadDirection3.Z };
+    private static readonly AxisDirection3[] loadDirSeq = new AxisDirection3[] { AxisDirection3.X, AxisDirection3.Y, AxisDirection3.Z };
 
     public static string ToNative(this Structural2DLoadPanel loadPanel)
     {
@@ -24,11 +24,11 @@ namespace SpeckleStructuralGSA.SchemaConversion
         return "";
       }
 
-      var keyword = GsaRecord.Keyword<GsaLoadGridArea>();
+      var keyword = GsaRecord.GetKeyword<GsaLoadGridArea>();
       var gwaSetCommandType = GsaRecord.GetGwaSetCommandType<GsaLoadGridArea>();
       var streamId = Initialiser.Cache.LookupStream(loadPanel.ApplicationId);
 
-      var loadCaseKeyword = GsaRecord.Keyword<GsaLoadCase>();
+      var loadCaseKeyword = GsaRecord.GetKeyword<GsaLoadCase>();
       var loadCaseIndex = Initialiser.Cache.ResolveIndex(loadCaseKeyword, loadPanel.LoadCaseRef);
 
       var loadingDict = ExplodeLoading(loadPanel.Loading);
@@ -43,9 +43,9 @@ namespace SpeckleStructuralGSA.SchemaConversion
       //1.  referencing a load plane (grid surface) 
       //2.  not referencing a load plane, in which case a grid surface and axis needs to be created
 
-      var gridSurfaceKeyword = GsaRecord.Keyword<GsaGridSurface>();
-      var gridPlaneKeyword = GsaRecord.Keyword<GsaGridPlane>();
-      var axisKeyword = GsaRecord.Keyword<GsaAxis>();
+      var gridSurfaceKeyword = GsaRecord.GetKeyword<GsaGridSurface>();
+      var gridPlaneKeyword = GsaRecord.GetKeyword<GsaGridPlane>();
+      var axisKeyword = GsaRecord.GetKeyword<GsaAxis>();
 
       StructuralAxis axis = null;
       int gridSurfaceIndex = 0;
@@ -220,9 +220,9 @@ namespace SpeckleStructuralGSA.SchemaConversion
       return "\"" + string.Join(" ", subLs) + "(m)\"";
     }
 
-    private static Dictionary<LoadDirection3, double> ExplodeLoading(StructuralVectorThree loading)
+    private static Dictionary<AxisDirection3, double> ExplodeLoading(StructuralVectorThree loading)
     {
-      var valueByDir = new Dictionary<LoadDirection3, double>();
+      var valueByDir = new Dictionary<AxisDirection3, double>();
 
       for (var i = 0; i < loadDirSeq.Count(); i++)
       {

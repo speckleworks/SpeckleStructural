@@ -21,6 +21,9 @@ namespace SpeckleStructuralGSA.Schema
     protected GwaSetCommandType gwaSetCommandType;
     protected string keyword;  //Useful in string rather than enum form for use in creating GWA commands
 
+    public string Keyword => this.keyword;
+    public GwaSetCommandType GwaSetCommandType => this.gwaSetCommandType;
+
     protected static readonly string SID_APPID_TAG = "speckle_app_id";
     protected static readonly string SID_STRID_TAG = "speckle_stream_id";
 
@@ -92,6 +95,12 @@ namespace SpeckleStructuralGSA.Schema
         }
       }
 
+      if (!ParseKeywordVersionSid(items[0], keywordOverride))
+      {
+        return false;
+      }
+
+      /*
       string keywordAndVersion;
       var delimIndex = items[0].IndexOf(':');
       if (delimIndex > 0)
@@ -126,6 +135,7 @@ namespace SpeckleStructuralGSA.Schema
       {
         Version = 1;
       }
+      */
 
       //Remove keyword
       items.Remove(items[0]);
@@ -136,6 +146,7 @@ namespace SpeckleStructuralGSA.Schema
         {
           return false;
         }
+        Index = index;
         items.Remove(items[0]);
       }
 
@@ -144,10 +155,135 @@ namespace SpeckleStructuralGSA.Schema
       return true;
     }
 
+    protected bool ParseKeywordVersionSid(string v, string keywordOverride = "")
+    {
+      string keywordAndVersion;
+      var delimIndex = v.IndexOf(':');
+      if (delimIndex > 0)
+      {
+        //An SID has been found
+        keywordAndVersion = v.Substring(0, delimIndex);
+        var sidTags = v.Substring(delimIndex);
+        var match = Regex.Match(sidTags, "(?<={" + SID_STRID_TAG + ":).*?(?=})");
+        StreamId = (!string.IsNullOrEmpty(match.Value)) ? match.Value : null;
+        match = Regex.Match(sidTags, "(?<={" + SID_APPID_TAG + ":).*?(?=})");
+        ApplicationId = (!string.IsNullOrEmpty(match.Value)) ? match.Value : null;
+      }
+      else
+      {
+        keywordAndVersion = v;
+      }
+
+      var kwSplit = keywordAndVersion.Split('.');
+      var foundKeyword = kwSplit[0];
+      if (!foundKeyword.Equals(string.IsNullOrEmpty(keywordOverride) ? keyword : keywordOverride, StringComparison.InvariantCultureIgnoreCase))
+      {
+        return false;
+      }
+      if (kwSplit.Count() > 1)
+      {
+        if (!int.TryParse(kwSplit[1], out Version))
+        {
+          return false;
+        }
+      }
+      else
+      {
+        Version = 1;
+      }
+      return true;
+    }
+
     protected bool AddName(string v)
     {
       name = (string.IsNullOrEmpty(v)) ? null : v;
       return true;
+    }
+
+    //Useful helper function for MEMB and EL
+    protected bool ProcessReleases(List<string> items, out List<string> remainingItems, 
+      ref Dictionary<AxisDirection6, ReleaseCode> Releases1, ref List<double> Stiffnesses1, ref Dictionary<AxisDirection6, ReleaseCode> Releases2, ref List<double> Stiffnesses2)
+    {
+      remainingItems = items; //default in case of early exit of this method
+      var axisDirs = Enum.GetValues(typeof(AxisDirection6)).OfType<AxisDirection6>().Where(v => v != AxisDirection6.NotSet).ToList();
+
+      var endReleases = new Dictionary<AxisDirection6, ReleaseCode>[2] { null, null };
+      var endStiffnesses = new List<double>[2];
+
+      var itemIndex = 0;
+      for (var i = 0; i < 2; i++)
+      {
+        endReleases[i] = new Dictionary<AxisDirection6, ReleaseCode>();
+        endStiffnesses[i] = new List<double>();
+
+        var relCodes = items[itemIndex++];
+        if (relCodes.Length < axisDirs.Count())
+        {
+          return false;
+        }
+
+        var numExpectedStiffnesses = 0;
+        for (var j = 0; j < axisDirs.Count(); j++)
+        {
+          var upperCharCode = char.ToUpper(relCodes[j]);
+          if (upperCharCode == 'K')
+          {
+            numExpectedStiffnesses++;
+            endReleases[i].Add(axisDirs[j], ReleaseCode.Stiff);
+          }
+          else if (upperCharCode == 'R')
+          {
+            endReleases[i].Add(axisDirs[j], ReleaseCode.Released);
+          }
+          else
+          {
+            //For now, Fixed values aren't added as it's considered the default
+            //endReleases[i].Add(axisDirs[j], ReleaseCode.Fixed);
+          }
+        }
+
+        if (numExpectedStiffnesses > 0)
+        {
+          for (var k = 0; k < numExpectedStiffnesses; k++)
+          {
+            if (!double.TryParse(items[itemIndex++], out double stiffness))
+            {
+              return false;
+            }
+            endStiffnesses[i].Add(stiffness);
+          }
+        }
+      }
+
+      Releases1 = endReleases[0].Count() > 0 ? endReleases[0] : null;
+      Releases2 = endReleases[1].Count() > 0 ? endReleases[1] : null;
+      Stiffnesses1 = endStiffnesses[0].Count() > 0 ? endStiffnesses[0] : null;
+      Stiffnesses2 = endStiffnesses[1].Count() > 0 ? endStiffnesses[1] : null;
+
+      remainingItems = items.Skip(itemIndex).ToList();
+
+      return true;
+    }
+
+    protected void AddEndReleaseItems(ref List<string> items, Dictionary<AxisDirection6, ReleaseCode> releases, List<double> stiffnesses, List<AxisDirection6> axisDirs)
+    {
+      var rls = "";
+      var stiffnessIndex = 0;
+      foreach (var d in axisDirs)
+      {
+        var releaseCode = (releases != null && releases.Count() > 0 && releases.ContainsKey(d)) ? releases[d] : ReleaseCode.Fixed;
+        rls += releaseCode.GetStringValue();
+        if (releaseCode == ReleaseCode.Stiff && releases.ContainsKey(d) && (++stiffnessIndex) < stiffnesses.Count())
+        {
+          stiffnesses.Add(stiffnesses[stiffnessIndex]);
+        }
+      }
+      items.Add(rls);
+      if (stiffnesses != null && stiffnesses.Count() > 0)
+      {
+        items.AddRange(stiffnesses.Select(s => s.ToString()));
+      }
+      return;
     }
 
     protected List<string> Split(string gwa)
@@ -160,6 +296,12 @@ namespace SpeckleStructuralGSA.Schema
       {
         return new List<string>();
       }
+    }
+
+    protected bool AddYesNoBoolean(string v, out bool dest)
+    {
+      dest = (v.Equals("YES", StringComparison.InvariantCultureIgnoreCase)) ? true : false;
+      return true;
     }
 
     protected bool AddNullableIndex(string v, out int? dest)
@@ -228,7 +370,7 @@ namespace SpeckleStructuralGSA.Schema
       }
       catch
       {
-        v = default;
+        v = default(T);
         return false;
       }
     }
@@ -290,7 +432,7 @@ namespace SpeckleStructuralGSA.Schema
       return (string.IsNullOrEmpty(value) ? null : "{" + SID_STRID_TAG + ":" + value.Replace(" ", "") + "}");
     }
 
-    private static string FormatSidTags(string streamId = null, string applicationId = null)
+    protected static string FormatSidTags(string streamId = null, string applicationId = null)
     {
       var streamIdSidTag = FormatStreamIdSidTag(streamId);
       var appIdSidTag = FormatApplicationIdSidTag(applicationId);
@@ -306,7 +448,7 @@ namespace SpeckleStructuralGSA.Schema
       return string.IsNullOrEmpty(sidTags) ? null : sidTags;
     }
 
-    public static string Keyword<T>()
+    public static string GetKeyword<T>()
     {
       return typeof(T).GetAttribute<GsaType>("Keyword").ToString();
     }

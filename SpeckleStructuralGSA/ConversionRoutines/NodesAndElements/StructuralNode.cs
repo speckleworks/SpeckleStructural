@@ -60,8 +60,10 @@ namespace SpeckleStructuralGSA
 
         // axis
         var axis = pieces[counter++];
-        if (axis == "GLOBAL")
+        if (string.IsNullOrEmpty(axis) || axis == "GLOBAL")
+        {
           obj.Axis = Helper.Global;
+        }
         else
         {
           string gwaRec = null;

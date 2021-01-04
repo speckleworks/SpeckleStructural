@@ -16,13 +16,13 @@ namespace SpeckleStructuralGSA.SchemaConversion
       }
 
       //Note: only LOAD_BEAM_UDL is supported at this stage
-      var keyword = GsaRecord.Keyword<GsaLoadBeam>();
+      var keyword = GsaRecord.GetKeyword<GsaLoadBeam>();
       var gwaSetCommandType = GsaRecord.GetGwaSetCommandType<GsaLoadBeam>();
       var streamId = Initialiser.Cache.LookupStream(load.ApplicationId);
 
-      var loadCaseIndex = Initialiser.Cache.ResolveIndex(GsaRecord.Keyword<GsaLoadCase>(), load.LoadCaseRef);
+      var loadCaseIndex = Initialiser.Cache.ResolveIndex(GsaRecord.GetKeyword<GsaLoadCase>(), load.LoadCaseRef);
 
-      var entityKeyword = (Initialiser.Settings.TargetLayer == GSATargetLayer.Design) ? GsaRecord.Keyword<GsaMemb>() : GsaRecord.Keyword<GsaEl>();
+      var entityKeyword = (Initialiser.Settings.TargetLayer == GSATargetLayer.Design) ? GsaRecord.GetKeyword<GsaMemb>() : GsaRecord.GetKeyword<GsaEl>();
       var entityIndices = Initialiser.Cache.LookupIndices(entityKeyword, load.ElementRefs).Where(i => i.HasValue).Select(i => i.Value).ToList();
 
       var loadingDict = Helper.ExplodeLoading(load.Loading);

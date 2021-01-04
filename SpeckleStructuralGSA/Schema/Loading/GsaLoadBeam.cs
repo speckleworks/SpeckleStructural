@@ -5,7 +5,7 @@ using SpeckleGSAInterfaces;
 
 namespace SpeckleStructuralGSA.Schema
 {
-  [GsaType(GwaKeyword.LOAD_BEAM, GwaSetCommandType.SetAt, StreamBucket.Model, GwaKeyword.MEMB, GwaKeyword.EL)]
+  [GsaType(GwaKeyword.LOAD_BEAM, GwaSetCommandType.SetAt, true, StreamBucket.Model, GwaKeyword.MEMB, GwaKeyword.EL)]
   public abstract class GsaLoadBeam : GsaRecord
   {
     public string Name { get => name; set { name = value; } }
@@ -14,7 +14,7 @@ namespace SpeckleStructuralGSA.Schema
     public LoadBeamAxisRefType AxisRefType;
     public int? AxisIndex;
     public bool Projected;
-    public LoadDirection6 LoadDirection;
+    public AxisDirection6 LoadDirection;
 
     protected GwaKeyword childKeyword;
 
@@ -37,7 +37,7 @@ namespace SpeckleStructuralGSA.Schema
         AddName, 
         AddEntities, 
         (v) => (AddNullableIndex(v, out LoadCaseIndex)),
-        (v) => (AddNullableIndex(v, out AxisIndex)),
+        AddAxis,
         AddProj, 
         (v) => Enum.TryParse(v, true, out LoadDirection))
         && (((extraFns.Count() > 0) && FromGwaByFuncs(remainingItems, out _, extraFns)) || true));
@@ -62,7 +62,7 @@ namespace SpeckleStructuralGSA.Schema
         LoadCaseIndex ?? 0,
         AddAxis(), 
         Projected ? "YES" : "NO", 
-        (LoadDirection == LoadDirection6.NotSet) ? "X" : LoadDirection.ToString());
+        (LoadDirection == AxisDirection6.NotSet) ? "X" : LoadDirection.ToString());
       if (extra.Count() > 0)
       {
         AddItems(ref items, extra);
@@ -88,7 +88,7 @@ namespace SpeckleStructuralGSA.Schema
       //the group is used
 
       var allIndices = Initialiser.Cache.LookupIndices(
-        (Initialiser.Settings.TargetLayer == GSATargetLayer.Design) ? Keyword<GsaMemb>() : Keyword<GsaEl>())
+        (Initialiser.Settings.TargetLayer == GSATargetLayer.Design) ? GetKeyword<GsaMemb>() : GetKeyword<GsaEl>())
         .Where(i => i.HasValue).Select(i => i.Value).Distinct().OrderBy(i => i).ToList();
 
       if (Entities.Distinct().OrderBy(i => i).SequenceEqual(allIndices))
@@ -131,14 +131,23 @@ namespace SpeckleStructuralGSA.Schema
       var entityItems = v.Split(' ');
       if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
       {
-        //Only recognise the groups, as these represent the members
-        //TO DO: for all elements, find if they have parents and include them
-        var members = string.Join(" ", entityItems.Where(ei => ei.StartsWith("G")).Select(ei => ei.Substring(1)));
-        Entities = Initialiser.Interface.ConvertGSAList(members, GSAEntity.MEMBER).ToList();
+        if (entityItems.Count() == 1 && entityItems.First().Equals("all", StringComparison.InvariantCultureIgnoreCase))
+        {
+          Entities = Initialiser.Cache.LookupIndices(GetKeyword<GsaMemb>()).Where(i => i.HasValue).Select(i => i.Value).ToList();
+        }
+        else
+        {
+          //Only recognise the groups, as these represent the members
+          //TO DO: for all elements, find if they have parents and include them
+          var members = string.Join(" ", entityItems.Where(ei => ei.StartsWith("G")).Select(ei => ei.Substring(1)));
+          Entities = Initialiser.Interface.ConvertGSAList(members, GSAEntity.MEMBER).ToList();
+        }
       }
       else
       {
-        Entities = Initialiser.Interface.ConvertGSAList(v, GSAEntity.ELEMENT).ToList();
+        Entities = (entityItems.Count() == 1 && entityItems.First().Equals("all", StringComparison.InvariantCultureIgnoreCase))
+          ? Entities = Initialiser.Cache.LookupIndices(GetKeyword<GsaEl>()).Where(i => i.HasValue).Select(i => i.Value).ToList()
+          : Initialiser.Interface.ConvertGSAList(v, GSAEntity.ELEMENT).ToList();
       }
 
       return Entities != null;

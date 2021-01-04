@@ -14,9 +14,9 @@ namespace SpeckleStructuralGSA.SchemaConversion
         return "";
       }
 
-      var keyword = GsaRecord.Keyword<GsaLoadNode>();
-      var nodeKeyword = GsaRecord.Keyword<GsaNode>();
-      var loadCaseKeyword = GsaRecord.Keyword<GsaLoadCase>();
+      var keyword = GsaRecord.GetKeyword<GsaLoadNode>();
+      var nodeKeyword = GsaRecord.GetKeyword<GsaNode>();
+      var loadCaseKeyword = GsaRecord.GetKeyword<GsaLoadCase>();
 
       var nodeIndices = Initialiser.Cache.LookupIndices(nodeKeyword, load.NodeRefs).Where(x => x.HasValue).Select(x => x.Value).OrderBy(i => i).ToList();
       var loadCaseIndex = Initialiser.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);

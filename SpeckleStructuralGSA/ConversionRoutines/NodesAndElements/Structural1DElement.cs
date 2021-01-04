@@ -195,7 +195,7 @@ namespace SpeckleStructuralGSA
         }
         else
         {
-          Helper.SafeDisplay("Property references not found:", element.ApplicationId + " referencing " + element.PropertyRef);
+          Helper.SafeDisplay("1D property references not found:", element.ApplicationId + " referencing " + element.PropertyRef);
         }
       }
 
@@ -504,7 +504,7 @@ namespace SpeckleStructuralGSA
         }
         else
         {
-          Helper.SafeDisplay("Property references not found:", member.ApplicationId + " referencing " + member.PropertyRef);
+          Helper.SafeDisplay("1D property references not found:", member.ApplicationId + " referencing " + member.PropertyRef);
         }
       }
 

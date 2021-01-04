@@ -7,7 +7,7 @@ using SpeckleGSAInterfaces;
 namespace SpeckleStructuralGSA.Schema
 {
   //polygon references not supported yet
-  [GsaType(GwaKeyword.GRID_SURFACE, GwaSetCommandType.Set, StreamBucket.Model, true, true, new[] { GwaKeyword.MEMB, GwaKeyword.EL, GwaKeyword.GRID_PLANE })]
+  [GsaType(GwaKeyword.GRID_SURFACE, GwaSetCommandType.Set, true, StreamBucket.Model, true, true, new[] { GwaKeyword.MEMB, GwaKeyword.EL, GwaKeyword.GRID_PLANE })]
   public class GsaGridSurface : GsaRecord
   {
     public string Name { get => name; set { name = value; } }

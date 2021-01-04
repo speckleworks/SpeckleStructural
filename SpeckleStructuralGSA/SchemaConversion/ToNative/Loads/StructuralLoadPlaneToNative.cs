@@ -16,8 +16,8 @@ namespace SpeckleStructuralGSA.SchemaConversion
         return "";
       }
 
-      var keyword = GsaRecord.Keyword<GsaGridSurface>();
-      var storeyKeyword = GsaRecord.Keyword<GsaGridPlane>();
+      var keyword = GsaRecord.GetKeyword<GsaGridSurface>();
+      var storeyKeyword = GsaRecord.GetKeyword<GsaGridPlane>();
       var streamId = Initialiser.Cache.LookupStream(loadPlane.ApplicationId);
 
       var index = Initialiser.Cache.ResolveIndex(keyword, loadPlane.ApplicationId);
@@ -71,7 +71,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
         //Create plane - the key here is that it's not a storey, but a general, type of grid plane, 
         //which is why the ToNative() method for SpeckleStorey shouldn't be used as it only creates storey-type GSA grid plane
-        var gsaPlaneKeyword = GsaRecord.Keyword<GsaGridPlane>();
+        var gsaPlaneKeyword = GsaRecord.GetKeyword<GsaGridPlane>();
         var planeIndex = Initialiser.Cache.ResolveIndex(gsaPlaneKeyword);
         
         var gsaPlane = new GsaGridPlane()

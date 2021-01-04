@@ -160,7 +160,7 @@ namespace SpeckleStructuralGSA
         }
         else
         {
-          Helper.SafeDisplay("Property references not found:", mesh.ApplicationId + " referencing " + mesh.PropertyRef);
+          Helper.SafeDisplay("2D property references not found:", mesh.ApplicationId + " referencing " + mesh.PropertyRef);
         }
       }
 
@@ -417,7 +417,7 @@ namespace SpeckleStructuralGSA
         }
         else
         {
-          Helper.SafeDisplay("Property references not found:", obj.ApplicationId + " referencing " + propRef);
+          Helper.SafeDisplay("2D property references not found:", obj.ApplicationId + " referencing " + propRef);
         }
       }
 

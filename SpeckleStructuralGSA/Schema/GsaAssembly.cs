@@ -5,7 +5,7 @@ using SpeckleGSAInterfaces;
 
 namespace SpeckleStructuralGSA.Schema
 {
-  [GsaType(GwaKeyword.ASSEMBLY, GwaSetCommandType.Set, StreamBucket.Model, GwaKeyword.NODE, GwaKeyword.MEMB, GwaKeyword.EL, GwaKeyword.GRID_PLANE)]
+  [GsaType(GwaKeyword.ASSEMBLY, GwaSetCommandType.Set, true, StreamBucket.Model, GwaKeyword.NODE, GwaKeyword.MEMB, GwaKeyword.EL, GwaKeyword.GRID_PLANE)]
   public class GsaAssembly : GsaRecord
   {
     public string Name { get => name; set { name = value; } }
@@ -88,7 +88,7 @@ namespace SpeckleStructuralGSA.Schema
       //The old mechanism of using "G_" in the entities field to signify members is understood to be superseded by the inclusion of the entity type
       //parameter as of version 3.
 
-      var allIndices = Initialiser.Cache.LookupIndices(Type == GSAEntity.MEMBER ? Keyword<GsaMemb>() : Keyword<GsaEl>())
+      var allIndices = Initialiser.Cache.LookupIndices(Type == GSAEntity.MEMBER ? GetKeyword<GsaMemb>() : GetKeyword<GsaEl>())
         .Where(i => i.HasValue).Select(i => i.Value).Distinct().OrderBy(i => i).ToList();
 
       if (Entities.Distinct().OrderBy(i => i).SequenceEqual(allIndices))
@@ -150,7 +150,7 @@ namespace SpeckleStructuralGSA.Schema
     private List<int> GetStoreyIndices()
     {
       //Since there is no way in the GSA COM API to resolve list specification ("1 2 to 8" etc) of grid surfaces, the cache needs to be used
-      var gridPlaneKw = Keyword<GsaGridPlane>();
+      var gridPlaneKw = GetKeyword<GsaGridPlane>();
       var allGridPlaneIndices = Initialiser.Cache.LookupIndices(gridPlaneKw).Where(i => i.HasValue).Select(i => i.Value).ToList();
       var storeyIndices = new List<int>();
       foreach (var i in allGridPlaneIndices)
