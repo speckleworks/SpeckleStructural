@@ -10,13 +10,8 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("ALIGN.1", new string[] { }, "model", true, true, new Type[] { }, new Type[] { })]
-  public class GSABridgeAlignment : IGSASpeckleContainer
+  public class GSABridgeAlignment : GSABase<StructuralBridgeAlignment>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralBridgeAlignment();
-
     public void ParseGWACommand()
     {
       if (this.GWACommand == null)

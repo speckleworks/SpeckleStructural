@@ -12,14 +12,9 @@ namespace SpeckleStructuralGSA
 {
   //Elements can have parent members and the application IDs should be based on that of their parents, so they need to be read first, hence the inclusion of that as a read prerequisite
   [GSAObject("EL.4", new string[] { "NODE.3", "PROP_2D.6" }, "model", true, false, new Type[] { typeof(GSANode), typeof(GSA2DProperty), typeof(GSA2DMember) }, new Type[] { typeof(GSANode), typeof(GSA2DProperty) })]
-  public class GSA2DElement : IGSASpeckleContainer
+  public class GSA2DElement : GSABase<Structural2DElement>
   {
     public int Member;
-
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural2DElement();
 
     public void ParseGWACommand(List<GSANode> nodes, List<GSA2DProperty> props)
     {
@@ -181,7 +176,7 @@ namespace SpeckleStructuralGSA
       for (var i = 1; i < mesh.Faces.Count(); i++)
       {
         coor.AddRange(mesh.Vertices.Skip(mesh.Faces[i] * 3).Take(3));
-        ls.Add(Helper.NodeAt(mesh.Vertices[mesh.Faces[i] * 3], mesh.Vertices[mesh.Faces[i] * 3 + 1], mesh.Vertices[mesh.Faces[i] * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString());
+        ls.Add(Initialiser.Interface.NodeAt(mesh.Vertices[mesh.Faces[i] * 3], mesh.Vertices[mesh.Faces[i] * 3 + 1], mesh.Vertices[mesh.Faces[i] * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString());
       }
       ls.Add("0"); //Orientation node
       if (mesh.Axis == null)
@@ -213,14 +208,9 @@ namespace SpeckleStructuralGSA
   }
 
   [GSAObject("MEMB.8", new string[] { "NODE.3" }, "model", false, true, new Type[] { typeof(GSANode), typeof(GSA2DProperty) }, new Type[] { typeof(GSANode), typeof(GSA2DProperty) })]
-  public class GSA2DMember : IGSASpeckleContainer
+  public class GSA2DMember : GSABase<SpeckleMesh>
   {
     public int Group; // Keep for load targetting
-
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural2DElementMesh();
 
     public void ParseGWACommand(List<GSANode> nodes, List<GSA2DProperty> props)
     {
@@ -378,7 +368,7 @@ namespace SpeckleStructuralGSA
         structural2dElementType = el.ElementType;
         sid = Helper.GenerateSID(el);
         propRef = el.PropertyRef;
-        mesh = new Structural2DElementMesh() { baseMesh = this.Value.baseMesh };
+        mesh = new Structural2DElementMesh() { baseMesh = ((Structural2DElement) this.Value).baseMesh };
         gsaMeshSize = el.GSAMeshSize;
         gsaDummy = el.GSADummy;
         axis = el.Axis;
@@ -390,7 +380,7 @@ namespace SpeckleStructuralGSA
         structural2dElementType = el.ElementType;
         propRef = el.PropertyRef;
         sid = Helper.GenerateSID(el);
-        mesh = this.Value;
+        mesh = ((Structural2DElementMesh) this.Value);
         gsaMeshSize = el.GSAMeshSize;
         gsaDummy = el.GSADummy;
         axis = (el.Axis == null || el.Axis.Count == 0) ? null : el.Axis.First();
@@ -459,7 +449,7 @@ namespace SpeckleStructuralGSA
       var prevNodeIndex = -1;
       foreach (var coorPt in coorPts)
       {
-        var currIndex = Helper.NodeAt(coorPt[0], coorPt[1], coorPt[2], Initialiser.Settings.CoincidentNodeAllowance);
+        var currIndex = Initialiser.Interface.NodeAt(coorPt[0], coorPt[1], coorPt[2], Initialiser.Settings.CoincidentNodeAllowance);
         if (prevNodeIndex != currIndex)
         {
           topo += currIndex.ToString() + " ";

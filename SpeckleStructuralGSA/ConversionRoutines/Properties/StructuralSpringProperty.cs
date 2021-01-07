@@ -9,13 +9,8 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("PROP_SPR.4", new string[] { }, "model", true, true, new Type[] { }, new Type[] { })]
-  public class GSASpringProperty : IGSASpeckleContainer
+  public class GSASpringProperty : GSABase<StructuralSpringProperty>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralSpringProperty();
-
     public void ParseGWACommand()
     {
       // GSA documentation of this GWA command is almost useless

@@ -8,13 +8,8 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("LOAD_2D_THERMAL.2", new string[] { }, "model", true, true, new Type[] { typeof(GSA2DElement), typeof(GSA2DMember), typeof(GSALoadCase) }, new Type[] { typeof(GSA2DElement), typeof(GSA2DMember), typeof(GSALoadCase) })]
-  public class GSA2DThermalLoading : IGSASpeckleContainer
+  public class GSA2DThermalLoading : GSABase<Structural2DThermalLoad>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural2DThermalLoad();
-
     public void ParseGWACommand(List<GSA2DElement> e2Ds, List<GSA2DMember> m2Ds)
     {
       if (this.GWACommand == null)
@@ -35,15 +30,15 @@ namespace SpeckleStructuralGSA
 
       if (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
       {
-        var elementId = Initialiser.Interface.ConvertGSAList(elementList, SpeckleGSAInterfaces.GSAEntity.ELEMENT);
+        var elementId = Initialiser.Interface.ConvertGSAList(elementList, GSAEntity.ELEMENT);
         foreach (var id in elementId)
         {
-          IGSASpeckleContainer elem = e2Ds.Where(e => e.GSAId == id).FirstOrDefault();
+          var elem = e2Ds.Where(e => e.GSAId == id).Select(e => (IGSAContainer<Structural2DElement>)e).FirstOrDefault();
 
           if (elem == null)
             continue;
 
-          obj.ElementRefs.Add((elem.Value as SpeckleObject).ApplicationId);
+          obj.ElementRefs.Add(((SpeckleObject)elem.Value).ApplicationId);
           this.SubGWACommand.Add(elem.GWACommand);
         }
       }
@@ -54,7 +49,7 @@ namespace SpeckleStructuralGSA
         {
           var memb2Ds = m2Ds.Where(m => m.Group == id);
 
-          obj.ElementRefs.AddRange(memb2Ds.Select(m => (string)m.Value.ApplicationId));
+          obj.ElementRefs.AddRange(memb2Ds.Select(m => (m.Value).ApplicationId));
           this.SubGWACommand.AddRange(memb2Ds.Select(m => m.GWACommand));
         }
       }

@@ -9,13 +9,8 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("INF_BEAM.1", new string[] { }, "model", true, false, new Type[] { typeof(GSA1DElement) }, new Type[] { typeof(GSA1DElement) })]
-  public class GSA1DInfluenceEffect : IGSASpeckleContainer
+  public class GSA1DInfluenceEffect : GSABase<Structural1DInfluenceEffect>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural1DInfluenceEffect();
-
     public void ParseGWACommand(List<GSA1DElement> e1Ds)
     {
       if (this.GWACommand == null)

@@ -8,12 +8,8 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("COMBINATION.1", new string[] { }, "model", true, true, new Type[] { typeof(GSALoadCase), typeof(GSALoadTask) }, new Type[] { typeof(GSALoadCase), typeof(GSALoadTask) })]
-  public class GSALoadCombo : IGSASpeckleContainer
+  public class GSALoadCombo : GSABase<StructuralLoadCombo>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralLoadCombo();
 
     public void ParseGWACommand()
     {

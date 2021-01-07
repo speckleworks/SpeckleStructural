@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using SpeckleGSAInterfaces;
+using SpeckleCore;
 
 namespace SpeckleStructuralGSA.Test
 {
@@ -43,7 +44,7 @@ namespace SpeckleStructuralGSA.Test
 
       // Grab all GSA related object
       var ass = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "SpeckleStructuralGSA");
-      var objTypes = ass.GetTypes().Where(t => interfaceType.IsAssignableFrom(t) && t != interfaceType).ToList();
+      var objTypes = ass.GetTypes().Where(t => interfaceType.IsAssignableFrom(t) && t != interfaceType && !t.IsAbstract).ToList();
 
       var TypePrerequisites = new Dictionary<Type, List<Type>>();
 

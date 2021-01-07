@@ -9,13 +9,8 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("ANAL_STAGE.3", new string[] { "LIST.1" }, "model", true, true, new Type[] { typeof(GSA1DElement), typeof(GSA2DElement), typeof(GSA1DMember), typeof(GSA2DMember) }, new Type[] { typeof(GSA1DElement), typeof(GSA2DElement), typeof(GSA1DMember), typeof(GSA2DMember) })]
-  public class GSAConstructionStage : IGSASpeckleContainer
+  public class GSAConstructionStage : GSABase<StructuralConstructionStage>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralConstructionStage();
-
     public void ParseGWACommand(List<GSA1DElement> e1Ds, List<GSA2DElement> e2Ds, List<GSA1DMember> m1Ds, List<GSA2DMember> m2Ds)
     {
       if (this.GWACommand == null)
@@ -39,18 +34,19 @@ namespace SpeckleStructuralGSA
 
       if (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
       {
-        var elementId = Initialiser.Interface.ConvertGSAList(elementList, SpeckleGSAInterfaces.GSAEntity.ELEMENT);
+        var elementId = Initialiser.Interface.ConvertGSAList(elementList, GSAEntity.ELEMENT);
         foreach (var id in elementId)
         {
-          IGSASpeckleContainer elem = e1Ds.Where(e => e.GSAId == id).FirstOrDefault();
+          var elem = (IGSAContainer<Structural1DElement>)e1Ds.Where(e => e.GSAId == id).FirstOrDefault();
 
           if (elem == null)
-            elem = e2Ds.Where(e => e.GSAId == id).FirstOrDefault();
-
+          {
+            elem = (IGSAContainer<Structural1DElement>)e2Ds.Where(e => e.GSAId == id).FirstOrDefault();
+          }
           if (elem == null)
             continue;
 
-          obj.ElementRefs.Add((elem.Value as SpeckleObject).ApplicationId);
+          obj.ElementRefs.Add(((SpeckleObject)elem.Value).ApplicationId);
           this.SubGWACommand.Add(elem.GWACommand);
         }
       }
@@ -62,8 +58,8 @@ namespace SpeckleStructuralGSA
           var memb1Ds = m1Ds.Where(m => m.Group == id);
           var memb2Ds = m2Ds.Where(m => m.Group == id);
 
-          obj.ElementRefs.AddRange(memb1Ds.Select(m => (string)m.Value.ApplicationId));
-          obj.ElementRefs.AddRange(memb2Ds.Select(m => (string)m.Value.ApplicationId));
+          obj.ElementRefs.AddRange(memb1Ds.Select(m => m.Value.ApplicationId));
+          obj.ElementRefs.AddRange(memb2Ds.Select(m => m.Value.ApplicationId));
           this.SubGWACommand.AddRange(memb1Ds.Select(m => m.GWACommand));
           this.SubGWACommand.AddRange(memb2Ds.Select(m => m.GWACommand));
         }

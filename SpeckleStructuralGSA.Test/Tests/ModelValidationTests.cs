@@ -20,7 +20,7 @@ namespace SpeckleStructuralGSA.Test
     [SetUp]
     public void BeforeEachTest()
     {
-      Initialiser.Settings = new Settings();
+      Initialiser.Settings = new MockSettings();
     }
 
     internal class UnmatchedData

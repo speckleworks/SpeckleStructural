@@ -8,13 +8,8 @@ using System.Linq;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("LOAD_GRAVITY.3", new string[] { }, "model", true, true, new Type[] { typeof(GSALoadCase) }, new Type[] { typeof(GSALoadCase) })]
-  public class GSAGravityLoading : IGSASpeckleContainer
+  public class GSAGravityLoading : GSABase<StructuralGravityLoading>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralGravityLoading();
-
     public void ParseGWACommand()
     {
       // LOAD_GRAVITY.3 | name | elemlist | nodelist | case | x | y | z

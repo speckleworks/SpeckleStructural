@@ -11,12 +11,8 @@ namespace SpeckleStructuralGSA
   // - GSA1DMember is also listed as a read prerequisite
   // - MEMB.8 is listed as a subkeyword
   [GSAObject("", new string[] { "EL.4", "MEMB.8" }, "results", true, false, new Type[] { typeof(GSA1DElement), typeof(GSA1DMember) }, new Type[] { })]
-  public class GSA1DElementResult : IGSASpeckleContainer
+  public class GSA1DElementResult : GSABase<Structural1DElementResult>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural1DElementResult();
   }
 
   public static partial class Conversions

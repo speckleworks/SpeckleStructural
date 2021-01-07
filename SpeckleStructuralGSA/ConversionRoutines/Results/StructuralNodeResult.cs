@@ -8,12 +8,8 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("", new string[] { "NODE.3" }, "results", true, false, new Type[] { typeof(GSANode) }, new Type[] { })]
-  public class GSANodeResult : IGSASpeckleContainer
+  public class GSANodeResult : GSABase<StructuralNodeResult>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralNodeResult();
   }
 
 
@@ -124,7 +120,7 @@ namespace SpeckleStructuralGSA
               }
               else
               {
-                existingRes.Value.Value[kvp.Key] = resultExport;
+                ((StructuralNodeResult)existingRes.Value).Value[kvp.Key] = resultExport;
               }
             }
           }

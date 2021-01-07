@@ -9,13 +9,8 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("USER_VEHICLE.1", new string[] { }, "model", true, true, new Type[] { }, new Type[] { })]
-  public class GSABridgeVehicle : IGSASpeckleContainer
+  public class GSABridgeVehicle : GSABase<StructuralBridgeVehicle>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralBridgeVehicle();
-
     public void ParseGWACommand()
     {
       if (this.GWACommand == null)

@@ -10,13 +10,8 @@ namespace SpeckleStructuralGSA
 {
   // Keyword set as MEMB to not clash with grouping of members
   [GSAObject("MEMB.8", new string[] { }, "model", true, false, new Type[] { typeof(GSA2DElement), typeof(GSA2DElementResult) }, new Type[] { typeof(GSANode), typeof(GSA2DProperty) })]
-  public class GSA2DElementMesh : IGSASpeckleContainer
+  public class GSA2DElementMesh : GSABase<Structural2DElementMesh>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural2DElementMesh();
-
     public void ParseGWACommand(List<GSA2DElement> elements)
     {
       if (elements.Count() < 1)
@@ -54,7 +49,7 @@ namespace SpeckleStructuralGSA
 
         
         axes.Add(e.Value.Axis);
-        offsets.Add(e.Value.Offset);
+        offsets.Add(e.Value.Offset ?? 0);
         elementAppIds.Add(e.Value.ApplicationId);
 
         // Result merging

@@ -178,7 +178,7 @@
     <Compile Include="Tests\ReceiverTests.cs" />
     <Compile Include="Tests\SenderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Other\Settings.cs" />
+    <Compile Include="Other\MockSettings.cs" />
     <Compile Include="Base\TestBase.cs" />
   </ItemGroup>
   <ItemGroup>

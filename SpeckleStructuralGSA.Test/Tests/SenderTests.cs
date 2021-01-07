@@ -34,7 +34,7 @@ namespace SpeckleStructuralGSA.Test
 
       Initialiser.Cache = gsaCache;
       Initialiser.Interface = gsaInterfacer;
-      Initialiser.Settings = new Settings();
+      Initialiser.Settings = new MockSettings();
       Initialiser.AppUI = new SpeckleAppUI();
     }
 

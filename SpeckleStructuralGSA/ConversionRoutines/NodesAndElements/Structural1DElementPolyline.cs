@@ -10,14 +10,9 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   //TO DO: check why everything except GSA1DElement is needed as read prerequisites 
-  [GSAObject("MEMB.8", new string[] { }, "model", true, true, new Type[] { typeof(GSA1DProperty), typeof(GSA1DElement), typeof(GSA1DLoadAnalysisLayer), typeof(GSA1DElementResult), typeof(GSAAssembly), typeof(GSAConstructionStage), typeof(GSA1DInfluenceEffect) }, new Type[] { typeof(GSA1DProperty), typeof(GSA1DElement) })]
-  public class GSA1DElementPolyline : IGSASpeckleContainer
+  [GSAObject("MEMB.8", new string[] { }, "model", true, true, new Type[] { typeof(GSA1DProperty), typeof(GSA1DElement), typeof(GSA1DLoad), typeof(GSA1DElementResult), typeof(GSAAssembly), typeof(GSAConstructionStage), typeof(GSA1DInfluenceEffect) }, new Type[] { typeof(GSA1DProperty), typeof(GSA1DElement) })]
+  public class GSA1DElementPolyline : GSABase<Structural1DElementPolyline>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural1DElementPolyline();
-
     public void ParseGWACommand(List<GSA1DElement> elements)
     {
       if (elements.Count() < 1)
@@ -96,7 +91,7 @@ namespace SpeckleStructuralGSA
         }
 
         var gsaElement = elementsListCopy[matchIndex];
-        Structural1DElement element = gsaElement.Value;
+        var element = (Structural1DElement)gsaElement.Value;
 
         elementAppIds.Add(element.ApplicationId);
         try

@@ -11,13 +11,8 @@ using System.Runtime.InteropServices;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("GRID_LINE.1", new string[] { }, "model", true, true, new Type[] { }, new Type[] { })]
-  public class GSAGridLine : IGSASpeckleContainer
+  public class GSAGridLine : GSABase<StructuralReferenceLine>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralReferenceLine();
-
     public void ParseGWACommand()
     {
       var gwaGridLineCommand = GWACommand;

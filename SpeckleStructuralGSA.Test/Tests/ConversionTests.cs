@@ -36,7 +36,7 @@ namespace SpeckleStructuralGSA.Test
       Initialiser.Interface = mockGSAObject.Object;
       Initialiser.AppUI = new SpeckleAppUI();
    
-      Initialiser.Settings = new Settings();
+      Initialiser.Settings = new MockSettings();
     }
 
     //Just for the unusual ones - where there is no 1:1 relationship between GWA line and Speckle object

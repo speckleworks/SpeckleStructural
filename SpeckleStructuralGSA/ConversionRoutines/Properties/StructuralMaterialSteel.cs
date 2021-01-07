@@ -9,13 +9,8 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("MAT_STEEL.3", new string[] { }, "model", true, true, new Type[] { }, new Type[] { })]
-  public class GSAMaterialSteel : IGSASpeckleContainer
+  public class GSAMaterialSteel : GSABase<StructuralMaterialSteel>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralMaterialSteel();
-
     public void ParseGWACommand()
     {
       if (this.GWACommand == null)

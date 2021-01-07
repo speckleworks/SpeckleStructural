@@ -9,13 +9,8 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("MEMB.8", new string[] { "NODE.3" }, "model", false, true, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode) })]
-  public class GSA2DVoid : IGSASpeckleContainer
+  public class GSA2DVoid : GSABase<Structural2DVoid>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural2DVoid();
-
     public void ParseGWACommand(List<GSANode> nodes)
     {
       if (this.GWACommand == null)
@@ -111,7 +106,7 @@ namespace SpeckleStructuralGSA
         foreach (var c in connectivities[0])
         {
           //coor.AddRange(v.Vertices.Skip(c * 3).Take(3));
-          var currIndex = Helper.NodeAt(v.Vertices[c * 3], v.Vertices[c * 3 + 1], v.Vertices[c * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance);
+          var currIndex = Initialiser.Interface.NodeAt(v.Vertices[c * 3], v.Vertices[c * 3 + 1], v.Vertices[c * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance);
           if (prevNodeIndex != currIndex)
             topo += currIndex.ToString() + " ";
           prevNodeIndex = currIndex;
@@ -129,7 +124,7 @@ namespace SpeckleStructuralGSA
           var indices = new List<int>();
           for (var i = 0; i < numVertices; i++)
           {
-            var currIndex = Helper.NodeAt(v.Vertices[i * 3], v.Vertices[i * 3 + 1], v.Vertices[i * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance);
+            var currIndex = Initialiser.Interface.NodeAt(v.Vertices[i * 3], v.Vertices[i * 3 + 1], v.Vertices[i * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance);
             if (prevNodeIndex != currIndex)
             {
               topo += currIndex.ToString() + " ";

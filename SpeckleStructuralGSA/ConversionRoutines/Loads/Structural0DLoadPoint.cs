@@ -8,13 +8,9 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("LOAD_GRID_POINT.2", new string[] { "NODE.3", "AXIS.1" }, "model", true, true, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSAGridSurface), typeof(GSAStorey), typeof(GSALoadCase), typeof(GSANode) })]
-  public class GSA0DLoadPoint : IGSASpeckleContainer
+  public class GSA0DLoadPoint : GSABase<Structural0DLoadPoint>
   {
     public int Axis; // Store this temporarily to generate other loads
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural0DLoadPoint();
 
     public void ParseGWACommand()
     {
@@ -201,13 +197,6 @@ namespace SpeckleStructuralGSA
         {
           Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
         }
-
-        // Raise node flag to make sure it gets sent
-        foreach (var n in nodes.Where(n => initLoad.Value.NodeRefs.Contains(n.Value.ApplicationId)))
-        {
-          n.ForceSend = true;
-        }
-
 
         loads.AddRange(loadSubList);
       }

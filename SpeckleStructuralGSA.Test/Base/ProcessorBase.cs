@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleGSAProxy;
 
@@ -29,7 +30,7 @@ namespace SpeckleStructuralGSA.Test
 
       // Grab all GSA related object
       var ass = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "SpeckleStructuralGSA");
-      var objTypes = ass.GetTypes().Where(t => interfaceType.IsAssignableFrom(t) && t != interfaceType).ToList();
+      var objTypes = ass.GetTypes().Where(t => interfaceType.IsAssignableFrom(t) && t != interfaceType && !t.IsAbstract).ToList();
 
       var TypePrerequisites = new Dictionary<Type, List<Type>>();
 
@@ -49,7 +50,7 @@ namespace SpeckleStructuralGSA.Test
           keywords.Add(typeKeyword);
         }
         var subtypeKeywords = t.GetSubGSAKeyword();
-        if (subtypeKeywords.Count() > 0)
+        if (subtypeKeywords != null && subtypeKeywords.Count() > 0)
         {
           for (int i = 0; i < subtypeKeywords.Count(); i++)
           {

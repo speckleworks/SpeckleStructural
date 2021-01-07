@@ -35,7 +35,7 @@ namespace SpeckleStructuralGSA.Test
     [SetUp]
     public void BeforeEachTest()
     {
-      Initialiser.Settings = new Settings();
+      Initialiser.Settings = new MockSettings();
     }
 
     [TearDown]
@@ -143,6 +143,7 @@ namespace SpeckleStructuralGSA.Test
       RunReceiverTest(savedBlankRefsJsonFileNames, expectedBlankRefsGwaPerIdsFileName, "Blank",layer);
     }
 
+    #region addition_fns
     private void RunReceiverTest(string[] savedJsonFileNames, string expectedGwaPerIdsFile, string subdir,GSATargetLayer layer)
     {
       var dir = System.IO.Path.Combine(TestDataDirectory, subdir) + "\\";
@@ -209,5 +210,6 @@ namespace SpeckleStructuralGSA.Test
         }
       }
     }
+    #endregion
   }
 }

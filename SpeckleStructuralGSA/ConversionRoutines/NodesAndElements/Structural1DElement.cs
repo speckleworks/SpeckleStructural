@@ -13,14 +13,9 @@ namespace SpeckleStructuralGSA
   [GSAObject("EL.4", new string[] { "NODE.3" }, "model", true, false, 
     new Type[] { typeof(GSANode), typeof(GSA1DProperty), typeof(GSASpringProperty), typeof(GSA1DMember) }, 
     new Type[] { typeof(GSANode), typeof(GSA1DProperty), typeof(GSASpringProperty) })]
-  public class GSA1DElement : IGSASpeckleContainer
+  public class GSA1DElement : GSABase<Structural1DElement>
   {
     public int Member;
-    
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural1DElement();
 
     public void ParseGWACommand(List<GSANode> nodes)
     {
@@ -215,7 +210,7 @@ namespace SpeckleStructuralGSA
       // topo()
       for (var i = 0; i < element.Value.Count(); i += 3)
       {
-        ls.Add(Helper.NodeAt(element.Value[i], element.Value[i + 1], element.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString());
+        ls.Add(Initialiser.Interface.NodeAt(element.Value[i], element.Value[i + 1], element.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString());
       }
       
       ls.Add("0"); // Orientation Node
@@ -310,14 +305,9 @@ namespace SpeckleStructuralGSA
   }
 
   [GSAObject("MEMB.8", new string[] { "NODE.3" }, "model", false, true, new Type[] { typeof(GSA1DProperty), typeof(GSANode), typeof(GSASpringProperty) }, new Type[] { typeof(GSA1DProperty), typeof(GSANode), typeof(GSASpringProperty) })]
-  public class GSA1DMember : IGSASpeckleContainer
+  public class GSA1DMember : GSABase<Structural1DElement>
   {
     public int Group; // Keep for load targetting
-
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural1DElement();
 
     public void ParseGWACommand(List<GSANode> nodes)
     {
@@ -383,7 +373,7 @@ namespace SpeckleStructuralGSA
       {
         var node = nodes.Where(n => n.GSAId == Convert.ToInt32(orientationNodeRef)).FirstOrDefault();
         obj.ZAxis = Helper.Parse1DAxis(obj.Value.ToArray(),
-            rotationAngle, node.Value.ToArray()).Normal as StructuralVectorThree;
+            rotationAngle, node.Value.Value.ToArray()).Normal as StructuralVectorThree;
         this.SubGWACommand.Add(node.GWACommand);
       }
       else
@@ -533,7 +523,7 @@ namespace SpeckleStructuralGSA
       {
         for (var i = 0; i < member.Value.Count(); i += 3)
         {
-          topo += Helper.NodeAt(member.Value[i], member.Value[i + 1], member.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString() + " ";
+          topo += Initialiser.Interface.NodeAt(member.Value[i], member.Value[i + 1], member.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString() + " ";
         }
       }
       ls.Add(topo.TrimEnd());

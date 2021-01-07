@@ -8,13 +8,8 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("LOAD_GRID_AREA.2", new string[] { "POLYLINE.1", "GRID_SURFACE.1", "GRID_PLANE.4", "AXIS.1" }, "model", true, true, new Type[] { }, new Type[] { typeof(GSALoadCase) })]
-  public class GSAGridAreaLoad : IGSASpeckleContainer
+  public class GSAGridAreaLoad : GSABase<Structural2DLoadPanel>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural2DLoadPanel();
-
     public void ParseGWACommand()
     {
       if (this.GWACommand == null)

@@ -10,13 +10,8 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("ASSEMBLY.3", new string[] { }, "model", true, true, new Type[] { typeof(GSANode), typeof(GSA1DElement), typeof(GSA2DElement), typeof(GSA1DMember), typeof(GSA2DMember) }, new Type[] { typeof(GSANode), typeof(GSA1DElement), typeof(GSA2DElement), typeof(GSA1DMember), typeof(GSA2DMember) })]
-  public class GSAAssembly : IGSASpeckleContainer
+  public class GSAAssembly : GSABase<StructuralAssembly>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralAssembly();
-
     public void ParseGWACommand(List<GSANode> nodes, List<GSA1DElement> e1Ds, List<GSA2DElement> e2Ds, List<GSA1DMember> m1Ds, List<GSA2DMember> m2Ds)
     {
       if (this.GWACommand == null)
@@ -42,15 +37,15 @@ namespace SpeckleStructuralGSA
       {
         if (targetEntity == "MEMBER")
         {
-          var memberList = Initialiser.Interface.ConvertGSAList(targetList, SpeckleGSAInterfaces.GSAEntity.MEMBER);
+          var memberList = Initialiser.Interface.ConvertGSAList(targetList, GSAEntity.MEMBER);
           var match1D = e1Ds.Where(e => memberList.Contains(Convert.ToInt32(e.Member)));
           var match2D = e2Ds.Where(e => memberList.Contains(Convert.ToInt32(e.Member)));
           var elementRefs = obj.ElementRefs;
-          elementRefs.AddRange(match1D.Select(e => (e.Value as SpeckleObject).ApplicationId.ToString()));
-          elementRefs.AddRange(match2D.Select(e => (e.Value as SpeckleObject).ApplicationId.ToString()));
+          elementRefs.AddRange(match1D.Select(e => e.Value.ApplicationId.ToString()));
+          elementRefs.AddRange(match2D.Select(e => e.Value.ApplicationId.ToString()));
           obj.ElementRefs = elementRefs;
-          this.SubGWACommand.AddRange(match1D.Select(e => (e as IGSASpeckleContainer).GWACommand));
-          this.SubGWACommand.AddRange(match2D.Select(e => (e as IGSASpeckleContainer).GWACommand));
+          this.SubGWACommand.AddRange(match1D.Select(e => e.GWACommand));
+          this.SubGWACommand.AddRange(match2D.Select(e => e.GWACommand));
         }
         else if (targetEntity == "ELEMENT")
         {
@@ -58,11 +53,11 @@ namespace SpeckleStructuralGSA
           var match1D = e1Ds.Where(e => elementList.Contains(e.GSAId));
           var match2D = e2Ds.Where(e => elementList.Contains(e.GSAId));
           var elementRefs = obj.ElementRefs;
-          elementRefs.AddRange(match1D.Select(e => (e.Value as SpeckleObject).ApplicationId.ToString()));
-          elementRefs.AddRange(match2D.Select(e => (e.Value as SpeckleObject).ApplicationId.ToString()));
+          elementRefs.AddRange(match1D.Select(e => (e.Value).ApplicationId.ToString()));
+          elementRefs.AddRange(match2D.Select(e => (e.Value).ApplicationId.ToString()));
           obj.ElementRefs = elementRefs;
-          this.SubGWACommand.AddRange(match1D.Select(e => (e as IGSASpeckleContainer).GWACommand));
-          this.SubGWACommand.AddRange(match2D.Select(e => (e as IGSASpeckleContainer).GWACommand));
+          this.SubGWACommand.AddRange(match1D.Select(e => e.GWACommand));
+          this.SubGWACommand.AddRange(match2D.Select(e => e.GWACommand));
         }
       }
       else if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
@@ -73,11 +68,11 @@ namespace SpeckleStructuralGSA
           var match1D = m1Ds.Where(e => memberList.Contains(e.GSAId));
           var match2D = m2Ds.Where(e => memberList.Contains(e.GSAId));
           var elementRefs = obj.ElementRefs;
-          elementRefs.AddRange(match1D.Select(e => (e.Value as SpeckleObject).ApplicationId.ToString()));
-          elementRefs.AddRange(match2D.Select(e => (e.Value as SpeckleObject).ApplicationId.ToString()));
+          elementRefs.AddRange(match1D.Select(e => ((Structural1DElement)e.Value).ApplicationId.ToString()));
+          elementRefs.AddRange(match2D.Select(e => ((Structural2DElement)e.Value).ApplicationId.ToString()));
           obj.ElementRefs = elementRefs;
-          this.SubGWACommand.AddRange(match1D.Select(e => (e as IGSASpeckleContainer).GWACommand));
-          this.SubGWACommand.AddRange(match2D.Select(e => (e as IGSASpeckleContainer).GWACommand));
+          this.SubGWACommand.AddRange(match1D.Select(e => e.GWACommand));
+          this.SubGWACommand.AddRange(match2D.Select(e => e.GWACommand));
         }
         else if (targetEntity == "ELEMENT")
         {

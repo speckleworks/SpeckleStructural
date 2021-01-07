@@ -12,6 +12,7 @@ using SpeckleStructuralGSA.Schema;
 using SpeckleStructuralGSA.SchemaConversion;
 using SpeckleCoreGeometryClasses;
 using DeepEqual.Syntax;
+using SpeckleCore;
 
 namespace SpeckleStructuralGSA.Test
 {
@@ -45,7 +46,7 @@ namespace SpeckleStructuralGSA.Test
       Initialiser.Interface = mockGSAObject.Object;
       Initialiser.AppUI = new SpeckleAppUI();
       Initialiser.GSASenderObjects.Clear();
-      Initialiser.Settings = new Settings
+      Initialiser.Settings = new MockSettings
       {
         Units = "m"
       };
@@ -347,7 +348,8 @@ namespace SpeckleStructuralGSA.Test
       var sentObjectsDict = Initialiser.GSASenderObjects.GetAll();
       Assert.IsTrue(sentObjectsDict.ContainsKey(typeof(GSA0DLoad)));
 
-      var sentObjs = sentObjectsDict[typeof(GSA0DLoad)].Select(o => ((IGSASpeckleContainer)o).Value).Cast<Structural0DLoad>().ToList();
+      var gsaLoadNodes = sentObjectsDict[typeof(GSA0DLoad)];
+      var sentObjs = gsaLoadNodes.Select(o => ((IGSAContainer<Structural0DLoad>)o).Value).Cast<Structural0DLoad>().ToList();
       Assert.AreEqual(1, sentObjs.Count());
       Assert.IsTrue(sentObjs.First().Loading.Value.SequenceEqual(loading));
     }
@@ -839,7 +841,7 @@ namespace SpeckleStructuralGSA.Test
       //Still using dummy objects for the ToSpeckle commands - any GsaLoadBeam concrete class can be used here
       Assert.NotNull(SchemaConversion.GsaLoadBeamToSpeckle.ToSpeckle(new GsaLoadBeamUdl()));
 
-      var structural1DLoads = Initialiser.GSASenderObjects.Get<GSA1DLoadBase>().Select(o => o.Value).Cast<Structural1DLoad>().ToList();
+      var structural1DLoads = Initialiser.GSASenderObjects.Get<GSA1DLoad>().Select(o => o.Value).Cast<Structural1DLoad>().ToList();
       
       Assert.AreEqual(6, structural1DLoads.Count());
     }

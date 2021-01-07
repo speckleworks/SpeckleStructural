@@ -9,14 +9,9 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("EL.4", new string[] { "NODE.3" }, "model", true, false, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode), typeof(GSA1DProperty) })]
-  public class GSA0DSpring : IGSASpeckleContainer
+  public class GSA0DSpring : GSABase<Structural0DSpring>
   {
     public int Member;
-
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural0DSpring();
 
     //Sending
     public void ParseGWACommand(List<GSANode> nodes)
@@ -115,7 +110,7 @@ namespace SpeckleStructuralGSA
       //Topology
       for (var i = 0; i < spring.Value.Count(); i += 3)
       {
-        ls.Add(Helper.NodeAt(spring.Value[i], spring.Value[i + 1], spring.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString());
+        ls.Add(Initialiser.Interface.NodeAt(spring.Value[i], spring.Value[i + 1], spring.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString());
       }
 
       ls.Add("0"); // Orientation Node

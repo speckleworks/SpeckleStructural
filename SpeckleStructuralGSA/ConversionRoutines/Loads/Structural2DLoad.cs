@@ -8,17 +8,13 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  public abstract class GSA2DLoadBase
+  [GSAObject("LOAD_2D_FACE.2", new string[] { "EL.4", "MEMB.8" }, "model", true, true, new Type[] { typeof(GSA2DMember), typeof(GSA2DElementMesh), typeof(GSA2DElement) }, new Type[] { typeof(GSA2DMember), typeof(GSA2DElement), typeof(GSA2DElementMesh) })]
+  public class GSA2DLoad : GSABase<Structural2DLoad>
   {
     public int Axis; // Store this temporarily to generate other loads
     public bool Projected;
 
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural2DLoad();
-
-    protected void ParseGWACommand(List<GSA2DElement> elements, List<GSA2DMember> members)
+    public void ParseGWACommand(List<GSA2DElement> elements, List<GSA2DMember> members)
     {
       if (this.GWACommand == null)
         return;
@@ -91,12 +87,14 @@ namespace SpeckleStructuralGSA
       this.Value = obj;
     }
 
-    protected string SetGWACommand(string keyword)
+    public string SetGWACommand()
     {
       if (this.Value == null)
         return "";
 
       var load = this.Value as Structural2DLoad;
+
+      var keyword = typeof(GSA2DLoad).GetGSAKeyword();
 
       if (load.Loading == null)
         return "";
@@ -169,91 +167,21 @@ namespace SpeckleStructuralGSA
     }
   }
 
-  [GSAObject("LOAD_2D_FACE.2", new string[] { "EL.4" }, "model", true, false, new Type[] { typeof(GSA2DElementMesh), typeof(GSA2DElement) }, new Type[] { typeof(GSA2DElement), typeof(GSA2DElementMesh) })]
-  public class GSA2DLoadAnalysisLayer : GSA2DLoadBase, IGSASpeckleContainer
-  {
-    public void ParseGWACommand(List<GSA2DElement> elements)
-    {
-      base.ParseGWACommand(elements, new List<GSA2DMember>());
-    }
-
-    public string SetGWACommand()
-    {
-      return base.SetGWACommand(typeof(GSA2DLoadAnalysisLayer).GetGSAKeyword());
-    }
-  }
-
-  [GSAObject("LOAD_2D_FACE.2", new string[] { "MEMB.8" }, "model", false, true, new Type[] {typeof(GSA2DMember) }, new Type[] {typeof(GSA2DMember)})]
-  public class GSA2DLoadDesignLayer : GSA2DLoadBase, IGSASpeckleContainer
-  {
-    public void ParseGWACommand(List<GSA2DMember> members)
-    {
-      base.ParseGWACommand(new List<GSA2DElement>(), members);
-    }
-
-    public string SetGWACommand()
-    {
-      return base.SetGWACommand(typeof(GSA2DLoadDesignLayer).GetGSAKeyword());
-    }
-  }
-
   public static partial class Conversions
   {
     public static string ToNative(this Structural2DLoad load)
     {
       return (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
-        ? new GSA2DLoadAnalysisLayer() { Value = load }.SetGWACommand()
-        : new GSA2DLoadDesignLayer() { Value = load }.SetGWACommand();
+        ? new GSA2DLoad() { Value = load }.SetGWACommand()
+        : new GSA2DLoad() { Value = load }.SetGWACommand();
     }
 
-    public static SpeckleObject ToSpeckle(this GSA2DLoadAnalysisLayer dummyObject)
+    public static SpeckleObject ToSpeckle(this GSA2DLoad dummyObject)
     {
-      var newLines = ToSpeckleBase<GSA2DLoadAnalysisLayer>();
+      var newLines = ToSpeckleBase<GSA2DLoad>();
       var typeName = dummyObject.GetType().Name;
-      var loads = new List<GSA2DLoadAnalysisLayer>();
+      var loads = new List<GSA2DLoad>();
       var elements = Initialiser.GSASenderObjects.Get<GSA2DElement>();
-      var loadLock = new object();
-
-#if DEBUG
-      foreach (var k in newLines.Keys)
-#else
-      Parallel.ForEach(newLines.Keys, k =>
-#endif
-      {
-        var p = newLines[k];
-        var loadSubList = new List<GSA2DLoadAnalysisLayer>();
-
-        // Placeholder load object to get list of elements and load values
-        // Need to transform to axis so one load definition may be transformed to many
-        var initLoad = new GSA2DLoadAnalysisLayer() { GWACommand = p, GSAId = k };
-        try
-        {
-          initLoad.ParseGWACommand(elements);
-        }
-        catch (Exception ex)
-        {
-          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
-        }
-
-        lock (loadLock)
-        {
-          loads.Add(initLoad);
-        }
-      }
-#if !DEBUG
-      );
-#endif
-
-      Initialiser.GSASenderObjects.AddRange(loads);
-
-      return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
-    }
-
-    public static SpeckleObject ToSpeckle(this GSA2DLoadDesignLayer dummyObject)
-    {
-      var newLines = ToSpeckleBase<GSA2DLoadDesignLayer>();
-      var typeName = dummyObject.GetType().Name;
-      var loads = new List<GSA2DLoadDesignLayer>();
       var members = Initialiser.GSASenderObjects.Get<GSA2DMember>();
       var loadLock = new object();
 
@@ -264,14 +192,14 @@ namespace SpeckleStructuralGSA
 #endif
       {
         var p = newLines[k];
-        var loadSubList = new List<GSA2DLoadDesignLayer>();
+        var loadSubList = new List<GSA2DLoad>();
 
         // Placeholder load object to get list of elements and load values
         // Need to transform to axis so one load definition may be transformed to many
-        var initLoad = new GSA2DLoadDesignLayer() { GWACommand = p, GSAId = k };
+        var initLoad = new GSA2DLoad() { GWACommand = p, GSAId = k };
         try
         {
-          initLoad.ParseGWACommand(members);
+          initLoad.ParseGWACommand(elements, members);
         }
         catch (Exception ex)
         {

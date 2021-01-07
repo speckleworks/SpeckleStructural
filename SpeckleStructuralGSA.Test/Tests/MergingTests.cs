@@ -21,7 +21,7 @@ namespace SpeckleStructuralGSA.Test
     public void SetupMergeTests()
     {
       Initialiser.Cache = new GSACache();
-      Initialiser.Settings = new Settings();
+      Initialiser.Settings = new MockSettings();
     }
 
     [Test]

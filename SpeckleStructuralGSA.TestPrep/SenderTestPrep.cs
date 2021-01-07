@@ -18,7 +18,7 @@ namespace SpeckleStructuralGSA.TestPrep
       gsaCache = new GSACache();
       Initialiser.Interface = gsaInterfacer;
       Initialiser.Cache = gsaCache;
-      Initialiser.Settings = new Settings();
+      Initialiser.Settings = new MockSettings();
       Initialiser.AppUI = new TestAppUI();
       gsaInterfacer.OpenFile(Path.Combine(TestDataDirectory, gsaFileName));
     }

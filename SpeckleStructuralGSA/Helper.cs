@@ -1021,21 +1021,6 @@ namespace SpeckleStructuralGSA
       return (string.IsNullOrEmpty(applicationId)) ? FormatApplicationId(keyword, id) : applicationId;
     }
 
-    public static int NodeAt(double x, double y, double z, double coincidentNodeAllowance, string applicationId = null, string streamId = null)
-    {
-      var index = Initialiser.Interface.NodeAt(x, y, z, coincidentNodeAllowance);
-      
-      if (applicationId != null)
-      {
-        //Only needs to be added to the cache if there is an application ID
-        var gwa = Initialiser.Interface.GetGwaForNode(index);
-        gwa = Initialiser.Interface.SetSid(gwa, streamId ?? "", applicationId);
-        Initialiser.Cache.Upsert("NODE.3", index, gwa, streamId, applicationId, GwaSetCommandType.Set);
-      }
-
-      return index;
-    }
-
     public static void GetGridPlaneData(int gridPlaneIndex, out int gridPlaneAxisIndex, out double gridPlaneElevation, out string gwa)
     {
       var gwas = Initialiser.Cache.GetGwa("GRID_PLANE", gridPlaneIndex);

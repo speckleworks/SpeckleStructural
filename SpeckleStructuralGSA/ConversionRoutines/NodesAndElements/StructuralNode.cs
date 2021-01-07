@@ -11,14 +11,9 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("NODE.3", new string[] { "AXIS.1", "PROP_SPR.4", "PROP_MASS.2" }, "model", true, true, new Type[] { }, new Type[] { })]
-  public class GSANode : IGSASpeckleContainer
+  public class GSANode : GSABase<StructuralNode>
   {
     public bool ForceSend; // This is to filter only "important" nodes
-
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralNode();
 
     public void ParseGWACommand()
     {
@@ -127,7 +122,7 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSANode).GetGSAKeyword();
 
-      var index = Helper.NodeAt(node.Value[0], node.Value[1], node.Value[2], Initialiser.Settings.CoincidentNodeAllowance);
+      var index = Initialiser.Interface.NodeAt(node.Value[0], node.Value[1], node.Value[2], Initialiser.Settings.CoincidentNodeAllowance);
 
       var sid = Helper.GenerateSID(node);
       var ls = new List<string>
@@ -193,13 +188,8 @@ namespace SpeckleStructuralGSA
   }
 
   [GSAObject("EL.4", new string[] { "PROP_MASS.2" }, "model", true, false, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode) })]
-  public class GSA0DElement : IGSASpeckleContainer
+  public class GSA0DElement : GSABase<StructuralNode>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralNode();
-
     public void ParseGWACommand()
     {
       if (this.GWACommand == null)

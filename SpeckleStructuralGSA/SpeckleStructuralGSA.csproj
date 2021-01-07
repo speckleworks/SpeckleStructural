@@ -122,7 +122,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConversionRoutines\Conversions.cs" />
-    <Compile Include="ConversionRoutines\GSAGridPlaneBase.cs" />
+    <Compile Include="ConversionRoutines\GSABase.cs" />
+    <Compile Include="ConversionRoutines\IGSAContainer.cs" />
     <Compile Include="ConversionRoutines\Loads\Structural0DLoad.cs" />
     <Compile Include="ConversionRoutines\Loads\Structural0DLoadPoint.cs" />
     <Compile Include="ConversionRoutines\Loads\Structural1DLoad.cs" />
