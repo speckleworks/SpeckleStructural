@@ -159,7 +159,7 @@ namespace SpeckleStructuralGSA
 
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
-      Parallel.ForEach(newLines.Select(nl => nl.Item2), p =>
+      foreach (var p in newLines.Select(nl => nl.Item2))
       {
         var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
         if (pPieces[4] == "GRD_SPRING")
@@ -179,7 +179,7 @@ namespace SpeckleStructuralGSA
             Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
           }
         }
-      });
+      }
 
       Initialiser.GSASenderObjects.AddRange(springs);
 

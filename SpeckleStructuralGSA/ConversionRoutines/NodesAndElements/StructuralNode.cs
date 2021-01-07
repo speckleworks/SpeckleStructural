@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -187,6 +188,8 @@ namespace SpeckleStructuralGSA
     }
   }
 
+  //Note this relies on GSANode being called first - which creates the nodes to be received/sent.  The nodes are then altered by the methods
+  //for GSA0DElement
   [GSAObject("EL.4", new string[] { "PROP_MASS.2" }, "model", true, false, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode) })]
   public class GSA0DElement : GSABase<StructuralNode>
   {
@@ -329,19 +332,19 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSANode>();
       var typeName = dummyObject.GetType().Name;
       var nodesLock = new object();
-      var nodes = new List<GSANode>();
+      var nodes = new SortedDictionary<int, GSANode>();
 
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
       {
-        var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
+        var pPieces = newLines[k].ListSplit(Initialiser.Interface.GwaDelimiter);
         var gsaId = pPieces[1];
-        var node = new GSANode { GWACommand = p };
+        var node = new GSANode { GWACommand = newLines[k] };
         try
         {
           node.ParseGWACommand();
           lock (nodesLock)
           {
-            nodes.Add(node);
+            nodes.Add(k, node);
           }
         }
         catch (Exception ex)
@@ -351,9 +354,9 @@ namespace SpeckleStructuralGSA
       }
       );
 
-      Initialiser.GSASenderObjects.AddRange(nodes);
+      Initialiser.GSASenderObjects.AddRange(nodes.Values.ToList());
 
-      return (nodes.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (nodes.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
 
     public static SpeckleObject ToSpeckle(this GSA0DElement dummyObject)
@@ -368,31 +371,31 @@ namespace SpeckleStructuralGSA
       var nodesLock = new object();
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
       {
-        var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
+        var pPieces = newLines[k].ListSplit(Initialiser.Interface.GwaDelimiter);
         var gsaId = pPieces[1];
         if (pPieces[4].ParseElementNumNodes() == 1)
         {
           try
           {
-            var massNode = new GSA0DElement() { GWACommand = p };
+            var massNode = new GSA0DElement() { GWACommand = newLines[k] };
             massNode.ParseGWACommand();
 
             GSANode match;
             lock (nodesLock)
             {
               match = nodes.Where(n => n.Value.ApplicationId == massNode.Value.ApplicationId).First();
-            }
 
-            if (match != null)
-            {
-              match.Value.Mass = massNode.Value.Mass;
-              match.SubGWACommand.AddRange(massNode.SubGWACommand.Concat(new string[] { p }));
+              if (match != null)
+              {
+                match.Value.Mass = massNode.Value.Mass;
+                match.SubGWACommand.AddRange(massNode.SubGWACommand.Concat(new string[] { newLines[k] }));
 
-              match.ForceSend = true;
+                match.ForceSend = true;
 
-              changed = true;
+                changed = true;
+              }
             }
           }
           catch (Exception ex)

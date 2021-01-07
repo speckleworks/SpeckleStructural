@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using SpeckleCore;
@@ -202,23 +203,23 @@ namespace SpeckleStructuralGSA
 
       var springPropLock = new object();
       //Get all relevant GSA entities in this entire model
-      var springProperties = new List<GSASpringProperty>();
+      var springProperties = new SortedDictionary<int, GSASpringProperty>();
 
 #if DEBUG
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
 #else
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
 #endif
       {
-        var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
+        var pPieces = newLines[k].ListSplit(Initialiser.Interface.GwaDelimiter);
         var gsaId = pPieces[1];
         try
         {
-          var springProperty = new GSASpringProperty() { GWACommand = p };
+          var springProperty = new GSASpringProperty() { GWACommand = newLines[k] };
           springProperty.ParseGWACommand();
           lock (springPropLock)
           {
-            springProperties.Add(springProperty);
+            springProperties.Add(k, springProperty);
           }
         }
         catch (Exception ex)
@@ -230,9 +231,9 @@ namespace SpeckleStructuralGSA
       );
 #endif
 
-      Initialiser.GSASenderObjects.AddRange(springProperties);
+      Initialiser.GSASenderObjects.AddRange(springProperties.Values.ToList());
 
-      return (springProperties.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (springProperties.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

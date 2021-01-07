@@ -7,6 +7,7 @@ using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 using MathNet.Spatial.Euclidean;
 using System.Runtime.InteropServices;
+using System.Collections.Specialized;
 
 namespace SpeckleStructuralGSA
 {
@@ -112,7 +113,7 @@ namespace SpeckleStructuralGSA
       var typeName = dummyObject.GetType().Name;
       var rlLock = new object();
       //Get all relevant GSA entities in this entire model
-      var rls = new List<GSAGridLine>();
+      var rls = new SortedDictionary<int, GSAGridLine>();
 
       Parallel.ForEach(newLines.Keys, k =>
       {
@@ -124,7 +125,7 @@ namespace SpeckleStructuralGSA
           rl.ParseGWACommand();
           lock (rlLock)
           {
-            rls.Add(rl);
+            rls.Add(k, rl);
           }
         }
         catch (Exception ex)
@@ -133,9 +134,9 @@ namespace SpeckleStructuralGSA
         }
       });
 
-      Initialiser.GSASenderObjects.AddRange(rls);
+      Initialiser.GSASenderObjects.AddRange(rls.Values.ToList());
 
-      return (rls.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (rls.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

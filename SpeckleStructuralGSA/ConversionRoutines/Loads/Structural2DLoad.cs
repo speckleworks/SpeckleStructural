@@ -185,11 +185,7 @@ namespace SpeckleStructuralGSA
       var members = Initialiser.GSASenderObjects.Get<GSA2DMember>();
       var loadLock = new object();
 
-#if DEBUG
       foreach (var k in newLines.Keys)
-#else
-      Parallel.ForEach(newLines.Keys, k =>
-#endif
       {
         var p = newLines[k];
         var loadSubList = new List<GSA2DLoad>();
@@ -211,9 +207,6 @@ namespace SpeckleStructuralGSA
           loads.Add(initLoad);
         }
       }
-#if !DEBUG
-      );
-#endif
 
       Initialiser.GSASenderObjects.AddRange(loads);
 

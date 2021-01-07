@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using SpeckleCore;
@@ -657,27 +658,27 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSA1DElement>();
       var typeName = dummyObject.GetType().Name;
       var elementsLock = new object();
-      var elements = new List<GSA1DElement>();
+      var elements = new SortedDictionary<int, GSA1DElement>();
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
 #if DEBUG
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
 #else
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
 #endif
       {
-        var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
+        var pPieces = newLines[k].ListSplit(Initialiser.Interface.GwaDelimiter);
 
         if (pPieces[4] == "BEAM" && pPieces[4].ParseElementNumNodes() == 2)
         {
           var gsaId = pPieces[1];
           try
           {
-            var element = new GSA1DElement() { GWACommand = p };
+            var element = new GSA1DElement() { GWACommand = newLines[k] };
             element.ParseGWACommand(nodes);
             lock (elementsLock)
             {
-              elements.Add(element);
+              elements.Add(k, element);
             }
           }
           catch (Exception ex)
@@ -690,36 +691,36 @@ namespace SpeckleStructuralGSA
       );
 #endif
 
-      Initialiser.GSASenderObjects.AddRange(elements);
+      Initialiser.GSASenderObjects.AddRange(elements.Values.ToList());
 
-      return (elements.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (elements.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
 
     public static SpeckleObject ToSpeckle(this GSA1DMember dummyObject)
     {
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
       var membersLock = new object();
-      var members = new List<GSA1DMember>();
+      var members = new SortedDictionary<int, GSA1DMember>();
       var newLines = ToSpeckleBase<GSA1DMember>();
       var typeName = dummyObject.GetType().Name;
 
 #if DEBUG
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
 #else
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
 #endif
       {
-        var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
+        var pPieces = newLines[k].ListSplit(Initialiser.Interface.GwaDelimiter);
         var gsaId = pPieces[1];
         if (pPieces[4].Is1DMember())
         {
           try
           {
-            var member = new GSA1DMember() { GWACommand = p };
+            var member = new GSA1DMember() { GWACommand = newLines[k] };
             member.ParseGWACommand(nodes);
             lock (membersLock)
             {
-              members.Add(member);
+              members.Add(k, member);
             }
           }
           catch (Exception ex)
@@ -732,9 +733,9 @@ namespace SpeckleStructuralGSA
       );
 #endif
 
-      Initialiser.GSASenderObjects.AddRange(members);
+      Initialiser.GSASenderObjects.AddRange(members.Values.ToList());
 
-      return (members.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (members.Keys.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

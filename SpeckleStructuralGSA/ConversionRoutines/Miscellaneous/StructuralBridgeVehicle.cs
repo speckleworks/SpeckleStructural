@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using SpeckleCore;
@@ -94,7 +95,7 @@ namespace SpeckleStructuralGSA
       var typeName = dummyObject.GetType().Name;
       var alignmentsLock = new object();
       //Get all relevant GSA entities in this entire model
-      var alignments = new List<GSABridgeVehicle>();
+      var alignments = new SortedDictionary<int, GSABridgeVehicle>();
 
       Parallel.ForEach(newLines.Keys, k =>
       {
@@ -106,7 +107,7 @@ namespace SpeckleStructuralGSA
           alignment.ParseGWACommand();
           lock (alignmentsLock)
           {
-            alignments.Add(alignment);
+            alignments.Add(k, alignment);
           }
         }
         catch (Exception ex)
@@ -115,9 +116,9 @@ namespace SpeckleStructuralGSA
         }
       });
 
-      Initialiser.GSASenderObjects.AddRange(alignments);
+      Initialiser.GSASenderObjects.AddRange(alignments.Values.ToList());
 
-      return (alignments.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (alignments.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

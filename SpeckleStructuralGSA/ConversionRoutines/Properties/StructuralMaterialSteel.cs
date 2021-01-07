@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using SpeckleCore;
@@ -144,19 +145,19 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSAMaterialSteel>();
       var typeName = dummyObject.GetType().Name;
       var materialsLock = new object();
-      var materials = new List<GSAMaterialSteel>();
+      var materials = new SortedDictionary<int, GSAMaterialSteel>();
 
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
       {
-        var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
+        var pPieces = newLines[k].ListSplit(Initialiser.Interface.GwaDelimiter);
         var gsaId = pPieces[1];
         try
         {
-          var mat = new GSAMaterialSteel() { GWACommand = p };
+          var mat = new GSAMaterialSteel() { GWACommand = newLines[k] };
           mat.ParseGWACommand();
           lock (materialsLock)
           {
-            materials.Add(mat);
+            materials.Add(k, mat);
           }
         }
         catch (Exception ex)
@@ -165,9 +166,9 @@ namespace SpeckleStructuralGSA
         }
       });
 
-      Initialiser.GSASenderObjects.AddRange(materials);
+      Initialiser.GSASenderObjects.AddRange(materials.Values.ToList());
 
-      return (materials.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (materials.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

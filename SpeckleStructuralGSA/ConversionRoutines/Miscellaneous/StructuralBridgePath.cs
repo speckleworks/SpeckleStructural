@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using SpeckleCore;
@@ -118,21 +119,20 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSABridgePath dummyObject)
     {
       var newLines = ToSpeckleBase<GSABridgePath>();
-      var paths = new List<GSABridgePath>();
+      var paths = new SortedDictionary<int, GSABridgePath>();
       var typeName = dummyObject.GetType().Name;
       var pathsLock = new object();
 
       Parallel.ForEach(newLines.Keys, k =>
       {
-        var p = newLines[k];
-        var path = new GSABridgePath() { GWACommand = p };
+        var path = new GSABridgePath() { GWACommand = newLines[k] };
         //Pass in ALL the nodes and members - the Parse_ method will search through them
         try
         {
           path.ParseGWACommand();
           lock (pathsLock)
           {
-            paths.Add(path);
+            paths.Add(k, path);
           }
         }
         catch (Exception ex)
@@ -141,9 +141,9 @@ namespace SpeckleStructuralGSA
         }
       });
 
-      Initialiser.GSASenderObjects.AddRange(paths);
+      Initialiser.GSASenderObjects.AddRange(paths.Values.ToList());
 
-      return (paths.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (paths.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

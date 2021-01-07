@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -720,21 +721,21 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSA1DProperty>();
       var typeName = dummyObject.GetType().Name;
       var propsLock = new object();
-      var props = new List<GSA1DProperty>();
+      var props = new SortedDictionary<int, GSA1DProperty>();
       var steels = Initialiser.GSASenderObjects.Get<GSAMaterialSteel>();      
       var concretes = Initialiser.GSASenderObjects.Get<GSAMaterialConcrete>();
 
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
       {
-        var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
+        var pPieces = newLines[k].ListSplit(Initialiser.Interface.GwaDelimiter);
         var gsaId = pPieces[1];
         try
         {
-          var prop = new GSA1DProperty() { GWACommand = p };
+          var prop = new GSA1DProperty() { GWACommand = newLines[k] };
           prop.ParseGWACommand(Initialiser.Settings.Units, steels, concretes);
           lock (propsLock)
           {
-            props.Add(prop);
+            props.Add(k, prop);
           }
         }
         catch (Exception ex)
@@ -743,9 +744,9 @@ namespace SpeckleStructuralGSA
         }
       });
 
-      Initialiser.GSASenderObjects.AddRange(props);
+      Initialiser.GSASenderObjects.AddRange(props.Values.ToList());
 
-      return (props.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (props.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

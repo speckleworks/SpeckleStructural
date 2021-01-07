@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
@@ -69,7 +70,7 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSALoadCase>();
       var typeName = dummyObject.GetType().Name;
-      var loadCases = new List<GSALoadCase>();
+      var loadCases = new SortedDictionary<int, GSALoadCase>();
 
       foreach (var k in newLines.Keys)
       {
@@ -83,12 +84,12 @@ namespace SpeckleStructuralGSA
         {
           Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
         }
-        loadCases.Add(loadCase);
+        loadCases.Add(k, loadCase);
       }
 
-      Initialiser.GSASenderObjects.AddRange(loadCases);
+      Initialiser.GSASenderObjects.AddRange(loadCases.Values.ToList());
 
-      return (loadCases.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (loadCases.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

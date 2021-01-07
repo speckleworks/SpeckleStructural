@@ -7,6 +7,7 @@ using SpeckleStructuralClasses;
 using System.Text.RegularExpressions;
 using SpeckleCoreGeometryClasses;
 using System.Threading.Tasks;
+using System.Collections.Specialized;
 
 namespace SpeckleStructuralGSA
 {
@@ -571,17 +572,17 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSA2DMember>();
       var typeName = dummyObject.GetType().Name;
       var membersLock = new object();
-      var members = new List<GSA2DMember>();
+      var members = new SortedDictionary<int, GSA2DMember>();
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
       var props = Initialiser.GSASenderObjects.Get<GSA2DProperty>();
 
 #if DEBUG
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
 #else
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
 #endif
       {
-        var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
+        var pPieces = newLines[k].ListSplit(Initialiser.Interface.GwaDelimiter);
         if (pPieces[4].Is2DMember())
         {
           // Check if dummy
@@ -590,11 +591,11 @@ namespace SpeckleStructuralGSA
             var gsaId = pPieces[1];
             try
             {
-              var member = new GSA2DMember() { GWACommand = p };
+              var member = new GSA2DMember() { GWACommand = newLines[k] };
               member.ParseGWACommand(nodes, props);
               lock (membersLock)
               {
-                members.Add(member);
+                members.Add(k, member);
               }
             }
             catch (Exception ex)
@@ -608,9 +609,9 @@ namespace SpeckleStructuralGSA
       );
 #endif
 
-      Initialiser.GSASenderObjects.AddRange(members);
+      Initialiser.GSASenderObjects.AddRange(members.Values.ToList());
 
-      return (members.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (members.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

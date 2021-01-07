@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using SpeckleCore;
@@ -171,12 +172,12 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSA2DVoid>();
       var typeName = dummyObject.GetType().Name;
       var voidsLock = new object();
-      var voids = new List<GSA2DVoid>();
+      var voids = new SortedDictionary<int, GSA2DVoid>();
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
 
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
       {
-        var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
+        var pPieces = newLines[k].ListSplit(Initialiser.Interface.GwaDelimiter);
         if (!pPieces[4].Is2DMember())
         {
           // Check if void
@@ -185,11 +186,11 @@ namespace SpeckleStructuralGSA
             var gsaId = pPieces[1];
             try
             {
-              var v = new GSA2DVoid() { GWACommand = p };
+              var v = new GSA2DVoid() { GWACommand = newLines[k] };
               v.ParseGWACommand(nodes);
               lock (voidsLock)
               {
-                voids.Add(v);
+                voids.Add(k, v);
               }
             }
             catch (Exception ex)
@@ -200,9 +201,9 @@ namespace SpeckleStructuralGSA
         }
       });
 
-      Initialiser.GSASenderObjects.AddRange(voids);
+      Initialiser.GSASenderObjects.AddRange(voids.Values.ToList());
 
-      return (voids.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (voids.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

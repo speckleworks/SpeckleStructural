@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using SpeckleCore;
@@ -114,7 +115,7 @@ namespace SpeckleStructuralGSA
       var assembliesLock = new object();
 
       //Get all relevant GSA entities in this entire model
-      var assemblies = new List<GSAAssembly>();
+      var assemblies = new SortedDictionary<int, GSAAssembly>();
       var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
       var e1Ds = new List<GSA1DElement>();
       var e2Ds = new List<GSA2DElement>();
@@ -136,8 +137,7 @@ namespace SpeckleStructuralGSA
       {
         try
         {
-          var p = newLines[k];
-          var assembly = new GSAAssembly() { GWACommand = p, GSAId = k };
+          var assembly = new GSAAssembly() { GWACommand = newLines[k], GSAId = k };
           //Pass in ALL the nodes and members - the Parse_ method will search through them
           assembly.ParseGWACommand(nodes, e1Ds, e2Ds, m1Ds, m2Ds);
 
@@ -148,7 +148,7 @@ namespace SpeckleStructuralGSA
           {
             lock (assembliesLock)
             {
-              assemblies.Add(assembly);
+              assemblies.Add(k, assembly);
             }
           }
         }
@@ -158,9 +158,9 @@ namespace SpeckleStructuralGSA
         }
       });
 
-      Initialiser.GSASenderObjects.AddRange(assemblies);
+      Initialiser.GSASenderObjects.AddRange(assemblies.Values.ToList());
 
-      return (assemblies.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (assemblies.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

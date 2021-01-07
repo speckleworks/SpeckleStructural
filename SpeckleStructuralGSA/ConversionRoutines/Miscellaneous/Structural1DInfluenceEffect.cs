@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
+using System.Collections.Specialized;
 
 namespace SpeckleStructuralGSA
 {
@@ -168,18 +169,17 @@ namespace SpeckleStructuralGSA
       var e1Ds = Initialiser.GSASenderObjects.Get<GSA1DElement>();
 
       var inflsLock = new object();
-      var infls = new List<GSA1DInfluenceEffect>();
+      var infls = new SortedDictionary<int, GSA1DInfluenceEffect>();
 
       Parallel.ForEach(newLines.Keys, k =>
       {
         try
         {
-          var p = newLines[k];
-          var infl = new GSA1DInfluenceEffect() { GWACommand = p };
+          var infl = new GSA1DInfluenceEffect() { GWACommand = newLines[k] };
           infl.ParseGWACommand(e1Ds);
           lock (inflsLock)
           {
-            infls.Add(infl);
+            infls.Add(k, infl);
           }
         }
         catch (Exception ex)
@@ -188,9 +188,9 @@ namespace SpeckleStructuralGSA
         }
       });
 
-      Initialiser.GSASenderObjects.AddRange(infls);
+      Initialiser.GSASenderObjects.AddRange(infls.Values.ToList());
 
-      return (infls.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (infls.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

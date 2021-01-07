@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using SpeckleCore;
@@ -152,7 +153,7 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSAConstructionStage>();
       var typeName = dummyObject.GetType().Name;
       var stageDefsLock = new object();
-      var stageDefs = new List<GSAConstructionStage>();
+      var stageDefs = new SortedDictionary<int, GSAConstructionStage>();
       var e1Ds = new List<GSA1DElement>();
       var e2Ds = new List<GSA2DElement>();
       var m1Ds = new List<GSA1DMember>();
@@ -171,14 +172,13 @@ namespace SpeckleStructuralGSA
 
       Parallel.ForEach(newLines.Keys, k =>
       {
-        var p = newLines[k];
         try
         {
-          var stageDef = new GSAConstructionStage() { GWACommand = p };
+          var stageDef = new GSAConstructionStage() { GWACommand = newLines[k] };
           stageDef.ParseGWACommand(e1Ds, e2Ds, m1Ds, m2Ds);
           lock (stageDefsLock)
           {
-            stageDefs.Add(stageDef);
+            stageDefs.Add(k, stageDef);
           }
         }
         catch (Exception ex)
@@ -187,9 +187,9 @@ namespace SpeckleStructuralGSA
         }
       });
 
-      Initialiser.GSASenderObjects.AddRange(stageDefs);
+      Initialiser.GSASenderObjects.AddRange(stageDefs.Values.ToList());
 
-      return (stageDefs.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (stageDefs.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }
