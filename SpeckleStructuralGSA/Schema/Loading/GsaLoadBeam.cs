@@ -87,15 +87,15 @@ namespace SpeckleStructuralGSA.Schema
       //Unlike other keywords which have entity type as a parameter, this keyword (at least for version 2) still has "element list" which means, for members,
       //the group is used
 
-      var allIndices = Initialiser.Cache.LookupIndices(
-        (Initialiser.Settings.TargetLayer == GSATargetLayer.Design) ? GetKeyword<GsaMemb>() : GetKeyword<GsaEl>())
+      var allIndices = Initialiser.Instance.Cache.LookupIndices(
+        (Initialiser.Instance.Settings.TargetLayer == GSATargetLayer.Design) ? GetKeyword<GsaMemb>() : GetKeyword<GsaEl>())
         .Where(i => i.HasValue).Select(i => i.Value).Distinct().OrderBy(i => i).ToList();
 
       if (Entities.Distinct().OrderBy(i => i).SequenceEqual(allIndices))
       {
         return "all";
       }
-      return (Initialiser.Settings.TargetLayer == GSATargetLayer.Design) ? string.Join(" ", Entities.Select(i => "G" + i)) : string.Join(" ",  Entities);
+      return (Initialiser.Instance.Settings.TargetLayer == GSATargetLayer.Design) ? string.Join(" ", Entities.Select(i => "G" + i)) : string.Join(" ",  Entities);
     }
     #endregion
 
@@ -129,25 +129,25 @@ namespace SpeckleStructuralGSA.Schema
     public bool AddEntities(string v)
     {
       var entityItems = v.Split(' ');
-      if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
+      if (Initialiser.Instance.Settings.TargetLayer == GSATargetLayer.Design)
       {
         if (entityItems.Count() == 1 && entityItems.First().Equals("all", StringComparison.InvariantCultureIgnoreCase))
         {
-          Entities = Initialiser.Cache.LookupIndices(GetKeyword<GsaMemb>()).Where(i => i.HasValue).Select(i => i.Value).ToList();
+          Entities = Initialiser.Instance.Cache.LookupIndices(GetKeyword<GsaMemb>()).Where(i => i.HasValue).Select(i => i.Value).ToList();
         }
         else
         {
           //Only recognise the groups, as these represent the members
           //TO DO: for all elements, find if they have parents and include them
           var members = string.Join(" ", entityItems.Where(ei => ei.StartsWith("G")).Select(ei => ei.Substring(1)));
-          Entities = Initialiser.Interface.ConvertGSAList(members, GSAEntity.MEMBER).ToList();
+          Entities = Initialiser.Instance.Interface.ConvertGSAList(members, GSAEntity.MEMBER).ToList();
         }
       }
       else
       {
         Entities = (entityItems.Count() == 1 && entityItems.First().Equals("all", StringComparison.InvariantCultureIgnoreCase))
-          ? Entities = Initialiser.Cache.LookupIndices(GetKeyword<GsaEl>()).Where(i => i.HasValue).Select(i => i.Value).ToList()
-          : Initialiser.Interface.ConvertGSAList(v, GSAEntity.ELEMENT).ToList();
+          ? Entities = Initialiser.Instance.Cache.LookupIndices(GetKeyword<GsaEl>()).Where(i => i.HasValue).Select(i => i.Value).ToList()
+          : Initialiser.Instance.Interface.ConvertGSAList(v, GSAEntity.ELEMENT).ToList();
       }
 
       return Entities != null;

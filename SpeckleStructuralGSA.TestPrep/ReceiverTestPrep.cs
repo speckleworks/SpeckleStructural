@@ -15,10 +15,10 @@ namespace SpeckleStructuralGSA.TestPrep
       gsaInterfacer = new GSAProxy();
       gsaCache = new GSACache();
 
-      Initialiser.Cache = gsaCache;
-      Initialiser.Interface = gsaInterfacer;
-      Initialiser.Settings = new MockSettings();
-      Initialiser.AppUI = new TestAppUI();
+      Initialiser.Instance.Cache = gsaCache;
+      Initialiser.Instance.Interface = gsaInterfacer;
+      Initialiser.Instance.Settings = new MockSettings();
+      Initialiser.Instance.AppUI = new TestAppUI();
     }
 
     public bool SetUpReceptionTestData(string[] savedJsonFileNames, string outputGWAFileName, GSATargetLayer layer, string subdir)

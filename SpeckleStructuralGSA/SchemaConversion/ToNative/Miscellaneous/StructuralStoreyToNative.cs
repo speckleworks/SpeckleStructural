@@ -17,8 +17,8 @@ namespace SpeckleStructuralGSA.SchemaConversion
       }
 
       var keyword = GsaRecord.GetKeyword<GsaGridPlane>();
-      var index = Initialiser.Cache.ResolveIndex(keyword, storey.ApplicationId);
-      var streamId = Initialiser.Cache.LookupStream(storey.ApplicationId);
+      var index = Initialiser.Instance.Cache.ResolveIndex(keyword, storey.ApplicationId);
+      var streamId = Initialiser.Instance.Cache.LookupStream(storey.ApplicationId);
 
       var gsaPlane = new GsaGridPlane()
       {
@@ -57,7 +57,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
       if (gsaPlane.Gwa(out var gsaPlaneGwaLines, true))
       {
-        Initialiser.Cache.Upsert(keyword, index, gsaPlaneGwaLines.First(), streamId, storey.ApplicationId, GsaRecord.GetGwaSetCommandType<GsaLoadCase>());
+        Initialiser.Instance.Cache.Upsert(keyword, index, gsaPlaneGwaLines.First(), streamId, storey.ApplicationId, GsaRecord.GetGwaSetCommandType<GsaLoadCase>());
       }
 
       return "";

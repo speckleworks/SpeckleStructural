@@ -31,7 +31,7 @@ namespace SpeckleStructuralGSA
         Offset = new List<double>()
       };
 
-      if (Initialiser.Settings.Element2DResults.Count > 0 && Initialiser.Settings.EmbedResults)
+      if (Initialiser.Instance.Settings.Element2DResults.Count > 0 && Initialiser.Instance.Settings.EmbedResults)
       {
         obj.Result = new Dictionary<string, object>();
       }
@@ -64,7 +64,7 @@ namespace SpeckleStructuralGSA
                 obj.Result[loadCase] = new Structural2DElementResult()
                 {
                   Value = new Dictionary<string, object>(),
-                  IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
+                  IsGlobal = !Initialiser.Instance.Settings.ResultInLocalAxis,
                 };
               }
 
@@ -121,7 +121,7 @@ namespace SpeckleStructuralGSA
         return "";
       }  
 
-      var group = Initialiser.Cache.ResolveIndex(typeof(GSA2DElementMesh).GetGSAKeyword(), obj.ApplicationId);
+      var group = Initialiser.Instance.Cache.ResolveIndex(typeof(GSA2DElementMesh).GetGSAKeyword(), obj.ApplicationId);
 
       var elements = obj.Explode();
 
@@ -129,7 +129,7 @@ namespace SpeckleStructuralGSA
 
       foreach (var element in elements)
       {
-        if (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
+        if (Initialiser.Instance.Settings.TargetLayer == GSATargetLayer.Analysis)
         {
           gwaCommands.Add(new GSA2DElement() { Value = element }.SetGWACommand(group));
         }
@@ -156,7 +156,7 @@ namespace SpeckleStructuralGSA
 
     public static string ToNative(this Structural2DElementMesh mesh)
     {
-      return (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis) 
+      return (Initialiser.Instance.Settings.TargetLayer == GSATargetLayer.Analysis) 
         ? new GSA2DElementMesh() { Value = mesh }.SetGWACommand() 
         : new GSA2DMember() { Value = mesh }.SetGWACommand();
     }
@@ -167,28 +167,28 @@ namespace SpeckleStructuralGSA
       var typeName = dummyObject.GetType().Name;
 
       // Perform mesh merging
-      var uniqueMembers = Initialiser.GSASenderObjects.Get<GSA2DElement>().Select(x => x.Member).Where(m => m > 0).Distinct().ToList();
+      var uniqueMembers = Initialiser.Instance.GSASenderObjects.Get<GSA2DElement>().Select(x => x.Member).Where(m => m > 0).Distinct().ToList();
 
       //This loop has been left as serial for now, considering the fact that the sender objects are retrieved and removed-from with each iteration
       foreach (var member in uniqueMembers)
       {
         try
         {
-          var all2dElements = Initialiser.GSASenderObjects.Get<GSA2DElement>();
+          var all2dElements = Initialiser.Instance.GSASenderObjects.Get<GSA2DElement>();
           var matching2dElementList = all2dElements.Where(x => x.Member == member).Cast<GSA2DElement>().ToList();
           var mesh = new GSA2DElementMesh() { GSAId = Convert.ToInt32(member) };
           mesh.ParseGWACommand(matching2dElementList);
           meshes.Add(mesh);
 
-          Initialiser.GSASenderObjects.RemoveAll(matching2dElementList);
+          Initialiser.Instance.GSASenderObjects.RemoveAll(matching2dElementList);
         }
         catch (Exception ex)
         {
-          Initialiser.AppUI.Message(typeName + ": " + ex.Message, member.ToString());
+          Initialiser.Instance.AppUI.Message(typeName + ": " + ex.Message, member.ToString());
         }
       }
 
-      Initialiser.GSASenderObjects.AddRange(meshes);
+      Initialiser.Instance.GSASenderObjects.AddRange(meshes);
 
       return new SpeckleNull(); // Return null because ToSpeckle method for GSA2DElement will handle this change
     }

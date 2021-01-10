@@ -41,7 +41,7 @@ namespace SpeckleStructuralGSA.TestPrep
           Console.WriteLine("Prepared reception test data for the blank refs rx design layer test");
         }
         //Don't print any error related to blank references - they're expected
-        PrintAnyErrorMessages((TestAppUI)Initialiser.AppUI, new List<string> { "blank" });
+        PrintAnyErrorMessages((TestAppUI)Initialiser.Instance.AppUI, new List<string> { "blank" });
       }
 
       if (rxDesign)
@@ -56,7 +56,7 @@ namespace SpeckleStructuralGSA.TestPrep
         {
           Console.WriteLine("Prepared reception test data for the rx design layer test");
         }
-        PrintAnyErrorMessages((TestAppUI)Initialiser.AppUI);
+        PrintAnyErrorMessages((TestAppUI)Initialiser.Instance.AppUI);
       }
 
       var senderTestPrep = new SenderTestPrep(TestDataDirectory);
@@ -81,7 +81,7 @@ namespace SpeckleStructuralGSA.TestPrep
         {
           senderTestPrep.TearDownContext();
         }
-        PrintAnyErrorMessages((TestAppUI)Initialiser.AppUI);
+        PrintAnyErrorMessages((TestAppUI)Initialiser.Instance.AppUI);
       }
 
       //Next the sender tests using a file with results already generated
@@ -130,7 +130,7 @@ namespace SpeckleStructuralGSA.TestPrep
       {
         senderTestPrep.TearDownContext();
       }
-      PrintAnyErrorMessages((TestAppUI)Initialiser.AppUI);
+      PrintAnyErrorMessages((TestAppUI)Initialiser.Instance.AppUI);
 
       Console.WriteLine("Press any key to exit ...");
       Console.ReadKey();

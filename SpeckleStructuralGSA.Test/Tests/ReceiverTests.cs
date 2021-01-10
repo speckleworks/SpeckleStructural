@@ -27,22 +27,22 @@ namespace SpeckleStructuralGSA.Test
       gsaInterfacer = new GSAProxy();
       gsaCache = new GSACache();
 
-      Initialiser.Cache = gsaCache;
-      Initialiser.Interface = gsaInterfacer;
-      Initialiser.AppUI = new SpeckleAppUI();
+      Initialiser.Instance.Cache = gsaCache;
+      Initialiser.Instance.Interface = gsaInterfacer;
+      Initialiser.Instance.AppUI = new SpeckleAppUI();
     }
 
     [SetUp]
     public void BeforeEachTest()
     {
-      Initialiser.Settings = new MockSettings();
+      Initialiser.Instance.Settings = new MockSettings();
     }
 
     [TearDown]
     public void AfterEachTest()
     {
-      Initialiser.Interface.Close();
-      ((IGSACacheForTesting) Initialiser.Cache).Clear();
+      Initialiser.Instance.Interface.Close();
+      ((IGSACacheForTesting) Initialiser.Instance.Cache).Clear();
     }
 
     //Reception test
@@ -77,7 +77,7 @@ namespace SpeckleStructuralGSA.Test
       var actualGwaRecordsForKeyword = new Dictionary<string, List<string>>();
       for (var i = 0; i < actualGwaRecords.Count(); i++)
       {
-        Initialiser.Interface.ParseGeneralGwa(actualGwaRecords[i].GwaCommand, out var recordKeyword, out var foundIndex, out var foundStreamId, out string foundApplicationId, out var gwaWithoutSet, out var gwaSetCommandType);
+        Initialiser.Instance.Interface.ParseGeneralGwa(actualGwaRecords[i].GwaCommand, out var recordKeyword, out var foundIndex, out var foundStreamId, out string foundApplicationId, out var gwaWithoutSet, out var gwaSetCommandType);
         if (!actualGwaRecordsForKeyword.ContainsKey(recordKeyword))
         {
           actualGwaRecordsForKeyword.Add(recordKeyword, new List<string>());
@@ -124,7 +124,7 @@ namespace SpeckleStructuralGSA.Test
         var actualGwaRecordsForKeyword = new List<GwaRecord>();
         for (var i = 0; i < actualGwaRecords.Count(); i++)
         {
-          Initialiser.Interface.ParseGeneralGwa(actualGwaRecords[i].GwaCommand, out var recordKeyword, out var foundIndex, out var foundStreamId, out string foundApplicationId, out var gwaWithoutSet, out var gwaSetCommandType);
+          Initialiser.Instance.Interface.ParseGeneralGwa(actualGwaRecords[i].GwaCommand, out var recordKeyword, out var foundIndex, out var foundStreamId, out string foundApplicationId, out var gwaWithoutSet, out var gwaSetCommandType);
           if (recordKeyword.Equals(keyword, StringComparison.InvariantCultureIgnoreCase))
           {
             actualGwaRecordsForKeyword.Add(actualGwaRecords[i]);
@@ -170,7 +170,7 @@ namespace SpeckleStructuralGSA.Test
         var expectedGwaRecordsForKeyword = new List<GwaRecord>();
         for (var i = 0; i < expectedGwaRecords.Count(); i++)
         {
-          Initialiser.Interface.ParseGeneralGwa(expectedGwaRecords[i].GwaCommand, out var recordKeyword, out var foundIndex, out var foundStreamId, out string foundApplicationId, out var gwaWithoutSet, out var gwaSetCommandType);
+          Initialiser.Instance.Interface.ParseGeneralGwa(expectedGwaRecords[i].GwaCommand, out var recordKeyword, out var foundIndex, out var foundStreamId, out string foundApplicationId, out var gwaWithoutSet, out var gwaSetCommandType);
           if (recordKeyword.Equals(keyword, StringComparison.InvariantCultureIgnoreCase))
           {
             expectedGwaRecordsForKeyword.Add(expectedGwaRecords[i]);
@@ -180,7 +180,7 @@ namespace SpeckleStructuralGSA.Test
         var actualGwaRecordsForKeyword = new List<GwaRecord>();
         for (var i = 0; i < actualGwaRecords.Count(); i++)
         {
-          Initialiser.Interface.ParseGeneralGwa(actualGwaRecords[i].GwaCommand, out var recordKeyword, out var foundIndex, out var foundStreamId, out string foundApplicationId, out var gwaWithoutSet, out var gwaSetCommandType);
+          Initialiser.Instance.Interface.ParseGeneralGwa(actualGwaRecords[i].GwaCommand, out var recordKeyword, out var foundIndex, out var foundStreamId, out string foundApplicationId, out var gwaWithoutSet, out var gwaSetCommandType);
           if (recordKeyword.Equals(keyword, StringComparison.InvariantCultureIgnoreCase))
           {
             actualGwaRecordsForKeyword.Add(actualGwaRecords[i]);

@@ -16,7 +16,7 @@ namespace SpeckleStructuralGSA.Test
     {
       GSAInterfacer = gsaInterfacer;
       GSACache = gsaCache;
-      Initialiser.Settings.TargetLayer = layer;
+      Initialiser.Instance.Settings.TargetLayer = layer;
     }
 
     public void JsonSpeckleStreamsToGwaRecords(IEnumerable<string> savedJsonFileNames, out List<GwaRecord> gwaRecords, GSATargetLayer layer)
@@ -89,7 +89,7 @@ namespace SpeckleStructuralGSA.Test
 
             for (var j = 0; j < gwaCommands.Count(); j++)
             {
-              Initialiser.Interface.ParseGeneralGwa(gwaCommands[j], out keyword, out int? foundIndex, out string foundStreamId, out string foundApplicationId, out string gwaWithoutSet, out GwaSetCommandType? gwaSetCommandType);
+              Initialiser.Instance.Interface.ParseGeneralGwa(gwaCommands[j], out keyword, out int? foundIndex, out string foundStreamId, out string foundApplicationId, out string gwaWithoutSet, out GwaSetCommandType? gwaSetCommandType);
 
               //Only cache the object against, the top-level GWA command, not the sub-commands
               GSACache.Upsert(keyword, foundIndex.Value, gwaWithoutSet, applicationId: foundApplicationId, so: (foundApplicationId == obj.ApplicationId) ? obj : null, gwaSetCommandType: gwaSetCommandType.Value);
@@ -104,7 +104,7 @@ namespace SpeckleStructuralGSA.Test
       var toBeAddedGwa = GSACache.GetNewGwaSetCommands();
       for (int i = 0; i < toBeAddedGwa.Count(); i++)
       {
-        Initialiser.Interface.SetGwa(toBeAddedGwa[i]);
+        Initialiser.Instance.Interface.SetGwa(toBeAddedGwa[i]);
       }
     }
 

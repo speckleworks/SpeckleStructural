@@ -15,6 +15,7 @@ namespace SpeckleStructuralGSA.Test
   [TestFixture]
   public class ConversionTests
   {
+    /*
     [SetUp]
     public void SetUp()
     {
@@ -32,11 +33,25 @@ namespace SpeckleStructuralGSA.Test
         .Returns(new Func<string, GSAEntity, int[]>(MockGSAProxy.ConvertGSAList));
       mockGSAObject.SetupGet(x => x.GwaDelimiter).Returns(GSAProxy.GwaDelimiter);
 
-      Initialiser.Cache = new GSACache();
-      Initialiser.Interface = mockGSAObject.Object;
-      Initialiser.AppUI = new SpeckleAppUI();
+      Initialiser.Instance.Cache = new GSACache();
+      Initialiser.Instance.Interface = mockGSAObject.Object;
+      Initialiser.Instance.AppUI = new SpeckleAppUI();
    
-      Initialiser.Settings = new MockSettings();
+      Initialiser.Instance.Settings = new MockSettings();
+    }
+    */
+
+    [Test]
+    public void DependencyTest()
+    {
+      var settings = new Mock<IGSASettings>();
+      Initialiser.Instance.Settings = settings.Object;
+
+      settings.SetupGet(x => x.TargetLayer).Returns(GSATargetLayer.Design);
+      var rxDep = Initialiser.Instance.RxTypeDependencies();
+
+      settings.SetupGet(x => x.TargetLayer).Returns(GSATargetLayer.Analysis);
+      rxDep = Initialiser.Instance.RxTypeDependencies();
     }
 
     //Just for the unusual ones - where there is no 1:1 relationship between GWA line and Speckle object

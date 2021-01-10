@@ -290,7 +290,7 @@ namespace SpeckleStructuralGSA.Schema
     {
       try
       {
-        return gwa.ListSplit(Initialiser.Interface.GwaDelimiter).ToList();
+        return gwa.ListSplit(Initialiser.Instance.Interface.GwaDelimiter).ToList();
       }
       catch
       {
@@ -326,7 +326,7 @@ namespace SpeckleStructuralGSA.Schema
 
     protected bool Join(List<string> items, out string joined)
     {
-      joined = string.Join(Initialiser.Interface.GwaDelimiter.ToString(), items);
+      joined = string.Join(Initialiser.Instance.Interface.GwaDelimiter.ToString(), items);
       return (joined.Length > 0);
     }
 
@@ -453,9 +453,34 @@ namespace SpeckleStructuralGSA.Schema
       return typeof(T).GetAttribute<GsaType>("Keyword").ToString();
     }
 
+    public static GwaKeyword GetGwaKeyword(Type t)
+    {
+      return (GwaKeyword)t.GetAttribute<GsaType>("Keyword");
+    }
+
+    public static bool IsAnalysisLayer(Type t)
+    {
+      return (bool)t.GetAttribute<GsaType>("AnalysisLayer");
+    }
+
+    public static bool IsDesignLayer(Type t)
+    {
+      return (bool)t.GetAttribute<GsaType>("DesignLayer");
+    }
+
+    public static GwaKeyword[] GetReferencedKeywords(Type t)
+    {
+      return (GwaKeyword[])t.GetAttribute<GsaType>("ReferencedKeywords");
+    }
+
     public static GwaSetCommandType GetGwaSetCommandType<T>()
     {
       return (GwaSetCommandType)typeof(T).GetAttribute<GsaType>("SetCommandType");
+    }
+
+    public static bool IsSelfContained(Type t)
+    {
+      return (bool)t.GetAttribute<GsaType>("SelfContained");
     }
     #endregion
 

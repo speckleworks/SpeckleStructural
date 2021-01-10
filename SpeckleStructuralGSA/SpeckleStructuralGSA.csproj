@@ -196,7 +196,8 @@
     <Compile Include="Schema\Loading\GsaLoadNode.cs" />
     <Compile Include="GSASenderDictionary.cs" />
     <Compile Include="Helper.cs" />
-    <Compile Include="Initialiser.cs" />
+    <Compile Include="Schema\OtherGsaClasses.cs" />
+    <Compile Include="Static\Initialiser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Schema\Geometry\GsaAxis.cs" />
     <Compile Include="Schema\Loading\GsaLoadCase.cs" />

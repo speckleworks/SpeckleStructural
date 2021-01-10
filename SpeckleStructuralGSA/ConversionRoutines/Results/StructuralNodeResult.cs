@@ -17,18 +17,18 @@ namespace SpeckleStructuralGSA
   {
     public static SpeckleObject ToSpeckle(this GSANodeResult dummyObject)
     {
-      if (Initialiser.Settings.NodalResults.Count() == 0 || Initialiser.Settings.EmbedResults && Initialiser.GSASenderObjects.Count<GSANode>() == 0)
+      if (Initialiser.Instance.Settings.NodalResults.Count() == 0 || Initialiser.Instance.Settings.EmbedResults && Initialiser.Instance.GSASenderObjects.Count<GSANode>() == 0)
       {
         return new SpeckleNull();
       }
 
-      if (Initialiser.Settings.EmbedResults)
+      if (Initialiser.Instance.Settings.EmbedResults)
       {
-        var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
+        var nodes = Initialiser.Instance.GSASenderObjects.Get<GSANode>();
 
-        foreach (var kvp in Initialiser.Settings.NodalResults)
+        foreach (var kvp in Initialiser.Instance.Settings.NodalResults)
         {
-          foreach (var loadCase in Initialiser.Settings.ResultCases.Where(rc => Initialiser.Interface.CaseExist(rc)))
+          foreach (var loadCase in Initialiser.Instance.Settings.ResultCases.Where(rc => Initialiser.Instance.Interface.CaseExist(rc)))
           {
             foreach (var node in nodes)
             {
@@ -40,7 +40,7 @@ namespace SpeckleStructuralGSA
                 obj.Result = new Dictionary<string, object>();
               }
 
-              var resultExport = Initialiser.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
+              var resultExport = Initialiser.Instance.Interface.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.Instance.Settings.ResultInLocalAxis ? "local" : "global");
 
               if (resultExport == null || resultExport.Count() == 0)
               {
@@ -80,19 +80,19 @@ namespace SpeckleStructuralGSA
 
         //Unlike embedding, separate results doesn't necessarily mean that there is a Speckle object created for each node.  There is always though
         //some GWA loaded into the cache
-        if (!Initialiser.Cache.GetKeywordRecordsSummary(keyword, out var gwa, out var indices, out var applicationIds))
+        if (!Initialiser.Instance.Cache.GetKeywordRecordsSummary(keyword, out var gwa, out var indices, out var applicationIds))
         {
           return new SpeckleNull();
         }
 
-        foreach (var kvp in Initialiser.Settings.NodalResults)
+        foreach (var kvp in Initialiser.Instance.Settings.NodalResults)
         {
-          foreach (var loadCase in Initialiser.Settings.ResultCases.Where(rc => Initialiser.Interface.CaseExist(rc)))
+          foreach (var loadCase in Initialiser.Instance.Settings.ResultCases.Where(rc => Initialiser.Instance.Interface.CaseExist(rc)))
           {
             for (var i = 0; i < indices.Count(); i++)
             {
-              var resultExport = Initialiser.Interface.GetGSAResult(indices[i], kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, 
-                Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
+              var resultExport = Initialiser.Instance.Interface.GetGSAResult(indices[i], kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, 
+                Initialiser.Instance.Settings.ResultInLocalAxis ? "local" : "global");
 
               if (resultExport == null || resultExport.Count() == 0)
               {
@@ -109,7 +109,7 @@ namespace SpeckleStructuralGSA
                 {
                   Value = new Dictionary<string, object>(),
                   TargetRef = targetRef,
-                  IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
+                  IsGlobal = !Initialiser.Instance.Settings.ResultInLocalAxis,
                   LoadCaseRef = loadCase
                 };
                 newRes.Value[kvp.Key] = resultExport;
@@ -126,7 +126,7 @@ namespace SpeckleStructuralGSA
           }
         }
 
-        Initialiser.GSASenderObjects.AddRange(results);
+        Initialiser.Instance.GSASenderObjects.AddRange(results);
       }
 
       return new SpeckleObject();

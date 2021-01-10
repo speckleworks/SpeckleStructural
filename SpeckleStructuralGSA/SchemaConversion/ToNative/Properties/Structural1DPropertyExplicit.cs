@@ -30,8 +30,8 @@ namespace SpeckleStructuralGSA.SchemaConversion
       };
 
       var keyword = GsaRecord.GetKeyword<GsaSection>();
-      var streamId = Initialiser.Cache.LookupStream(prop.ApplicationId);
-      var index = Initialiser.Cache.ResolveIndex(keyword, prop.ApplicationId);
+      var streamId = Initialiser.Instance.Cache.LookupStream(prop.ApplicationId);
+      var index = Initialiser.Instance.Cache.ResolveIndex(keyword, prop.ApplicationId);
 
       var materialIndex = 0;
       var materialType = MaterialType.Generic;
@@ -39,7 +39,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
       var materialSteelKeyword = typeof(GSAMaterialSteel).GetGSAKeyword();
       var materialConcKeyword = typeof(GSAMaterialConcrete).GetGSAKeyword();
 
-      var res = Initialiser.Cache.LookupIndex(materialSteelKeyword, prop.MaterialRef);
+      var res = Initialiser.Instance.Cache.LookupIndex(materialSteelKeyword, prop.MaterialRef);
       if (res.HasValue)
       {
         materialIndex = res.Value;
@@ -47,7 +47,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
       }
       else
       {
-        res = Initialiser.Cache.LookupIndex(materialConcKeyword, prop.MaterialRef);
+        res = Initialiser.Instance.Cache.LookupIndex(materialConcKeyword, prop.MaterialRef);
         if (res.HasValue)
         {
           materialIndex = res.Value;
@@ -67,7 +67,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
       if (gsaSection.Gwa(out var gwaLines, false))
       {
-        Initialiser.Cache.Upsert(keyword, index, gwaLines.First(), streamId, prop.ApplicationId, GsaRecord.GetGwaSetCommandType<GsaSection>());
+        Initialiser.Instance.Cache.Upsert(keyword, index, gwaLines.First(), streamId, prop.ApplicationId, GsaRecord.GetGwaSetCommandType<GsaSection>());
       }
 
       return "";

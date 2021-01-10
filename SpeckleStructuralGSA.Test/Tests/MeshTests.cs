@@ -28,10 +28,10 @@ namespace SpeckleStructuralGSA.Test
       gsaInterfacer = new GSAProxy();
       gsaCache = new GSACache();
 
-      Initialiser.Cache = gsaCache;
-      Initialiser.Interface = gsaInterfacer;
-      Initialiser.Settings = new MockSettings();
-      Initialiser.AppUI = new SpeckleAppUI();
+      Initialiser.Instance.Cache = gsaCache;
+      Initialiser.Instance.Interface = gsaInterfacer;
+      Initialiser.Instance.Settings = new MockSettings();
+      Initialiser.Instance.AppUI = new SpeckleAppUI();
     }
 
     [SetUp]
@@ -40,7 +40,7 @@ namespace SpeckleStructuralGSA.Test
       gsaCache.Clear();
 
       //Clear out all sender objects that might be there from the last test preparation
-      Initialiser.GSASenderObjects.Clear();
+      Initialiser.Instance.GSASenderObjects.Clear();
     }
 
     [Test]
@@ -76,7 +76,7 @@ namespace SpeckleStructuralGSA.Test
       dummy = Activator.CreateInstance(typeof(GSA2DMember));
       retObject = Conversions.ToSpeckle((GSA2DMember)dummy);
 
-      var meshes = Initialiser.GSASenderObjects.Get<GSA2DMember>();
+      var meshes = Initialiser.Instance.GSASenderObjects.Get<GSA2DMember>();
       Assert.AreEqual(50, meshes.Count);
 
       var noFaceMeshes = meshes.Where(m => ((Structural2DElementMesh)m.Value).Faces == null || ((Structural2DElementMesh)m.Value).Faces.Count() == 0).ToList();

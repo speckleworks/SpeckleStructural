@@ -52,7 +52,49 @@
     [StringValue("SECTION_COVER")]
     SECTION_COVER,
     [StringValue("SECTION_TMPL")]
-    SECTION_TMPL
+    SECTION_TMPL,
+    [StringValue("PROP_SPR")]
+    PROP_SPR,
+    [StringValue("PROP_2D")]
+    PROP_2D,
+    [StringValue("PROP_MASS")]
+    PROP_MASS,
+    [StringValue("ALIGN")]
+    ALIGN,
+    [StringValue("ANAL")]
+    ANAL,
+    [StringValue("LOAD_TASK")]
+    LOAD_TASK,
+    [StringValue("ANAL_STAGE")]
+    ANAL_STAGE,
+    [StringValue("COMBINATION")]
+    COMBINATION,
+    [StringValue("GEN_REST")]
+    GEN_REST,
+    [StringValue("GRID_LINE")]
+    GRID_LINE,
+    [StringValue("INF_BEAM")]
+    INF_BEAM,
+    [StringValue("INF_NODE")]
+    INF_NODE,
+    [StringValue("LOAD_2D_FACE")]
+    LOAD_2D_FACE,
+    [StringValue("LOAD_2D_THERMAL")]
+    LOAD_2D_THERMAL,
+    [StringValue("LOAD_GRAVITY")]
+    LOAD_GRAVITY,
+    [StringValue("LOAD_GRID_LINE")]
+    LOAD_GRID_LINE,
+    [StringValue("LOAD_GRID_POINT")]
+    LOAD_GRID_POINT,
+    [StringValue("PATH")]
+    PATH,
+    [StringValue("PROP_SEC")]
+    PROP_SEC,
+    [StringValue("RIGID")]
+    RIGID,
+    [StringValue("USER_VEHICLE")]
+    USER_VEHICLE
   }
 
   public enum Restraint

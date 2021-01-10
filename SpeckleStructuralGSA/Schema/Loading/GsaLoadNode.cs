@@ -61,7 +61,7 @@ namespace SpeckleStructuralGSA.Schema
     #region from_gwa_fns
     private bool AddList(string v)
     {
-      NodeIndices = Initialiser.Interface.ConvertGSAList(v, GSAEntity.NODE).ToList();
+      NodeIndices = Initialiser.Instance.Interface.ConvertGSAList(v, GSAEntity.NODE).ToList();
       return (NodeIndices.Count() > 0);
     }
 

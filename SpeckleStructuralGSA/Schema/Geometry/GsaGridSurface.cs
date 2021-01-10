@@ -140,8 +140,8 @@ namespace SpeckleStructuralGSA.Schema
       }
       else
       {
-        var entityType = (Initialiser.Settings.TargetLayer == GSATargetLayer.Design) ? GSAEntity.MEMBER : GSAEntity.ELEMENT;
-        EntityIndices = Initialiser.Interface.ConvertGSAList(v, entityType).ToList();
+        var entityType = (Initialiser.Instance.Settings.TargetLayer == GSATargetLayer.Design) ? GSAEntity.MEMBER : GSAEntity.ELEMENT;
+        EntityIndices = Initialiser.Instance.Interface.ConvertGSAList(v, entityType).ToList();
         return (EntityIndices.Count() > 0);
       }
     }

@@ -19,7 +19,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralBridgePath();
 
-      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
+      var pieces = this.GWACommand.ListSplit(Initialiser.Instance.Interface.GwaDelimiter);
 
       var counter = 1; // Skip identifier
 
@@ -56,8 +56,8 @@ namespace SpeckleStructuralGSA
 
       var keyword = destType.GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(keyword, path.ApplicationId);
-      var alignmentIndex = Initialiser.Cache.LookupIndex(typeof(GSABridgeAlignment).GetGSAKeyword(), path.AlignmentRef) ?? 1;
+      var index = Initialiser.Instance.Cache.ResolveIndex(keyword, path.ApplicationId);
+      var alignmentIndex = Initialiser.Instance.Cache.LookupIndex(typeof(GSABridgeAlignment).GetGSAKeyword(), path.AlignmentRef) ?? 1;
 
       var left = (path.Offsets == null || path.Offsets.Count() == 0) ? 0 : path.Offsets.First();
       var right = (path.PathType == StructuralBridgePathType.Track || path.PathType == StructuralBridgePathType.Vehicle) 
@@ -79,7 +79,7 @@ namespace SpeckleStructuralGSA
           path.LeftRailFactor.ToString()
       };
 
-      return (string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
+      return (string.Join(Initialiser.Instance.Interface.GwaDelimiter.ToString(), ls));
     }
 
     private string PathTypeToGWAString(StructuralBridgePathType pathType)
@@ -137,11 +137,11 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+          Initialiser.Instance.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
         }
       });
 
-      Initialiser.GSASenderObjects.AddRange(paths.Values.ToList());
+      Initialiser.Instance.GSASenderObjects.AddRange(paths.Values.ToList());
 
       return (paths.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }

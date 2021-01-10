@@ -20,8 +20,8 @@ namespace SpeckleStructuralGSA.Test
     [SetUp]
     public void SetupMergeTests()
     {
-      Initialiser.Cache = new GSACache();
-      Initialiser.Settings = new MockSettings();
+      Initialiser.Instance.Cache = new GSACache();
+      Initialiser.Instance.Settings = new MockSettings();
     }
 
     [Test]
@@ -126,7 +126,7 @@ namespace SpeckleStructuralGSA.Test
 
       //Call the ToSpeckle method, which just adds to the GSASenderObjects collection-
       Conversions.ToSpeckle(new GSASpringProperty());
-      var existing = (StructuralSpringProperty)Initialiser.GSASenderObjects.Get<GSASpringProperty>().First().Value;
+      var existing = (StructuralSpringProperty)Initialiser.Instance.GSASenderObjects.Get<GSASpringProperty>().First().Value;
 
       var newToMerge = new StructuralSpringProperty() { DampingRatio = 1.5 };
 
@@ -171,7 +171,7 @@ namespace SpeckleStructuralGSA.Test
 
       //Call the ToSpeckle method, which just adds to the GSASenderObjects collection
       Conversions.ToSpeckle(new GSASpringProperty());
-      var existing = (StructuralSpringProperty)Initialiser.GSASenderObjects.Get<GSASpringProperty>().First().Value;
+      var existing = (StructuralSpringProperty)Initialiser.Instance.GSASenderObjects.Get<GSASpringProperty>().First().Value;
 
       var newToMerge = new StructuralSpringProperty() { DampingRatio = 1.5 };
 
@@ -268,10 +268,10 @@ namespace SpeckleStructuralGSA.Test
       var testType = typeof(T);
 
       var mockGsaInterfacer = new Mock<IGSAProxy>();
-
-      ((IGSACache)Initialiser.Cache).Upsert(keyword, 1, gwaCommand, sid);
-      Initialiser.GSASenderObjects.Clear();
-      //Initialiser.GSASenderObjects.Add(testType, new List<object>());
+      mockGsaInterfacer.SetupGet(x => x.GwaDelimiter).Returns('\t');
+      Initialiser.Instance.Interface = mockGsaInterfacer.Object;
+      ((IGSACache)Initialiser.Instance.Cache).Upsert(keyword, 1, gwaCommand, sid);
+      Initialiser.Instance.GSASenderObjects.Clear();
     }
   }
 

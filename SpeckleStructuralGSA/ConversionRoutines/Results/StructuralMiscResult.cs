@@ -17,7 +17,7 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSAMiscResult dummyObject)
     {
       var keyword = typeof(GSAAssembly).GetGSAKeyword();
-      if (Initialiser.Settings.MiscResults.Count() == 0 || !Initialiser.Cache.GetKeywordRecordsSummary(keyword, out var gwa, out var indices, out var applicationIds))
+      if (Initialiser.Instance.Settings.MiscResults.Count() == 0 || !Initialiser.Instance.Cache.GetKeywordRecordsSummary(keyword, out var gwa, out var indices, out var applicationIds))
       {
         return new SpeckleNull();
       }
@@ -26,14 +26,14 @@ namespace SpeckleStructuralGSA
 
       //Unlike embedding, separate results doesn't necessarily mean that there is a Speckle object created for each assembly.  There is always though
       //some GWA loaded into the cache
-      foreach (var kvp in Initialiser.Settings.MiscResults)
+      foreach (var kvp in Initialiser.Instance.Settings.MiscResults)
       {
-        foreach (var loadCase in Initialiser.Settings.ResultCases.Where(rc => Initialiser.Interface.CaseExist(rc)))
+        foreach (var loadCase in Initialiser.Instance.Settings.ResultCases.Where(rc => Initialiser.Instance.Interface.CaseExist(rc)))
         {
           for (var i = 0; i < indices.Count(); i++)
           {
-            var resultExport = Initialiser.Interface.GetGSAResult(indices[i], kvp.Value.Item2, kvp.Value.Item3, kvp.Value.Item4, loadCase, 
-              Initialiser.Settings.ResultInLocalAxis ? "local" : "global");
+            var resultExport = Initialiser.Instance.Interface.GetGSAResult(indices[i], kvp.Value.Item2, kvp.Value.Item3, kvp.Value.Item4, loadCase, 
+              Initialiser.Instance.Settings.ResultInLocalAxis ? "local" : "global");
 
             if (resultExport == null || resultExport.Count() == 0)
             {
@@ -50,7 +50,7 @@ namespace SpeckleStructuralGSA
               var newRes = new StructuralMiscResult
               {
                 Description = kvp.Key,
-                IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
+                IsGlobal = !Initialiser.Instance.Settings.ResultInLocalAxis,
                 Value = resultExport,
                 LoadCaseRef = loadCase,
                 TargetRef = string.IsNullOrEmpty(applicationIds[i]) ? Helper.GetApplicationId(keyword, indices[i]) : applicationIds[i]
@@ -66,7 +66,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      Initialiser.GSASenderObjects.AddRange(results);
+      Initialiser.Instance.GSASenderObjects.AddRange(results);
 
       return new SpeckleObject();
     }
