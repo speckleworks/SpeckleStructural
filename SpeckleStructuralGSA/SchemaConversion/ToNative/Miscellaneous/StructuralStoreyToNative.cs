@@ -11,7 +11,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
   {
     public static string ToNative(this StructuralStorey storey)
     {
-      if (string.IsNullOrEmpty(storey.ApplicationId) && storey.Axis == null)
+      if (string.IsNullOrEmpty(storey.ApplicationId) && Helper.IsZeroAxis(storey.Axis))
       {
         return "";
       }

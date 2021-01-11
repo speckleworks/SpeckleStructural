@@ -47,7 +47,8 @@ namespace SpeckleStructuralGSA.SchemaConversion
     {
       var bp = axis.basePlane;
       var zeroVector = new double[3] { 0, 0, 0 };
-      return (bp.Xdir.Value.SequenceEqual(zeroVector) && bp.Ydir.Value.SequenceEqual(zeroVector));
+      return ((bp.Xdir == null && bp.Ydir == null) 
+        || (bp.Xdir.Value.SequenceEqual(zeroVector) && bp.Ydir.Value.SequenceEqual(zeroVector)));
     }
 
     public static string GridExpansionToString(GridExpansion expansion)

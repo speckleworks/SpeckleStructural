@@ -7,7 +7,7 @@ namespace SpeckleStructuralGSA.Schema
 {
   //Named load case instead of load title because it is referred to as such by the documentation at
   //https://www.oasys-software.com/help/gsa/10.1/GSA_Text.html
-  [GsaType(GwaKeyword.LOAD_TITLE, GwaSetCommandType.Set, true, StreamBucket.Model)]
+  [GsaType(GwaKeyword.LOAD_TITLE, GwaSetCommandType.Set, true)]
   public class GsaLoadCase : GsaRecord
   {
     public StructuralLoadCaseType CaseType;

@@ -84,7 +84,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
         };
         if (gsaPlane.Gwa(out var gsaPlaneGwas, true))
         {
-          Initialiser.Instance.Cache.Upsert(gsaPlaneKeyword, planeIndex, gsaPlaneGwas.First(), "", "", GsaRecord.GetGwaSetCommandType<GsaGridPlane>());
+          Initialiser.Instance.Cache.Upsert(gsaPlaneKeyword, planeIndex, gsaPlaneGwas.First(), streamId, "", GsaRecord.GetGwaSetCommandType<GsaGridPlane>());
         }
         gsaGridSurface.PlaneIndex = planeIndex;
       }

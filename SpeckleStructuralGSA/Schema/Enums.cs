@@ -223,12 +223,6 @@
     Polygon
   }
 
-  public enum StreamBucket
-  {
-    Model,
-    Results
-  }
-
   public enum MemberGeometry
   {
     NotSet = 0,

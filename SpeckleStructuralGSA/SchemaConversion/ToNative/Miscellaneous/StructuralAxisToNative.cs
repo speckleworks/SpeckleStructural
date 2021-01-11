@@ -16,8 +16,8 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
       if (gsaAxis.Gwa(out var gwaLines, false))
       {
-        //axes currently never have a stream nor an application ID
-        Initialiser.Instance.Cache.Upsert(keyword, gsaAxis.Index.Value, gwaLines.First(), "", "", GsaRecord.GetGwaSetCommandType<GsaAxis>());
+        //axes currently never have an application ID
+        Initialiser.Instance.Cache.Upsert(keyword, gsaAxis.Index.Value, gwaLines.First(), gsaAxis.StreamId, "", GsaRecord.GetGwaSetCommandType<GsaAxis>());
       }
       return "";
     }

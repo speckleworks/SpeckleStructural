@@ -48,10 +48,10 @@ namespace SpeckleStructuralGSA.Test
       Initialiser.Instance.Settings = settings.Object;
 
       settings.SetupGet(x => x.TargetLayer).Returns(GSATargetLayer.Design);
-      var rxDep = Initialiser.Instance.RxTypeDependencies();
+      var rxDep = Initialiser.Instance.RxTypeDependencies;
 
       settings.SetupGet(x => x.TargetLayer).Returns(GSATargetLayer.Analysis);
-      rxDep = Initialiser.Instance.RxTypeDependencies();
+      rxDep = Initialiser.Instance.RxTypeDependencies;
     }
 
     //Just for the unusual ones - where there is no 1:1 relationship between GWA line and Speckle object

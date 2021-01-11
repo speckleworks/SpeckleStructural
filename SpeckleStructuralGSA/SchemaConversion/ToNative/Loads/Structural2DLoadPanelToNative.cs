@@ -63,6 +63,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
           axis = SpeckleStructuralGSA.Helper.Parse2DAxis(originalPolyline);
           axis.Name = loadPanel.Name;
           var gsaAxis = StructuralAxisToNative.ToNativeSchema(axis);
+          gsaAxis.StreamId = streamId;
           StructuralAxisToNative.ToNative(gsaAxis);
 
           var gridPlaneIndex = Initialiser.Instance.Cache.ResolveIndex(gridPlaneKeyword);
@@ -70,6 +71,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
           {
             Index = gridPlaneIndex,
             Name = loadPanel.Name,
+            StreamId = streamId,
             AxisRefType = GridPlaneAxisRefType.Reference,
             AxisIndex = gsaAxis.Index,
             Elevation = AxisElevation(axis, originalPolyline),
@@ -79,7 +81,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
           };
           if (gsaGridPlane.Gwa(out var gsaGridPlaneGwas, false))
           {
-            Initialiser.Instance.Cache.Upsert(gridPlaneKeyword, gridPlaneIndex, gsaGridPlaneGwas.First(), "", "", GsaRecord.GetGwaSetCommandType<GsaGridPlane>());
+            Initialiser.Instance.Cache.Upsert(gridPlaneKeyword, gridPlaneIndex, gsaGridPlaneGwas.First(), streamId, "", GsaRecord.GetGwaSetCommandType<GsaGridPlane>());
           }
 
           gridSurfaceIndex = Initialiser.Instance.Cache.ResolveIndex(gridSurfaceKeyword);
@@ -87,6 +89,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
           {
             Index = gridSurfaceIndex,
             PlaneRefType = GridPlaneAxisRefType.Reference,
+            StreamId = streamId,
             PlaneIndex = gridPlaneIndex,
             Name = loadPanel.Name,
             AllIndices = true,
@@ -98,7 +101,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
           };
           if (gsaGridSurface.Gwa(out var gsaGridSurfaceGwas, false))
           {
-            Initialiser.Instance.Cache.Upsert(gridSurfaceKeyword, gridSurfaceIndex, gsaGridSurfaceGwas.First(), "", "", GsaRecord.GetGwaSetCommandType<GsaGridSurface>());
+            Initialiser.Instance.Cache.Upsert(gridSurfaceKeyword, gridSurfaceIndex, gsaGridSurfaceGwas.First(), streamId, "", GsaRecord.GetGwaSetCommandType<GsaGridSurface>());
           }
         }
         catch

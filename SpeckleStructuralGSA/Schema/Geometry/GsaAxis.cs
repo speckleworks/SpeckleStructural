@@ -5,7 +5,7 @@ using SpeckleGSAInterfaces;
 
 namespace SpeckleStructuralGSA.Schema
 {
-  [GsaType(GwaKeyword.AXIS, GwaSetCommandType.Set, true, StreamBucket.Model)]
+  [GsaType(GwaKeyword.AXIS, GwaSetCommandType.Set, true)]
   public class GsaAxis : GsaRecord
   {
     //Only supporting cartesian at this stage
