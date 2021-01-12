@@ -39,7 +39,7 @@ namespace SpeckleStructuralGSA
           { typeof(Structural2DElement), elementKw.GetStringValue() },
           { typeof(Structural2DElementMesh), elementKw.GetStringValue() },
           { typeof(Structural2DVoid), elementKw.GetStringValue() },
-          { typeof(Structural1DProperty), GwaKeyword.SECTION.GetStringValue() },
+          { typeof(Structural1DProperty), GwaKeyword.PROP_SEC.GetStringValue() },
           { typeof(Structural1DPropertyExplicit), GwaKeyword.SECTION.GetStringValue() },
           { typeof(Structural2DProperty), GwaKeyword.PROP_2D.GetStringValue() },
           { typeof(StructuralSpringProperty), GwaKeyword.PROP_SPR.GetStringValue() },
@@ -85,6 +85,11 @@ namespace SpeckleStructuralGSA
           layerKeywordTypes[GSATargetLayer.Analysis].Add(t, GsaRecord.GetGwaKeyword(t));
         }
       }
+    }
+
+    public void Clear()
+    {
+      GSASenderObjects.Clear();
     }
 
     //For now, it returns old GSA schema (i.e. those implementing the IGSASpeckleContainer and IGSAContainer interfaces.
