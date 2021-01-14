@@ -45,7 +45,7 @@ namespace SpeckleStructuralGSA.Schema
       }
 
       //LOAD_NODE.2 | name | list | case | axis | dir | value
-      AddItems(ref items, Name, List(NodeIndices), LoadCaseIndex ?? 0, (GlobalAxis ? "GLOBAL" : (object)AxisIndex), AddLoadDirection(), Value);
+      AddItems(ref items, Name, IndicesList(NodeIndices), LoadCaseIndex ?? 0, (GlobalAxis ? "GLOBAL" : (object)AxisIndex), AddLoadDirection(), Value ?? 0);
 
       gwa = Join(items, out var gwaLine) ? new List<string>() { gwaLine } : new List<string>();
       return (gwa.Count() > 0);

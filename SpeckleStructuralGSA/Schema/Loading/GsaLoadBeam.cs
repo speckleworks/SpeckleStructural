@@ -35,7 +35,7 @@ namespace SpeckleStructuralGSA.Schema
       //Common fields across all of them: name | list | case | axis | proj | dir
       return (FromGwaByFuncs(items, out remainingItems, 
         AddName, 
-        AddEntities, 
+        (v) => AddEntities(v, out Entities), 
         (v) => (AddNullableIndex(v, out LoadCaseIndex)),
         AddAxis,
         AddProj, 
@@ -58,7 +58,7 @@ namespace SpeckleStructuralGSA.Schema
       //LOAD_BEAM_TRILIN.2 | name | list | case | axis | proj | dir | pos_1 | value_1 | pos_2 | value_2
 
       //Common fields across all of them: name | list | case | axis | proj | dir
-      AddItems(ref items, Name, AddEntities(), 
+      AddItems(ref items, Name, AddEntities(Entities), 
         LoadCaseIndex ?? 0,
         AddAxis(), 
         Projected ? "YES" : "NO", 
@@ -80,22 +80,6 @@ namespace SpeckleStructuralGSA.Schema
         : (AxisRefType == LoadBeamAxisRefType.Reference)
          ? (AxisIndex ?? 0).ToString()
          : AxisRefType.ToString().ToUpper();
-    }
-
-    public string AddEntities()
-    {
-      //Unlike other keywords which have entity type as a parameter, this keyword (at least for version 2) still has "element list" which means, for members,
-      //the group is used
-
-      var allIndices = Initialiser.Instance.Cache.LookupIndices(
-        (Initialiser.Instance.Settings.TargetLayer == GSATargetLayer.Design) ? GetKeyword<GsaMemb>() : GetKeyword<GsaEl>())
-        .Where(i => i.HasValue).Select(i => i.Value).Distinct().OrderBy(i => i).ToList();
-
-      if (Entities.Distinct().OrderBy(i => i).SequenceEqual(allIndices))
-      {
-        return "all";
-      }
-      return (Initialiser.Instance.Settings.TargetLayer == GSATargetLayer.Design) ? string.Join(" ", Entities.Select(i => "G" + i)) : string.Join(" ",  Entities);
     }
     #endregion
 
@@ -124,33 +108,6 @@ namespace SpeckleStructuralGSA.Schema
         AxisRefType = LoadBeamAxisRefType.NotSet;
       }
       return true;
-    }
-
-    public bool AddEntities(string v)
-    {
-      var entityItems = v.Split(' ');
-      if (Initialiser.Instance.Settings.TargetLayer == GSATargetLayer.Design)
-      {
-        if (entityItems.Count() == 1 && entityItems.First().Equals("all", StringComparison.InvariantCultureIgnoreCase))
-        {
-          Entities = Initialiser.Instance.Cache.LookupIndices(GetKeyword<GsaMemb>()).Where(i => i.HasValue).Select(i => i.Value).ToList();
-        }
-        else
-        {
-          //Only recognise the groups, as these represent the members
-          //TO DO: for all elements, find if they have parents and include them
-          var members = string.Join(" ", entityItems.Where(ei => ei.StartsWith("G")).Select(ei => ei.Substring(1)));
-          Entities = Initialiser.Instance.Interface.ConvertGSAList(members, GSAEntity.MEMBER).ToList();
-        }
-      }
-      else
-      {
-        Entities = (entityItems.Count() == 1 && entityItems.First().Equals("all", StringComparison.InvariantCultureIgnoreCase))
-          ? Entities = Initialiser.Instance.Cache.LookupIndices(GetKeyword<GsaEl>()).Where(i => i.HasValue).Select(i => i.Value).ToList()
-          : Initialiser.Instance.Interface.ConvertGSAList(v, GSAEntity.ELEMENT).ToList();
-      }
-
-      return Entities != null;
     }
 
     private bool AddProj(string v)

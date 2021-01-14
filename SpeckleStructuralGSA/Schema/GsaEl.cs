@@ -45,7 +45,7 @@ namespace SpeckleStructuralGSA.Schema
       var items = remainingItems;
 
       // EL.4 | num | name | colour | type | prop | group | topo() | orient_node | orient_angle | is_rls { | rls { | k } } off_x1 | off_x2 | off_y | off_z | dummy | parent
-      if (!FromGwaByFuncs(items, out remainingItems, AddName, AddColour, (v) => v.TryParseStringValue(out Type), AddProp, (v) => AddNullableIntValue(v, out Group)))
+      if (!FromGwaByFuncs(items, out remainingItems, AddName, (v) => AddColour(v, out Colour), (v) => v.TryParseStringValue(out Type), AddProp, (v) => AddNullableIntValue(v, out Group)))
       {
         return false;
       }
@@ -163,14 +163,6 @@ namespace SpeckleStructuralGSA.Schema
     #endregion
 
     #region from_gwa_fns
-    private bool AddColour(string v)
-    {
-      if (!Enum.TryParse(v, true, out Colour))
-      {
-        Colour = Colour.NO_RGB;
-      }
-      return true;
-    }
 
     private bool AddProp(string v)
     {

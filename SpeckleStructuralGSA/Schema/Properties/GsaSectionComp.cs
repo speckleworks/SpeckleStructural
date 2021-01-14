@@ -295,12 +295,12 @@ namespace SpeckleStructuralGSA.Schema
 
     public override bool FromDesc(string desc)
     {
-      throw new NotImplementedException();
+      return true;
     }
 
     public override string ToDesc()
     {
-      throw new NotImplementedException();
+      return "";
     }
   }
 
@@ -313,12 +313,12 @@ namespace SpeckleStructuralGSA.Schema
 
     public override bool FromDesc(string desc)
     {
-      throw new NotImplementedException();
+      return true;
     }
 
     public override string ToDesc()
     {
-      throw new NotImplementedException();
+      return "";
     }
   }
 

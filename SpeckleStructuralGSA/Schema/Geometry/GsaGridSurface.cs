@@ -52,7 +52,7 @@ namespace SpeckleStructuralGSA.Schema
       AddItems(ref items, Name, 
         AddPlane(), 
         ((Type == GridSurfaceElementsType.OneD) ? 1 : 2).ToString(), 
-        AllIndices ? "all" : List(EntityIndices), 
+        AllIndices ? "all" : IndicesList(EntityIndices), 
         Tolerance ?? 0, AddSpan(),
         AddAngle(), 
         SchemaConversion.Helper.GridExpansionToString(Expansion));

@@ -398,6 +398,16 @@
     REBAR
   }
 
+  public enum Load2dThermalType
+  {
+    [StringValue("CONS")]
+    Uniform,
+    [StringValue("DZ")]
+    Gradient,
+    [StringValue("GEN")]
+    General
+  }
+
   public enum Section1dStandardProfileType
   {
     [StringValue("R")] Rectangular,

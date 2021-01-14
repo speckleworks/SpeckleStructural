@@ -280,59 +280,51 @@ namespace SpeckleStructuralGSA.Test
     }
 
     [Test]
-    public void Structural1DPropertyExplicitToNative()
+    public void Structural1DPropertyExplicit()
     {
       var steel = new StructuralMaterialSteel(200000, 76923.0769, 0.3, 7850, 0.000012, 300, 440, 0.05, "steel");
       var concrete = new StructuralMaterialConcrete(29910.2016, 12462.584, 0.2, 2400, 0.00001, 12.8, 0.003, 0.02, "conc");
 
       var gwaSteel = steel.ToNative();
       var gwaConcrete = concrete.ToNative();
+      var gwaPropNonExp = "SET\tSECTION.7:{speckle_app_id:columnProp}\t1\tNO_RGB\tColumn property\t1D_GENERIC\t0\tCENTROID\t0\t0\t0\t1\t0\t0\t0\t0\t1\tSECTION_COMP.4\t\t0\tCONCRETE\t1\tGEO P(m) M(-0.836|-1.141) L(-3.799|3.396) L(1.71|0.992) L(0.931|-0.92) M(-1.881|1.512) L(-0.247|1.195) L(-0.431|-0.418) M(1.313|0.588) L(1.098|0.683) L(1.115|0.273) L(1.24|0.259)\t0\t0\t0\tNONE\t0\tNONE\t0\tSECTION_CONC.6\t1\tNO_SLAB\t89.99999998\t0.025\t0\tSECTION_LINK.3\t0\t0\tDISCRETE\tRECT\t1\t0\t0\t0\t1\t0\tNO\tNO\t\tSECTION_COVER.3\tUNIFORM\t0\t0\tNO_SMEAR\tSECTION_TMPL.4\tUNDEF\t0\t0\t0\t0\t0\t0\tNO_ENVIRON";
       Helper.GwaToCache(gwaSteel, streamId1);
       Helper.GwaToCache(gwaConcrete, streamId1);
+      Helper.GwaToCache(gwaPropNonExp, streamId1);
 
       var propExp1 = new Structural1DPropertyExplicit() { ApplicationId = "propexp1", Name = "PropExp1", MaterialRef = "steel", Area = 11, Iyy = 21, Izz = 31, J = 41, Ky = 51, Kz = 61 };
       var propExp2 = new Structural1DPropertyExplicit() { ApplicationId = "propexp2", Name = "PropExp2", MaterialRef = "conc", Area = 12, Iyy = 22, Izz = 32, J = 42, Ky = 52, Kz = 62 };
       var propExp3 = new Structural1DPropertyExplicit() { ApplicationId = "propexp3", Name = "PropExp3", Area = 13, Iyy = 23, Izz = 33, J = 43, Ky = 53, Kz = 63 };
 
-      SchemaConversion.Structural1DPropertyExplicitToNative.ToNative(propExp1);
-      SchemaConversion.Structural1DPropertyExplicitToNative.ToNative(propExp2);
-      SchemaConversion.Structural1DPropertyExplicitToNative.ToNative(propExp3);
+      Structural1DPropertyExplicitToNative.ToNative(propExp1);
+      Structural1DPropertyExplicitToNative.ToNative(propExp2);
+      Structural1DPropertyExplicitToNative.ToNative(propExp3);
 
       var allGwa = ((IGSACache)Initialiser.Instance.Cache).GetNewGwaSetCommands();
       var expectedCountByKw = new Dictionary<string, int>()
       {
         { "MAT_STEEL", 1},
         { "MAT_CONCRETE", 1 },
-        { "SECTION", 3 }
+        { "SECTION", 4 }
       };
       Assert.IsTrue(ModelValidation(allGwa, expectedCountByKw, out var mismatchByKw, false));
       Assert.AreEqual(0, mismatchByKw.Keys.Count());
 
-      var gsaElBeam = new GsaEl()
-      {
-        ApplicationId = "elbeam",
-        Name = "Beam",
-        Index = 1,
-        Type = ElementType.Beam, //*
-        Group = 1,
-        PropertyIndex = 2,
-        NodeIndices = new List<int> { 3, 4 },
-        OrientationNodeIndex = 5,
-        Angle = 6,
-        ReleaseInclusion = ReleaseInclusion.Included,
-        Releases1 = new Dictionary<AxisDirection6, ReleaseCode>() { { AxisDirection6.Y, ReleaseCode.Released }, { AxisDirection6.YY, ReleaseCode.Stiff } }, //*
-        Stiffnesses1 = new List<double>() { 7 }, //*
-        End1OffsetX = 8,
-        End2OffsetX = 9,
-        OffsetY = 10,
-        OffsetZ = 11,
-        ParentIndex = 1
-      };
-      Assert.IsTrue(gsaElBeam.Gwa(out var gwa1, false));
+      //Check all the FromGwa commands - this includes the non-EXP one since the keyword for GSA1DPropertyExplicit is the same as for other 1D properties
+      var gsaSections = SchemaConversion.Helper.GetNewFromCache<GSA1DPropertyExplicit, GsaSection>();
+      Assert.AreEqual(4, gsaSections.Count());
 
-      var gsaEl = new GsaEl();
-      Assert.IsTrue(gsaEl.FromGwa(gwa1.First()));
-      gsaElBeam.ShouldDeepEqual(gsaEl);
+      (new GSAMaterialConcrete()).ToSpeckle();
+      (new GSAMaterialSteel()).ToSpeckle();
+
+      var dummy = new GsaSection();
+      GsaSectionToSpeckle.ToSpeckle(dummy);
+
+      var newPropExps = Initialiser.Instance.GSASenderObjects.Get<GSA1DPropertyExplicit>();
+
+      newPropExps[0].SpeckleObject.ShouldDeepEqual(propExp1);
+      newPropExps[1].SpeckleObject.ShouldDeepEqual(propExp2);
+      newPropExps[2].SpeckleObject.ShouldDeepEqual(propExp3);
     }
 
     //Both ToNative and ToSpeckle
@@ -899,6 +891,41 @@ namespace SpeckleStructuralGSA.Test
       gsaSectionExp.FromGwa(gwaExp);
       gsaSectionExp.Gwa(out var gwaOutExp);
       Assert.IsTrue(gwaExp.Equals(gwaOutExp.First(), StringComparison.InvariantCulture));
+    }
+
+    [Test]
+    public void GsaLoadGravity()
+    {
+      //TO DO
+      Assert.IsTrue(false);
+    }
+
+    [Test]
+    public void GsaAnalStage()
+    {
+      //TO DO
+      Assert.IsTrue(false);
+    }
+
+    [Test]
+    public void GsaAnal()
+    {
+      //TO DO
+      Assert.IsTrue(false);
+    }
+
+    [Test]
+    public void GsaCombination()
+    {
+      //TO DO
+      Assert.IsTrue(false);
+    }
+
+    [Test]
+    public void GsaLoad2dThermal()
+    {
+      //TO DO
+      Assert.IsTrue(false);
     }
 
     #region other_methods

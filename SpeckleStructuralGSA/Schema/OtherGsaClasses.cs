@@ -16,16 +16,6 @@ namespace SpeckleStructuralGSA.Schema
   [GsaType(GwaKeyword.ALIGN, GwaSetCommandType.Set, true, GwaKeyword.GRID_SURFACE)]
   public class GsaAlign : BlankGsaRecord { }
 
-  [GsaType(GwaKeyword.ANAL, GwaSetCommandType.Set, true, GwaKeyword.LOAD_TITLE, GwaKeyword.LOAD_TASK)]
-  public class GsaAnal : BlankGsaRecord { }
-
-  [GsaType(GwaKeyword.ANAL_STAGE, GwaSetCommandType.Set, true)]
-  public class GsaAnalStage : BlankGsaRecord { }
-
-  //Check when implementing: is LOAD_TASK truly a referenced keyword?
-  [GsaType(GwaKeyword.COMBINATION, GwaSetCommandType.Set, true, GwaKeyword.LOAD_TITLE, GwaKeyword.LOAD_TASK)]
-  public class GsaCombination : BlankGsaRecord { }
-
   [GsaType(GwaKeyword.GRID_LINE, GwaSetCommandType.Set, true, GwaKeyword.GRID_SURFACE, GwaKeyword.LOAD_TITLE)]
   public class GsaGridLine: BlankGsaRecord { }
 
@@ -65,9 +55,6 @@ namespace SpeckleStructuralGSA.Schema
 
   [GsaType(GwaKeyword.LOAD_2D_THERMAL, GwaSetCommandType.SetAt, true, GwaKeyword.LOAD_TITLE, GwaKeyword.EL, GwaKeyword.MEMB)]
   public class GsaLoad2dThermal : BlankGsaRecord { }
-
-  [GsaType(GwaKeyword.LOAD_GRAVITY, GwaSetCommandType.SetAt, true, GwaKeyword.LOAD_TITLE, GwaKeyword.EL, GwaKeyword.MEMB, GwaKeyword.NODE)]
-  public class GsaLoadGravity : BlankGsaRecord { }
 
   [GsaType(GwaKeyword.INF_BEAM, GwaSetCommandType.SetAt, true, false, true, GwaKeyword.AXIS, GwaKeyword.EL)]
   public class GsaInfBeam : BlankGsaRecord { }
