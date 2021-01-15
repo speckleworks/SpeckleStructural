@@ -5,8 +5,8 @@ using SpeckleGSAInterfaces;
 
 namespace SpeckleStructuralGSA.Schema
 {
-  //Check when implementing: is LOAD_TASK truly a referenced keyword?
-  [GsaType(GwaKeyword.COMBINATION, GwaSetCommandType.Set, true, GwaKeyword.LOAD_TITLE, GwaKeyword.LOAD_TASK)]
+  //Check when implementing: is TASK truly a referenced keyword?
+  [GsaType(GwaKeyword.COMBINATION, GwaSetCommandType.Set, true, GwaKeyword.LOAD_TITLE, GwaKeyword.TASK)]
   public class GsaCombination : GsaRecord
   {
     public string Name { get => name; set { name = value; } }

@@ -8,7 +8,7 @@ using SpeckleGSAInterfaces;
 namespace SpeckleStructuralGSA.Schema.Loading
 {
   //This needs review: seems to be a SET keyword but the index is of a load case, not a ANAL index
-  [GsaType(GwaKeyword.ANAL, GwaSetCommandType.Set, true, GwaKeyword.LOAD_TITLE, GwaKeyword.LOAD_TASK)]
+  [GsaType(GwaKeyword.ANAL, GwaSetCommandType.Set, true, GwaKeyword.LOAD_TITLE, GwaKeyword.TASK)]
   public class GsaAnal : GsaRecord
   {
     public string Name { get => name; set { name = value; } }

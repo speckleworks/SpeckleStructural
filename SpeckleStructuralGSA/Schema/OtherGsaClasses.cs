@@ -41,7 +41,7 @@ namespace SpeckleStructuralGSA.Schema
   [GsaType(GwaKeyword.PROP_SPR, GwaSetCommandType.Set, true, GwaKeyword.AXIS)]
   public class GsaPropSpr : BlankGsaRecord { }
 
-  [GsaType(GwaKeyword.USER_VEHICLE, GwaSetCommandType.Set, true, GwaKeyword.LOAD_TITLE, GwaKeyword.LOAD_TASK)]
+  [GsaType(GwaKeyword.USER_VEHICLE, GwaSetCommandType.Set, true, GwaKeyword.LOAD_TITLE, GwaKeyword.TASK)]
   public class GsaUserVehicle : BlankGsaRecord { }
 
   [GsaType(GwaKeyword.LOAD_GRID_POINT, GwaSetCommandType.SetAt, true, GwaKeyword.GRID_SURFACE, GwaKeyword.LOAD_TITLE, GwaKeyword.AXIS)]

@@ -63,8 +63,8 @@
     ALIGN,
     [StringValue("ANAL")]
     ANAL,
-    [StringValue("LOAD_TASK")]
-    LOAD_TASK,
+    [StringValue("TASK")]
+    TASK,
     [StringValue("ANAL_STAGE")]
     ANAL_STAGE,
     [StringValue("COMBINATION")]

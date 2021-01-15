@@ -48,14 +48,21 @@ namespace SpeckleStructuralGSA
         };
       }
     }
-
+    
     private readonly List<Type> schemaTypes = new List<Type>();  //ALL schema types, from both layers
     private readonly List<Type> oldSchemaTypes = new List<Type>();  //ALL old schema types, from both layers
-    private readonly Dictionary<GSATargetLayer, Dictionary<Type, GwaKeyword>> layerKeywordTypes 
-      = new Dictionary<GSATargetLayer, Dictionary<Type, GwaKeyword>>();
-    private readonly List<TypeDependencyData> typeDepData = new List<TypeDependencyData>();
+    //The reason for both layerKeywords and layerKeywordTypes existing is because not all keywords have types
+    private readonly Dictionary<GSATargetLayer, List<GwaKeyword>> layerKeywords;
 
-    public List<string> Keywords => layerKeywordTypes[Settings.TargetLayer].Values.Select(kw => kw.GetStringValue()).ToList();
+    //This dictionary should be independent of layer
+    private readonly Dictionary<GSATargetLayer, Dictionary<Type, GwaKeyword>> layerKeywordTypes;
+
+    //private readonly Dictionary<GwaKeyword, GwaKeyword[]> keywordDependencies; //ALL keywords, regardless of layer
+    private readonly List<TypeDependencyData> typeDepData = new List<TypeDependencyData>();
+    
+    public List<string> Keywords => layerKeywords[Settings.TargetLayer].Select(kw => kw.GetStringValue()).ToList();
+
+    
 
     public Initialiser()
     {
@@ -69,22 +76,25 @@ namespace SpeckleStructuralGSA
       var oldGsaInterface = typeof(IGSASpeckleContainer);
       oldSchemaTypes.AddRange(assemblyTypes.Where(t => oldGsaInterface.IsAssignableFrom(t) && !t.IsAbstract));
 
-      //First get all keywords of the layer - this is needed because the referenced keywords in the GsaType attribute of GsaRecord
-      //classes sometimes span both layers
-      layerKeywordTypes.Add(GSATargetLayer.Design, new Dictionary<Type, GwaKeyword>());
-      layerKeywordTypes.Add(GSATargetLayer.Analysis, new Dictionary<Type, GwaKeyword>());
-
-      foreach (var t in schemaTypes.Where(t => GsaRecord.IsSelfContained(t)))
+      //First get all keywords associated with implemented classes of the layer - this is needed because the referenced keywords 
+      //in the GsaType attribute of GsaRecord classes sometimes span both layers
+      layerKeywordTypes = new Dictionary<GSATargetLayer, Dictionary<Type, GwaKeyword>>
       {
-        if (MatchesLayer(t, GSATargetLayer.Design))
-        {
-          layerKeywordTypes[GSATargetLayer.Design].Add(t, GsaRecord.GetGwaKeyword(t));
-        }
-        if (MatchesLayer(t, GSATargetLayer.Analysis))
-        {
-          layerKeywordTypes[GSATargetLayer.Analysis].Add(t, GsaRecord.GetGwaKeyword(t));
-        }
-      }
+        { GSATargetLayer.Design, new Dictionary<Type, GwaKeyword>() },
+        { GSATargetLayer.Analysis, new Dictionary<Type, GwaKeyword>() }
+      };
+
+      //These aren't limited to whether these keywords are implemented in any classes as yet
+      layerKeywords  = new Dictionary<GSATargetLayer, List<GwaKeyword>>
+      { 
+        { GSATargetLayer.Design, new List<GwaKeyword>() },
+        { GSATargetLayer.Analysis, new List<GwaKeyword>() }
+      };
+
+      var relevantSchemaTypes = schemaTypes.Where(t => GsaRecord.IsSelfContained(t));
+
+      GenerateLayerKeywords(relevantSchemaTypes);
+      GenerateLayerKeywordTypes(relevantSchemaTypes);
     }
 
     public void Clear()
@@ -100,7 +110,8 @@ namespace SpeckleStructuralGSA
       {
         if (!typeDepData.Any(td => td.Direction == StreamDirection.Receive && td.Layer == Settings.TargetLayer))
         {
-          typeDepData.Add(new TypeDependencyData(StreamDirection.Receive, Settings.TargetLayer, TypeDependencies(StreamDirection.Receive)));
+          var typeDeps = TypeDependencies(StreamDirection.Receive);
+          typeDepData.Add(new TypeDependencyData(StreamDirection.Receive, Settings.TargetLayer, typeDeps));
         }
         return typeDepData.FirstOrDefault(td => td.Direction == StreamDirection.Receive && td.Layer == Settings.TargetLayer).Dependencies;
       }
@@ -112,10 +123,72 @@ namespace SpeckleStructuralGSA
       {
         if (!typeDepData.Any(td => td.Direction == StreamDirection.Send && td.Layer == Settings.TargetLayer))
         {
-          typeDepData.Add(new TypeDependencyData(StreamDirection.Send, Settings.TargetLayer, TypeDependencies(StreamDirection.Send)));
+          var typeDeps = TypeDependencies(StreamDirection.Send);
+          typeDepData.Add(new TypeDependencyData(StreamDirection.Send, Settings.TargetLayer, typeDeps));
         }
         return typeDepData.FirstOrDefault(td => td.Direction == StreamDirection.Send && td.Layer == Settings.TargetLayer).Dependencies;
       }
+    }
+
+    private void GenerateLayerKeywordTypes(IEnumerable<Type> relevantSchemaTypes)
+    {
+      foreach (var t in relevantSchemaTypes)
+      {
+        foreach (var layer in new[] { GSATargetLayer.Design, GSATargetLayer.Analysis })
+        {
+          if (MatchesLayer(t, layer))
+          {
+            layerKeywordTypes[layer].Add(t, GsaRecord.GetGwaKeyword(t));
+          }
+        }
+      }
+    }
+
+    private void GenerateLayerKeywords(IEnumerable<Type> relevantSchemaTypes)
+    {
+      //This dictionary should be independent of layer
+      var keywordDependencies = relevantSchemaTypes.ToDictionary(t => GsaRecord.GetGwaKeyword(t), t => GsaRecord.GetReferencedKeywords(t));
+
+      var implementedKwsByLayer = relevantSchemaTypes.ToDictionary(t => GsaRecord.GetGwaKeyword(t), t => TypeLayers(t));
+      foreach (var kw in keywordDependencies.Keys)
+      {
+        foreach (var layer in new[] { GSATargetLayer.Design, GSATargetLayer.Analysis })
+        {
+          if (implementedKwsByLayer[kw][layer])
+          {
+            if (!layerKeywords[layer].Contains(kw))
+            {
+              layerKeywords[layer].Add(kw);
+            }
+          }
+          if (keywordDependencies[kw] != null && keywordDependencies[kw].Length > 0)
+          {
+            foreach (var kwPrereq in keywordDependencies[kw])
+            {
+              //The attributes on the types are the container for knowing which layer a keyword is for.  For each referenced
+              //(i.e. prerequiste) keyword of a keyword, a corresponding type will need to be found in order to determine which
+              //layer that referenced keyword is on.
+              //However, at any point in time, there might not be a type created yet for that referenced keyword.  For these cases,
+              //assume that the referenced keyword is for both layers.
+
+              if (((implementedKwsByLayer.ContainsKey(kwPrereq) && implementedKwsByLayer[kwPrereq][layer]) || !implementedKwsByLayer.ContainsKey(kwPrereq)) 
+                && (!layerKeywords[layer].Contains(kwPrereq)))
+              {
+                layerKeywords[layer].Add(kwPrereq);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    private Dictionary<GSATargetLayer, bool> TypeLayers(Type t)
+    {
+      return new Dictionary<GSATargetLayer, bool> 
+      { 
+        { GSATargetLayer.Design, GsaRecord.IsDesignLayer(t) }, 
+        { GSATargetLayer.Analysis, GsaRecord.IsAnalysisLayer(t) } 
+      };
     }
 
     private Dictionary<Type, List<Type>> TypeDependencies(StreamDirection direction)
@@ -126,7 +199,8 @@ namespace SpeckleStructuralGSA
       var layerSchemaDict = layerKeywordTypes[Settings.TargetLayer];
       var layerSchemaTypes = layerSchemaDict.Keys;
       var layerSchemaKeywords = layerSchemaDict.Values;
-      var kwDependencies = layerSchemaTypes.ToDictionary(t => layerSchemaDict[t], t => GsaRecord.GetReferencedKeywords(t).Where(kw => layerSchemaKeywords.Contains(kw)).ToList());
+      var kwDependencies = layerSchemaTypes.ToDictionary(t => layerSchemaDict[t], 
+        t => GsaRecord.GetReferencedKeywords(t).Where(kw => layerSchemaKeywords.Contains(kw)).ToList());
 
       foreach (var oldT in oldSchemaTypes)
       {
@@ -200,5 +274,13 @@ namespace SpeckleStructuralGSA
         }
       }
     }
+  }
+
+  internal enum LayerCoverage
+  {
+    None,
+    Design,
+    Analysis,
+    Both
   }
 }
