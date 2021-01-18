@@ -20,7 +20,7 @@ namespace SpeckleStructuralGSA.Test
     [SetUp]
     public void BeforeEachTest()
     {
-      Initialiser.Settings = new Settings();
+      Initialiser.Instance.Settings = new MockSettings();
     }
 
     internal class UnmatchedData
@@ -54,9 +54,9 @@ namespace SpeckleStructuralGSA.Test
       gsaInterfacer = new GSAProxy();
       gsaCache = new GSACache();
 
-      Initialiser.Cache = gsaCache;
-      Initialiser.Interface = gsaInterfacer;
-      Initialiser.AppUI = new SpeckleAppUI();
+      Initialiser.Instance.Cache = gsaCache;
+      Initialiser.Instance.Interface = gsaInterfacer;
+      Initialiser.Instance.AppUI = new SpeckleAppUI();
       gsaInterfacer.NewFile(true);
 
       var dir = TestDataDirectory;
@@ -84,14 +84,14 @@ namespace SpeckleStructuralGSA.Test
       keywords.AddRange(analysisTypeHierarchy.SelectMany(i => i.Key.GetSubGSAKeyword()));
       keywords = keywords.Where(k => k.Length > 0).Select(k => Helper.RemoveVersionFromKeyword(k)).Distinct().ToList();
 
-      Initialiser.Interface.Sync(); // send GWA to GSA
+      Initialiser.Instance.Interface.Sync(); // send GWA to GSA
 
-      var retrievedGwa = Initialiser.Interface.GetGwaData(keywords, true); // read GWA from GSA
+      var retrievedGwa = Initialiser.Instance.Interface.GetGwaData(keywords, true); // read GWA from GSA
 
       var retrievedDict = new Dictionary<string, List<string>>();
       foreach (var gwa in retrievedGwa)
       {
-        Initialiser.Interface.ParseGeneralGwa(gwa.GwaWithoutSet, out string keyword, out _, out _, out _, out _, out _);
+        Initialiser.Instance.Interface.ParseGeneralGwa(gwa.GwaWithoutSet, out string keyword, out _, out _, out _, out _, out _);
         if (!retrievedDict.ContainsKey(keyword))
         {
           retrievedDict.Add(keyword, new List<string>());
@@ -102,7 +102,7 @@ namespace SpeckleStructuralGSA.Test
       var fromFileDict = new Dictionary<string, List<string>>();
       foreach (var r in gwaRecordsFromFile)
       {
-        Initialiser.Interface.ParseGeneralGwa(r.GwaCommand, out string keyword, out _, out _, out _, out string gwaWithoutSet, out _);
+        Initialiser.Instance.Interface.ParseGeneralGwa(r.GwaCommand, out string keyword, out _, out _, out _, out string gwaWithoutSet, out _);
         if (!fromFileDict.ContainsKey(keyword))
         {
           fromFileDict.Add(keyword, new List<string>());
@@ -110,7 +110,7 @@ namespace SpeckleStructuralGSA.Test
         fromFileDict[keyword].Add(gwaWithoutSet);
       }
 
-      Initialiser.Interface.Close();
+      Initialiser.Instance.Interface.Close();
 
       var unmatching = new Dictionary<string, UnmatchedData>();
       foreach (var keyword in fromFileDict.Keys)

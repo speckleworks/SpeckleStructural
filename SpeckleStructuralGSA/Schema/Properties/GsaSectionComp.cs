@@ -8,7 +8,7 @@ namespace SpeckleStructuralGSA.Schema
 {
   //The term "section component" here is a name applied to both the group as a whole as well as one member of the group, 
   //but the latter is shortened to SectionComp to distinguish them here
-  [GsaType(GwaKeyword.SECTION_COMP, GwaSetCommandType.Set, false, StreamBucket.Model, true, true)]
+  [GsaType(GwaKeyword.SECTION_COMP, GwaSetCommandType.Set, false, true, true)]
   public class SectionComp : GsaSectionComponentBase
   {
     public string Name { get => name; set { name = value; } }
@@ -295,12 +295,12 @@ namespace SpeckleStructuralGSA.Schema
 
     public override bool FromDesc(string desc)
     {
-      throw new NotImplementedException();
+      return true;
     }
 
     public override string ToDesc()
     {
-      throw new NotImplementedException();
+      return "";
     }
   }
 
@@ -313,12 +313,12 @@ namespace SpeckleStructuralGSA.Schema
 
     public override bool FromDesc(string desc)
     {
-      throw new NotImplementedException();
+      return true;
     }
 
     public override string ToDesc()
     {
-      throw new NotImplementedException();
+      return "";
     }
   }
 

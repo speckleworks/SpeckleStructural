@@ -47,7 +47,8 @@ namespace SpeckleStructuralGSA.SchemaConversion
     {
       var bp = axis.basePlane;
       var zeroVector = new double[3] { 0, 0, 0 };
-      return (bp.Xdir.Value.SequenceEqual(zeroVector) && bp.Ydir.Value.SequenceEqual(zeroVector));
+      return ((bp.Xdir == null && bp.Ydir == null) 
+        || (bp.Xdir.Value.SequenceEqual(zeroVector) && bp.Ydir.Value.SequenceEqual(zeroVector)));
     }
 
     public static string GridExpansionToString(GridExpansion expansion)
@@ -108,7 +109,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
     {
       //Convert all raw GWA into GSA schema objects
       var keyword = typeof(T).GetGSAKeyword().Split('.').First();
-      var newLines = Initialiser.Cache.GetGwaToSerialise(keyword);
+      var newLines = Initialiser.Instance.Cache.GetGwaToSerialise(keyword);
       var schemaObjs = new List<U>();
       foreach (var index in newLines.Keys)
       {
@@ -117,7 +118,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
         if (!obj.FromGwa(newLines[index]))
         {
-          Initialiser.AppUI.Message(typeof(U).Name + ": Unable to parse GWA", index.ToString());
+          Initialiser.Instance.AppUI.Message(typeof(U).Name + ": Unable to parse GWA", index.ToString());
         }
         schemaObjs.Add((U)obj);
       }
@@ -127,7 +128,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
     public static List<U> GetAllFromCache<T, U>() where U : GsaRecord  //T = old type, U = new schema type
     {
       //Convert all raw GWA into GSA schema objects
-      Initialiser.Cache.GetKeywordRecordsSummary(typeof(T).GetGSAKeyword(), out var gwa, out var indices, out var appIds);
+      Initialiser.Instance.Cache.GetKeywordRecordsSummary(typeof(T).GetGSAKeyword(), out var gwa, out var indices, out var appIds);
       var schemaObjs = new List<U>();
       for (var i = 0; i < gwa.Count(); i++)
       {
@@ -138,7 +139,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
         if (!obj.FromGwa(gwa[i]))
         {
-          Initialiser.AppUI.Message(typeof(U).Name + ": Unable to parse GWA", index.ToString());
+          Initialiser.Instance.AppUI.Message(typeof(U).Name + ": Unable to parse GWA", index.ToString());
         }
         schemaObjs.Add((U)obj);
       }

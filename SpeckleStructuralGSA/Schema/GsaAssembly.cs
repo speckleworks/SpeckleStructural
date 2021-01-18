@@ -5,7 +5,7 @@ using SpeckleGSAInterfaces;
 
 namespace SpeckleStructuralGSA.Schema
 {
-  [GsaType(GwaKeyword.ASSEMBLY, GwaSetCommandType.Set, true, StreamBucket.Model, GwaKeyword.NODE, GwaKeyword.MEMB, GwaKeyword.EL, GwaKeyword.GRID_PLANE)]
+  [GsaType(GwaKeyword.ASSEMBLY, GwaSetCommandType.Set, true, GwaKeyword.NODE, GwaKeyword.MEMB, GwaKeyword.EL, GwaKeyword.GRID_PLANE)]
   public class GsaAssembly : GsaRecord
   {
     public string Name { get => name; set { name = value; } }
@@ -73,7 +73,7 @@ namespace SpeckleStructuralGSA.Schema
       {
         return "ELEMENT";
       }
-      else if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
+      else if (Initialiser.Instance.Settings.TargetLayer == GSATargetLayer.Design)
       {
         return "MEMBER";
       }
@@ -88,7 +88,7 @@ namespace SpeckleStructuralGSA.Schema
       //The old mechanism of using "G_" in the entities field to signify members is understood to be superseded by the inclusion of the entity type
       //parameter as of version 3.
 
-      var allIndices = Initialiser.Cache.LookupIndices(Type == GSAEntity.MEMBER ? GetKeyword<GsaMemb>() : GetKeyword<GsaEl>())
+      var allIndices = Initialiser.Instance.Cache.LookupIndices(Type == GSAEntity.MEMBER ? GetKeyword<GsaMemb>() : GetKeyword<GsaEl>())
         .Where(i => i.HasValue).Select(i => i.Value).Distinct().OrderBy(i => i).ToList();
 
       if (Entities.Distinct().OrderBy(i => i).SequenceEqual(allIndices))
@@ -151,11 +151,11 @@ namespace SpeckleStructuralGSA.Schema
     {
       //Since there is no way in the GSA COM API to resolve list specification ("1 2 to 8" etc) of grid surfaces, the cache needs to be used
       var gridPlaneKw = GetKeyword<GsaGridPlane>();
-      var allGridPlaneIndices = Initialiser.Cache.LookupIndices(gridPlaneKw).Where(i => i.HasValue).Select(i => i.Value).ToList();
+      var allGridPlaneIndices = Initialiser.Instance.Cache.LookupIndices(gridPlaneKw).Where(i => i.HasValue).Select(i => i.Value).ToList();
       var storeyIndices = new List<int>();
       foreach (var i in allGridPlaneIndices)
       {
-        var planeGwas = Initialiser.Cache.GetGwa(gridPlaneKw, i);
+        var planeGwas = Initialiser.Instance.Cache.GetGwa(gridPlaneKw, i);
         if (planeGwas != null && planeGwas.Count() > 0)
         {
           var gsaGridPlane = new GsaGridPlane();
@@ -190,13 +190,13 @@ namespace SpeckleStructuralGSA.Schema
 
     private bool AddEntities(string v)
     {
-      Entities = Initialiser.Interface.ConvertGSAList(v.Replace("G", ""), Type).ToList();
+      Entities = Initialiser.Instance.Interface.ConvertGSAList(v.Replace("G", ""), Type).ToList();
       return Entities != null;
     }
 
     private bool AddIntTopo(string v)
     {
-      var nodeIndices = Initialiser.Interface.ConvertGSAList(v, GSAEntity.NODE);
+      var nodeIndices = Initialiser.Instance.Interface.ConvertGSAList(v, GSAEntity.NODE);
       IntTopo = nodeIndices.ToList();
       return true;
     }

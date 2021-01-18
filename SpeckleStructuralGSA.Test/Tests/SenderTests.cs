@@ -32,10 +32,10 @@ namespace SpeckleStructuralGSA.Test
       gsaInterfacer = new GSAProxy();
       gsaCache = new GSACache();
 
-      Initialiser.Cache = gsaCache;
-      Initialiser.Interface = gsaInterfacer;
-      Initialiser.Settings = new Settings();
-      Initialiser.AppUI = new SpeckleAppUI();
+      Initialiser.Instance.Cache = gsaCache;
+      Initialiser.Instance.Interface = gsaInterfacer;
+      Initialiser.Instance.Settings = new MockSettings();
+      Initialiser.Instance.AppUI = new SpeckleAppUI();
     }
 
     [TestCase("TxSpeckleObjectsDesignLayer.json", GSATargetLayer.Design, false, true, gsaFileNameWithResults)]

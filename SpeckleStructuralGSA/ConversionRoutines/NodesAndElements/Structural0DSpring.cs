@@ -9,14 +9,9 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("EL.4", new string[] { "NODE.3" }, "model", true, false, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode), typeof(GSA1DProperty) })]
-  public class GSA0DSpring : IGSASpeckleContainer
+  public class GSA0DSpring : GSABase<Structural0DSpring>
   {
     public int Member;
-
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural0DSpring();
 
     //Sending
     public void ParseGWACommand(List<GSANode> nodes)
@@ -31,7 +26,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural0DSpring();
 
-      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
+      var pieces = this.GWACommand.ListSplit(Initialiser.Instance.Interface.GwaDelimiter);
 
       var counter = 1; // Skip identifier
 
@@ -80,12 +75,12 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA0DSpring).GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(keyword, spring.ApplicationId);
+      var index = Initialiser.Instance.Cache.ResolveIndex(keyword, spring.ApplicationId);
 
       var propKeyword = typeof(GSASpringProperty).GetGSAKeyword();
-      var indexResult = Initialiser.Cache.LookupIndex(propKeyword, spring.PropertyRef);
+      var indexResult = Initialiser.Instance.Cache.LookupIndex(propKeyword, spring.PropertyRef);
       //If the reference can't be found, then reserve a new index so that it at least doesn't point to any other existing record
-      var propRef = indexResult ?? Initialiser.Cache.ResolveIndex(propKeyword, spring.PropertyRef);
+      var propRef = indexResult ?? Initialiser.Instance.Cache.ResolveIndex(propKeyword, spring.PropertyRef);
       if (indexResult == null && spring.ApplicationId != null)
       {
         if (spring.PropertyRef == null)
@@ -115,7 +110,7 @@ namespace SpeckleStructuralGSA
       //Topology
       for (var i = 0; i < spring.Value.Count(); i += 3)
       {
-        ls.Add(Helper.NodeAt(spring.Value[i], spring.Value[i + 1], spring.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString());
+        ls.Add(Initialiser.Instance.Interface.NodeAt(spring.Value[i], spring.Value[i + 1], spring.Value[i + 2], Initialiser.Instance.Settings.CoincidentNodeAllowance).ToString());
       }
 
       ls.Add("0"); // Orientation Node
@@ -131,7 +126,7 @@ namespace SpeckleStructuralGSA
 
       ls.Add((spring.Dummy.HasValue && spring.Dummy.Value) ? "DUMMY" : "");
 
-      return (string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
+      return (string.Join(Initialiser.Instance.Interface.GwaDelimiter.ToString(), ls));
     }
   }
 
@@ -139,8 +134,8 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this Structural0DSpring spring)
     {
-      var group = Initialiser.Cache.ResolveIndex(typeof(GSA0DSpring).GetGSAKeyword(), spring.ApplicationId);
-      return new GSA0DSpring() { Value = spring }.SetGWACommand(Initialiser.Interface, group);
+      var group = Initialiser.Instance.Cache.ResolveIndex(typeof(GSA0DSpring).GetGSAKeyword(), spring.ApplicationId);
+      return new GSA0DSpring() { Value = spring }.SetGWACommand(Initialiser.Instance.Interface, group);
     }
 
     //Sending to Speckle, search through a
@@ -162,11 +157,11 @@ namespace SpeckleStructuralGSA
       var springsLock = new object();
       var springs = new List<GSA0DSpring>();
 
-      var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
+      var nodes = Initialiser.Instance.GSASenderObjects.Get<GSANode>();
 
-      Parallel.ForEach(newLines.Select(nl => nl.Item2), p =>
+      foreach (var p in newLines.Select(nl => nl.Item2))
       {
-        var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
+        var pPieces = p.ListSplit(Initialiser.Instance.Interface.GwaDelimiter);
         if (pPieces[4] == "GRD_SPRING")
         {
           var gsaId = pPieces[1];
@@ -181,12 +176,12 @@ namespace SpeckleStructuralGSA
           }
           catch (Exception ex)
           {
-            Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+            Initialiser.Instance.AppUI.Message(typeName + ": " + ex.Message, gsaId);
           }
         }
-      });
+      }
 
-      Initialiser.GSASenderObjects.AddRange(springs);
+      Initialiser.Instance.GSASenderObjects.AddRange(springs);
 
       return (springs.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

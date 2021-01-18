@@ -122,7 +122,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConversionRoutines\Conversions.cs" />
-    <Compile Include="ConversionRoutines\GSAGridPlaneBase.cs" />
+    <Compile Include="ConversionRoutines\GSABase.cs" />
+    <Compile Include="ConversionRoutines\IGSAContainer.cs" />
     <Compile Include="ConversionRoutines\Loads\Structural0DLoad.cs" />
     <Compile Include="ConversionRoutines\Loads\Structural0DLoadPoint.cs" />
     <Compile Include="ConversionRoutines\Loads\Structural1DLoad.cs" />
@@ -155,6 +156,7 @@
     <Compile Include="ConversionRoutines\NodesAndElements\Structural2DVoid.cs" />
     <Compile Include="ConversionRoutines\NodesAndElements\StructuralNode.cs" />
     <Compile Include="ConversionRoutines\Properties\Structural1DProperty.cs" />
+    <Compile Include="ConversionRoutines\Properties\Structural1DPropertyExplicit.cs" />
     <Compile Include="ConversionRoutines\Properties\Structural2DProperty.cs" />
     <Compile Include="ConversionRoutines\Properties\StructuralMaterialConcrete.cs" />
     <Compile Include="ConversionRoutines\Properties\StructuralMaterialSteel.cs" />
@@ -184,18 +186,25 @@
     <Compile Include="SchemaConversion\ToNative\Loads\StructuralLoadCaseToNative.cs" />
     <Compile Include="SchemaConversion\ToNative\Loads\StructuralLoadPlaneToNative.cs" />
     <Compile Include="SchemaConversion\ToNative\Miscellaneous\StructuralStoreyToNative.cs" />
+    <Compile Include="SchemaConversion\ToSpeckle\Properties\GsaSectionToSpeckle.cs" />
+    <Compile Include="Schema\AnalysisStages\GsaAnalStage.cs" />
     <Compile Include="Schema\Enums.cs" />
     <Compile Include="Schema\Geometry\GsaGridPlane.cs" />
     <Compile Include="Schema\Geometry\GsaGridSurface.cs" />
     <Compile Include="Schema\GsaAssembly.cs" />
     <Compile Include="Schema\GsaEl.cs" />
     <Compile Include="Schema\GsaMemb.cs" />
+    <Compile Include="Schema\Loading\GsaAnal.cs" />
+    <Compile Include="Schema\Loading\GsaCombination.cs" />
+    <Compile Include="Schema\Loading\GsaLoad2dThermal.cs" />
     <Compile Include="Schema\Loading\GsaLoadBeam.cs" />
+    <Compile Include="Schema\Loading\GsaLoadGravity.cs" />
     <Compile Include="Schema\Loading\GsaLoadGridArea.cs" />
     <Compile Include="Schema\Loading\GsaLoadNode.cs" />
     <Compile Include="GSASenderDictionary.cs" />
     <Compile Include="Helper.cs" />
-    <Compile Include="Initialiser.cs" />
+    <Compile Include="Schema\OtherGsaClasses.cs" />
+    <Compile Include="Static\Initialiser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Schema\Geometry\GsaAxis.cs" />
     <Compile Include="Schema\Loading\GsaLoadCase.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using SpeckleCore;
@@ -9,13 +10,8 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("MAT_STEEL.3", new string[] { }, "model", true, true, new Type[] { }, new Type[] { })]
-  public class GSAMaterialSteel : IGSASpeckleContainer
+  public class GSAMaterialSteel : GSABase<StructuralMaterialSteel>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralMaterialSteel();
-
     public void ParseGWACommand()
     {
       if (this.GWACommand == null)
@@ -23,7 +19,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralMaterialSteel();
 
-      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
+      var pieces = this.GWACommand.ListSplit(Initialiser.Instance.Interface.GwaDelimiter);
 
       var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
@@ -69,7 +65,7 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSAMaterialSteel).GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(typeof(GSAMaterialSteel).GetGSAKeyword(), mat.ApplicationId);
+      var index = Initialiser.Instance.Cache.ResolveIndex(typeof(GSAMaterialSteel).GetGSAKeyword(), mat.ApplicationId);
 
       // TODO: This function barely works.
       var ls = new List<string>
@@ -133,7 +129,7 @@ namespace SpeckleStructuralGSA
         "0" // Hardening modulus
       };
 
-      return (string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
+      return (string.Join(Initialiser.Instance.Interface.GwaDelimiter.ToString(), ls));
     }
   }
 
@@ -149,30 +145,30 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSAMaterialSteel>();
       var typeName = dummyObject.GetType().Name;
       var materialsLock = new object();
-      var materials = new List<GSAMaterialSteel>();
+      var materials = new SortedDictionary<int, GSAMaterialSteel>();
 
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
       {
-        var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
+        var pPieces = newLines[k].ListSplit(Initialiser.Instance.Interface.GwaDelimiter);
         var gsaId = pPieces[1];
         try
         {
-          var mat = new GSAMaterialSteel() { GWACommand = p };
+          var mat = new GSAMaterialSteel() { GWACommand = newLines[k] };
           mat.ParseGWACommand();
           lock (materialsLock)
           {
-            materials.Add(mat);
+            materials.Add(k, mat);
           }
         }
         catch (Exception ex)
         {
-          Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+          Initialiser.Instance.AppUI.Message(typeName + ": " + ex.Message, gsaId);
         }
       });
 
-      Initialiser.GSASenderObjects.AddRange(materials);
+      Initialiser.Instance.GSASenderObjects.AddRange(materials.Values.ToList());
 
-      return (materials.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (materials.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

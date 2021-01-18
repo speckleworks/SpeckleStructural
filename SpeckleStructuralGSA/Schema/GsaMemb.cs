@@ -5,7 +5,8 @@ using SpeckleGSAInterfaces;
 
 namespace SpeckleStructuralGSA.Schema
 {
-  [GsaType(GwaKeyword.MEMB, GwaSetCommandType.Set, true, StreamBucket.Model, true, false)]
+  [GsaType(GwaKeyword.MEMB, GwaSetCommandType.Set, true, true, false, 
+    GwaKeyword.PROP_SPR, GwaKeyword.SECTION, GwaKeyword.PROP_2D, GwaKeyword.PROP_MASS)]
   public class GsaMemb : GsaRecord
   {
     //Not supporting: 3D members, or 2D reinforcement
@@ -101,7 +102,7 @@ namespace SpeckleStructuralGSA.Schema
       //MEMB.8 | num | name | colour | type (3D) | prop | group | topology | node | angle | mesh_size | is_intersector | analysis_type | fire | time[4] | dummy |
 
       //Process enough to determine the type of member it is (i.e 1D, 2D or 3D)
-      if (!FromGwaByFuncs(items, out remainingItems, AddName, AddColour, (v) => v.TryParseStringValue(out Type)) || Type == MemberType.Generic3d)
+      if (!FromGwaByFuncs(items, out remainingItems, AddName, (v) => AddColour(v, out Colour), (v) => v.TryParseStringValue(out Type)) || Type == MemberType.Generic3d)
       {
         return false;
       }
@@ -316,15 +317,6 @@ namespace SpeckleStructuralGSA.Schema
     #endregion
 
     #region from_gwa_fns
-
-    private bool AddColour(string v)
-    {
-      if (!Enum.TryParse(v, true, out Colour))
-      {
-        Colour = Colour.NO_RGB;
-      }
-      return true;
-    }
 
     private bool AddTopology(string v)
     {

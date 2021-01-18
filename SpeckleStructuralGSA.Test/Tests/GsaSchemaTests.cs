@@ -12,6 +12,7 @@ using SpeckleStructuralGSA.Schema;
 using SpeckleStructuralGSA.SchemaConversion;
 using SpeckleCoreGeometryClasses;
 using DeepEqual.Syntax;
+using SpeckleCore;
 
 namespace SpeckleStructuralGSA.Test
 {
@@ -41,11 +42,11 @@ namespace SpeckleStructuralGSA.Test
       mockGSAObject.SetupGet(x => x.GwaDelimiter).Returns(GSAProxy.GwaDelimiter);
       mockGSAObject.Setup(x => x.GetUnits()).Returns("m");
 
-      Initialiser.Cache = new GSACache();
-      Initialiser.Interface = mockGSAObject.Object;
-      Initialiser.AppUI = new SpeckleAppUI();
-      Initialiser.GSASenderObjects.Clear();
-      Initialiser.Settings = new Settings
+      Initialiser.Instance.Cache = new GSACache();
+      Initialiser.Instance.Interface = mockGSAObject.Object;
+      Initialiser.Instance.AppUI = new SpeckleAppUI();
+      Initialiser.Instance.GSASenderObjects.Clear();
+      Initialiser.Instance.Settings = new MockSettings
       {
         Units = "m"
       };
@@ -60,7 +61,7 @@ namespace SpeckleStructuralGSA.Test
       SchemaConversion.StructuralLoadCaseToNative.ToNative(load1);
       SchemaConversion.StructuralLoadCaseToNative.ToNative(load2);
 
-      var gwa = Initialiser.Cache.GetGwa(GsaRecord.GetKeyword<GsaLoadCase>());
+      var gwa = Initialiser.Instance.Cache.GetGwa(GsaRecord.GetKeyword<GsaLoadCase>());
       Assert.AreEqual(2, gwa.Count());
       Assert.False(gwa.Any(g => string.IsNullOrEmpty(g)));
 
@@ -98,11 +99,11 @@ namespace SpeckleStructuralGSA.Test
       StructuralAssemblyToNative.ToNative(assembly1);
       StructuralAssemblyToNative.ToNative(assembly2);
 
-      var gwa = Initialiser.Cache.GetGwa(GsaRecord.GetKeyword<GsaAssembly>());
+      var gwa = Initialiser.Instance.Cache.GetGwa(GsaRecord.GetKeyword<GsaAssembly>());
       Assert.AreEqual(2, gwa.Count());
       Assert.False(gwa.Any(g => string.IsNullOrEmpty(g)));
 
-      Assert.IsTrue(ModelValidation(gwa, new Dictionary<string, int> { { GsaRecord.GetKeyword<GsaAssembly>(), 2 } }, out var mismatchByKw, visible: true));
+      Assert.IsTrue(ModelValidation(gwa, new Dictionary<string, int> { { GsaRecord.GetKeyword<GsaAssembly>(), 2 } }, out var mismatchByKw));
       Assert.Zero(mismatchByKw.Keys.Count());
 
       var gsaAssembly1 = new GsaAssembly();
@@ -229,7 +230,7 @@ namespace SpeckleStructuralGSA.Test
       var load2dPanelWithPlane2 = new Structural2DLoadPanel(polylineCoords, loading, "LcDead", "loadpanel3") { LoadPlaneRef = "lp2" };
       SchemaConversion.Structural2DLoadPanelToNative.ToNative(load2dPanelWithPlane2);
 
-      var allGwa = ((IGSACache)Initialiser.Cache).GetCurrentGwa();
+      var allGwa = ((IGSACache)Initialiser.Instance.Cache).GetCurrentGwa();
 
       //Try all the entities' GWA commands to check if the 
       Assert.IsTrue(ModelValidation(allGwa,
@@ -240,9 +241,9 @@ namespace SpeckleStructuralGSA.Test
           { GsaRecord.GetKeyword<GsaGridSurface>(), 3 },
           { GsaRecord.GetKeyword<GsaLoadGridArea>(), 6 }
         },
-        out var mismatchByKw, visible: true));
+        out var mismatchByKw));
       Assert.Zero(mismatchByKw.Keys.Count());
-      Assert.Zero(((SpeckleAppUI)Initialiser.AppUI).GroupMessages().Count());
+      Assert.Zero(((SpeckleAppUI)Initialiser.Instance.AppUI).GroupMessages().Count());
     }
     
     [Test]
@@ -266,7 +267,7 @@ namespace SpeckleStructuralGSA.Test
       };
       SchemaConversion.Structural2DLoadPanelToNative.ToNative(loadPanel).Split('\n');
 
-      var LoadPanelGwa = ((IGSACache)Initialiser.Cache).GetCurrentGwa();
+      var LoadPanelGwa = ((IGSACache)Initialiser.Instance.Cache).GetCurrentGwa();
       Assert.AreEqual(5, LoadPanelGwa.Count()); //should be a load case, axis, plane, surface and a load panel
 
       var gsaLoadCase = new GsaLoadCase() { ApplicationId = loadCaseAppId, CaseType = StructuralLoadCaseType.Dead, Index = 1 };
@@ -279,33 +280,51 @@ namespace SpeckleStructuralGSA.Test
     }
 
     [Test]
-    public void Structural1DPropertyExplicitToNative()
+    public void Structural1DPropertyExplicit()
     {
       var steel = new StructuralMaterialSteel(200000, 76923.0769, 0.3, 7850, 0.000012, 300, 440, 0.05, "steel");
       var concrete = new StructuralMaterialConcrete(29910.2016, 12462.584, 0.2, 2400, 0.00001, 12.8, 0.003, 0.02, "conc");
 
       var gwaSteel = steel.ToNative();
       var gwaConcrete = concrete.ToNative();
+      var gwaPropNonExp = "SET\tSECTION.7:{speckle_app_id:columnProp}\t1\tNO_RGB\tColumn property\t1D_GENERIC\t0\tCENTROID\t0\t0\t0\t1\t0\t0\t0\t0\t1\tSECTION_COMP.4\t\t0\tCONCRETE\t1\tGEO P(m) M(-0.836|-1.141) L(-3.799|3.396) L(1.71|0.992) L(0.931|-0.92) M(-1.881|1.512) L(-0.247|1.195) L(-0.431|-0.418) M(1.313|0.588) L(1.098|0.683) L(1.115|0.273) L(1.24|0.259)\t0\t0\t0\tNONE\t0\tNONE\t0\tSECTION_CONC.6\t1\tNO_SLAB\t89.99999998\t0.025\t0\tSECTION_LINK.3\t0\t0\tDISCRETE\tRECT\t1\t0\t0\t0\t1\t0\tNO\tNO\t\tSECTION_COVER.3\tUNIFORM\t0\t0\tNO_SMEAR\tSECTION_TMPL.4\tUNDEF\t0\t0\t0\t0\t0\t0\tNO_ENVIRON";
       Helper.GwaToCache(gwaSteel, streamId1);
       Helper.GwaToCache(gwaConcrete, streamId1);
+      Helper.GwaToCache(gwaPropNonExp, streamId1);
 
       var propExp1 = new Structural1DPropertyExplicit() { ApplicationId = "propexp1", Name = "PropExp1", MaterialRef = "steel", Area = 11, Iyy = 21, Izz = 31, J = 41, Ky = 51, Kz = 61 };
       var propExp2 = new Structural1DPropertyExplicit() { ApplicationId = "propexp2", Name = "PropExp2", MaterialRef = "conc", Area = 12, Iyy = 22, Izz = 32, J = 42, Ky = 52, Kz = 62 };
       var propExp3 = new Structural1DPropertyExplicit() { ApplicationId = "propexp3", Name = "PropExp3", Area = 13, Iyy = 23, Izz = 33, J = 43, Ky = 53, Kz = 63 };
 
-      SchemaConversion.Structural1DPropertyExplicitToNative.ToNative(propExp1);
-      SchemaConversion.Structural1DPropertyExplicitToNative.ToNative(propExp2);
-      SchemaConversion.Structural1DPropertyExplicitToNative.ToNative(propExp3);
+      Structural1DPropertyExplicitToNative.ToNative(propExp1);
+      Structural1DPropertyExplicitToNative.ToNative(propExp2);
+      Structural1DPropertyExplicitToNative.ToNative(propExp3);
 
-      var allGwa = ((IGSACache)Initialiser.Cache).GetNewGwaSetCommands();
+      var allGwa = ((IGSACache)Initialiser.Instance.Cache).GetNewGwaSetCommands();
       var expectedCountByKw = new Dictionary<string, int>()
       {
         { "MAT_STEEL", 1},
         { "MAT_CONCRETE", 1 },
-        { "SECTION", 3 }
+        { "SECTION", 4 }
       };
-      Assert.IsTrue(ModelValidation(allGwa, expectedCountByKw, out var mismatchByKw, false, true));
+      Assert.IsTrue(ModelValidation(allGwa, expectedCountByKw, out var mismatchByKw, false));
       Assert.AreEqual(0, mismatchByKw.Keys.Count());
+
+      //Check all the FromGwa commands - this includes the non-EXP one since the keyword for GSA1DPropertyExplicit is the same as for other 1D properties
+      var gsaSections = SchemaConversion.Helper.GetNewFromCache<GSA1DPropertyExplicit, GsaSection>();
+      Assert.AreEqual(4, gsaSections.Count());
+
+      (new GSAMaterialConcrete()).ToSpeckle();
+      (new GSAMaterialSteel()).ToSpeckle();
+
+      var dummy = new GsaSection();
+      GsaSectionToSpeckle.ToSpeckle(dummy);
+
+      var newPropExps = Initialiser.Instance.GSASenderObjects.Get<GSA1DPropertyExplicit>();
+
+      newPropExps[0].SpeckleObject.ShouldDeepEqual(propExp1);
+      newPropExps[1].SpeckleObject.ShouldDeepEqual(propExp2);
+      newPropExps[2].SpeckleObject.ShouldDeepEqual(propExp3);
     }
 
     //Both ToNative and ToSpeckle
@@ -333,7 +352,7 @@ namespace SpeckleStructuralGSA.Test
       };
       Structural0DLoadToNative.ToNative(receivedObj);
 
-      ((IGSACache)Initialiser.Cache).Snapshot(streamId1);
+      ((IGSACache)Initialiser.Instance.Cache).Snapshot(streamId1);
 
       //PREREQUISITES/REFERENCES - CONVERT TO SPECKLE
 
@@ -344,10 +363,11 @@ namespace SpeckleStructuralGSA.Test
 
       Conversions.ToSpeckle(new GSA0DLoad());
 
-      var sentObjectsDict = Initialiser.GSASenderObjects.GetAll();
+      var sentObjectsDict = Initialiser.Instance.GSASenderObjects.GetAll();
       Assert.IsTrue(sentObjectsDict.ContainsKey(typeof(GSA0DLoad)));
 
-      var sentObjs = sentObjectsDict[typeof(GSA0DLoad)].Select(o => ((IGSASpeckleContainer)o).Value).Cast<Structural0DLoad>().ToList();
+      var gsaLoadNodes = sentObjectsDict[typeof(GSA0DLoad)];
+      var sentObjs = gsaLoadNodes.Select(o => ((IGSAContainer<Structural0DLoad>)o).Value).Cast<Structural0DLoad>().ToList();
       Assert.AreEqual(1, sentObjs.Count());
       Assert.IsTrue(sentObjs.First().Loading.Value.SequenceEqual(loading));
     }
@@ -356,7 +376,7 @@ namespace SpeckleStructuralGSA.Test
     [TestCase(GSATargetLayer.Analysis)]
     public void Structural1DLoad(GSATargetLayer layer)
     {
-      Initialiser.Settings.TargetLayer = layer;
+      Initialiser.Instance.Settings.TargetLayer = layer;
 
       var loadCase = new StructuralLoadCase()
       {
@@ -426,17 +446,17 @@ namespace SpeckleStructuralGSA.Test
       };
 
       Structural1DLoadToNative.ToNative(load);
-      var allGwa = ((IGSACache)Initialiser.Cache).GetNewGwaSetCommands();
+      var allGwa = ((IGSACache)Initialiser.Instance.Cache).GetNewGwaSetCommands();
 
-      ((IGSACache)Initialiser.Cache).Snapshot(streamId1);
+      ((IGSACache)Initialiser.Instance.Cache).Snapshot(streamId1);
 
       var entityKeyword = (layer == GSATargetLayer.Design) ? GsaRecord.GetKeyword<GsaMemb>() : GsaRecord.GetKeyword<GsaEl>();
       var loadBeamKeyword = GsaRecord.GetKeyword<GsaLoadBeam>();
-      Assert.IsTrue(Initialiser.Cache.GetKeywordRecordsSummary(entityKeyword, out var gwaEntities, out var _, out var _));
+      Assert.IsTrue(Initialiser.Instance.Cache.GetKeywordRecordsSummary(entityKeyword, out var gwaEntities, out var _, out var _));
       Assert.AreEqual(3, gwaEntities.Count());
-      Assert.IsTrue(Initialiser.Cache.GetKeywordRecordsSummary(typeof(GSA1DProperty).GetGSAKeyword(), out var gwa1dProp, out var _, out var _));
+      Assert.IsTrue(Initialiser.Instance.Cache.GetKeywordRecordsSummary(typeof(GSA1DProperty).GetGSAKeyword(), out var gwa1dProp, out var _, out var _));
       Assert.AreEqual(1, gwa1dProp.Count());
-      Assert.IsTrue(Initialiser.Cache.GetKeywordRecordsSummary(loadBeamKeyword, out var gwaLoadBeam, out var _, out var _));
+      Assert.IsTrue(Initialiser.Instance.Cache.GetKeywordRecordsSummary(loadBeamKeyword, out var gwaLoadBeam, out var _, out var _));
       Assert.AreEqual(1, gwaLoadBeam.Count());
 
       var expectedCountByKw = new Dictionary<string, int>()
@@ -445,7 +465,7 @@ namespace SpeckleStructuralGSA.Test
         { "SECTION", 1 }, //PROP_SEC is written but SECTION is returned by GSA
         { entityKeyword, 3 } 
       };
-      Assert.IsTrue(ModelValidation(allGwa, expectedCountByKw, out var mismatchByKw, false, true));
+      Assert.IsTrue(ModelValidation(allGwa, expectedCountByKw, out var mismatchByKw, false));
       Assert.AreEqual(0, mismatchByKw.Keys.Count());
     }
 
@@ -470,7 +490,7 @@ namespace SpeckleStructuralGSA.Test
       var load8 = new GsaLoadNode() { Index = 8, NodeIndices = new List<int> { 1 }, LoadCaseIndex = 2, GlobalAxis = true, LoadDirection = AxisDirection6.Z, Value = -10 };  //Test global without application ID
 
       Assert.IsTrue(ExtractAndValidateGwa(new GsaRecord[] { loadCase1, loadCase2, node1, node2, axis1, axis2, load1, load2, load3, load4, load5, load6, load7, load8 }, 
-        out var gwaCommands, out var mismatchByKw, visible: true));
+        out var gwaCommands, out var mismatchByKw));
 
       Assert.IsTrue(UpsertGwaIntoCache(gwaCommands));
 
@@ -481,7 +501,7 @@ namespace SpeckleStructuralGSA.Test
       var dummy = new GsaLoadNode();
       SchemaConversion.GsaLoadNodeToSpeckle.ToSpeckle(dummy);
 
-      var sos = Initialiser.GSASenderObjects.Get<GSA0DLoad>().Select(g => g.Value).Cast<Structural0DLoad>().ToList();
+      var sos = Initialiser.Instance.GSASenderObjects.Get<GSA0DLoad>().Select(g => g.Value).Cast<Structural0DLoad>().ToList();
 
       Assert.AreEqual(5, sos.Count());
       Assert.AreEqual(1, sos.Count(o => o.ApplicationId.Equals(baseAppId1, StringComparison.InvariantCultureIgnoreCase) && o.Loading.Value.SequenceEqual(new double[] { 0, 0, 0, 12, 13, 0 })));
@@ -617,7 +637,7 @@ namespace SpeckleStructuralGSA.Test
 
       var gwaToTest = gwa1.Union(gwa2).Union(gwa3).ToList();
 
-      Assert.IsTrue(ModelValidation(gwaToTest, GsaRecord.GetKeyword<GsaMemb>(), 3, out var mismatch, visible: true));
+      Assert.IsTrue(ModelValidation(gwaToTest, GsaRecord.GetKeyword<GsaMemb>(), 3, out var mismatch));
     }
 
     [Test]
@@ -712,7 +732,7 @@ namespace SpeckleStructuralGSA.Test
 
       var gwaToTest = gwa1.Union(gwa2).Union(gwa3).ToList();
 
-      Assert.IsTrue(ModelValidation(gwaToTest, GsaRecord.GetKeyword<GsaMemb>(), 3, out var mismatch, visible: true));
+      Assert.IsTrue(ModelValidation(gwaToTest, GsaRecord.GetKeyword<GsaMemb>(), 3, out var mismatch));
     }
 
     [Test]
@@ -766,7 +786,7 @@ namespace SpeckleStructuralGSA.Test
 
       var gwaToTest = gwa1.Union(gwa2).ToList();
 
-      Assert.IsTrue(ModelValidation(gwaToTest, GsaRecord.GetKeyword<GsaEl>(), 2, out var mismatch, visible: true));
+      Assert.IsTrue(ModelValidation(gwaToTest, GsaRecord.GetKeyword<GsaEl>(), 2, out var mismatch));
     }
 
     [TestCase(GSATargetLayer.Design)]
@@ -797,7 +817,7 @@ namespace SpeckleStructuralGSA.Test
       foreach (var g in gsaPrereqs)
       {
         Assert.IsTrue(g.Gwa(out var gwa, false));
-        Assert.IsTrue(Initialiser.Cache.Upsert(g.Keyword, g.Index.Value, gwa.First(), g.StreamId, g.ApplicationId, g.GwaSetCommandType));
+        Assert.IsTrue(Initialiser.Instance.Cache.Upsert(g.Keyword, g.Index.Value, gwa.First(), g.StreamId, g.ApplicationId, g.GwaSetCommandType));
       }
 
       var baseAppId1 = "LoadFromSpeckle1";
@@ -833,13 +853,13 @@ namespace SpeckleStructuralGSA.Test
       foreach (var gsalb in gsaLoadBeams)
       {
         Assert.IsTrue(gsalb.Gwa(out var lbGwa, false));
-        Initialiser.Cache.Upsert(gsalb.Keyword, gsalb.Index.Value, lbGwa.First(), gsalb.StreamId, gsalb.ApplicationId, gsalb.GwaSetCommandType);
+        Initialiser.Instance.Cache.Upsert(gsalb.Keyword, gsalb.Index.Value, lbGwa.First(), gsalb.StreamId, gsalb.ApplicationId, gsalb.GwaSetCommandType);
       }
 
       //Still using dummy objects for the ToSpeckle commands - any GsaLoadBeam concrete class can be used here
       Assert.NotNull(SchemaConversion.GsaLoadBeamToSpeckle.ToSpeckle(new GsaLoadBeamUdl()));
 
-      var structural1DLoads = Initialiser.GSASenderObjects.Get<GSA1DLoadBase>().Select(o => o.Value).Cast<Structural1DLoad>().ToList();
+      var structural1DLoads = Initialiser.Instance.GSASenderObjects.Get<GSA1DLoad>().Select(o => o.Value).Cast<Structural1DLoad>().ToList();
       
       Assert.AreEqual(6, structural1DLoads.Count());
     }
@@ -871,6 +891,41 @@ namespace SpeckleStructuralGSA.Test
       gsaSectionExp.FromGwa(gwaExp);
       gsaSectionExp.Gwa(out var gwaOutExp);
       Assert.IsTrue(gwaExp.Equals(gwaOutExp.First(), StringComparison.InvariantCulture));
+    }
+
+    [Test]
+    public void GsaLoadGravity()
+    {
+      //TO DO
+      Assert.IsTrue(false);
+    }
+
+    [Test]
+    public void GsaAnalStage()
+    {
+      //TO DO
+      Assert.IsTrue(false);
+    }
+
+    [Test]
+    public void GsaAnal()
+    {
+      //TO DO
+      Assert.IsTrue(false);
+    }
+
+    [Test]
+    public void GsaCombination()
+    {
+      //TO DO
+      Assert.IsTrue(false);
+    }
+
+    [Test]
+    public void GsaLoad2dThermal()
+    {
+      //TO DO
+      Assert.IsTrue(false);
     }
 
     #region other_methods
@@ -935,8 +990,8 @@ namespace SpeckleStructuralGSA.Test
     {
       foreach (var gwaC in gwaCommands)
       {
-        Initialiser.Interface.ParseGeneralGwa(gwaC, out var keyword, out var index, out var streamId, out var applicationId, out var gwaWithoutSet, out var gwaSetCommandType);
-        if (!Initialiser.Cache.Upsert(keyword, index.Value, gwaWithoutSet, streamId, applicationId, gwaSetCommandType.Value))
+        Initialiser.Instance.Interface.ParseGeneralGwa(gwaC, out var keyword, out var index, out var streamId, out var applicationId, out var gwaWithoutSet, out var gwaSetCommandType);
+        if (!Initialiser.Instance.Cache.Upsert(keyword, index.Value, gwaWithoutSet, streamId, applicationId, gwaSetCommandType.Value))
         {
           return false;
         }

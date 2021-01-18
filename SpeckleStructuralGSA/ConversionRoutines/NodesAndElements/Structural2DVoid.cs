@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using SpeckleCore;
@@ -9,13 +10,8 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("MEMB.8", new string[] { "NODE.3" }, "model", false, true, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode) })]
-  public class GSA2DVoid : IGSASpeckleContainer
+  public class GSA2DVoid : GSABase<Structural2DVoid>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural2DVoid();
-
     public void ParseGWACommand(List<GSANode> nodes)
     {
       if (this.GWACommand == null)
@@ -23,7 +19,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural2DVoid();
 
-      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
+      var pieces = this.GWACommand.ListSplit(Initialiser.Instance.Interface.GwaDelimiter);
 
       var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
@@ -84,7 +80,7 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA2DVoid).GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(keyword, v.ApplicationId);
+      var index = Initialiser.Instance.Cache.ResolveIndex(keyword, v.ApplicationId);
 
       var sid = Helper.GenerateSID(v);
       var ls = new List<string>
@@ -111,7 +107,7 @@ namespace SpeckleStructuralGSA
         foreach (var c in connectivities[0])
         {
           //coor.AddRange(v.Vertices.Skip(c * 3).Take(3));
-          var currIndex = Helper.NodeAt(v.Vertices[c * 3], v.Vertices[c * 3 + 1], v.Vertices[c * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance);
+          var currIndex = Initialiser.Instance.Interface.NodeAt(v.Vertices[c * 3], v.Vertices[c * 3 + 1], v.Vertices[c * 3 + 2], Initialiser.Instance.Settings.CoincidentNodeAllowance);
           if (prevNodeIndex != currIndex)
             topo += currIndex.ToString() + " ";
           prevNodeIndex = currIndex;
@@ -129,7 +125,7 @@ namespace SpeckleStructuralGSA
           var indices = new List<int>();
           for (var i = 0; i < numVertices; i++)
           {
-            var currIndex = Helper.NodeAt(v.Vertices[i * 3], v.Vertices[i * 3 + 1], v.Vertices[i * 3 + 2], Initialiser.Settings.CoincidentNodeAllowance);
+            var currIndex = Initialiser.Instance.Interface.NodeAt(v.Vertices[i * 3], v.Vertices[i * 3 + 1], v.Vertices[i * 3 + 2], Initialiser.Instance.Settings.CoincidentNodeAllowance);
             if (prevNodeIndex != currIndex)
             {
               topo += currIndex.ToString() + " ";
@@ -160,7 +156,7 @@ namespace SpeckleStructuralGSA
       ls.Add("0"); // Offset z
       ls.Add("NO"); // Internal auto offset
 
-      return (string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
+      return (string.Join(Initialiser.Instance.Interface.GwaDelimiter.ToString(), ls));
     }
   }
 
@@ -176,12 +172,12 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSA2DVoid>();
       var typeName = dummyObject.GetType().Name;
       var voidsLock = new object();
-      var voids = new List<GSA2DVoid>();
-      var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
+      var voids = new SortedDictionary<int, GSA2DVoid>();
+      var nodes = Initialiser.Instance.GSASenderObjects.Get<GSANode>();
 
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
       {
-        var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
+        var pPieces = newLines[k].ListSplit(Initialiser.Instance.Interface.GwaDelimiter);
         if (!pPieces[4].Is2DMember())
         {
           // Check if void
@@ -190,24 +186,24 @@ namespace SpeckleStructuralGSA
             var gsaId = pPieces[1];
             try
             {
-              var v = new GSA2DVoid() { GWACommand = p };
+              var v = new GSA2DVoid() { GWACommand = newLines[k] };
               v.ParseGWACommand(nodes);
               lock (voidsLock)
               {
-                voids.Add(v);
+                voids.Add(k, v);
               }
             }
             catch (Exception ex)
             {
-              Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+              Initialiser.Instance.AppUI.Message(typeName + ": " + ex.Message, gsaId);
             }
           }
         }
       });
 
-      Initialiser.GSASenderObjects.AddRange(voids);
+      Initialiser.Instance.GSASenderObjects.AddRange(voids.Values.ToList());
 
-      return (voids.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (voids.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

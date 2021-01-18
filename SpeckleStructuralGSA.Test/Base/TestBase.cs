@@ -61,7 +61,7 @@ namespace SpeckleStructuralGSA.Test
       gsaCache.Clear();
 
       //Clear out all sender objects that might be there from the last test preparation
-      Initialiser.GSASenderObjects.Clear();
+      Initialiser.Instance.GSASenderObjects.Clear();
 
       //Compile all GWA commands with application IDs
       var senderProcessor = new SenderProcessor(TestDataDirectory, gsaInterfacer, gsaCache, layer, embedResults, cases, resultsToSend);

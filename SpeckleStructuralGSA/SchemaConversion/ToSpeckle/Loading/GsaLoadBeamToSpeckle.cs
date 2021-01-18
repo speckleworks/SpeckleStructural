@@ -11,7 +11,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
   {
     public static SpeckleObject ToSpeckle(this GsaLoadBeam dummyObject)
     {
-      var newLines = Initialiser.Cache.GetGwaToSerialise(dummyObject.Keyword);
+      var newLines = Initialiser.Instance.Cache.GetGwaToSerialise(dummyObject.Keyword);
       //This will return ALL load beams, which (in the future) may not be UDLs
       //Also in the future, the cache will return Gsa schema objects, not just GWA that needs to be converted into Gsa schema objects
       var allGsaLoadBeams = GwaToGsaLoadBeams(newLines);
@@ -21,7 +21,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
       var keyword = GsaRecord.GetKeyword<GsaLoadBeamUdl>();
       var axisKeyword = GsaRecord.GetKeyword<GsaAxis>();
       var loadCaseKeyword = GsaRecord.GetKeyword<GsaLoadCase>();
-      var entityKeyword = (Initialiser.Settings.TargetLayer == SpeckleGSAInterfaces.GSATargetLayer.Design) ? GsaRecord.GetKeyword<GsaMemb>() : GsaRecord.GetKeyword<GsaEl>();
+      var entityKeyword = (Initialiser.Instance.Settings.TargetLayer == SpeckleGSAInterfaces.GSATargetLayer.Design) ? GsaRecord.GetKeyword<GsaMemb>() : GsaRecord.GetKeyword<GsaEl>();
 
       //Just to UDL for now
       var gsaLoads = gsaLoadsByType[typeof(GsaLoadBeamUdl)].Cast<GsaLoadBeamUdl>().ToList();
@@ -40,12 +40,9 @@ namespace SpeckleStructuralGSA.SchemaConversion
       Add1dLoadsWithAppId(entityKeyword, loadCaseKeyword, group1, ref structural1DLoads);
       Add1dLoadsWithoutAppId(keyword, axisKeyword, entityKeyword, loadCaseKeyword, group2, ref structural1DLoads);
 
+      var loads = structural1DLoads.Select(sl => new GSA1DLoad() { Value = sl }).Cast<GSA1DLoad>().ToList();
 
-      var loads = ((Initialiser.Settings.TargetLayer == SpeckleGSAInterfaces.GSATargetLayer.Design)
-        ? structural1DLoads.Select(sl => new GSA1DLoadDesignLayer() { Value = sl }).Cast<GSA1DLoadBase>()
-        : structural1DLoads.Select(sl => new GSA1DLoadAnalysisLayer() { Value = sl }).Cast<GSA1DLoadBase>()).ToList();
-
-      Initialiser.GSASenderObjects.AddRange(loads);
+      Initialiser.Instance.GSASenderObjects.AddRange(loads);
       return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
 
@@ -60,8 +57,8 @@ namespace SpeckleStructuralGSA.SchemaConversion
         var name = (gList.Any(gl => !string.IsNullOrEmpty(gl.Name))) ? gList.FirstOrDefault(gl => !string.IsNullOrEmpty(gl.Name)).Name : "";
         
         //Assume the element refs are the same for those with application IDs - so just take the indices of the first record and resolve them to application IDs for entities
-        var elementRefs = gList[0].Entities.Select(ei => Initialiser.Cache.GetApplicationId(entityKeyword, ei)).Where(aid => !string.IsNullOrEmpty(aid)).ToList();
-        var loadCaseRef = Initialiser.Cache.GetApplicationId(loadCaseKeyword, gList[0].LoadCaseIndex.Value);
+        var elementRefs = gList[0].Entities.Select(ei => Initialiser.Instance.Cache.GetApplicationId(entityKeyword, ei)).Where(aid => !string.IsNullOrEmpty(aid)).ToList();
+        var loadCaseRef = Initialiser.Instance.Cache.GetApplicationId(loadCaseKeyword, gList[0].LoadCaseIndex.Value);
 
         var loadings = gList.Select(gl => Helper.GsaLoadToLoading(gl.LoadDirection, gl.Load.Value)).ToList();
         var combinedLoading = new StructuralVectorSix(Enumerable.Range(0, 6).Select(i => loadings.Sum(l => l.Value[i])));
@@ -98,7 +95,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
           if (gl.AxisRefType == LoadBeamAxisRefType.Reference && gl.AxisIndex.HasValue && gl.AxisIndex.Value > 0)
           {
 
-            var axisGwa = Initialiser.Cache.GetGwa(axisKeyword, gl.AxisIndex.Value);
+            var axisGwa = Initialiser.Instance.Cache.GetGwa(axisKeyword, gl.AxisIndex.Value);
             if (axisGwa != null && axisGwa.Count() > 0 && string.IsNullOrEmpty(axisGwa.First()))
             {
               return false;
@@ -134,8 +131,8 @@ namespace SpeckleStructuralGSA.SchemaConversion
         foreach (var ul in uniqueToLoadingsList.Keys)
         {
           var entityIndices = uniqueToLoadingsList[ul].SelectMany(ei => glByIndex[ei].Entities).Distinct().OrderBy(n => n).ToList();
-          var elementRefs = entityIndices.Select(ei => Initialiser.Cache.GetApplicationId(entityKeyword, ei)).Where(aid => !string.IsNullOrEmpty(aid)).ToList();
-          var loadCaseRef = (gsaGroup.First().LoadCaseIndex.HasValue) ? Initialiser.Cache.GetApplicationId(loadCaseKeyword, gsaGroup.First().LoadCaseIndex.Value) : null;
+          var elementRefs = entityIndices.Select(ei => Initialiser.Instance.Cache.GetApplicationId(entityKeyword, ei)).Where(aid => !string.IsNullOrEmpty(aid)).ToList();
+          var loadCaseRef = (gsaGroup.First().LoadCaseIndex.HasValue) ? Initialiser.Instance.Cache.GetApplicationId(loadCaseKeyword, gsaGroup.First().LoadCaseIndex.Value) : null;
           structural1DLoads.Add(new Structural1DLoad()
           {
             ApplicationId = SpeckleStructuralGSA.Helper.FormatApplicationId(keyword, uniqueToLoadingsList[ul]),
@@ -191,9 +188,11 @@ namespace SpeckleStructuralGSA.SchemaConversion
       public int Index;
       public int? LoadCaseIndex;
       public List<int> EntityIndices;
+      /*
       public int? UniqueLoadingIndex;
       public string Name;
       public string ApplicationId;
+      */
 
       public D1LoadingSummary(int index, int? loadCaseIndex, List<int> entityIndices)
       {
