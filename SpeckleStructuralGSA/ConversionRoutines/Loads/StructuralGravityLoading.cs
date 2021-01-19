@@ -19,7 +19,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralGravityLoading();
 
-      var pieces = this.GWACommand.ListSplit(Initialiser.Instance.Interface.GwaDelimiter);
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
       obj.Name = pieces[counter++].Trim(new char[] { '"' }); // name
@@ -52,8 +52,8 @@ namespace SpeckleStructuralGSA
       var keyword = typeof(GSAGravityLoading).GetGSAKeyword();
 
       var loadCaseKeyword = typeof(GSALoadCase).GetGSAKeyword();
-      var indexResult = Initialiser.Instance.Cache.LookupIndex(loadCaseKeyword, load.LoadCaseRef);
-      var loadCaseRef = indexResult ?? Initialiser.Instance.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
+      var indexResult = Initialiser.AppResources.Cache.LookupIndex(loadCaseKeyword, load.LoadCaseRef);
+      var loadCaseRef = indexResult ?? Initialiser.AppResources.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
 
       if (indexResult == null && load.ApplicationId != null)
       {
@@ -67,7 +67,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      var index = Initialiser.Instance.Cache.ResolveIndex(typeof(GSAGravityLoading).GetGSAKeyword());
+      var index = Initialiser.AppResources.Cache.ResolveIndex(typeof(GSAGravityLoading).GetGSAKeyword());
 
       var sid = Helper.GenerateSID(load);
       var ls = new List<string>
@@ -84,7 +84,7 @@ namespace SpeckleStructuralGSA
           load.GravityFactors.Value[2].ToString(),
         };
 
-      return (string.Join(Initialiser.Instance.Interface.GwaDelimiter.ToString(), ls));
+      return (string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
     }
   }
 
@@ -112,12 +112,12 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.Instance.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+          Initialiser.AppResources.Messager.Message(typeName + ": " + ex.Message, k.ToString());
         }
         loads.Add(load);
       }
 
-      Initialiser.Instance.GSASenderObjects.AddRange(loads);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(loads);
 
       return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

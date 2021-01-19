@@ -40,11 +40,11 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.Instance.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+          Initialiser.AppResources.Messager.Message(typeName + ": " + ex.Message, k.ToString());
         }
       }
 
-      Initialiser.Instance.GSASenderObjects.AddRange(planes);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(planes);
 
       return (planes.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

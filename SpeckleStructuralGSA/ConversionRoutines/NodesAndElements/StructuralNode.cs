@@ -26,7 +26,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralNode();
 
-      var pieces = this.GWACommand.ListSplit(Initialiser.Instance.Interface.GwaDelimiter);
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]); // num
@@ -80,7 +80,7 @@ namespace SpeckleStructuralGSA
       {
         // springProperty
         var spKeyword = typeof(GSASpringProperty).GetGSAKeyword().Split('.').First();
-        var springPropsGwa = Initialiser.Instance.Cache.GetGwa(spKeyword, Convert.ToInt32(pieces[counter++])); // not sure how this could ever return multiple?
+        var springPropsGwa = Initialiser.AppResources.Cache.GetGwa(spKeyword, Convert.ToInt32(pieces[counter++])); // not sure how this could ever return multiple?
         if (springPropsGwa.Count > 0)
         {
           var springPropGWA = springPropsGwa[0];
@@ -95,11 +95,11 @@ namespace SpeckleStructuralGSA
       {
         // massProperty
         // Speckle node currently only supports single mass, rather than the more complicated PROP_MASS in GSA
-        var massPropsGwa = Initialiser.Instance.Cache.GetGwa("PROP_MASS", Convert.ToInt32(pieces[counter++]));
+        var massPropsGwa = Initialiser.AppResources.Cache.GetGwa("PROP_MASS", Convert.ToInt32(pieces[counter++]));
         if (massPropsGwa.Count > 0)
         {
           var massPropGwa = massPropsGwa[0];
-          var massPropPieces = massPropGwa.ListSplit(Initialiser.Instance.Interface.GwaDelimiter);
+          var massPropPieces = massPropGwa.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
           obj.Mass = Convert.ToDouble(massPropPieces[5]);
         }
       }
@@ -123,7 +123,7 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSANode).GetGSAKeyword();
 
-      var index = Initialiser.Instance.Interface.NodeAt(node.Value[0], node.Value[1], node.Value[2], Initialiser.Instance.Settings.CoincidentNodeAllowance);
+      var index = Initialiser.AppResources.Proxy.NodeAt(node.Value[0], node.Value[1], node.Value[2], Initialiser.AppResources.Settings.CoincidentNodeAllowance);
 
       var sid = Helper.GenerateSID(node);
       var ls = new List<string>
@@ -133,7 +133,7 @@ namespace SpeckleStructuralGSA
         index.ToString(), // num
         node.Name == null || node.Name == "" ? " " : node.Name, // name
         "NO_RGB", // colour
-        string.Join(Initialiser.Instance.Interface.GwaDelimiter.ToString(), node.Value.Select(v => Math.Round(v, 8)).ToArray()), // x y z - GSA seems to round to 8 here
+        string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), node.Value.Select(v => Math.Round(v, 8)).ToArray()), // x y z - GSA seems to round to 8 here
       };
 
       // restraint
@@ -182,7 +182,7 @@ namespace SpeckleStructuralGSA
       
       // damperProperty - not supported
 
-      gwaCommands.Add(string.Join(Initialiser.Instance.Interface.GwaDelimiter.ToString(), ls));
+      gwaCommands.Add(string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
 
       return string.Join("\n", gwaCommands);
     }
@@ -200,7 +200,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralNode();
 
-      var pieces = this.GWACommand.ListSplit(Initialiser.Instance.Interface.GwaDelimiter);
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
       counter++; // Reference
@@ -238,9 +238,9 @@ namespace SpeckleStructuralGSA
         return "";
 
       var keyword = typeof(GSA0DElement).GetGSAKeyword();
-      var index = Initialiser.Instance.Cache.ResolveIndex(typeof(GSA0DElement).GetGSAKeyword(), node.ApplicationId);
-      var propIndex = Initialiser.Instance.Cache.ResolveIndex("PROP_MASS.2", node.ApplicationId);
-      var nodeIndex = Initialiser.Instance.Cache.ResolveIndex(typeof(GSANode).GetGSAKeyword(), node.ApplicationId);
+      var index = Initialiser.AppResources.Cache.ResolveIndex(typeof(GSA0DElement).GetGSAKeyword(), node.ApplicationId);
+      var propIndex = Initialiser.AppResources.Cache.ResolveIndex("PROP_MASS.2", node.ApplicationId);
+      var nodeIndex = Initialiser.AppResources.Cache.ResolveIndex(typeof(GSANode).GetGSAKeyword(), node.ApplicationId);
 
       var gwaCommands = new List<string>();
 
@@ -266,7 +266,7 @@ namespace SpeckleStructuralGSA
         "" //Dummy
       };
 
-      gwaCommands.Add(string.Join(Initialiser.Instance.Interface.GwaDelimiter.ToString(), ls));
+      gwaCommands.Add(string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
 
       ls = new List<string>
       {
@@ -290,15 +290,15 @@ namespace SpeckleStructuralGSA
         "100%"
       };
 
-      gwaCommands.Add(string.Join(Initialiser.Instance.Interface.GwaDelimiter.ToString(), ls));
+      gwaCommands.Add(string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
 
       return string.Join("\n", gwaCommands);
     }
 
     private double GetGSAMass(int propertyIndex)
     {
-      var gwa = Initialiser.Instance.Cache.GetGwa("PROP_MASS", propertyIndex).FirstOrDefault();
-      var pieces = gwa.ListSplit(Initialiser.Instance.Interface.GwaDelimiter);
+      var gwa = Initialiser.AppResources.Cache.GetGwa("PROP_MASS", propertyIndex).FirstOrDefault();
+      var pieces = gwa.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       this.SubGWACommand.Add(gwa);
 
@@ -336,7 +336,7 @@ namespace SpeckleStructuralGSA
 
       Parallel.ForEach(newLines.Keys, k =>
       {
-        var pPieces = newLines[k].ListSplit(Initialiser.Instance.Interface.GwaDelimiter);
+        var pPieces = newLines[k].ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
         var gsaId = pPieces[1];
         var node = new GSANode { GWACommand = newLines[k] };
         try
@@ -349,19 +349,19 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.Instance.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+          Initialiser.AppResources.Messager.Message(typeName + ": " + ex.Message, gsaId);
         }
       }
       );
 
-      Initialiser.Instance.GSASenderObjects.AddRange(nodes.Values.ToList());
+      Initialiser.GsaKit.GSASenderObjects.AddRange(nodes.Values.ToList());
 
       return (nodes.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
 
     public static SpeckleObject ToSpeckle(this GSA0DElement dummyObject)
     {
-      if (Initialiser.Instance.GSASenderObjects.Count<GSA0DElement>() == 0)
+      if (Initialiser.GsaKit.GSASenderObjects.Count<GSA0DElement>() == 0)
         return new SpeckleNull();
 
       var newLines = ToSpeckleBase<GSA0DElement>();
@@ -369,11 +369,11 @@ namespace SpeckleStructuralGSA
       var changed = false;
 
       var nodesLock = new object();
-      var nodes = Initialiser.Instance.GSASenderObjects.Get<GSANode>();
+      var nodes = Initialiser.GsaKit.GSASenderObjects.Get<GSANode>();
 
       Parallel.ForEach(newLines.Keys, k =>
       {
-        var pPieces = newLines[k].ListSplit(Initialiser.Instance.Interface.GwaDelimiter);
+        var pPieces = newLines[k].ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
         var gsaId = pPieces[1];
         if (pPieces[4].ParseElementNumNodes() == 1)
         {
@@ -400,7 +400,7 @@ namespace SpeckleStructuralGSA
           }
           catch (Exception ex)
           {
-            Initialiser.Instance.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+            Initialiser.AppResources.Messager.Message(typeName + ": " + ex.Message, gsaId);
           }
         }
       }

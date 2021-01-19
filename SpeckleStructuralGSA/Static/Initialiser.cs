@@ -8,17 +8,29 @@ using SpeckleStructuralGSA.Schema;
 
 namespace SpeckleStructuralGSA
 {
-  public class Initialiser : ISpeckleInitializer, IGSAKit
+  public class Initialiser : ISpeckleInitializer
   {
-    public static Initialiser Instance { get; } = new Initialiser();
+    private static GsaKit gsaKit = new GsaKit();
 
+    public static IGSAKit GsaKit { get => gsaKit; }
+    public static IGSAAppResources AppResources { get; set; }
+
+    /*
     public IGSASettings Settings { get; set; }
     public IGSAProxy Interface { get; set; }
     public IGSACacheForKit Cache { get; set; }
     public ISpeckleGSAAppUI AppUI { get; set; }
+    */
+  }
+
+  public class GsaKit : IGSAKit
+  {
+    private readonly List<TypeDependencyData> typeDepData = new List<TypeDependencyData>();
+
     //The variable below must be a property (i.e. with { get; }) and of Dictionary<Type, List<object>> type so that SpeckleGSA
     //can recognise this as a kit it can work with
     public IGSASenderDictionary GSASenderObjects { get; } = new GSASenderDictionary();
+
     //This is a dictionary of types (and their keywords for advance GSA record index reservation) which can be processed in parallel 
     //ensure the order they appear in GSA matches the order in the stream.
     //In most cases a type is added to this list if:
@@ -30,7 +42,7 @@ namespace SpeckleStructuralGSA
     {
       get
       {
-        var elementKw = Settings.TargetLayer == GSATargetLayer.Design ? GwaKeyword.MEMB : GwaKeyword.EL;
+        var elementKw = Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Design ? GwaKeyword.MEMB : GwaKeyword.EL;
         return new Dictionary<Type, string>()
         { { typeof(StructuralLoadCase), GwaKeyword.LOAD_TITLE.GetStringValue() },
           { typeof(StructuralLoadCombo), GwaKeyword.COMBINATION.GetStringValue() },
@@ -48,23 +60,47 @@ namespace SpeckleStructuralGSA
         };
       }
     }
-    
-    private readonly List<Type> schemaTypes = new List<Type>();  //ALL schema types, from both layers
-    private readonly List<Type> oldSchemaTypes = new List<Type>();  //ALL old schema types, from both layers
-    //The reason for both layerKeywords and layerKeywordTypes existing is because not all keywords have types
-    private readonly Dictionary<GSATargetLayer, List<GwaKeyword>> layerKeywords;
+
+    //For now, it returns old GSA schema (i.e. those implementing the IGSASpeckleContainer and IGSAContainer interfaces.
+    //When the new GSA schema is fully integrated, it will return SpeckleStructural types
+    public Dictionary<Type, List<Type>> RxTypeDependencies
+    {
+      get
+      {
+        if (!typeDepData.Any(td => td.Direction == StreamDirection.Receive && td.Layer == Initialiser.AppResources.Settings.TargetLayer))
+        {
+          var typeDeps = TypeDependencies(StreamDirection.Receive);
+          typeDepData.Add(new TypeDependencyData(StreamDirection.Receive, Initialiser.AppResources.Settings.TargetLayer, typeDeps));
+        }
+        return typeDepData.FirstOrDefault(td => td.Direction == StreamDirection.Receive && td.Layer == Initialiser.AppResources.Settings.TargetLayer).Dependencies;
+      }
+    }
+
+    public Dictionary<Type, List<Type>> TxTypeDependencies
+    {
+      get
+      {
+        if (!typeDepData.Any(td => td.Direction == StreamDirection.Send && td.Layer == Initialiser.AppResources.Settings.TargetLayer))
+        {
+          var typeDeps = TypeDependencies(StreamDirection.Send);
+          typeDepData.Add(new TypeDependencyData(StreamDirection.Send, Initialiser.AppResources.Settings.TargetLayer, typeDeps));
+        }
+        return typeDepData.FirstOrDefault(td => td.Direction == StreamDirection.Send && td.Layer == Initialiser.AppResources.Settings.TargetLayer).Dependencies;
+      }
+    }
+
+    public List<string> Keywords => layerKeywords[Initialiser.AppResources.Settings.TargetLayer].Select(kw => kw.GetStringValue()).ToList();
 
     //This dictionary should be independent of layer
     private readonly Dictionary<GSATargetLayer, Dictionary<Type, GwaKeyword>> layerKeywordTypes;
 
-    //private readonly Dictionary<GwaKeyword, GwaKeyword[]> keywordDependencies; //ALL keywords, regardless of layer
-    private readonly List<TypeDependencyData> typeDepData = new List<TypeDependencyData>();
-    
-    public List<string> Keywords => layerKeywords[Settings.TargetLayer].Select(kw => kw.GetStringValue()).ToList();
+    private readonly List<Type> schemaTypes = new List<Type>();  //ALL schema types, from both layers
+    private readonly List<Type> oldSchemaTypes = new List<Type>();  //ALL old schema types, from both layers
 
-    
+    //The reason for both layerKeywords and layerKeywordTypes existing is because not all keywords have types
+    private readonly Dictionary<GSATargetLayer, List<GwaKeyword>> layerKeywords;
 
-    public Initialiser()
+    public GsaKit()
     {
       var assembly = GetType().Assembly; //This assembly
       var assemblyTypes = assembly.GetTypes();
@@ -85,8 +121,8 @@ namespace SpeckleStructuralGSA
       };
 
       //These aren't limited to whether these keywords are implemented in any classes as yet
-      layerKeywords  = new Dictionary<GSATargetLayer, List<GwaKeyword>>
-      { 
+      layerKeywords = new Dictionary<GSATargetLayer, List<GwaKeyword>>
+      {
         { GSATargetLayer.Design, new List<GwaKeyword>() },
         { GSATargetLayer.Analysis, new List<GwaKeyword>() }
       };
@@ -99,36 +135,10 @@ namespace SpeckleStructuralGSA
 
     public void Clear()
     {
-      GSASenderObjects.Clear();
+      throw new NotImplementedException();
     }
 
-    //For now, it returns old GSA schema (i.e. those implementing the IGSASpeckleContainer and IGSAContainer interfaces.
-    //When the new GSA schema is fully integrated, it will return SpeckleStructural types
-    public Dictionary<Type, List<Type>> RxTypeDependencies
-    {
-      get
-      {
-        if (!typeDepData.Any(td => td.Direction == StreamDirection.Receive && td.Layer == Settings.TargetLayer))
-        {
-          var typeDeps = TypeDependencies(StreamDirection.Receive);
-          typeDepData.Add(new TypeDependencyData(StreamDirection.Receive, Settings.TargetLayer, typeDeps));
-        }
-        return typeDepData.FirstOrDefault(td => td.Direction == StreamDirection.Receive && td.Layer == Settings.TargetLayer).Dependencies;
-      }
-    }
-
-    public Dictionary<Type, List<Type>> TxTypeDependencies
-    {
-      get
-      {
-        if (!typeDepData.Any(td => td.Direction == StreamDirection.Send && td.Layer == Settings.TargetLayer))
-        {
-          var typeDeps = TypeDependencies(StreamDirection.Send);
-          typeDepData.Add(new TypeDependencyData(StreamDirection.Send, Settings.TargetLayer, typeDeps));
-        }
-        return typeDepData.FirstOrDefault(td => td.Direction == StreamDirection.Send && td.Layer == Settings.TargetLayer).Dependencies;
-      }
-    }
+    #region private_methods
 
     private void GenerateLayerKeywordTypes(IEnumerable<Type> relevantSchemaTypes)
     {
@@ -171,7 +181,7 @@ namespace SpeckleStructuralGSA
               //However, at any point in time, there might not be a type created yet for that referenced keyword.  For these cases,
               //assume that the referenced keyword is for both layers.
 
-              if (((implementedKwsByLayer.ContainsKey(kwPrereq) && implementedKwsByLayer[kwPrereq][layer]) || !implementedKwsByLayer.ContainsKey(kwPrereq)) 
+              if (((implementedKwsByLayer.ContainsKey(kwPrereq) && implementedKwsByLayer[kwPrereq][layer]) || !implementedKwsByLayer.ContainsKey(kwPrereq))
                 && (!layerKeywords[layer].Contains(kwPrereq)))
               {
                 layerKeywords[layer].Add(kwPrereq);
@@ -182,24 +192,15 @@ namespace SpeckleStructuralGSA
       }
     }
 
-    private Dictionary<GSATargetLayer, bool> TypeLayers(Type t)
-    {
-      return new Dictionary<GSATargetLayer, bool> 
-      { 
-        { GSATargetLayer.Design, GsaRecord.IsDesignLayer(t) }, 
-        { GSATargetLayer.Analysis, GsaRecord.IsAnalysisLayer(t) } 
-      };
-    }
-
     private Dictionary<Type, List<Type>> TypeDependencies(StreamDirection direction)
     {
       var typeDependencies = new Dictionary<Type, List<Type>>();
 
       //Build up dictionary of new GSA schema types and keywords - to be used to construct dependencies based on these new types
-      var layerSchemaDict = layerKeywordTypes[Settings.TargetLayer];
+      var layerSchemaDict = layerKeywordTypes[Initialiser.AppResources.Settings.TargetLayer];
       var layerSchemaTypes = layerSchemaDict.Keys;
       var layerSchemaKeywords = layerSchemaDict.Values;
-      var kwDependencies = layerSchemaTypes.ToDictionary(t => layerSchemaDict[t], 
+      var kwDependencies = layerSchemaTypes.ToDictionary(t => layerSchemaDict[t],
         t => GsaRecord.GetReferencedKeywords(t).Where(kw => layerSchemaKeywords.Contains(kw)).ToList());
 
       foreach (var oldT in oldSchemaTypes)
@@ -233,12 +234,25 @@ namespace SpeckleStructuralGSA
       return typeDependencies;
     }
 
+    private Dictionary<GSATargetLayer, bool> TypeLayers(Type t)
+    {
+      return new Dictionary<GSATargetLayer, bool>
+      {
+        { GSATargetLayer.Design, GsaRecord.IsDesignLayer(t) },
+        { GSATargetLayer.Analysis, GsaRecord.IsAnalysisLayer(t) }
+      };
+    }
+
     private bool MatchesLayer(Type t, GSATargetLayer layer)
     {
       return ((layer == GSATargetLayer.Design && GsaRecord.IsDesignLayer(t))
             || (layer == GSATargetLayer.Analysis && GsaRecord.IsAnalysisLayer(t)));
     }
+
+    #endregion
   }
+
+  
 
   internal class TypeDependencyData
   {

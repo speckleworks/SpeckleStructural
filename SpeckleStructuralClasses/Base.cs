@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace SpeckleStructuralClasses
 {
-  public interface IStructural : ISpeckleInitializer { }
+  public interface IStructural { }
   
   [Serializable]
   public partial class StructuralVectorThree : SpeckleVector, IStructural

@@ -19,7 +19,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralMaterialConcrete();
 
-      var pieces = this.GWACommand.ListSplit(Initialiser.Instance.Interface.GwaDelimiter);
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
       
@@ -61,7 +61,7 @@ namespace SpeckleStructuralGSA
       }
 
       var keyword = typeof(GSAMaterialConcrete).GetGSAKeyword();
-      var index = Initialiser.Instance.Cache.ResolveIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), mat.ApplicationId);
+      var index = Initialiser.AppResources.Cache.ResolveIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), mat.ApplicationId);
 
       // TODO: This function barely works.
       var ls = new List<string>
@@ -148,7 +148,7 @@ namespace SpeckleStructuralGSA
         "0" // TODO: What is this?
       };
 
-      return (string.Join(Initialiser.Instance.Interface.GwaDelimiter.ToString(), ls));
+      return (string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
     }
   }
 
@@ -168,7 +168,7 @@ namespace SpeckleStructuralGSA
 
       Parallel.ForEach(newLines.Keys, k =>
       {
-        var pPieces = newLines[k].ListSplit(Initialiser.Instance.Interface.GwaDelimiter);
+        var pPieces = newLines[k].ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
         var gsaId = pPieces[1];
         try
         {
@@ -181,11 +181,11 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.Instance.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+          Initialiser.AppResources.Messager.Message(typeName + ": " + ex.Message, gsaId);
         }
       });
 
-      Initialiser.Instance.GSASenderObjects.AddRange(materials.Values.ToList());
+      Initialiser.GsaKit.GSASenderObjects.AddRange(materials.Values.ToList());
 
       return (materials.Keys.Count > 0 ) ? new SpeckleObject() : new SpeckleNull();
     }

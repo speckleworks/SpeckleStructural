@@ -19,7 +19,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural1DInfluenceEffect();
 
-      var pieces = this.GWACommand.ListSplit(Initialiser.Instance.Interface.GwaDelimiter);
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
@@ -109,9 +109,9 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA1DInfluenceEffect).GetGSAKeyword();
 
-      var index = Initialiser.Instance.Cache.ResolveIndex(typeof(GSA1DInfluenceEffect).GetGSAKeyword(), infl.ApplicationId);
+      var index = Initialiser.AppResources.Cache.ResolveIndex(typeof(GSA1DInfluenceEffect).GetGSAKeyword(), infl.ApplicationId);
 
-      var elementRef = Initialiser.Instance.Cache.LookupIndex(typeof(GSA1DElement).GetGSAKeyword(), infl.ElementRef);
+      var elementRef = Initialiser.AppResources.Cache.LookupIndex(typeof(GSA1DElement).GetGSAKeyword(), infl.ElementRef);
 
       if (!elementRef.HasValue)
         return "";
@@ -149,7 +149,7 @@ namespace SpeckleStructuralGSA
         }
         ls.Add("GLOBAL"); // TODO: GSA TEAM TO LOOK INTO THIS. GLOBAL IS DEFAULT IN GSA
         ls.Add(direction[i]);
-        gwaCommands.Add(string.Join(Initialiser.Instance.Interface.GwaDelimiter.ToString(), ls));
+        gwaCommands.Add(string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
       }
       return string.Join("\n", gwaCommands);
     }
@@ -166,7 +166,7 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSA1DInfluenceEffect>();
       var typeName = dummyObject.GetType().Name;
-      var e1Ds = Initialiser.Instance.GSASenderObjects.Get<GSA1DElement>();
+      var e1Ds = Initialiser.GsaKit.GSASenderObjects.Get<GSA1DElement>();
 
       var inflsLock = new object();
       var infls = new SortedDictionary<int, GSA1DInfluenceEffect>();
@@ -184,11 +184,11 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.Instance.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+          Initialiser.AppResources.Messager.Message(typeName + ": " + ex.Message, k.ToString());
         }
       });
 
-      Initialiser.Instance.GSASenderObjects.AddRange(infls.Values.ToList());
+      Initialiser.GsaKit.GSASenderObjects.AddRange(infls.Values.ToList());
 
       return (infls.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }

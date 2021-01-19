@@ -32,7 +32,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
       var nodeIndicesReferenced = new List<int>();
 
       var structural0DLoads = new List<Structural0DLoad>();
-      var gsaNodes = Initialiser.Instance.GSASenderObjects.Get<GSANode>();
+      var gsaNodes = Initialiser.GsaKit.GSASenderObjects.Get<GSANode>();
       Add0dLoadsWithAppId(nodeKeyword, loadCaseKeyword, group1, gsaNodes, ref structural0DLoads, ref nodeIndicesReferenced);
       Add0dLoadsWithoutAppId(keyword, nodeKeyword, loadCaseKeyword, group2, gsaNodes, ref structural0DLoads, ref nodeIndicesReferenced);
 
@@ -44,7 +44,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
       var loads = structural0DLoads.Select(sl => new GSA0DLoad() { Value = sl }).ToList();
 
-      Initialiser.Instance.GSASenderObjects.AddRange(loads);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(loads);
       return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
 

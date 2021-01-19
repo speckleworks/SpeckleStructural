@@ -11,12 +11,12 @@ namespace SpeckleStructuralGSA.SchemaConversion
   {
     public static SpeckleObject ToSpeckle(this GsaSection dummyObject)
     {
-      var newLines = Initialiser.Instance.Cache.GetGwaToSerialise(dummyObject.Keyword);
+      var newLines = Initialiser.AppResources.Cache.GetGwaToSerialise(dummyObject.Keyword);
 
       var structural1DPropertyExplicits = new List<Structural1DPropertyExplicit>();
       
-      var concreteMaterials = Initialiser.Instance.GSASenderObjects.Get<GSAMaterialConcrete>().ToDictionary(o => o.GSAId, o => ((StructuralMaterialConcrete) o.SpeckleObject).ApplicationId);
-      var steelMaterials = Initialiser.Instance.GSASenderObjects.Get<GSAMaterialSteel>().ToDictionary(o => o.GSAId, o => ((StructuralMaterialSteel)o.SpeckleObject).ApplicationId);
+      var concreteMaterials = Initialiser.GsaKit.GSASenderObjects.Get<GSAMaterialConcrete>().ToDictionary(o => o.GSAId, o => ((StructuralMaterialConcrete) o.SpeckleObject).ApplicationId);
+      var steelMaterials = Initialiser.GsaKit.GSASenderObjects.Get<GSAMaterialSteel>().ToDictionary(o => o.GSAId, o => ((StructuralMaterialSteel)o.SpeckleObject).ApplicationId);
 
       //Currently only handles explicit 1D properties
       //Filtering out all but explicit properties:
@@ -54,7 +54,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
       }
 
       var props = structural1DPropertyExplicits.Select(pe => new GSA1DPropertyExplicit() { Value = pe }).ToList();
-      Initialiser.Instance.GSASenderObjects.AddRange(props);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(props);
       return (props.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
 

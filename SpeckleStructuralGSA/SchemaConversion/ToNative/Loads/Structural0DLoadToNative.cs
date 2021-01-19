@@ -18,9 +18,9 @@ namespace SpeckleStructuralGSA.SchemaConversion
       var nodeKeyword = GsaRecord.GetKeyword<GsaNode>();
       var loadCaseKeyword = GsaRecord.GetKeyword<GsaLoadCase>();
 
-      var nodeIndices = Initialiser.Instance.Cache.LookupIndices(nodeKeyword, load.NodeRefs).Where(x => x.HasValue).Select(x => x.Value).OrderBy(i => i).ToList();
-      var loadCaseIndex = Initialiser.Instance.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
-      var streamId = Initialiser.Instance.Cache.LookupStream(load.ApplicationId);
+      var nodeIndices = Initialiser.AppResources.Cache.LookupIndices(nodeKeyword, load.NodeRefs).Where(x => x.HasValue).Select(x => x.Value).OrderBy(i => i).ToList();
+      var loadCaseIndex = Initialiser.AppResources.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
+      var streamId = Initialiser.AppResources.Cache.LookupStream(load.ApplicationId);
       var gwaSetCommandType = GsaRecord.GetGwaSetCommandType<GsaLoadNode>();
 
       var gwaList = new List<string>();
@@ -28,7 +28,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
       foreach (var k in loadingDict.Keys)
       {
         var applicationId = string.Join("_", load.ApplicationId, k.ToString());
-        var index = Initialiser.Instance.Cache.ResolveIndex(keyword, applicationId);
+        var index = Initialiser.AppResources.Cache.ResolveIndex(keyword, applicationId);
         var gsaLoad = new GsaLoadNode()
         {
           Index = index,
@@ -43,7 +43,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
         };
         if (gsaLoad.Gwa(out var gwa, false))
         {
-          Initialiser.Instance.Cache.Upsert(keyword, index, gwa.First(), streamId, applicationId, gwaSetCommandType);
+          Initialiser.AppResources.Cache.Upsert(keyword, index, gwa.First(), streamId, applicationId, gwaSetCommandType);
         }
       }
 

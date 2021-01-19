@@ -17,7 +17,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
       if (gsaAxis.Gwa(out var gwaLines, false))
       {
         //axes currently never have an application ID
-        Initialiser.Instance.Cache.Upsert(keyword, gsaAxis.Index.Value, gwaLines.First(), gsaAxis.StreamId, "", GsaRecord.GetGwaSetCommandType<GsaAxis>());
+        Initialiser.AppResources.Cache.Upsert(keyword, gsaAxis.Index.Value, gwaLines.First(), gsaAxis.StreamId, "", GsaRecord.GetGwaSetCommandType<GsaAxis>());
       }
       return "";
     }
@@ -25,7 +25,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
     public static GsaAxis ToNativeSchema(this StructuralAxis axis)
     {
       var keyword = GsaRecord.GetKeyword<GsaAxis>();
-      var index = Initialiser.Instance.Cache.ResolveIndex(keyword);
+      var index = Initialiser.AppResources.Cache.ResolveIndex(keyword);
       var origin = (Valid(axis.Origin)) ? axis.Origin : new SpecklePoint(0, 0, 0);
       var gsaAxis = new GsaAxis()
       {
