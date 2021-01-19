@@ -376,7 +376,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        Initialiser.AppResources.Messager.Message("1D section profile string (" + type + ") is not supported", prop.ApplicationId);  // TODO: IMPLEMENT ALL SECTIONS
+        Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, "1D section profile string (" + type + ") is not supported", prop.ApplicationId);  // TODO: IMPLEMENT ALL SECTIONS
       }
 
       return prop;
@@ -740,7 +740,7 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messager.Message(typeName + ": " + ex.Message, gsaId);
+          Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
         }
       });
 

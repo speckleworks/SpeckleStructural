@@ -20,7 +20,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
       }
       if (loadPanel.Loading == null || loadPanel.Loading.Value == null || loadPanel.Loading.Value.All(v => v == 0))
       {
-        Initialiser.AppResources.Messager.Message("Structural2DLoadPanel with no loading", loadPanel.ApplicationId);
+        Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, "Structural2DLoadPanel with no loading", loadPanel.ApplicationId);
         return "";
       }
 
@@ -106,7 +106,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
         }
         catch
         {
-          Initialiser.AppResources.Messager.Message("Generating axis from coordinates for 2D load panel", loadPanel.ApplicationId);
+          Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, "Generating axis from coordinates for 2D load panel", loadPanel.ApplicationId);
         }
       }
       else
@@ -141,27 +141,27 @@ namespace SpeckleStructuralGSA.SchemaConversion
                 }
                 else
                 {
-                  Initialiser.AppResources.Messager.Message("Unable to parse AXIS GWA", loadPanel.ApplicationId);
+                  Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, "Unable to parse AXIS GWA", loadPanel.ApplicationId);
                 }
               }
               else
               {
-                Initialiser.AppResources.Messager.Message("Invalid AXIS reference", loadPanel.ApplicationId);
+                Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, "Invalid AXIS reference", loadPanel.ApplicationId);
               }
             }
             else
             {
-              Initialiser.AppResources.Messager.Message("Unable to parse GRID_PLANE GWA", loadPanel.ApplicationId);
+              Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, "Unable to parse GRID_PLANE GWA", loadPanel.ApplicationId);
             }
           }
           else
           {
-            Initialiser.AppResources.Messager.Message("Invalid GRID_PLANE reference", loadPanel.ApplicationId);
+            Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, "Invalid GRID_PLANE reference", loadPanel.ApplicationId);
           }
         }
         else
         {
-          Initialiser.AppResources.Messager.Message("Unable to parse GRID_SURFACE GWA", loadPanel.ApplicationId);
+          Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, "Unable to parse GRID_SURFACE GWA", loadPanel.ApplicationId);
         }
       }
 

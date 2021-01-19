@@ -1072,7 +1072,7 @@ namespace SpeckleStructuralGSA
     {
       try
       {
-        Initialiser.AppResources.Messager.Message(groupMessage, details);
+        Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, groupMessage, details);
       }
       catch
       {

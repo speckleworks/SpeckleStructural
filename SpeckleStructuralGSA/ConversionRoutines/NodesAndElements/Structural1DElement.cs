@@ -87,7 +87,7 @@ namespace SpeckleStructuralGSA
       }
       catch
       {
-        Initialiser.AppResources.Messager.Message("Generating axis from coordinates for 1D element", obj.ApplicationId);
+        Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, "Generating axis from coordinates for 1D element", obj.ApplicationId);
       }
 
       if (pieces[counter++] != "NO_RLS")
@@ -683,7 +683,7 @@ namespace SpeckleStructuralGSA
           }
           catch (Exception ex)
           {
-            Initialiser.AppResources.Messager.Message(typeName + ": " + ex.Message, gsaId);
+            Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
           }
         }
       }
@@ -725,7 +725,7 @@ namespace SpeckleStructuralGSA
           }
           catch (Exception ex)
           {
-            Initialiser.AppResources.Messager.Message(typeName + ": " + ex.Message, gsaId);
+            Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
           }
         }
       }

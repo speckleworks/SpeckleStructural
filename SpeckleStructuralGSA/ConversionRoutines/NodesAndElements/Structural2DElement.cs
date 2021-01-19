@@ -74,7 +74,7 @@ namespace SpeckleStructuralGSA
       }
       catch
       {
-        Initialiser.AppResources.Messager.Message("Generating axis from coordinates for 2D element", obj.ApplicationId);
+        Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, "Generating axis from coordinates for 2D element", obj.ApplicationId);
       }
 
       if (prop != null)
@@ -294,7 +294,7 @@ namespace SpeckleStructuralGSA
       }
       catch
       {
-        Initialiser.AppResources.Messager.Message("Generating axis from coordinates for 2D member", obj.ApplicationId);
+        Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, "Generating axis from coordinates for 2D member", obj.ApplicationId);
       }
 
       if (axis != null)
@@ -557,7 +557,7 @@ namespace SpeckleStructuralGSA
           }
           catch (Exception ex)
           {
-            Initialiser.AppResources.Messager.Message(typeName + ": " + ex.Message, gsaId);
+            Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
           }
         }
       });
@@ -600,7 +600,7 @@ namespace SpeckleStructuralGSA
             }
             catch (Exception ex)
             {
-              Initialiser.AppResources.Messager.Message(typeName + ": " + ex.Message, gsaId);
+              Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
             }
           }
         }
