@@ -310,7 +310,7 @@ namespace SpeckleStructuralGSA
             }
             catch (Exception ex)
             {
-              Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, member.ToString());
+              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, member.ToString());
             }
 
             Initialiser.GsaKit.GSASenderObjects.RemoveAll(matching1dElementList);

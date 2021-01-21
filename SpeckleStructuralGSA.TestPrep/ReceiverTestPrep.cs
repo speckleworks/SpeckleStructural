@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
 using SpeckleGSAInterfaces;
-using SpeckleGSAProxy;
 using SpeckleStructuralGSA.Test;
 
 namespace SpeckleStructuralGSA.TestPrep
@@ -12,13 +11,7 @@ namespace SpeckleStructuralGSA.TestPrep
 
     public void SetupContext()
     {
-      gsaInterfacer = new GSAProxy();
-      gsaCache = new GSACache();
-
-      Initialiser.Instance.Cache = gsaCache;
-      Initialiser.Instance.Interface = gsaInterfacer;
-      Initialiser.Instance.Settings = new MockSettings();
-      Initialiser.Instance.AppUI = new TestAppUI();
+      Initialiser.AppResources = new MockGSAApp();
     }
 
     public bool SetUpReceptionTestData(string[] savedJsonFileNames, string outputGWAFileName, GSATargetLayer layer, string subdir)
@@ -29,9 +22,9 @@ namespace SpeckleStructuralGSA.TestPrep
     private bool PrepareReceptionTestData(string[] savedJsonFileNames, string outputGWAFileName, GSATargetLayer layer, string subdir)
     {
       var mockGsaCom = SetupMockGsaCom();
-      gsaInterfacer.OpenFile("", false, mockGsaCom.Object);
+      Initialiser.AppResources.Proxy.OpenFile("", false, mockGsaCom.Object);
 
-      var receiverProcessor = new ReceiverProcessor(Path.Combine(TestDataDirectory, subdir), gsaInterfacer, gsaCache, layer);
+      var receiverProcessor = new ReceiverProcessor(Path.Combine(TestDataDirectory, subdir), Initialiser.AppResources, layer);
 
       //Run conversion to GWA keywords
       receiverProcessor.JsonSpeckleStreamsToGwaRecords(savedJsonFileNames, out var gwaRecords, layer);

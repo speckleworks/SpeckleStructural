@@ -12,7 +12,7 @@ using System.Collections.Specialized;
 namespace SpeckleStructuralGSA
 {
   //Elements can have parent members and the application IDs should be based on that of their parents, so they need to be read first, hence the inclusion of that as a read prerequisite
-  [GSAObject("EL.4", new string[] { "NODE.3", "PROP_2D.6" }, "model", true, false, new Type[] { typeof(GSANode), typeof(GSA2DProperty), typeof(GSA2DMember) }, new Type[] { typeof(GSANode), typeof(GSA2DProperty) })]
+  [GSAObject("EL.4", new string[] { "NODE.3", "PROP_2D.7" }, "model", true, false, new Type[] { typeof(GSANode), typeof(GSA2DProperty), typeof(GSA2DMember) }, new Type[] { typeof(GSANode), typeof(GSA2DProperty) })]
   public class GSA2DElement : GSABase<Structural2DElement>
   {
     public int Member;
@@ -74,7 +74,7 @@ namespace SpeckleStructuralGSA
       }
       catch
       {
-        Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, "Generating axis from coordinates for 2D element", obj.ApplicationId);
+        Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, "Generating axis from coordinates for 2D element", obj.ApplicationId);
       }
 
       if (prop != null)
@@ -294,7 +294,7 @@ namespace SpeckleStructuralGSA
       }
       catch
       {
-        Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, "Generating axis from coordinates for 2D member", obj.ApplicationId);
+        Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, "Generating axis from coordinates for 2D member", obj.ApplicationId);
       }
 
       if (axis != null)
@@ -487,8 +487,11 @@ namespace SpeckleStructuralGSA
       ls.Add((gsaDummy.HasValue && gsaDummy.Value) ? "DUMMY" : "ACTIVE");
       ls.Add(offset.HasValue ? offset.ToString() : "0"); // Offset z
       ls.Add("NO"); // Internal auto offset
-      // ignore rebar commands and hope GSA fills in default values
-
+      //These are default values - filled in here to avoid instances of GWA comparisons (when upserting into the cache) showing change where there isn't
+      ls.Add("REBAR_2D.1");
+      ls.Add("0.03");
+      ls.Add("0.03");
+      ls.Add("0");
       gwaCommands.Add(string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
 
       return string.Join("\n", gwaCommands);
@@ -557,7 +560,7 @@ namespace SpeckleStructuralGSA
           }
           catch (Exception ex)
           {
-            Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
+            Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
           }
         }
       });
@@ -600,7 +603,7 @@ namespace SpeckleStructuralGSA
             }
             catch (Exception ex)
             {
-              Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
+              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
             }
           }
         }

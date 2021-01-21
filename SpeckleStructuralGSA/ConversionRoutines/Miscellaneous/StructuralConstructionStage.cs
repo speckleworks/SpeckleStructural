@@ -104,7 +104,7 @@ namespace SpeckleStructuralGSA
           indices.AddRange(e1DPolyIndices);
           indices.AddRange(e2DIndices);
           indices.AddRange(e2DMeshIndices);
-          indices = indices.Distinct().ToList();
+          indices = indices.Distinct().OrderBy(i => i).ToList();
 
           targetString = string.Join(" ", indices.Select(x => x.ToString()));
         }
@@ -115,7 +115,7 @@ namespace SpeckleStructuralGSA
 
           var indices = new List<int>(m1DIndices);
           indices.AddRange(m2DIndices);
-          indices = indices.Distinct().ToList();
+          indices = indices.Distinct().OrderBy(i => i).ToList();
 
           targetString = string.Join(" ", indices.Select(i => "G" + i.ToString()));
         }
@@ -134,7 +134,8 @@ namespace SpeckleStructuralGSA
           "NO_RGB", // Colour
           targetString, //Elements by group name
           "0", //Creep factor
-          stageDef.StageDays.ToString() // Stage
+          stageDef.StageDays.ToString(), // Stage
+          "none"
         };
 
       return (string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
@@ -183,7 +184,7 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, k.ToString());
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, k.ToString());
         }
       });
 

@@ -155,7 +155,11 @@ namespace SpeckleStructuralGSA
       ls.Add("ACTIVE"); // Dummy
       ls.Add("0"); // Offset z
       ls.Add("NO"); // Internal auto offset
-
+      //These are default values - filled in here to avoid instances of GWA comparisons (when upserting into the cache) showing change where there isn't
+      ls.Add("REBAR_2D.1");
+      ls.Add("0.03");
+      ls.Add("0.03");
+      ls.Add("0");
       return (string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
     }
   }
@@ -195,7 +199,7 @@ namespace SpeckleStructuralGSA
             }
             catch (Exception ex)
             {
-              Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
+              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
             }
           }
         }

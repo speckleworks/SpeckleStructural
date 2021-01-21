@@ -56,7 +56,7 @@ namespace SpeckleStructuralGSA.Schema
       }
 
       //ASSEMBLY.3 | num | name | type | entity | topo_1 | topo_2 | orient_node | int_topo | size_y | size_z | curve_type | curve_order | point_defn | points
-      AddItems(ref items, Name, AddType(), AddEntities(), Topo1, Topo2, OrientNode, AddIntTopo(), SizeY, SizeZ, AddCurveType(), CurveOrder, AddPointDefn(), AddPoints());
+      AddItems(ref items, Name, AddType(), AddEntities(), Topo1, Topo2, OrientNode, AddIntTopo(), SizeY, SizeZ, AddCurveType(), CurveOrder ?? 0, AddPointDefn(), AddPoints());
 
       gwa = (Join(items, out var gwaLine)) ? new List<string>() { gwaLine } : new List<string>();
       return gwa.Count() > 0;

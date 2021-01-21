@@ -12,11 +12,12 @@ namespace SpeckleStructuralGSA.Test
   {
     private List<Tuple<string, SpeckleObject>> receivedObjects;
 
-    public ReceiverProcessor(string directory, GSAProxy gsaInterfacer, GSACache gsaCache, GSATargetLayer layer = GSATargetLayer.Design) : base (directory)
+    public ReceiverProcessor(string directory, IGSAAppResources appResources, GSATargetLayer layer = GSATargetLayer.Design) : base (directory)
     {
-      GSAInterfacer = gsaInterfacer;
-      GSACache = gsaCache;
-      Initialiser.Instance.Settings.TargetLayer = layer;
+      this.appResources = appResources;
+      //GSAInterfacer = gsaInterfacer;
+      //GSACache = gsaCache;
+      this.appResources.Settings.TargetLayer = layer;
     }
 
     public void JsonSpeckleStreamsToGwaRecords(IEnumerable<string> savedJsonFileNames, out List<GwaRecord> gwaRecords, GSATargetLayer layer)
@@ -29,10 +30,10 @@ namespace SpeckleStructuralGSA.Test
 
       ConvertSpeckleObjectsToGsaInterfacerCache(layer);
 
-      var gwaCommands = GSACache.GetGwaSetCommands();
+      var gwaCommands = ((IGSACacheForTesting) this.appResources.Cache).GetGwaSetCommands();
       foreach (var gwaC in gwaCommands)
       {
-        GSAInterfacer.ParseGeneralGwa(gwaC, out var keyword, out int? index, out var streamId, out var applicationId, out var gwaWithoutSet, out GwaSetCommandType? gwaSetType);
+        this.appResources.Proxy.ParseGeneralGwa(gwaC, out var keyword, out int? index, out var streamId, out var applicationId, out var gwaWithoutSet, out GwaSetCommandType? gwaSetType);
         gwaRecords.Add(new GwaRecord(string.IsNullOrEmpty(applicationId) ? null : applicationId, gwaC));
       }
     }
@@ -89,22 +90,23 @@ namespace SpeckleStructuralGSA.Test
 
             for (var j = 0; j < gwaCommands.Count(); j++)
             {
-              Initialiser.Instance.Interface.ParseGeneralGwa(gwaCommands[j], out keyword, out int? foundIndex, out string foundStreamId, out string foundApplicationId, out string gwaWithoutSet, out GwaSetCommandType? gwaSetCommandType);
+              appResources.Proxy.ParseGeneralGwa(gwaCommands[j], out keyword, out int? foundIndex, out var foundStreamId, out var foundApplicationId, 
+                out var gwaWithoutSet, out var gwaSetCommandType);
 
               //Only cache the object against, the top-level GWA command, not the sub-commands
-              GSACache.Upsert(keyword, foundIndex.Value, gwaWithoutSet, applicationId: foundApplicationId, so: (foundApplicationId == obj.ApplicationId) ? obj : null, gwaSetCommandType: gwaSetCommandType.Value);
+              ((IGSACache)appResources.Cache).Upsert(keyword, foundIndex.Value, gwaWithoutSet, applicationId: foundApplicationId, 
+                so: (foundApplicationId == obj.ApplicationId) ? obj : null, gwaSetCommandType: gwaSetCommandType.Value);
             }
           }
-
 
           traversedTypes.Add(t);
         }
       } while (currentBatch.Count > 0);
 
-      var toBeAddedGwa = GSACache.GetNewGwaSetCommands();
+      var toBeAddedGwa = ((IGSACache)appResources.Cache).GetNewGwaSetCommands();
       for (int i = 0; i < toBeAddedGwa.Count(); i++)
       {
-        Initialiser.Instance.Interface.SetGwa(toBeAddedGwa[i]);
+        appResources.Proxy.SetGwa(toBeAddedGwa[i]);
       }
     }
 

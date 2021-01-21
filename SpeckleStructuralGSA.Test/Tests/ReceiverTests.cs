@@ -24,25 +24,26 @@ namespace SpeckleStructuralGSA.Test
 
       //If this isn't called, then the GetObjectSubtypeBetter method in SpeckleCore will cause a {"Value cannot be null.\r\nParameter name: source"} message
       SpeckleInitializer.Initialize();
-      gsaInterfacer = new GSAProxy();
-      gsaCache = new GSACache();
+      Initialiser.AppResources = new MockGSAApp();
+      //gsaInterfacer = new GSAProxy();
+      //gsaCache = new GSACache();
 
-      Initialiser.Instance.Cache = gsaCache;
-      Initialiser.Instance.Interface = gsaInterfacer;
-      Initialiser.Instance.AppUI = new SpeckleAppUI();
+      //Initialiser.Instance.Cache = gsaCache;
+      //Initialiser.Instance.Interface = gsaInterfacer;
+      //Initialiser.Instance.AppUI = new SpeckleAppUI();
     }
 
     [SetUp]
     public void BeforeEachTest()
     {
-      Initialiser.Instance.Settings = new MockSettings();
+      ((MockGSAApp) Initialiser.AppResources).Settings = new MockSettings();
     }
 
     [TearDown]
     public void AfterEachTest()
     {
-      Initialiser.Instance.Interface.Close();
-      ((IGSACacheForTesting) Initialiser.Instance.Cache).Clear();
+      Initialiser.AppResources.Proxy.Close();
+      ((IGSACacheForTesting) Initialiser.AppResources.Cache).Clear();
     }
 
     //Reception test
@@ -61,9 +62,9 @@ namespace SpeckleStructuralGSA.Test
       var json = Helper.ReadFile(fileName, TestDataDirectory);
 
       var mockGsaCom = SetupMockGsaCom();
-      gsaInterfacer.OpenFile("", false, mockGsaCom.Object);
+      Initialiser.AppResources.Proxy.OpenFile("", false, mockGsaCom.Object);
 
-      var receiverProcessor = new ReceiverProcessor(TestDataDirectory, gsaInterfacer, gsaCache);
+      var receiverProcessor = new ReceiverProcessor(TestDataDirectory, Initialiser.AppResources);
 
       //Run conversion to GWA keywords
       receiverProcessor.JsonSpeckleStreamsToGwaRecords(new[] { fileName }, out var actualGwaRecords, layer);
@@ -77,7 +78,7 @@ namespace SpeckleStructuralGSA.Test
       var actualGwaRecordsForKeyword = new Dictionary<string, List<string>>();
       for (var i = 0; i < actualGwaRecords.Count(); i++)
       {
-        Initialiser.Instance.Interface.ParseGeneralGwa(actualGwaRecords[i].GwaCommand, out var recordKeyword, out var foundIndex, out var foundStreamId, out string foundApplicationId, out var gwaWithoutSet, out var gwaSetCommandType);
+        Initialiser.AppResources.Proxy.ParseGeneralGwa(actualGwaRecords[i].GwaCommand, out var recordKeyword, out var foundIndex, out var foundStreamId, out string foundApplicationId, out var gwaWithoutSet, out var gwaSetCommandType);
         if (!actualGwaRecordsForKeyword.ContainsKey(recordKeyword))
         {
           actualGwaRecordsForKeyword.Add(recordKeyword, new List<string>());
@@ -106,9 +107,9 @@ namespace SpeckleStructuralGSA.Test
       var json = Helper.ReadFile(fileName, TestDataDirectory);
 
       var mockGsaCom = SetupMockGsaCom();
-      gsaInterfacer.OpenFile("", false, mockGsaCom.Object);
+      Initialiser.AppResources.Proxy.OpenFile("", false, mockGsaCom.Object);
 
-      var receiverProcessor = new ReceiverProcessor(TestDataDirectory, gsaInterfacer, gsaCache);
+      var receiverProcessor = new ReceiverProcessor(TestDataDirectory, Initialiser.AppResources);
 
       //Run conversion to GWA keywords
       receiverProcessor.JsonSpeckleStreamsToGwaRecords(new[] { fileName }, out var actualGwaRecords, layer);
@@ -124,7 +125,7 @@ namespace SpeckleStructuralGSA.Test
         var actualGwaRecordsForKeyword = new List<GwaRecord>();
         for (var i = 0; i < actualGwaRecords.Count(); i++)
         {
-          Initialiser.Instance.Interface.ParseGeneralGwa(actualGwaRecords[i].GwaCommand, out var recordKeyword, out var foundIndex, out var foundStreamId, out string foundApplicationId, out var gwaWithoutSet, out var gwaSetCommandType);
+          Initialiser.AppResources.Proxy.ParseGeneralGwa(actualGwaRecords[i].GwaCommand, out var recordKeyword, out var foundIndex, out var foundStreamId, out string foundApplicationId, out var gwaWithoutSet, out var gwaSetCommandType);
           if (recordKeyword.Equals(keyword, StringComparison.InvariantCultureIgnoreCase))
           {
             actualGwaRecordsForKeyword.Add(actualGwaRecords[i]);
@@ -152,9 +153,9 @@ namespace SpeckleStructuralGSA.Test
       var expectedGwaRecords = Helper.DeserialiseJson<List<GwaRecord>>(expectedJson);
 
       var mockGsaCom = SetupMockGsaCom();
-      gsaInterfacer.OpenFile("", false, mockGsaCom.Object);
+      Initialiser.AppResources.Proxy.OpenFile("", false, mockGsaCom.Object);
 
-      var receiverProcessor = new ReceiverProcessor(dir, gsaInterfacer, gsaCache);
+      var receiverProcessor = new ReceiverProcessor(dir, Initialiser.AppResources);
 
       //Run conversion to GWA keywords
       receiverProcessor.JsonSpeckleStreamsToGwaRecords(savedJsonFileNames, out var actualGwaRecords, layer);
@@ -170,7 +171,7 @@ namespace SpeckleStructuralGSA.Test
         var expectedGwaRecordsForKeyword = new List<GwaRecord>();
         for (var i = 0; i < expectedGwaRecords.Count(); i++)
         {
-          Initialiser.Instance.Interface.ParseGeneralGwa(expectedGwaRecords[i].GwaCommand, out var recordKeyword, out var foundIndex, out var foundStreamId, out string foundApplicationId, out var gwaWithoutSet, out var gwaSetCommandType);
+          Initialiser.AppResources.Proxy.ParseGeneralGwa(expectedGwaRecords[i].GwaCommand, out var recordKeyword, out var foundIndex, out var foundStreamId, out string foundApplicationId, out var gwaWithoutSet, out var gwaSetCommandType);
           if (recordKeyword.Equals(keyword, StringComparison.InvariantCultureIgnoreCase))
           {
             expectedGwaRecordsForKeyword.Add(expectedGwaRecords[i]);
@@ -180,7 +181,7 @@ namespace SpeckleStructuralGSA.Test
         var actualGwaRecordsForKeyword = new List<GwaRecord>();
         for (var i = 0; i < actualGwaRecords.Count(); i++)
         {
-          Initialiser.Instance.Interface.ParseGeneralGwa(actualGwaRecords[i].GwaCommand, out var recordKeyword, out var foundIndex, out var foundStreamId, out string foundApplicationId, out var gwaWithoutSet, out var gwaSetCommandType);
+          Initialiser.AppResources.Proxy.ParseGeneralGwa(actualGwaRecords[i].GwaCommand, out var recordKeyword, out var foundIndex, out var foundStreamId, out string foundApplicationId, out var gwaWithoutSet, out var gwaSetCommandType);
           if (recordKeyword.Equals(keyword, StringComparison.InvariantCultureIgnoreCase))
           {
             actualGwaRecordsForKeyword.Add(actualGwaRecords[i]);

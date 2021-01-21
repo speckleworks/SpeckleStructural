@@ -119,7 +119,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
         if (!obj.FromGwa(newLines[index]))
         {
-          Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, typeof(U).Name + ": Unable to parse GWA", index.ToString());
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeof(U).Name + ": Unable to parse GWA", index.ToString());
         }
         schemaObjs.Add((U)obj);
       }
@@ -140,7 +140,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
         if (!obj.FromGwa(gwa[i]))
         {
-          Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, typeof(U).Name + ": Unable to parse GWA", index.ToString());
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeof(U).Name + ": Unable to parse GWA", index.ToString());
         }
         schemaObjs.Add((U)obj);
       }

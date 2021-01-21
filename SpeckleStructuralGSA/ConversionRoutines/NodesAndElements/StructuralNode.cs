@@ -148,7 +148,23 @@ namespace SpeckleStructuralGSA
           restraint += node.Restraint.Value[3] ? "xx" : "";
           restraint += node.Restraint.Value[4] ? "yy" : "";
           restraint += node.Restraint.Value[5] ? "zz" : "";
-          ls.Add(restraint);
+
+          if (restraint == "")
+          {
+            ls.Add("free");
+          }
+          else if (restraint == "xyz")
+          {
+            ls.Add("pin");
+          }
+          else if (restraint == "xyzxxyyzz")
+          {
+            ls.Add("fix");
+          }
+          else
+          {
+            ls.Add(restraint);
+          }
         }
         else
         {
@@ -157,30 +173,36 @@ namespace SpeckleStructuralGSA
       }
       catch { ls.Add("free"); }
 
-      // axis
       var gwaCommands = new List<string>();
-      var axisGwa = "";
-      try
+
+      //This condition will need to be expanded if springProperty, massProperty and damperProperty are ever implemented
+      if (node.Axis != null && node.GSALocalMeshSize.HasValue)
       {
-        Helper.SetAxis(node.Axis, out var axisIndex, out axisGwa, node.Name);
-        if (axisGwa.Length > 0)
+        // axis
+        
+        var axisGwa = "";
+        try
         {
-          gwaCommands.Add(axisGwa);
+          Helper.SetAxis(node.Axis, out var axisIndex, out axisGwa, node.Name);
+          if (axisGwa.Length > 0)
+          {
+            gwaCommands.Add(axisGwa);
+          }
+
+          ls.Add(axisIndex.ToString());
         }
+        catch { ls.Add("GLOBAL"); }
 
-        ls.Add(axisIndex.ToString());
+        ls.Add(node.GSALocalMeshSize.HasValue ? node.GSALocalMeshSize.Value.ToString() : ""); // mesh_size - may need to perform rounding here
+
+        // TODO: springProperty
+        // naive of one spring property per springy node could create thousands of spring props
+
+        // TODO: massProperty
+        // similar potential problem as spring props
+
+        // damperProperty - not supported
       }
-      catch { ls.Add("GLOBAL"); }
-
-      ls.Add(node.GSALocalMeshSize.HasValue ? node.GSALocalMeshSize.Value.ToString() : ""); // mesh_size - may need to perform rounding here
-
-      // TODO: springProperty
-      // naive of one spring property per springy node could create thousands of spring props
-      
-      // TODO: massProperty
-      // similar potential problem as spring props
-      
-      // damperProperty - not supported
 
       gwaCommands.Add(string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
 
@@ -349,7 +371,7 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
         }
       }
       );
@@ -400,7 +422,7 @@ namespace SpeckleStructuralGSA
           }
           catch (Exception ex)
           {
-            Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
+            Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
           }
         }
       }

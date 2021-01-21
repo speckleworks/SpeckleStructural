@@ -7,7 +7,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("ANAL.1", new string[] { "TASK.1" }, "model", true, true, new Type[] { typeof(GSALoadCase) }, new Type[] { typeof(GSALoadCase) })]
+  [GSAObject("ANAL.1", new string[] { "TASK.2" }, "model", true, true, new Type[] { typeof(GSALoadCase) }, new Type[] { typeof(GSALoadCase) })]
   public class GSALoadTask : GSABase<StructuralLoadTask>
   {
     public void ParseGWACommand()
@@ -72,7 +72,7 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSALoadTask).GetGSAKeyword();
 
-      var taskIndex = Initialiser.AppResources.Cache.ResolveIndex("TASK.1", loadTask.ApplicationId);
+      var taskIndex = Initialiser.AppResources.Cache.ResolveIndex("TASK.2", loadTask.ApplicationId);
       var index = Initialiser.AppResources.Cache.ResolveIndex(typeof(GSALoadTask).GetGSAKeyword(), loadTask.ApplicationId);
 
       var gwaCommands = new List<string>();
@@ -81,7 +81,7 @@ namespace SpeckleStructuralGSA
       {
         // Set TASK
         "SET",
-        "TASK.1" + ":" + Helper.GenerateSID(loadTask),
+        "TASK.2" + ":" + Helper.GenerateSID(loadTask),
         taskIndex.ToString(),
         "", // Name
         "0" // Stage
@@ -268,7 +268,7 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, k.ToString());
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, k.ToString());
         }
         loadTasks.Add(task);
       }

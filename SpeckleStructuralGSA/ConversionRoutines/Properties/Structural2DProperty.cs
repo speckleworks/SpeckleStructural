@@ -9,7 +9,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("PROP_2D.6", new string[] { "MAT_STEEL.3", "MAT_CONCRETE.17" }, "model", true, true, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) }, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) })]
+  [GSAObject("PROP_2D.7", new string[] { "MAT_STEEL.3", "MAT_CONCRETE.17" }, "model", true, true, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) }, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) })]
   public class GSA2DProperty : GSABase<Structural2DProperty>
   {
     public bool IsAxisLocal;
@@ -148,7 +148,7 @@ namespace SpeckleStructuralGSA
       ls.Add("100%"); // Shear modifier
       ls.Add("100%"); // Inplane modifier
       ls.Add("100%"); // Weight modifier
-      ls.Add("NO_ENV"); // Environmental data
+      //ls.Add("NO_ENV"); // Environmental data
 
       return (string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
     }
@@ -185,7 +185,7 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
         }
       });
 

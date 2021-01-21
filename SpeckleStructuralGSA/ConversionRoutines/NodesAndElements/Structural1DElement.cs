@@ -87,7 +87,7 @@ namespace SpeckleStructuralGSA
       }
       catch
       {
-        Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, "Generating axis from coordinates for 1D element", obj.ApplicationId);
+        Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, "Generating axis from coordinates for 1D element", obj.ApplicationId);
       }
 
       if (pieces[counter++] != "NO_RLS")
@@ -560,9 +560,9 @@ namespace SpeckleStructuralGSA
       ls.Add("Free"); // restraint_end_1
       ls.Add("Free"); // restraint_end_2
 
-      ls.Add("0"); // Effective length option
+      ls.Add("AUTOMATIC"); // Effective length option
       ls.Add("0"); // height
-      ls.Add("0"); // load_ref
+      ls.Add("SHR_CENTRE"); // load_ref
 
       if (member.Offset == null)
       {
@@ -683,7 +683,7 @@ namespace SpeckleStructuralGSA
           }
           catch (Exception ex)
           {
-            Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
+            Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
           }
         }
       }
@@ -725,7 +725,7 @@ namespace SpeckleStructuralGSA
           }
           catch (Exception ex)
           {
-            Initialiser.AppResources.Messager.Message(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
+            Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
           }
         }
       }

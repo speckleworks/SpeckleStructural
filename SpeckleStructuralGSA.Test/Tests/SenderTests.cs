@@ -29,13 +29,15 @@ namespace SpeckleStructuralGSA.Test
       //This uses the installed SpeckleKits - when SpeckleStructural is built, the built files are copied into the 
       // %LocalAppData%\SpeckleKits directory, so therefore this project doesn't need to reference the projects within in this solution
       SpeckleInitializer.Initialize();
-      gsaInterfacer = new GSAProxy();
-      gsaCache = new GSACache();
+      //gsaInterfacer = new GSAProxy();
+      //gsaCache = new GSACache();
+      Initialiser.AppResources = new MockGSAApp(proxy: new GSAProxy());
+      Initialiser.GsaKit.Clear();
 
-      Initialiser.Instance.Cache = gsaCache;
-      Initialiser.Instance.Interface = gsaInterfacer;
-      Initialiser.Instance.Settings = new MockSettings();
-      Initialiser.Instance.AppUI = new SpeckleAppUI();
+      //Initialiser.Instance.Cache = gsaCache;
+      //Initialiser.Instance.Interface = gsaInterfacer;
+      //Initialiser.Instance.Settings = new MockSettings();
+      //Initialiser.Instance.AppUI = new SpeckleAppUI();
     }
 
     [TestCase("TxSpeckleObjectsDesignLayer.json", GSATargetLayer.Design, false, true, gsaFileNameWithResults)]
@@ -45,7 +47,7 @@ namespace SpeckleStructuralGSA.Test
     [TestCase("TxSpeckleObjectsNotEmbedded.json", GSATargetLayer.Analysis, false, false, gsaFileNameWithResults)]
     public void TransmissionTest(string inputJsonFileName, GSATargetLayer layer, bool resultsOnly, bool embedResults, string gsaFileName)
     {
-      gsaInterfacer.OpenFile(Path.Combine(TestDataDirectory, gsaFileName));
+      Initialiser.AppResources.Proxy.OpenFile(Path.Combine(TestDataDirectory, gsaFileName));
 
       //Deserialise into Speckle Objects so that these can be compared in any order
 
@@ -163,7 +165,7 @@ namespace SpeckleStructuralGSA.Test
       }
       //);
 
-      gsaInterfacer.Close();
+      Initialiser.AppResources.Proxy.Close();
       Assert.IsFalse(actual.Keys.Any(a => !a.Type.ToLower().EndsWith("result") && string.IsNullOrEmpty(a.ApplicationId)));
       Assert.AreEqual(actual.Count(), matched.Count());
       Assert.IsEmpty(unmatching, unmatching.Count().ToString() + " unmatched objects");
@@ -193,7 +195,7 @@ namespace SpeckleStructuralGSA.Test
     public void TransmissionTestForDebug(GSATargetLayer layer, bool resultsOnly, bool embedResults, string gsaFileName, 
       string overrideResultType = null, string loadCasesOverride = null)
     {
-      gsaInterfacer.OpenFile(gsaFileName.Contains("\\") ? gsaFileName : Path.Combine(TestDataDirectory, gsaFileName));
+      Initialiser.AppResources.Proxy.OpenFile(gsaFileName.Contains("\\") ? gsaFileName : Path.Combine(TestDataDirectory, gsaFileName));
 
       var actualObjects = ModelToSpeckleObjects(layer, resultsOnly, embedResults,
         (loadCasesOverride == null) ? loadCases : loadCasesOverride.ListSplit(" "),
@@ -217,7 +219,7 @@ namespace SpeckleStructuralGSA.Test
 
       var matched = new List<SpeckleObject>();
 
-      gsaInterfacer.Close();
+      Initialiser.AppResources.Proxy.Close();
     }
   }
 }

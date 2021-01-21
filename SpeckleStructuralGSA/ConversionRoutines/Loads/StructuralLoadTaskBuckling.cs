@@ -7,7 +7,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("ANAL.1", new string[] { "TASK.1" }, "model", true, true, new Type[] { typeof(GSALoadCase), typeof(GSAConstructionStage), typeof(GSALoadCombo) }, new Type[] { typeof(GSALoadCase), typeof(GSAConstructionStage), typeof(GSALoadCombo) })]
+  [GSAObject("ANAL.1", new string[] { "TASK.2" }, "model", true, true, new Type[] { typeof(GSALoadCase), typeof(GSAConstructionStage), typeof(GSALoadCombo) }, new Type[] { typeof(GSALoadCase), typeof(GSAConstructionStage), typeof(GSALoadCombo) })]
   public class GSALoadTaskBuckling : GSABase<StructuralLoadTaskBuckling>
   {
 
@@ -54,7 +54,7 @@ namespace SpeckleStructuralGSA
       var keyword = typeof(GSALoadTaskBuckling).GetGSAKeyword();
       var subkeyword = typeof(GSALoadTaskBuckling).GetSubGSAKeyword().First();
 
-      var taskIndex = Initialiser.AppResources.Cache.ResolveIndex("TASK.1", loadTask.ApplicationId);
+      var taskIndex = Initialiser.AppResources.Cache.ResolveIndex("TASK.2", loadTask.ApplicationId);
       var comboIndex = Initialiser.AppResources.Cache.LookupIndex(typeof(GSALoadCombo).GetGSAKeyword(), loadTask.ResultCaseRef);
       var stageIndex = Initialiser.AppResources.Cache.LookupIndex(typeof(GSAConstructionStage).GetGSAKeyword(), loadTask.StageDefinitionRef);
 
