@@ -157,6 +157,7 @@ namespace SpeckleStructuralClasses
     public string MaterialRef { get; set; }
   }
 
+  [Serializable]
   public partial class Structural1DPropertyExplicit : SpeckleObject, IStructural
   {
     public override string Type { get => "Structural1DPropertyExplicit"; }

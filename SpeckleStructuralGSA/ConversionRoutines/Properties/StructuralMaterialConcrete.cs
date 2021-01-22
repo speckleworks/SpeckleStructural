@@ -71,8 +71,8 @@ namespace SpeckleStructuralGSA
         index.ToString(),
         "MAT.10",
         mat.Name == null || mat.Name == "" ? " " : mat.Name,
-        mat.CompressiveStrength.ToString(), // Design Strength (Pa) <-- need to check units here
         (mat.YoungsModulus*1000).ToString(), // E
+        mat.CompressiveStrength.ToString(), // Design Strength (Pa) <-- need to check units here
         mat.PoissonsRatio.ToString(), // nu
         mat.ShearModulus.ToString(), // G
         mat.Density.ToString(), // rho
