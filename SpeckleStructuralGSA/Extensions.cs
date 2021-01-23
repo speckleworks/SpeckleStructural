@@ -17,7 +17,7 @@ namespace SpeckleStructuralGSA
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static string GetStringValue(this Enum value)
+    public static string GetStringValue(this IConvertible value)
     {
       // Get the type
       var type = value.GetType();
@@ -33,8 +33,12 @@ namespace SpeckleStructuralGSA
       return attribs.Length > 0 ? attribs[0].Value : null;
     }
 
-    public static bool TryParseStringValue<T>(this string v, out T value) where T : Enum
+    public static bool TryParseStringValue<T>(this string v, out T value) where T :  IConvertible
     {
+      if (!typeof(T).IsEnum)
+      {
+        throw new ArgumentException("T must be an enumerated type");
+      }
       var enumValues = typeof(T).GetEnumValues().OfType<T>().ToDictionary(ev => GetStringValue(ev), ev => ev);
       if (enumValues.Keys.Any(k => k.Equals(v, StringComparison.InvariantCultureIgnoreCase)))
       {
