@@ -17,7 +17,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural2DLoadPanel();
 
-      var pieces = this.GWACommand.ListSplit(Initialiser.Instance.Interface.GwaDelimiter);
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
@@ -136,13 +136,13 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.Instance.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, k.ToString());
         }
 
         loads.Add(load);
       }
 
-      Initialiser.Instance.GSASenderObjects.AddRange(loads);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(loads);
 
       return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

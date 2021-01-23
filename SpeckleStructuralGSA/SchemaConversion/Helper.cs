@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SpeckleCore;
+using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 using SpeckleStructuralGSA.Schema;
 
@@ -109,7 +110,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
     {
       //Convert all raw GWA into GSA schema objects
       var keyword = typeof(T).GetGSAKeyword().Split('.').First();
-      var newLines = Initialiser.Instance.Cache.GetGwaToSerialise(keyword);
+      var newLines = Initialiser.AppResources.Cache.GetGwaToSerialise(keyword);
       var schemaObjs = new List<U>();
       foreach (var index in newLines.Keys)
       {
@@ -118,7 +119,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
         if (!obj.FromGwa(newLines[index]))
         {
-          Initialiser.Instance.AppUI.Message(typeof(U).Name + ": Unable to parse GWA", index.ToString());
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeof(U).Name + ": Unable to parse GWA", index.ToString());
         }
         schemaObjs.Add((U)obj);
       }
@@ -128,7 +129,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
     public static List<U> GetAllFromCache<T, U>() where U : GsaRecord  //T = old type, U = new schema type
     {
       //Convert all raw GWA into GSA schema objects
-      Initialiser.Instance.Cache.GetKeywordRecordsSummary(typeof(T).GetGSAKeyword(), out var gwa, out var indices, out var appIds);
+      Initialiser.AppResources.Cache.GetKeywordRecordsSummary(typeof(T).GetGSAKeyword(), out var gwa, out var indices, out var appIds);
       var schemaObjs = new List<U>();
       for (var i = 0; i < gwa.Count(); i++)
       {
@@ -139,7 +140,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
         if (!obj.FromGwa(gwa[i]))
         {
-          Initialiser.Instance.AppUI.Message(typeof(U).Name + ": Unable to parse GWA", index.ToString());
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeof(U).Name + ": Unable to parse GWA", index.ToString());
         }
         schemaObjs.Add((U)obj);
       }

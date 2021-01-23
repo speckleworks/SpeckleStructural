@@ -15,7 +15,7 @@ namespace SpeckleStructuralGSA
       if (this.GWACommand == null)
         return false;
 
-      var pieces = this.GWACommand.ListSplit(Initialiser.Instance.Interface.GwaDelimiter);
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       if (pieces[3].ToLower() != "storey")
       {
@@ -57,11 +57,11 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.Instance.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, k.ToString());
         }
       }
 
-      Initialiser.Instance.GSASenderObjects.AddRange(storeys);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(storeys);
 
       return (storeys.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

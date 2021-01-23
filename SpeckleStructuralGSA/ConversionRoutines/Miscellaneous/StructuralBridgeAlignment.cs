@@ -20,7 +20,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralBridgeAlignment();
 
-      var pieces = this.GWACommand.ListSplit(Initialiser.Instance.Interface.GwaDelimiter);
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
 
@@ -48,10 +48,10 @@ namespace SpeckleStructuralGSA
 
       var keyword = destType.GetGSAKeyword();
 
-      var gridSurfaceIndex = Initialiser.Instance.Cache.ResolveIndex("GRID_SURFACE.1");
-      var gridPlaneIndex = Initialiser.Instance.Cache.ResolveIndex("GRID_PLANE.4");
+      var gridSurfaceIndex = Initialiser.AppResources.Cache.ResolveIndex("GRID_SURFACE.1");
+      var gridPlaneIndex = Initialiser.AppResources.Cache.ResolveIndex("GRID_PLANE.4");
 
-      var index = Initialiser.Instance.Cache.ResolveIndex(keyword, alignment.ApplicationId);
+      var index = Initialiser.AppResources.Cache.ResolveIndex(keyword, alignment.ApplicationId);
 
       var sid = Helper.GenerateSID(alignment);
 
@@ -84,7 +84,7 @@ namespace SpeckleStructuralGSA
         "0", // Elevation above
         "0" }); // Elevation below
 
-      gwaCommands.Add(string.Join(Initialiser.Instance.Interface.GwaDelimiter.ToString(), ls));
+      gwaCommands.Add(string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
 
       ls.Clear();
       ls.AddRange(new[] {
@@ -98,7 +98,7 @@ namespace SpeckleStructuralGSA
         "0.01", // Tolerance
         "ONE", // Span option
         "0"}); // Span angle
-      gwaCommands.Add(string.Join(Initialiser.Instance.Interface.GwaDelimiter.ToString(), ls));
+      gwaCommands.Add(string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
 
 
       ls.Clear();
@@ -126,7 +126,7 @@ namespace SpeckleStructuralGSA
             ls.Add(((1d / node.Radius) * ((node.Curvature == StructuralBridgeCurvature.RightCurve) ? 1 : -1)).ToString());
           }
         }
-        gwaCommands.Add(string.Join(Initialiser.Instance.Interface.GwaDelimiter.ToString(), ls));
+        gwaCommands.Add(string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
       }
 
       return string.Join("\n", gwaCommands);
@@ -173,11 +173,11 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.Instance.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, k.ToString());
         }
       });
 
-      Initialiser.Instance.GSASenderObjects.AddRange(alignments.Values.ToList());
+      Initialiser.GsaKit.GSASenderObjects.AddRange(alignments.Values.ToList());
 
       return (alignments.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }

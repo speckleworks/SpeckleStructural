@@ -20,16 +20,16 @@ namespace SpeckleStructuralGSA.SchemaConversion
       }
       if (loadPanel.Loading == null || loadPanel.Loading.Value == null || loadPanel.Loading.Value.All(v => v == 0))
       {
-        Initialiser.Instance.AppUI.Message("Structural2DLoadPanel with no loading", loadPanel.ApplicationId);
+        Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, "Structural2DLoadPanel with no loading", loadPanel.ApplicationId);
         return "";
       }
 
       var keyword = GsaRecord.GetKeyword<GsaLoadGridArea>();
       var gwaSetCommandType = GsaRecord.GetGwaSetCommandType<GsaLoadGridArea>();
-      var streamId = Initialiser.Instance.Cache.LookupStream(loadPanel.ApplicationId);
+      var streamId = Initialiser.AppResources.Cache.LookupStream(loadPanel.ApplicationId);
 
       var loadCaseKeyword = GsaRecord.GetKeyword<GsaLoadCase>();
-      var loadCaseIndex = Initialiser.Instance.Cache.ResolveIndex(loadCaseKeyword, loadPanel.LoadCaseRef);
+      var loadCaseIndex = Initialiser.AppResources.Cache.ResolveIndex(loadCaseKeyword, loadPanel.LoadCaseRef);
 
       var loadingDict = ExplodeLoading(loadPanel.Loading);
       var originalPolyline = loadPanel.Value.ToArray();
@@ -66,7 +66,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
           gsaAxis.StreamId = streamId;
           StructuralAxisToNative.ToNative(gsaAxis);
 
-          var gridPlaneIndex = Initialiser.Instance.Cache.ResolveIndex(gridPlaneKeyword);
+          var gridPlaneIndex = Initialiser.AppResources.Cache.ResolveIndex(gridPlaneKeyword);
           var gsaGridPlane = new GsaGridPlane()
           {
             Index = gridPlaneIndex,
@@ -81,10 +81,10 @@ namespace SpeckleStructuralGSA.SchemaConversion
           };
           if (gsaGridPlane.Gwa(out var gsaGridPlaneGwas, false))
           {
-            Initialiser.Instance.Cache.Upsert(gridPlaneKeyword, gridPlaneIndex, gsaGridPlaneGwas.First(), streamId, "", GsaRecord.GetGwaSetCommandType<GsaGridPlane>());
+            Initialiser.AppResources.Cache.Upsert(gridPlaneKeyword, gridPlaneIndex, gsaGridPlaneGwas.First(), streamId, "", GsaRecord.GetGwaSetCommandType<GsaGridPlane>());
           }
 
-          gridSurfaceIndex = Initialiser.Instance.Cache.ResolveIndex(gridSurfaceKeyword);
+          gridSurfaceIndex = Initialiser.AppResources.Cache.ResolveIndex(gridSurfaceKeyword);
           var gsaGridSurface = new GsaGridSurface()
           {
             Index = gridSurfaceIndex,
@@ -101,12 +101,12 @@ namespace SpeckleStructuralGSA.SchemaConversion
           };
           if (gsaGridSurface.Gwa(out var gsaGridSurfaceGwas, false))
           {
-            Initialiser.Instance.Cache.Upsert(gridSurfaceKeyword, gridSurfaceIndex, gsaGridSurfaceGwas.First(), streamId, "", GsaRecord.GetGwaSetCommandType<GsaGridSurface>());
+            Initialiser.AppResources.Cache.Upsert(gridSurfaceKeyword, gridSurfaceIndex, gsaGridSurfaceGwas.First(), streamId, "", GsaRecord.GetGwaSetCommandType<GsaGridSurface>());
           }
         }
         catch
         {
-          Initialiser.Instance.AppUI.Message("Generating axis from coordinates for 2D load panel", loadPanel.ApplicationId);
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, "Generating axis from coordinates for 2D load panel", loadPanel.ApplicationId);
         }
       }
       else
@@ -116,15 +116,15 @@ namespace SpeckleStructuralGSA.SchemaConversion
         //1.  the StructuralLoadPlane has its own axis (because AxisRefs aren't offered yet in the Structural classes)
         //2.  the StructuralLoadPlane references a StructuralStorey, which has an axis
 
-        gridSurfaceIndex = Initialiser.Instance.Cache.ResolveIndex(gridSurfaceKeyword, loadPanel.LoadPlaneRef);
-        var gsaGridSurfaceGwa = Initialiser.Instance.Cache.GetGwa(gridSurfaceKeyword, gridSurfaceIndex).First();
+        gridSurfaceIndex = Initialiser.AppResources.Cache.ResolveIndex(gridSurfaceKeyword, loadPanel.LoadPlaneRef);
+        var gsaGridSurfaceGwa = Initialiser.AppResources.Cache.GetGwa(gridSurfaceKeyword, gridSurfaceIndex).First();
 
         var gsaGridSurface = new GsaGridSurface();
         if (gsaGridSurface.FromGwa(gsaGridSurfaceGwa))
         {
           if (gsaGridSurface.PlaneRefType == GridPlaneAxisRefType.Reference && gsaGridSurface.PlaneIndex.ValidNonZero())
           {
-            var gsaGridPlaneGwa = Initialiser.Instance.Cache.GetGwa(gridPlaneKeyword, gsaGridSurface.PlaneIndex.Value).First();
+            var gsaGridPlaneGwa = Initialiser.AppResources.Cache.GetGwa(gridPlaneKeyword, gsaGridSurface.PlaneIndex.Value).First();
 
             var gsaGridPlane = new GsaGridPlane();
             if (gsaGridPlane.FromGwa(gsaGridPlaneGwa))
@@ -133,7 +133,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
               {
                 var axisIndex = gsaGridPlane.AxisIndex.Value;
 
-                var gsaAxisGwa = Initialiser.Instance.Cache.GetGwa(axisKeyword, axisIndex).First();
+                var gsaAxisGwa = Initialiser.AppResources.Cache.GetGwa(axisKeyword, axisIndex).First();
                 var gsaAxis = new GsaAxis();
                 if (gsaAxis.FromGwa(gsaAxisGwa))
                 {
@@ -141,27 +141,27 @@ namespace SpeckleStructuralGSA.SchemaConversion
                 }
                 else
                 {
-                  Initialiser.Instance.AppUI.Message("Unable to parse AXIS GWA", loadPanel.ApplicationId);
+                  Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, "Unable to parse AXIS GWA", loadPanel.ApplicationId);
                 }
               }
               else
               {
-                Initialiser.Instance.AppUI.Message("Invalid AXIS reference", loadPanel.ApplicationId);
+                Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, "Invalid AXIS reference", loadPanel.ApplicationId);
               }
             }
             else
             {
-              Initialiser.Instance.AppUI.Message("Unable to parse GRID_PLANE GWA", loadPanel.ApplicationId);
+              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, "Unable to parse GRID_PLANE GWA", loadPanel.ApplicationId);
             }
           }
           else
           {
-            Initialiser.Instance.AppUI.Message("Invalid GRID_PLANE reference", loadPanel.ApplicationId);
+            Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, "Invalid GRID_PLANE reference", loadPanel.ApplicationId);
           }
         }
         else
         {
-          Initialiser.Instance.AppUI.Message("Unable to parse GRID_SURFACE GWA", loadPanel.ApplicationId);
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, "Unable to parse GRID_SURFACE GWA", loadPanel.ApplicationId);
         }
       }
 
@@ -172,7 +172,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
       foreach (var k in loadingDict.Keys)
       {
         var applicationId = string.Join("_", loadPanel.ApplicationId, k.ToString());
-        var index = Initialiser.Instance.Cache.ResolveIndex(keyword, applicationId);
+        var index = Initialiser.AppResources.Cache.ResolveIndex(keyword, applicationId);
 
         var gsaLoadPanel = new GsaLoadGridArea()
         {
@@ -193,7 +193,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
         };
         if (gsaLoadPanel.Gwa(out var gsaLoadPanelGwas, false))
         {
-          Initialiser.Instance.Cache.Upsert(keyword, index, gsaLoadPanelGwas.First(), streamId, applicationId, GsaRecord.GetGwaSetCommandType<GsaLoadGridArea>());
+          Initialiser.AppResources.Cache.Upsert(keyword, index, gsaLoadPanelGwas.First(), streamId, applicationId, GsaRecord.GetGwaSetCommandType<GsaLoadGridArea>());
         }
       }
 

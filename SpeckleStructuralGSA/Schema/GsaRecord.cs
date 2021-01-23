@@ -175,15 +175,15 @@ namespace SpeckleStructuralGSA.Schema
       //Unlike other keywords which have entity type as a parameter, this keyword (at least for version 2) still has "element list" which means, for members,
       //the group is used
 
-      var allIndices = Initialiser.Instance.Cache.LookupIndices(
-        (Initialiser.Instance.Settings.TargetLayer == GSATargetLayer.Design) ? GetKeyword<GsaMemb>() : GetKeyword<GsaEl>())
+      var allIndices = Initialiser.AppResources.Cache.LookupIndices(
+        (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Design) ? GetKeyword<GsaMemb>() : GetKeyword<GsaEl>())
         .Where(i => i.HasValue).Select(i => i.Value).Distinct().OrderBy(i => i).ToList();
 
       if (entities.Distinct().OrderBy(i => i).SequenceEqual(allIndices))
       {
         return "all";
       }
-      return (Initialiser.Instance.Settings.TargetLayer == GSATargetLayer.Design)
+      return (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Design)
         ? string.Join(" ", entities.Select(i => "G" + i))
         : string.Join(" ", entities);
     }
@@ -276,25 +276,25 @@ namespace SpeckleStructuralGSA.Schema
     protected bool AddEntities(string v, out List<int> indices)
     {
       var entityItems = v.Split(' ');
-      if (Initialiser.Instance.Settings.TargetLayer == GSATargetLayer.Design)
+      if (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Design)
       {
         if (entityItems.Count() == 1 && entityItems.First().Equals("all", StringComparison.InvariantCultureIgnoreCase))
         {
-          indices = Initialiser.Instance.Cache.LookupIndices(GetKeyword<GsaMemb>()).Where(i => i.HasValue).Select(i => i.Value).ToList();
+          indices = Initialiser.AppResources.Cache.LookupIndices(GetKeyword<GsaMemb>()).Where(i => i.HasValue).Select(i => i.Value).ToList();
         }
         else
         {
           //Only recognise the groups, as these represent the members
           //TO DO: for all elements, find if they have parents and include them
           var members = string.Join(" ", entityItems.Where(ei => ei.StartsWith("G")).Select(ei => ei.Substring(1)));
-          indices = Initialiser.Instance.Interface.ConvertGSAList(members, GSAEntity.MEMBER).ToList();
+          indices = Initialiser.AppResources.Proxy.ConvertGSAList(members, GSAEntity.MEMBER).ToList();
         }
       }
       else
       {
         indices = (entityItems.Count() == 1 && entityItems.First().Equals("all", StringComparison.InvariantCultureIgnoreCase))
-          ? Initialiser.Instance.Cache.LookupIndices(GetKeyword<GsaEl>()).Where(i => i.HasValue).Select(i => i.Value).ToList()
-          : Initialiser.Instance.Interface.ConvertGSAList(v, GSAEntity.ELEMENT).ToList();
+          ? Initialiser.AppResources.Cache.LookupIndices(GetKeyword<GsaEl>()).Where(i => i.HasValue).Select(i => i.Value).ToList()
+          : Initialiser.AppResources.Proxy.ConvertGSAList(v, GSAEntity.ELEMENT).ToList();
       }
       return true;
     }
@@ -303,8 +303,8 @@ namespace SpeckleStructuralGSA.Schema
     {
       var entityItems = v.Split(' ');
       indices = (entityItems.Count() == 1 && entityItems.First().Equals("all", StringComparison.InvariantCultureIgnoreCase))
-          ? Initialiser.Instance.Cache.LookupIndices(GetKeyword<GsaNode>()).Where(i => i.HasValue).Select(i => i.Value).ToList()
-          : Initialiser.Instance.Interface.ConvertGSAList(v, GSAEntity.NODE).ToList();
+          ? Initialiser.AppResources.Cache.LookupIndices(GetKeyword<GsaNode>()).Where(i => i.HasValue).Select(i => i.Value).ToList()
+          : Initialiser.AppResources.Proxy.ConvertGSAList(v, GSAEntity.NODE).ToList();
       return true;
     }
 
@@ -407,7 +407,7 @@ namespace SpeckleStructuralGSA.Schema
     {
       try
       {
-        return gwa.ListSplit(Initialiser.Instance.Interface.GwaDelimiter).ToList();
+        return gwa.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter).ToList();
       }
       catch
       {
@@ -417,7 +417,7 @@ namespace SpeckleStructuralGSA.Schema
 
     protected bool Join(List<string> items, out string joined)
     {
-      joined = string.Join(Initialiser.Instance.Interface.GwaDelimiter.ToString(), items);
+      joined = string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), items);
       return (joined.Length > 0);
     }
 

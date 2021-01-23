@@ -22,7 +22,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural1DProperty();
 
-      var pieces = this.GWACommand.ListSplit(Initialiser.Instance.Interface.GwaDelimiter);
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
@@ -81,11 +81,11 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA1DProperty).GetGSAKeyword();
 
-      var index = Initialiser.Instance.Cache.ResolveIndex(typeof(GSA1DProperty).GetGSAKeyword(), prop.ApplicationId);
+      var index = Initialiser.AppResources.Cache.ResolveIndex(typeof(GSA1DProperty).GetGSAKeyword(), prop.ApplicationId);
       var materialRef = 0;
       var materialType = "UNDEF";
 
-      var res = Initialiser.Instance.Cache.LookupIndex(typeof(GSAMaterialSteel).GetGSAKeyword(), prop.MaterialRef);
+      var res = Initialiser.AppResources.Cache.LookupIndex(typeof(GSAMaterialSteel).GetGSAKeyword(), prop.MaterialRef);
       if (res.HasValue)
       {
         materialRef = res.Value;
@@ -93,7 +93,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        res = Initialiser.Instance.Cache.LookupIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), prop.MaterialRef);
+        res = Initialiser.AppResources.Cache.LookupIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), prop.MaterialRef);
         if (res.HasValue)
         {
           materialRef = res.Value;
@@ -125,7 +125,7 @@ namespace SpeckleStructuralGSA
         "0" //this needs review
       };
 
-      return (string.Join(Initialiser.Instance.Interface.GwaDelimiter.ToString(), ls));
+      return (string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
     }
 
     private Structural1DProperty SetDesc(Structural1DProperty prop, string desc, string gsaUnit)
@@ -376,7 +376,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        Initialiser.Instance.AppUI.Message("1D section profile string (" + type + ") is not supported", prop.ApplicationId);  // TODO: IMPLEMENT ALL SECTIONS
+        Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, "1D section profile string (" + type + ") is not supported", prop.ApplicationId);  // TODO: IMPLEMENT ALL SECTIONS
       }
 
       return prop;
@@ -713,7 +713,7 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this Structural1DProperty prop)
     {
-      return new GSA1DProperty() { Value = prop }.SetGWACommand(Initialiser.Instance.Settings.Units);
+      return new GSA1DProperty() { Value = prop }.SetGWACommand(Initialiser.AppResources.Settings.Units);
     }
 
     public static SpeckleObject ToSpeckle(this GSA1DProperty dummyObject)
@@ -722,17 +722,17 @@ namespace SpeckleStructuralGSA
       var typeName = dummyObject.GetType().Name;
       var propsLock = new object();
       var props = new SortedDictionary<int, GSA1DProperty>();
-      var steels = Initialiser.Instance.GSASenderObjects.Get<GSAMaterialSteel>();      
-      var concretes = Initialiser.Instance.GSASenderObjects.Get<GSAMaterialConcrete>();
+      var steels = Initialiser.GsaKit.GSASenderObjects.Get<GSAMaterialSteel>();      
+      var concretes = Initialiser.GsaKit.GSASenderObjects.Get<GSAMaterialConcrete>();
 
       Parallel.ForEach(newLines.Keys, k =>
       {
-        var pPieces = newLines[k].ListSplit(Initialiser.Instance.Interface.GwaDelimiter);
+        var pPieces = newLines[k].ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
         var gsaId = pPieces[1];
         try
         {
           var prop = new GSA1DProperty() { GWACommand = newLines[k] };
-          prop.ParseGWACommand(Initialiser.Instance.Settings.Units, steels, concretes);
+          prop.ParseGWACommand(Initialiser.AppResources.Settings.Units, steels, concretes);
           lock (propsLock)
           {
             props.Add(k, prop);
@@ -740,11 +740,11 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.Instance.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
         }
       });
 
-      Initialiser.Instance.GSASenderObjects.AddRange(props.Values.ToList());
+      Initialiser.GsaKit.GSASenderObjects.AddRange(props.Values.ToList());
 
       return (props.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }

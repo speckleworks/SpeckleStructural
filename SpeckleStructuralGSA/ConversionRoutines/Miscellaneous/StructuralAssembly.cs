@@ -20,7 +20,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralAssembly();
 
-      var pieces = this.GWACommand.ListSplit(Initialiser.Instance.Interface.GwaDelimiter);
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
 
@@ -34,11 +34,11 @@ namespace SpeckleStructuralGSA
 
       obj.ElementRefs = new List<string>();
 
-      if (Initialiser.Instance.Settings.TargetLayer == GSATargetLayer.Analysis)
+      if (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Analysis)
       {
         if (targetEntity == "MEMBER")
         {
-          var memberList = Initialiser.Instance.Interface.ConvertGSAList(targetList, GSAEntity.MEMBER);
+          var memberList = Initialiser.AppResources.Proxy.ConvertGSAList(targetList, GSAEntity.MEMBER);
           var match1D = e1Ds.Where(e => memberList.Contains(Convert.ToInt32(e.Member)));
           var match2D = e2Ds.Where(e => memberList.Contains(Convert.ToInt32(e.Member)));
           var elementRefs = obj.ElementRefs;
@@ -50,7 +50,7 @@ namespace SpeckleStructuralGSA
         }
         else if (targetEntity == "ELEMENT")
         {
-          var elementList = Initialiser.Instance.Interface.ConvertGSAList(targetList, SpeckleGSAInterfaces.GSAEntity.ELEMENT);
+          var elementList = Initialiser.AppResources.Proxy.ConvertGSAList(targetList, SpeckleGSAInterfaces.GSAEntity.ELEMENT);
           var match1D = e1Ds.Where(e => elementList.Contains(e.GSAId));
           var match2D = e2Ds.Where(e => elementList.Contains(e.GSAId));
           var elementRefs = obj.ElementRefs;
@@ -61,11 +61,11 @@ namespace SpeckleStructuralGSA
           this.SubGWACommand.AddRange(match2D.Select(e => e.GWACommand));
         }
       }
-      else if (Initialiser.Instance.Settings.TargetLayer == GSATargetLayer.Design)
+      else if (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Design)
       {
         if (targetEntity == "MEMBER")
         {
-          var memberList = Initialiser.Instance.Interface.ConvertGSAList(targetList, SpeckleGSAInterfaces.GSAEntity.MEMBER);
+          var memberList = Initialiser.AppResources.Proxy.ConvertGSAList(targetList, SpeckleGSAInterfaces.GSAEntity.MEMBER);
           var match1D = m1Ds.Where(e => memberList.Contains(e.GSAId));
           var match2D = m2Ds.Where(e => memberList.Contains(e.GSAId));
           var elementRefs = obj.ElementRefs;
@@ -116,21 +116,21 @@ namespace SpeckleStructuralGSA
 
       //Get all relevant GSA entities in this entire model
       var assemblies = new SortedDictionary<int, GSAAssembly>();
-      var nodes = Initialiser.Instance.GSASenderObjects.Get<GSANode>();
+      var nodes = Initialiser.GsaKit.GSASenderObjects.Get<GSANode>();
       var e1Ds = new List<GSA1DElement>();
       var e2Ds = new List<GSA2DElement>();
       var m1Ds = new List<GSA1DMember>();
       var m2Ds = new List<GSA2DMember>();
 
-      if (Initialiser.Instance.Settings.TargetLayer == GSATargetLayer.Analysis)
+      if (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Analysis)
       {
-        e1Ds = Initialiser.Instance.GSASenderObjects.Get<GSA1DElement>();
-        e2Ds = Initialiser.Instance.GSASenderObjects.Get<GSA2DElement>();
+        e1Ds = Initialiser.GsaKit.GSASenderObjects.Get<GSA1DElement>();
+        e2Ds = Initialiser.GsaKit.GSASenderObjects.Get<GSA2DElement>();
       }
-      else if (Initialiser.Instance.Settings.TargetLayer == GSATargetLayer.Design)
+      else if (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Design)
       {
-        m1Ds = Initialiser.Instance.GSASenderObjects.Get<GSA1DMember>();
-        m2Ds = Initialiser.Instance.GSASenderObjects.Get<GSA2DMember>();
+        m1Ds = Initialiser.GsaKit.GSASenderObjects.Get<GSA1DMember>();
+        m2Ds = Initialiser.GsaKit.GSASenderObjects.Get<GSA2DMember>();
       }
 
       Parallel.ForEach(newLines.Keys, k =>
@@ -154,11 +154,11 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.Instance.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, k.ToString());
         }
       });
 
-      Initialiser.Instance.GSASenderObjects.AddRange(assemblies.Values.ToList());
+      Initialiser.GsaKit.GSASenderObjects.AddRange(assemblies.Values.ToList());
 
       return (assemblies.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }

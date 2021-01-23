@@ -11,15 +11,15 @@ namespace SpeckleStructuralGSA.Test
 {
   public class SenderProcessor : ProcessorBase
   {
-    public SenderProcessor(string directory, GSAProxy gsaInterfacer, GSACache gsaCache, GSATargetLayer layer, bool embedResults, string[] cases = null, string[] resultsToSend = null) : base(directory)
+    public SenderProcessor(string directory, IGSAAppResources appResources, GSATargetLayer layer, bool embedResults, string[] cases = null, string[] resultsToSend = null) : base(directory)
     {
-      GSAInterfacer = gsaInterfacer;
-      Initialiser.Instance.Settings.TargetLayer = layer;
+      this.appResources = appResources;
+      this.appResources.Settings.TargetLayer = layer;
 
-      Initialiser.Instance.Settings.EmbedResults = embedResults;
+      this.appResources.Settings.EmbedResults = embedResults;
       if (cases != null)
       {
-        Initialiser.Instance.Settings.ResultCases = cases.ToList();
+        this.appResources.Settings.ResultCases = cases.ToList();
       }
       if (resultsToSend != null)
       {
@@ -64,7 +64,7 @@ namespace SpeckleStructuralGSA.Test
         }
       } while (currentBatch.Count > 0);
 
-      speckleObjects.AddRange(Initialiser.Instance.GSASenderObjects.GetAll().SelectMany(i => i.Value).Select(o => (SpeckleObject) ((IGSASpeckleContainer)o).SpeckleObject));
+      speckleObjects.AddRange(Initialiser.GsaKit.GSASenderObjects.GetAll().SelectMany(i => i.Value).Select(o => (SpeckleObject) ((IGSASpeckleContainer)o).SpeckleObject));
     }
 
     #region private_methods
@@ -95,28 +95,28 @@ namespace SpeckleStructuralGSA.Test
       var matchingKey = Result.NodalResultMap.Keys.FirstOrDefault(k => string.Equals(k, resultLabel, StringComparison.OrdinalIgnoreCase));
       if (matchingKey != null)
       {
-        Initialiser.Instance.Settings.NodalResults[matchingKey] = Result.NodalResultMap[matchingKey];
+        this.appResources.Settings.NodalResults[matchingKey] = Result.NodalResultMap[matchingKey];
         return true;
       }
 
       matchingKey = Result.Element1DResultMap.Keys.FirstOrDefault(k => string.Equals(k, resultLabel, StringComparison.OrdinalIgnoreCase));
       if (matchingKey != null)
       {
-        Initialiser.Instance.Settings.Element1DResults[matchingKey] = Result.Element1DResultMap[matchingKey];
+        this.appResources.Settings.Element1DResults[matchingKey] = Result.Element1DResultMap[matchingKey];
         return true;
       }
 
       matchingKey = Result.Element2DResultMap.Keys.FirstOrDefault(k => string.Equals(k, resultLabel, StringComparison.OrdinalIgnoreCase));
       if (matchingKey != null)
       {
-        Initialiser.Instance.Settings.Element2DResults[matchingKey] = Result.Element2DResultMap[matchingKey];
+        this.appResources.Settings.Element2DResults[matchingKey] = Result.Element2DResultMap[matchingKey];
         return true;
       }
 
       matchingKey = Result.MiscResultMap.Keys.FirstOrDefault(k => string.Equals(k, resultLabel, StringComparison.OrdinalIgnoreCase));
       if (matchingKey != null)
       {
-        Initialiser.Instance.Settings.MiscResults[matchingKey] = Result.MiscResultMap[matchingKey];
+        this.appResources.Settings.MiscResults[matchingKey] = Result.MiscResultMap[matchingKey];
         return true;
       }
       return false;

@@ -18,18 +18,18 @@ namespace SpeckleStructuralGSA.SchemaConversion
       //Note: only LOAD_BEAM_UDL is supported at this stage
       var keyword = GsaRecord.GetKeyword<GsaLoadBeam>();
       var gwaSetCommandType = GsaRecord.GetGwaSetCommandType<GsaLoadBeam>();
-      var streamId = Initialiser.Instance.Cache.LookupStream(load.ApplicationId);
+      var streamId = Initialiser.AppResources.Cache.LookupStream(load.ApplicationId);
 
-      var loadCaseIndex = Initialiser.Instance.Cache.ResolveIndex(GsaRecord.GetKeyword<GsaLoadCase>(), load.LoadCaseRef);
+      var loadCaseIndex = Initialiser.AppResources.Cache.ResolveIndex(GsaRecord.GetKeyword<GsaLoadCase>(), load.LoadCaseRef);
 
-      var entityKeyword = (Initialiser.Instance.Settings.TargetLayer == GSATargetLayer.Design) ? GsaRecord.GetKeyword<GsaMemb>() : GsaRecord.GetKeyword<GsaEl>();
-      var entityIndices = Initialiser.Instance.Cache.LookupIndices(entityKeyword, load.ElementRefs).Where(i => i.HasValue).Select(i => i.Value).ToList();
+      var entityKeyword = (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Design) ? GsaRecord.GetKeyword<GsaMemb>() : GsaRecord.GetKeyword<GsaEl>();
+      var entityIndices = Initialiser.AppResources.Cache.LookupIndices(entityKeyword, load.ElementRefs).Where(i => i.HasValue).Select(i => i.Value).ToList();
 
       var loadingDict = Helper.ExplodeLoading(load.Loading);
       foreach (var k in loadingDict.Keys)
       {
         var applicationId = string.Join("_", load.ApplicationId, k.ToString());
-        var index = Initialiser.Instance.Cache.ResolveIndex(keyword, applicationId);
+        var index = Initialiser.AppResources.Cache.ResolveIndex(keyword, applicationId);
         var gsaLoad = new GsaLoadBeamUdl()
         {
           Index = index,
@@ -48,7 +48,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
         {
           foreach (var gwaLine in gwa)
           {
-            Initialiser.Instance.Cache.Upsert(keyword, index, gwaLine, streamId, applicationId, gwaSetCommandType);
+            Initialiser.AppResources.Cache.Upsert(keyword, index, gwaLine, streamId, applicationId, gwaSetCommandType);
           }
         }
       }

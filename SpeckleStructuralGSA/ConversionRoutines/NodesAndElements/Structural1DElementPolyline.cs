@@ -45,7 +45,7 @@ namespace SpeckleStructuralGSA
       }
 
       Dictionary<string, object> results = null;
-      if (Initialiser.Instance.Settings.Element1DResults.Count > 0 && Initialiser.Instance.Settings.EmbedResults)
+      if (Initialiser.AppResources.Settings.Element1DResults.Count > 0 && Initialiser.AppResources.Settings.EmbedResults)
         results = new Dictionary<string, object>();
 
       // Match up coordinates
@@ -122,7 +122,7 @@ namespace SpeckleStructuralGSA
           endReleases.AddRange(element.EndRelease);
           offsets.AddRange(element.Offset);
 
-          if (Initialiser.Instance.Settings.Element1DResults.Count > 0 && Initialiser.Instance.Settings.EmbedResults)
+          if (Initialiser.AppResources.Settings.Element1DResults.Count > 0 && Initialiser.AppResources.Settings.EmbedResults)
           {
             resultVertices.AddRange(element.ResultVertices);
           }
@@ -140,7 +140,7 @@ namespace SpeckleStructuralGSA
           offsets.Add((element.Offset as List<StructuralVectorThree>).Last());
           offsets.Add((element.Offset as List<StructuralVectorThree>).First());
 
-          if (Initialiser.Instance.Settings.Element1DResults.Count > 0 && Initialiser.Instance.Settings.EmbedResults)
+          if (Initialiser.AppResources.Settings.Element1DResults.Count > 0 && Initialiser.AppResources.Settings.EmbedResults)
           {
             for (var i = (element.ResultVertices.Count - 3); i >= 0; i -= 3)
             {
@@ -166,7 +166,7 @@ namespace SpeckleStructuralGSA
                 results[loadCase] = new Structural1DElementResult()
                 {
                   Value = new Dictionary<string, object>(),
-                  IsGlobal = !Initialiser.Instance.Settings.ResultInLocalAxis,
+                  IsGlobal = !Initialiser.AppResources.Settings.ResultInLocalAxis,
                 };
               }
 
@@ -245,17 +245,17 @@ namespace SpeckleStructuralGSA
 
       if (elements.Count() == 1)
       {
-        gwaCommands.Add((Initialiser.Instance.Settings.TargetLayer == GSATargetLayer.Analysis)
+        gwaCommands.Add((Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Analysis)
          ? new GSA1DElement() { Value = elements.First() }.SetGWACommand()
          : new GSA1DMember() { Value = elements.First() }.SetGWACommand());
       }
       else
       {
-        var group = Initialiser.Instance.Cache.ResolveIndex(typeof(GSA1DElementPolyline).GetGSAKeyword(), obj.ApplicationId);
+        var group = Initialiser.AppResources.Cache.ResolveIndex(typeof(GSA1DElementPolyline).GetGSAKeyword(), obj.ApplicationId);
 
         foreach (var element in elements)
         {
-          gwaCommands.Add((Initialiser.Instance.Settings.TargetLayer == GSATargetLayer.Analysis)
+          gwaCommands.Add((Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Analysis)
             ? new GSA1DElement() { Value = element }.SetGWACommand(group)
             : new GSA1DMember() { Value = element }.SetGWACommand(group));
         }
@@ -290,7 +290,7 @@ namespace SpeckleStructuralGSA
       var polylines = new List<GSA1DElementPolyline>();
       var typeName = dummyObject.GetType().Name;
       // Perform mesh merging
-      var uniqueMembers = new List<int>(Initialiser.Instance.GSASenderObjects.Get<GSA1DElement>().Select(x => x.Member).Where(m => m > 0).Distinct());
+      var uniqueMembers = new List<int>(Initialiser.GsaKit.GSASenderObjects.Get<GSA1DElement>().Select(x => x.Member).Where(m => m > 0).Distinct());
       uniqueMembers.Sort();  //Just for readability and testing
 
       //This loop has been left as serial for now, considering the fact that the sender objects are retrieved and removed-from with each iteration
@@ -298,7 +298,7 @@ namespace SpeckleStructuralGSA
       {
         try
         {
-          var all1dElements = Initialiser.Instance.GSASenderObjects.Get<GSA1DElement>();
+          var all1dElements = Initialiser.GsaKit.GSASenderObjects.Get<GSA1DElement>();
           var matching1dElementList = all1dElements.Where(x => x.Member == member).OrderBy(m => m.GSAId).ToList();
           if (matching1dElementList.Count() > 1)
           {
@@ -310,16 +310,16 @@ namespace SpeckleStructuralGSA
             }
             catch (Exception ex)
             {
-              Initialiser.Instance.AppUI.Message(typeName + ": " + ex.Message, member.ToString());
+              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, member.ToString());
             }
 
-            Initialiser.Instance.GSASenderObjects.RemoveAll(matching1dElementList);
+            Initialiser.GsaKit.GSASenderObjects.RemoveAll(matching1dElementList);
           }
         }
         catch { }
       }
 
-      Initialiser.Instance.GSASenderObjects.AddRange(polylines);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(polylines);
 
       return new SpeckleNull(); // Return null because ToSpeckle method for GSA1DElement will handle this change
     }

@@ -19,7 +19,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralBridgeVehicle();
 
-      var pieces = this.GWACommand.ListSplit(Initialiser.Instance.Interface.GwaDelimiter);
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
 
@@ -48,7 +48,7 @@ namespace SpeckleStructuralGSA
 
       var keyword = destType.GetGSAKeyword();
 
-      var index = Initialiser.Instance.Cache.ResolveIndex(keyword, vehicle.ApplicationId);
+      var index = Initialiser.AppResources.Cache.ResolveIndex(keyword, vehicle.ApplicationId);
 
       //The width parameter is intentionally not being used here as the meaning doesn't map to the y coordinate parameter of the ASSEMBLY keyword
       //It is therefore to be ignored here for GSA purposes.
@@ -78,7 +78,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      return (string.Join(Initialiser.Instance.Interface.GwaDelimiter.ToString(), ls));
+      return (string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
     }
   }
 
@@ -112,11 +112,11 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.Instance.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, k.ToString());
         }
       });
 
-      Initialiser.Instance.GSASenderObjects.AddRange(alignments.Values.ToList());
+      Initialiser.GsaKit.GSASenderObjects.AddRange(alignments.Values.ToList());
 
       return (alignments.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }

@@ -44,14 +44,15 @@ namespace SpeckleStructuralGSA.Test
     [Test]
     public void DependencyTest()
     {
-      var settings = new Mock<IGSASettings>();
-      Initialiser.Instance.Settings = settings.Object;
+      var mockSettings = new Mock<IGSASettings>();
+      Initialiser.AppResources = new MockGSAApp(settings: mockSettings.Object, cache: new GSACache());
+      //Initialiser.AppResources.Settings = settings.Object;
 
-      settings.SetupGet(x => x.TargetLayer).Returns(GSATargetLayer.Design);
-      var rxDep = Initialiser.Instance.RxTypeDependencies;
+      mockSettings.SetupGet(x => x.TargetLayer).Returns(GSATargetLayer.Design);
+      var rxDep = Initialiser.GsaKit.RxTypeDependencies;
 
-      settings.SetupGet(x => x.TargetLayer).Returns(GSATargetLayer.Analysis);
-      rxDep = Initialiser.Instance.RxTypeDependencies;
+      mockSettings.SetupGet(x => x.TargetLayer).Returns(GSATargetLayer.Analysis);
+      rxDep = Initialiser.GsaKit.RxTypeDependencies;
     }
 
     //Just for the unusual ones - where there is no 1:1 relationship between GWA line and Speckle object

@@ -18,9 +18,9 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
       var keyword = GsaRecord.GetKeyword<GsaGridSurface>();
       var storeyKeyword = GsaRecord.GetKeyword<GsaGridPlane>();
-      var streamId = Initialiser.Instance.Cache.LookupStream(loadPlane.ApplicationId);
+      var streamId = Initialiser.AppResources.Cache.LookupStream(loadPlane.ApplicationId);
 
-      var index = Initialiser.Instance.Cache.ResolveIndex(keyword, loadPlane.ApplicationId);
+      var index = Initialiser.AppResources.Cache.ResolveIndex(keyword, loadPlane.ApplicationId);
       var gsaGridSurface = new GsaGridSurface()
       {
         ApplicationId = loadPlane.ApplicationId,
@@ -52,7 +52,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
       if (!string.IsNullOrEmpty(loadPlane.StoreyRef))
       {
-        var gridPlaneIndex = Initialiser.Instance.Cache.LookupIndex(storeyKeyword, loadPlane.StoreyRef);
+        var gridPlaneIndex = Initialiser.AppResources.Cache.LookupIndex(storeyKeyword, loadPlane.StoreyRef);
 
         if (gridPlaneIndex.ValidNonZero())
         {
@@ -72,7 +72,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
         //Create plane - the key here is that it's not a storey, but a general, type of grid plane, 
         //which is why the ToNative() method for SpeckleStorey shouldn't be used as it only creates storey-type GSA grid plane
         var gsaPlaneKeyword = GsaRecord.GetKeyword<GsaGridPlane>();
-        var planeIndex = Initialiser.Instance.Cache.ResolveIndex(gsaPlaneKeyword);
+        var planeIndex = Initialiser.AppResources.Cache.ResolveIndex(gsaPlaneKeyword);
         
         var gsaPlane = new GsaGridPlane()
         {
@@ -84,7 +84,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
         };
         if (gsaPlane.Gwa(out var gsaPlaneGwas, true))
         {
-          Initialiser.Instance.Cache.Upsert(gsaPlaneKeyword, planeIndex, gsaPlaneGwas.First(), streamId, "", GsaRecord.GetGwaSetCommandType<GsaGridPlane>());
+          Initialiser.AppResources.Cache.Upsert(gsaPlaneKeyword, planeIndex, gsaPlaneGwas.First(), streamId, "", GsaRecord.GetGwaSetCommandType<GsaGridPlane>());
         }
         gsaGridSurface.PlaneIndex = planeIndex;
       }
@@ -95,7 +95,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
       if (gsaGridSurface.Gwa(out var gwaLines, false))
       {
-        Initialiser.Instance.Cache.Upsert(keyword, index, gwaLines.First(), streamId, loadPlane.ApplicationId, GsaRecord.GetGwaSetCommandType<GsaGridSurface>());
+        Initialiser.AppResources.Cache.Upsert(keyword, index, gwaLines.First(), streamId, loadPlane.ApplicationId, GsaRecord.GetGwaSetCommandType<GsaGridSurface>());
       }
 
       return "";

@@ -27,8 +27,10 @@ namespace SpeckleStructuralGSA.Test
 
     protected IComAuto comAuto;
 
-    protected GSAProxy gsaInterfacer;
-    protected GSACache gsaCache;
+    //protected IGSAAppResources appResources;
+
+    //protected GSAProxy gsaInterfacer;
+    //protected GSACache gsaCache;
 
     protected JsonSerializerSettings jsonSettings = new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore };
     protected string jsonDecSearch = @"(\d*\.\d\d\d\d\d\d)\d*";
@@ -41,6 +43,7 @@ namespace SpeckleStructuralGSA.Test
     protected TestBase(string directory)
     {
       TestDataDirectory = directory;
+      //appResources = new MockGSAApp();
     }
 
     protected Mock<IComAuto> SetupMockGsaCom()
@@ -58,20 +61,21 @@ namespace SpeckleStructuralGSA.Test
 
     protected List<SpeckleObject> ModelToSpeckleObjects(GSATargetLayer layer, bool resultsOnly, bool embedResults, string[] cases, string[] resultsToSend = null)
     {
-      gsaCache.Clear();
+      //((IGSACache) appResources.Cache).Clear();
+      ((IGSACache)Initialiser.AppResources.Cache).Clear();
 
       //Clear out all sender objects that might be there from the last test preparation
-      Initialiser.Instance.GSASenderObjects.Clear();
+      Initialiser.GsaKit.GSASenderObjects.Clear();
 
       //Compile all GWA commands with application IDs
-      var senderProcessor = new SenderProcessor(TestDataDirectory, gsaInterfacer, gsaCache, layer, embedResults, cases, resultsToSend);
+      var senderProcessor = new SenderProcessor(TestDataDirectory, Initialiser.AppResources, layer, embedResults, cases, resultsToSend);
 
       var keywords = senderProcessor.GetKeywords(layer);
-      var data = gsaInterfacer.GetGwaData(keywords, false);
+      var data = Initialiser.AppResources.Proxy.GetGwaData(keywords, false);
       for (int i = 0; i < data.Count(); i++)
       {
         var applicationId = string.IsNullOrEmpty(data[i].ApplicationId) ? null : data[i].ApplicationId;
-        gsaCache.Upsert(
+        Initialiser.AppResources.Cache.Upsert(
           data[i].Keyword, 
           data[i].Index, 
           data[i].GwaWithoutSet,

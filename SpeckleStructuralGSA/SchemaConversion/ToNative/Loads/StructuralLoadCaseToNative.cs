@@ -15,8 +15,8 @@ namespace SpeckleStructuralGSA.SchemaConversion
       }
 
       var keyword = GsaRecord.GetKeyword<GsaLoadCase>();
-      var index = Initialiser.Instance.Cache.ResolveIndex(keyword, loadCase.ApplicationId);
-      var streamId = Initialiser.Instance.Cache.LookupStream(loadCase.ApplicationId);
+      var index = Initialiser.AppResources.Cache.ResolveIndex(keyword, loadCase.ApplicationId);
+      var streamId = Initialiser.AppResources.Cache.LookupStream(loadCase.ApplicationId);
       var gsaLoad = new GsaLoadCase()
       {
         ApplicationId = loadCase.ApplicationId,
@@ -28,7 +28,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
       if (gsaLoad.Gwa(out var gwaLines, false))
       {
-        Initialiser.Instance.Cache.Upsert(keyword, index, gwaLines.First(), streamId, loadCase.ApplicationId, GsaRecord.GetGwaSetCommandType<GsaLoadCase>());
+        Initialiser.AppResources.Cache.Upsert(keyword, index, gwaLines.First(), streamId, loadCase.ApplicationId, GsaRecord.GetGwaSetCommandType<GsaLoadCase>());
       }
       //TO DO: add to error messages shown on UI
       return "";

@@ -163,8 +163,9 @@
     <Compile Include="Other\Enums.cs" />
     <Compile Include="Other\GwaRecord.cs" />
     <Compile Include="Other\Helper.cs" />
+    <Compile Include="Other\MockGSAApp.cs" />
     <Compile Include="Other\MockGSAProxy.cs" />
-    <Compile Include="Other\TestAppUI.cs" />
+    <Compile Include="Other\MockGSAMessenger.cs" />
     <Compile Include="Tests\ConversionTests.cs" />
     <Compile Include="Tests\FileComparison.cs" />
     <Compile Include="Tests\GsaSchemaTests.cs" />
