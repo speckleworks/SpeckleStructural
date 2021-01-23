@@ -41,7 +41,7 @@ namespace SpeckleStructuralGSA
         value = enumValues[v];
         return true;
       }
-      value = default;
+      value = default(T);
       return false;
     }
 
