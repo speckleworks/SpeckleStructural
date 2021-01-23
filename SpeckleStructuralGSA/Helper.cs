@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace SpeckleStructuralGSA
@@ -18,8 +19,15 @@ namespace SpeckleStructuralGSA
   /// </summary>
   public static class Helper
   {
+    #region Reflection
+    public static IEnumerable<Type> GetEnumerableOfType<T>() where T : class
+    {
+      return Assembly.GetAssembly(typeof(T)).GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(T)));
+    }
+    #endregion
+
     #region Math
-    
+
 
     /// <summary>
     /// Calculates the mean of two numbers.
@@ -338,12 +346,12 @@ namespace SpeckleStructuralGSA
 
     public static string GenerateSID(SpeckleObject obj)
     {
-      return Initialiser.Interface.FormatApplicationIdSidTag(obj.ApplicationId);
+      return Initialiser.AppResources.Proxy.FormatApplicationIdSidTag(obj.ApplicationId);
     }
 
     public static string GenerateSID(string applicationId)
     {
-      return Initialiser.Interface.FormatApplicationIdSidTag(applicationId);
+      return Initialiser.AppResources.Proxy.FormatApplicationIdSidTag(applicationId);
     }
 
     public static void SetAxis(StructuralAxis axis, out int index, out string gwa, string name = "")
@@ -364,7 +372,7 @@ namespace SpeckleStructuralGSA
       {
         return;
       }
-      var res = Initialiser.Cache.ResolveIndex("AXIS");
+      var res = Initialiser.AppResources.Cache.ResolveIndex("AXIS");
 
       var originCoords = (axis.Origin == null || axis.Origin.Value == null) ? new List<double> { 0, 0, 0 } : axis.Origin.Value;
 
@@ -389,7 +397,7 @@ namespace SpeckleStructuralGSA
         axis.Ydir.Value[2].ToString()
       };
 
-      gwa = string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls);
+      gwa = string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls);
 
       index = res;
     }
@@ -433,7 +441,7 @@ namespace SpeckleStructuralGSA
         axis.Ydir.Value[2].ToString()
       };
 
-      gwa = string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls);
+      gwa = string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls);
 
     }
 
@@ -464,12 +472,12 @@ namespace SpeckleStructuralGSA
           xyVector.Value[2].ToString(),
         };
 
-      gwaCommand = (string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
+      gwaCommand = (string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
     }
     public static void SetAxis(SpeckleVector xVector, SpeckleVector xyVector, SpecklePoint origin, out int index, out string gwaCommand, string name = "")
     {
       gwaCommand = "";
-      index = Initialiser.Cache.ResolveIndex("AXIS");
+      index = Initialiser.AppResources.Cache.ResolveIndex("AXIS");
 
       var gwaCommands = new List<string>();
 
@@ -494,7 +502,7 @@ namespace SpeckleStructuralGSA
           xyVector.Value[2].ToString(),
         };
 
-      gwaCommand = (string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
+      gwaCommand = (string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
     }
 
     /// <summary>
@@ -790,10 +798,10 @@ namespace SpeckleStructuralGSA
               new StructuralVectorThree(new double[] { z.X, z.Y, z.Z })
           );
         default:
-          var res = Initialiser.Cache.GetGwa("AXIS", axis).First();
+          var res = Initialiser.AppResources.Cache.GetGwa("AXIS", axis).First();
           gwaRecord = res;
 
-          var pieces = res.Split(Initialiser.Interface.GwaDelimiter);
+          var pieces = res.Split(Initialiser.AppResources.Proxy.GwaDelimiter);
           if (pieces.Length < 13)
           {
             return new StructuralAxis(
@@ -963,7 +971,7 @@ namespace SpeckleStructuralGSA
 
     public static StructuralLoadTaskType GetLoadTaskType(string taskGwaCommand)
     {
-      var taskPieces = taskGwaCommand.ListSplit(Initialiser.Interface.GwaDelimiter);
+      var taskPieces = taskGwaCommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
       var taskType = StructuralLoadTaskType.LinearStatic;
 
       if (taskPieces[4] == "GSS")
@@ -984,7 +992,7 @@ namespace SpeckleStructuralGSA
 
     public static bool GetElementParentIdFromGwa(string gwa, out int id)
     {
-      var pieces = gwa.ListSplit(Initialiser.Interface.GwaDelimiter);
+      var pieces = gwa.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
       var dummyIndex = pieces.Count() - 2;
       if (pieces.Length >= 18 && (pieces[dummyIndex] == "" || pieces[dummyIndex] == "DUMMY"))
       {
@@ -1009,28 +1017,13 @@ namespace SpeckleStructuralGSA
       //Ensure keyword version is left out
       keyword = keyword.Split('.').First();
       //Fill with SID
-      var applicationId = Initialiser.Cache.GetApplicationId(keyword, id);
+      var applicationId = Initialiser.AppResources.Cache.GetApplicationId(keyword, id);
       return (string.IsNullOrEmpty(applicationId)) ? FormatApplicationId(keyword, id) : applicationId;
-    }
-
-    public static int NodeAt(double x, double y, double z, double coincidentNodeAllowance, string applicationId = null, string streamId = null)
-    {
-      var index = Initialiser.Interface.NodeAt(x, y, z, coincidentNodeAllowance);
-      
-      if (applicationId != null)
-      {
-        //Only needs to be added to the cache if there is an application ID
-        var gwa = Initialiser.Interface.GetGwaForNode(index);
-        gwa = Initialiser.Interface.SetSid(gwa, streamId ?? "", applicationId);
-        Initialiser.Cache.Upsert("NODE.3", index, gwa, streamId, applicationId, GwaSetCommandType.Set);
-      }
-
-      return index;
     }
 
     public static void GetGridPlaneData(int gridPlaneIndex, out int gridPlaneAxisIndex, out double gridPlaneElevation, out string gwa)
     {
-      var gwas = Initialiser.Cache.GetGwa("GRID_PLANE", gridPlaneIndex);
+      var gwas = Initialiser.AppResources.Cache.GetGwa("GRID_PLANE", gridPlaneIndex);
       if (gwas == null || gwas.Count() == 0)
       {
         gridPlaneAxisIndex = 0;
@@ -1039,7 +1032,7 @@ namespace SpeckleStructuralGSA
         return;
       }
       gwa = gwas.First();
-      var pieces = gwa.ListSplit(Initialiser.Interface.GwaDelimiter);
+      var pieces = gwa.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
       gridPlaneAxisIndex = Convert.ToInt32(pieces[4]);
       gridPlaneElevation = Convert.ToDouble(pieces[5]);
       return;
@@ -1047,7 +1040,7 @@ namespace SpeckleStructuralGSA
 
     public static void GetGridPlaneRef(int gridSurfaceIndex, out int gridPlaneIndex, out string gwa)
     {
-      var gwas = Initialiser.Cache.GetGwa("GRID_SURFACE", gridSurfaceIndex);
+      var gwas = Initialiser.AppResources.Cache.GetGwa("GRID_SURFACE", gridSurfaceIndex);
       if (gwas == null || gwas.Count() == 0)
       {
         gridPlaneIndex = 0;
@@ -1055,13 +1048,13 @@ namespace SpeckleStructuralGSA
         return;
       }
       gwa = gwas.First();
-      var pieces = gwa.ListSplit(Initialiser.Interface.GwaDelimiter);
+      var pieces = gwa.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
       gridPlaneIndex = Convert.ToInt32(pieces[3]);
     }
 
     public static void GetPolylineDesc(int polylineIndex, out string desc, out string gwa)
     {
-      var gwas = Initialiser.Cache.GetGwa("tPOLYLINE", polylineIndex);
+      var gwas = Initialiser.AppResources.Cache.GetGwa("tPOLYLINE", polylineIndex);
       if (gwas == null || gwas.Count() == 0)
       {
         desc = "";
@@ -1070,7 +1063,7 @@ namespace SpeckleStructuralGSA
       }
       gwa = gwas.First();
 
-      var pieces = gwa.ListSplit(Initialiser.Interface.GwaDelimiter);
+      var pieces = gwa.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       desc = pieces[6];
     }
@@ -1079,7 +1072,7 @@ namespace SpeckleStructuralGSA
     {
       try
       {
-        Initialiser.AppUI.Message(groupMessage, details);
+        Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, groupMessage, details);
       }
       catch
       {
@@ -1089,18 +1082,29 @@ namespace SpeckleStructuralGSA
 
     public static StructuralVectorBoolSix RestraintFromCode(string code)
     {
+      return new StructuralVectorBoolSix(RestraintBoolArrayFromCode(code));
+    }
+
+    public static bool[] RestraintBoolArrayFromCode(string code)
+    {
       if (code == "free")
-        return new StructuralVectorBoolSix(false, false, false, false, false, false);
+      {
+        return new bool[] { false, false, false, false, false, false };
+      }
       else if (code == "pin")
-        return new StructuralVectorBoolSix(true, true, true, false, false, false);
+      {
+        return new bool[] { true, true, true, false, false, false };
+      }
       else if (code == "fix")
-        return new StructuralVectorBoolSix(true, true, true, true, true, true);
+      {
+        return new bool[] { true, true, true, true, true, true };
+      }
       else
       {
         var fixities = new bool[6];
 
         var codeRemaining = code;
-        int prevLength = code.Length;
+        int prevLength;
         do
         {
           prevLength = codeRemaining.Length;
@@ -1156,7 +1160,7 @@ namespace SpeckleStructuralGSA
           }
         } while (codeRemaining.Length > 0 && (codeRemaining.Length < prevLength));
 
-        return new StructuralVectorBoolSix(fixities);
+        return fixities;
       }
     }
 

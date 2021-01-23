@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using SpeckleCore;
@@ -9,13 +10,8 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("USER_VEHICLE.1", new string[] { }, "model", true, true, new Type[] { }, new Type[] { })]
-  public class GSABridgeVehicle : IGSASpeckleContainer
+  public class GSABridgeVehicle : GSABase<StructuralBridgeVehicle>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralBridgeVehicle();
-
     public void ParseGWACommand()
     {
       if (this.GWACommand == null)
@@ -23,7 +19,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralBridgeVehicle();
 
-      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
 
@@ -52,7 +48,7 @@ namespace SpeckleStructuralGSA
 
       var keyword = destType.GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(keyword, vehicle.ApplicationId);
+      var index = Initialiser.AppResources.Cache.ResolveIndex(keyword, vehicle.ApplicationId);
 
       //The width parameter is intentionally not being used here as the meaning doesn't map to the y coordinate parameter of the ASSEMBLY keyword
       //It is therefore to be ignored here for GSA purposes.
@@ -82,7 +78,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      return (string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
+      return (string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
     }
   }
 
@@ -99,7 +95,7 @@ namespace SpeckleStructuralGSA
       var typeName = dummyObject.GetType().Name;
       var alignmentsLock = new object();
       //Get all relevant GSA entities in this entire model
-      var alignments = new List<GSABridgeVehicle>();
+      var alignments = new SortedDictionary<int, GSABridgeVehicle>();
 
       Parallel.ForEach(newLines.Keys, k =>
       {
@@ -111,18 +107,18 @@ namespace SpeckleStructuralGSA
           alignment.ParseGWACommand();
           lock (alignmentsLock)
           {
-            alignments.Add(alignment);
+            alignments.Add(k, alignment);
           }
         }
         catch (Exception ex)
         {
-          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, k.ToString());
         }
       });
 
-      Initialiser.GSASenderObjects.AddRange(alignments);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(alignments.Values.ToList());
 
-      return (alignments.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (alignments.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

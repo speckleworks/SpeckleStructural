@@ -16,16 +16,11 @@ namespace SpeckleStructuralGSA.SchemaConversion
       {
         return new SpeckleObject();
       }
-
-      var gsaNodes = Initialiser.GSASenderObjects.Get<GSANode>();
-
-      var keyword = GsaRecord.Keyword<GsaLoadNode>();
-      var nodeKeyword = GsaRecord.Keyword<GsaNode>();
-      var loadCaseKeyword = GsaRecord.Keyword<GsaLoadCase>();
-
-      var structural0DLoads = new List<Structural0DLoad>();
-
       gsaLoads = gsaLoads.Where(l => l.Index.ValidNonZero()).ToList();
+
+      var keyword = GsaRecord.GetKeyword<GsaLoadNode>();
+      var nodeKeyword = GsaRecord.GetKeyword<GsaNode>();
+      var loadCaseKeyword = GsaRecord.GetKeyword<GsaLoadCase>();
 
       //The 0D loads are split into two groups:
       //1. Those which are grouped by Application ID - n:1 ratio (where n <= 6) between GSA objects and Speckle objects
@@ -36,7 +31,9 @@ namespace SpeckleStructuralGSA.SchemaConversion
       var group2 = gsaLoads.Except(group1);
       var nodeIndicesReferenced = new List<int>();
 
-      Add0dLoadsWithAppId(keyword, nodeKeyword, loadCaseKeyword, group1, gsaNodes, ref structural0DLoads, ref nodeIndicesReferenced);
+      var structural0DLoads = new List<Structural0DLoad>();
+      var gsaNodes = Initialiser.GsaKit.GSASenderObjects.Get<GSANode>();
+      Add0dLoadsWithAppId(nodeKeyword, loadCaseKeyword, group1, gsaNodes, ref structural0DLoads, ref nodeIndicesReferenced);
       Add0dLoadsWithoutAppId(keyword, nodeKeyword, loadCaseKeyword, group2, gsaNodes, ref structural0DLoads, ref nodeIndicesReferenced);
 
       var forceSendNodes = gsaNodes.Where(n => nodeIndicesReferenced.Any(nir => nir == n.GSAId)).ToList();
@@ -47,13 +44,13 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
       var loads = structural0DLoads.Select(sl => new GSA0DLoad() { Value = sl }).ToList();
 
-      Initialiser.GSASenderObjects.AddRange(loads);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(loads);
       return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
 
     #region 0dLoad_methods
 
-    private static bool Add0dLoadsWithoutAppId(string keyword, string nodeKeyword, string loadCaseKeyword, IEnumerable<Schema.GsaLoadNode> gsaLoads,
+    private static bool Add0dLoadsWithoutAppId(string keyword, string nodeKeyword, string loadCaseKeyword, IEnumerable<GsaLoadNode> gsaLoads,
       List<GSANode> gsaNodes, ref List<Structural0DLoad> structural0DLoads, ref List<int> nodeIndicesReferenced)
     {
       var summaries = new List<D0LoadingSummary>();
@@ -121,7 +118,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
       return true;
     }
 
-    private static bool Add0dLoadsWithAppId(string keyword, string nodeKeyword, string loadCaseKeyword, IEnumerable<GsaLoadNode> gsaLoads,
+    private static bool Add0dLoadsWithAppId(string nodeKeyword, string loadCaseKeyword, IEnumerable<GsaLoadNode> gsaLoads,
       List<GSANode> gsaNodes, ref List<Structural0DLoad> structural0DLoads, ref List<int> nodeIndicesReferenced)
     {
       var summaries = new List<D0LoadingSummary>();

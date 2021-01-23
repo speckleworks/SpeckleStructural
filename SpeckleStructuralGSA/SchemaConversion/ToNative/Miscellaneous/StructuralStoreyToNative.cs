@@ -11,14 +11,14 @@ namespace SpeckleStructuralGSA.SchemaConversion
   {
     public static string ToNative(this StructuralStorey storey)
     {
-      if (string.IsNullOrEmpty(storey.ApplicationId) && storey.Axis == null)
+      if (string.IsNullOrEmpty(storey.ApplicationId) && Helper.IsZeroAxis(storey.Axis))
       {
         return "";
       }
 
-      var keyword = GsaRecord.Keyword<GsaGridPlane>();
-      var index = Initialiser.Cache.ResolveIndex(keyword, storey.ApplicationId);
-      var streamId = Initialiser.Cache.LookupStream(storey.ApplicationId);
+      var keyword = GsaRecord.GetKeyword<GsaGridPlane>();
+      var index = Initialiser.AppResources.Cache.ResolveIndex(keyword, storey.ApplicationId);
+      var streamId = Initialiser.AppResources.Cache.LookupStream(storey.ApplicationId);
 
       var gsaPlane = new GsaGridPlane()
       {
@@ -57,7 +57,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
       if (gsaPlane.Gwa(out var gsaPlaneGwaLines, true))
       {
-        Initialiser.Cache.Upsert(keyword, index, gsaPlaneGwaLines.First(), streamId, storey.ApplicationId, GsaRecord.GetGwaSetCommandType<GsaLoadCase>());
+        Initialiser.AppResources.Cache.Upsert(keyword, index, gsaPlaneGwaLines.First(), streamId, storey.ApplicationId, GsaRecord.GetGwaSetCommandType<GsaLoadCase>());
       }
 
       return "";

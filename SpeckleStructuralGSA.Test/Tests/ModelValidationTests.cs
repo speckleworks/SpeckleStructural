@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
@@ -16,12 +13,6 @@ namespace SpeckleStructuralGSA.Test
   public class ModelValidationTests : TestBase
   {
     public ModelValidationTests() : base(AppDomain.CurrentDomain.BaseDirectory.TrimEnd(new[] { '\\' }) + @"\..\..\TestData\") { }
-
-    [SetUp]
-    public void BeforeEachTest()
-    {
-      Initialiser.Settings = new Settings();
-    }
 
     internal class UnmatchedData
     {
@@ -51,13 +42,10 @@ namespace SpeckleStructuralGSA.Test
       // of each of the keywords in as out
 
       SpeckleInitializer.Initialize();
-      gsaInterfacer = new GSAProxy();
-      gsaCache = new GSACache();
-
-      Initialiser.Cache = gsaCache;
-      Initialiser.Interface = gsaInterfacer;
-      Initialiser.AppUI = new SpeckleAppUI();
-      gsaInterfacer.NewFile(true);
+      Initialiser.AppResources = new MockGSAApp(proxy: new GSAProxy());
+      Initialiser.GsaKit.Clear();
+      Initialiser.AppResources.Settings.TargetLayer = layer;
+      Initialiser.AppResources.Proxy.NewFile(true);
 
       var dir = TestDataDirectory;
       if (subdir != String.Empty)
@@ -66,7 +54,7 @@ namespace SpeckleStructuralGSA.Test
         dir = dir + @"\"; // TestDataDirectory setup unconvetionally with trailing seperator - follow suit
       }
 
-      var receiverProcessor = new ReceiverProcessor(dir, gsaInterfacer, gsaCache);
+      var receiverProcessor = new ReceiverProcessor(dir, Initialiser.AppResources);
 
       // Run conversion to GWA keywords
       // Note that it can be one model split over several json files
@@ -84,14 +72,14 @@ namespace SpeckleStructuralGSA.Test
       keywords.AddRange(analysisTypeHierarchy.SelectMany(i => i.Key.GetSubGSAKeyword()));
       keywords = keywords.Where(k => k.Length > 0).Select(k => Helper.RemoveVersionFromKeyword(k)).Distinct().ToList();
 
-      Initialiser.Interface.Sync(); // send GWA to GSA
+      Initialiser.AppResources.Proxy.Sync(); // send GWA to GSA
 
-      var retrievedGwa = Initialiser.Interface.GetGwaData(keywords, true); // read GWA from GSA
+      var retrievedGwa = Initialiser.AppResources.Proxy.GetGwaData(keywords, true); // read GWA from GSA
 
       var retrievedDict = new Dictionary<string, List<string>>();
       foreach (var gwa in retrievedGwa)
       {
-        Initialiser.Interface.ParseGeneralGwa(gwa.GwaWithoutSet, out string keyword, out _, out _, out _, out _, out _);
+        Initialiser.AppResources.Proxy.ParseGeneralGwa(gwa.GwaWithoutSet, out string keyword, out _, out _, out _, out _, out _);
         if (!retrievedDict.ContainsKey(keyword))
         {
           retrievedDict.Add(keyword, new List<string>());
@@ -102,7 +90,7 @@ namespace SpeckleStructuralGSA.Test
       var fromFileDict = new Dictionary<string, List<string>>();
       foreach (var r in gwaRecordsFromFile)
       {
-        Initialiser.Interface.ParseGeneralGwa(r.GwaCommand, out string keyword, out _, out _, out _, out string gwaWithoutSet, out _);
+        Initialiser.AppResources.Proxy.ParseGeneralGwa(r.GwaCommand, out string keyword, out _, out _, out _, out string gwaWithoutSet, out _);
         if (!fromFileDict.ContainsKey(keyword))
         {
           fromFileDict.Add(keyword, new List<string>());
@@ -110,7 +98,7 @@ namespace SpeckleStructuralGSA.Test
         fromFileDict[keyword].Add(gwaWithoutSet);
       }
 
-      Initialiser.Interface.Close();
+      Initialiser.AppResources.Proxy.Close();
 
       var unmatching = new Dictionary<string, UnmatchedData>();
       foreach (var keyword in fromFileDict.Keys)

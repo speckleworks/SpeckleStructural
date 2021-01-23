@@ -1,9 +1,7 @@
 ﻿using System.IO;
-using System.Linq;
 using Newtonsoft.Json;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
-using SpeckleGSAProxy;
 using SpeckleStructuralGSA.Test;
 
 namespace SpeckleStructuralGSA.TestPrep
@@ -14,13 +12,8 @@ namespace SpeckleStructuralGSA.TestPrep
 
     public void SetupContext(string gsaFileName)
     {
-      gsaInterfacer = new GSAProxy();
-      gsaCache = new GSACache();
-      Initialiser.Interface = gsaInterfacer;
-      Initialiser.Cache = gsaCache;
-      Initialiser.Settings = new Settings();
-      Initialiser.AppUI = new TestAppUI();
-      gsaInterfacer.OpenFile(Path.Combine(TestDataDirectory, gsaFileName));
+      Initialiser.AppResources = new MockGSAApp();
+      Initialiser.AppResources.Proxy.OpenFile(Path.Combine(TestDataDirectory, gsaFileName));
     }
 
     public bool SetUpTransmissionTestData(string outputJsonFileName, GSATargetLayer layer,
@@ -56,7 +49,7 @@ namespace SpeckleStructuralGSA.TestPrep
 
     public void TearDownContext()
     {
-      gsaInterfacer.Close();
+      Initialiser.AppResources.Proxy.Close();
     }
   }
 }

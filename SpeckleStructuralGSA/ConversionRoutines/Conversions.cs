@@ -15,7 +15,7 @@ namespace SpeckleStructuralGSA
 
       //These are all the as-yet-unserialised GWA lines keyword, which could map to other GSA types, but the ParseGWACommand will quickly exit
       //as soon as it notices that the GWA isn't relevant to this class
-      return Initialiser.Cache.GetGwaToSerialise(keyword);
+      return Initialiser.AppResources.Cache.GetGwaToSerialise(keyword);
     }
 
     public static double[] Essential(this IEnumerable<double> coords)

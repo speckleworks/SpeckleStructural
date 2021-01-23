@@ -7,7 +7,7 @@ using SpeckleGSAInterfaces;
 namespace SpeckleStructuralGSA.Schema
 {
   //polygon references not supported yet
-  [GsaType(GwaKeyword.GRID_SURFACE, GwaSetCommandType.Set, StreamBucket.Model, true, true, new[] { GwaKeyword.MEMB, GwaKeyword.EL, GwaKeyword.GRID_PLANE })]
+  [GsaType(GwaKeyword.GRID_SURFACE, GwaSetCommandType.Set, true, true, true, new[] { GwaKeyword.MEMB, GwaKeyword.EL, GwaKeyword.GRID_PLANE })]
   public class GsaGridSurface : GsaRecord
   {
     public string Name { get => name; set { name = value; } }
@@ -52,7 +52,7 @@ namespace SpeckleStructuralGSA.Schema
       AddItems(ref items, Name, 
         AddPlane(), 
         ((Type == GridSurfaceElementsType.OneD) ? 1 : 2).ToString(), 
-        AllIndices ? "all" : List(EntityIndices), 
+        AllIndices ? "all" : IndicesList(EntityIndices), 
         Tolerance ?? 0, AddSpan(),
         AddAngle(), 
         SchemaConversion.Helper.GridExpansionToString(Expansion));
@@ -140,8 +140,8 @@ namespace SpeckleStructuralGSA.Schema
       }
       else
       {
-        var entityType = (Initialiser.Settings.TargetLayer == GSATargetLayer.Design) ? GSAEntity.MEMBER : GSAEntity.ELEMENT;
-        EntityIndices = Initialiser.Interface.ConvertGSAList(v, entityType).ToList();
+        var entityType = (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Design) ? GSAEntity.MEMBER : GSAEntity.ELEMENT;
+        EntityIndices = Initialiser.AppResources.Proxy.ConvertGSAList(v, entityType).ToList();
         return (EntityIndices.Count() > 0);
       }
     }

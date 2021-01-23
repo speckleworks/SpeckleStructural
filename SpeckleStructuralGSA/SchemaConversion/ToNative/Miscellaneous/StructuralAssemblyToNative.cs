@@ -21,20 +21,20 @@ namespace SpeckleStructuralGSA.SchemaConversion
       var epsilon = SpeckleStructuralClasses.Helper.PointComparisonEpsilon.ToString();
       var numDecPlaces = epsilon.IndexOf('1') - epsilon.IndexOf('.');
 
-      var keyword = GsaRecord.Keyword<GsaAssembly>();
-      var index = Initialiser.Cache.ResolveIndex(keyword, assembly.ApplicationId);
-      var streamId = Initialiser.Cache.LookupStream(assembly.ApplicationId);
+      var keyword = GsaRecord.GetKeyword<GsaAssembly>();
+      var index = Initialiser.AppResources.Cache.ResolveIndex(keyword, assembly.ApplicationId);
+      var streamId = Initialiser.AppResources.Cache.LookupStream(assembly.ApplicationId);
 
       var topo1Pt = CoordsToPoint(assembly.Value.Take(3));
       var topo2Pt = CoordsToPoint(assembly.Value.Skip(3).Take(3));
       var orientPt = (assembly.OrientationPoint.Value == null) ? new Point3D(0,0,0) : CoordsToPoint(assembly.OrientationPoint.Value);
       
-      var topo1Index = Initialiser.Interface.NodeAt(topo1Pt.X, topo1Pt.Y, topo1Pt.Z, Initialiser.Settings.CoincidentNodeAllowance);
-      var topo2Index = Initialiser.Interface.NodeAt(topo2Pt.X, topo2Pt.Y, topo2Pt.Z, Initialiser.Settings.CoincidentNodeAllowance);
-      var orientPtIndex = Initialiser.Interface.NodeAt(orientPt.X, orientPt.Y, orientPt.Z, Initialiser.Settings.CoincidentNodeAllowance);
+      var topo1Index = Initialiser.AppResources.Proxy.NodeAt(topo1Pt.X, topo1Pt.Y, topo1Pt.Z, Initialiser.AppResources.Settings.CoincidentNodeAllowance);
+      var topo2Index = Initialiser.AppResources.Proxy.NodeAt(topo2Pt.X, topo2Pt.Y, topo2Pt.Z, Initialiser.AppResources.Settings.CoincidentNodeAllowance);
+      var orientPtIndex = Initialiser.AppResources.Proxy.NodeAt(orientPt.X, orientPt.Y, orientPt.Z, Initialiser.AppResources.Settings.CoincidentNodeAllowance);
 
-      var entityKeyword = (Initialiser.Settings.TargetLayer == GSATargetLayer.Design) ? GsaRecord.Keyword<GsaMemb>() : GsaRecord.Keyword<GsaEl>();
-      var entityIndices = Initialiser.Cache.LookupIndices(entityKeyword, assembly.ElementRefs).Where(i => i.HasValue).Select(i => i.Value).ToList();
+      var entityKeyword = (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Design) ? GsaRecord.GetKeyword<GsaMemb>() : GsaRecord.GetKeyword<GsaEl>();
+      var entityIndices = Initialiser.AppResources.Cache.LookupIndices(entityKeyword, assembly.ElementRefs).Where(i => i.HasValue).Select(i => i.Value).ToList();
 
       var gsaAssembly = new GsaAssembly()
       {
@@ -48,7 +48,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
         CurveType = CurveType.Lagrange,
         SizeY = assembly.Width ?? 0,
         SizeZ = 0,
-        Type = (Initialiser.Settings.TargetLayer == GSATargetLayer.Design) ? GSAEntity.MEMBER : GSAEntity.ELEMENT,
+        Type = (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Design) ? GSAEntity.MEMBER : GSAEntity.ELEMENT,
         Entities = entityIndices
       };
 
@@ -66,7 +66,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
       else if (assembly.StoreyRefs != null && assembly.StoreyRefs.Count() > 0)
       {
         gsaAssembly.PointDefn = PointDefinition.Storey;
-        gsaAssembly.StoreyIndices = Initialiser.Cache.LookupIndices(GsaRecord.Keyword<GsaGridPlane>(), assembly.StoreyRefs).Where(i => i.HasValue).Select(i => i.Value).ToList();
+        gsaAssembly.StoreyIndices = Initialiser.AppResources.Cache.LookupIndices(GsaRecord.GetKeyword<GsaGridPlane>(), assembly.StoreyRefs).Where(i => i.HasValue).Select(i => i.Value).ToList();
         //Not verifying at the moment that the grid planes are indeed storeys
       }
       else
@@ -78,7 +78,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
       if (gsaAssembly.Gwa(out var gwaLines, false))
       {
         //axes currently never have a stream nor an application ID
-        Initialiser.Cache.Upsert(keyword, gsaAssembly.Index.Value, gwaLines.First(), streamId, assembly.ApplicationId, GsaRecord.GetGwaSetCommandType<GsaAssembly>());
+        Initialiser.AppResources.Cache.Upsert(keyword, gsaAssembly.Index.Value, gwaLines.First(), streamId, assembly.ApplicationId, GsaRecord.GetGwaSetCommandType<GsaAssembly>());
       }
 
       return "";

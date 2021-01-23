@@ -5,7 +5,7 @@ using SpeckleGSAInterfaces;
 
 namespace SpeckleStructuralGSA.Schema
 {
-  [GsaType(GwaKeyword.LOAD_BEAM, GwaSetCommandType.SetAt, StreamBucket.Model, GwaKeyword.MEMB, GwaKeyword.EL)]
+  [GsaType(GwaKeyword.LOAD_BEAM, GwaSetCommandType.SetAt, true, GwaKeyword.MEMB, GwaKeyword.EL)]
   public abstract class GsaLoadBeam : GsaRecord
   {
     public string Name { get => name; set { name = value; } }
@@ -14,7 +14,7 @@ namespace SpeckleStructuralGSA.Schema
     public LoadBeamAxisRefType AxisRefType;
     public int? AxisIndex;
     public bool Projected;
-    public LoadDirection6 LoadDirection;
+    public AxisDirection6 LoadDirection;
 
     protected GwaKeyword childKeyword;
 
@@ -35,9 +35,9 @@ namespace SpeckleStructuralGSA.Schema
       //Common fields across all of them: name | list | case | axis | proj | dir
       return (FromGwaByFuncs(items, out remainingItems, 
         AddName, 
-        AddEntities, 
+        (v) => AddEntities(v, out Entities), 
         (v) => (AddNullableIndex(v, out LoadCaseIndex)),
-        (v) => (AddNullableIndex(v, out AxisIndex)),
+        AddAxis,
         AddProj, 
         (v) => Enum.TryParse(v, true, out LoadDirection))
         && (((extraFns.Count() > 0) && FromGwaByFuncs(remainingItems, out _, extraFns)) || true));
@@ -58,11 +58,11 @@ namespace SpeckleStructuralGSA.Schema
       //LOAD_BEAM_TRILIN.2 | name | list | case | axis | proj | dir | pos_1 | value_1 | pos_2 | value_2
 
       //Common fields across all of them: name | list | case | axis | proj | dir
-      AddItems(ref items, Name, AddEntities(), 
+      AddItems(ref items, Name, AddEntities(Entities), 
         LoadCaseIndex ?? 0,
         AddAxis(), 
         Projected ? "YES" : "NO", 
-        (LoadDirection == LoadDirection6.NotSet) ? "X" : LoadDirection.ToString());
+        (LoadDirection == AxisDirection6.NotSet) ? "X" : LoadDirection.ToString());
       if (extra.Count() > 0)
       {
         AddItems(ref items, extra);
@@ -80,22 +80,6 @@ namespace SpeckleStructuralGSA.Schema
         : (AxisRefType == LoadBeamAxisRefType.Reference)
          ? (AxisIndex ?? 0).ToString()
          : AxisRefType.ToString().ToUpper();
-    }
-
-    public string AddEntities()
-    {
-      //Unlike other keywords which have entity type as a parameter, this keyword (at least for version 2) still has "element list" which means, for members,
-      //the group is used
-
-      var allIndices = Initialiser.Cache.LookupIndices(
-        (Initialiser.Settings.TargetLayer == GSATargetLayer.Design) ? Keyword<GsaMemb>() : Keyword<GsaEl>())
-        .Where(i => i.HasValue).Select(i => i.Value).Distinct().OrderBy(i => i).ToList();
-
-      if (Entities.Distinct().OrderBy(i => i).SequenceEqual(allIndices))
-      {
-        return "all";
-      }
-      return (Initialiser.Settings.TargetLayer == GSATargetLayer.Design) ? string.Join(" ", Entities.Select(i => "G" + i)) : string.Join(" ",  Entities);
     }
     #endregion
 
@@ -124,24 +108,6 @@ namespace SpeckleStructuralGSA.Schema
         AxisRefType = LoadBeamAxisRefType.NotSet;
       }
       return true;
-    }
-
-    public bool AddEntities(string v)
-    {
-      var entityItems = v.Split(' ');
-      if (Initialiser.Settings.TargetLayer == GSATargetLayer.Design)
-      {
-        //Only recognise the groups, as these represent the members
-        //TO DO: for all elements, find if they have parents and include them
-        var members = string.Join(" ", entityItems.Where(ei => ei.StartsWith("G")).Select(ei => ei.Substring(1)));
-        Entities = Initialiser.Interface.ConvertGSAList(members, GSAEntity.MEMBER).ToList();
-      }
-      else
-      {
-        Entities = Initialiser.Interface.ConvertGSAList(v, GSAEntity.ELEMENT).ToList();
-      }
-
-      return Entities != null;
     }
 
     private bool AddProj(string v)

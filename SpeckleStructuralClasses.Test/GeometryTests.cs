@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using NUnit.Framework;
-using SpeckleStructuralClasses;
 using SpeckleCoreGeometryClasses;
 using System.Collections.Generic;
 using System;
@@ -56,7 +55,5 @@ namespace SpeckleStructuralClasses.Test
         Assert.AreEqual(expectedPoint.Value[2], localCoords[2]);
       }
     }
-
-    
   }
 }

@@ -8,13 +8,8 @@ using System.Linq;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("LOAD_GRAVITY.3", new string[] { }, "model", true, true, new Type[] { typeof(GSALoadCase) }, new Type[] { typeof(GSALoadCase) })]
-  public class GSAGravityLoading : IGSASpeckleContainer
+  public class GSAGravityLoading : GSABase<StructuralGravityLoading>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralGravityLoading();
-
     public void ParseGWACommand()
     {
       // LOAD_GRAVITY.3 | name | elemlist | nodelist | case | x | y | z
@@ -24,7 +19,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralGravityLoading();
 
-      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
       obj.Name = pieces[counter++].Trim(new char[] { '"' }); // name
@@ -57,8 +52,8 @@ namespace SpeckleStructuralGSA
       var keyword = typeof(GSAGravityLoading).GetGSAKeyword();
 
       var loadCaseKeyword = typeof(GSALoadCase).GetGSAKeyword();
-      var indexResult = Initialiser.Cache.LookupIndex(loadCaseKeyword, load.LoadCaseRef);
-      var loadCaseRef = indexResult ?? Initialiser.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
+      var indexResult = Initialiser.AppResources.Cache.LookupIndex(loadCaseKeyword, load.LoadCaseRef);
+      var loadCaseRef = indexResult ?? Initialiser.AppResources.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
 
       if (indexResult == null && load.ApplicationId != null)
       {
@@ -72,7 +67,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      var index = Initialiser.Cache.ResolveIndex(typeof(GSAGravityLoading).GetGSAKeyword());
+      var index = Initialiser.AppResources.Cache.ResolveIndex(typeof(GSAGravityLoading).GetGSAKeyword());
 
       var sid = Helper.GenerateSID(load);
       var ls = new List<string>
@@ -89,7 +84,7 @@ namespace SpeckleStructuralGSA
           load.GravityFactors.Value[2].ToString(),
         };
 
-      return (string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
+      return (string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
     }
   }
 
@@ -117,12 +112,12 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, k.ToString());
         }
         loads.Add(load);
       }
 
-      Initialiser.GSASenderObjects.AddRange(loads);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(loads);
 
       return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

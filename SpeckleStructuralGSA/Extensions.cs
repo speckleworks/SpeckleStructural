@@ -1,17 +1,50 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
+using SpeckleStructuralGSA.Schema;
 
 namespace SpeckleStructuralGSA
 {
   public static class Extensions
   {
+    /// <summary>
+    /// Will get the string value for a given enums value, this will
+    /// only work if you assign the StringValue attribute to
+    /// the items in your enum.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public static string GetStringValue(this Enum value)
+    {
+      // Get the type
+      var type = value.GetType();
+
+      // Get fieldinfo for this type
+      var fieldInfo = type.GetField(value.ToString());
+
+      // Get the stringvalue attributes
+      var attribs = fieldInfo.GetCustomAttributes(
+          typeof(StringValue), false) as StringValue[];
+
+      // Return the first if there was a match.
+      return attribs.Length > 0 ? attribs[0].Value : null;
+    }
+
+    public static bool TryParseStringValue<T>(this string v, out T value) where T : Enum
+    {
+      var enumValues = typeof(T).GetEnumValues().OfType<T>().ToDictionary(ev => GetStringValue(ev), ev => ev);
+      if (enumValues.Keys.Any(k => k.Equals(v, StringComparison.InvariantCultureIgnoreCase)))
+      {
+        value = enumValues[v];
+        return true;
+      }
+      value = default;
+      return false;
+    }
+
     public static bool ValidNonZero(this double? v)
     {
       return v.HasValue && v > 0;

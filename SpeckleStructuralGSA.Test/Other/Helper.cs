@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using SpeckleGSAInterfaces;
+using SpeckleCore;
 
 namespace SpeckleStructuralGSA.Test
 {
@@ -43,7 +44,7 @@ namespace SpeckleStructuralGSA.Test
 
       // Grab all GSA related object
       var ass = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "SpeckleStructuralGSA");
-      var objTypes = ass.GetTypes().Where(t => interfaceType.IsAssignableFrom(t) && t != interfaceType).ToList();
+      var objTypes = ass.GetTypes().Where(t => interfaceType.IsAssignableFrom(t) && t != interfaceType && !t.IsAbstract).ToList();
 
       var TypePrerequisites = new Dictionary<Type, List<Type>>();
 
@@ -211,18 +212,18 @@ namespace SpeckleStructuralGSA.Test
       foreach (var l in lines)
       {
         //At this point the SID will be filled with the application ID
-        Initialiser.Interface.ParseGeneralGwa(l, out var keyword, out var foundIndex,
+        Initialiser.AppResources.Proxy.ParseGeneralGwa(l, out var keyword, out var foundIndex,
           out var foundStreamId, out var foundApplicationId, out var gwaWithoutSet, out var gwaSetCommandType);
 
-        var originalSid = Initialiser.Interface.FormatSidTags(foundStreamId, foundApplicationId);
-        var newSid = Initialiser.Interface.FormatSidTags(streamId, foundApplicationId);
+        var originalSid = Initialiser.AppResources.Proxy.FormatSidTags(foundStreamId, foundApplicationId);
+        var newSid = Initialiser.AppResources.Proxy.FormatSidTags(streamId, foundApplicationId);
 
         //If the SID tag has been set then update it with the stream
         gwaWithoutSet = (string.IsNullOrEmpty(originalSid))
             ? gwaWithoutSet.Replace(keyword, keyword + ":" + newSid)
             : gwaWithoutSet.Replace(originalSid, newSid);
 
-        if (!Initialiser.Cache.Upsert(keyword, foundIndex.Value, gwaWithoutSet, streamId, foundApplicationId, gwaSetCommandType.Value))
+        if (!Initialiser.AppResources.Cache.Upsert(keyword, foundIndex.Value, gwaWithoutSet, streamId, foundApplicationId, gwaSetCommandType.Value))
         {
           return false;
         }

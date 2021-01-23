@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using SpeckleCore;
@@ -9,13 +10,8 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("PROP_SPR.4", new string[] { }, "model", true, true, new Type[] { }, new Type[] { })]
-  public class GSASpringProperty : IGSASpeckleContainer
+  public class GSASpringProperty : GSABase<StructuralSpringProperty>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralSpringProperty();
-
     public void ParseGWACommand()
     {
       // GSA documentation of this GWA command is almost useless
@@ -24,7 +20,7 @@ namespace SpeckleStructuralGSA
       if (this.GWACommand == null)
         return;
 
-      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var obj = new StructuralSpringProperty();
 
@@ -125,7 +121,7 @@ namespace SpeckleStructuralGSA
 
       var keyword = destType.GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(keyword, springProp.ApplicationId);
+      var index = Initialiser.AppResources.Cache.ResolveIndex(keyword, springProp.ApplicationId);
 
       var gwaCommands = new List<string>();
 
@@ -141,7 +137,7 @@ namespace SpeckleStructuralGSA
 
       ls.AddRange(SpringTypeCommandPieces(springProp.SpringType, springProp.Stiffness, springProp.DampingRatio ?? 0));
 
-      gwaCommands.Add(string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
+      gwaCommands.Add(string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
 
       return string.Join("\n", gwaCommands);
     }
@@ -207,37 +203,37 @@ namespace SpeckleStructuralGSA
 
       var springPropLock = new object();
       //Get all relevant GSA entities in this entire model
-      var springProperties = new List<GSASpringProperty>();
+      var springProperties = new SortedDictionary<int, GSASpringProperty>();
 
 #if DEBUG
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
 #else
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
 #endif
       {
-        var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
+        var pPieces = newLines[k].ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
         var gsaId = pPieces[1];
         try
         {
-          var springProperty = new GSASpringProperty() { GWACommand = p };
+          var springProperty = new GSASpringProperty() { GWACommand = newLines[k] };
           springProperty.ParseGWACommand();
           lock (springPropLock)
           {
-            springProperties.Add(springProperty);
+            springProperties.Add(k, springProperty);
           }
         }
         catch (Exception ex)
         {
-          Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
         }
       }
 #if !DEBUG
       );
 #endif
 
-      Initialiser.GSASenderObjects.AddRange(springProperties);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(springProperties.Values.ToList());
 
-      return (springProperties.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (springProperties.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

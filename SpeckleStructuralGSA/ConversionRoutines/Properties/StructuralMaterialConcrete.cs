@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using SpeckleCore;
@@ -9,13 +10,8 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("MAT_CONCRETE.17", new string[] { }, "model", true, true, new Type[] { }, new Type[] { })]
-  public class GSAMaterialConcrete : IGSASpeckleContainer
+  public class GSAMaterialConcrete : GSABase<StructuralMaterialConcrete>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralMaterialConcrete();
-
     public void ParseGWACommand()
     {
       if (this.GWACommand == null)
@@ -23,7 +19,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralMaterialConcrete();
 
-      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
       
@@ -65,7 +61,7 @@ namespace SpeckleStructuralGSA
       }
 
       var keyword = typeof(GSAMaterialConcrete).GetGSAKeyword();
-      var index = Initialiser.Cache.ResolveIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), mat.ApplicationId);
+      var index = Initialiser.AppResources.Cache.ResolveIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), mat.ApplicationId);
 
       // TODO: This function barely works.
       var ls = new List<string>
@@ -75,8 +71,8 @@ namespace SpeckleStructuralGSA
         index.ToString(),
         "MAT.10",
         mat.Name == null || mat.Name == "" ? " " : mat.Name,
-        mat.CompressiveStrength.ToString(), // Design Strength (Pa) <-- need to check units here
         (mat.YoungsModulus*1000).ToString(), // E
+        mat.CompressiveStrength.ToString(), // Design Strength (Pa) <-- need to check units here
         mat.PoissonsRatio.ToString(), // nu
         mat.ShearModulus.ToString(), // G
         mat.Density.ToString(), // rho
@@ -152,7 +148,7 @@ namespace SpeckleStructuralGSA
         "0" // TODO: What is this?
       };
 
-      return (string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
+      return (string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
     }
   }
 
@@ -168,30 +164,30 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSAMaterialConcrete>();
       var typeName = dummyObject.GetType().Name;
       var materialsLock = new object();
-      var materials = new List<GSAMaterialConcrete>();
+      var materials = new SortedDictionary<int, GSAMaterialConcrete>();
 
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
       {
-        var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
+        var pPieces = newLines[k].ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
         var gsaId = pPieces[1];
         try
         {
-          var mat = new GSAMaterialConcrete() { GWACommand = p };
+          var mat = new GSAMaterialConcrete() { GWACommand = newLines[k] };
           mat.ParseGWACommand();
           lock (materialsLock)
           {
-            materials.Add(mat);
+            materials.Add(k, mat);
           }
         }
         catch (Exception ex)
         {
-          Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
         }
       });
 
-      Initialiser.GSASenderObjects.AddRange(materials);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(materials.Values.ToList());
 
-      return (materials.Count() > 0 ) ? new SpeckleObject() : new SpeckleNull();
+      return (materials.Keys.Count > 0 ) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

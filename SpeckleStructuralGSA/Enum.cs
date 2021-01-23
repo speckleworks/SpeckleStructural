@@ -1,5 +1,11 @@
 ﻿namespace SpeckleStructuralGSA
 {
+  public enum StreamDirection
+  {
+    Receive,
+    Send
+  }
+
   /// <summary>
   /// Number of nodes in each GSA element definition
   /// </summary>

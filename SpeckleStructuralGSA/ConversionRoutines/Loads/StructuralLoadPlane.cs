@@ -8,13 +8,8 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   [GSAObject("GRID_SURFACE.1", new string[] { "POLYLINE.1", "GRID_PLANE.4", "AXIS.1" }, "model", true, true, new Type[] { }, new Type[] { typeof(GSAStorey) })]
-  public class GSAGridSurface : GSAGridPlaneBase, IGSASpeckleContainer
+  public class GSAGridSurface : GSABase<StructuralLoadPlane>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralLoadPlane();
-
     public bool ParseGWACommand()
     {
       //TO DO
@@ -45,11 +40,11 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, k.ToString());
         }
       }
 
-      Initialiser.GSASenderObjects.AddRange(planes);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(planes);
 
       return (planes.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

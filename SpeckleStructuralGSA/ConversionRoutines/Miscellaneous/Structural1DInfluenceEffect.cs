@@ -5,17 +5,13 @@ using System.Threading.Tasks;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
+using System.Collections.Specialized;
 
 namespace SpeckleStructuralGSA
 {
   [GSAObject("INF_BEAM.1", new string[] { }, "model", true, false, new Type[] { typeof(GSA1DElement) }, new Type[] { typeof(GSA1DElement) })]
-  public class GSA1DInfluenceEffect : IGSASpeckleContainer
+  public class GSA1DInfluenceEffect : GSABase<Structural1DInfluenceEffect>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural1DInfluenceEffect();
-
     public void ParseGWACommand(List<GSA1DElement> e1Ds)
     {
       if (this.GWACommand == null)
@@ -23,7 +19,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural1DInfluenceEffect();
 
-      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
@@ -113,9 +109,9 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA1DInfluenceEffect).GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(typeof(GSA1DInfluenceEffect).GetGSAKeyword(), infl.ApplicationId);
+      var index = Initialiser.AppResources.Cache.ResolveIndex(typeof(GSA1DInfluenceEffect).GetGSAKeyword(), infl.ApplicationId);
 
-      var elementRef = Initialiser.Cache.LookupIndex(typeof(GSA1DElement).GetGSAKeyword(), infl.ElementRef);
+      var elementRef = Initialiser.AppResources.Cache.LookupIndex(typeof(GSA1DElement).GetGSAKeyword(), infl.ElementRef);
 
       if (!elementRef.HasValue)
         return "";
@@ -153,7 +149,7 @@ namespace SpeckleStructuralGSA
         }
         ls.Add("GLOBAL"); // TODO: GSA TEAM TO LOOK INTO THIS. GLOBAL IS DEFAULT IN GSA
         ls.Add(direction[i]);
-        gwaCommands.Add(string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
+        gwaCommands.Add(string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
       }
       return string.Join("\n", gwaCommands);
     }
@@ -170,32 +166,31 @@ namespace SpeckleStructuralGSA
     {
       var newLines = ToSpeckleBase<GSA1DInfluenceEffect>();
       var typeName = dummyObject.GetType().Name;
-      var e1Ds = Initialiser.GSASenderObjects.Get<GSA1DElement>();
+      var e1Ds = Initialiser.GsaKit.GSASenderObjects.Get<GSA1DElement>();
 
       var inflsLock = new object();
-      var infls = new List<GSA1DInfluenceEffect>();
+      var infls = new SortedDictionary<int, GSA1DInfluenceEffect>();
 
       Parallel.ForEach(newLines.Keys, k =>
       {
         try
         {
-          var p = newLines[k];
-          var infl = new GSA1DInfluenceEffect() { GWACommand = p };
+          var infl = new GSA1DInfluenceEffect() { GWACommand = newLines[k] };
           infl.ParseGWACommand(e1Ds);
           lock (inflsLock)
           {
-            infls.Add(infl);
+            infls.Add(k, infl);
           }
         }
         catch (Exception ex)
         {
-          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, k.ToString());
         }
       });
 
-      Initialiser.GSASenderObjects.AddRange(infls);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(infls.Values.ToList());
 
-      return (infls.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (infls.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }
