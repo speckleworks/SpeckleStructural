@@ -4,7 +4,7 @@ using SpeckleGSAInterfaces;
 
 namespace SpeckleStructuralGSA.Test
 {
-  public class Settings : IGSASettings
+  public class MockSettings : IGSASettings
   {
     public bool SendOnlyMeaningfulNodes = true;
     public bool SeparateStreams = false;

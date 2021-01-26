@@ -7,17 +7,13 @@ using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 using MathNet.Spatial.Euclidean;
 using System.Runtime.InteropServices;
+using System.Collections.Specialized;
 
 namespace SpeckleStructuralGSA
 {
   [GSAObject("GRID_LINE.1", new string[] { }, "model", true, true, new Type[] { }, new Type[] { })]
-  public class GSAGridLine : IGSASpeckleContainer
+  public class GSAGridLine : GSABase<StructuralReferenceLine>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralReferenceLine();
-
     public void ParseGWACommand()
     {
       var gwaGridLineCommand = GWACommand;
@@ -26,7 +22,7 @@ namespace SpeckleStructuralGSA
         return;
       }
 
-      var pieces = gwaGridLineCommand.ListSplit(Initialiser.Interface.GwaDelimiter);
+      var pieces = gwaGridLineCommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
 
@@ -78,7 +74,7 @@ namespace SpeckleStructuralGSA
 
       var keyword = destType.GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(keyword, gridLine.ApplicationId);
+      var index = Initialiser.AppResources.Cache.ResolveIndex(keyword, gridLine.ApplicationId);
 
       //The width parameter is intentionally not being used here as the meaning doesn't map to the y coordinate parameter of the ASSEMBLY keyword
       //It is therefore to be ignored here for GSA purposes.
@@ -100,7 +96,7 @@ namespace SpeckleStructuralGSA
           "0" //ignored as the angle is in degrees
       };
 
-      return (string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
+      return (string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
     }
   }
 
@@ -117,7 +113,7 @@ namespace SpeckleStructuralGSA
       var typeName = dummyObject.GetType().Name;
       var rlLock = new object();
       //Get all relevant GSA entities in this entire model
-      var rls = new List<GSAGridLine>();
+      var rls = new SortedDictionary<int, GSAGridLine>();
 
       Parallel.ForEach(newLines.Keys, k =>
       {
@@ -129,18 +125,18 @@ namespace SpeckleStructuralGSA
           rl.ParseGWACommand();
           lock (rlLock)
           {
-            rls.Add(rl);
+            rls.Add(k, rl);
           }
         }
         catch (Exception ex)
         {
-          Initialiser.AppUI.Message(typeName + ": " + ex.Message, k.ToString());
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, k.ToString());
         }
       });
 
-      Initialiser.GSASenderObjects.AddRange(rls);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(rls.Values.ToList());
 
-      return (rls.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (rls.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

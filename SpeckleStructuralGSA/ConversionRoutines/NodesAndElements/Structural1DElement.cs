@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using SpeckleCore;
@@ -13,14 +14,9 @@ namespace SpeckleStructuralGSA
   [GSAObject("EL.4", new string[] { "NODE.3" }, "model", true, false, 
     new Type[] { typeof(GSANode), typeof(GSA1DProperty), typeof(GSASpringProperty), typeof(GSA1DMember) }, 
     new Type[] { typeof(GSANode), typeof(GSA1DProperty), typeof(GSASpringProperty) })]
-  public class GSA1DElement : IGSASpeckleContainer
+  public class GSA1DElement : GSABase<Structural1DElement>
   {
     public int Member;
-    
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural1DElement();
 
     public void ParseGWACommand(List<GSANode> nodes)
     {
@@ -38,7 +34,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural1DElement();
 
-      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
       
       var counter = 1; // Skip identifier
 
@@ -91,7 +87,7 @@ namespace SpeckleStructuralGSA
       }
       catch
       {
-        Initialiser.AppUI.Message("Generating axis from coordinates for 1D element", obj.ApplicationId);
+        Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, "Generating axis from coordinates for 1D element", obj.ApplicationId);
       }
 
       if (pieces[counter++] != "NO_RLS")
@@ -162,7 +158,7 @@ namespace SpeckleStructuralGSA
 
       this.Value = obj;
 
-      Initialiser.Cache.SetApplicationId(keyword, this.GSAId, obj.ApplicationId);
+      Initialiser.AppResources.Cache.SetApplicationId(keyword, this.GSAId, obj.ApplicationId);
     }
 
     public string SetGWACommand(int group = 0)
@@ -177,16 +173,16 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA1DElement).GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(keyword, element.ApplicationId);
+      var index = Initialiser.AppResources.Cache.ResolveIndex(keyword, element.ApplicationId);
 
       var propKeyword = (element.ElementType == Structural1DElementType.Spring)
         ? typeof(GSASpringProperty).GetGSAKeyword()
         : typeof(GSA1DProperty).GetGSAKeyword();
 
-      var indexResult = Initialiser.Cache.LookupIndex(propKeyword, element.PropertyRef);
+      var indexResult = Initialiser.AppResources.Cache.LookupIndex(propKeyword, element.PropertyRef);
 
       //If the reference can't be found, then reserve a new index so that it at least doesn't point to any other existing record
-      var propRef = indexResult ?? Initialiser.Cache.ResolveIndex(propKeyword, element.PropertyRef);
+      var propRef = indexResult ?? Initialiser.AppResources.Cache.ResolveIndex(propKeyword, element.PropertyRef);
       if (indexResult == null && element.ApplicationId != null)
       {
         if (element.PropertyRef == null)
@@ -215,7 +211,7 @@ namespace SpeckleStructuralGSA
       // topo()
       for (var i = 0; i < element.Value.Count(); i += 3)
       {
-        ls.Add(Helper.NodeAt(element.Value[i], element.Value[i + 1], element.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString());
+        ls.Add(Initialiser.AppResources.Proxy.NodeAt(element.Value[i], element.Value[i + 1], element.Value[i + 2], Initialiser.AppResources.Settings.CoincidentNodeAllowance).ToString());
       }
       
       ls.Add("0"); // Orientation Node
@@ -290,7 +286,7 @@ namespace SpeckleStructuralGSA
 
       ls.Add((element.GSADummy.HasValue && element.GSADummy.Value) ? "DUMMY" : ""); // dummy
 
-      return (string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
+      return (string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
     }
 
     private static bool ParseEndRelease(char code, string[] pieces, ref int counter)
@@ -310,14 +306,9 @@ namespace SpeckleStructuralGSA
   }
 
   [GSAObject("MEMB.8", new string[] { "NODE.3" }, "model", false, true, new Type[] { typeof(GSA1DProperty), typeof(GSANode), typeof(GSASpringProperty) }, new Type[] { typeof(GSA1DProperty), typeof(GSANode), typeof(GSASpringProperty) })]
-  public class GSA1DMember : IGSASpeckleContainer
+  public class GSA1DMember : GSABase<Structural1DElement>
   {
     public int Group; // Keep for load targetting
-
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural1DElement();
 
     public void ParseGWACommand(List<GSANode> nodes)
     {
@@ -336,7 +327,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural1DElement();
 
-      var pieces = this.GWACommand.ListSplit(Initialiser.Interface.GwaDelimiter);
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // num - Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
@@ -383,7 +374,7 @@ namespace SpeckleStructuralGSA
       {
         var node = nodes.Where(n => n.GSAId == Convert.ToInt32(orientationNodeRef)).FirstOrDefault();
         obj.ZAxis = Helper.Parse1DAxis(obj.Value.ToArray(),
-            rotationAngle, node.Value.ToArray()).Normal as StructuralVectorThree;
+            rotationAngle, node.Value.Value.ToArray()).Normal as StructuralVectorThree;
         this.SubGWACommand.Add(node.GWACommand);
       }
       else
@@ -490,12 +481,12 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSA1DMember).GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(typeof(GSA1DMember).GetGSAKeyword(), member.ApplicationId);
+      var index = Initialiser.AppResources.Cache.ResolveIndex(typeof(GSA1DMember).GetGSAKeyword(), member.ApplicationId);
 
       var propKeyword = ((member.ElementType == Structural1DElementType.Spring) ? typeof(GSASpringProperty) : typeof(GSA1DProperty)).GetGSAKeyword();
-      var indexResult = Initialiser.Cache.LookupIndex(propKeyword, member.PropertyRef);
+      var indexResult = Initialiser.AppResources.Cache.LookupIndex(propKeyword, member.PropertyRef);
       //If the reference can't be found, then reserve a new index so that it at least doesn't point to any other existing record
-      var propRef = indexResult ?? Initialiser.Cache.ResolveIndex(propKeyword, member.PropertyRef);
+      var propRef = indexResult ?? Initialiser.AppResources.Cache.ResolveIndex(propKeyword, member.PropertyRef);
       if (indexResult == null && member.ApplicationId != null)
       {
         if (member.PropertyRef == null)
@@ -533,7 +524,7 @@ namespace SpeckleStructuralGSA
       {
         for (var i = 0; i < member.Value.Count(); i += 3)
         {
-          topo += Helper.NodeAt(member.Value[i], member.Value[i + 1], member.Value[i + 2], Initialiser.Settings.CoincidentNodeAllowance).ToString() + " ";
+          topo += Initialiser.AppResources.Proxy.NodeAt(member.Value[i], member.Value[i + 1], member.Value[i + 2], Initialiser.AppResources.Settings.CoincidentNodeAllowance).ToString() + " ";
         }
       }
       ls.Add(topo.TrimEnd());
@@ -569,9 +560,9 @@ namespace SpeckleStructuralGSA
       ls.Add("Free"); // restraint_end_1
       ls.Add("Free"); // restraint_end_2
 
-      ls.Add("0"); // Effective length option
+      ls.Add("AUTOMATIC"); // Effective length option
       ls.Add("0"); // height
-      ls.Add("0"); // load_ref
+      ls.Add("SHR_CENTRE"); // load_ref
 
       if (member.Offset == null)
       {
@@ -601,7 +592,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      return (string.Join(Initialiser.Interface.GwaDelimiter.ToString(), ls));
+      return (string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
     }
 
     private static StructuralVectorBoolSix ParseEndRelease(string code)
@@ -657,7 +648,7 @@ namespace SpeckleStructuralGSA
 
     public static string ToNative(this Structural1DElement beam)
     {
-      return (Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis) 
+      return (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Analysis) 
         ? new GSA1DElement() { Value = beam }.SetGWACommand()
         : new GSA1DMember() { Value = beam }.SetGWACommand();
     }
@@ -667,32 +658,32 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSA1DElement>();
       var typeName = dummyObject.GetType().Name;
       var elementsLock = new object();
-      var elements = new List<GSA1DElement>();
-      var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
+      var elements = new SortedDictionary<int, GSA1DElement>();
+      var nodes = Initialiser.GsaKit.GSASenderObjects.Get<GSANode>();
 
 #if DEBUG
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
 #else
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
 #endif
       {
-        var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
+        var pPieces = newLines[k].ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
         if (pPieces[4] == "BEAM" && pPieces[4].ParseElementNumNodes() == 2)
         {
           var gsaId = pPieces[1];
           try
           {
-            var element = new GSA1DElement() { GWACommand = p };
+            var element = new GSA1DElement() { GWACommand = newLines[k] };
             element.ParseGWACommand(nodes);
             lock (elementsLock)
             {
-              elements.Add(element);
+              elements.Add(k, element);
             }
           }
           catch (Exception ex)
           {
-            Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+            Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
           }
         }
       }
@@ -700,41 +691,41 @@ namespace SpeckleStructuralGSA
       );
 #endif
 
-      Initialiser.GSASenderObjects.AddRange(elements);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(elements.Values.ToList());
 
-      return (elements.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (elements.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
 
     public static SpeckleObject ToSpeckle(this GSA1DMember dummyObject)
     {
-      var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
+      var nodes = Initialiser.GsaKit.GSASenderObjects.Get<GSANode>();
       var membersLock = new object();
-      var members = new List<GSA1DMember>();
+      var members = new SortedDictionary<int, GSA1DMember>();
       var newLines = ToSpeckleBase<GSA1DMember>();
       var typeName = dummyObject.GetType().Name;
 
 #if DEBUG
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
 #else
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
 #endif
       {
-        var pPieces = p.ListSplit(Initialiser.Interface.GwaDelimiter);
+        var pPieces = newLines[k].ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
         var gsaId = pPieces[1];
         if (pPieces[4].Is1DMember())
         {
           try
           {
-            var member = new GSA1DMember() { GWACommand = p };
+            var member = new GSA1DMember() { GWACommand = newLines[k] };
             member.ParseGWACommand(nodes);
             lock (membersLock)
             {
-              members.Add(member);
+              members.Add(k, member);
             }
           }
           catch (Exception ex)
           {
-            Initialiser.AppUI.Message(typeName + ": " + ex.Message, gsaId);
+            Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, gsaId);
           }
         }
       }
@@ -742,9 +733,9 @@ namespace SpeckleStructuralGSA
       );
 #endif
 
-      Initialiser.GSASenderObjects.AddRange(members);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(members.Values.ToList());
 
-      return (members.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (members.Keys.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

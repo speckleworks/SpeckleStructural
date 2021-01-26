@@ -21,6 +21,9 @@ namespace SpeckleStructuralGSA.Schema
     protected GwaSetCommandType gwaSetCommandType;
     protected string keyword;  //Useful in string rather than enum form for use in creating GWA commands
 
+    public string Keyword => this.keyword;
+    public GwaSetCommandType GwaSetCommandType => this.gwaSetCommandType;
+
     protected static readonly string SID_APPID_TAG = "speckle_app_id";
     protected static readonly string SID_STRID_TAG = "speckle_stream_id";
 
@@ -33,6 +36,8 @@ namespace SpeckleStructuralGSA.Schema
       keyword = GetType().GetAttribute<GsaType>("Keyword").ToString();
       Enum.TryParse(GetType().GetAttribute<GsaType>("SetCommandType").ToString(), out gwaSetCommandType);
     }
+
+    #region basic_common_fns
 
     //The keywordOverride is mainly used for the LOAD_BEAM case
     protected bool InitialiseGwa(bool includeSet, out List<string> items, string keywordOverride = "")
@@ -92,39 +97,9 @@ namespace SpeckleStructuralGSA.Schema
         }
       }
 
-      string keywordAndVersion;
-      var delimIndex = items[0].IndexOf(':');
-      if (delimIndex > 0)
-      {
-        //An SID has been found
-        keywordAndVersion = items[0].Substring(0, delimIndex);
-        var sidTags = items[0].Substring(delimIndex);
-        var match = Regex.Match(sidTags, "(?<={" + SID_STRID_TAG + ":).*?(?=})");
-        StreamId = (!string.IsNullOrEmpty(match.Value)) ? match.Value : null;
-        match = Regex.Match(sidTags, "(?<={" + SID_APPID_TAG + ":).*?(?=})");
-        ApplicationId = (!string.IsNullOrEmpty(match.Value)) ? match.Value : null;
-      }
-      else
-      {
-        keywordAndVersion = items[0];
-      }
-
-      var kwSplit = keywordAndVersion.Split(new[] { '.' });
-      var foundKeyword = kwSplit[0];
-      if (!foundKeyword.Equals(string.IsNullOrEmpty(keywordOverride) ? keyword : keywordOverride, StringComparison.InvariantCultureIgnoreCase))
+      if (!ParseKeywordVersionSid(items[0], keywordOverride))
       {
         return false;
-      }
-      if (kwSplit.Count() > 1)
-      {
-        if (!int.TryParse(kwSplit[1], out Version))
-        {
-          return false;
-        }
-      }
-      else
-      {
-        Version = 1;
       }
 
       //Remove keyword
@@ -136,101 +111,13 @@ namespace SpeckleStructuralGSA.Schema
         {
           return false;
         }
+        Index = index;
         items.Remove(items[0]);
       }
 
       remainingItems = items;
 
       return true;
-    }
-
-    protected bool AddName(string v)
-    {
-      name = (string.IsNullOrEmpty(v)) ? null : v;
-      return true;
-    }
-
-    protected List<string> Split(string gwa)
-    {
-      try
-      {
-        return gwa.ListSplit(Initialiser.Interface.GwaDelimiter).ToList();
-      }
-      catch
-      {
-        return new List<string>();
-      }
-    }
-
-    protected bool AddNullableIndex(string v, out int? dest)
-    {
-      dest = int.TryParse(v, out var n) && n > 0 ? (int?)n : null;
-      return true;
-    }
-
-    //For when you need to read a value from GWA that is stored in a nullable double member
-    protected bool AddNullableDoubleValue(string v, out double? dest)
-    {
-      dest = double.TryParse(v, out var n) ? (double?)n : null;
-      return true;
-    }
-
-    //For when you need to read a value from GWA that is stored in a nullable integer member
-    protected bool AddNullableIntValue(string v, out int? dest)
-    {
-      dest = int.TryParse(v, out var n) ? (int?)n : null;
-      return true;
-    }
-
-    protected bool Join(List<string> items, out string joined)
-    {
-      joined = string.Join(Initialiser.Interface.GwaDelimiter.ToString(), items);
-      return (joined.Length > 0);
-    }
-
-    protected string List(List<int> indices)
-    {
-      return string.Join(" ", indices);
-    }
-
-    protected List<int> StringToIntList(string s, char delim = ' ')
-    {
-      var retList = new List<int>();
-      foreach (var i in s.Split(delim).Where(i => i.IsDigits()))
-      {
-        if (int.TryParse(i, out var result))
-        {
-          retList.Add(result);
-        }
-      }
-      return retList;
-    }
-
-    protected List<double> StringToDoubleList(string s, char delim = ' ')
-    {
-      var retList = new List<double>();
-      foreach (var i in s.Split(delim).Where(i => Regex.IsMatch(i, @"\d+\.?\d*")))
-      {
-        if (double.TryParse(i, out var result))
-        {
-          retList.Add(result);
-        }
-      }
-      return retList;
-    }
-
-    protected bool EnumParse<T>(string s, out T v)
-    {
-      try
-      {
-        v = (T)Enum.Parse(typeof(T), s);
-        return true;
-      }
-      catch
-      {
-        v = default(T);
-        return false;
-      }
     }
 
     protected bool AddItems(ref List<string> items, params object[] list)
@@ -279,6 +166,308 @@ namespace SpeckleStructuralGSA.Schema
       return true;
     }
 
+    #endregion
+
+    #region common_to_gwa_fns
+
+    public string AddEntities(List<int> entities)
+    {
+      //Unlike other keywords which have entity type as a parameter, this keyword (at least for version 2) still has "element list" which means, for members,
+      //the group is used
+
+      var allIndices = Initialiser.AppResources.Cache.LookupIndices(
+        (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Design) ? GetKeyword<GsaMemb>() : GetKeyword<GsaEl>())
+        .Where(i => i.HasValue).Select(i => i.Value).Distinct().OrderBy(i => i).ToList();
+
+      if (entities.Distinct().OrderBy(i => i).SequenceEqual(allIndices))
+      {
+        return "all";
+      }
+      return (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Design)
+        ? string.Join(" ", entities.Select(i => "G" + i))
+        : string.Join(" ", entities);
+    }
+
+    protected void AddEndReleaseItems(ref List<string> items, Dictionary<AxisDirection6, ReleaseCode> releases, List<double> stiffnesses, List<AxisDirection6> axisDirs)
+    {
+      var rls = "";
+      var stiffnessIndex = 0;
+      foreach (var d in axisDirs)
+      {
+        var releaseCode = (releases != null && releases.Count() > 0 && releases.ContainsKey(d)) ? releases[d] : ReleaseCode.Fixed;
+        rls += releaseCode.GetStringValue();
+        if (releaseCode == ReleaseCode.Stiff && releases.ContainsKey(d) && (++stiffnessIndex) < stiffnesses.Count())
+        {
+          stiffnesses.Add(stiffnesses[stiffnessIndex]);
+        }
+      }
+      items.Add(rls);
+      if (stiffnesses != null && stiffnesses.Count() > 0)
+      {
+        items.AddRange(stiffnesses.Select(s => s.ToString()));
+      }
+      return;
+    }
+
+    #endregion
+
+    #region common_from_gwa_fns
+
+    protected bool AddName(string v)
+    {
+      name = (string.IsNullOrEmpty(v)) ? null : v;
+      return true;
+    }
+
+    protected bool AddStringValue(string v, out string sv)
+    {
+      sv = (string.IsNullOrEmpty(v)) ? null : v;
+      return true;
+    }
+
+    protected bool AddColour(string v, out Colour c)
+    {
+      if (!Enum.TryParse(v, true, out c))
+      {
+        c = Colour.NO_RGB;
+      }
+      return true;
+    }
+
+    protected bool ParseKeywordVersionSid(string v, string keywordOverride = "")
+    {
+      string keywordAndVersion;
+      var delimIndex = v.IndexOf(':');
+      if (delimIndex > 0)
+      {
+        //An SID has been found
+        keywordAndVersion = v.Substring(0, delimIndex);
+        var sidTags = v.Substring(delimIndex);
+        var match = Regex.Match(sidTags, "(?<={" + SID_STRID_TAG + ":).*?(?=})");
+        StreamId = (!string.IsNullOrEmpty(match.Value)) ? match.Value : null;
+        match = Regex.Match(sidTags, "(?<={" + SID_APPID_TAG + ":).*?(?=})");
+        ApplicationId = (!string.IsNullOrEmpty(match.Value)) ? match.Value : null;
+      }
+      else
+      {
+        keywordAndVersion = v;
+      }
+
+      var kwSplit = keywordAndVersion.Split('.');
+      var foundKeyword = kwSplit[0];
+      if (!foundKeyword.Equals(string.IsNullOrEmpty(keywordOverride) ? keyword : keywordOverride, StringComparison.InvariantCultureIgnoreCase))
+      {
+        return false;
+      }
+      if (kwSplit.Count() > 1)
+      {
+        if (!int.TryParse(kwSplit[1], out Version))
+        {
+          return false;
+        }
+      }
+      else
+      {
+        Version = 1;
+      }
+      return true;
+    }
+
+    protected bool AddEntities(string v, out List<int> indices)
+    {
+      var entityItems = v.Split(' ');
+      if (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Design)
+      {
+        if (entityItems.Count() == 1 && entityItems.First().Equals("all", StringComparison.InvariantCultureIgnoreCase))
+        {
+          indices = Initialiser.AppResources.Cache.LookupIndices(GetKeyword<GsaMemb>()).Where(i => i.HasValue).Select(i => i.Value).ToList();
+        }
+        else
+        {
+          //Only recognise the groups, as these represent the members
+          //TO DO: for all elements, find if they have parents and include them
+          var members = string.Join(" ", entityItems.Where(ei => ei.StartsWith("G")).Select(ei => ei.Substring(1)));
+          indices = Initialiser.AppResources.Proxy.ConvertGSAList(members, GSAEntity.MEMBER).ToList();
+        }
+      }
+      else
+      {
+        indices = (entityItems.Count() == 1 && entityItems.First().Equals("all", StringComparison.InvariantCultureIgnoreCase))
+          ? Initialiser.AppResources.Cache.LookupIndices(GetKeyword<GsaEl>()).Where(i => i.HasValue).Select(i => i.Value).ToList()
+          : Initialiser.AppResources.Proxy.ConvertGSAList(v, GSAEntity.ELEMENT).ToList();
+      }
+      return true;
+    }
+
+    protected bool AddNodes(string v, out List<int> indices)
+    {
+      var entityItems = v.Split(' ');
+      indices = (entityItems.Count() == 1 && entityItems.First().Equals("all", StringComparison.InvariantCultureIgnoreCase))
+          ? Initialiser.AppResources.Cache.LookupIndices(GetKeyword<GsaNode>()).Where(i => i.HasValue).Select(i => i.Value).ToList()
+          : Initialiser.AppResources.Proxy.ConvertGSAList(v, GSAEntity.NODE).ToList();
+      return true;
+    }
+
+    //Useful helper function for MEMB and EL
+    protected bool ProcessReleases(List<string> items, out List<string> remainingItems,
+      ref Dictionary<AxisDirection6, ReleaseCode> Releases1, ref List<double> Stiffnesses1, ref Dictionary<AxisDirection6, ReleaseCode> Releases2, ref List<double> Stiffnesses2)
+    {
+      remainingItems = items; //default in case of early exit of this method
+      var axisDirs = Enum.GetValues(typeof(AxisDirection6)).OfType<AxisDirection6>().Where(v => v != AxisDirection6.NotSet).ToList();
+
+      var endReleases = new Dictionary<AxisDirection6, ReleaseCode>[2] { null, null };
+      var endStiffnesses = new List<double>[2];
+
+      var itemIndex = 0;
+      for (var i = 0; i < 2; i++)
+      {
+        endReleases[i] = new Dictionary<AxisDirection6, ReleaseCode>();
+        endStiffnesses[i] = new List<double>();
+
+        var relCodes = items[itemIndex++];
+        if (relCodes.Length < axisDirs.Count())
+        {
+          return false;
+        }
+
+        var numExpectedStiffnesses = 0;
+        for (var j = 0; j < axisDirs.Count(); j++)
+        {
+          var upperCharCode = char.ToUpper(relCodes[j]);
+          if (upperCharCode == 'K')
+          {
+            numExpectedStiffnesses++;
+            endReleases[i].Add(axisDirs[j], ReleaseCode.Stiff);
+          }
+          else if (upperCharCode == 'R')
+          {
+            endReleases[i].Add(axisDirs[j], ReleaseCode.Released);
+          }
+          else
+          {
+            //For now, Fixed values aren't added as it's considered the default
+            //endReleases[i].Add(axisDirs[j], ReleaseCode.Fixed);
+          }
+        }
+
+        if (numExpectedStiffnesses > 0)
+        {
+          for (var k = 0; k < numExpectedStiffnesses; k++)
+          {
+            if (!double.TryParse(items[itemIndex++], out double stiffness))
+            {
+              return false;
+            }
+            endStiffnesses[i].Add(stiffness);
+          }
+        }
+      }
+
+      Releases1 = endReleases[0].Count() > 0 ? endReleases[0] : null;
+      Releases2 = endReleases[1].Count() > 0 ? endReleases[1] : null;
+      Stiffnesses1 = endStiffnesses[0].Count() > 0 ? endStiffnesses[0] : null;
+      Stiffnesses2 = endStiffnesses[1].Count() > 0 ? endStiffnesses[1] : null;
+
+      remainingItems = items.Skip(itemIndex).ToList();
+
+      return true;
+    }
+
+    protected bool AddYesNoBoolean(string v, out bool dest)
+    {
+      dest = (v.Equals("YES", StringComparison.InvariantCultureIgnoreCase)) ? true : false;
+      return true;
+    }
+
+    protected bool AddNullableIndex(string v, out int? dest)
+    {
+      dest = int.TryParse(v, out var n) && n > 0 ? (int?)n : null;
+      return true;
+    }
+
+    //For when you need to read a value from GWA that is stored in a nullable double member
+    protected bool AddNullableDoubleValue(string v, out double? dest)
+    {
+      dest = double.TryParse(v, out var n) ? (double?)n : null;
+      return true;
+    }
+
+    //For when you need to read a value from GWA that is stored in a nullable integer member
+    protected bool AddNullableIntValue(string v, out int? dest)
+    {
+      dest = int.TryParse(v, out var n) ? (int?)n : null;
+      return true;
+    }
+
+    #endregion
+
+    #region other_fns
+
+    protected List<string> Split(string gwa)
+    {
+      try
+      {
+        return gwa.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter).ToList();
+      }
+      catch
+      {
+        return new List<string>();
+      }
+    }
+
+    protected bool Join(List<string> items, out string joined)
+    {
+      joined = string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), items);
+      return (joined.Length > 0);
+    }
+
+    protected string IndicesList(List<int> indices)
+    {
+      return string.Join(" ", indices);
+    }
+
+    protected List<int> StringToIntList(string s, char delim = ' ')
+    {
+      var retList = new List<int>();
+      foreach (var i in s.Split(delim).Where(i => i.IsDigits()))
+      {
+        if (int.TryParse(i, out var result))
+        {
+          retList.Add(result);
+        }
+      }
+      return retList;
+    }
+
+    protected List<double> StringToDoubleList(string s, char delim = ' ')
+    {
+      var retList = new List<double>();
+      foreach (var i in s.Split(delim).Where(i => Regex.IsMatch(i, @"\d+\.?\d*")))
+      {
+        if (double.TryParse(i, out var result))
+        {
+          retList.Add(result);
+        }
+      }
+      return retList;
+    }
+
+    protected bool EnumParse<T>(string s, out T v)
+    {
+      try
+      {
+        v = (T)Enum.Parse(typeof(T), s);
+        return true;
+      }
+      catch
+      {
+        v = default(T);
+        return false;
+      }
+    }
+
+    #endregion
+
     #region static_methods
     private static string FormatApplicationIdSidTag(string value)
     {
@@ -290,7 +479,7 @@ namespace SpeckleStructuralGSA.Schema
       return (string.IsNullOrEmpty(value) ? null : "{" + SID_STRID_TAG + ":" + value.Replace(" ", "") + "}");
     }
 
-    private static string FormatSidTags(string streamId = null, string applicationId = null)
+    protected static string FormatSidTags(string streamId = null, string applicationId = null)
     {
       var streamIdSidTag = FormatStreamIdSidTag(streamId);
       var appIdSidTag = FormatApplicationIdSidTag(applicationId);
@@ -306,14 +495,39 @@ namespace SpeckleStructuralGSA.Schema
       return string.IsNullOrEmpty(sidTags) ? null : sidTags;
     }
 
-    public static string Keyword<T>()
+    public static string GetKeyword<T>()
     {
       return typeof(T).GetAttribute<GsaType>("Keyword").ToString();
+    }
+
+    public static GwaKeyword GetGwaKeyword(Type t)
+    {
+      return (GwaKeyword)t.GetAttribute<GsaType>("Keyword");
+    }
+
+    public static bool IsAnalysisLayer(Type t)
+    {
+      return (bool)t.GetAttribute<GsaType>("AnalysisLayer");
+    }
+
+    public static bool IsDesignLayer(Type t)
+    {
+      return (bool)t.GetAttribute<GsaType>("DesignLayer");
+    }
+
+    public static GwaKeyword[] GetReferencedKeywords(Type t)
+    {
+      return (GwaKeyword[])t.GetAttribute<GsaType>("ReferencedKeywords");
     }
 
     public static GwaSetCommandType GetGwaSetCommandType<T>()
     {
       return (GwaSetCommandType)typeof(T).GetAttribute<GsaType>("SetCommandType");
+    }
+
+    public static bool IsSelfContained(Type t)
+    {
+      return (bool)t.GetAttribute<GsaType>("SelfContained");
     }
     #endregion
 

@@ -7,7 +7,7 @@ namespace SpeckleStructuralGSA.Schema
 {
   //Named load case instead of load title because it is referred to as such by the documentation at
   //https://www.oasys-software.com/help/gsa/10.1/GSA_Text.html
-  [GsaType(GwaKeyword.LOAD_TITLE, GwaSetCommandType.Set, StreamBucket.Model)]
+  [GsaType(GwaKeyword.LOAD_TITLE, GwaSetCommandType.Set, true)]
   public class GsaLoadCase : GsaRecord
   {
     public StructuralLoadCaseType CaseType;
@@ -31,19 +31,7 @@ namespace SpeckleStructuralGSA.Schema
       //LOAD_TITLE.2 | case | title | type | source | category | dir | include | bridge
       //Note: case is deserialised into the Index field
       return FromGwaByFuncs(items, out _, AddTitle, AddType);
-    }
-
-    public bool AddTitle(string v)
-    {
-      Title = string.IsNullOrEmpty(v) ? null : v;
-      return true;
-    }
-
-    public bool AddType(string v)
-    {
-      CaseType = SchemaConversion.Helper.StringToLoadCaseType(v);
-      return true;
-    }
+    }    
 
     public override bool Gwa(out List<string> gwa, bool includeSet = false)
     {
@@ -61,6 +49,19 @@ namespace SpeckleStructuralGSA.Schema
       return gwa.Count() > 0;
     }
 
+    #region from_gwa_fns
+    public bool AddTitle(string v)
+    {
+      Title = string.IsNullOrEmpty(v) ? null : v;
+      return true;
+    }
+
+    public bool AddType(string v)
+    {
+      CaseType = SchemaConversion.Helper.StringToLoadCaseType(v);
+      return true;
+    }
+    #endregion
 
   }
 }

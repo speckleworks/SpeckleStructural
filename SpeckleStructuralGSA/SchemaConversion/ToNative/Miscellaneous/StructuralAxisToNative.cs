@@ -12,20 +12,20 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
     public static string ToNative(this GsaAxis gsaAxis)
     {
-      var keyword = GsaRecord.Keyword<GsaAxis>();
+      var keyword = GsaRecord.GetKeyword<GsaAxis>();  
 
       if (gsaAxis.Gwa(out var gwaLines, false))
       {
-        //axes currently never have a stream nor an application ID
-        Initialiser.Cache.Upsert(keyword, gsaAxis.Index.Value, gwaLines.First(), "", "", GsaRecord.GetGwaSetCommandType<GsaAxis>());
+        //axes currently never have an application ID
+        Initialiser.AppResources.Cache.Upsert(keyword, gsaAxis.Index.Value, gwaLines.First(), gsaAxis.StreamId, "", GsaRecord.GetGwaSetCommandType<GsaAxis>());
       }
       return "";
     }
 
     public static GsaAxis ToNativeSchema(this StructuralAxis axis)
     {
-      var keyword = GsaRecord.Keyword<GsaAxis>();
-      var index = Initialiser.Cache.ResolveIndex(keyword);
+      var keyword = GsaRecord.GetKeyword<GsaAxis>();
+      var index = Initialiser.AppResources.Cache.ResolveIndex(keyword);
       var origin = (Valid(axis.Origin)) ? axis.Origin : new SpecklePoint(0, 0, 0);
       var gsaAxis = new GsaAxis()
       {
