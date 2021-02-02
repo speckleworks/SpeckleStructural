@@ -17,7 +17,9 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSAMiscResult dummyObject)
     {
       var keyword = typeof(GSAAssembly).GetGSAKeyword();
-      if (Initialiser.AppResources.Settings.MiscResults.Count() == 0 || !Initialiser.AppResources.Cache.GetKeywordRecordsSummary(keyword, out var gwa, out var indices, out var applicationIds))
+
+      if (Initialiser.AppResources.Settings.MiscResults.Count() == 0 
+        || !Initialiser.AppResources.Cache.GetKeywordRecordsSummary(keyword, out var gwa, out var indices, out var applicationIds))
       {
         return new SpeckleNull();
       }
@@ -42,8 +44,7 @@ namespace SpeckleStructuralGSA
 
             var targetRef = (string.IsNullOrEmpty(applicationIds[i])) ? Helper.GetApplicationId(keyword, indices[i]) : applicationIds[i];
 
-            var existingRes = results.FirstOrDefault(x => ((StructuralResultBase)x.Value).TargetRef == targetRef
-                && ((StructuralResultBase)x.Value).LoadCaseRef == loadCase);
+            var existingRes = results.FirstOrDefault(x => x.Value.TargetRef == targetRef && x.Value.LoadCaseRef == loadCase);
 
             if (existingRes == null)
             {
@@ -60,7 +61,7 @@ namespace SpeckleStructuralGSA
             }
             else
             {
-              ((StructuralMiscResult)existingRes.Value).Value[kvp.Key] = resultExport;
+              existingRes.Value.Value[kvp.Key] = resultExport;
             }
           }
         }
