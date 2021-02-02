@@ -88,6 +88,7 @@ namespace SpeckleStructuralGSA
         var results = new List<GSA2DElementResult>();
 
         var keyword = typeof(GSA2DElement).GetGSAKeyword();
+        var memberKw = typeof(GSA1DMember).GetGSAKeyword();
 
         //Unlike embedding, separate results doesn't necessarily mean that there is a Speckle object created for each 1d element.  There is always though
         //some GWA loaded into the cache
@@ -134,7 +135,7 @@ namespace SpeckleStructuralGSA
                 //and so in that case the application ID would need to be calculated in the same way as what would happen as a result of the ToSpeckle() call
                 if (Helper.GetElementParentIdFromGwa(gwa[i], out var memberIndex) && memberIndex > 0)
                 {
-                  targetRef = SpeckleStructuralClasses.Helper.CreateChildApplicationId(indices[i], Helper.GetApplicationId(typeof(GSA1DMember).GetGSAKeyword(), memberIndex));
+                  targetRef = SpeckleStructuralClasses.Helper.CreateChildApplicationId(indices[i], Helper.GetApplicationId(memberKw, memberIndex));
                 }
                 else
                 {
@@ -142,8 +143,7 @@ namespace SpeckleStructuralGSA
                 }
               }
 
-              var existingRes = results.FirstOrDefault(x => ((StructuralResultBase)x.Value).TargetRef == targetRef
-                && ((StructuralResultBase)x.Value).LoadCaseRef == loadCase);
+              var existingRes = results.FirstOrDefault(x => x.Value.TargetRef == targetRef && x.Value.LoadCaseRef == loadCase);
 
               if (existingRes == null)
               {

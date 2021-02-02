@@ -10,6 +10,8 @@ namespace SpeckleStructuralGSA
   public class GsaKit : IGSAKit
   {
     private readonly List<TypeDependencyData> typeDepData = new List<TypeDependencyData>();
+    //Result type dependencies kept separate for now as typeDepData is based on the new schema and the results is currently based solely on the old schema
+    private readonly List<TypeDependencyData> resultsTypeDepData = new List<TypeDependencyData>();
 
     //The variable below must be a property (i.e. with { get; }) and of Dictionary<Type, List<object>> type so that SpeckleGSA
     //can recognise this as a kit it can work with
@@ -61,15 +63,33 @@ namespace SpeckleStructuralGSA
     }
 
     public Dictionary<Type, List<Type>> TxTypeDependencies
-    {
+    {      
       get
       {
-        if (!typeDepData.Any(td => td.Direction == StreamDirection.Send && td.Layer == Initialiser.AppResources.Settings.TargetLayer))
+        var currentLayer = Initialiser.AppResources.Settings.TargetLayer;
+        if (!typeDepData.Any(td => td.Direction == StreamDirection.Send && td.Layer == currentLayer))
         {
           var typeDeps = TypeDependencies(StreamDirection.Send);
-          typeDepData.Add(new TypeDependencyData(StreamDirection.Send, Initialiser.AppResources.Settings.TargetLayer, typeDeps));
+          typeDepData.Add(new TypeDependencyData(StreamDirection.Send, currentLayer, typeDeps));
         }
-        return typeDepData.FirstOrDefault(td => td.Direction == StreamDirection.Send && td.Layer == Initialiser.AppResources.Settings.TargetLayer).Dependencies;
+        if (Initialiser.AppResources.Settings.SendResults && !resultsTypeDepData.Any(td => td.Layer == currentLayer))
+        {
+          var resultTypeDeps = ResultTypeDependencies();
+          resultsTypeDepData.Add(new TypeDependencyData(StreamDirection.Send, currentLayer, resultTypeDeps));
+        }
+
+        var retDict = typeDepData.FirstOrDefault(td => td.Direction == StreamDirection.Send && td.Layer == currentLayer).Dependencies
+          .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+        if (Initialiser.AppResources.Settings.SendResults)
+        {
+          foreach (var kvp in resultsTypeDepData.FirstOrDefault(td => td.Layer == currentLayer).Dependencies)
+          {
+            retDict.Add(kvp.Key, kvp.Value);
+          }
+        }
+
+        return retDict;
       }
     }
 
@@ -217,6 +237,40 @@ namespace SpeckleStructuralGSA
       }
 
       return typeDependencies;
+    }
+
+    private Dictionary<Type, List<Type>> ResultTypeDependencies()
+    {
+      //Build up dictionary of new GSA schema types and keywords - to be used to construct dependencies based on these new types
+      var layerSchemaDict = layerKeywordTypes[Initialiser.AppResources.Settings.TargetLayer];
+      var layerSchemaTypes = layerSchemaDict.Keys;
+      var layerKw = layerSchemaDict.Values.Select(v => v.GetStringValue()).ToList();
+
+      var resultTypeDependencies = new Dictionary<Type, List<Type>>();
+      var oldSchemaResultTypes = oldSchemaTypes.Where(t => ((string)t.GetAttribute<GSAObject>("Stream")).Contains("result")).ToList();
+      foreach (var t in oldSchemaResultTypes)
+      {
+        if (!resultTypeDependencies.ContainsKey(t))
+        {
+          resultTypeDependencies.Add(t, new List<Type>());
+        }
+        
+        var attVal = t.GetAttribute<GSAObject>("ReadPrerequisite");
+        var prereqs = (attVal != null) ? ((Type[])attVal).ToList() : new List<Type>();
+
+        //the prereqs list is a list of the old schema types
+        foreach (var tPrereq in prereqs)
+        {
+          //Remove version for comparison with keyword enum
+          var kwPrereq = ((string)tPrereq.GetAttribute<GSAObject>("GSAKeyword")).Split('.').First();
+
+          if (layerKw.Any(lkw => lkw.Equals(kwPrereq, StringComparison.InvariantCultureIgnoreCase)))
+          {
+            resultTypeDependencies[t].Add(tPrereq);
+          }
+        }
+      }
+      return resultTypeDependencies;
     }
 
     private Dictionary<GSATargetLayer, bool> TypeLayers(Type t)

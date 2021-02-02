@@ -33,7 +33,7 @@ namespace SpeckleStructuralGSA
             foreach (var node in nodes)
             {
               var id = node.GSAId;
-              var obj = (StructuralNode)node.Value;
+              var obj = node.Value;
 
               if (obj.Result == null)
               {
@@ -98,10 +98,9 @@ namespace SpeckleStructuralGSA
               {
                 continue;
               }
-              var targetRef = string.IsNullOrEmpty(applicationIds[i]) ? Helper.GetApplicationId(typeof(GSANode).GetGSAKeyword(), indices[i]) : applicationIds[i];
+              var targetRef = string.IsNullOrEmpty(applicationIds[i]) ? Helper.GetApplicationId(keyword, indices[i]) : applicationIds[i];
 
-              var existingRes = results.FirstOrDefault(x => ((StructuralResultBase)x.Value).TargetRef == targetRef
-                && ((StructuralResultBase)x.Value).LoadCaseRef == loadCase);
+              var existingRes = results.FirstOrDefault(x => x.Value.TargetRef == targetRef && x.Value.LoadCaseRef == loadCase);
 
               if (existingRes == null)
               {
@@ -120,7 +119,7 @@ namespace SpeckleStructuralGSA
               }
               else
               {
-                ((StructuralNodeResult)existingRes.Value).Value[kvp.Key] = resultExport;
+                existingRes.Value.Value[kvp.Key] = resultExport;
               }
             }
           }

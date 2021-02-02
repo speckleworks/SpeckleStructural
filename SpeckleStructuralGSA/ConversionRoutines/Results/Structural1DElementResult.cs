@@ -26,6 +26,8 @@ namespace SpeckleStructuralGSA
       }
 
       var keyword = typeof(GSA1DElement).GetGSAKeyword();
+      var axisStr = Initialiser.AppResources.Settings.ResultInLocalAxis ? "local" : "global";
+      var num1dPos = Initialiser.AppResources.Settings.Result1DNumPosition;
 
       if (Initialiser.AppResources.Settings.EmbedResults)
       {
@@ -39,11 +41,10 @@ namespace SpeckleStructuralGSA
           {
             foreach (var entity in entities)
             {
-              var obj = (Structural1DElement)entity.Value;
+              var obj = entity.Value;
               var id = entity.GSAId;
 
-              var resultExport = Initialiser.AppResources.Proxy.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.AppResources.Settings.ResultInLocalAxis
-                ? "local" : "global", Initialiser.AppResources.Settings.Result1DNumPosition);
+              var resultExport = Initialiser.AppResources.Proxy.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, axisStr, num1dPos);
 
               if (resultExport == null)
               {
@@ -76,14 +77,14 @@ namespace SpeckleStructuralGSA
         // Linear interpolate the line values
         foreach (var entity in entities)
         {
-          var obj = (Structural1DElement)entity.Value;
+          var obj = entity.Value;
 
           var dX = (obj.Value[3] - obj.Value[0]) / (Initialiser.AppResources.Settings.Result1DNumPosition + 1);
           var dY = (obj.Value[4] - obj.Value[1]) / (Initialiser.AppResources.Settings.Result1DNumPosition + 1);
           var dZ = (obj.Value[5] - obj.Value[2]) / (Initialiser.AppResources.Settings.Result1DNumPosition + 1);
 
           var interpolatedVertices = new List<double>();
-          interpolatedVertices.AddRange((obj.Value as List<double>).Take(3));
+          interpolatedVertices.AddRange(obj.Value.Take(3));
 
           for (var i = 1; i <= Initialiser.AppResources.Settings.Result1DNumPosition; i++)
           {
@@ -92,7 +93,7 @@ namespace SpeckleStructuralGSA
             interpolatedVertices.Add(interpolatedVertices[2] + dZ * i);
           }
 
-          interpolatedVertices.AddRange((obj.Value as List<double>).Skip(3).Take(3));
+          interpolatedVertices.AddRange(obj.Value.Skip(3).Take(3));
 
           obj.ResultVertices = interpolatedVertices;
         }
@@ -100,6 +101,7 @@ namespace SpeckleStructuralGSA
       else
       {
         var results = new List<GSA1DElementResult>();
+        var memberKw = typeof(GSA1DMember).GetGSAKeyword();
 
         //Unlike embedding, separate results doesn't necessarily mean that there is a Speckle object created for each 1d element.  There is always though
         //some GWA loaded into the cache
@@ -120,8 +122,7 @@ namespace SpeckleStructuralGSA
                 continue;
               }
 
-              var resultExport = Initialiser.AppResources.Proxy.GetGSAResult(indices[i], kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, 
-                Initialiser.AppResources.Settings.ResultInLocalAxis ? "local" : "global", Initialiser.AppResources.Settings.Result1DNumPosition);
+              var resultExport = Initialiser.AppResources.Proxy.GetGSAResult(indices[i], kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, axisStr, num1dPos);
 
               if (resultExport == null || resultExport.Count() == 0)
               {
@@ -136,7 +137,7 @@ namespace SpeckleStructuralGSA
                 //and so in that case the application ID would need to be calculated in the same way as what would happen as a result of the ToSpeckle() call
                 if (Helper.GetElementParentIdFromGwa(gwa[i], out var memberIndex) && memberIndex > 0)
                 {
-                  targetRef = SpeckleStructuralClasses.Helper.CreateChildApplicationId(indices[i], Helper.GetApplicationId(typeof(GSA1DMember).GetGSAKeyword(), memberIndex));
+                  targetRef = SpeckleStructuralClasses.Helper.CreateChildApplicationId(indices[i], Helper.GetApplicationId(memberKw, memberIndex));
                 }
                 else
                 {
@@ -144,8 +145,7 @@ namespace SpeckleStructuralGSA
                 }
               }
 
-              var existingRes = results.FirstOrDefault(x => ((StructuralResultBase)x.Value).TargetRef == targetRef
-                && ((StructuralResultBase)x.Value).LoadCaseRef == loadCase);
+              var existingRes = results.FirstOrDefault(x => x.Value.TargetRef == targetRef && x.Value.LoadCaseRef == loadCase);
 
               if (existingRes == null)
               {
