@@ -19,100 +19,51 @@ namespace SpeckleStructuralGSA
   {
     public static SpeckleObject ToSpeckle(this GSA1DElementResult dummyObject)
     {
-      if (Initialiser.AppResources.Settings.Element1DResults.Count() == 0 
+      if (Initialiser.AppResources.Settings.Element1DResults.Count() == 0
         || Initialiser.AppResources.Settings.EmbedResults && Initialiser.GsaKit.GSASenderObjects.Count<GSA1DElement>() == 0)
       {
         return new SpeckleNull();
       }
 
-      var keyword = typeof(GSA1DElement).GetGSAKeyword();
+      var axisStr = Initialiser.AppResources.Settings.ResultInLocalAxis ? "local" : "global";
+      var num1dPos = Initialiser.AppResources.Settings.Result1DNumPosition;
+      var typeName = dummyObject.GetType().Name;
 
       if (Initialiser.AppResources.Settings.EmbedResults)
       {
-        var elements = Initialiser.GsaKit.GSASenderObjects.Get<GSA1DElement>();
-
-        var entities = elements.Cast<GSA1DElement>().ToList();
-
-        foreach (var kvp in Initialiser.AppResources.Settings.Element1DResults)
-        {
-          foreach (var loadCase in Initialiser.AppResources.Settings.ResultCases.Where(rc => Initialiser.AppResources.Proxy.CaseExist(rc)))
-          {
-            foreach (var entity in entities)
-            {
-              var obj = (Structural1DElement)entity.Value;
-              var id = entity.GSAId;
-
-              var resultExport = Initialiser.AppResources.Proxy.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.AppResources.Settings.ResultInLocalAxis
-                ? "local" : "global", Initialiser.AppResources.Settings.Result1DNumPosition);
-
-              if (resultExport == null)
-              {
-                continue;
-              }
-
-              var newResult = new Structural1DElementResult()
-              {
-                TargetRef = obj.ApplicationId,
-                LoadCaseRef = loadCase,
-                Value = new Dictionary<string, object>()
-              };
-
-              //The setter of entity.Value.Result won't accept a value if there are no keys (to avoid issues during merging), so
-              //setting a value here needs to be done with at least one key in it
-              if (obj.Result == null)
-              {
-                obj.Result = new Dictionary<string, object>() { { loadCase, newResult }};
-              }
-              else if (!obj.Result.ContainsKey(loadCase))
-              {
-                obj.Result[loadCase] = newResult;
-              }
-
-              (obj.Result[loadCase] as Structural1DElementResult).Value[kvp.Key] = resultExport;
-            }
-          }
-        }
-
-        // Linear interpolate the line values
-        foreach (var entity in entities)
-        {
-          var obj = (Structural1DElement)entity.Value;
-
-          var dX = (obj.Value[3] - obj.Value[0]) / (Initialiser.AppResources.Settings.Result1DNumPosition + 1);
-          var dY = (obj.Value[4] - obj.Value[1]) / (Initialiser.AppResources.Settings.Result1DNumPosition + 1);
-          var dZ = (obj.Value[5] - obj.Value[2]) / (Initialiser.AppResources.Settings.Result1DNumPosition + 1);
-
-          var interpolatedVertices = new List<double>();
-          interpolatedVertices.AddRange((obj.Value as List<double>).Take(3));
-
-          for (var i = 1; i <= Initialiser.AppResources.Settings.Result1DNumPosition; i++)
-          {
-            interpolatedVertices.Add(interpolatedVertices[0] + dX * i);
-            interpolatedVertices.Add(interpolatedVertices[1] + dY * i);
-            interpolatedVertices.Add(interpolatedVertices[2] + dZ * i);
-          }
-
-          interpolatedVertices.AddRange((obj.Value as List<double>).Skip(3).Take(3));
-
-          obj.ResultVertices = interpolatedVertices;
-        }
+        Embed1DResults(typeName, axisStr, num1dPos);
       }
       else
       {
-        var results = new List<GSA1DElementResult>();
-
-        //Unlike embedding, separate results doesn't necessarily mean that there is a Speckle object created for each 1d element.  There is always though
-        //some GWA loaded into the cache
-        if (!Initialiser.AppResources.Cache.GetKeywordRecordsSummary(keyword, out var gwa, out var indices, out var applicationIds))
+        if (!Create1DElementResultObjects(typeName, axisStr, num1dPos))
         {
           return new SpeckleNull();
         }
+      }
 
-        foreach (var kvp in Initialiser.AppResources.Settings.Element1DResults)
+      return new SpeckleObject();
+    }
+
+    private static bool Create1DElementResultObjects(string typeName, string axisStr, int num1dPos)
+    {
+      var results = new List<GSA1DElementResult>();
+      var memberKw = typeof(GSA1DMember).GetGSAKeyword();
+      var keyword = typeof(GSA1DElement).GetGSAKeyword();
+
+      //Unlike embedding, separate results doesn't necessarily mean that there is a Speckle object created for each 1d element.  There is always though
+      //some GWA loaded into the cache
+      if (!Initialiser.AppResources.Cache.GetKeywordRecordsSummary(keyword, out var gwa, out var indices, out var applicationIds))
+      {
+        return false;
+      }
+
+      foreach (var kvp in Initialiser.AppResources.Settings.Element1DResults)
+      {
+        foreach (var loadCase in Initialiser.AppResources.Settings.ResultCases.Where(rc => Initialiser.AppResources.Proxy.CaseExist(rc)))
         {
-          foreach (var loadCase in Initialiser.AppResources.Settings.ResultCases.Where(rc => Initialiser.AppResources.Proxy.CaseExist(rc)))
+          for (var i = 0; i < indices.Count(); i++)
           {
-            for (var i = 0; i < indices.Count(); i++)
+            try
             {
               var pPieces = gwa[i].ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
               if (pPieces[4].ParseElementNumNodes() != 2 || indices[i] == 0)
@@ -120,8 +71,7 @@ namespace SpeckleStructuralGSA
                 continue;
               }
 
-              var resultExport = Initialiser.AppResources.Proxy.GetGSAResult(indices[i], kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, 
-                Initialiser.AppResources.Settings.ResultInLocalAxis ? "local" : "global", Initialiser.AppResources.Settings.Result1DNumPosition);
+              var resultExport = Initialiser.AppResources.Proxy.GetGSAResult(indices[i], kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, axisStr, num1dPos);
 
               if (resultExport == null || resultExport.Count() == 0)
               {
@@ -136,7 +86,7 @@ namespace SpeckleStructuralGSA
                 //and so in that case the application ID would need to be calculated in the same way as what would happen as a result of the ToSpeckle() call
                 if (Helper.GetElementParentIdFromGwa(gwa[i], out var memberIndex) && memberIndex > 0)
                 {
-                  targetRef = SpeckleStructuralClasses.Helper.CreateChildApplicationId(indices[i], Helper.GetApplicationId(typeof(GSA1DMember).GetGSAKeyword(), memberIndex));
+                  targetRef = SpeckleStructuralClasses.Helper.CreateChildApplicationId(indices[i], Helper.GetApplicationId(memberKw, memberIndex));
                 }
                 else
                 {
@@ -144,8 +94,7 @@ namespace SpeckleStructuralGSA
                 }
               }
 
-              var existingRes = results.FirstOrDefault(x => ((StructuralResultBase)x.Value).TargetRef == targetRef
-                && ((StructuralResultBase)x.Value).LoadCaseRef == loadCase);
+              var existingRes = results.FirstOrDefault(x => x.Value.TargetRef == targetRef && x.Value.LoadCaseRef == loadCase);
 
               if (existingRes == null)
               {
@@ -167,13 +116,98 @@ namespace SpeckleStructuralGSA
                 existingRes.Value.Value[kvp.Key] = resultExport;
               }
             }
+            catch (Exception ex)
+            {
+              var contextDesc = string.Join(" ", typeName, kvp.Key, loadCase);
+              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, contextDesc, i.ToString());
+              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, contextDesc, i.ToString());
+            }
           }
         }
-
-        Initialiser.GsaKit.GSASenderObjects.AddRange(results);
       }
 
-      return new SpeckleObject();
+      Initialiser.GsaKit.GSASenderObjects.AddRange(results);
+
+      return true;
+    }
+
+    private static void Embed1DResults(string typeName, string axisStr, int num1dPos)
+    {
+      var elements = Initialiser.GsaKit.GSASenderObjects.Get<GSA1DElement>();
+
+      var entities = elements.Cast<GSA1DElement>().ToList();
+
+      foreach (var kvp in Initialiser.AppResources.Settings.Element1DResults)
+      {
+        foreach (var loadCase in Initialiser.AppResources.Settings.ResultCases.Where(rc => Initialiser.AppResources.Proxy.CaseExist(rc)))
+        {
+          foreach (var entity in entities)
+          {
+            var id = entity.GSAId;
+            var obj = entity.Value;
+
+            try
+            {
+              var resultExport = Initialiser.AppResources.Proxy.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, axisStr, num1dPos);
+
+              if (resultExport == null)
+              {
+                continue;
+              }
+
+              var newResult = new Structural1DElementResult()
+              {
+                TargetRef = obj.ApplicationId,
+                LoadCaseRef = loadCase,
+                Value = new Dictionary<string, object>()
+              };
+
+              //The setter of entity.Value.Result won't accept a value if there are no keys (to avoid issues during merging), so
+              //setting a value here needs to be done with at least one key in it
+              if (obj.Result == null)
+              {
+                obj.Result = new Dictionary<string, object>() { { loadCase, newResult } };
+              }
+              else if (!obj.Result.ContainsKey(loadCase))
+              {
+                obj.Result[loadCase] = newResult;
+              }
+
+              (obj.Result[loadCase] as Structural1DElementResult).Value[kvp.Key] = resultExport;
+            }
+            catch (Exception ex)
+            {
+              var contextDesc = string.Join(" ", typeName, kvp.Key, loadCase);
+              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, contextDesc, id.ToString());
+              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, contextDesc, id.ToString());
+            }
+          }
+        }
+      }
+
+      // Linear interpolate the line values
+      foreach (var entity in entities)
+      {
+        var obj = entity.Value;
+
+        var dX = (obj.Value[3] - obj.Value[0]) / (Initialiser.AppResources.Settings.Result1DNumPosition + 1);
+        var dY = (obj.Value[4] - obj.Value[1]) / (Initialiser.AppResources.Settings.Result1DNumPosition + 1);
+        var dZ = (obj.Value[5] - obj.Value[2]) / (Initialiser.AppResources.Settings.Result1DNumPosition + 1);
+
+        var interpolatedVertices = new List<double>();
+        interpolatedVertices.AddRange(obj.Value.Take(3));
+
+        for (var i = 1; i <= Initialiser.AppResources.Settings.Result1DNumPosition; i++)
+        {
+          interpolatedVertices.Add(interpolatedVertices[0] + dX * i);
+          interpolatedVertices.Add(interpolatedVertices[1] + dY * i);
+          interpolatedVertices.Add(interpolatedVertices[2] + dZ * i);
+        }
+
+        interpolatedVertices.AddRange(obj.Value.Skip(3).Take(3));
+
+        obj.ResultVertices = interpolatedVertices;
+      }
     }
   }
 }

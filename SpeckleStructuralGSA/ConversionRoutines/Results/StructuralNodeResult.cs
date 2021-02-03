@@ -17,30 +17,117 @@ namespace SpeckleStructuralGSA
   {
     public static SpeckleObject ToSpeckle(this GSANodeResult dummyObject)
     {
-      if (Initialiser.AppResources.Settings.NodalResults.Count() == 0 || Initialiser.AppResources.Settings.EmbedResults && Initialiser.GsaKit.GSASenderObjects.Count<GSANode>() == 0)
+      if (Initialiser.AppResources.Settings.NodalResults.Count() == 0
+        || Initialiser.AppResources.Settings.EmbedResults && Initialiser.GsaKit.GSASenderObjects.Count<GSANode>() == 0)
       {
         return new SpeckleNull();
       }
 
+      var typeName = dummyObject.GetType().Name;
+      var axisStr = Initialiser.AppResources.Settings.ResultInLocalAxis ? "local" : "global";
+
       if (Initialiser.AppResources.Settings.EmbedResults)
       {
-        var nodes = Initialiser.GsaKit.GSASenderObjects.Get<GSANode>();
-
-        foreach (var kvp in Initialiser.AppResources.Settings.NodalResults)
+        EmbedNodeResults(typeName, axisStr);
+      }
+      else
+      {
+        if (!CreateNodeResultObjects(typeName, axisStr))
         {
-          foreach (var loadCase in Initialiser.AppResources.Settings.ResultCases.Where(rc => Initialiser.AppResources.Proxy.CaseExist(rc)))
-          {
-            foreach (var node in nodes)
-            {
-              var id = node.GSAId;
-              var obj = (StructuralNode)node.Value;
+          return new SpeckleNull();
+        }
+      }
 
+      return new SpeckleObject();
+    }
+
+    private static bool CreateNodeResultObjects(string typeName, string axisStr)
+    {
+      var results = new List<GSANodeResult>();
+
+      var keyword = typeof(GSANode).GetGSAKeyword();
+
+      //Unlike embedding, separate results doesn't necessarily mean that there is a Speckle object created for each node.  There is always though
+      //some GWA loaded into the cache
+      if (!Initialiser.AppResources.Cache.GetKeywordRecordsSummary(keyword, out var gwa, out var indices, out var applicationIds))
+      {
+        return false;
+      }
+
+      foreach (var kvp in Initialiser.AppResources.Settings.NodalResults)
+      {
+        foreach (var loadCase in Initialiser.AppResources.Settings.ResultCases.Where(rc => Initialiser.AppResources.Proxy.CaseExist(rc)))
+        {
+          for (var i = 0; i < indices.Count(); i++)
+          {
+            try
+            {
+              var resultExport = Initialiser.AppResources.Proxy.GetGSAResult(indices[i], kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, axisStr);
+
+              if (resultExport == null || resultExport.Count() == 0)
+              {
+                continue;
+              }
+              var targetRef = string.IsNullOrEmpty(applicationIds[i]) ? Helper.GetApplicationId(keyword, indices[i]) : applicationIds[i];
+
+              var existingRes = results.FirstOrDefault(x => x.Value.TargetRef == targetRef && x.Value.LoadCaseRef == loadCase);
+
+              if (existingRes == null)
+              {
+                var newRes = new StructuralNodeResult()
+                {
+                  Value = new Dictionary<string, object>(),
+                  TargetRef = targetRef,
+                  IsGlobal = !Initialiser.AppResources.Settings.ResultInLocalAxis,
+                  LoadCaseRef = loadCase
+                };
+                newRes.Value[kvp.Key] = resultExport;
+
+                newRes.GenerateHash();
+
+                results.Add(new GSANodeResult() { Value = newRes, GSAId = indices[i] });
+              }
+              else
+              {
+                existingRes.Value.Value[kvp.Key] = resultExport;
+              }
+            }
+            catch (Exception ex)
+            {
+              var contextDesc = string.Join(" ", typeName, kvp.Key, loadCase);
+              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, contextDesc, i.ToString());
+              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, contextDesc, i.ToString());
+            }
+          }
+        }
+      }
+
+      Initialiser.GsaKit.GSASenderObjects.AddRange(results);
+
+      return true;
+    }
+
+    private static void EmbedNodeResults(string typeName, string axisStr)
+    {
+      var nodes = Initialiser.GsaKit.GSASenderObjects.Get<GSANode>();
+
+      foreach (var kvp in Initialiser.AppResources.Settings.NodalResults)
+      {
+        foreach (var loadCase in Initialiser.AppResources.Settings.ResultCases.Where(rc => Initialiser.AppResources.Proxy.CaseExist(rc)))
+        {
+          foreach (var node in nodes)
+          {
+            var id = node.GSAId;
+            var obj = node.Value;
+
+            try
+            {
               if (obj.Result == null)
               {
                 obj.Result = new Dictionary<string, object>();
               }
 
-              var resultExport = Initialiser.AppResources.Proxy.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, Initialiser.AppResources.Settings.ResultInLocalAxis ? "local" : "global");
+              var resultExport = Initialiser.AppResources.Proxy.GetGSAResult(id, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, axisStr);
 
               if (resultExport == null || resultExport.Count() == 0)
               {
@@ -69,67 +156,15 @@ namespace SpeckleStructuralGSA
 
               node.ForceSend = true;
             }
-          }
-        }
-      }
-      else
-      {
-        var results = new List<GSANodeResult>();
-
-        var keyword = typeof(GSANode).GetGSAKeyword();
-
-        //Unlike embedding, separate results doesn't necessarily mean that there is a Speckle object created for each node.  There is always though
-        //some GWA loaded into the cache
-        if (!Initialiser.AppResources.Cache.GetKeywordRecordsSummary(keyword, out var gwa, out var indices, out var applicationIds))
-        {
-          return new SpeckleNull();
-        }
-
-        foreach (var kvp in Initialiser.AppResources.Settings.NodalResults)
-        {
-          foreach (var loadCase in Initialiser.AppResources.Settings.ResultCases.Where(rc => Initialiser.AppResources.Proxy.CaseExist(rc)))
-          {
-            for (var i = 0; i < indices.Count(); i++)
+            catch (Exception ex)
             {
-              var resultExport = Initialiser.AppResources.Proxy.GetGSAResult(indices[i], kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, loadCase, 
-                Initialiser.AppResources.Settings.ResultInLocalAxis ? "local" : "global");
-
-              if (resultExport == null || resultExport.Count() == 0)
-              {
-                continue;
-              }
-              var targetRef = string.IsNullOrEmpty(applicationIds[i]) ? Helper.GetApplicationId(typeof(GSANode).GetGSAKeyword(), indices[i]) : applicationIds[i];
-
-              var existingRes = results.FirstOrDefault(x => ((StructuralResultBase)x.Value).TargetRef == targetRef
-                && ((StructuralResultBase)x.Value).LoadCaseRef == loadCase);
-
-              if (existingRes == null)
-              {
-                var newRes = new StructuralNodeResult()
-                {
-                  Value = new Dictionary<string, object>(),
-                  TargetRef = targetRef,
-                  IsGlobal = !Initialiser.AppResources.Settings.ResultInLocalAxis,
-                  LoadCaseRef = loadCase
-                };
-                newRes.Value[kvp.Key] = resultExport;
-
-                newRes.GenerateHash();
-
-                results.Add(new GSANodeResult() { Value = newRes, GSAId = indices[i] });
-              }
-              else
-              {
-                ((StructuralNodeResult)existingRes.Value).Value[kvp.Key] = resultExport;
-              }
+              var contextDesc = string.Join(" ", typeName, kvp.Key, loadCase);
+              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, contextDesc, id.ToString());
+              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, contextDesc, id.ToString());
             }
           }
         }
-
-        Initialiser.GsaKit.GSASenderObjects.AddRange(results);
       }
-
-      return new SpeckleObject();
     }
   }
 }

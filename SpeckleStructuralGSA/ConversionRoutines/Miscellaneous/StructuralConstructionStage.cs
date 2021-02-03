@@ -38,17 +38,29 @@ namespace SpeckleStructuralGSA
         var elementId = Initialiser.AppResources.Proxy.ConvertGSAList(elementList, GSAEntity.ELEMENT);
         foreach (var id in elementId)
         {
-          var elem = (IGSAContainer<Structural1DElement>)e1Ds.Where(e => e.GSAId == id).FirstOrDefault();
+          string elementApplicationId = null;
+          string elementGwaCommand = "";
+          var elem1d = (IGSAContainer<Structural1DElement>)e1Ds.Where(e => e.GSAId == id).FirstOrDefault();
 
-          if (elem == null)
+          if (elem1d == null)
           {
-            elem = (IGSAContainer<Structural1DElement>)e2Ds.Where(e => e.GSAId == id).FirstOrDefault();
+            var elem2d = (IGSAContainer<Structural2DElement>)e2Ds.Where(e => e.GSAId == id).FirstOrDefault();
+            if (elem2d != null)
+            {
+              elementApplicationId = elem2d.Value.ApplicationId;
+              elementGwaCommand = elem2d.GWACommand;
+            }
           }
-          if (elem == null)
-            continue;
-
-          obj.ElementRefs.Add(((SpeckleObject)elem.Value).ApplicationId);
-          this.SubGWACommand.Add(elem.GWACommand);
+          else
+          {
+            elementApplicationId = elem1d.Value.ApplicationId;
+            elementGwaCommand = elem1d.GWACommand;
+          }
+          if (elementApplicationId != null)
+          {
+            obj.ElementRefs.Add(elementApplicationId);
+            this.SubGWACommand.Add(elementGwaCommand);
+          }
         }
       }
       else
@@ -184,7 +196,8 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName + ": " + ex.Message, k.ToString());
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString());
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
         }
       });
 

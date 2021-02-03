@@ -16,7 +16,7 @@ namespace SpeckleStructuralGSA.Test
     public double CoincidentNodeAllowance { get; set; } = 0.1;
     public bool SendOnlyResults { get; set; } = false;
 
-    public bool SendResults = false;
+    public bool SendResults { get; set; } = false;
 
     public Dictionary<string, Tuple<int, int, List<string>>> NodalResults { get; set; } = new Dictionary<string, Tuple<int, int, List<string>>>();
     public Dictionary<string, Tuple<int, int, List<string>>> Element1DResults { get; set; } = new Dictionary<string, Tuple<int, int, List<string>>>();
