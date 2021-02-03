@@ -13,6 +13,11 @@ namespace SpeckleStructuralGSA.Test
       return Message(intent, level, messagePortions);
     }
 
+    public bool CacheMessage(MessageIntent intent, MessageLevel level, Exception ex, params string[] messagePortions)
+    {
+      return Message(intent, level, messagePortions);
+    }
+
     public bool Message(MessageIntent intent, MessageLevel level, params string[] messagePortions)
     {
       Messages.Add(new Tuple<MessageIntent, MessageLevel, string[]>(intent, level, messagePortions));

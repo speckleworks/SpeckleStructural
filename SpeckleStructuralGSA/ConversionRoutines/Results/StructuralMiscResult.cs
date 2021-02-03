@@ -17,6 +17,8 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSAMiscResult dummyObject)
     {
       var keyword = typeof(GSAAssembly).GetGSAKeyword();
+      var typeName = dummyObject.GetType().Name;
+      var axisStr = Initialiser.AppResources.Settings.ResultInLocalAxis ? "local" : "global";
 
       if (Initialiser.AppResources.Settings.MiscResults.Count() == 0 
         || !Initialiser.AppResources.Cache.GetKeywordRecordsSummary(keyword, out var gwa, out var indices, out var applicationIds))
@@ -34,34 +36,42 @@ namespace SpeckleStructuralGSA
         {
           for (var i = 0; i < indices.Count(); i++)
           {
-            var resultExport = Initialiser.AppResources.Proxy.GetGSAResult(indices[i], kvp.Value.Item2, kvp.Value.Item3, kvp.Value.Item4, loadCase, 
-              Initialiser.AppResources.Settings.ResultInLocalAxis ? "local" : "global");
-
-            if (resultExport == null || resultExport.Count() == 0)
+            try
             {
-              continue;
-            }
+              var resultExport = Initialiser.AppResources.Proxy.GetGSAResult(indices[i], kvp.Value.Item2, kvp.Value.Item3, kvp.Value.Item4, loadCase, axisStr);
 
-            var targetRef = (string.IsNullOrEmpty(applicationIds[i])) ? Helper.GetApplicationId(keyword, indices[i]) : applicationIds[i];
-
-            var existingRes = results.FirstOrDefault(x => x.Value.TargetRef == targetRef && x.Value.LoadCaseRef == loadCase);
-
-            if (existingRes == null)
-            {
-              var newRes = new StructuralMiscResult
+              if (resultExport == null || resultExport.Count() == 0)
               {
-                Description = kvp.Key,
-                IsGlobal = !Initialiser.AppResources.Settings.ResultInLocalAxis,
-                Value = resultExport,
-                LoadCaseRef = loadCase,
-                TargetRef = string.IsNullOrEmpty(applicationIds[i]) ? Helper.GetApplicationId(keyword, indices[i]) : applicationIds[i]
-              };
-              newRes.GenerateHash();
-              results.Add(new GSAMiscResult() { Value = newRes, GSAId = indices[i] });
+                continue;
+              }
+
+              var targetRef = (string.IsNullOrEmpty(applicationIds[i])) ? Helper.GetApplicationId(keyword, indices[i]) : applicationIds[i];
+
+              var existingRes = results.FirstOrDefault(x => x.Value.TargetRef == targetRef && x.Value.LoadCaseRef == loadCase);
+
+              if (existingRes == null)
+              {
+                var newRes = new StructuralMiscResult
+                {
+                  Description = kvp.Key,
+                  IsGlobal = !Initialiser.AppResources.Settings.ResultInLocalAxis,
+                  Value = resultExport,
+                  LoadCaseRef = loadCase,
+                  TargetRef = string.IsNullOrEmpty(applicationIds[i]) ? Helper.GetApplicationId(keyword, indices[i]) : applicationIds[i]
+                };
+                newRes.GenerateHash();
+                results.Add(new GSAMiscResult() { Value = newRes, GSAId = indices[i] });
+              }
+              else
+              {
+                existingRes.Value.Value[kvp.Key] = resultExport;
+              }
             }
-            else
+            catch (Exception ex)
             {
-              existingRes.Value.Value[kvp.Key] = resultExport;
+              var contextDesc = string.Join(" ", typeName, kvp.Key, loadCase);
+              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, contextDesc, i.ToString());
+              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, contextDesc, i.ToString());
             }
           }
         }
