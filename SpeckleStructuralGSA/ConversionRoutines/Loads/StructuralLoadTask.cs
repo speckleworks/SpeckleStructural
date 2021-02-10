@@ -249,14 +249,14 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this StructuralLoadTask loadTask)
     {
-      return new GSALoadTask() { Value = loadTask }.SetGWACommand();
+      return SchemaConversion.Helper.ToNativeTryCatch(loadTask, () => new GSALoadTask() { Value = loadTask }.SetGWACommand());
     }
 
     public static SpeckleObject ToSpeckle(this GSALoadTask dummyObject)
     {
       var newLines = ToSpeckleBase<GSALoadTask>();
-      var typeName = dummyObject.GetType().Name;
       var loadTasks = new List<GSALoadTask>();
+      var keyword = dummyObject.GetGSAKeyword();
 
       foreach (var k in newLines.Keys)
       {
@@ -268,8 +268,8 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+          Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+            "Keyword=" + keyword, "Index=" + k);
         }
         loadTasks.Add(task);
       }

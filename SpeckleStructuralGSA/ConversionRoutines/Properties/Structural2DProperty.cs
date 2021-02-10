@@ -158,7 +158,7 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this Structural2DProperty prop)
     {
-      return new GSA2DProperty() { Value = prop }.SetGWACommand();
+      return SchemaConversion.Helper.ToNativeTryCatch(prop, () => new GSA2DProperty() { Value = prop }.SetGWACommand());
     }
 
     public static SpeckleObject ToSpeckle(this GSA2DProperty dummyObject)
@@ -169,6 +169,7 @@ namespace SpeckleStructuralGSA
       var props = new SortedDictionary<int, GSA2DProperty>();
       var steels = Initialiser.GsaKit.GSASenderObjects.Get<GSAMaterialSteel>();
       var concretes = Initialiser.GsaKit.GSASenderObjects.Get<GSAMaterialConcrete>();
+      var keyword = dummyObject.GetGSAKeyword();
 
       Parallel.ForEach(newLines.Keys, k =>
       {
@@ -185,8 +186,8 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, gsaId);
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, gsaId);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+            "Keyword=" + keyword, "Index=" + k);
         }
       });
 

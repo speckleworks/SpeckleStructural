@@ -104,7 +104,7 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this StructuralReferenceLine gs)
     {
-      return new GSAGridLine() { Value = gs }.SetGWACommand();
+      return SchemaConversion.Helper.ToNativeTryCatch(gs, () => new GSAGridLine() { Value = gs }.SetGWACommand());
     }
 
     public static SpeckleObject ToSpeckle(this GSAGridLine dummyObject)
@@ -114,6 +114,7 @@ namespace SpeckleStructuralGSA
       var rlLock = new object();
       //Get all relevant GSA entities in this entire model
       var rls = new SortedDictionary<int, GSAGridLine>();
+      var keyword = dummyObject.GetGSAKeyword();
 
       Parallel.ForEach(newLines.Keys, k =>
       {
@@ -130,8 +131,8 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+          Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+            "Keyword=" + keyword, "Index=" + k);
         }
       });
 

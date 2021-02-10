@@ -2,6 +2,7 @@
 using SpeckleCoreGeometryClasses;
 using SpeckleStructuralClasses;
 using SpeckleStructuralGSA.Schema;
+using SpeckleGSAInterfaces;
 
 namespace SpeckleStructuralGSA.SchemaConversion
 {

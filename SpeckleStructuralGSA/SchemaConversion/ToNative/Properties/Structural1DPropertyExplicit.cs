@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using SpeckleStructuralClasses;
 using SpeckleStructuralGSA.Schema;
+using SpeckleGSAInterfaces;
 
 namespace SpeckleStructuralGSA.SchemaConversion
 {
@@ -22,55 +23,58 @@ namespace SpeckleStructuralGSA.SchemaConversion
         return "";
       }
 
-      var gsaSectionDict = new Dictionary<MaterialType, Func<Structural1DPropertyExplicit, int, GsaSection>>
-      { 
-        { MaterialType.Concrete, ToGsaSectionConcrete }, 
-        { MaterialType.Steel, ToGsaSectionSteel}, 
-        { MaterialType.Generic, ToGsaSectionGeneric } 
-      };
-
-      var keyword = GsaRecord.GetKeyword<GsaSection>();
-      var streamId = Initialiser.AppResources.Cache.LookupStream(prop.ApplicationId);
-      var index = Initialiser.AppResources.Cache.ResolveIndex(keyword, prop.ApplicationId);
-
-      var materialIndex = 0;
-      var materialType = MaterialType.Generic;
-
-      var materialSteelKeyword = typeof(GSAMaterialSteel).GetGSAKeyword();
-      var materialConcKeyword = typeof(GSAMaterialConcrete).GetGSAKeyword();
-
-      var res = Initialiser.AppResources.Cache.LookupIndex(materialSteelKeyword, prop.MaterialRef);
-      if (res.HasValue)
+      return Helper.ToNativeTryCatch(prop, () =>
       {
-        materialIndex = res.Value;
-        materialType = MaterialType.Steel;
-      }
-      else
-      {
-        res = Initialiser.AppResources.Cache.LookupIndex(materialConcKeyword, prop.MaterialRef);
+        var gsaSectionDict = new Dictionary<MaterialType, Func<Structural1DPropertyExplicit, int, GsaSection>>
+        {
+          { MaterialType.Concrete, ToGsaSectionConcrete },
+          { MaterialType.Steel, ToGsaSectionSteel},
+          { MaterialType.Generic, ToGsaSectionGeneric }
+        };
+
+        var keyword = GsaRecord.GetKeyword<GsaSection>();
+        var streamId = Initialiser.AppResources.Cache.LookupStream(prop.ApplicationId);
+        var index = Initialiser.AppResources.Cache.ResolveIndex(keyword, prop.ApplicationId);
+
+        var materialIndex = 0;
+        var materialType = MaterialType.Generic;
+
+        var materialSteelKeyword = typeof(GSAMaterialSteel).GetGSAKeyword();
+        var materialConcKeyword = typeof(GSAMaterialConcrete).GetGSAKeyword();
+
+        var res = Initialiser.AppResources.Cache.LookupIndex(materialSteelKeyword, prop.MaterialRef);
         if (res.HasValue)
         {
           materialIndex = res.Value;
-          materialType = MaterialType.Concrete;
+          materialType = MaterialType.Steel;
         }
         else
         {
-          //For generic, set index to 1 as a default
-          materialIndex = 1;
+          res = Initialiser.AppResources.Cache.LookupIndex(materialConcKeyword, prop.MaterialRef);
+          if (res.HasValue)
+          {
+            materialIndex = res.Value;
+            materialType = MaterialType.Concrete;
+          }
+          else
+          {
+            //For generic, set index to 1 as a default
+            materialIndex = 1;
+          }
         }
-      }
 
-      var gsaSection = gsaSectionDict[materialType](prop, materialIndex);
-      gsaSection.Index = index;
-      gsaSection.ApplicationId = prop.ApplicationId;
-      gsaSection.Name = prop.Name;
+        var gsaSection = gsaSectionDict[materialType](prop, materialIndex);
+        gsaSection.Index = index;
+        gsaSection.ApplicationId = prop.ApplicationId;
+        gsaSection.Name = prop.Name;
 
-      if (gsaSection.Gwa(out var gwaLines, false))
-      {
-        Initialiser.AppResources.Cache.Upsert(keyword, index, gwaLines.First(), streamId, prop.ApplicationId, GsaRecord.GetGwaSetCommandType<GsaSection>());
-      }
+        if (gsaSection.Gwa(out var gwaLines, false))
+        {
+          Initialiser.AppResources.Cache.Upsert(keyword, index, gwaLines.First(), streamId, prop.ApplicationId, GsaRecord.GetGwaSetCommandType<GsaSection>());
+        }
 
-      return "";
+        return "";
+      });
     }
 
     private static GsaSection ToGsaSectionConcrete(Structural1DPropertyExplicit prop, int materialIndex)

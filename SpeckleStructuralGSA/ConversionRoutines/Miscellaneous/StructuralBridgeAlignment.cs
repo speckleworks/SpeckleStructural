@@ -147,7 +147,7 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this StructuralBridgeAlignment alignment)
     {
-      return new GSABridgeAlignment() { Value = alignment }.SetGWACommand();
+      return SchemaConversion.Helper.ToNativeTryCatch(alignment, () => new GSABridgeAlignment() { Value = alignment }.SetGWACommand());
     }
 
     public static SpeckleObject ToSpeckle(this GSABridgeAlignment dummyObject)
@@ -155,6 +155,7 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSABridgeAlignment>();
       var typeName = dummyObject.GetType().Name;
       var alignmentsLock = new object();
+      var keyword = dummyObject.GetGSAKeyword();
 
       //Get all relevant GSA entities in this entire model
       var alignments = new SortedDictionary<int, GSABridgeAlignment>();
@@ -173,8 +174,8 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+          Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+            "Keyword=" + keyword, "Index=" + k);
         }
       });
 

@@ -87,7 +87,7 @@ namespace SpeckleStructuralGSA
       }
       catch
       {
-        Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, "Generating axis from coordinates for 1D element", obj.ApplicationId);
+        Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "Generating axis from coordinates for 1D element", obj.ApplicationId);
       }
 
       if (pieces[counter++] != "NO_RLS")
@@ -634,23 +634,26 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this SpeckleLine inputObject)
     {
-      var convertedObject = new Structural1DElement();
-
-      foreach (var p in convertedObject.GetType().GetProperties().Where(p => p.CanWrite))
+      return SchemaConversion.Helper.ToNativeTryCatch(inputObject, () =>
       {
-        var inputProperty = inputObject.GetType().GetProperty(p.Name);
-        if (inputProperty != null)
-          p.SetValue(convertedObject, inputProperty.GetValue(inputObject));
-      }
+        var convertedObject = new Structural1DElement();
 
-      return convertedObject.ToNative();
+        foreach (var p in convertedObject.GetType().GetProperties().Where(p => p.CanWrite))
+        {
+          var inputProperty = inputObject.GetType().GetProperty(p.Name);
+          if (inputProperty != null)
+            p.SetValue(convertedObject, inputProperty.GetValue(inputObject));
+        }
+
+        return convertedObject.ToNative();
+      });
     }
 
     public static string ToNative(this Structural1DElement beam)
     {
-      return (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Analysis) 
+      return SchemaConversion.Helper.ToNativeTryCatch(beam, () => (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Analysis) 
         ? new GSA1DElement() { Value = beam }.SetGWACommand()
-        : new GSA1DMember() { Value = beam }.SetGWACommand();
+        : new GSA1DMember() { Value = beam }.SetGWACommand());
     }
 
     public static SpeckleObject ToSpeckle(this GSA1DElement dummyObject)
@@ -660,6 +663,7 @@ namespace SpeckleStructuralGSA
       var elementsLock = new object();
       var elements = new SortedDictionary<int, GSA1DElement>();
       var nodes = Initialiser.GsaKit.GSASenderObjects.Get<GSANode>();
+      var keyword = dummyObject.GetGSAKeyword();
 
 #if DEBUG
       foreach (var k in newLines.Keys)
@@ -683,8 +687,8 @@ namespace SpeckleStructuralGSA
           }
           catch (Exception ex)
           {
-            Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, gsaId);
-            Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, gsaId);
+            Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+              "Keyword=" + keyword, "Index=" + k);
           }
         }
       }
@@ -704,6 +708,7 @@ namespace SpeckleStructuralGSA
       var members = new SortedDictionary<int, GSA1DMember>();
       var newLines = ToSpeckleBase<GSA1DMember>();
       var typeName = dummyObject.GetType().Name;
+      var keyword = dummyObject.GetGSAKeyword();
 
 #if DEBUG
       foreach (var k in newLines.Keys)
@@ -726,8 +731,8 @@ namespace SpeckleStructuralGSA
           }
           catch (Exception ex)
           {
-            Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, gsaId);
-            Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, gsaId);
+            Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+              "Keyword=" + keyword, "Index=" + k);
           }
         }
       }

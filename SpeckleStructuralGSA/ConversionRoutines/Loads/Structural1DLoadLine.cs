@@ -43,7 +43,7 @@ namespace SpeckleStructuralGSA
         case "POLYREF":
           var polylineRef = pieces[counter++];
           string newRec = null;
-         Helper.GetPolylineDesc(Convert.ToInt32(polylineRef), out polylineDescription, out newRec);
+          Helper.GetPolylineDesc(Convert.ToInt32(polylineRef), out polylineDescription, out newRec);
           this.SubGWACommand.Add(newRec);
           break;
         case "POLYGON":
@@ -316,14 +316,14 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this Structural1DLoadLine load)
     {
-      return new GSAGridLineLoad() { Value = load }.SetGWACommand();
+      return SchemaConversion.Helper.ToNativeTryCatch(load, () => new GSAGridLineLoad() { Value = load }.SetGWACommand());
     }
 
     public static SpeckleObject ToSpeckle(this GSAGridLineLoad dummyObject)
     {
       var newLines = ToSpeckleBase<GSAGridLineLoad>();
-      var typeName = dummyObject.GetType().Name;
       var loads = new List<GSAGridLineLoad>();
+      var keyword = dummyObject.GetGSAKeyword();
 
       foreach (var k in newLines.Keys)
       {
@@ -335,8 +335,8 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+          Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+            "Keyword=" + keyword, "Index=" + k);
         }
 
         // Break them apart

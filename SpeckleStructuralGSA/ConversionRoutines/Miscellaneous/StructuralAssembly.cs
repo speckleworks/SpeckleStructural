@@ -113,6 +113,7 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSAAssembly>();
       var typeName = dummyObject.GetType().Name;
       var assembliesLock = new object();
+      var keyword = dummyObject.GetGSAKeyword();
 
       //Get all relevant GSA entities in this entire model
       var assemblies = new SortedDictionary<int, GSAAssembly>();
@@ -154,8 +155,8 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+          Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+            "Keyword=" + keyword, "Index=" + k);
         }
       });
 

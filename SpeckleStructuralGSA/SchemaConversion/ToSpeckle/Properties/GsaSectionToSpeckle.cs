@@ -4,6 +4,7 @@ using System.Linq;
 using SpeckleCore;
 using SpeckleStructuralClasses;
 using SpeckleStructuralGSA.Schema;
+using SpeckleGSAInterfaces;
 
 namespace SpeckleStructuralGSA.SchemaConversion
 {
@@ -26,30 +27,39 @@ namespace SpeckleStructuralGSA.SchemaConversion
       var gsaSectionsExp = new List<GsaSection>();
       foreach (var k in keysContainingEXP)
       {
-        var gsaSection = new GsaSection();
-        if (gsaSection.FromGwa(newLines[k]) && FindExpDetails(gsaSection, out var comp, out var pde))
+        var obj = Helper.ToSpeckleTryCatch(dummyObject.Keyword, k, () =>
         {
-          var structuralProp = new Structural1DPropertyExplicit()
+          var gsaSection = new GsaSection();
+          if (gsaSection.FromGwa(newLines[k]) && FindExpDetails(gsaSection, out var comp, out var pde))
           {
-            Name = gsaSection.Name,
-            ApplicationId = gsaSection.ApplicationId,
-            Area = pde.Area,
-            Iyy = pde.Iyy,
-            Izz = pde.Izz,
-            J = pde.J,
-            Ky = pde.Ky,
-            Kz = pde.Kz
-          };
+            var structuralProp = new Structural1DPropertyExplicit()
+            {
+              Name = gsaSection.Name,
+              ApplicationId = gsaSection.ApplicationId,
+              Area = pde.Area,
+              Iyy = pde.Iyy,
+              Izz = pde.Izz,
+              J = pde.J,
+              Ky = pde.Ky,
+              Kz = pde.Kz
+            };
 
-          //No support for any other material type at this stage
-          if (comp.MaterialType == Section1dMaterialType.CONCRETE || comp.MaterialType == Section1dMaterialType.STEEL)
-          {
-            var materialIndex = comp.MaterialIndex ?? 0;
-            var materialDict = (comp.MaterialType == Section1dMaterialType.CONCRETE) ? concreteMaterials : steelMaterials;
-            structuralProp.MaterialRef = (materialIndex > 0 && materialDict.ContainsKey(materialIndex)) ? materialDict[materialIndex] : null;
+            //No support for any other material type at this stage
+            if (comp.MaterialType == Section1dMaterialType.CONCRETE || comp.MaterialType == Section1dMaterialType.STEEL)
+            {
+              var materialIndex = comp.MaterialIndex ?? 0;
+              var materialDict = (comp.MaterialType == Section1dMaterialType.CONCRETE) ? concreteMaterials : steelMaterials;
+              structuralProp.MaterialRef = (materialIndex > 0 && materialDict.ContainsKey(materialIndex)) ? materialDict[materialIndex] : null;
+            }
+
+            return structuralProp;
           }
+          return new SpeckleNull();
+        });
 
-          structural1DPropertyExplicits.Add(structuralProp);
+        if (!(obj is SpeckleNull))
+        {
+          structural1DPropertyExplicits.Add((Structural1DPropertyExplicit)obj);
         }
       }
 

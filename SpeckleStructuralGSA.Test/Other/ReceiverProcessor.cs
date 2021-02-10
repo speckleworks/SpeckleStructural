@@ -17,7 +17,7 @@ namespace SpeckleStructuralGSA.Test
       this.appResources = appResources;
       //GSAInterfacer = gsaInterfacer;
       //GSACache = gsaCache;
-      this.appResources.Settings.TargetLayer = layer;
+      ((MockSettings)this.appResources.Settings).TargetLayer = layer;
     }
 
     public void JsonSpeckleStreamsToGwaRecords(IEnumerable<string> savedJsonFileNames, out List<GwaRecord> gwaRecords, GSATargetLayer layer)

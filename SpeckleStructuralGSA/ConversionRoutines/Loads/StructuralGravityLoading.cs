@@ -93,14 +93,14 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this StructuralGravityLoading load)
     {
-      return new GSAGravityLoading() { Value = load }.SetGWACommand();
+      return SchemaConversion.Helper.ToNativeTryCatch(load, () => new GSAGravityLoading() { Value = load }.SetGWACommand());
     }
 
     public static SpeckleObject ToSpeckle(this GSAGravityLoading dummyObject)
     {
       var newLines = ToSpeckleBase<GSAGravityLoading>();
-      var typeName = dummyObject.GetType().Name;
       var loads = new List<GSAGravityLoading>();
+      var keyword = dummyObject.GetGSAKeyword();
 
       foreach (var k in newLines.Keys)
       {
@@ -112,8 +112,8 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+          Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+            "Keyword=" + keyword, "Index=" + k);
         }
         loads.Add(load);
       }

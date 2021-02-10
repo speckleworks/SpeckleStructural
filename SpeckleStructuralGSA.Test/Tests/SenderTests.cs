@@ -40,7 +40,7 @@ namespace SpeckleStructuralGSA.Test
     [TestCase("TxSpeckleObjectsNotEmbedded.json", GSATargetLayer.Analysis, false, false, gsaFileNameWithResults)]
     public void TransmissionTest(string inputJsonFileName, GSATargetLayer layer, bool resultsOnly, bool embedResults, string gsaFileName)
     {
-      Initialiser.AppResources.Proxy.OpenFile(Path.Combine(TestDataDirectory, gsaFileName));
+      Initialiser.AppResources.Proxy.OpenFile(Path.Combine(TestDataDirectory, gsaFileName), false);
 
       //Deserialise into Speckle Objects so that these can be compared in any order
 
@@ -184,11 +184,11 @@ namespace SpeckleStructuralGSA.Test
     public void ResultTypeDependencies()
     {
       var resultTypes = new List<Type> { typeof(GSAMiscResult), typeof(GSANodeResult), typeof(GSA1DElementResult), typeof(GSA2DElementResult) };
-      Initialiser.AppResources.Settings.TargetLayer = GSATargetLayer.Analysis;
-      Initialiser.AppResources.Settings.SendResults = false;
+      ((MockSettings)Initialiser.AppResources.Settings).TargetLayer = GSATargetLayer.Analysis;
+      ((MockSettings)Initialiser.AppResources.Settings).SendResults = false;
       resultTypes.ForEach(rt => Assert.IsFalse(Initialiser.GsaKit.TxTypeDependencies.ContainsKey(rt)));
 
-      Initialiser.AppResources.Settings.SendResults = true;
+      ((MockSettings)Initialiser.AppResources.Settings).SendResults = true;
       foreach (var rt in resultTypes)
       {
         Assert.IsTrue(Initialiser.GsaKit.TxTypeDependencies.ContainsKey(rt));

@@ -44,8 +44,8 @@ namespace SpeckleStructuralGSA.Test
       SpeckleInitializer.Initialize();
       Initialiser.AppResources = new MockGSAApp(proxy: new GSAProxy());
       Initialiser.GsaKit.Clear();
-      Initialiser.AppResources.Settings.TargetLayer = layer;
-      Initialiser.AppResources.Proxy.NewFile(true);
+      ((MockSettings)Initialiser.AppResources.Settings).TargetLayer = layer;
+      Initialiser.AppResources.Proxy.NewFile(false);
 
       var dir = TestDataDirectory;
       if (subdir != String.Empty)

@@ -162,7 +162,7 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this StructuralNodalInfluenceEffect infl)
     {
-      return new GSANodalInfluenceEffect() { Value = infl }.SetGWACommand();
+      return SchemaConversion.Helper.ToNativeTryCatch(infl, () => new GSANodalInfluenceEffect() { Value = infl }.SetGWACommand());
     }
 
     public static SpeckleObject ToSpeckle(this GSANodalInfluenceEffect dummyObject)
@@ -172,6 +172,7 @@ namespace SpeckleStructuralGSA
       var inflsLock = new object();
       var infls = new SortedDictionary<int, GSANodalInfluenceEffect>();
       var nodes = Initialiser.GsaKit.GSASenderObjects.Get<GSANode>();
+      var keyword = dummyObject.GetGSAKeyword();
 
       Parallel.ForEach(newLines.Keys, k =>
       {
@@ -187,8 +188,8 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+          Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+            "Keyword=" + keyword, "Index=" + k);
         }
       });
 

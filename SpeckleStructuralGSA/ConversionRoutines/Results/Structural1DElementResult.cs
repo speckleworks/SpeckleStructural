@@ -119,8 +119,7 @@ namespace SpeckleStructuralGSA
             catch (Exception ex)
             {
               var contextDesc = string.Join(" ", typeName, kvp.Key, loadCase);
-              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, contextDesc, i.ToString());
-              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, contextDesc, i.ToString());
+              Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex, contextDesc, i.ToString());
             }
           }
         }
@@ -178,8 +177,7 @@ namespace SpeckleStructuralGSA
             catch (Exception ex)
             {
               var contextDesc = string.Join(" ", typeName, kvp.Key, loadCase);
-              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, contextDesc, id.ToString());
-              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, contextDesc, id.ToString());
+              Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex, contextDesc, id.ToString());
             }
           }
         }

@@ -74,7 +74,7 @@ namespace SpeckleStructuralGSA
       }
       catch
       {
-        Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, "Generating axis from coordinates for 2D element", obj.ApplicationId);
+        Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "Generating axis from coordinates for 2D element", obj.ApplicationId);
       }
 
       if (prop != null)
@@ -294,7 +294,7 @@ namespace SpeckleStructuralGSA
       }
       catch
       {
-        Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, "Generating axis from coordinates for 2D member", obj.ApplicationId);
+        Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "Generating axis from coordinates for 2D member", obj.ApplicationId);
       }
 
       if (axis != null)
@@ -515,9 +515,9 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this Structural2DElement mesh)
     {
-      return (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Analysis) 
+      return SchemaConversion.Helper.ToNativeTryCatch(mesh, () => (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Analysis) 
         ? new GSA2DElement() { Value = mesh }.SetGWACommand() 
-        : new GSA2DMember() { Value = mesh }.SetGWACommand();
+        : new GSA2DMember() { Value = mesh }.SetGWACommand());
     }
 
     public static SpeckleObject ToSpeckle(this GSA2DElement dummyObject)
@@ -526,6 +526,8 @@ namespace SpeckleStructuralGSA
       var newElementLines = ToSpeckleBase<GSA2DElement>();
       var newMeshLines = ToSpeckleBase<GSA2DElementMesh>();
       var newLinesTuples = new List<Tuple<int, string>>();
+      var keyword = dummyObject.GetGSAKeyword();
+
       foreach (var k in newElementLines.Keys)
       {
         newLinesTuples.Add(new Tuple<int, string>(k, newElementLines[k]));
@@ -560,8 +562,8 @@ namespace SpeckleStructuralGSA
           }
           catch (Exception ex)
           {
-            Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, gsaId);
-            Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, gsaId);
+            Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+              "Keyword=" + keyword, "Index=" + gsaId);
           }
         }
       });
@@ -579,6 +581,7 @@ namespace SpeckleStructuralGSA
       var members = new SortedDictionary<int, GSA2DMember>();
       var nodes = Initialiser.GsaKit.GSASenderObjects.Get<GSANode>();
       var props = Initialiser.GsaKit.GSASenderObjects.Get<GSA2DProperty>();
+      var keyword = dummyObject.GetGSAKeyword();
 
 #if DEBUG
       foreach (var k in newLines.Keys)
@@ -604,8 +607,8 @@ namespace SpeckleStructuralGSA
             }
             catch (Exception ex)
             {
-              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, gsaId);
-              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, gsaId);
+              Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+                "Keyword=" + keyword, "Index=" + k);
             }
           }
         }

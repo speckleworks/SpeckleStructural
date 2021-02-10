@@ -47,7 +47,7 @@ namespace SpeckleStructuralGSA.Test
     [Test]
     public void MeshTest()
     {
-      Initialiser.AppResources.Proxy.OpenFile(Path.Combine(TestDataDirectory, "sjc.gwb"));
+      Initialiser.AppResources.Proxy.OpenFile(Path.Combine(TestDataDirectory, "sjc.gwb"), false);
 
       var data = Initialiser.AppResources.Proxy.GetGwaData(new[] { "NODE.2", "MEMB.7" }, false);
       Assert.IsNotNull(data);

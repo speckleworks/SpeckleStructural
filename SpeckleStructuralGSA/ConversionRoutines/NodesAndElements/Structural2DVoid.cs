@@ -51,6 +51,12 @@ namespace SpeckleStructuralGSA
         }
       }
 
+      if (coordinates == null || coordinates.Count() == 0)
+      {
+        Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Information, "2D voids with unresolvable node references", obj.ApplicationId);
+        return;
+      }
+
       var temp = new Structural2DVoid(
           coordinates.Essential(),
           color.HexToArgbColor());
@@ -168,18 +174,19 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this Structural2DVoid v)
     {
-      return new GSA2DVoid() { Value = v }.SetGWACommand();
+      return SchemaConversion.Helper.ToNativeTryCatch(v, () => new GSA2DVoid() { Value = v }.SetGWACommand());
     }
 
     public static SpeckleObject ToSpeckle(this GSA2DVoid dummyObject)
     {
       var newLines = ToSpeckleBase<GSA2DVoid>();
-      var typeName = dummyObject.GetType().Name;
       var voidsLock = new object();
       var voids = new SortedDictionary<int, GSA2DVoid>();
       var nodes = Initialiser.GsaKit.GSASenderObjects.Get<GSANode>();
+      var keyword = dummyObject.GetGSAKeyword();
 
-      Parallel.ForEach(newLines.Keys, k =>
+      //Parallel.ForEach(newLines.Keys, k =>
+      foreach (var k in newLines.Keys)
       {
         var pPieces = newLines[k].ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
         if (!pPieces[4].Is2DMember())
@@ -199,12 +206,13 @@ namespace SpeckleStructuralGSA
             }
             catch (Exception ex)
             {
-              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, gsaId);
-              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, gsaId);
+              Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+                "Keyword=" + keyword, "Index=" + k);
             }
           }
         }
-      });
+      }
+      //);
 
       Initialiser.GsaKit.GSASenderObjects.AddRange(voids.Values.ToList());
 

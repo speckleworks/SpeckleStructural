@@ -268,25 +268,31 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this SpecklePolyline inputObject)
     {
-      var convertedObject = new Structural1DElementPolyline();
-
-      foreach (var p in convertedObject.GetType().GetProperties().Where(p => p.CanWrite))
+      return SchemaConversion.Helper.ToNativeTryCatch(inputObject, () =>
       {
-        var inputProperty = inputObject.GetType().GetProperty(p.Name);
-        if (inputProperty != null)
-          p.SetValue(convertedObject, inputProperty.GetValue(inputObject));
-      }
+        var convertedObject = new Structural1DElementPolyline();
 
-      return convertedObject.ToNative();
+        foreach (var p in convertedObject.GetType().GetProperties().Where(p => p.CanWrite))
+        {
+          var inputProperty = inputObject.GetType().GetProperty(p.Name);
+          if (inputProperty != null)
+          {
+            p.SetValue(convertedObject, inputProperty.GetValue(inputObject));
+          }
+        }
+
+        return convertedObject.ToNative();
+      });
     }
 
     public static string ToNative(this Structural1DElementPolyline poly)
     {
-      return new GSA1DElementPolyline() { Value = poly }.SetGWACommand();
+      return SchemaConversion.Helper.ToNativeTryCatch(poly, () => new GSA1DElementPolyline() { Value = poly }.SetGWACommand());
     }
 
     public static SpeckleObject ToSpeckle(this GSA1DElementPolyline dummyObject)
     {
+      var keyword = dummyObject.GetGSAKeyword();
       var polylines = new List<GSA1DElementPolyline>();
       var typeName = dummyObject.GetType().Name;
       // Perform mesh merging
@@ -310,8 +316,8 @@ namespace SpeckleStructuralGSA
             }
             catch (Exception ex)
             {
-              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, member.ToString());
-              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, member.ToString());
+              Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+                "Keyword=" + keyword, "Index=" + member);
             }
 
             Initialiser.GsaKit.GSASenderObjects.RemoveAll(matching1dElementList);

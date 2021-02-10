@@ -10,6 +10,73 @@ namespace SpeckleStructuralGSA.SchemaConversion
 {
   public static class Helper
   {
+    //This is necessary because SpeckleCore swallows exceptions thrown within ToNative methods
+    public static string ToNativeTryCatch(SpeckleObject so, Func<object> toNativeMethod)
+    {
+      if (so == null)
+      {
+        return "";
+      }
+
+      var retValue = "";
+      var streamId = "";
+      var speckleType = "";
+      var id = "";
+      var url = "";
+
+      try
+      {
+        streamId = so.Properties["StreamId"].ToString();
+        speckleType = so.Type;
+        id = so._id;
+        url = Initialiser.AppResources.Settings.ObjectUrl(id);
+      }
+      catch { }
+
+      //In case of error
+      var errContext = new List<string>() { "Receive", "StreamId=" + streamId, "SpeckleType=" + speckleType,
+        "ApplicationId=" + (string.IsNullOrEmpty(so.ApplicationId) ? "" : so.ApplicationId),
+        "_id=" + id, "Url=" + url };
+
+      try
+      {
+        var methodReturnValue = toNativeMethod();
+
+        if (methodReturnValue is string)
+        {
+          retValue = (string)methodReturnValue;
+        }
+        else if (methodReturnValue is Exception)
+        {
+          throw ((Exception)methodReturnValue);
+        }
+        else
+        {
+          throw new Exception("Unexpected type returned by conversion code: " + methodReturnValue.GetType().Name);
+        }
+      }
+      catch (Exception ex)
+      {
+        //These messages will have more information added to them in the app before they are logged to file
+        Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex, errContext.ToArray());
+      }
+      return retValue;
+    }
+
+    public static SpeckleObject ToSpeckleTryCatch(string keyword, int index, Func<SpeckleObject> toSpeckleMethod)
+    {
+      try
+      {
+        return toSpeckleMethod();
+      }
+      catch (Exception ex)
+      {
+        //These messages will have more information added to them in the app before they are logged to file
+        Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex, "Keyword=" + keyword, "Index=" + index);
+      }
+      return new SpeckleNull();
+    }
+
     #region loading
     //public static readonly AxisDirection6[] loadDirSeq = new AxisDirection6[] { AxisDirection6.X, AxisDirection6.Y, AxisDirection6.Z, AxisDirection6.XX, AxisDirection6.YY, AxisDirection6.ZZ };
 
@@ -119,7 +186,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
         if (!obj.FromGwa(newLines[index]))
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeof(U).Name + ": Unable to parse GWA", index.ToString());
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, typeof(U).Name + ": Unable to parse GWA", index.ToString());
         }
         schemaObjs.Add((U)obj);
       }
@@ -140,7 +207,7 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
         if (!obj.FromGwa(gwa[i]))
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeof(U).Name + ": Unable to parse GWA", index.ToString());
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, typeof(U).Name + ": Unable to parse GWA", index.ToString());
         }
         schemaObjs.Add((U)obj);
       }

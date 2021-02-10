@@ -43,7 +43,7 @@ namespace SpeckleStructuralGSA.Schema
       }
 
       //LOAD_GRAVITY.3 | name | elemlist | nodelist | case | x | y | z
-      AddItems(ref items, Name, AddEntities(Entities), IndicesList(Nodes), X ?? 0, Y ?? 0, Z ?? 0);
+      AddItems(ref items, Name, AddEntities(Entities), AddNodes(Nodes), LoadCaseIndex ?? 0, X ?? 0, Y ?? 0, Z ?? 0);
 
       gwa = Join(items, out var gwaLine) ? new List<string>() { gwaLine } : new List<string>();
       return (gwa.Count() > 0);

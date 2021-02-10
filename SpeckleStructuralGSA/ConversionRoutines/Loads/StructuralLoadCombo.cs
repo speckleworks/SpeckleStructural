@@ -144,14 +144,14 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this StructuralLoadCombo loadCombo)
     {
-      return new GSALoadCombo() { Value = loadCombo }.SetGWACommand();
+      return SchemaConversion.Helper.ToNativeTryCatch(loadCombo, () => new GSALoadCombo() { Value = loadCombo }.SetGWACommand());
     }
 
     public static SpeckleObject ToSpeckle(this GSALoadCombo dummyObject)
     {
       var newLines = ToSpeckleBase<GSALoadCombo>();
-      var typeName = dummyObject.GetType().Name;
       var loadCombos = new SortedDictionary<int, GSALoadCombo>();
+      var keyword = dummyObject.GetGSAKeyword();
 
       foreach (var k in newLines.Keys)
       {
@@ -163,8 +163,8 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+          Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+            "Keyword=" + keyword, "Index=" + k);
         }
         loadCombos.Add(k, combo);
       }

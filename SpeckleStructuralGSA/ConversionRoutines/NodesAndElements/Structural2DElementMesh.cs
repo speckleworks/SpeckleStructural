@@ -142,29 +142,33 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this SpeckleMesh inputObject)
     {
-      var convertedObject = new Structural2DElementMesh();
-
-      foreach (var p in convertedObject.GetType().GetProperties().Where(p => p.CanWrite))
+      return SchemaConversion.Helper.ToNativeTryCatch(inputObject, () =>
       {
-        var inputProperty = inputObject.GetType().GetProperty(p.Name);
-        if (inputProperty != null)
-          p.SetValue(convertedObject, inputProperty.GetValue(inputObject));
-      }
+        var convertedObject = new Structural2DElementMesh();
 
-      return convertedObject.ToNative();
+        foreach (var p in convertedObject.GetType().GetProperties().Where(p => p.CanWrite))
+        {
+          var inputProperty = inputObject.GetType().GetProperty(p.Name);
+          if (inputProperty != null)
+            p.SetValue(convertedObject, inputProperty.GetValue(inputObject));
+        }
+
+        return convertedObject.ToNative();
+      });
     }
 
     public static string ToNative(this Structural2DElementMesh mesh)
     {
-      return (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Analysis) 
+      return SchemaConversion.Helper.ToNativeTryCatch(mesh, () => (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Analysis) 
         ? new GSA2DElementMesh() { Value = mesh }.SetGWACommand() 
-        : new GSA2DMember() { Value = mesh }.SetGWACommand();
+        : new GSA2DMember() { Value = mesh }.SetGWACommand());
     }
 
     public static SpeckleObject ToSpeckle(this GSA2DElementMesh dummyObject)
     {
       var meshes = new List<GSA2DElementMesh>();
       var typeName = dummyObject.GetType().Name;
+      var keyword = dummyObject.GetGSAKeyword();
 
       // Perform mesh merging
       var uniqueMembers = Initialiser.GsaKit.GSASenderObjects.Get<GSA2DElement>().Select(x => x.Member).Where(m => m > 0).Distinct().ToList();
@@ -184,8 +188,8 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, member.ToString());
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, member.ToString());
+          Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+            "Keyword=" + keyword, "Index=" + member);
         }
       }
 
