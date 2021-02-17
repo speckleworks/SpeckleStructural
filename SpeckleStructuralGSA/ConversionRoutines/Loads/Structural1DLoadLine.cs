@@ -7,14 +7,9 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("LOAD_GRID_LINE.2", new string[] { "POLYLINE.1", "GRID_SURFACE.1", "GRID_PLANE.4", "AXIS.1" }, "loads", true, true, new Type[] { }, new Type[] { typeof(GSAGridSurface), typeof(GSAStorey), typeof(GSALoadCase) })]
-  public class GSAGridLineLoad : IGSASpeckleContainer
+  [GSAObject("LOAD_GRID_LINE.2", new string[] { "POLYLINE.1", "GRID_SURFACE.1", "GRID_PLANE.4", "AXIS.1" }, "model", true, true, new Type[] { }, new Type[] { typeof(GSAGridSurface), typeof(GSAStorey), typeof(GSALoadCase) })]
+  public class GSAGridLineLoad : GSABase<Structural1DLoadLine>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural1DLoadLine();
-
     public void ParseGWACommand()
     {
       if (this.GWACommand == null)
@@ -22,9 +17,10 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural1DLoadLine();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       Helper.GetGridPlaneRef(Convert.ToInt32(pieces[counter++]), out int gridPlaneRefRet, out string gridSurfaceRec);
       Helper.GetGridPlaneData(gridPlaneRefRet, out int gridPlaneAxis, out double gridPlaneElevation, out string gridPlaneRec);
@@ -32,7 +28,7 @@ namespace SpeckleStructuralGSA
       this.SubGWACommand.Add(gridPlaneRec);
 
       string gwaRec = null;
-      var axis = Helper.Parse0DAxis(gridPlaneAxis, Initialiser.Interface, out gwaRec);
+      var axis = Helper.Parse0DAxis(gridPlaneAxis, out gwaRec);
       if (gwaRec != null)
         this.SubGWACommand.Add(gwaRec);
       double elevation = gridPlaneElevation;
@@ -71,7 +67,7 @@ namespace SpeckleStructuralGSA
       else
       {
         loadAxisId = loadAxisData == "GLOBAL" ? 0 : Convert.ToInt32(loadAxisData);
-        loadAxis = Helper.Parse0DAxis(loadAxisId, Initialiser.Interface, out gwaRec);
+        loadAxis = Helper.Parse0DAxis(loadAxisId, out gwaRec);
         if (gwaRec != null)
           this.SubGWACommand.Add(gwaRec);
       }
@@ -156,8 +152,8 @@ namespace SpeckleStructuralGSA
 
       var loadCaseKeyword = typeof(GSALoadCase).GetGSAKeyword();
 
-      var indexResult = Initialiser.Cache.LookupIndex(loadCaseKeyword, load.LoadCaseRef);
-      var loadCaseRef = indexResult ?? Initialiser.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
+      var indexResult = Initialiser.AppResources.Cache.LookupIndex(loadCaseKeyword, load.LoadCaseRef);
+      var loadCaseRef = indexResult ?? Initialiser.AppResources.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
       if (indexResult == null && load.ApplicationId != null)
       {
         if (load.LoadCaseRef == null)
@@ -201,8 +197,8 @@ namespace SpeckleStructuralGSA
         }
 
 
-        gridSurfaceIndex = Initialiser.Cache.ResolveIndex("GRID_SURFACE.1");
-        var gridPlaneIndex = Initialiser.Cache.ResolveIndex("GRID_PLANE.4");
+        gridSurfaceIndex = Initialiser.AppResources.Cache.ResolveIndex("GRID_SURFACE.1");
+        var gridPlaneIndex = Initialiser.AppResources.Cache.ResolveIndex("GRID_PLANE.4");
 
         ls.Clear();
         ls.AddRange(new[] {
@@ -215,7 +211,7 @@ namespace SpeckleStructuralGSA
         elevation.ToString(),
         "0", // Elevation above
         "0"}); // Elevation below
-        gwaCommands.Add(string.Join("\t", ls));
+        gwaCommands.Add(string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
 
         ls.Clear();
         ls.AddRange(new[] {"SET",
@@ -228,20 +224,20 @@ namespace SpeckleStructuralGSA
         "0.01", // Tolerance
         "TWO_SIMPLE", // Span option
         "0"}); // Span angle
-        gwaCommands.Add(string.Join("\t", ls));
+        gwaCommands.Add(string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
       }
       else //LoadPlaneRef is not empty/null
       {
         try
         {
-          gridSurfaceIndex = Initialiser.Cache.LookupIndex("GRID_SURFACE.1", load.LoadPlaneRef).Value;
+          gridSurfaceIndex = Initialiser.AppResources.Cache.LookupIndex("GRID_SURFACE.1", load.LoadPlaneRef).Value;
         }
         catch
         {
-          gridSurfaceIndex = Initialiser.Cache.ResolveIndex("GRID_SURFACE.1", load.LoadPlaneRef);
+          gridSurfaceIndex = Initialiser.AppResources.Cache.ResolveIndex("GRID_SURFACE.1", load.LoadPlaneRef);
         }
 
-        var loadPlanesDict = Initialiser.Cache.GetIndicesSpeckleObjects(typeof(StructuralLoadPlane).Name);
+        var loadPlanesDict = Initialiser.AppResources.Cache.GetIndicesSpeckleObjects(typeof(StructuralLoadPlane).Name);
         if (loadPlanesDict.ContainsKey(gridSurfaceIndex) && loadPlanesDict[gridSurfaceIndex] != null)
         {
           var loadPlane = ((StructuralLoadPlane)loadPlanesDict[gridSurfaceIndex]);
@@ -253,8 +249,8 @@ namespace SpeckleStructuralGSA
           {
             try
             {
-              var storeyIndex = Initialiser.Cache.LookupIndex("GRID_PLANE.4", loadPlane.StoreyRef).Value;
-              var storeysDict = Initialiser.Cache.GetIndicesSpeckleObjects(typeof(StructuralStorey).Name);
+              var storeyIndex = Initialiser.AppResources.Cache.LookupIndex("GRID_PLANE.4", loadPlane.StoreyRef).Value;
+              var storeysDict = Initialiser.AppResources.Cache.GetIndicesSpeckleObjects(typeof(StructuralStorey).Name);
               if (storeysDict.ContainsKey(storeyIndex) && storeysDict[storeyIndex] != null)
               {
                 var storey = ((StructuralStorey)storeysDict[storeyIndex]);
@@ -291,13 +287,14 @@ namespace SpeckleStructuralGSA
 
         ls.Clear();
 
-        var index = Initialiser.Cache.ResolveIndex(typeof(GSAGridLineLoad).GetGSAKeyword());
+        var index = Initialiser.AppResources.Cache.ResolveIndex(typeof(GSAGridLineLoad).GetGSAKeyword());
 
+        var sid = Helper.GenerateSID(load);
         ls.AddRange(new[] {
           "SET_AT",
           index.ToString(),
-          keyword + ":" + Helper.GenerateSID(load),
-          load.Name == null || load.Name == "" ? " " : load.Name,
+          keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
+          load.Name == null || load.Name == "" ? " " : load.Name + (load.Name.All(char.IsDigit) ? " " : ""),
           gridSurfaceIndex.ToString(),
           "POLYGON",
           string.Join(" ", subLs),
@@ -308,7 +305,7 @@ namespace SpeckleStructuralGSA
           load.Loading.Value[i].ToString(),
           load.LoadingEnd == null ? load.Loading.Value[i].ToString() : load.LoadingEnd.Value[i].ToString()});
 
-        gwaCommands.Add(string.Join("\t", ls));
+        gwaCommands.Add(string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
       }
 
       return string.Join("\n", gwaCommands);
@@ -325,14 +322,23 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSAGridLineLoad dummyObject)
     {
       var newLines = ToSpeckleBase<GSAGridLineLoad>();
-
+      var typeName = dummyObject.GetType().Name;
       var loads = new List<GSAGridLineLoad>();
 
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
       {
+        var p = newLines[k];
         var load = new GSAGridLineLoad() { GWACommand = p };
-        load.ParseGWACommand();
-        
+        try
+        {
+          load.ParseGWACommand();
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+        }
+
         // Break them apart
         for (var i = 0; i < load.Value.Value.Count - 3; i += 3)
         {
@@ -352,7 +358,7 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      Initialiser.GSASenderObjects.AddRange(loads);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(loads);
 
       return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

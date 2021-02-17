@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using SpeckleCore;
@@ -8,14 +9,9 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("RIGID.3", new string[] { }, "misc", true, true, new Type[] { typeof(GSANode), typeof(GSAConstructionStage) }, new Type[] { typeof(GSANode), typeof(GSAConstructionStage) })]
-  public class GSARigidConstraints : IGSASpeckleContainer
+  [GSAObject("RIGID.3", new string[] { }, "model", true, true, new Type[] { typeof(GSANode), typeof(GSAConstructionStage) }, new Type[] { typeof(GSANode), typeof(GSAConstructionStage) })]
+  public class GSARigidConstraints : GSABase<StructuralRigidConstraints>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralRigidConstraints();
-
     public void ParseGWACommand(List<GSANode> nodes, List<GSAConstructionStage> stages)
     {
       if (this.GWACommand == null)
@@ -23,7 +19,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralRigidConstraints();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
 
@@ -85,7 +81,7 @@ namespace SpeckleStructuralGSA
 
       obj.Constraint = new StructuralVectorBoolSix(constraint);
 
-      var targetNodeRefs = Initialiser.Interface.ConvertGSAList(pieces[counter++], SpeckleGSAInterfaces.GSAEntity.NODE);
+      var targetNodeRefs = Initialiser.AppResources.Proxy.ConvertGSAList(pieces[counter++], SpeckleGSAInterfaces.GSAEntity.NODE);
 
       if (nodes != null)
       {
@@ -118,13 +114,13 @@ namespace SpeckleStructuralGSA
 
       var keyword = typeof(GSARigidConstraints).GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(keyword, constraint.ApplicationId);
+      var index = Initialiser.AppResources.Cache.ResolveIndex(keyword, constraint.ApplicationId);
       
-      var slaveNodeIndices = Initialiser.Cache.LookupIndices(typeof(GSANode).GetGSAKeyword(), constraint.NodeRefs).Where(x => x.HasValue)
+      var slaveNodeIndices = Initialiser.AppResources.Cache.LookupIndices(typeof(GSANode).GetGSAKeyword(), constraint.NodeRefs).Where(x => x.HasValue)
         .Distinct().OrderBy(i => i).Select(x => x.Value.ToString()).ToList();
       var slaveNodeIndicesSummary = slaveNodeIndices.Count > 0 ? string.Join(" ", slaveNodeIndices) : "none";
-      var masterNodeIndex = Initialiser.Cache.LookupIndex(typeof(GSANode).GetGSAKeyword(), constraint.MasterNodeRef);
-      var stageDefRefs = Initialiser.Cache.LookupIndices(typeof(GSAConstructionStage).GetGSAKeyword(), constraint.ConstructionStageRefs)
+      var masterNodeIndex = Initialiser.AppResources.Cache.LookupIndex(typeof(GSANode).GetGSAKeyword(), constraint.MasterNodeRef);
+      var stageDefRefs = Initialiser.AppResources.Cache.LookupIndices(typeof(GSAConstructionStage).GetGSAKeyword(), constraint.ConstructionStageRefs)
         .Where(x => x.HasValue).Distinct().Select(x => x.Value.ToString()).ToList();
 
       var subLs = new List<string>();
@@ -180,7 +176,7 @@ namespace SpeckleStructuralGSA
         "0" // Parent member
       };
 
-      return (string.Join("\t", ls));
+      return (string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
     }
   }
 
@@ -194,11 +190,11 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSARigidConstraints dummyObject)
     {
       var newLines = ToSpeckleBase<GSARigidConstraints>();
-
+      var typeName = dummyObject.GetType().Name;
       var constraintsLock = new object();
-      var constraints = new List<GSARigidConstraints>();
-      var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
-      var stages = Initialiser.GSASenderObjects.Get<GSAConstructionStage>();
+      var constraints = new SortedDictionary<int, GSARigidConstraints>();
+      var nodes = Initialiser.GsaKit.GSASenderObjects.Get<GSANode>();
+      var stages = Initialiser.GsaKit.GSASenderObjects.Get<GSAConstructionStage>();
 
       Parallel.ForEach(newLines.Keys, k =>
       {
@@ -208,15 +204,19 @@ namespace SpeckleStructuralGSA
           constraint.ParseGWACommand(nodes, stages);
           lock (constraintsLock)
           {
-            constraints.Add(constraint);
+            constraints.Add(k, constraint);
           }
         }
-        catch { }
+        catch (Exception ex)
+        {
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+        }
       });
 
-      Initialiser.GSASenderObjects.AddRange(constraints);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(constraints.Values.ToList());
 
-      return (constraints.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (constraints.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

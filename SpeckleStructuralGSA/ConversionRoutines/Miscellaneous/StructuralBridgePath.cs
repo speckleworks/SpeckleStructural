@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using SpeckleCore;
@@ -8,14 +9,9 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("PATH.1", new string[] { "ALIGN.1" }, "misc", true, true, new Type[] { }, new Type[] { typeof(GSABridgeAlignment) })]
-  public class GSABridgePath : IGSASpeckleContainer
+  [GSAObject("PATH.1", new string[] { "ALIGN.1" }, "model", true, true, new Type[] { }, new Type[] { typeof(GSABridgeAlignment) })]
+  public class GSABridgePath : GSABase<StructuralBridgePath>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralBridgePath();
-
     public void ParseGWACommand()
     {
       if (this.GWACommand == null)
@@ -23,7 +19,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralBridgePath();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
 
@@ -53,21 +49,26 @@ namespace SpeckleStructuralGSA
       var destType = typeof(GSABridgePath);
 
       var path = this.Value as StructuralBridgePath;
+      if (string.IsNullOrEmpty(path.ApplicationId))
+      {
+        return "";
+      }
 
       var keyword = destType.GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(keyword, path.ApplicationId);
-      var alignmentIndex = Initialiser.Cache.LookupIndex(typeof(GSABridgeAlignment).GetGSAKeyword(), path.AlignmentRef) ?? 1;
+      var index = Initialiser.AppResources.Cache.ResolveIndex(keyword, path.ApplicationId);
+      var alignmentIndex = Initialiser.AppResources.Cache.LookupIndex(typeof(GSABridgeAlignment).GetGSAKeyword(), path.AlignmentRef) ?? 1;
 
       var left = (path.Offsets == null || path.Offsets.Count() == 0) ? 0 : path.Offsets.First();
       var right = (path.PathType == StructuralBridgePathType.Track || path.PathType == StructuralBridgePathType.Vehicle) 
         ? path.Gauge 
         : (path.Offsets == null || path.Offsets.Count() == 0) ? 0 : path.Offsets.Last();
 
+      var sid = Helper.GenerateSID(path);
       var ls = new List<string>
         {
           "SET",
-          keyword + ":" + Helper.GenerateSID(path),
+          keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
           index.ToString(),
           string.IsNullOrEmpty(path.Name) ? "" : path.Name,
           PathTypeToGWAString(path.PathType),
@@ -78,7 +79,7 @@ namespace SpeckleStructuralGSA
           path.LeftRailFactor.ToString()
       };
 
-      return (string.Join("\t", ls));
+      return (string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
     }
 
     private string PathTypeToGWAString(StructuralBridgePathType pathType)
@@ -118,24 +119,32 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSABridgePath dummyObject)
     {
       var newLines = ToSpeckleBase<GSABridgePath>();
-      var paths = new List<GSABridgePath>();
-
+      var paths = new SortedDictionary<int, GSABridgePath>();
+      var typeName = dummyObject.GetType().Name;
       var pathsLock = new object();
 
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
       {
-        var path = new GSABridgePath() { GWACommand = p };
+        var path = new GSABridgePath() { GWACommand = newLines[k] };
         //Pass in ALL the nodes and members - the Parse_ method will search through them
-        path.ParseGWACommand();
-        lock (pathsLock)
+        try
         {
-          paths.Add(path);
+          path.ParseGWACommand();
+          lock (pathsLock)
+          {
+            paths.Add(k, path);
+          }
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
         }
       });
 
-      Initialiser.GSASenderObjects.AddRange(paths);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(paths.Values.ToList());
 
-      return (paths.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (paths.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

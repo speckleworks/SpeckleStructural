@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using SpeckleCore;
@@ -9,14 +10,9 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("ALIGN.1", new string[] { }, "misc", true, true, new Type[] { }, new Type[] { })]
-  public class GSABridgeAlignment : IGSASpeckleContainer
+  [GSAObject("ALIGN.1", new string[] { }, "model", true, true, new Type[] { }, new Type[] { })]
+  public class GSABridgeAlignment : GSABase<StructuralBridgeAlignment>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralBridgeAlignment();
-
     public void ParseGWACommand()
     {
       if (this.GWACommand == null)
@@ -24,7 +20,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralBridgeAlignment();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
 
@@ -52,10 +48,10 @@ namespace SpeckleStructuralGSA
 
       var keyword = destType.GetGSAKeyword();
 
-      var gridSurfaceIndex = Initialiser.Cache.ResolveIndex("GRID_SURFACE.1");
-      var gridPlaneIndex = Initialiser.Cache.ResolveIndex("GRID_PLANE.4");
+      var gridSurfaceIndex = Initialiser.AppResources.Cache.ResolveIndex("GRID_SURFACE.1");
+      var gridPlaneIndex = Initialiser.AppResources.Cache.ResolveIndex("GRID_PLANE.4");
 
-      var index = Initialiser.Cache.ResolveIndex(keyword, alignment.ApplicationId);
+      var index = Initialiser.AppResources.Cache.ResolveIndex(keyword, alignment.ApplicationId);
 
       var sid = Helper.GenerateSID(alignment);
 
@@ -88,7 +84,7 @@ namespace SpeckleStructuralGSA
         "0", // Elevation above
         "0" }); // Elevation below
 
-      gwaCommands.Add(string.Join("\t", ls));
+      gwaCommands.Add(string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
 
       ls.Clear();
       ls.AddRange(new[] {
@@ -102,7 +98,7 @@ namespace SpeckleStructuralGSA
         "0.01", // Tolerance
         "ONE", // Span option
         "0"}); // Span angle
-      gwaCommands.Add(string.Join("\t", ls));
+      gwaCommands.Add(string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
 
 
       ls.Clear();
@@ -130,7 +126,7 @@ namespace SpeckleStructuralGSA
             ls.Add(((1d / node.Radius) * ((node.Curvature == StructuralBridgeCurvature.RightCurve) ? 1 : -1)).ToString());
           }
         }
-        gwaCommands.Add(string.Join("\t", ls));
+        gwaCommands.Add(string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
       }
 
       return string.Join("\n", gwaCommands);
@@ -157,26 +153,34 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSABridgeAlignment dummyObject)
     {
       var newLines = ToSpeckleBase<GSABridgeAlignment>();
-
+      var typeName = dummyObject.GetType().Name;
       var alignmentsLock = new object();
 
       //Get all relevant GSA entities in this entire model
-      var alignments = new List<GSABridgeAlignment>();
+      var alignments = new SortedDictionary<int, GSABridgeAlignment>();
 
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
       {
-        var alignment = new GSABridgeAlignment() { GWACommand = p };
+        var alignment = new GSABridgeAlignment() { GWACommand = newLines[k] };
         //Pass in ALL the nodes and members - the Parse_ method will search through them
-        alignment.ParseGWACommand();
-        lock (alignmentsLock)
+        try
         {
-          alignments.Add(alignment);
+          alignment.ParseGWACommand();
+          lock (alignmentsLock)
+          {
+            alignments.Add(k, alignment);
+          }
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
         }
       });
 
-      Initialiser.GSASenderObjects.AddRange(alignments);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(alignments.Values.ToList());
 
-      return (alignments.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (alignments.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

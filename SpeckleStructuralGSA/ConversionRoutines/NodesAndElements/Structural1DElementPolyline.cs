@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
 using SpeckleCore;
@@ -9,14 +10,9 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   //TO DO: check why everything except GSA1DElement is needed as read prerequisites 
-  [GSAObject("MEMB.7", new string[] { }, "elements", true, false, new Type[] { typeof(GSA1DElement), typeof(GSA1DLoadAnalysisLayer), typeof(GSA1DElementResult), typeof(GSAAssembly), typeof(GSAConstructionStage), typeof(GSA1DInfluenceEffect) }, new Type[] { typeof(GSA1DElement) })]
-  public class GSA1DElementPolyline : IGSASpeckleContainer
+  [GSAObject("MEMB.8", new string[] { }, "model", true, true, new Type[] { typeof(GSA1DProperty), typeof(GSA1DElement), typeof(GSA1DLoad), typeof(GSA1DElementResult), typeof(GSAAssembly), typeof(GSAConstructionStage), typeof(GSA1DInfluenceEffect) }, new Type[] { typeof(GSA1DProperty), typeof(GSA1DElement) })]
+  public class GSA1DElementPolyline : GSABase<Structural1DElementPolyline>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural1DElementPolyline();
-
     public void ParseGWACommand(List<GSA1DElement> elements)
     {
       if (elements.Count() < 1)
@@ -39,8 +35,18 @@ namespace SpeckleStructuralGSA
         ResultVertices = new List<double>()
       };
 
-      if (Initialiser.Settings.Element1DResults.Count > 0 && Initialiser.Settings.EmbedResults)
-        obj.Result = new Dictionary<string, object>();
+      if (obj.Properties == null)
+      {
+        obj.Properties = new Dictionary<string, object>();
+      }
+      if (!obj.Properties.ContainsKey("structural"))
+      {
+        obj.Properties.Add("structural", new Dictionary<string, object>());
+      }
+
+      Dictionary<string, object> results = null;
+      if (Initialiser.AppResources.Settings.Element1DResults.Count > 0 && Initialiser.AppResources.Settings.EmbedResults)
+        results = new Dictionary<string, object>();
 
       // Match up coordinates
       var coordinates = new List<Tuple<string, string>>();
@@ -60,11 +66,16 @@ namespace SpeckleStructuralGSA
       //Because these properties could, depending on how they've been added to the StructuralProperties dictionary,
       //return another instance of the lists instead of a pointer to the lists themselves, temporary variables are used
       //to build up new lists which are assigned as replacements to the property values further down
-      var elementAppIds = obj.ElementApplicationId;
-      var zAxes = obj.ZAxis;
-      var endReleases = obj.EndRelease;
-      var offsets = obj.Offset;
-      var resultVertices = obj.ResultVertices;
+      if (obj.ElementApplicationId == null)
+      {
+        obj.ElementApplicationId = new List<string>();
+      }
+      var elementAppIds = obj.ElementApplicationId ?? new List<string>();
+      var gsaIds = new List<int>();
+      var zAxes = obj.ZAxis ?? new List<StructuralVectorThree>();
+      var endReleases = obj.EndRelease ?? new List<StructuralVectorBoolSix>();
+      var offsets = obj.Offset ?? new List<StructuralVectorThree>();
+      var resultVertices = obj.ResultVertices ?? new List<double>();
 
       while (coordinates.Count > 0)
       {
@@ -79,97 +90,106 @@ namespace SpeckleStructuralGSA
           reverseCoordinates = true;
         }
 
-        var element = elementsListCopy[matchIndex];
+        var gsaElement = elementsListCopy[matchIndex];
+        var element = (Structural1DElement)gsaElement.Value;
 
-        elementAppIds.Add(element.Value.ApplicationId);
-        zAxes.Add(element.Value.ZAxis);
+        elementAppIds.Add(element.ApplicationId);
+        try
+        {
+          if (int.TryParse(((Dictionary<string, object>)element.Properties["structural"])["NativeId"].ToString(), out int gsaId))
+          gsaIds.Add(gsaId);
+        }
+        catch { }
+
+        zAxes.Add(element.ZAxis);
 
         if (obj.Value.Count == 0)
         {
           if (!reverseCoordinates)
           {
-            obj.Value.AddRange((element.Value.Value as List<double>).Take(3));
+            obj.Value.AddRange((element.Value as List<double>).Take(3));
           }
           else
           {
-            obj.Value.AddRange((element.Value.Value as List<double>).Skip(3).Take(3));
+            obj.Value.AddRange((element.Value as List<double>).Skip(3).Take(3));
           }
         }
 
         if (!reverseCoordinates)
         {
-          current = string.Join(",", (element.Value.Value as List<double>).Skip(3).Take(3).Select(x => Math.Round(x, 4).ToString()));
-          obj.Value.AddRange((element.Value.Value as List<double>).Skip(3).Take(3));
-          endReleases.AddRange(element.Value.EndRelease);
-          offsets.AddRange(element.Value.Offset);
+          current = string.Join(",", (element.Value as List<double>).Skip(3).Take(3).Select(x => Math.Round(x, 4).ToString()));
+          obj.Value.AddRange((element.Value as List<double>).Skip(3).Take(3));
+          endReleases.AddRange(element.EndRelease);
+          offsets.AddRange(element.Offset);
 
-          if (Initialiser.Settings.Element1DResults.Count > 0 && Initialiser.Settings.EmbedResults)
+          if (Initialiser.AppResources.Settings.Element1DResults.Count > 0 && Initialiser.AppResources.Settings.EmbedResults)
           {
-            resultVertices.AddRange(element.Value.ResultVertices);
+            resultVertices.AddRange(element.ResultVertices);
           }
           else
           {
-            resultVertices.AddRange((element.Value.Value as List<double>));
+            resultVertices.AddRange((element.Value as List<double>));
           }
         }
         else
         {
-          current = string.Join(",", (element.Value.Value as List<double>).Take(3).Select(x => Math.Round(x, 4).ToString()));
-          obj.Value.AddRange((element.Value.Value as List<double>).Take(3));
-          endReleases.Add((element.Value.EndRelease as List<StructuralVectorBoolSix>).Last());
-          endReleases.Add((element.Value.EndRelease as List<StructuralVectorBoolSix>).First());
-          offsets.Add((element.Value.Offset as List<StructuralVectorThree>).Last());
-          offsets.Add((element.Value.Offset as List<StructuralVectorThree>).First());
+          current = string.Join(",", (element.Value as List<double>).Take(3).Select(x => Math.Round(x, 4).ToString()));
+          obj.Value.AddRange((element.Value as List<double>).Take(3));
+          endReleases.Add((element.EndRelease as List<StructuralVectorBoolSix>).Last());
+          endReleases.Add((element.EndRelease as List<StructuralVectorBoolSix>).First());
+          offsets.Add((element.Offset as List<StructuralVectorThree>).Last());
+          offsets.Add((element.Offset as List<StructuralVectorThree>).First());
 
-          if (Initialiser.Settings.Element1DResults.Count > 0 && Initialiser.Settings.EmbedResults)
+          if (Initialiser.AppResources.Settings.Element1DResults.Count > 0 && Initialiser.AppResources.Settings.EmbedResults)
           {
-            for (int i = element.Value.ResultVertices.Count - 3; i >= 0; i -= 3)
+            for (var i = (element.ResultVertices.Count - 3); i >= 0; i -= 3)
             {
-              resultVertices.AddRange((element.Value.ResultVertices as List<double>).Skip(i).Take(3));
+              resultVertices.AddRange((element.ResultVertices as List<double>).Skip(i).Take(3));
             }
           }
           else
           {
-            resultVertices.AddRange((element.Value.Value as List<double>).Skip(3).Take(3));
-            resultVertices.AddRange((element.Value.Value as List<double>).Take(3));
+            resultVertices.AddRange((element.Value as List<double>).Skip(3).Take(3));
+            resultVertices.AddRange((element.Value as List<double>).Take(3));
           }
         }
 
         // Result merging
-        if (obj.Result != null && ((Structural1DElement)element.Value).Result != null)
+        if (results != null && ((Structural1DElement)gsaElement.Value).Result != null)
         {
           try
           {
-            foreach (string loadCase in element.Value.Result.Keys)
+            foreach (var loadCase in element.Result.Keys)
             {
-              if (!obj.Result.ContainsKey(loadCase))
-                obj.Result[loadCase] = new Structural1DElementResult()
+              if (!results.ContainsKey(loadCase))
+              {
+                results[loadCase] = new Structural1DElementResult()
                 {
                   Value = new Dictionary<string, object>(),
-                  IsGlobal = !Initialiser.Settings.ResultInLocalAxis,
+                  IsGlobal = !Initialiser.AppResources.Settings.ResultInLocalAxis,
                 };
+              }
 
-              var resultExport = element.Value.Result[loadCase] as Structural1DElementResult;
 
-              if (resultExport != null)
+              if (element.Result[loadCase] is Structural1DElementResult resultExport)
               {
                 foreach (var key in resultExport.Value.Keys)
                 {
-                  if (!(obj.Result[loadCase] as Structural1DElementResult).Value.ContainsKey(key))
+                  if (!(results[loadCase] as Structural1DElementResult).Value.ContainsKey(key))
                   {
-                    (obj.Result[loadCase] as Structural1DElementResult).Value[key]
+                    (results[loadCase] as Structural1DElementResult).Value[key]
                       = new Dictionary<string, object>(resultExport.Value[key] as Dictionary<string, object>);
                   }
                   else
                   {
-                    foreach (var resultKey in ((obj.Result[loadCase] as Structural1DElementResult).Value[key] as Dictionary<string, object>).Keys)
+                    foreach (var resultKey in ((results[loadCase] as Structural1DElementResult).Value[key] as Dictionary<string, object>).Keys)
                     {
                       var res = (resultExport.Value[key] as Dictionary<string, object>)[resultKey] as List<double>;
                       if (reverseCoordinates)
                       {
                         res.Reverse();
                       }
-                      (((obj.Result[loadCase] as Structural1DElementResult).Value[key] as Dictionary<string, object>)[resultKey] as List<double>)
+                      (((results[loadCase] as Structural1DElementResult).Value[key] as Dictionary<string, object>)[resultKey] as List<double>)
                         .AddRange(res);
                     }
                   }
@@ -178,7 +198,8 @@ namespace SpeckleStructuralGSA
               else
               {
                 // UNABLE TO MERGE RESULTS
-                obj.Result = null;
+                //obj.Result = null;
+                results = null;
                 break;
               }
             }
@@ -186,15 +207,16 @@ namespace SpeckleStructuralGSA
           catch
           {
             // UNABLE TO MERGE RESULTS
-            obj.Result = null;
+            //obj.Result = null;
+            results = null;
           }
         }
 
         coordinates.RemoveAt(matchIndex);
         elementsListCopy.RemoveAt(matchIndex);
 
-        this.SubGWACommand.Add(element.GWACommand);
-        this.SubGWACommand.AddRange(element.SubGWACommand);
+        this.SubGWACommand.Add(gsaElement.GWACommand);
+        this.SubGWACommand.AddRange(gsaElement.SubGWACommand);
       }
 
       obj.ElementApplicationId = elementAppIds;
@@ -202,6 +224,9 @@ namespace SpeckleStructuralGSA
       obj.EndRelease = endReleases;
       obj.Offset = offsets;
       obj.ResultVertices = resultVertices;
+      obj.Result = results;
+
+      ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeIds", gsaIds.Select(gid => gid.ToString()).ToList());
 
       this.Value = obj;
     }
@@ -220,17 +245,17 @@ namespace SpeckleStructuralGSA
 
       if (elements.Count() == 1)
       {
-        gwaCommands.Add((Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
+        gwaCommands.Add((Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Analysis)
          ? new GSA1DElement() { Value = elements.First() }.SetGWACommand()
          : new GSA1DMember() { Value = elements.First() }.SetGWACommand());
       }
       else
       {
-        var group = Initialiser.Cache.ResolveIndex(typeof(GSA1DElementPolyline).GetGSAKeyword(), obj.ApplicationId);
+        var group = Initialiser.AppResources.Cache.ResolveIndex(typeof(GSA1DElementPolyline).GetGSAKeyword(), obj.ApplicationId);
 
         foreach (var element in elements)
         {
-          gwaCommands.Add((Initialiser.Settings.TargetLayer == GSATargetLayer.Analysis)
+          gwaCommands.Add((Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Analysis)
             ? new GSA1DElement() { Value = element }.SetGWACommand(group)
             : new GSA1DMember() { Value = element }.SetGWACommand(group));
         }
@@ -263,9 +288,9 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA1DElementPolyline dummyObject)
     {
       var polylines = new List<GSA1DElementPolyline>();
-
+      var typeName = dummyObject.GetType().Name;
       // Perform mesh merging
-      var uniqueMembers = new List<string>(Initialiser.GSASenderObjects.Get<GSA1DElement>().Select(x => (x as GSA1DElement).Member).Where(m => Convert.ToInt32(m) > 0).Distinct());
+      var uniqueMembers = new List<int>(Initialiser.GsaKit.GSASenderObjects.Get<GSA1DElement>().Select(x => x.Member).Where(m => m > 0).Distinct());
       uniqueMembers.Sort();  //Just for readability and testing
 
       //This loop has been left as serial for now, considering the fact that the sender objects are retrieved and removed-from with each iteration
@@ -273,19 +298,29 @@ namespace SpeckleStructuralGSA
       {
         try
         {
-          var all1dElements = Initialiser.GSASenderObjects.Get<GSA1DElement>();
-          var matching1dElementList = all1dElements.Where(x => (x as GSA1DElement).Member == member).OrderBy(m => m.GSAId).ToList();
+          var all1dElements = Initialiser.GsaKit.GSASenderObjects.Get<GSA1DElement>();
+          var matching1dElementList = all1dElements.Where(x => x.Member == member).OrderBy(m => m.GSAId).ToList();
+          if (matching1dElementList.Count() > 1)
+          {
+            var poly = new GSA1DElementPolyline() { GSAId = Convert.ToInt32(member) };
+            try
+            {
+              poly.ParseGWACommand(matching1dElementList);
+              polylines.Add(poly);
+            }
+            catch (Exception ex)
+            {
+              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, member.ToString());
+              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, member.ToString());
+            }
 
-          var poly = new GSA1DElementPolyline() { GSAId = Convert.ToInt32(member) };
-          poly.ParseGWACommand(matching1dElementList);
-          polylines.Add(poly);
-
-          Initialiser.GSASenderObjects.RemoveAll(matching1dElementList);
+            Initialiser.GsaKit.GSASenderObjects.RemoveAll(matching1dElementList);
+          }
         }
         catch { }
       }
 
-      Initialiser.GSASenderObjects.AddRange(polylines);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(polylines);
 
       return new SpeckleNull(); // Return null because ToSpeckle method for GSA1DElement will handle this change
     }

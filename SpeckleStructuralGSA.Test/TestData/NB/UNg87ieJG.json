@@ -1,0 +1,274 @@
+{
+	"success": true,
+  "resources": [
+    {
+      "private": false,
+      "canRead": [],
+      "canWrite": [],
+      "anonymousComments": false,
+      "comments": [],
+      "name": "Alignment One",
+      "geometryHash": null,
+      "hash": "1549418625ae7df33ca48092cc6ad035",
+      "applicationId": "AL1",
+      "properties": {
+        "structural": {
+          "nodes": [
+            {
+              "type": "StructuralBridgeAlignmentNode",
+              "chainage": 0,
+              "curvature": "Straight",
+              "radius": 0,
+              "hash": "655ed0688f8d4da881d5a39d8a21d846",
+              "applicationId": "gh/655ed0688f8d4da881d5a39d8a21d846"
+            },
+            {
+              "type": "StructuralBridgeAlignmentNode",
+              "chainage": 40,
+              "curvature": "LeftCurve",
+              "radius": 100,
+              "hash": "33679424f184c6dfb126805dc85e84f9",
+              "applicationId": "gh/33679424f184c6dfb126805dc85e84f9"
+            },
+            {
+              "type": "StructuralBridgeAlignmentNode",
+              "chainage": 80,
+              "curvature": "LeftCurve",
+              "radius": 100,
+              "hash": "1cfc6eed9a2d6c382824c905417ac1bf",
+              "applicationId": "gh/1cfc6eed9a2d6c382824c905417ac1bf"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [],
+      "ancestors": [],
+      "_id": "5d953979fb0e35208ce45fa1",
+      "plane": {
+        "xdir": {
+          "type": "Vector",
+          "value": [
+            1,
+            0,
+            0
+          ],
+          "hash": "e80c77b8af81536d423bd621f3d50ece"
+        },
+        "ydir": {
+          "type": "Vector",
+          "value": [
+            0,
+            1,
+            0
+          ],
+          "hash": "6c4b67e6449c76f35ab0b81ba2cbb107"
+        },
+        "applicationId": "gh/056fc03d379070ee829e0820ae153203",
+        "hash": "056fc03d379070ee829e0820ae153203",
+        "origin": {
+          "type": "Point",
+          "value": [
+            0,
+            0,
+            20
+          ],
+          "hash": "78fb74c82928b220ee2aeee5e48e86f7"
+        },
+        "type": "Plane"
+      },
+      "type": "StructuralBridgeAlignment",
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2019-10-02T23:57:45.893Z",
+      "updatedAt": "2019-10-02T23:57:45.893Z"
+    },
+    {
+      "private": false,
+      "canRead": [],
+      "canWrite": [],
+      "anonymousComments": false,
+      "comments": [],
+      "name": "Path One",
+      "geometryHash": null,
+      "hash": "ae62546782298ee240dcba1541255690",
+      "applicationId": "gh/ae62546782298ee240dcba1541255690",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [],
+      "ancestors": [],
+      "_id": "5d4409e9f659bb2a09e7bff9",
+      "type": "StructuralBridgePath",
+      "alignmentRef": "AL1",
+      "pathType": "Carriage1Way",
+      "offsets": [
+        -6.8,
+        6.8
+      ],
+      "gauge": 0,
+      "leftRailFactor": 0,
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2019-08-02T10:01:13.786Z",
+      "updatedAt": "2019-08-02T10:01:13.786Z"
+    },
+    {
+      "private": false,
+      "canRead": [],
+      "canWrite": [],
+      "anonymousComments": false,
+      "comments": [],
+      "name": "Path Two",
+      "geometryHash": null,
+      "hash": "1be0944ea0aa85ffb4b9326b0d49debc",
+      "applicationId": "gh/1be0944ea0aa85ffb4b9326b0d49debc",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [],
+      "ancestors": [],
+      "_id": "5d4409e7f659bb2a09e7bff8",
+      "type": "StructuralBridgePath",
+      "alignmentRef": "AL1",
+      "pathType": "Track",
+      "offsets": [
+        0
+      ],
+      "gauge": 1.4,
+      "leftRailFactor": 0,
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2019-08-02T10:01:11.364Z",
+      "updatedAt": "2019-08-02T10:01:11.364Z"
+    },
+    {
+      "private": false,
+      "canRead": [],
+      "canWrite": [],
+      "anonymousComments": false,
+      "comments": [],
+      "name": "Vehicle One",
+      "geometryHash": null,
+      "hash": "6849beac3a786ce17213ba0815de4859",
+      "applicationId": "gh/6849beac3a786ce17213ba0815de4859",
+      "properties": {
+        "structural": {
+          "axles": [
+            {
+              "type": "StructuralBridgeVehicleAxle",
+              "position": 3,
+              "wheelOffset": 2,
+              "leftWheelLoad": 2,
+              "rightWheelLoad": 2,
+              "hash": "5e6bba3ab5a0894005ccb3f10936cb15",
+              "applicationId": "gh/5e6bba3ab5a0894005ccb3f10936cb15"
+            },
+            {
+              "type": "StructuralBridgeVehicleAxle",
+              "position": 6,
+              "wheelOffset": 2,
+              "leftWheelLoad": 2,
+              "rightWheelLoad": 2,
+              "hash": "703864ca53a4df186961fe8e2d7bd8e8",
+              "applicationId": "gh/703864ca53a4df186961fe8e2d7bd8e8"
+            }
+          ]
+        }
+      },
+      "deleted": false,
+      "parent": null,
+      "children": [],
+      "ancestors": [],
+      "_id": "5d440a0f35db773ba174178a",
+      "type": "StructuralBridgeVehicle",
+      "width": 10,
+      "owner": "5cc252a6f659bb2a09e03748",
+      "__v": 0,
+      "createdAt": "2019-08-02T10:01:51.617Z",
+      "updatedAt": "2019-08-02T10:01:51.617Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+
+      ],
+      "canWrite": [
+
+      ],
+      "anonymousComments": false,
+      "comments": [
+
+      ],
+      "name": "Level",
+      "geometryHash": null,
+      "hash": "d267e07d01bde4a766f5fae9dcae63c0",
+      "applicationId": "gsa/GRID_LINE.1_1",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+
+      ],
+      "ancestors": [
+
+      ],
+      "_id": "5efe7fad156713473a8ffb71",
+      "type": "StructuralReferenceLine",
+      "value": [
+        10,
+        0,
+        0,
+        50,
+        0,
+        0
+      ],
+      "owner": "5ca5b384457ac451ab269a4f",
+      "__v": 0,
+      "createdAt": "2020-07-03T00:45:33.487Z",
+      "updatedAt": "2020-07-03T00:45:33.487Z"
+    },
+    {
+      "private": false,
+      "canRead": [
+
+      ],
+      "canWrite": [
+
+      ],
+      "anonymousComments": false,
+      "comments": [
+
+      ],
+      "name": "Angled",
+      "geometryHash": null,
+      "hash": "15638d99d28aeb337368a1e1dfaa408b",
+      "applicationId": "gsa/GRID_LINE.1_2",
+      "properties": null,
+      "deleted": false,
+      "parent": null,
+      "children": [
+
+      ],
+      "ancestors": [
+
+      ],
+      "_id": "5efe7fad156713473a8ffb72",
+      "type": "StructuralReferenceLine",
+      "value": [
+        5,
+        60,
+        0,
+        34.64101615137755,
+        19.999999999999996,
+        0
+      ],
+      "owner": "5ca5b384457ac451ab269a4f",
+      "__v": 0,
+      "createdAt": "2020-07-03T00:45:33.487Z",
+      "updatedAt": "2020-07-03T00:45:33.487Z"
+    }
+  ],
+	"message": "Object list returned. If querying, duplication of objects in list will not be respected."
+}

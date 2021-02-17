@@ -7,14 +7,9 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("LOAD_GRID_AREA.2", new string[] { "POLYLINE.1", "GRID_SURFACE.1", "GRID_PLANE.4", "AXIS.1" }, "elements", true, true, new Type[] { }, new Type[] { typeof(GSALoadCase) })]
-  public class GSAGridAreaLoad : IGSASpeckleContainer
+  [GSAObject("LOAD_GRID_AREA.2", new string[] { "POLYLINE.1", "GRID_SURFACE.1", "GRID_PLANE.4", "AXIS.1" }, "model", true, true, new Type[] { }, new Type[] { typeof(GSALoadCase) })]
+  public class GSAGridAreaLoad : GSABase<Structural2DLoadPanel>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural2DLoadPanel();
-
     public void ParseGWACommand()
     {
       if (this.GWACommand == null)
@@ -22,7 +17,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural2DLoadPanel();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
@@ -35,7 +30,7 @@ namespace SpeckleStructuralGSA
       this.SubGWACommand.Add(gridPlaneRec);
 
       string gwaRec = null;
-      var axis = Helper.Parse0DAxis(gridPlaneAxis, Initialiser.Interface, out gwaRec);
+      var axis = Helper.Parse0DAxis(gridPlaneAxis, out gwaRec);
       if (gwaRec != null)
         this.SubGWACommand.Add(gwaRec);
       double elevation = gridPlaneElevation;
@@ -79,7 +74,7 @@ namespace SpeckleStructuralGSA
       else
       {
         loadAxisId = loadAxisData == "GLOBAL" ? 0 : Convert.ToInt32(loadAxisData);
-        loadAxis = Helper.Parse0DAxis(loadAxisId, Initialiser.Interface, out gwaRec);
+        loadAxis = Helper.Parse0DAxis(loadAxisId, out gwaRec);
         if (gwaRec != null)
           this.SubGWACommand.Add(gwaRec);
       }
@@ -120,151 +115,35 @@ namespace SpeckleStructuralGSA
 
       this.Value = obj;
     }
-
-    public string SetGWACommand()
-    {
-      if (this.Value == null)
-        return "";
-
-      var load = this.Value as Structural2DLoadPanel;
-
-      if (load.ApplicationId == null)
-        return "";
-
-      var keyword = typeof(GSAGridAreaLoad).GetGSAKeyword();
-
-      //There are no GSA types for these yet so use empty strings for the type names for the index
-      var gridSurfaceIndex = Initialiser.Cache.ResolveIndex("GRID_SURFACE.1");
-      var gridPlaneIndex = Initialiser.Cache.ResolveIndex("GRID_PLANE.4");
-
-      var loadCaseKeyword = typeof(GSALoadCase).GetGSAKeyword();
-      var indexResult = Initialiser.Cache.LookupIndex(loadCaseKeyword, load.LoadCaseRef);
-      var loadCaseRef = indexResult ?? Initialiser.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
-
-      if (indexResult == null && load.ApplicationId != null)
-      {
-        if (load.LoadCaseRef == null)
-        {
-          Helper.SafeDisplay("Blank load case references found for these Application IDs:", load.ApplicationId);
-        }
-        else
-        {
-          Helper.SafeDisplay("Load case references not found:", load.ApplicationId + " referencing " + load.LoadCaseRef);
-        }
-      }
-      if (load.Loading == null || load.Loading.Value == null || load.Loading.Value.Count() == 0)
-      {
-        Helper.SafeDisplay("Grid area loads not added to model due to empty loading found:", load.ApplicationId);
-        return "";
-      }
-
-      var axis = Helper.Parse2DAxis(load.Value.ToArray());
-
-      // Calculate elevation
-      var elevation = (load.Value[0] * axis.Normal.Value[0] +
-          load.Value[1] * axis.Normal.Value[1] +
-          load.Value[2] * axis.Normal.Value[2]) /
-          Math.Sqrt(axis.Normal.Value[0] * axis.Normal.Value[0] +
-              axis.Normal.Value[1] * axis.Normal.Value[1] +
-              axis.Normal.Value[2] * axis.Normal.Value[2]);
-
-      // Transform coordinate to new axis
-      var transformed = Helper.MapPointsGlobal2Local(load.Value.ToArray(), axis);
-
-      var ls = new List<string>();
-
-      var direction = new string[3] { "X", "Y", "Z" };
-
-      var gwaCommands = new List<string>();
-
-      
-      Helper.SetAxis(axis, out int planeAxisIndex, out string planeAxisGwa, load.Name);
-      if (planeAxisGwa.Length > 0)
-      {
-        gwaCommands.Add(planeAxisGwa);
-      }
-
-      ls.AddRange(new[] {
-        "SET",
-        "GRID_PLANE.4",
-        gridPlaneIndex.ToString(),
-        load.Name == null || load.Name == "" ? " " : load.Name,
-        "GENERAL", // Type
-        planeAxisIndex.ToString(),
-        elevation.ToString(),
-        "0", // Elevation above
-        "0"}); // Elevation below
-      gwaCommands.Add(string.Join("\t", ls));
-
-      ls.Clear();
-      ls.AddRange(new[] {
-        "SET",
-        "GRID_SURFACE.1",
-        gridSurfaceIndex.ToString(),
-        load.Name == null || load.Name == "" ? " " : load.Name,
-        gridPlaneIndex.ToString(),
-        "2", // Dimension of elements to target
-        "all", // List of elements to target
-        "0.01", // Tolerance
-        "ONE", // Span option
-        "0"}); // Span angle
-      gwaCommands.Add(string.Join("\t", ls));
-
-      for (var i = 0; i < load.Loading.Value.Count(); i++)
-      {
-        if (load.Loading.Value[i] == 0) continue;
-
-        var index = Initialiser.Cache.ResolveIndex(typeof(GSAGridAreaLoad).GetGSAKeyword());
-
-        ls.Clear();
-        var subLs = new List<string>();
-        for (var j = 0; j < transformed.Count(); j += 3)
-        {
-          //The GWA that GSA generates seems to return a rounded number, so do so here
-          subLs.Add("(" + Math.Round(transformed[j],4).ToString() + "," + Math.Round(transformed[j + 1],4).ToString() + ")");
-        }
-
-        ls.AddRange(new string[] { 
-          "SET_AT",
-          index.ToString(),
-          keyword + ":" + Helper.GenerateSID(load),
-          load.Name == null || load.Name == "" ? " " : load.Name,
-          gridSurfaceIndex.ToString(),
-          "POLYGON",
-          "\"" + string.Join(" ", subLs) + "(m)\"",
-          loadCaseRef.ToString(),
-          "GLOBAL",
-          "NO",
-          direction[i],
-          load.Loading.Value[i].ToString() });
-
-        gwaCommands.Add(string.Join("\t", ls));
-      }
-
-      return string.Join("\n", gwaCommands);
-    }
   }
 
   public static partial class Conversions
   {
-    public static string ToNative(this Structural2DLoadPanel load)
-    {
-      return new GSAGridAreaLoad() { Value = load }.SetGWACommand();
-    }
+    //The ToNative() method is in the new schema conversion folder hierarchy
 
     public static SpeckleObject ToSpeckle(this GSAGridAreaLoad dummyObject)
     {
       var newLines = ToSpeckleBase<GSAGridAreaLoad>();
       var loads = new List<GSAGridAreaLoad>();
+      var typeName = dummyObject.GetType().Name;
 
       foreach (var k in newLines.Keys)
       {
         var load = new GSAGridAreaLoad() { GSAId = k, GWACommand = newLines[k] };
-        load.ParseGWACommand();
+        try
+        {
+          load.ParseGWACommand();
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+        }
+
         loads.Add(load);
       }
 
-      Initialiser.GSASenderObjects.AddRange(loads);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(loads);
 
       return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

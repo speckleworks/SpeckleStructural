@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
@@ -7,13 +8,9 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("COMBINATION.1", new string[] { }, "loads", true, true, new Type[] { typeof(GSALoadCase), typeof(GSALoadTask) }, new Type[] { typeof(GSALoadCase), typeof(GSALoadTask) })]
-  public class GSALoadCombo : IGSASpeckleContainer
+  [GSAObject("COMBINATION.1", new string[] { }, "model", true, true, new Type[] { typeof(GSALoadCase), typeof(GSALoadTask) }, new Type[] { typeof(GSALoadCase), typeof(GSALoadTask) })]
+  public class GSALoadCombo : GSABase<StructuralLoadCombo>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralLoadCombo();
 
     public void ParseGWACommand()
     {
@@ -22,7 +19,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralLoadCombo();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
 
@@ -77,15 +74,20 @@ namespace SpeckleStructuralGSA
         return "";
 
       var loadCombo = this.Value as StructuralLoadCombo;
+      if (string.IsNullOrEmpty(loadCombo.ApplicationId))
+      {
+        return "";
+      }
 
       var keyword = typeof(GSALoadCombo).GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(typeof(GSALoadCombo).GetGSAKeyword(), loadCombo.ApplicationId);
+      var index = Initialiser.AppResources.Cache.ResolveIndex(typeof(GSALoadCombo).GetGSAKeyword(), loadCombo.ApplicationId);
 
+      var sid = Helper.GenerateSID(loadCombo);
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + Helper.GenerateSID(loadCombo),
+        keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
         index.ToString(),
         loadCombo.Name == null || loadCombo.Name == "" ? " " : loadCombo.Name
       };
@@ -95,7 +97,7 @@ namespace SpeckleStructuralGSA
       {
         for (var i = 0; i < loadCombo.LoadTaskRefs.Count(); i++)
         {
-          var loadTaskRef = Initialiser.Cache.LookupIndex(typeof(GSALoadTask).GetGSAKeyword(), loadCombo.LoadTaskRefs[i]);
+          var loadTaskRef = Initialiser.AppResources.Cache.LookupIndex(typeof(GSALoadTask).GetGSAKeyword(), loadCombo.LoadTaskRefs[i]);
 
           if (loadTaskRef.HasValue)
           {
@@ -110,7 +112,7 @@ namespace SpeckleStructuralGSA
       {
         for (var i = 0; i < loadCombo.LoadComboRefs.Count(); i++)
         {
-          var loadComboRef = Initialiser.Cache.LookupIndex(typeof(GSALoadTask).GetGSAKeyword(), loadCombo.LoadComboRefs[i]);
+          var loadComboRef = Initialiser.AppResources.Cache.LookupIndex(typeof(GSALoadTask).GetGSAKeyword(), loadCombo.LoadComboRefs[i]);
 
           if (loadComboRef.HasValue)
           {
@@ -134,7 +136,7 @@ namespace SpeckleStructuralGSA
           break;
       }
 
-      return (string.Join("\t", ls));
+      return (string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
     }
   }
 
@@ -148,19 +150,28 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSALoadCombo dummyObject)
     {
       var newLines = ToSpeckleBase<GSALoadCombo>();
+      var typeName = dummyObject.GetType().Name;
+      var loadCombos = new SortedDictionary<int, GSALoadCombo>();
 
-      var loadCombos = new List<GSALoadCombo>();
-
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
       {
-        var combo = new GSALoadCombo() { GWACommand = p };
-        combo.ParseGWACommand();
-        loadCombos.Add(combo);
+        var p = newLines[k];
+        var combo = new GSALoadCombo() { GWACommand = p, GSAId = k };
+        try
+        {
+          combo.ParseGWACommand();
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+        }
+        loadCombos.Add(k, combo);
       }
 
-      Initialiser.GSASenderObjects.AddRange(loadCombos);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(loadCombos.Values.ToList());
 
-      return (loadCombos.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (loadCombos.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

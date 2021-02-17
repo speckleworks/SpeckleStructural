@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using SpeckleCore;
@@ -8,20 +9,18 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("PROP_SPR.3", new string[] { }, "properties", true, true, new Type[] { }, new Type[] { })]
-  public class GSASpringProperty : IGSASpeckleContainer
+  [GSAObject("PROP_SPR.4", new string[] { }, "model", true, true, new Type[] { }, new Type[] { })]
+  public class GSASpringProperty : GSABase<StructuralSpringProperty>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralSpringProperty();
-
     public void ParseGWACommand()
     {
+      // GSA documentation of this GWA command is almost useless
+      // save a GSA file as GWA to learn about it as GSA creates it
+      
       if (this.GWACommand == null)
         return;
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var obj = new StructuralSpringProperty();
 
@@ -31,17 +30,6 @@ namespace SpeckleStructuralGSA
       obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
       counter++; //Skip colour
-      var gsaAxis = pieces[counter++];
-
-      if (gsaAxis == "GLOBAL")
-        obj.Axis = Helper.Parse0DAxis(0, Initialiser.Interface, out var gwaRec);
-      else if (gsaAxis == "VERTICAL")
-        obj.Axis = Helper.Parse0DAxis(-14, Initialiser.Interface, out var gwaRec);
-      else
-      {
-        obj.Axis = Helper.Parse0DAxis(Convert.ToInt32(gsaAxis), Initialiser.Interface, out var gwaRec);
-        this.SubGWACommand.Add(gwaRec);
-      }
 
       var springPropertyType = pieces[counter++];
 
@@ -90,6 +78,7 @@ namespace SpeckleStructuralGSA
           break;
 
         case "general":
+          // Speckle spring currently only supports linear springs
           obj.SpringType = StructuralSpringPropertyType.General;
           counter--;
           for (var i = 0; i < 6; i++)
@@ -110,6 +99,12 @@ namespace SpeckleStructuralGSA
       //Found some extremely small floating point issues so rounding to (arbitrarily-chosen) 4 digits
       obj.DampingRatio = Math.Round(dampingRatio, 4);
 
+      if (!obj.Properties.ContainsKey("structural"))
+      {
+        obj.Properties.Add("structural", new Dictionary<string, object>());
+      }
+      ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeId", this.GSAId.ToString());
+
       this.Value = obj;
     }
 
@@ -126,58 +121,23 @@ namespace SpeckleStructuralGSA
 
       var keyword = destType.GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(keyword, springProp.ApplicationId);
+      var index = Initialiser.AppResources.Cache.ResolveIndex(keyword, springProp.ApplicationId);
 
-      var gwaAxisCommand = "";
       var gwaCommands = new List<string>();
 
-      var axisRef = "GLOBAL";
-
-      if (springProp.Axis == null)
-      {
-        //Default value
-        axisRef = "GLOBAL";
-      }
-      else
-      {
-        if (springProp.Axis.Xdir.Value.SequenceEqual(new double[] { 1, 0, 0 }) &&
-          springProp.Axis.Ydir.Value.SequenceEqual(new double[] { 0, 1, 0 }) &&
-          springProp.Axis.Normal.Value.SequenceEqual(new double[] { 0, 0, 1 }))
-        {
-          axisRef = "GLOBAL";
-        }
-        else if (springProp.Axis.Xdir.Value.SequenceEqual(new double[] { 0, 0, 1 }) &&
-          springProp.Axis.Ydir.Value.SequenceEqual(new double[] { 1, 0, 0 }) &&
-          springProp.Axis.Normal.Value.SequenceEqual(new double[] { 0, 1, 0 }))
-        {
-          axisRef = "VERTICAL";
-        }
-        else
-          try
-          {
-            Helper.SetAxis(springProp.Axis, out var axisIndex, out gwaAxisCommand, springProp.Name);
-            if (gwaAxisCommand.Length > 0)
-            {
-              gwaCommands.Add(gwaAxisCommand);
-              axisRef = axisIndex.ToString();
-            }
-          }
-          catch { axisRef = "GLOBAL"; }
-      }
-
+      var sid = Helper.GenerateSID(springProp);
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + Helper.GenerateSID(springProp),
+        keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
         index.ToString(),
         string.IsNullOrEmpty(springProp.Name) ? "" : springProp.Name,
-        "NO_RGB",
-        axisRef
+        "NO_RGB"
       };
 
       ls.AddRange(SpringTypeCommandPieces(springProp.SpringType, springProp.Stiffness, springProp.DampingRatio ?? 0));
 
-      gwaCommands.Add(string.Join("\t", ls));
+      gwaCommands.Add(string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
 
       return string.Join("\n", gwaCommands);
     }
@@ -239,28 +199,42 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSASpringProperty dummyObject)
     {
       var newLines = ToSpeckleBase<GSASpringProperty>();
+      var typeName = dummyObject.GetType().Name;
 
       var springPropLock = new object();
       //Get all relevant GSA entities in this entire model
-      var springProperties = new List<GSASpringProperty>();
+      var springProperties = new SortedDictionary<int, GSASpringProperty>();
 
-      Parallel.ForEach(newLines.Values, p =>
+#if DEBUG
+      foreach (var k in newLines.Keys)
+#else
+      Parallel.ForEach(newLines.Keys, k =>
+#endif
       {
+        var pPieces = newLines[k].ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
+        var gsaId = pPieces[1];
         try
         {
-          var springProperty = new GSASpringProperty() { GWACommand = p };
+          var springProperty = new GSASpringProperty() { GWACommand = newLines[k] };
           springProperty.ParseGWACommand();
           lock (springPropLock)
           {
-            springProperties.Add(springProperty);
+            springProperties.Add(k, springProperty);
           }
         }
-        catch { }
-      });
+        catch (Exception ex)
+        {
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, gsaId);
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, gsaId);
+        }
+      }
+#if !DEBUG
+      );
+#endif
 
-      Initialiser.GSASenderObjects.AddRange(springProperties);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(springProperties.Values.ToList());
 
-      return (springProperties.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (springProperties.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
@@ -7,14 +8,9 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("LOAD_TITLE.2", new string[] { }, "loads", true, true, new Type[] { }, new Type[] { })]
-  public class GSALoadCase : IGSASpeckleContainer
+  [GSAObject("LOAD_TITLE.2", new string[] { }, "model", true, true, new Type[] { }, new Type[] { })]
+  public class GSALoadCase : GSABase<StructuralLoadCase>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralLoadCase();
-
     public void ParseGWACommand()
     {
       if (this.GWACommand == null)
@@ -22,7 +18,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralLoadCase();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
 
@@ -33,6 +29,7 @@ namespace SpeckleStructuralGSA
       var type = pieces[counter++];
       switch (type)
       {
+        case "LC_PERM_SELF":
         case "DEAD":
           obj.CaseType = StructuralLoadCaseType.Dead;
           break;
@@ -63,88 +60,37 @@ namespace SpeckleStructuralGSA
 
       this.Value = obj;
     }
-
-    public string SetGWACommand()
-    {
-      if (this.Value == null)
-        return "";
-
-      var loadCase = this.Value as StructuralLoadCase;
-      if (loadCase.ApplicationId == null)
-      {
-        return "";
-      }
-
-      var keyword = typeof(GSALoadCase).GetGSAKeyword();
-
-      var index = Initialiser.Cache.ResolveIndex(typeof(GSALoadCase).GetGSAKeyword(), loadCase.ApplicationId);
-
-      var ls = new List<string>
-      {
-        "SET",
-        keyword + ":" + Helper.GenerateSID(loadCase),
-        index.ToString(),
-        loadCase.Name == null || loadCase.Name == "" ? " " : loadCase.Name
-      };
-      switch (loadCase.CaseType)
-      {
-        case StructuralLoadCaseType.Dead:
-          ls.Add("DEAD");
-          break;
-        case StructuralLoadCaseType.Live:
-          ls.Add("LC_VAR_IMP");
-          break;
-        case StructuralLoadCaseType.Wind:
-          ls.Add("WIND");
-          break;
-        case StructuralLoadCaseType.Snow:
-          ls.Add("SNOW");
-          break;
-        case StructuralLoadCaseType.Earthquake:
-          ls.Add("SEISMIC");
-          break;
-        case StructuralLoadCaseType.Soil:
-          ls.Add("LC_PERM_SOIL");
-          break;
-        case StructuralLoadCaseType.Thermal:
-          ls.Add("LC_VAR_TEMP");
-          break;
-        default:
-          ls.Add("LC_UNDEF");
-          break;
-      }
-      ls.Add("1"); // Source
-      ls.Add("~"); // Category
-      ls.Add("NONE"); // Direction
-      ls.Add("INC_BOTH"); // Include
-
-      return (string.Join("\t", ls));
-    }
   }
 
   public static partial class Conversions
   {
-    public static string ToNative(this StructuralLoadCase load)
-    {
-      return new GSALoadCase() { Value = load }.SetGWACommand();
-    }
+    //The ToNative() method is in the new schema conversion folder hierarchy
 
     public static SpeckleObject ToSpeckle(this GSALoadCase dummyObject)
     {
       var newLines = ToSpeckleBase<GSALoadCase>();
+      var typeName = dummyObject.GetType().Name;
+      var loadCases = new SortedDictionary<int, GSALoadCase>();
 
-      var loadCases = new List<GSALoadCase>();
-
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
       {
-        var loadCase = new GSALoadCase() { GWACommand = p };
-        loadCase.ParseGWACommand();
-        loadCases.Add(loadCase);
+        var p = newLines[k];
+        var loadCase = new GSALoadCase() { GWACommand = p, GSAId = k };
+        try
+        {
+          loadCase.ParseGWACommand();
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+        }
+        loadCases.Add(k, loadCase);
       }
 
-      Initialiser.GSASenderObjects.AddRange(loadCases);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(loadCases.Values.ToList());
 
-      return (loadCases.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (loadCases.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

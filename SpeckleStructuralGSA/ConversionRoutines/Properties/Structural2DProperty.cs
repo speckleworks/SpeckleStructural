@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using SpeckleCore;
@@ -8,15 +9,10 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("PROP_2D.5", new string[] { "MAT_STEEL.3", "MAT_CONCRETE.16" }, "properties", true, true, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) }, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) })]
-  public class GSA2DProperty : IGSASpeckleContainer
+  [GSAObject("PROP_2D.7", new string[] { "MAT_STEEL.3", "MAT_CONCRETE.17" }, "model", true, true, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) }, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) })]
+  public class GSA2DProperty : GSABase<Structural2DProperty>
   {
     public bool IsAxisLocal;
-
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural2DProperty();
 
     public void ParseGWACommand(List<GSAMaterialSteel> steels, List<GSAMaterialConcrete> concretes)
     {
@@ -25,7 +21,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural2DProperty();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
@@ -58,14 +54,11 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      counter++; // Analysis material
-      obj.Thickness = Convert.ToDouble(pieces[counter++]);
+      counter++; // design property
+      obj.Thickness = Convert.ToDouble(pieces[counter++]); // version 5 and 6 of this command are meant to include 'profile' but it does not yet seem functional and so only thickness is recorded
 
       switch (pieces[counter++])
       {
-        case "CENTROID":
-          obj.ReferenceSurface = Structural2DPropertyReferenceSurface.Middle;
-          break;
         case "TOP_CENTRE":
           obj.ReferenceSurface = Structural2DPropertyReferenceSurface.Top;
           break;
@@ -78,6 +71,12 @@ namespace SpeckleStructuralGSA
       }
       // Ignore the rest
 
+      if (!obj.Properties.ContainsKey("structural"))
+      {
+        obj.Properties.Add("structural", new Dictionary<string, object>());
+      }
+      ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeId", this.GSAId.ToString());
+
       this.Value = obj;
     }
 
@@ -87,16 +86,18 @@ namespace SpeckleStructuralGSA
         return "";
 
       var prop = this.Value as Structural2DProperty;
-      if (prop.ReferenceSurface == Structural2DPropertyReferenceSurface.NotSet)
+      if (string.IsNullOrEmpty(prop.ApplicationId))
+      {
         return "";
+      }
 
       var keyword = typeof(GSA2DProperty).GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(typeof(GSA2DProperty).GetGSAKeyword(), prop.ApplicationId);
+      var index = Initialiser.AppResources.Cache.ResolveIndex(typeof(GSA2DProperty).GetGSAKeyword(), prop.ApplicationId);
       var materialRef = 1;  //Default to 1 even if there is no such record - better for GSA than a default of 0
       var materialType = "UNDEF";
 
-      var res = Initialiser.Cache.LookupIndex(typeof(GSAMaterialSteel).GetGSAKeyword(), prop.MaterialRef);
+      var res = Initialiser.AppResources.Cache.LookupIndex(typeof(GSAMaterialSteel).GetGSAKeyword(), prop.MaterialRef);
       if (res.HasValue)
       {
         materialRef = res.Value;
@@ -104,7 +105,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        res = Initialiser.Cache.LookupIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), prop.MaterialRef);
+        res = Initialiser.AppResources.Cache.LookupIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), prop.MaterialRef);
         if (res.HasValue)
         {
           materialRef = res.Value;
@@ -112,10 +113,11 @@ namespace SpeckleStructuralGSA
         }
       }
 
+      var sid = Helper.GenerateSID(prop);
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + Helper.GenerateSID(prop),
+        keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
         index.ToString(),
         prop.Name == null || prop.Name == "" ? " " : prop.Name,
         "NO_RGB",
@@ -130,9 +132,6 @@ namespace SpeckleStructuralGSA
 
       switch (prop.ReferenceSurface)
       {
-        case Structural2DPropertyReferenceSurface.Middle:
-          ls.Add("CENTROID");
-          break;
         case Structural2DPropertyReferenceSurface.Top:
           ls.Add("TOP_CENTRE");
           break;
@@ -149,9 +148,9 @@ namespace SpeckleStructuralGSA
       ls.Add("100%"); // Shear modifier
       ls.Add("100%"); // Inplane modifier
       ls.Add("100%"); // Weight modifier
-      ls.Add("NO_ENV"); // Environmental data
+      //ls.Add("NO_ENV"); // Environmental data
 
-      return (string.Join("\t", ls));
+      return (string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
     }
   }
 
@@ -165,29 +164,35 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSA2DProperty dummyObject)
     {
       var newLines = ToSpeckleBase<GSA2DProperty>();
-
+      var typeName = dummyObject.GetType().Name;
       var propsLock = new object();
-      var props = new List<GSA2DProperty>();
-      var steels = Initialiser.GSASenderObjects.Get<GSAMaterialSteel>();
-      var concretes = Initialiser.GSASenderObjects.Get<GSAMaterialConcrete>();
+      var props = new SortedDictionary<int, GSA2DProperty>();
+      var steels = Initialiser.GsaKit.GSASenderObjects.Get<GSAMaterialSteel>();
+      var concretes = Initialiser.GsaKit.GSASenderObjects.Get<GSAMaterialConcrete>();
 
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
       {
+        var pPieces = newLines[k].ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
+        var gsaId = pPieces[1];
         try
         {
-          var prop = new GSA2DProperty() { GWACommand = p };
+          var prop = new GSA2DProperty() { GWACommand = newLines[k] };
           prop.ParseGWACommand(steels, concretes);
           lock (propsLock)
           {
-            props.Add(prop);
+            props.Add(k, prop);
           }
         }
-        catch { }
+        catch (Exception ex)
+        {
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, gsaId);
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, gsaId);
+        }
       });
 
-      Initialiser.GSASenderObjects.AddRange(props);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(props.Values.ToList());
 
-      return (props.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (props.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleGSAProxy;
 
@@ -10,8 +11,9 @@ namespace SpeckleStructuralGSA.Test
   {
     protected string TestDataDirectory;
 
-    protected GSAProxy GSAInterfacer;
-    protected GSACache GSACache;
+    //protected GSAProxy GSAInterfacer;
+    //protected GSACache GSACache;
+    protected IGSAAppResources appResources;
 
     //This should match the private member in GSAInterfacer
     protected const string SID_APPID_TAG = "speckle_app_id";
@@ -19,6 +21,7 @@ namespace SpeckleStructuralGSA.Test
     protected ProcessorBase(string directory)
     {
       TestDataDirectory = directory;
+      appResources = new MockGSAApp();
     }
 
     public List<string> GetKeywords(GSATargetLayer layer)
@@ -29,7 +32,7 @@ namespace SpeckleStructuralGSA.Test
 
       // Grab all GSA related object
       var ass = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "SpeckleStructuralGSA");
-      var objTypes = ass.GetTypes().Where(t => interfaceType.IsAssignableFrom(t) && t != interfaceType).ToList();
+      var objTypes = ass.GetTypes().Where(t => interfaceType.IsAssignableFrom(t) && t != interfaceType && !t.IsAbstract).ToList();
 
       var TypePrerequisites = new Dictionary<Type, List<Type>>();
 
@@ -49,9 +52,9 @@ namespace SpeckleStructuralGSA.Test
           keywords.Add(typeKeyword);
         }
         var subtypeKeywords = t.GetSubGSAKeyword();
-        if (subtypeKeywords.Count() > 0)
+        if (subtypeKeywords != null && subtypeKeywords.Count() > 0)
         {
-          for (int i = 0; i < subtypeKeywords.Count(); i++)
+          for (var i = 0; i < subtypeKeywords.Count(); i++)
           {
             if (!keywords.Contains(subtypeKeywords[i]))
             {

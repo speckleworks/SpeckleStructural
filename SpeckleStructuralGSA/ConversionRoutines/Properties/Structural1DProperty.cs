@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -11,14 +12,9 @@ using SQLite;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("PROP_SEC.3", new string[] { "MAT_STEEL.3", "MAT_CONCRETE.16" }, "properties", true, true, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) }, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) })]
-  public class GSA1DProperty : IGSASpeckleContainer
+  [GSAObject("PROP_SEC.3", new string[] { "MAT_STEEL.3", "MAT_CONCRETE.17" }, "model", true, true, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) }, new Type[] { typeof(GSAMaterialSteel), typeof(GSAMaterialConcrete) })]
+  public class GSA1DProperty : GSABase<Structural1DProperty>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new Structural1DProperty();
-
     public void ParseGWACommand(string GSAUnits, List<GSAMaterialSteel> steels, List<GSAMaterialConcrete> concretes)
     {
       if (this.GWACommand == null)
@@ -26,7 +22,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural1DProperty();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
       this.GSAId = Convert.ToInt32(pieces[counter++]);
@@ -62,6 +58,13 @@ namespace SpeckleStructuralGSA
 
       obj = SetDesc(obj, shapeDesc, GSAUnits);
 
+      if (!obj.Properties.ContainsKey("structural"))
+      {
+        obj.Properties.Add("structural", new Dictionary<string, object>());
+      }
+      ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeId", this.GSAId.ToString());
+      ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeSectionProfile", shapeDesc);
+
       this.Value = obj;
     }
 
@@ -72,16 +75,17 @@ namespace SpeckleStructuralGSA
 
       var prop = this.Value as Structural1DProperty;
 
-      if (prop.Profile == null && string.IsNullOrEmpty(prop.CatalogueName))
+      if (prop.ApplicationId == null)
+      //if (prop.Profile == null && string.IsNullOrEmpty(prop.CatalogueName))
         return "";
 
       var keyword = typeof(GSA1DProperty).GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(typeof(GSA1DProperty).GetGSAKeyword(), prop.ApplicationId);
+      var index = Initialiser.AppResources.Cache.ResolveIndex(typeof(GSA1DProperty).GetGSAKeyword(), prop.ApplicationId);
       var materialRef = 0;
       var materialType = "UNDEF";
 
-      var res = Initialiser.Cache.LookupIndex(typeof(GSAMaterialSteel).GetGSAKeyword(), prop.MaterialRef);
+      var res = Initialiser.AppResources.Cache.LookupIndex(typeof(GSAMaterialSteel).GetGSAKeyword(), prop.MaterialRef);
       if (res.HasValue)
       {
         materialRef = res.Value;
@@ -89,7 +93,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        res = Initialiser.Cache.LookupIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), prop.MaterialRef);
+        res = Initialiser.AppResources.Cache.LookupIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), prop.MaterialRef);
         if (res.HasValue)
         {
           materialRef = res.Value;
@@ -103,10 +107,11 @@ namespace SpeckleStructuralGSA
         materialType = "GENERIC";
       }
 
+      var sid = Helper.GenerateSID(prop);
       var ls = new List<string>
       {
         "SET",
-        keyword + ":" + Helper.GenerateSID(prop),
+        keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
         index.ToString(),
         prop.Name == null || prop.Name == "" ? " " : prop.Name,
         "NO_RGB",
@@ -120,7 +125,7 @@ namespace SpeckleStructuralGSA
         "0" //this needs review
       };
 
-      return (string.Join("\t", ls));
+      return (string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
     }
 
     private Structural1DProperty SetDesc(Structural1DProperty prop, string desc, string gsaUnit)
@@ -371,7 +376,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        // TODO: IMPLEMENT ALL SECTIONS
+        Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, "1D section profile string (" + type + ") is not supported", prop.ApplicationId);  // TODO: IMPLEMENT ALL SECTIONS
       }
 
       return prop;
@@ -544,7 +549,7 @@ namespace SpeckleStructuralGSA
     {
       var pieces = description.ListSplit("%");
 
-      var DbPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ProgramFiles) + @"\Oasys\GSA 10.0\sectlib.db3";
+      var DbPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ProgramFiles) + @"\Oasys\GSA 10.1\sectlib.db3";
 
       try
       {
@@ -625,7 +630,7 @@ namespace SpeckleStructuralGSA
     /// <returns>GSA section description or null if error.</returns>
     public string GetGSACategorySection(string name)
     {
-      var DbPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ProgramFiles) + @"\Oasys\GSA 10.0\sectlib.db3";
+      var DbPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ProgramFiles) + @"\Oasys\GSA 10.1\sectlib.db3";
 
       try
       {
@@ -708,35 +713,41 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this Structural1DProperty prop)
     {
-      return new GSA1DProperty() { Value = prop }.SetGWACommand(Initialiser.Settings.Units);
+      return new GSA1DProperty() { Value = prop }.SetGWACommand(Initialiser.AppResources.Settings.Units);
     }
 
     public static SpeckleObject ToSpeckle(this GSA1DProperty dummyObject)
     {
       var newLines = ToSpeckleBase<GSA1DProperty>();
-
+      var typeName = dummyObject.GetType().Name;
       var propsLock = new object();
-      var props = new List<GSA1DProperty>();
-      var steels = Initialiser.GSASenderObjects.Get<GSAMaterialSteel>();      
-      var concretes = Initialiser.GSASenderObjects.Get<GSAMaterialConcrete>();
+      var props = new SortedDictionary<int, GSA1DProperty>();
+      var steels = Initialiser.GsaKit.GSASenderObjects.Get<GSAMaterialSteel>();      
+      var concretes = Initialiser.GsaKit.GSASenderObjects.Get<GSAMaterialConcrete>();
 
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
       {
+        var pPieces = newLines[k].ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
+        var gsaId = pPieces[1];
         try
         {
-          var prop = new GSA1DProperty() { GWACommand = p };
-          prop.ParseGWACommand(Initialiser.Settings.Units, steels, concretes);
+          var prop = new GSA1DProperty() { GWACommand = newLines[k] };
+          prop.ParseGWACommand(Initialiser.AppResources.Settings.Units, steels, concretes);
           lock (propsLock)
           {
-            props.Add(prop);
+            props.Add(k, prop);
           }
         }
-        catch { }
+        catch (Exception ex)
+        {
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, gsaId);
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, gsaId);
+        }
       });
 
-      Initialiser.GSASenderObjects.AddRange(props);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(props.Values.ToList());
 
-      return (props.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (props.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

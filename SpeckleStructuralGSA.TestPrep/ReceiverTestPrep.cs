@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System.IO;
+using Newtonsoft.Json;
 using SpeckleGSAInterfaces;
-using SpeckleGSAProxy;
 using SpeckleStructuralGSA.Test;
 
 namespace SpeckleStructuralGSA.TestPrep
@@ -11,26 +11,20 @@ namespace SpeckleStructuralGSA.TestPrep
 
     public void SetupContext()
     {
-      gsaInterfacer = new GSAProxy();
-      gsaCache = new GSACache();
-
-      Initialiser.Cache = gsaCache;
-      Initialiser.Interface = gsaInterfacer;
-      Initialiser.Settings = new Settings();
-      Initialiser.AppUI = new SpeckleAppUI();
+      Initialiser.AppResources = new MockGSAApp();
     }
 
-    public bool SetUpReceptionTestData(string[] savedJsonFileNames, string outputGWAFileName, GSATargetLayer layer)
+    public bool SetUpReceptionTestData(string[] savedJsonFileNames, string outputGWAFileName, GSATargetLayer layer, string subdir)
     {
-      return PrepareReceptionTestData(savedJsonFileNames, outputGWAFileName, layer);
+      return PrepareReceptionTestData(savedJsonFileNames, outputGWAFileName, layer, subdir);
     }
 
-    private bool PrepareReceptionTestData(string[] savedJsonFileNames, string outputGWAFileName, GSATargetLayer layer)
+    private bool PrepareReceptionTestData(string[] savedJsonFileNames, string outputGWAFileName, GSATargetLayer layer, string subdir)
     {
       var mockGsaCom = SetupMockGsaCom();
-      gsaInterfacer.OpenFile("", false, mockGsaCom.Object);
+      Initialiser.AppResources.Proxy.OpenFile("", false, mockGsaCom.Object);
 
-      var receiverProcessor = new ReceiverProcessor(TestDataDirectory, gsaInterfacer, gsaCache, layer);
+      var receiverProcessor = new ReceiverProcessor(Path.Combine(TestDataDirectory, subdir), Initialiser.AppResources, layer);
 
       //Run conversion to GWA keywords
       receiverProcessor.JsonSpeckleStreamsToGwaRecords(savedJsonFileNames, out var gwaRecords, layer);
@@ -39,7 +33,7 @@ namespace SpeckleStructuralGSA.TestPrep
       var jsonToWrite = JsonConvert.SerializeObject(gwaRecords, Formatting.Indented, jsonSettings);
 
       //Save JSON file
-      Test.Helper.WriteFile(jsonToWrite, outputGWAFileName, TestDataDirectory);
+      Test.Helper.WriteFile(jsonToWrite, outputGWAFileName, Path.Combine(TestDataDirectory, subdir));
 
       return true;
     }

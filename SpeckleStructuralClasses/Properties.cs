@@ -158,6 +158,41 @@ namespace SpeckleStructuralClasses
   }
 
   [Serializable]
+  public partial class Structural1DPropertyExplicit : SpeckleObject, IStructural
+  {
+    public override string Type { get => "Structural1DPropertyExplicit"; }
+
+    /// <summary>Application ID of StructuralMaterial.</summary>
+    [JsonProperty("materialRef", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public string MaterialRef { get; set; }
+
+    /// <summary>Thickness of the section if hollow.</summary>
+    [JsonProperty("area", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public double? Area { get; set; }
+
+    /// <summary>Thickness of the section if hollow.</summary>
+    [JsonProperty("iyy", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public double? Iyy { get; set; }
+
+    /// <summary>Thickness of the section if hollow.</summary>
+    [JsonProperty("izz", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public double? Izz { get; set; }
+
+    /// <summary>Thickness of the section if hollow.</summary>
+    [JsonProperty("j", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public double? J { get; set; }
+
+    /// <summary>Thickness of the section if hollow.</summary>
+    [JsonProperty("ky", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public double? Ky { get; set; }
+
+    /// <summary>Thickness of the section if hollow.</summary>
+    [JsonProperty("kz", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public double? Kz { get; set; }
+
+  }
+
+  [Serializable]
   public partial class Structural2DProperty : SpeckleObject, IStructural
   {
     public override string Type { get => "Structural2DProperty"; }

@@ -173,4 +173,32 @@ namespace SpeckleStructuralClasses
       this.GenerateHash();
     }
   }
+
+  public partial class StructuralReferenceLine
+  {
+    public StructuralReferenceLine() { }
+
+    public StructuralReferenceLine(double[] value, string applicationId = null, Dictionary<string, object> properties = null)
+    {
+      if (properties != null)
+      {
+        this.Properties = properties;
+      }
+      this.ApplicationId = applicationId;
+      this.Value = value.ToList();
+
+      GenerateHash();
+    }
+
+    public override void Scale(double factor)
+    {
+      for (var i = 0; i < Value.Count(); i++)
+      {
+        Value[i] *= factor;
+      }
+
+      Helper.ScaleProperties(Properties, factor);
+      GenerateHash();
+    }
+  }
 }

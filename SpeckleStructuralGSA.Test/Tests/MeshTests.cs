@@ -10,7 +10,7 @@ using SpeckleGSAProxy;
 using SpeckleStructuralClasses;
 using MathNet.Spatial;
 using MathNet.Spatial.Euclidean;
-using g3;
+using System.IO;
 
 namespace SpeckleStructuralGSA.Test
 {
@@ -25,29 +25,31 @@ namespace SpeckleStructuralGSA.Test
       //This uses the installed SpeckleKits - when SpeckleStructural is built, the built files are copied into the 
       // %LocalAppData%\SpeckleKits directory, so therefore this project doesn't need to reference the projects within in this solution
       SpeckleInitializer.Initialize();
-      gsaInterfacer = new GSAProxy();
-      gsaCache = new GSACache();
+      Initialiser.AppResources = new MockGSAApp(proxy: new GSAProxy());
+      //gsaInterfacer = new GSAProxy();
+      //gsaCache = new GSACache();
 
-      Initialiser.Cache = gsaCache;
-      Initialiser.Interface = gsaInterfacer;
-      Initialiser.Settings = new Settings();
+      //Initialiser.Instance.Cache = gsaCache;
+      //Initialiser.Instance.Interface = gsaInterfacer;
+      //Initialiser.Instance.Settings = new MockSettings();
+      //Initialiser.Instance.AppUI = new SpeckleAppUI();
     }
 
     [SetUp]
     public void SetUp()
     {
-      gsaCache.Clear();
+      //gsaCache.Clear();
 
       //Clear out all sender objects that might be there from the last test preparation
-      Initialiser.GSASenderObjects.Clear();
+      Initialiser.GsaKit.GSASenderObjects.Clear();
     }
 
     [Test]
     public void MeshTest()
     {
-      gsaInterfacer.OpenFile(Helper.ResolveFullPath("sjc.gwb", TestDataDirectory));
+      Initialiser.AppResources.Proxy.OpenFile(Path.Combine(TestDataDirectory, "sjc.gwb"));
 
-      var data = gsaInterfacer.GetGwaData(new[] { "NODE.2", "MEMB.7" }, false);
+      var data = Initialiser.AppResources.Proxy.GetGwaData(new[] { "NODE.2", "MEMB.7" }, false);
       Assert.IsNotNull(data);
       Assert.Greater(data.Count(), 0);
 
@@ -56,12 +58,14 @@ namespace SpeckleStructuralGSA.Test
       //The ToSpeckle methods use the cache, so they need to be inserted here
       for (int i = 0; i < data.Count(); i++)
       {
-        gsaCache.Upsert(
+        Initialiser.AppResources.Cache.Upsert(
           data[i].Keyword,
           data[i].Index,
           data[i].GwaWithoutSet,
           //This needs to be revised as this logic is in the kit too
-          applicationId: (string.IsNullOrEmpty(data[i].ApplicationId)) ? ("gsa/" + data[i].Keyword + "_" + data[i].Index.ToString()) : data[i].ApplicationId,
+          applicationId: (string.IsNullOrEmpty(data[i].ApplicationId))
+            ? SpeckleStructuralClasses.Helper.CreateChildApplicationId(data[i].Index, SpeckleStructuralGSA.Helper.GetApplicationId(data[i].Keyword, data[i].Index)) 
+            : data[i].ApplicationId,
           gwaSetCommandType: data[i].GwaSetType,
           streamId: data[i].StreamId
           );
@@ -73,10 +77,8 @@ namespace SpeckleStructuralGSA.Test
       dummy = Activator.CreateInstance(typeof(GSA2DMember));
       retObject = Conversions.ToSpeckle((GSA2DMember)dummy);
 
-      var meshes = Initialiser.GSASenderObjects.Get<GSA2DMember>();
+      var meshes = Initialiser.GsaKit.GSASenderObjects.Get<GSA2DMember>();
       Assert.AreEqual(50, meshes.Count);
-
-      //var mesh359 = meshes.FirstOrDefault(m => ((Structural2DElementMesh)m.Value).ApplicationId == "gh/433bc42d96bf273a2629bf0495e9b004");
 
       var noFaceMeshes = meshes.Where(m => ((Structural2DElementMesh)m.Value).Faces == null || ((Structural2DElementMesh)m.Value).Faces.Count() == 0).ToList();
       Assert.AreEqual(0, noFaceMeshes.Count());
@@ -85,7 +87,7 @@ namespace SpeckleStructuralGSA.Test
     [OneTimeTearDown]
     public void TearDown()
     {
-      gsaInterfacer.Close();
+      Initialiser.AppResources.Proxy.Close();
     }
   }
 }

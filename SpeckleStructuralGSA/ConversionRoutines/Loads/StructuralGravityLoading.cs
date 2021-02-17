@@ -7,30 +7,29 @@ using System.Linq;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("LOAD_GRAVITY.2", new string[] { }, "loads", true, true, new Type[] { typeof(GSALoadCase) }, new Type[] { typeof(GSALoadCase) })]
-  public class GSAGravityLoading : IGSASpeckleContainer
+  [GSAObject("LOAD_GRAVITY.3", new string[] { }, "model", true, true, new Type[] { typeof(GSALoadCase) }, new Type[] { typeof(GSALoadCase) })]
+  public class GSAGravityLoading : GSABase<StructuralGravityLoading>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralGravityLoading();
-
     public void ParseGWACommand()
     {
+      // LOAD_GRAVITY.3 | name | elemlist | nodelist | case | x | y | z
+
       if (this.GWACommand == null)
         return;
 
       var obj = new StructuralGravityLoading();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
-      obj.Name = pieces[counter++].Trim(new char[] { '"' });
+      obj.Name = pieces[counter++].Trim(new char[] { '"' }); // name
+      obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
+      counter++; // elemlist - Skip elements - assumed to always be "all" at this point in time
+      counter++; // nodelist - also skipped
 
-      counter++; // Skip elements - assumed to always be "all" at this point int time
+      obj.LoadCaseRef = Helper.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++])); // case
 
-      obj.LoadCaseRef = Helper.GetApplicationId(typeof(GSALoadCase).GetGSAKeyword(), Convert.ToInt32(pieces[counter++]));
-
+      // x | y| z
       var vector = new double[3];
       for (var i = 0; i < 3; i++)
         double.TryParse(pieces[counter++], out vector[i]);
@@ -53,8 +52,8 @@ namespace SpeckleStructuralGSA
       var keyword = typeof(GSAGravityLoading).GetGSAKeyword();
 
       var loadCaseKeyword = typeof(GSALoadCase).GetGSAKeyword();
-      var indexResult = Initialiser.Cache.LookupIndex(loadCaseKeyword, load.LoadCaseRef);
-      var loadCaseRef = indexResult ?? Initialiser.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
+      var indexResult = Initialiser.AppResources.Cache.LookupIndex(loadCaseKeyword, load.LoadCaseRef);
+      var loadCaseRef = indexResult ?? Initialiser.AppResources.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
 
       if (indexResult == null && load.ApplicationId != null)
       {
@@ -68,14 +67,16 @@ namespace SpeckleStructuralGSA
         }
       }
 
-      var index = Initialiser.Cache.ResolveIndex(typeof(GSAGravityLoading).GetGSAKeyword());
+      var index = Initialiser.AppResources.Cache.ResolveIndex(typeof(GSAGravityLoading).GetGSAKeyword());
 
+      var sid = Helper.GenerateSID(load);
       var ls = new List<string>
         {
           "SET_AT",
           index.ToString(),
-          keyword + ":" + Helper.GenerateSID(load),
+          keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
           string.IsNullOrEmpty(load.Name) ? "" : load.Name,
+          "all",
           "all",
           loadCaseRef.ToString(),
           load.GravityFactors.Value[0].ToString(),
@@ -83,7 +84,7 @@ namespace SpeckleStructuralGSA
           load.GravityFactors.Value[2].ToString(),
         };
 
-      return (string.Join("\t", ls));
+      return (string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
     }
   }
 
@@ -98,17 +99,26 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSAGravityLoading dummyObject)
     {
       var newLines = ToSpeckleBase<GSAGravityLoading>();
-
+      var typeName = dummyObject.GetType().Name;
       var loads = new List<GSAGravityLoading>();
 
-      foreach (var p in newLines.Values)
+      foreach (var k in newLines.Keys)
       {
-        var load = new GSAGravityLoading() { GWACommand = p };
-        load.ParseGWACommand();
+        var p = newLines[k];
+        var load = new GSAGravityLoading() { GWACommand = p, GSAId = k };
+        try
+        {
+          load.ParseGWACommand();
+        }
+        catch (Exception ex)
+        {
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+        }
         loads.Add(load);
       }
 
-      Initialiser.GSASenderObjects.AddRange(loads);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(loads);
 
       return (loads.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
     }

@@ -21,6 +21,7 @@ namespace SpeckleStructuralGSA.Test
     [TestCase("OLD_TxSpeckleObjectsNotEmbedded.json", "TxSpeckleObjectsNotEmbedded.json")]
     [TestCase("OLD_TxSpeckleObjectsEmbedded.json", "TxSpeckleObjectsEmbedded.json")]
     [TestCase("OLD_TxSpeckleObjectsResultsOnly.json", "TxSpeckleObjectsResultsOnly.json")]
+    [TestCase("OLD_TxSpeckleObjectsDesignLayer.json", "TxSpeckleObjectsDesignLayer.json")]
     public void CompareFiles(string fn1, string fn2)
     {
       Debug.WriteLine("----------------");
@@ -60,7 +61,11 @@ namespace SpeckleStructuralGSA.Test
       var ret = new Dictionary<SpeckleObject, List<SpeckleObject>>();
       var lockObj = new object();
       var debugLock = new object();
+#if DEBUG
+      foreach (var o in d1.Keys)
+#else
       Parallel.ForEach(d1.Keys, o =>
+#endif
       {
         var j = d1[o];
         var matchingExpected = d2.Where(e => JsonCompareAreEqual(e.Value, j));
@@ -92,7 +97,14 @@ namespace SpeckleStructuralGSA.Test
           }
           else
           {
-            var nearest = string.IsNullOrEmpty(o.ApplicationId) ? null : d2.Where(e => e.Key.ApplicationId == o.ApplicationId).Select(kvp => kvp.Key).ToList();
+            //if (o.ApplicationId != null)
+            //{
+            //  var oAppId = Regex.Replace(o.ApplicationId, @"(?<=\.)(.*)(?=_)", "");
+            //}
+            
+            var nearest = string.IsNullOrEmpty(o.ApplicationId) 
+              ? null 
+              : d2.Where(e => Helper.RemoveKeywordVersionFromApplicationIds(e.Key.ApplicationId) == Helper.RemoveKeywordVersionFromApplicationIds(o.ApplicationId)).Select(kvp => kvp.Key).ToList();
             lock (lockObj) { ret.Add(o, nearest); }
 
             if (nearest == null || nearest.Count() == 0)
@@ -127,7 +139,10 @@ namespace SpeckleStructuralGSA.Test
             */
           }
         }
-      });
+      }
+#if !DEBUG
+      );
+#endif
       no1in2 = ret;
     }
   }

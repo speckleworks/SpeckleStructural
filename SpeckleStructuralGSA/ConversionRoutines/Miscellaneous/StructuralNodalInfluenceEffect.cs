@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using SpeckleCore;
@@ -8,14 +9,9 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("INF_NODE.1", new string[] { }, "misc", true, false, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode) })]
-  public class GSANodalInfluenceEffect : IGSASpeckleContainer
+  [GSAObject("INF_NODE.1", new string[] { }, "model", true, false, new Type[] { typeof(GSANode) }, new Type[] { typeof(GSANode) })]
+  public class GSANodalInfluenceEffect : GSABase<StructuralNodalInfluenceEffect>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralNodalInfluenceEffect();
-
     public void ParseGWACommand(List<GSANode> nodes)
     {
       if (this.GWACommand == null)
@@ -23,7 +19,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralNodalInfluenceEffect();
 
-      var pieces = this.GWACommand.ListSplit("\t");
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
@@ -63,7 +59,7 @@ namespace SpeckleStructuralGSA
       var axis = pieces[counter++];
       if (axis == "GLOBAL")
       {
-        obj.Axis = Helper.Parse0DAxis(0, Initialiser.Interface, out var temp);
+        obj.Axis = Helper.Parse0DAxis(0, out var temp);
       }
       else if (axis == "LOCAL")
       {
@@ -71,7 +67,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        obj.Axis = Helper.Parse0DAxis(Convert.ToInt32(axis), Initialiser.Interface, out string rec, targetNode.Value.Value.ToArray());
+        obj.Axis = Helper.Parse0DAxis(Convert.ToInt32(axis), out string rec, targetNode.Value.Value.ToArray());
         if (rec != null)
           this.SubGWACommand.Add(rec);
       }
@@ -112,9 +108,9 @@ namespace SpeckleStructuralGSA
       
       var keyword = typeof(GSANodalInfluenceEffect).GetGSAKeyword();
 
-      var index = Initialiser.Cache.ResolveIndex(typeof(GSANodalInfluenceEffect).GetGSAKeyword(), infl.ApplicationId);
+      var index = Initialiser.AppResources.Cache.ResolveIndex(typeof(GSANodalInfluenceEffect).GetGSAKeyword(), infl.ApplicationId);
 
-      var nodeRef = Initialiser.Cache.LookupIndex(typeof(GSANode).GetGSAKeyword(), infl.NodeRef);
+      var nodeRef = Initialiser.AppResources.Cache.LookupIndex(typeof(GSANode).GetGSAKeyword(), infl.NodeRef);
 
       if (!nodeRef.HasValue)
         return "";
@@ -129,13 +125,15 @@ namespace SpeckleStructuralGSA
 
       var direction = new string[6] { "X", "Y", "Z", "XX", "YY", "ZZ" };
 
+      //This will cause multiple GWA lines to have the same application Id - might need a review
+      var sid = Helper.GenerateSID(infl);
       for (var i = 0; i < infl.Directions.Value.Count(); i++)
       {
         var ls = new List<string>
         {
           "SET_AT",
           index.ToString(),
-          keyword + ":" + Helper.GenerateSID(infl),
+          keyword + (string.IsNullOrEmpty(sid) ? "" : ":" + sid),
           infl.Name == null || infl.Name == "" ? " " : infl.Name,
           infl.GSAEffectGroup.ToString(),
           nodeRef.Value.ToString(),
@@ -154,7 +152,7 @@ namespace SpeckleStructuralGSA
         }
         ls.Add(axisIndex.ToString());
         ls.Add(direction[i]);
-        gwaCommands.Add(string.Join("\t", ls));
+        gwaCommands.Add(string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
       }
       return string.Join("\n", gwaCommands);
     }
@@ -170,28 +168,33 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSANodalInfluenceEffect dummyObject)
     {
       var newLines = ToSpeckleBase<GSANodalInfluenceEffect>();
-
+      var typeName = dummyObject.GetType().Name;
       var inflsLock = new object();
-      var infls = new List<GSANodalInfluenceEffect>();
-      var nodes = Initialiser.GSASenderObjects.Get<GSANode>();
+      var infls = new SortedDictionary<int, GSANodalInfluenceEffect>();
+      var nodes = Initialiser.GsaKit.GSASenderObjects.Get<GSANode>();
 
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
       {
         try
         {
+          var p = newLines[k];
           var infl = new GSANodalInfluenceEffect() { GWACommand = p };
           infl.ParseGWACommand(nodes);
           lock (inflsLock)
           {
-            infls.Add(infl);
+            infls.Add(k, infl);
           }
         }
-        catch { }
+        catch (Exception ex)
+        {
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+        }
       });
 
-      Initialiser.GSASenderObjects.AddRange(infls);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(infls.Values.ToList());
 
-      return (infls.Count() > 0) ? new SpeckleObject() : new SpeckleNull();
+      return (infls.Keys.Count > 0) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }

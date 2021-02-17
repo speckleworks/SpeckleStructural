@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Interop.Gsa_10_0;
+using Interop.Gsa_10_1;
 using Moq;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
@@ -11,15 +11,15 @@ namespace SpeckleStructuralGSA.Test
 {
   public class SenderProcessor : ProcessorBase
   {
-    public SenderProcessor(string directory, GSAProxy gsaInterfacer, GSACache gsaCache, GSATargetLayer layer, bool embedResults, string[] cases = null, string[] resultsToSend = null) : base(directory)
+    public SenderProcessor(string directory, IGSAAppResources appResources, GSATargetLayer layer, bool embedResults, string[] cases = null, string[] resultsToSend = null) : base(directory)
     {
-      GSAInterfacer = gsaInterfacer;
-      Initialiser.Settings.TargetLayer = layer;
+      this.appResources = appResources;
+      this.appResources.Settings.TargetLayer = layer;
 
-      Initialiser.Settings.EmbedResults = embedResults;
+      this.appResources.Settings.EmbedResults = embedResults;
       if (cases != null)
       {
-        Initialiser.Settings.ResultCases = cases.ToList();
+        this.appResources.Settings.ResultCases = cases.ToList();
       }
       if (resultsToSend != null)
       {
@@ -64,17 +64,7 @@ namespace SpeckleStructuralGSA.Test
         }
       } while (currentBatch.Count > 0);
 
-      speckleObjects.AddRange(Initialiser.GSASenderObjects.GetAll().SelectMany(i => i.Value).Select(o => (SpeckleObject)((IGSASpeckleContainer)o).Value));
-
-      /*
-      foreach (var t in Initialiser.GSASenderObjects.Keys)
-      {
-        foreach (var o in Initialiser.GSASenderObjects[t])
-        {
-          speckleObjects.Add((SpeckleObject)(((IGSASpeckleContainer)o).Value));
-        }
-      }
-      */
+      speckleObjects.AddRange(Initialiser.GsaKit.GSASenderObjects.GetAll().SelectMany(i => i.Value).Select(o => (SpeckleObject) ((IGSASpeckleContainer)o).SpeckleObject));
     }
 
     #region private_methods
@@ -105,28 +95,28 @@ namespace SpeckleStructuralGSA.Test
       var matchingKey = Result.NodalResultMap.Keys.FirstOrDefault(k => string.Equals(k, resultLabel, StringComparison.OrdinalIgnoreCase));
       if (matchingKey != null)
       {
-        Initialiser.Settings.NodalResults[matchingKey] = Result.NodalResultMap[matchingKey];
+        this.appResources.Settings.NodalResults[matchingKey] = Result.NodalResultMap[matchingKey];
         return true;
       }
 
       matchingKey = Result.Element1DResultMap.Keys.FirstOrDefault(k => string.Equals(k, resultLabel, StringComparison.OrdinalIgnoreCase));
       if (matchingKey != null)
       {
-        Initialiser.Settings.Element1DResults[matchingKey] = Result.Element1DResultMap[matchingKey];
+        this.appResources.Settings.Element1DResults[matchingKey] = Result.Element1DResultMap[matchingKey];
         return true;
       }
 
       matchingKey = Result.Element2DResultMap.Keys.FirstOrDefault(k => string.Equals(k, resultLabel, StringComparison.OrdinalIgnoreCase));
       if (matchingKey != null)
       {
-        Initialiser.Settings.Element2DResults[matchingKey] = Result.Element2DResultMap[matchingKey];
+        this.appResources.Settings.Element2DResults[matchingKey] = Result.Element2DResultMap[matchingKey];
         return true;
       }
 
       matchingKey = Result.MiscResultMap.Keys.FirstOrDefault(k => string.Equals(k, resultLabel, StringComparison.OrdinalIgnoreCase));
       if (matchingKey != null)
       {
-        Initialiser.Settings.MiscResults[matchingKey] = Result.MiscResultMap[matchingKey];
+        this.appResources.Settings.MiscResults[matchingKey] = Result.MiscResultMap[matchingKey];
         return true;
       }
       return false;

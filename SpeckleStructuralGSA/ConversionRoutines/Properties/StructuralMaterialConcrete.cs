@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using SpeckleCore;
@@ -8,14 +9,9 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("MAT_CONCRETE.17", new string[] { }, "properties", true, true, new Type[] { }, new Type[] { })]
-  public class GSAMaterialConcrete : IGSASpeckleContainer
+  [GSAObject("MAT_CONCRETE.17", new string[] { }, "model", true, true, new Type[] { }, new Type[] { })]
+  public class GSAMaterialConcrete : GSABase<StructuralMaterialConcrete>
   {
-    public int GSAId { get; set; }
-    public string GWACommand { get; set; }
-    public List<string> SubGWACommand { get; set; } = new List<string>();
-    public dynamic Value { get; set; } = new StructuralMaterialConcrete();
-
     public void ParseGWACommand()
     {
       if (this.GWACommand == null)
@@ -23,31 +19,32 @@ namespace SpeckleStructuralGSA
 
       var obj = new StructuralMaterialConcrete();
 
-      var pieces = this.GWACommand.ListSplit("\t");
-
-      int commandVersion = 16;
-      int.TryParse(pieces[0].Split(new[] { '.' }).Last(), out commandVersion);
+      var pieces = this.GWACommand.ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
 
       var counter = 1; // Skip identifier
       
       this.GSAId = Convert.ToInt32(pieces[counter++]);
       obj.ApplicationId = Helper.GetApplicationId(this.GetGSAKeyword(), this.GSAId);
-      counter++; // MAT.8
+      counter++; // MAT.10
       obj.Name = pieces[counter++].Trim(new char[] { '"' });
-      counter++; // Unlocked
       obj.YoungsModulus = Convert.ToDouble(pieces[counter++]);
+      counter++; // strength
       obj.PoissonsRatio = Convert.ToDouble(pieces[counter++]);
       obj.ShearModulus = Convert.ToDouble(pieces[counter++]);
       obj.Density = Convert.ToDouble(pieces[counter++]);
       obj.CoeffThermalExpansion = Convert.ToDouble(pieces[counter++]);
 
-      obj.CompressiveStrength = Convert.ToDouble(pieces[41]);
+      obj.CompressiveStrength = Convert.ToDouble(pieces[54]);
 
-      counter = (commandVersion == 16) ? 54 : 52;
-      obj.MaxStrain = Convert.ToDouble(pieces[counter]);
+      obj.MaxStrain = Convert.ToDouble(pieces[65]);
 
-      counter = (commandVersion == 16) ? 59 : 57;
-      obj.AggragateSize = Convert.ToDouble(pieces[counter]);
+      obj.AggragateSize = Convert.ToDouble(pieces[70]);
+
+      if (!obj.Properties.ContainsKey("structural"))
+      {
+        obj.Properties.Add("structural", new Dictionary<string, object>());
+      }
+      ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeId", this.GSAId.ToString());
 
       this.Value = obj;
     }
@@ -64,7 +61,7 @@ namespace SpeckleStructuralGSA
       }
 
       var keyword = typeof(GSAMaterialConcrete).GetGSAKeyword();
-      var index = Initialiser.Cache.ResolveIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), mat.ApplicationId);
+      var index = Initialiser.AppResources.Cache.ResolveIndex(typeof(GSAMaterialConcrete).GetGSAKeyword(), mat.ApplicationId);
 
       // TODO: This function barely works.
       var ls = new List<string>
@@ -72,10 +69,10 @@ namespace SpeckleStructuralGSA
         "SET",
         "MAT_CONCRETE.17" + ":" + Helper.GenerateSID(mat),
         index.ToString(),
-        "MAT.8",
+        "MAT.10",
         mat.Name == null || mat.Name == "" ? " " : mat.Name,
-        "YES", // Unlocked
         (mat.YoungsModulus*1000).ToString(), // E
+        mat.CompressiveStrength.ToString(), // Design Strength (Pa) <-- need to check units here
         mat.PoissonsRatio.ToString(), // nu
         mat.ShearModulus.ToString(), // G
         mat.Density.ToString(), // rho
@@ -98,17 +95,30 @@ namespace SpeckleStructuralGSA
         "0", // TODO: What is this?
         "0", // TODO: What is this?
         "0", // Ultimate strain
-        "MAT_CURVE_PARAM.2",
+        "MAT_CURVE_PARAM.3", // ULS - this is GSA default for concrete
         "",
-        "UNDEF",
-        "1", // Material factor on strength
+        "RECT_PARABOLA+NO_TENSION", // material model
+        "0", // strain[6]
+        "0",
+        "0",
+        "0",
+        "0.0035",
+        "1",
+        "1.5", // Material factor on strength
         "1", // Material factor on elastic modulus
-        "MAT_CURVE_PARAM.2",
+        "MAT_CURVE_PARAM.3", // SLS - this is the GSA default for concrete
         "",
-        "UNDEF",
+        "FIB_SCHEMATIC+INTERPOLATED",
+        "0", // strain[6]
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
         "1", // Material factor on strength
         "1", // Material factor on elastic modulus
         "0", // Cost
+        "Concrete",
         "CYLINDER", // Strength type
         "N", // Cement class
         mat.CompressiveStrength.ToString(), // Concrete strength
@@ -138,7 +148,7 @@ namespace SpeckleStructuralGSA
         "0" // TODO: What is this?
       };
 
-      return (string.Join("\t", ls));
+      return (string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
     }
   }
 
@@ -152,27 +162,33 @@ namespace SpeckleStructuralGSA
     public static SpeckleObject ToSpeckle(this GSAMaterialConcrete dummyObject)
     {
       var newLines = ToSpeckleBase<GSAMaterialConcrete>();
-
+      var typeName = dummyObject.GetType().Name;
       var materialsLock = new object();
-      var materials = new List<GSAMaterialConcrete>();
+      var materials = new SortedDictionary<int, GSAMaterialConcrete>();
 
-      Parallel.ForEach(newLines.Values, p =>
+      Parallel.ForEach(newLines.Keys, k =>
       {
+        var pPieces = newLines[k].ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
+        var gsaId = pPieces[1];
         try
         {
-          var mat = new GSAMaterialConcrete() { GWACommand = p };
+          var mat = new GSAMaterialConcrete() { GWACommand = newLines[k] };
           mat.ParseGWACommand();
           lock (materialsLock)
           {
-            materials.Add(mat);
+            materials.Add(k, mat);
           }
         }
-        catch { }
+        catch (Exception ex)
+        {
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, gsaId);
+          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, gsaId);
+        }
       });
 
-      Initialiser.GSASenderObjects.AddRange(materials);
+      Initialiser.GsaKit.GSASenderObjects.AddRange(materials.Values.ToList());
 
-      return (materials.Count() > 0 ) ? new SpeckleObject() : new SpeckleNull();
+      return (materials.Keys.Count > 0 ) ? new SpeckleObject() : new SpeckleNull();
     }
   }
 }
