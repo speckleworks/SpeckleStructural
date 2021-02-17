@@ -1,0 +1,398 @@
+[
+  {
+    "ApplicationId": "LC1",
+    "GwaCommand": "SET\tLOAD_TITLE.2:{speckle_app_id:LC1}\t1\tLive load case\tLC_VAR_IMP\t1\t~\tNONE\tINC_BOTH"
+  },
+  {
+    "ApplicationId": "LC2",
+    "GwaCommand": "SET\tLOAD_TITLE.2:{speckle_app_id:LC2}\t2\tDead load case\tLC_PERM_SELF\t1\t~\tNONE\tINC_BOTH"
+  },
+  {
+    "ApplicationId": "LC3",
+    "GwaCommand": "SET\tLOAD_TITLE.2:{speckle_app_id:LC3}\t3\tThermal load case\tLC_VAR_TEMP\t1\t~\tNONE\tINC_BOTH"
+  },
+  {
+    "GwaCommand": "SET\tGRID_PLANE.4\t1\tAlignment One\tGENERAL\t0\t0\t0\t0"
+  },
+  {
+    "GwaCommand": "SET\tGRID_PLANE.4\t2\tLive load panel\tGENERAL\t1\t-11.58\t0\t0"
+  },
+  {
+    "GwaCommand": "SET\tGRID_PLANE.4\t3\tDead load panel\tGENERAL\t2\t-17.37\t0\t0"
+  },
+  {
+    "GwaCommand": "SET\tGRID_SURFACE.1\t1\tAlignment One\t1\t2\tall\t0.01\tONE\t0"
+  },
+  {
+    "GwaCommand": "SET\tGRID_SURFACE.1\t2\tLive load panel\t2\t2\tall\t0.01\tONE\t0\tPLANE_CORNER"
+  },
+  {
+    "GwaCommand": "SET\tGRID_SURFACE.1\t3\tDead load panel\t3\t2\tall\t0.01\tONE\t0\tPLANE_CORNER"
+  },
+  {
+    "ApplicationId": "AL1",
+    "GwaCommand": "SET\tALIGN.1:{speckle_app_id:AL1}\t1\tAlignment One\t1\t3\t0\t0\t40\t-0.01\t80\t-0.01"
+  },
+  {
+    "ApplicationId": "gh/6849beac3a786ce17213ba0815de4859",
+    "GwaCommand": "SET\tUSER_VEHICLE.1:{speckle_app_id:gh/6849beac3a786ce17213ba0815de4859}\t1\tVehicle One\t10\t2\t3\t2\t2\t2\t6\t2\t2\t2"
+  },
+  {
+    "ApplicationId": "gsa/GRID_LINE.1_1",
+    "GwaCommand": "SET\tGRID_LINE.1:{speckle_app_id:gsa/GRID_LINE.1_1}\t1\tLevel\tLINE\t0.01\t0\t0\t0"
+  },
+  {
+    "ApplicationId": "gsa/GRID_LINE.1_2",
+    "GwaCommand": "SET\tGRID_LINE.1:{speckle_app_id:gsa/GRID_LINE.1_2}\t2\tAngled\tLINE\t0.005\t0.06\t53.4606146377575\t0"
+  },
+  {
+    "ApplicationId": "gh/ad4558d6e5a0784fe711195b15dbb60d",
+    "GwaCommand": "SET\tNODE.3:{speckle_app_id:gh/ad4558d6e5a0784fe711195b15dbb60d}\t1\t \tNO_RGB\t14.75614035\t-4.87192982\t0\txyzxxyyzz\t0\t0"
+  },
+  {
+    "ApplicationId": "gh/460a05faac77730b25727b360f7d0cec",
+    "GwaCommand": "SET\tNODE.3:{speckle_app_id:gh/460a05faac77730b25727b360f7d0cec}\t2\t \tNO_RGB\t74.15614035\t-4.87192982\t0\txyzxxyyzz\t0\t0"
+  },
+  {
+    "ApplicationId": "gh/e9901628ee704568be982cf978f99ebb",
+    "GwaCommand": "SET\tNODE.3:{speckle_app_id:gh/e9901628ee704568be982cf978f99ebb}\t3\t \tNO_RGB\t74.15614035\t94.12807018\t0\txyzxxyyzz\t0\t0"
+  },
+  {
+    "ApplicationId": "gh/fbcd9cadcbb666d66ffe391c8ef78fa8",
+    "GwaCommand": "SET\tNODE.3:{speckle_app_id:gh/fbcd9cadcbb666d66ffe391c8ef78fa8}\t4\t \tNO_RGB\t34.55614035\t54.52807018\t0\txyzxxyyzz\t0\t0"
+  },
+  {
+    "ApplicationId": "gh/f16de03fe77b08cc3c9dceb84920aff8",
+    "GwaCommand": "SET\tNODE.3:{speckle_app_id:gh/f16de03fe77b08cc3c9dceb84920aff8}\t5\t \tNO_RGB\t-24.84385965\t54.52807018\t0\txyzxxyyzz\t0\t0"
+  },
+  {
+    "ApplicationId": "gh/aad3349332e757ba1c6bc306b2a56957",
+    "GwaCommand": "SET\tNODE.3:{speckle_app_id:gh/aad3349332e757ba1c6bc306b2a56957}\t6\t \tNO_RGB\t-24.84385965\t-24.67192982\t0\txyzxxyyzz\t0\t0"
+  },
+  {
+    "ApplicationId": "gh/81377a0b1382a79b6833ab88c0a0e311",
+    "GwaCommand": "SET\tNODE.3:{speckle_app_id:gh/81377a0b1382a79b6833ab88c0a0e311}\t7\t \tNO_RGB\t14.75614035\t-24.67192982\t0\txyzxxyyzz\t0\t0"
+  },
+  {
+    "ApplicationId": "concrete",
+    "GwaCommand": "SET\tMAT_CONCRETE.17:{speckle_app_id:concrete}\t1\tMAT.10\tConcrete\t40000\t28000000000\t0.2\t11666700000\t2400\t1E-05\tMAT_ANAL.1\tConcrete\t-268435456\tMAT_ELAS_ISO\t6\t28000000\t0.2\t2400\t1E-05\t11666700000\t0\t0\t0\t0\t0\t0\t0\t0\tMAT_CURVE_PARAM.3\t\tRECT_PARABOLA+NO_TENSION\t0\t0\t0\t0\t0.0035\t1\t1.5\t1\tMAT_CURVE_PARAM.3\t\tFIB_SCHEMATIC+INTERPOLATED\t0\t0\t0\t0\t0\t0\t1\t1\t0\tConcrete\tCYLINDER\tN\t40000\t0\t0\t0\t0\t0\t1\t2\t0.00218389285990043\t0.0035\t0.00041125\t0.003\t0.0035\t0.002\t0.0035\tNO\t0.02\t0\t1\t0.8825\t0\t0\t0\t0\t0"
+  },
+  {
+    "ApplicationId": "gh/0e14ea030d377c1860dc6b72453e58fc",
+    "GwaCommand": "SET\tPROP_SPR.4:{speckle_app_id:gh/0e14ea030d377c1860dc6b72453e58fc}\t1\tLSP-General\tNO_RGB\tGENERAL\t0\t0.012\t0\t0.015\t0\t0.02\t0\t0.025\t0\t0.03\t0\t0.038\t0.21"
+  },
+  {
+    "ApplicationId": "gh/34a7311a137096403bbe0296bbed53b7",
+    "GwaCommand": "SET\tPROP_SPR.4:{speckle_app_id:gh/34a7311a137096403bbe0296bbed53b7}\t2\tLSP-Axial\tNO_RGB\tAXIAL\t0.012\t0.21"
+  },
+  {
+    "ApplicationId": "gh/d3acde535f3ecd3a9d384929810714dc",
+    "GwaCommand": "SET\tPROP_SPR.4:{speckle_app_id:gh/d3acde535f3ecd3a9d384929810714dc}\t3\tLSP-Torsional\tNO_RGB\tTORSIONAL\t0.025\t0.21"
+  },
+  {
+    "ApplicationId": "gh/150a6a79e8ecbc0f7efb4fa822d67558",
+    "GwaCommand": "SET\tPROP_SPR.4:{speckle_app_id:gh/150a6a79e8ecbc0f7efb4fa822d67558}\t4\tLSP-Compression\tNO_RGB\tCOMPRESSION\t0.012\t0.21"
+  },
+  {
+    "ApplicationId": "gh/ee71ea28e5836bad65af7cdde55f37ec",
+    "GwaCommand": "SET\tPROP_SPR.4:{speckle_app_id:gh/ee71ea28e5836bad65af7cdde55f37ec}\t5\tLSP-Tension\tNO_RGB\tTENSION\t0.012\t0.21"
+  },
+  {
+    "ApplicationId": "gh/6854f7b9522dd1c5d13cf369b726cef1",
+    "GwaCommand": "SET\tPROP_SPR.4:{speckle_app_id:gh/6854f7b9522dd1c5d13cf369b726cef1}\t6\tLSP-Lockup\tNO_RGB\tLOCKUP\t0.012\t0.21\t0\t0"
+  },
+  {
+    "ApplicationId": "gh/75e517bb9ccbecdd6b844a57a73f2edb",
+    "GwaCommand": "SET\tPROP_SPR.4:{speckle_app_id:gh/75e517bb9ccbecdd6b844a57a73f2edb}\t7\tLSP-Gap\tNO_RGB\tGAP\t0.012\t0.21"
+  },
+  {
+    "ApplicationId": "gh/a2f49ec8a94bdebe19c1433d95294955",
+    "GwaCommand": "SET\tPROP_SPR.4:{speckle_app_id:gh/a2f49ec8a94bdebe19c1433d95294955}\t8\tLSP-Friction\tNO_RGB\tFRICTION\t0.012\t0.015\t0.02\t0\t0.21"
+  },
+  {
+    "GwaCommand": "SET\tAXIS.1\t1\tLive load panel\tCART\t0\t0\t0\t1\t0\t0\t0\t-1\t0"
+  },
+  {
+    "GwaCommand": "SET\tAXIS.1\t2\tDead load panel\tCART\t0\t0\t0\t1\t0\t0\t0\t-1\t0"
+  },
+  {
+    "ApplicationId": "Live_Z",
+    "GwaCommand": "SET_AT\t1\tLOAD_GRID_AREA.2:{speckle_app_id:Live_Z}\tLive load panel\t2\tPOLYGON\t\"(14.7561,24.6719) (-24.8439,24.6719) (-24.8439,-2.5272) (14.7561,4.8719)(m)\"\t1\tGLOBAL\tNO\tZ\t-0.0048"
+  },
+  {
+    "ApplicationId": "SDL_Z",
+    "GwaCommand": "SET_AT\t2\tLOAD_GRID_AREA.2:{speckle_app_id:SDL_Z}\tDead load panel\t3\tPOLYGON\t\"(44.4561,4.8719) (54.3561,-74.3281) (74.1561,-67.7348) (74.1561,4.8719)(m)\"\t2\tGLOBAL\tNO\tZ\t-0.0012"
+  },
+  {
+    "ApplicationId": "LT1",
+    "GwaCommand": "SET\tTASK.1:{speckle_app_id:LT1}\t1\t\t0\tGSS\tSTATIC\t1\t0\t128\tSELF\tnone\tnone\tDRCMEFNSQBHU*\tMIN\tAUTO\t0\t0\t0\tNONE\tFATAL\tNONE\tNONE\tRAFT_LO\tRESID_NO\t0\t1\t0"
+  },
+  {
+    "ApplicationId": "LT2",
+    "GwaCommand": "SET\tTASK.1:{speckle_app_id:LT2}\t2\t\t0\tGSS\tSTATIC\t1\t0\t128\tSELF\tnone\tnone\tDRCMEFNSQBHU*\tMIN\tAUTO\t0\t0\t0\tNONE\tFATAL\tNONE\tNONE\tRAFT_LO\tRESID_NO\t0\t1\t0"
+  },
+  {
+    "ApplicationId": "LT1",
+    "GwaCommand": "SET\tANAL.1:{speckle_app_id:LT1}\t1\tLoad task 1\t1\t1.1L1 + 1L2 + L3"
+  },
+  {
+    "ApplicationId": "LT2",
+    "GwaCommand": "SET\tANAL.1:{speckle_app_id:LT2}\t2\tLoad task 2\t2\t1.1L1 + 1L2 + L3"
+  },
+  {
+    "ApplicationId": "gh/ae62546782298ee240dcba1541255690",
+    "GwaCommand": "SET\tPATH.1:{speckle_app_id:gh/ae62546782298ee240dcba1541255690}\t1\tPath One\tCWAY_1WAY\t1\t1\t-6.8\t6.8\t0"
+  },
+  {
+    "ApplicationId": "gh/1be0944ea0aa85ffb4b9326b0d49debc",
+    "GwaCommand": "SET\tPATH.1:{speckle_app_id:gh/1be0944ea0aa85ffb4b9326b0d49debc}\t2\tPath Two\tTRACK\t1\t1\t0\t1.4\t0"
+  },
+  {
+    "ApplicationId": "gh/8471296211afb5f5eebbffa4e899dbec",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/8471296211afb5f5eebbffa4e899dbec}\t1\t \tNO_RGB\t2D_VOID_CUTTER\tALL\t1\t0\t8 9 10 11 12 13 14 \t0\t0\t1\tYES\tLINEAR\t0\t0\t0\t0\t0\t0\tACTIVE\t0\tNO"
+  },
+  {
+    "ApplicationId": "gh/ff7c29fdcbfb53eed7b95b268e72cc35",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/ff7c29fdcbfb53eed7b95b268e72cc35}\t2\t \tNO_RGB\t2D_VOID_CUTTER\tALL\t1\t0\t15 16 17 18 19 20 21 \t0\t0\t1\tYES\tLINEAR\t0\t0\t0\t0\t0\t0\tACTIVE\t0\tNO"
+  },
+  {
+    "ApplicationId": "gh/51e8d0bc5b67257aea4d3f733dc153a2",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/51e8d0bc5b67257aea4d3f733dc153a2}\t3\t \tNO_RGB\t2D_VOID_CUTTER\tALL\t1\t0\t22 23 24 25 26 27 28 \t0\t0\t1\tYES\tLINEAR\t0\t0\t0\t0\t0\t0\tACTIVE\t0\tNO"
+  },
+  {
+    "ApplicationId": "gh/42d2b51094c7c16a565d883dd5dd7a59",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/42d2b51094c7c16a565d883dd5dd7a59}\t4\t \tNO_RGB\t2D_VOID_CUTTER\tALL\t1\t0\t29 30 31 32 33 34 35 \t0\t0\t1\tYES\tLINEAR\t0\t0\t0\t0\t0\t0\tACTIVE\t0\tNO"
+  },
+  {
+    "ApplicationId": "gh/a461ec766c5e867d96a5036dc53c811a",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/a461ec766c5e867d96a5036dc53c811a}\t5\t \tNO_RGB\t2D_VOID_CUTTER\tALL\t1\t0\t36 37 38 39 40 41 42 \t0\t0\t1\tYES\tLINEAR\t0\t0\t0\t0\t0\t0\tACTIVE\t0\tNO"
+  },
+  {
+    "ApplicationId": "gh/71aeda7ba88bbbc6dc8f8966d24045bc",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/71aeda7ba88bbbc6dc8f8966d24045bc}\t6\tColumn 0\tNO_RGB\tCOLUMN\tALL\t1\t6\t43 44\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/467503d3bf98b641d3fb7d507c365e53",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/467503d3bf98b641d3fb7d507c365e53}\t7\tColumn 1\tNO_RGB\tCOLUMN\tALL\t1\t7\t45 46\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/5971550242e77e8b899d33d8f65a9681",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/5971550242e77e8b899d33d8f65a9681}\t8\tColumn 2\tNO_RGB\tCOLUMN\tALL\t1\t8\t47 48\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/7a63661a22286943500cc7b165312546",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/7a63661a22286943500cc7b165312546}\t9\tColumn 3\tNO_RGB\tCOLUMN\tALL\t1\t9\t49 50\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/a933d1f9bc5f97bc2e9166dcc2accd2b",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/a933d1f9bc5f97bc2e9166dcc2accd2b}\t10\tColumn 4\tNO_RGB\tCOLUMN\tALL\t1\t10\t51 52\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/9ee222aeacd6a783edd7996781351117",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/9ee222aeacd6a783edd7996781351117}\t11\tColumn 5\tNO_RGB\tCOLUMN\tALL\t1\t11\t53 54\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/154de130d058e883b9f30eed45a72895",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/154de130d058e883b9f30eed45a72895}\t12\tColumn 6\tNO_RGB\tCOLUMN\tALL\t1\t12\t55 56\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/43cfc7591b81b59602d4cc46ee20d226",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/43cfc7591b81b59602d4cc46ee20d226}\t13\tColumn 7\tNO_RGB\tCOLUMN\tALL\t1\t13\t57 58\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/fe643881343fd0ba26070cc52e91246c",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/fe643881343fd0ba26070cc52e91246c}\t14\tColumn 8\tNO_RGB\tCOLUMN\tALL\t1\t14\t59 60\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/e7a4f495bea0d044febe1328ec2eb0df",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/e7a4f495bea0d044febe1328ec2eb0df}\t15\tColumn 9\tNO_RGB\tCOLUMN\tALL\t1\t15\t61 62\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/37d3376f7550f4d01c5ae2b44eeffd93",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/37d3376f7550f4d01c5ae2b44eeffd93}\t16\tColumn 10\tNO_RGB\tCOLUMN\tALL\t1\t16\t63 64\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/98777989964c2c0822154abc9ad1a7b5",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/98777989964c2c0822154abc9ad1a7b5}\t17\tColumn 11\tNO_RGB\tCOLUMN\tALL\t1\t17\t65 66\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/5389b96a589a41cd85610ca769831649",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/5389b96a589a41cd85610ca769831649}\t18\tColumn 12\tNO_RGB\tCOLUMN\tALL\t1\t18\t67 68\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/ec93ebcab0f587089747a2d7445c1039",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/ec93ebcab0f587089747a2d7445c1039}\t19\tColumn 13\tNO_RGB\tCOLUMN\tALL\t1\t19\t69 70\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/e9e01e24eb57e21b087a365ddbe22484",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/e9e01e24eb57e21b087a365ddbe22484}\t20\tColumn 14\tNO_RGB\tCOLUMN\tALL\t1\t20\t71 72\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/79e56706e96ae448c95f28548e2e8521",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/79e56706e96ae448c95f28548e2e8521}\t21\tColumn 15\tNO_RGB\tCOLUMN\tALL\t1\t21\t73 74\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/30b8049b34cc22b6add3f3565129b6f9",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/30b8049b34cc22b6add3f3565129b6f9}\t22\tColumn 16\tNO_RGB\tCOLUMN\tALL\t1\t22\t75 76\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/da62f5ea397543274e1f71c0f04e9f0e",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/da62f5ea397543274e1f71c0f04e9f0e}\t23\tColumn 17\tNO_RGB\tCOLUMN\tALL\t1\t23\t77 78\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/7edb8fba34a7d36b41634d06d5c7a2e9",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/7edb8fba34a7d36b41634d06d5c7a2e9}\t24\tColumn 18\tNO_RGB\tCOLUMN\tALL\t1\t24\t79 80\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/d65a448739a36232438e08af84d49a29",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/d65a448739a36232438e08af84d49a29}\t25\tColumn 19\tNO_RGB\tCOLUMN\tALL\t1\t25\t81 82\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/2f568fb93557d7e1c5accf5fdaf8b158",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/2f568fb93557d7e1c5accf5fdaf8b158}\t26\tColumn 20\tNO_RGB\tCOLUMN\tALL\t1\t26\t83 84\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/61c3aac7cd02baa986a8e6bea2a5a71c",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/61c3aac7cd02baa986a8e6bea2a5a71c}\t27\tColumn 21\tNO_RGB\tCOLUMN\tALL\t1\t27\t85 86\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/36a426efd9c31c0ce970a9d7543010de",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/36a426efd9c31c0ce970a9d7543010de}\t28\tColumn 22\tNO_RGB\tCOLUMN\tALL\t1\t28\t87 88\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/a793eef6a72dbd78839e5c8ce6d67982",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/a793eef6a72dbd78839e5c8ce6d67982}\t29\tColumn 23\tNO_RGB\tCOLUMN\tALL\t1\t29\t89 90\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/63cd77ed5483f86e5657568dee4876c8",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/63cd77ed5483f86e5657568dee4876c8}\t30\tColumn 24\tNO_RGB\tCOLUMN\tALL\t1\t30\t91 92\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/1e3d7853e300b8fa54294c3badb3b424",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/1e3d7853e300b8fa54294c3badb3b424}\t31\tColumn 25\tNO_RGB\tCOLUMN\tALL\t1\t31\t93 94\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/7a6723674cbd08c5a5cc9eabfc2958ea",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/7a6723674cbd08c5a5cc9eabfc2958ea}\t32\tColumn 26\tNO_RGB\tCOLUMN\tALL\t1\t32\t95 96\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/f6b828cfbbe6dfa459744822105192c4",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/f6b828cfbbe6dfa459744822105192c4}\t33\tColumn 27\tNO_RGB\tCOLUMN\tALL\t1\t33\t97 98\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/dcf4ad9e8994895a42dcfa5431a4bd31",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/dcf4ad9e8994895a42dcfa5431a4bd31}\t34\tColumn 28\tNO_RGB\tCOLUMN\tALL\t1\t34\t99 100\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/83e4d528ae20104b72e69211e3c21e93",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/83e4d528ae20104b72e69211e3c21e93}\t35\tColumn 29\tNO_RGB\tCOLUMN\tALL\t1\t35\t101 102\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/65f4e171aed320cb78cfe8a585045bb6",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/65f4e171aed320cb78cfe8a585045bb6}\t36\tColumn 30\tNO_RGB\tCOLUMN\tALL\t1\t36\t103 104\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/2a555bdfd01233946d31ddd4b072aaf7",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/2a555bdfd01233946d31ddd4b072aaf7}\t37\tColumn 31\tNO_RGB\tCOLUMN\tALL\t1\t37\t105 106\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/6e7446596bc26cd0f0fd9c7f78d99a98",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/6e7446596bc26cd0f0fd9c7f78d99a98}\t38\tColumn 32\tNO_RGB\tCOLUMN\tALL\t1\t38\t107 108\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/452a6f3af50a7c9626411fe6f5f1d9c2",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/452a6f3af50a7c9626411fe6f5f1d9c2}\t39\tColumn 33\tNO_RGB\tCOLUMN\tALL\t1\t39\t109 110\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/832132ef28d937d055d53c0c6fad70ac",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/832132ef28d937d055d53c0c6fad70ac}\t40\tColumn 34\tNO_RGB\tCOLUMN\tALL\t1\t40\t111 112\t0\t0\t0\tYES\tBEAM\t0\t0\t0\t0\t0\t0\tACTIVE\tRRRRRR\tRRRRRR\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/bfdbe99cfde1f26362f14b144b0f3141",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/bfdbe99cfde1f26362f14b144b0f3141}\t41\tNew spring 0\tNO_RGB\t1D_GENERIC\tALL\t1\t41\t113 114\t0\t0\t0\tYES\tSPRING\t0\t0\t0\t0\t0\t0\tACTIVE\tFFFFFF\tFFFFFF\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/a6d0397fdad99d3455d5b125b2523a09",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/a6d0397fdad99d3455d5b125b2523a09}\t42\tNew spring 1\tNO_RGB\t1D_GENERIC\tALL\t1\t42\t115 116\t0\t0\t0\tYES\tSPRING\t0\t0\t0\t0\t0\t0\tACTIVE\tFFFFFF\tFFFFFF\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/04812414ed54e44b3372e04b6ab20556",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/04812414ed54e44b3372e04b6ab20556}\t43\tNew spring 2\tNO_RGB\t1D_GENERIC\tALL\t1\t43\t117 118\t0\t0\t0\tYES\tSPRING\t0\t0\t0\t0\t0\t0\tACTIVE\tFFFFFF\tFFFFFF\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/e1d3bfa1c104d2cbac83c00c5a5a91bf",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/e1d3bfa1c104d2cbac83c00c5a5a91bf}\t44\tNew spring 3\tNO_RGB\t1D_GENERIC\tALL\t1\t44\t119 120\t0\t0\t0\tYES\tSPRING\t0\t0\t0\t0\t0\t0\tACTIVE\tFFFFFF\tFFFFFF\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/fe78ca20d5fa53527e7bb7809138c819",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/fe78ca20d5fa53527e7bb7809138c819}\t45\tNew spring 4\tNO_RGB\t1D_GENERIC\tALL\t1\t45\t121 122\t0\t0\t0\tYES\tSPRING\t0\t0\t0\t0\t0\t0\tACTIVE\tFFFFFF\tFFFFFF\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/77ee0b345f17f46ac0677947d0d1c70b",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/77ee0b345f17f46ac0677947d0d1c70b}\t46\tNew spring 5\tNO_RGB\t1D_GENERIC\tALL\t1\t46\t123 124\t0\t0\t0\tYES\tSPRING\t0\t0\t0\t0\t0\t0\tACTIVE\tFFFFFF\tFFFFFF\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "gh/9718df1338e56a0746cfdbe383fd2a60",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:gh/9718df1338e56a0746cfdbe383fd2a60}\t47\tNew spring 6\tNO_RGB\t1D_GENERIC\tALL\t1\t47\t125 126\t0\t0\t0\tYES\tSPRING\t0\t0\t0\t0\t0\t0\tACTIVE\tFFFFFF\tFFFFFF\tFree\tFree\t0\t0\t0\tNO_OFF"
+  },
+  {
+    "ApplicationId": "Slab0",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:Slab0}\t48\tSlab 0\tNO_RGB\tSLAB\tALL\t1\t48\t127 128 129 130 131 132 133\t0\t0\t5\tYES\tLINEAR\t0\t0\t0\t0\t0\t0\tACTIVE\t0\tNO"
+  },
+  {
+    "ApplicationId": "Slab1",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:Slab1}\t49\tSlab 1\tNO_RGB\tSLAB\tALL\t1\t49\t134 135 136 137 138 139 140\t0\t0\t5\tYES\tLINEAR\t0\t0\t0\t0\t0\t0\tACTIVE\t0\tNO"
+  },
+  {
+    "ApplicationId": "Slab2",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:Slab2}\t50\tSlab 2\tNO_RGB\tSLAB\tALL\t1\t50\t141 142 143 144 145 146 147\t0\t0\t5\tYES\tLINEAR\t0\t0\t0\t0\t0\t0\tACTIVE\t0\tNO"
+  },
+  {
+    "ApplicationId": "Slab3",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:Slab3}\t51\tSlab 3\tNO_RGB\tSLAB\tALL\t1\t51\t148 149 150 151 152 153 154\t0\t0\t5\tYES\tLINEAR\t0\t0\t0\t0\t0\t0\tACTIVE\t0\tNO"
+  },
+  {
+    "ApplicationId": "Slab4",
+    "GwaCommand": "SET\tMEMB.8:{speckle_app_id:Slab4}\t52\tSlab 4\tNO_RGB\tSLAB\tALL\t1\t52\t155 156 157 158 159 160 161\t0\t0\t5\tYES\tLINEAR\t0\t0\t0\t0\t0\t0\tACTIVE\t0\tNO"
+  },
+  {
+    "ApplicationId": "columnProp",
+    "GwaCommand": "SET\tPROP_SEC.3:{speckle_app_id:columnProp}\t1\tColumn property\tNO_RGB\tCONCRETE\t1\t0\tGEO%P()%M(-0.836|-1.141)%L(-3.799|3.396)%L(1.71|0.992)%L(0.931|-0.92)%M(-1.881|1.512)%L(-0.247|1.195)%L(-0.431|-0.418)%M(1.313|0.588)%L(1.098|0.683)%L(1.115|0.273)%L(1.24|0.259)\t0\tCENTROID\t0\t0"
+  },
+  {
+    "ApplicationId": "slabProp",
+    "GwaCommand": "SET\tPROP_2D.6:{speckle_app_id:slabProp}\t1\tSlab property\tNO_RGB\tSHELL\tGLOBAL\t0\tCONCRETE\t1\t0\t0.3\tCENTROID\t0\t0\t100%\t100%\t100%\t100%\tNO_ENV"
+  },
+  {
+    "ApplicationId": "ComboOne",
+    "GwaCommand": "SET\tCOMBINATION.1:{speckle_app_id:ComboOne}\t1\tCombo One\t1.5A1 + 1.25A2"
+  },
+  {
+    "ApplicationId": "TL1",
+    "GwaCommand": "SET_AT\t1\tLOAD_2D_THERMAL.2:{speckle_app_id:TL1}\tGeneral\tG48 G49 G50 G51 G52\t3\tDZ\t239\t509"
+  },
+  {
+    "ApplicationId": "gh/818c27d7c19b886a4cd9f03048cb26eb",
+    "GwaCommand": "SET\tASSEMBLY.3:{speckle_app_id:gh/818c27d7c19b886a4cd9f03048cb26eb}\t1\tAssembly One\tMEMBER\t49\t162\t163\t164\t\t12.5\t0\tLAGRANGE\t\tPOINTS\t2"
+  },
+  {
+    "ApplicationId": "gh/2c4635a46bc0aa4f0403ca1ac751e2c4",
+    "GwaCommand": "SET\tASSEMBLY.3:{speckle_app_id:gh/2c4635a46bc0aa4f0403ca1ac751e2c4}\t2\tAssembly two\tMEMBER\t49\t165\t166\t167\t\t20.1\t0\tLAGRANGE\t\tPOINTS\t2"
+  },
+  {
+    "ApplicationId": "Stage1",
+    "GwaCommand": "SET\tANAL_STAGE.3:{speckle_app_id:Stage1}\t1\tStage One\tNO_RGB\tG6 G7 G8 G9 G10 G11 G12 G13 G14 G15 G16 G17 G18 G19 G20 G21 G22 G23 G24 G25 G26 G27 G28 G29 G30 G31 G32 G33 G34 G35 G36 G37 G38 G39 G40\t0\t14"
+  },
+  {
+    "ApplicationId": "Stage2",
+    "GwaCommand": "SET\tANAL_STAGE.3:{speckle_app_id:Stage2}\t2\tStage Two\tNO_RGB\tG48 G49 G50 G51 G52\t0\t28"
+  },
+  {
+    "ApplicationId": "gh/247ea14c3351f46f84aa93ae4e31a1a9",
+    "GwaCommand": "SET_AT\t1\tRIGID.3:{speckle_app_id:gh/247ea14c3351f46f84aa93ae4e31a1a9}\t \t1\tX:XYYZZ-Y:YZZ-YY:YY-ZZ:ZZ\t2 3 4 5 6 7\t2\t0"
+  },
+  {
+    "ApplicationId": "Stage1",
+    "GwaCommand": "SET_AT\t1\tGEN_REST.2:{speckle_app_id:Stage1}\tNode Restraints One\t1\t0\t0\t1\t0\t1\t2 4\t2"
+  }
+]

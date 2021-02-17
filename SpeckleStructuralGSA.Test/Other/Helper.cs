@@ -4,14 +4,35 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using SpeckleGSAInterfaces;
+using SpeckleCore;
 
 namespace SpeckleStructuralGSA.Test
 {
   public static class Helper
   {
+    public static string RemoveKeywordVersionFromApplicationIds(string gwa)
+    {
+      var matches = Regex.Matches(gwa, @"(gsa/[A-Z_]+)\.[0-9]{1,2}");
+      if (matches.Count > 0)
+      {
+        var matched = matches.Cast<Match>().Select(m => m.Value).Distinct().ToList();
+        foreach (var m in matched)
+        {
+          gwa = gwa.Replace(m, m.Split('.').First());
+        }
+      }
+      return gwa;
+    }
+
+    public static string RemoveVersionFromKeyword(string keyword)
+    {
+      return keyword.Split('.').First();
+    }
+
     //made public so that the sender tests can use it to know which keywords to use to hydrate the cache
     public static Dictionary<Type, List<Type>> GetTypeCastPriority(ioDirection ioDirection, GSATargetLayer layer, bool resultsOnly)
     {
@@ -23,7 +44,7 @@ namespace SpeckleStructuralGSA.Test
 
       // Grab all GSA related object
       var ass = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "SpeckleStructuralGSA");
-      var objTypes = ass.GetTypes().Where(t => interfaceType.IsAssignableFrom(t) && t != interfaceType).ToList();
+      var objTypes = ass.GetTypes().Where(t => interfaceType.IsAssignableFrom(t) && t != interfaceType && !t.IsAbstract).ToList();
 
       var TypePrerequisites = new Dictionary<Type, List<Type>>();
 
@@ -99,8 +120,8 @@ namespace SpeckleStructuralGSA.Test
     {
       byte[] buffer;
       //Directory should have a trailing slash
-     
-      var fileStream = new FileStream(directory + testDataFileName, FileMode.Open, FileAccess.Read);
+
+      var fileStream = new FileStream(Path.Combine(directory, testDataFileName), FileMode.Open, FileAccess.Read);
       try
       {
         var length = (int)fileStream.Length;  // get file length
@@ -121,13 +142,6 @@ namespace SpeckleStructuralGSA.Test
       return Encoding.UTF8.GetString(buffer);
     }
 
-    public static string ResolveFullPath(string fileName, string directory)
-    {
-      //Directory should have a trailing slash
-
-      return (directory + fileName);
-    }
-
     public static void WriteFile(string data, string fileName, string directory)
     {
       var stream = new MemoryStream();
@@ -138,7 +152,7 @@ namespace SpeckleStructuralGSA.Test
       stream.Position = 0;
       stream.Seek(0, SeekOrigin.Begin);
 
-      var fileStream = File.Create(ResolveFullPath(fileName, directory));
+      var fileStream = File.Create(Path.Combine(directory, fileName));
       stream.CopyTo(fileStream);
       fileStream.Close();
     }
@@ -177,6 +191,44 @@ namespace SpeckleStructuralGSA.Test
       }
 
       return false;
+    }
+
+    public static bool GwaToCache(IEnumerable<string> gwaCommands, string streamId)
+    {
+      foreach (var c in gwaCommands)
+      {
+        if (!GwaToCache(c, streamId))
+        {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    //Copied and modified from Receiver in SpeckleGSA - the Speckle object isn't copied to the cache here because that's only used for merging
+    public static bool GwaToCache(string gwaCommand, string streamId)
+    {
+      var lines = gwaCommand.Split(new[] { '\n' }).Where(l => !string.IsNullOrEmpty(l)).ToList();
+      foreach (var l in lines)
+      {
+        //At this point the SID will be filled with the application ID
+        Initialiser.AppResources.Proxy.ParseGeneralGwa(l, out var keyword, out var foundIndex,
+          out var foundStreamId, out var foundApplicationId, out var gwaWithoutSet, out var gwaSetCommandType);
+
+        var originalSid = Initialiser.AppResources.Proxy.FormatSidTags(foundStreamId, foundApplicationId);
+        var newSid = Initialiser.AppResources.Proxy.FormatSidTags(streamId, foundApplicationId);
+
+        //If the SID tag has been set then update it with the stream
+        gwaWithoutSet = (string.IsNullOrEmpty(originalSid))
+            ? gwaWithoutSet.Replace(keyword, keyword + ":" + newSid)
+            : gwaWithoutSet.Replace(originalSid, newSid);
+
+        if (!Initialiser.AppResources.Cache.Upsert(keyword, foundIndex.Value, gwaWithoutSet, streamId, foundApplicationId, gwaSetCommandType.Value))
+        {
+          return false;
+        }
+      }
+      return true;
     }
   }
 }

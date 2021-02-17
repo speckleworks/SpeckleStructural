@@ -93,15 +93,19 @@ namespace SpeckleStructuralRevit
       stiffness.GenerateHash();
 
       var myNodes = new List<SpeckleObject>();
+      var baseAppId = myRestraint.UniqueId;
 
-      foreach(var point in points)
+      for (int i = 0; i < points.Count(); i++)
       {
-        var myPoint = (SpeckleCoreGeometryClasses.SpecklePoint)SpeckleCore.Converter.Serialise(point);
-        var myNode = new StructuralNode();
-        myNode.basePoint = myPoint;
-        myNode.Axis = axis;
-        myNode.Restraint = restraint;
-        myNode.Stiffness = stiffness;
+        var myPoint = (SpeckleCoreGeometryClasses.SpecklePoint)Converter.Serialise(points[i]);
+        var myNode = new StructuralNode
+        {
+          ApplicationId = Helper.CreateChildApplicationId(i, baseAppId),
+          basePoint = myPoint,
+          Axis = axis,
+          Restraint = restraint,
+          Stiffness = stiffness
+        };
         myNodes.Add(myNode);
       }
       

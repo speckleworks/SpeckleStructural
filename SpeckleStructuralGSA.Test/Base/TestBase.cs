@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Interop.Gsa_10_0;
+using System.Text.RegularExpressions;
+using Interop.Gsa_10_1;
 using Moq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -13,10 +14,23 @@ namespace SpeckleStructuralGSA.Test
 {
   public abstract class TestBase
   {
+    public static string[] savedJsonFileNames = new[] { "lfsaIEYkR.json", "NaJD7d5kq.json", "U7ntEJkzdZ.json", "UNg87ieJG.json" };
+    public static string expectedGwaPerIdsFileName = "TestGwaRecords.json";
+
+    public static string[] savedBlankRefsJsonFileNames = new[] { "P40rt5c8I.json" };
+    public static string expectedBlankRefsGwaPerIdsFileName = "BlankRefsGwaRecords.json";
+
+    public static string[] savedSharedLoadPlaneJsonFileNames = new[] { "nagwSLyPE.json" };
+    public static string expectedSharedLoadPlaneGwaPerIdsFileName = "SharedLoadPlaneGwaRefords.json";
+
+    public static string[] simpleDataJsonFileNames = new[] { "gMu-Xgpc.json" };
+
     protected IComAuto comAuto;
 
-    protected GSAProxy gsaInterfacer;
-    protected GSACache gsaCache;
+    //protected IGSAAppResources appResources;
+
+    //protected GSAProxy gsaInterfacer;
+    //protected GSACache gsaCache;
 
     protected JsonSerializerSettings jsonSettings = new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore };
     protected string jsonDecSearch = @"(\d*\.\d\d\d\d\d\d)\d*";
@@ -29,6 +43,7 @@ namespace SpeckleStructuralGSA.Test
     protected TestBase(string directory)
     {
       TestDataDirectory = directory;
+      //appResources = new MockGSAApp();
     }
 
     protected Mock<IComAuto> SetupMockGsaCom()
@@ -39,31 +54,32 @@ namespace SpeckleStructuralGSA.Test
       //The new cache is stricter about duplicates so just generate a new index every time so no duplicate entries with same index and different GWAs are tried to be cached
       mockGsaCom.Setup(x => x.Gen_NodeAt(It.IsAny<double>(), It.IsAny<double>(), It.IsAny<double>(), It.IsAny<double>())).Returns((double x, double y, double z, double coin) => { NodeIndex++; return NodeIndex; });
       mockGsaCom.Setup(x => x.GwaCommand(It.IsAny<string>())).Returns((string x) => { return x.Contains("GET") ? (object)"" : (object)1; });
-      mockGsaCom.Setup(x => x.VersionString()).Returns("Test\t1");
+      mockGsaCom.Setup(x => x.VersionString()).Returns("Test" + GSAProxy.GwaDelimiter + "1");
       mockGsaCom.Setup(x => x.LogFeatureUsage(It.IsAny<string>()));
       return mockGsaCom;
     }
 
-    protected List<SpeckleObject> ModelToSpeckleObjects(GSATargetLayer layer, bool resultsOnly, bool embedResults, string[] cases = null, string[] resultsToSend = null)
+    protected List<SpeckleObject> ModelToSpeckleObjects(GSATargetLayer layer, bool resultsOnly, bool embedResults, string[] cases, string[] resultsToSend = null)
     {
-      gsaCache.Clear();
+      //((IGSACache) appResources.Cache).Clear();
+      ((IGSACache)Initialiser.AppResources.Cache).Clear();
 
       //Clear out all sender objects that might be there from the last test preparation
-      Initialiser.GSASenderObjects.Clear();
+      Initialiser.GsaKit.GSASenderObjects.Clear();
 
       //Compile all GWA commands with application IDs
-      var senderProcessor = new SenderProcessor(TestDataDirectory, gsaInterfacer, gsaCache, layer, embedResults, cases, resultsToSend);
+      var senderProcessor = new SenderProcessor(TestDataDirectory, Initialiser.AppResources, layer, embedResults, cases, resultsToSend);
 
       var keywords = senderProcessor.GetKeywords(layer);
-      var data = gsaInterfacer.GetGwaData(keywords, false);
+      var data = Initialiser.AppResources.Proxy.GetGwaData(keywords, false);
       for (int i = 0; i < data.Count(); i++)
       {
-        gsaCache.Upsert(
+        var applicationId = string.IsNullOrEmpty(data[i].ApplicationId) ? null : data[i].ApplicationId;
+        Initialiser.AppResources.Cache.Upsert(
           data[i].Keyword, 
           data[i].Index, 
           data[i].GwaWithoutSet,
-          //This needs to be revised as this logic is in the kit too
-          applicationId: (string.IsNullOrEmpty(data[i].ApplicationId)) ? ("gsa/" + data[i].Keyword + "_" + data[i].Index.ToString()) : data[i].ApplicationId, 
+          applicationId: applicationId,
           gwaSetCommandType: data[i].GwaSetType,
           streamId: data[i].StreamId
           );
@@ -85,8 +101,8 @@ namespace SpeckleStructuralGSA.Test
         {
           //Required until SpeckleCoreGeometry has an updated such that its constructors create empty dictionaries for the "properties" property by default,
           //which would bring it in line with the default creation of empty dictionaries when they are created by other means
-          removeNullEmptyFields(jt1, new[] { "properties" });
-          removeNullEmptyFields(jt2, new[] { "properties" });
+          RemoveNullEmptyFields(jt1, new[] { "properties" });
+          RemoveNullEmptyFields(jt2, new[] { "properties" });
 
           var newResult = JToken.DeepEquals(jt1, jt2);
         }
@@ -99,7 +115,7 @@ namespace SpeckleStructuralGSA.Test
       }
     }
 
-    protected void removeNullEmptyFields(JToken token, string[] fields)
+    protected void RemoveNullEmptyFields(JToken token, string[] fields)
     {
       var container = token as JContainer;
       if (container == null) return;
@@ -112,7 +128,7 @@ namespace SpeckleStructuralGSA.Test
         {
           removeList.Add(el);
         }
-        removeNullEmptyFields(el, fields);
+        RemoveNullEmptyFields(el, fields);
       }
 
       foreach (var el in removeList)

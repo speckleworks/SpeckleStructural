@@ -27,9 +27,10 @@ namespace SpeckleStructuralRevit
       // Get the family
       var myFamily = (FamilyInstance)Doc.GetElement(myStick.GetElementId());
 
-      var myElement = new Structural1DElementPolyline();
-
-      myElement.Value = new List<double>();
+      var myElement = new Structural1DElementPolyline
+      {
+        Value = new List<double>()
+      };
 
       var curves = myStick.GetCurves(AnalyticalCurveType.RigidLinkHead).ToList();
       curves.AddRange(myStick.GetCurves(AnalyticalCurveType.ActiveCurves));
@@ -202,10 +203,11 @@ namespace SpeckleStructuralRevit
       // Property
       try
       {
-        var mySection = new Structural1DProperty();
-
-        mySection.Name = Doc.GetElement(myStick.GetElementId()).Name;
-        mySection.ApplicationId = myFamily.Symbol.UniqueId;
+        var mySection = new Structural1DProperty
+        {
+          Name = Doc.GetElement(myStick.GetElementId()).Name,
+          ApplicationId = myFamily.Symbol.UniqueId
+        };
 
         switch (myFamily.Symbol.GetStructuralSection().StructuralSectionGeneralShape)
         {
@@ -258,9 +260,10 @@ namespace SpeckleStructuralRevit
 
         if (mySection.Shape != Structural1DPropertyShape.Circular)
         {
-          var myProfile = new SpecklePolyline();
-
-          myProfile.Value = new List<double>();
+          var myProfile = new SpecklePolyline
+          {
+            Value = new List<double>()
+          };
 
           for (var i = 0; i < profile.Curves.Size; i++)
           {
@@ -332,37 +335,43 @@ namespace SpeckleStructuralRevit
           switch (matType)
           {
             case Autodesk.Revit.DB.Structure.StructuralMaterialType.Concrete:
-              var concMat = new StructuralMaterialConcrete();
-              concMat.ApplicationId = Doc.GetElement(myFamily.StructuralMaterialId).UniqueId;
-              concMat.Name = Doc.GetElement(myFamily.StructuralMaterialId).Name;
-              concMat.YoungsModulus = matAsset.YoungModulus.X;
-              concMat.ShearModulus = matAsset.ShearModulus.X;
-              concMat.PoissonsRatio = matAsset.PoissonRatio.X;
-              concMat.Density = matAsset.Density;
-              concMat.CoeffThermalExpansion = matAsset.ThermalExpansionCoefficient.X;
-              concMat.CompressiveStrength = matAsset.ConcreteCompression;
-              concMat.MaxStrain = 0;
-              concMat.AggragateSize = 0;
+              var concMat = new StructuralMaterialConcrete
+              {
+                ApplicationId = Doc.GetElement(myFamily.StructuralMaterialId).UniqueId,
+                Name = Doc.GetElement(myFamily.StructuralMaterialId).Name,
+                YoungsModulus = matAsset.YoungModulus.X,
+                ShearModulus = matAsset.ShearModulus.X,
+                PoissonsRatio = matAsset.PoissonRatio.X,
+                Density = matAsset.Density,
+                CoeffThermalExpansion = matAsset.ThermalExpansionCoefficient.X,
+                CompressiveStrength = matAsset.ConcreteCompression,
+                MaxStrain = 0,
+                AggragateSize = 0
+              };
               myMaterial = concMat;
               break;
             case Autodesk.Revit.DB.Structure.StructuralMaterialType.Steel:
-              var steelMat = new StructuralMaterialSteel();
-              steelMat.ApplicationId = Doc.GetElement(myFamily.StructuralMaterialId).UniqueId;
-              steelMat.Name = Doc.GetElement(myFamily.StructuralMaterialId).Name;
-              steelMat.YoungsModulus = matAsset.YoungModulus.X;
-              steelMat.ShearModulus = matAsset.ShearModulus.X;
-              steelMat.PoissonsRatio = matAsset.PoissonRatio.X;
-              steelMat.Density = matAsset.Density;
-              steelMat.CoeffThermalExpansion = matAsset.ThermalExpansionCoefficient.X;
-              steelMat.YieldStrength = matAsset.MinimumYieldStress;
-              steelMat.UltimateStrength = matAsset.MinimumTensileStrength;
-              steelMat.MaxStrain = 0;
+              var steelMat = new StructuralMaterialSteel
+              {
+                ApplicationId = Doc.GetElement(myFamily.StructuralMaterialId).UniqueId,
+                Name = Doc.GetElement(myFamily.StructuralMaterialId).Name,
+                YoungsModulus = matAsset.YoungModulus.X,
+                ShearModulus = matAsset.ShearModulus.X,
+                PoissonsRatio = matAsset.PoissonRatio.X,
+                Density = matAsset.Density,
+                CoeffThermalExpansion = matAsset.ThermalExpansionCoefficient.X,
+                YieldStrength = matAsset.MinimumYieldStress,
+                UltimateStrength = matAsset.MinimumTensileStrength,
+                MaxStrain = 0
+              };
               myMaterial = steelMat;
               break;
             default:
-              var defMat = new StructuralMaterialSteel();
-              defMat.ApplicationId = Doc.GetElement(myFamily.StructuralMaterialId).UniqueId;
-              defMat.Name = Doc.GetElement(myFamily.StructuralMaterialId).Name;
+              var defMat = new StructuralMaterialSteel
+              {
+                ApplicationId = Doc.GetElement(myFamily.StructuralMaterialId).UniqueId,
+                Name = Doc.GetElement(myFamily.StructuralMaterialId).Name
+              };
               myMaterial = defMat;
               break;
           }

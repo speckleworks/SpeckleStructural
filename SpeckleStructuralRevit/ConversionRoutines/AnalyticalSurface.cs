@@ -98,7 +98,8 @@ namespace SpeckleStructuralRevit
         var mySection = new Structural2DProperty
         {
           Name = Doc.GetElement(myRevitElement.GetTypeId()).Name,
-          ApplicationId = Doc.GetElement(myRevitElement.GetTypeId()).UniqueId
+          ApplicationId = Doc.GetElement(myRevitElement.GetTypeId()).UniqueId,
+          ReferenceSurface = Structural2DPropertyReferenceSurface.Middle
         };
 
         if (myRevitElement is Floor)
@@ -224,7 +225,7 @@ namespace SpeckleStructuralRevit
         mesh.Offset = Enumerable.Repeat(0.0, numFaces).Cast<double>().ToList(); //TODO
 
         mesh.GenerateHash();
-        mesh.ApplicationId = mySurface.UniqueId + "_" + (counter++).ToString();
+        mesh.ApplicationId = Helper.CreateChildApplicationId(counter++, mySurface.UniqueId);
 
         returnObjects.Add(mesh);
       }

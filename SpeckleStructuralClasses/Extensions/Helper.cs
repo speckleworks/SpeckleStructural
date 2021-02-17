@@ -6,9 +6,26 @@ namespace SpeckleStructuralClasses
 {
   public static class Helper
   {
+    public static double PointComparisonEpsilon = 0.0001;
+
     public static void ScaleProperties(Dictionary<string, object> dict, double factor)
     {
       ScaleDictionary(ref dict, factor);
+    }
+
+    public static string CreateChildApplicationId(int childId, string parentApplicationId)
+    {
+      return string.Join("_", new[] { parentApplicationId, childId.ToString() });
+    }
+
+    public static string CreateChildApplicationId(string childId, string parentApplicationId)
+    {
+      return string.Join("_", new[] { parentApplicationId, childId });
+    }
+
+    public static string ExtractParentApplicationId(string appId)
+    {
+      return appId.Split(new[] { '_' }).First();
     }
 
     private static void ScaleDictionary(ref Dictionary<string, object> dict, double factor)

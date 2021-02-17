@@ -20,8 +20,10 @@ namespace SpeckleStructuralGSA.Test
     [SetUp]
     public void SetupMergeTests()
     {
-      Initialiser.Cache = new GSACache();
-      Initialiser.Settings = new Settings();
+      Initialiser.AppResources = new MockGSAApp();
+
+      //Initialiser.Instance.Cache = new GSACache();
+      //Initialiser.Instance.Settings = new MockSettings();
     }
 
     [Test]
@@ -119,14 +121,14 @@ namespace SpeckleStructuralGSA.Test
     [Test]
     public void MergeTestGSA_WithMerger()
     {
-      var ls1 = new object[] { "PROP_SPR.3:{speckle_app_id:gh/a}", 1, "LSPxGeneral", "NO_RGB", "GLOBAL", "GENERAL", 0, 16, 0, 17, 0, 18, 0, 19, 0, 20, 0, 21, 0.21 };
-      var gwa1 = string.Join("\t", ls1.Select(l => l.ToString()));
+      var ls1 = new object[] { "PROP_SPR.4:{speckle_app_id:gh/a}", 1, "LSPxGeneral", "NO_RGB", "GLOBAL", "GENERAL", 0, 16, 0, 17, 0, 18, 0, 19, 0, 20, 0, 21, 0.21 };
+      var gwa1 = string.Join(GSAProxy.GwaDelimiter.ToString(), ls1.Select(l => l.ToString()));
 
-      PrepareInterfacerForGwaToSpeckle<GSASpringProperty>(gwa1, "PROP_SPR.3", "gh/a");
+      PrepareInterfacerForGwaToSpeckle<GSASpringProperty>(gwa1, "PROP_SPR", "gh/a");
 
       //Call the ToSpeckle method, which just adds to the GSASenderObjects collection-
       Conversions.ToSpeckle(new GSASpringProperty());
-      var existing = (StructuralSpringProperty)Initialiser.GSASenderObjects.Get<GSASpringProperty>().First().Value;
+      var existing = (StructuralSpringProperty)Initialiser.GsaKit.GSASenderObjects.Get<GSASpringProperty>().First().Value;
 
       var newToMerge = new StructuralSpringProperty() { DampingRatio = 1.5 };
 
@@ -164,14 +166,14 @@ namespace SpeckleStructuralGSA.Test
     [Test]
     public void MergeTestGSA()
     {
-      var ls1 = new object[] { "PROP_SPR.3:{speckle_app_id:gh/a}", 1, "LSPxGeneral", "NO_RGB", "GLOBAL", "GENERAL", 0, 16, 0, 17, 0, 18, 0, 19, 0, 20, 0, 21, 0.21 };
-      var gwa1 = string.Join("\t", ls1.Select(l => l.ToString()));
+      var ls1 = new object[] { "PROP_SPR.4:{speckle_app_id:gh/a}", 1, "LSPxGeneral", "NO_RGB", "GLOBAL", "GENERAL", 0, 16, 0, 17, 0, 18, 0, 19, 0, 20, 0, 21, 0.21 };
+      var gwa1 = string.Join(GSAProxy.GwaDelimiter.ToString(), ls1.Select(l => l.ToString()));
 
-      PrepareInterfacerForGwaToSpeckle<GSASpringProperty>(gwa1, "PROP_SPR.3", "gh/a");
+      PrepareInterfacerForGwaToSpeckle<GSASpringProperty>(gwa1, "PROP_SPR", "gh/a");
 
       //Call the ToSpeckle method, which just adds to the GSASenderObjects collection
       Conversions.ToSpeckle(new GSASpringProperty());
-      var existing = (StructuralSpringProperty)Initialiser.GSASenderObjects.Get<GSASpringProperty>().First().Value;
+      var existing = (StructuralSpringProperty)Initialiser.GsaKit.GSASenderObjects.Get<GSASpringProperty>().First().Value;
 
       var newToMerge = new StructuralSpringProperty() { DampingRatio = 1.5 };
 
@@ -182,10 +184,10 @@ namespace SpeckleStructuralGSA.Test
 
     private IMapper SetupGSAMerger()
     {
-      //Find all structural types which have a ToNative static method
-      var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetTypes().Any(t => typeof(ISpeckleInitializer).IsAssignableFrom(t))).ToList();
+      //Find all structural types
+      var speckleTypeAssemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetTypes().Any(t => typeof(IStructural).IsAssignableFrom(t))).ToList();
       var speckleTypes = new List<Type>();
-      foreach (var assembly in assemblies)
+      foreach (var assembly in speckleTypeAssemblies)
       {
         var types = assembly.GetTypes();
         foreach (var t in types)
@@ -197,8 +199,9 @@ namespace SpeckleStructuralGSA.Test
         }
       }
 
+      var speckleToNativeAssemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.Contains("GSA"));
       var mappableTypes = new List<Type>();
-      foreach (var assembly in assemblies.Where(a => a.FullName.Contains("GSA")))
+      foreach (var assembly in speckleToNativeAssemblies)
       {
         foreach (var t in speckleTypes)
         {
@@ -268,10 +271,10 @@ namespace SpeckleStructuralGSA.Test
       var testType = typeof(T);
 
       var mockGsaInterfacer = new Mock<IGSAProxy>();
-
-      ((IGSACache)Initialiser.Cache).Upsert(keyword, 1, gwaCommand, sid);
-      Initialiser.GSASenderObjects.Clear();
-      //Initialiser.GSASenderObjects.Add(testType, new List<object>());
+      mockGsaInterfacer.SetupGet(x => x.GwaDelimiter).Returns('\t');
+      ((MockGSAApp)Initialiser.AppResources).Proxy = mockGsaInterfacer.Object;
+      ((IGSACache)Initialiser.AppResources.Cache).Upsert(keyword, 1, gwaCommand, sid);
+      Initialiser.GsaKit.GSASenderObjects.Clear();
     }
   }
 

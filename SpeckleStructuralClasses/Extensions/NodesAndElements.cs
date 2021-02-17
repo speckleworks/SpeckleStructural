@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Media.Media3D;
+using System.Security.AccessControl;
+using MathNet.Spatial.Euclidean;
 
 namespace SpeckleStructuralClasses
 {
@@ -158,10 +159,12 @@ namespace SpeckleStructuralClasses
             ZAxis == null || ZAxis.Count() <= i ? null : ZAxis[i],
             EndRelease == null || EndRelease.Count() < i * 2 + 2 ? null : EndRelease.Skip(i * 2).Take(2).ToArray(),
             Offset == null || Offset.Count() < i * 2 + 2 ? null : Offset.Skip(i * 2).Take(2).ToArray(),
-            ElementApplicationId != null && ElementApplicationId.Count() > i ? ElementApplicationId[i] : ApplicationId + "_" + i.ToString()
-        );
-        element.GSADummy = GSADummy;
-        element.GSAMeshSize = GSAMeshSize;
+            ElementApplicationId != null && ElementApplicationId.Count() > i ? ElementApplicationId[i] : Helper.CreateChildApplicationId(i, ApplicationId)
+        )
+        {
+          GSADummy = GSADummy,
+          GSAMeshSize = GSAMeshSize
+        };
         elements.Add(element);
       }
 
@@ -254,20 +257,11 @@ namespace SpeckleStructuralClasses
       {
         Properties = properties;
       }
-      Vertices = edgeVertices.ToList();
 
-      // Perform mesh making
-      var faces = SplitMesh(
-          edgeVertices.ToArray(),
-          (Enumerable.Range(0, edgeVertices.Count() / 3).ToArray()));
-
-      Faces = new List<int>();
-
-      foreach (var face in faces)
-      {
-        Faces.Add(face.Count() - 3);
-        Faces.AddRange(face);
-      }
+      var pm = new PolygonMesher.PolygonMesher();
+      pm.Init(edgeVertices);
+      Faces = pm.Faces().ToList();
+      Vertices = pm.Coordinates.ToList();
 
       Colors = (color == null) ? new List<int>() : Enumerable.Repeat(color.Value, Vertices.Count() / 3).ToList();
 
@@ -318,10 +312,14 @@ namespace SpeckleStructuralClasses
             PropertyRef,
             Axis != null && Axis.Count() > faceCounter ? Axis[faceCounter] : null,
             Offset != null && Offset.Count() > faceCounter ? Offset[faceCounter] : 0,
-            ElementApplicationId != null && ElementApplicationId.Count() > faceCounter ? ElementApplicationId[faceCounter] : ApplicationId + "_" + faceCounter.ToString()
-        );
-        element.GSADummy = GSADummy;
-        element.GSAMeshSize = GSAMeshSize;
+            ElementApplicationId != null && ElementApplicationId.Count() > faceCounter
+              ? ElementApplicationId[faceCounter]
+              : Helper.CreateChildApplicationId(i, ApplicationId + "-" + faceCounter.ToString())
+        )
+        {
+          GSADummy = GSADummy,
+          GSAMeshSize = GSAMeshSize
+        };
         elements.Add(element);
 
         faceCounter++;
@@ -330,114 +328,190 @@ namespace SpeckleStructuralClasses
       return elements.ToArray();
     }
 
+    private bool EqualPair(int[] p1, int[] p2)
+    {
+      return ((p1[0] == p2[0] && p1[1] == p2[1]) || (p1[1] == p2[0] && p1[0] == p2[1]));
+    }
+
+    private List<int[]> FaceEdgePairs()
+    {
+      var allEdgePairs = new List<int[]>();
+      var edgePairCounts = new Dictionary<int, int>();
+
+      var i = 0;
+      do
+      {
+        var numInFace = (Faces[i] == 0) ? 3 : 4;
+        if ((i + numInFace) < Faces.Count())
+        {
+          i++;
+          for (var v = 0; v < numInFace; v++)
+          {
+            var pair = (new int[] { Faces[i + v], Faces[((v + 1) == numInFace) ? i : i + v + 1] }).OrderBy(n => n).ToArray();
+            var foundIndex = allEdgePairs.FindIndex(ep => EqualPair(ep, pair));
+            if (foundIndex >= 0)
+            {
+              edgePairCounts[foundIndex]++;
+            }
+            else
+            {
+              allEdgePairs.Add(pair);
+              edgePairCounts.Add(allEdgePairs.IndexOf(pair), 1);
+            }
+          }
+        }
+        i += numInFace;
+      } while (i < Faces.Count());
+
+      var edgePairIndices = edgePairCounts.Where(kvp => kvp.Value == 1).Select(kvp => kvp.Key).ToList();
+
+      return edgePairIndices.Select(pi => allEdgePairs[pi]).ToList();
+    }
+
+    private bool FindNextLoopEndIndex(int pointIndex, List<int[]> edgePairs, out int? nextLoopEndIndex, out int? connectingEdgePairIndex)
+    {
+      for (var i = 0; i < edgePairs.Count(); i++)
+      {
+        if (pointIndex == edgePairs[i][0])
+        {
+          nextLoopEndIndex = edgePairs[i][1];
+          connectingEdgePairIndex = i;
+          return true;
+        }
+        else if (pointIndex == edgePairs[i][1])
+        {
+          nextLoopEndIndex = edgePairs[i][0];
+          connectingEdgePairIndex = i;
+          return true;
+        }
+      }
+      nextLoopEndIndex = null;
+      connectingEdgePairIndex = null;
+      return false;
+    }
+
+    //This is to cater for situations where the mesh has duplicate points; these are when the same combination of x/y/z values are repeated
+    //in the vertices collection
+    public void Consolidate()
+    {
+      var vPts = Enumerable.Range(0, Vertices.Count() / 3).Select(v => new Point3D(Vertices[v * 3], Vertices[(v * 3) + 1], Vertices[(v * 3) + 2])).ToList();
+
+      //This algorithm is O(N^2) at the moment
+      var indexConsolidateMappings = new Dictionary<int, int>();
+      var newPts = new List<Point3D>();
+      for (var i = 0; i < vPts.Count(); i++)
+      {
+        var found = false;
+        for (int j = 0; j < newPts.Count(); j++)
+        {
+          if (vPts[i].Equals(newPts[j], Helper.PointComparisonEpsilon))
+          {
+            indexConsolidateMappings.Add(i, j);
+            found = true;
+            break;
+          }
+        }
+        if (!found)
+        {
+          var newIndex = newPts.Count();
+          newPts.Add(vPts[i]);
+          indexConsolidateMappings.Add(i, newIndex);
+        }
+      }
+
+      var newFaces = Faces.ToList();
+      var f = 0;
+      do
+      {
+        var numInFace = (newFaces[f] == 0) ? 3 : 4;
+        if ((f + numInFace) < newFaces.Count())
+        {
+          f++;
+          for (var v = 0; v < numInFace; v++)
+          {
+            if (indexConsolidateMappings.ContainsKey(newFaces[f + v]))
+            {
+              newFaces[f + v] = indexConsolidateMappings[newFaces[f + v]];
+            }
+          }
+        }
+        f += numInFace;
+      } while (f < newFaces.Count());
+
+      Faces = newFaces;
+      Vertices = newPts.SelectMany(p => new[] { p.X, p.Y, p.Z }).ToList();
+    }
+
     public List<int[]> Edges()
     {
-      var edgeConnectivities = new List<int[]>();
+      var edgePairs = FaceEdgePairs();
+      var vPts = Enumerable.Range(0, Vertices.Count() / 3).Select(i => new Point3D(Vertices[i * 3], Vertices[(i * 3) + 1], Vertices[(i * 3) + 2])).ToList();
 
-      // Get face connectivities and close loop
-      var faceConnnectivities = new List<int[]>();
-      for (var i = 0; i < Faces.Count(); i++)
+      //Cap the number of attempts at finding connecting lines to no more than the number of lines overall
+      var iterationCount = 0;
+      var maxIterations = edgePairs.Count();
+
+      var loops = new List<List<int>>();
+
+      var remainingEdgePairs = edgePairs.ToList();
+
+      do 
       {
-        var numVertices = Faces[i] + 3;
-        i++;
-        faceConnnectivities.Add(Faces.Skip(i).Take(numVertices).Concat(Faces.Skip(i).Take(1)).ToArray());
-        i += numVertices - 1;
+        var currIndex = remainingEdgePairs.First()[1];
+        var endIndex = remainingEdgePairs.First()[0];
+
+        var loop = new List<int>() { currIndex };
+
+        remainingEdgePairs = remainingEdgePairs.Skip(1).ToList();
+        var error = false;
+
+        do
+        {
+          for (var i = 0; i < 2; i++)
+          {
+            if (FindNextLoopEndIndex(currIndex, remainingEdgePairs, out var nextLoopEndIndex, out var connectingEdgePairIndex))
+            {
+              currIndex = nextLoopEndIndex.Value;  //Move the end of the loop along this newly-found line to its end
+              loop.Add(currIndex);
+              remainingEdgePairs.RemoveAt(connectingEdgePairIndex.Value);
+            }
+            iterationCount++;
+          }
+          
+        } while (remainingEdgePairs.Count() > 0 && currIndex != endIndex && !error && iterationCount < maxIterations);
+
+        if (!error && loop.Count() > 0)
+        {
+          loops.Add(loop);
+        }
+      } while (remainingEdgePairs.Count() > 0 && iterationCount < maxIterations);
+
+      var lengthsOfLoops = new List<double>();
+      foreach (var l in loops)
+      {
+        double length = 0;
+        for (var i = 0; i < l.Count(); i++)
+        {
+          var j = ((i + 1) < l.Count()) ? i + 1 : 0;
+
+          length += (new Line3D(vPts[l[i]], vPts[l[j]])).Length;
+        }
+        lengthsOfLoops.Add(length);
       }
 
-      // Get distinct edges
-      var edges = new List<Tuple<int, int, string, string, double>>();
-
-      foreach (var conn in faceConnnectivities)
-      {
-        for (var i = 0; i < conn.Length - 1; i++)
-        {
-          var c1 = string.Join(",", Vertices.Skip(conn[i] * 3).Take(3).Select(x => Math.Round(x, 4).ToString()));
-          var c2 = string.Join(",", Vertices.Skip(conn[i + 1] * 3).Take(3).Select(x => Math.Round(x, 4).ToString()));
-          var length = Math.Pow(Vertices.Skip(conn[i] * 3).Take(1).First() - Vertices.Skip(conn[i + 1] * 3).Take(1).First(), 2) +
-            Math.Pow(Vertices.Skip(conn[i] * 3 + 1).Take(1).First() - Vertices.Skip(conn[i + 1] * 3 + 1).Take(1).First(), 2) +
-            Math.Pow(Vertices.Skip(conn[i] * 3 + 2).Take(1).First() - Vertices.Skip(conn[i + 1] * 3 + 2).Take(1).First(), 2);
-          length = Math.Sqrt(length);
-
-          if (edges.Any(e => (e.Item3 == c1 && e.Item4 == c2) || (e.Item3 == c2 && e.Item4 == c1)))
-          {
-            edges.RemoveAll(x => (x.Item3 == c1 && x.Item4 == c2) || (x.Item3 == c2 && x.Item4 == c1));
-          }
-          else
-          {
-            if (conn[i] < conn[i + 1])
-              edges.Add(new Tuple<int, int, string, string, double>(conn[i], conn[i + 1], c1, c2, length));
-            else
-              edges.Add(new Tuple<int, int, string, string, double>(conn[i + 1], conn[i], c2, c1, length));
-          }
-        }
-      }
-
-      // Reorder the edges
-      var lengthsOfEdges = new List<double>();
-      double currentLength = 0;
-
-      var currentLoop = new List<int>();
-      var flatCoor = new List<string>();
-      currentLoop.Add(edges[0].Item1);
-      currentLoop.Add(edges[0].Item2);
-      flatCoor.Add(edges[0].Item3);
-      flatCoor.Add(edges[0].Item4);
-
-      edges.RemoveAt(0);
-
-      while (edges.Count > 0)
-      {
-        var commonVertex = flatCoor.Last();
-
-        var nextEdge = edges.Where(e => e.Item3 == commonVertex | e.Item4 == commonVertex).ToList();
-
-        if (nextEdge.Count > 0)
-        {
-          currentLoop.Add(nextEdge[0].Item3 == commonVertex ? nextEdge[0].Item2 : nextEdge[0].Item1);
-          flatCoor.Add(nextEdge[0].Item3 == commonVertex ? nextEdge[0].Item4 : nextEdge[0].Item3);
-          edges.Remove(nextEdge[0]);
-          currentLength += nextEdge[0].Item5;
-        }
-        else
-        {
-          // Next edge not found. Stop looking for more
-          break;
-        }
-
-        if (currentLoop[0] == currentLoop.Last())
-        {
-          currentLoop.RemoveAt(0);
-
-          edgeConnectivities.Add(currentLoop.ToArray());
-          lengthsOfEdges.Add(currentLength);
-
-          currentLength = 0;
-          currentLoop = new List<int>();
-          faceConnnectivities = new List<int[]>();
-
-          if (edges.Count > 0)
-          {
-            currentLoop.Add(edges[0].Item1);
-            currentLoop.Add(edges[0].Item2);
-            flatCoor.Add(edges[0].Item3);
-            flatCoor.Add(edges[0].Item4);
-
-            edges.RemoveAt(0);
-          }
-        }
-      }
-
-      // Sort based on length
-      var ordered = lengthsOfEdges
+      //Assumption: the longest length loop is the outer loop
+      //Sort by loop length
+      var ordered = lengthsOfLoops
         .Select((x, i) => new KeyValuePair<double, int>(x, i))
         .OrderBy(x => x.Key)
         .Select(x => x.Value)
         .Reverse();
 
       var sortedEdgeConnectivities = new List<int[]>();
-
       foreach (var i in ordered)
-        sortedEdgeConnectivities.Add(edgeConnectivities[i]);
+      {
+        sortedEdgeConnectivities.Add(loops[i].ToArray()); ;
+      }
 
       return sortedEdgeConnectivities;
     }
@@ -455,145 +529,6 @@ namespace SpeckleStructuralClasses
       GenerateHash();
     }
 
-    //TODO: These methods need to be disintegrated 
-    #region Mesh Generation Helper Functions
-    private static List<List<int>> SplitMesh(double[] coordinates, int[] mesh)
-    {
-      if (mesh.Length <= 3) return new List<List<int>>() { mesh.ToList() };
-
-      // Need to ensure same area!
-      var currArea = IntegrateHasher(coordinates, mesh);
-
-      // Assume area doesn't twist on itself
-      if (currArea < 0)
-      {
-        mesh = mesh.Reverse().ToArray();
-        currArea *= -1;
-      }
-
-      var indexToCut = 0;
-      var numCut = 3;
-      var bestCost = currArea * 10; // TODO: figure out a better way
-      var newFace1 = new List<int>();
-      var newFace2 = new List<int>();
-
-      do
-      {
-        var face1 = mesh.Take(numCut).ToList();
-        var face2 = mesh.Skip(numCut - 1).ToList();
-        face2.Add(mesh[0]);
-
-        var cost1 = IntegrateHasher(coordinates, face1.ToArray());
-        var cost2 = IntegrateHasher(coordinates, face2.ToArray());
-
-        if (cost1 > 0 && cost2 > 0)
-        {
-          // Check to make sure that the new region does not encompass the other's points
-          var flag = false;
-          for (var i = 1; i < face2.Count() - 1; i++)
-          {
-            if (InTri(coordinates, face1.ToArray(), face2[i]))
-            {
-              flag = true;
-              break;
-            }
-          }
-
-          if (!flag)
-          {
-            var cost = Math.Abs(cost1 + cost2 - currArea);
-            if (bestCost > cost)
-            {
-              // Track best solution
-              bestCost = cost;
-              newFace1 = face1;
-              newFace2 = face2;
-            }
-          }
-        }
-
-        mesh = mesh.Skip(1).Take(mesh.Count() - 1).Concat(new int[] { mesh[0] }).ToArray();
-        indexToCut++;
-
-        if (indexToCut >= mesh.Count())
-          break;
-
-      } while (bestCost > 1e-10);
-
-      var returnVals = new List<List<int>>();
-      if (newFace1.Count() > 0)
-        returnVals.AddRange(SplitMesh(coordinates, newFace1.ToArray()));
-      if (newFace2.Count() > 0)
-        returnVals.AddRange(SplitMesh(coordinates, newFace2.ToArray()));
-      return returnVals;
-    }
-
-    private static double IntegrateHasher(double[] coordinates, int[] vertices)
-    {
-      // Get coordinates
-      var x = new List<double>();
-      var y = new List<double>();
-      var z = new List<double>();
-
-      foreach (var e in vertices)
-      {
-        x.Add(coordinates[e * 3]);
-        y.Add(coordinates[e * 3 + 1]);
-        z.Add(coordinates[e * 3 + 2]);
-      }
-
-      // Close the loop
-      x.Add(x[0]);
-      y.Add(y[0]);
-      z.Add(z[0]);
-
-      //Integrate
-      double area1 = 0;
-      for (var i = 0; i < x.Count() - 1; i++)
-        area1 += x[i] * y[i + 1] - y[i] * x[i + 1];
-
-      if (Math.Abs(area1) > 1e-16) return area1;
-
-      //Integrate
-      double area2 = 0;
-      for (var i = 0; i < x.Count() - 1; i++)
-        area2 += x[i] * z[i + 1] - z[i] * x[i + 1];
-
-      if (Math.Abs(area2) > 1e-16) return area2;
-
-      //Integrate
-      double area3 = 0;
-      for (var i = 0; i < y.Count() - 1; i++)
-        area3 += y[i] * z[i + 1] - z[i] * y[i + 1];
-
-      if (Math.Abs(area3) > 1e-16) return area3;
-
-      return 0;
-    }
-
-    public static bool InTri(double[] coordinates, int[] tri, int point)
-    {
-      // Get coordinates
-      var p0 = new Point3D(coordinates[tri[0] * 3], coordinates[tri[0] * 3 + 1], coordinates[tri[0] * 3 + 2]);
-      var p1 = new Point3D(coordinates[tri[1] * 3], coordinates[tri[1] * 3 + 1], coordinates[tri[1] * 3 + 2]);
-      var p2 = new Point3D(coordinates[tri[2] * 3], coordinates[tri[2] * 3 + 1], coordinates[tri[2] * 3 + 2]);
-      var p = new Point3D(coordinates[point * 3], coordinates[point * 3 + 1], coordinates[point * 3 + 2]);
-
-      var u = Point3D.Subtract(p1, p0);
-      var v = Point3D.Subtract(p2, p0);
-      var n = Vector3D.CrossProduct(u, v);
-      var w = Point3D.Subtract(p, p0);
-
-      var gamma = Vector3D.DotProduct(Vector3D.CrossProduct(u, w), n) / (n.Length * n.Length);
-      var beta = Vector3D.DotProduct(Vector3D.CrossProduct(w, v), n) / (n.Length * n.Length);
-      var alpha = 1 - gamma - beta;
-
-      if (alpha >= 0 && beta >= 0 && gamma >= 0 && alpha <= 1 && beta <= 1 && gamma <= 1)
-        return true;
-      else
-        return false;
-    }
-    #endregion
   }
 
   public partial class Structural2DVoid
@@ -622,25 +557,20 @@ namespace SpeckleStructuralClasses
       {
         Properties = properties;
       }
-      Vertices = edgeVertices.ToList();
 
-      // Perform mesh making
-      var faces = SplitMesh(
-          edgeVertices,
-          (Enumerable.Range(0, edgeVertices.Count() / 3).ToArray()));
-
-      Faces = new List<int>();
-
-      foreach (var face in faces)
-      {
-        Faces.Add(face.Count() - 3);
-        Faces.AddRange(face);
-      }
+      var pm = new PolygonMesher.PolygonMesher();
+      pm.Init(edgeVertices);
+      Faces = pm.Faces().ToList();
+      Vertices = pm.Coordinates.ToList();
 
       if (color != null)
+      {
         Colors = Enumerable.Repeat(color.Value, Vertices.Count() / 3).ToList();
+      }
       else
+      {
         Colors = new List<int>();
+      }
 
       ApplicationId = applicationId;
 
@@ -770,145 +700,5 @@ namespace SpeckleStructuralClasses
       Helper.ScaleProperties(Properties, factor);
       GenerateHash();
     }
-
-    //TODO: These methods need to be disintegrated 
-    #region Mesh Generation Helper Functions
-    private static List<List<int>> SplitMesh(double[] coordinates, int[] mesh)
-    {
-      if (mesh.Length <= 3) return new List<List<int>>() { mesh.ToList() };
-
-      // Need to ensure same area!
-      var currArea = IntegrateHasher(coordinates, mesh);
-
-      // Assume area doesn't twist on itself
-      if (currArea < 0)
-      {
-        mesh = mesh.Reverse().ToArray();
-        currArea *= -1;
-      }
-
-      var indexToCut = 0;
-      var numCut = 3;
-      var bestCost = currArea * 10; // TODO: figure out a better way
-      var newFace1 = new List<int>();
-      var newFace2 = new List<int>();
-
-      do
-      {
-        var face1 = mesh.Take(numCut).ToList();
-        var face2 = mesh.Skip(numCut - 1).ToList();
-        face2.Add(mesh[0]);
-
-        var cost1 = IntegrateHasher(coordinates, face1.ToArray());
-        var cost2 = IntegrateHasher(coordinates, face2.ToArray());
-
-        if (cost1 > 0 && cost2 > 0)
-        {
-          // Check to make sure that the new region does not encompass the other's points
-          var flag = false;
-          for (var i = 1; i < face2.Count() - 1; i++)
-          {
-            if (InTri(coordinates, face1.ToArray(), face2[i]))
-            {
-              flag = true;
-              break;
-            }
-          }
-
-          if (!flag)
-          {
-            var cost = Math.Abs(cost1 + cost2 - currArea);
-            if (bestCost > cost)
-            {
-              // Track best solution
-              bestCost = cost;
-              newFace1 = face1;
-              newFace2 = face2;
-            }
-          }
-        }
-
-        mesh = mesh.Skip(1).Take(mesh.Count() - 1).Concat(new int[] { mesh[0] }).ToArray();
-        indexToCut++;
-
-        if (indexToCut >= mesh.Count())
-          break;
-
-      } while (bestCost > 1e-10);
-
-      var returnVals = new List<List<int>>();
-      if (newFace1.Count() > 0)
-        returnVals.AddRange(SplitMesh(coordinates, newFace1.ToArray()));
-      if (newFace2.Count() > 0)
-        returnVals.AddRange(SplitMesh(coordinates, newFace2.ToArray()));
-      return returnVals;
-    }
-
-    private static double IntegrateHasher(double[] coordinates, int[] vertices)
-    {
-      // Get coordinates
-      var x = new List<double>();
-      var y = new List<double>();
-      var z = new List<double>();
-
-      foreach (var e in vertices)
-      {
-        x.Add(coordinates[e * 3]);
-        y.Add(coordinates[e * 3 + 1]);
-        z.Add(coordinates[e * 3 + 2]);
-      }
-
-      // Close the loop
-      x.Add(x[0]);
-      y.Add(y[0]);
-      z.Add(z[0]);
-
-      //Integrate
-      double area1 = 0;
-      for (var i = 0; i < x.Count() - 1; i++)
-        area1 += x[i] * y[i + 1] - y[i] * x[i + 1];
-
-      if (Math.Abs(area1) > 1e-16) return area1;
-
-      //Integrate
-      double area2 = 0;
-      for (var i = 0; i < x.Count() - 1; i++)
-        area2 += x[i] * z[i + 1] - z[i] * y[i + 1];
-
-      if (Math.Abs(area2) > 1e-16) return area2;
-
-      //Integrate
-      double area3 = 0;
-      for (var i = 0; i < y.Count() - 1; i++)
-        area3 += y[i] * z[i + 1] - z[i] * y[i + 1];
-
-      if (Math.Abs(area3) > 1e-16) return area3;
-
-      return 0;
-    }
-
-    public static bool InTri(double[] coordinates, int[] tri, int point)
-    {
-      // Get coordinates
-      var p0 = new Point3D(coordinates[tri[0] * 3], coordinates[tri[0] * 3 + 1], coordinates[tri[0] * 3 + 2]);
-      var p1 = new Point3D(coordinates[tri[1] * 3], coordinates[tri[1] * 3 + 1], coordinates[tri[1] * 3 + 2]);
-      var p2 = new Point3D(coordinates[tri[2] * 3], coordinates[tri[2] * 3 + 1], coordinates[tri[2] * 3 + 2]);
-      var p = new Point3D(coordinates[point * 3], coordinates[point * 3 + 1], coordinates[point * 3 + 2]);
-
-      var u = Point3D.Subtract(p1, p0);
-      var v = Point3D.Subtract(p2, p0);
-      var n = Vector3D.CrossProduct(u, v);
-      var w = Point3D.Subtract(p, p0);
-
-      var gamma = Vector3D.DotProduct(Vector3D.CrossProduct(u, w), n) / (n.Length * n.Length);
-      var beta = Vector3D.DotProduct(Vector3D.CrossProduct(w, v), n) / (n.Length * n.Length);
-      var alpha = 1 - gamma - beta;
-
-      if (alpha >= 0 & beta >= 0 & gamma >= 0 & alpha <= 1 & beta <= 1 & gamma <= 1)
-        return true;
-      else
-        return false;
-    }
-    #endregion
   }
 }
