@@ -439,7 +439,7 @@ namespace SpeckleStructuralGSA
       var coor = new List<double>();
       foreach (var c in connectivities[0])
       {
-        coor.AddRange(baseMesh.Vertices.Skip(c * 3).Take(3));
+        coor.AddRange(mesh.Vertices.Skip(c * 3).Take(3));
       }
       coor = coor.Essential().ToList();
       var coorPts = Enumerable.Range(0, coor.Count() / 3).Select(i => new double[] { coor[i * 3], coor[i * 3 + 1], coor[i * 3 + 2] }).ToList();

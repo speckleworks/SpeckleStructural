@@ -65,7 +65,9 @@ namespace SpeckleStructuralGSA.Test
       // Write objects
       var currentBatch = new List<Type>();
       var traversedTypes = new List<Type>();
-      var TypePrerequisites = Helper.GetTypeCastPriority(ioDirection.Receive, layer, false);
+
+      //var TypePrerequisites = Helper.GetTypeCastPriority(ioDirection.Receive, layer, false);
+      var TypePrerequisites = Initialiser.GsaKit.RxTypeDependencies;
       do
       {
         currentBatch = TypePrerequisites.Where(i => i.Value.Count(x => !traversedTypes.Contains(x)) == 0).Select(i => i.Key).ToList();
@@ -77,7 +79,8 @@ namespace SpeckleStructuralGSA.Test
           var keyword = dummyObject.GetAttribute<GSAObject>("GSAKeyword").ToString();
           var valueType = t.GetProperty("Value").GetValue(dummyObject).GetType();
           var speckleTypeName = valueType.GetType().Name;
-          var targetObjects = receivedObjects.Where(o => o.Item2.GetType() == valueType).ToList();
+          var targetObjects = receivedObjects.Select(o => new { o, t = o.Item2.GetType() })
+            .Where(x => (x.t == valueType || x.t.IsSubclassOf(valueType))).Select(x => x.o).ToList();
 
           for (var i = 0; i < targetObjects.Count(); i++)
           {

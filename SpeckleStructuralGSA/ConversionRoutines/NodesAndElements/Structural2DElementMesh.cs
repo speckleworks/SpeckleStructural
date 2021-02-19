@@ -116,7 +116,7 @@ namespace SpeckleStructuralGSA
         return "";
 
       var obj = this.Value as Structural2DElementMesh;
-      if (obj.ApplicationId == null)
+      if (obj.ApplicationId == null || Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Design)
       {
         return "";
       }  
@@ -125,15 +125,8 @@ namespace SpeckleStructuralGSA
 
       var elements = obj.Explode();
 
-      var gwaCommands = new List<string>();
+      var gwaCommands = elements.Select(e => new GSA2DElement() { Value = e }.SetGWACommand(group));
 
-      foreach (var element in elements)
-      {
-        if (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Analysis)
-        {
-          gwaCommands.Add(new GSA2DElement() { Value = element }.SetGWACommand(group));
-        }
-      }
       return string.Join("\n", gwaCommands);
     }
   }

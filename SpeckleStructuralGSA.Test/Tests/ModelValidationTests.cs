@@ -64,12 +64,13 @@ namespace SpeckleStructuralGSA.Test
       Assert.IsNotNull(gwaRecordsFromFile);
       Assert.IsNotEmpty(gwaRecordsFromFile);
 
-      var designTypeHierarchy = Helper.GetTypeCastPriority(ioDirection.Receive, GSATargetLayer.Design, false);
-      var analysisTypeHierarchy = Helper.GetTypeCastPriority(ioDirection.Receive, GSATargetLayer.Analysis, false);
-      var keywords = designTypeHierarchy.Select(i => i.Key.GetGSAKeyword()).ToList();
-      keywords.AddRange(designTypeHierarchy.SelectMany(i => i.Key.GetSubGSAKeyword()));
-      keywords.AddRange(analysisTypeHierarchy.Select(i => i.Key.GetGSAKeyword()));
-      keywords.AddRange(analysisTypeHierarchy.SelectMany(i => i.Key.GetSubGSAKeyword()));
+      var typeHierarchy = Initialiser.GsaKit.RxTypeDependencies;
+      //var designTypeHierarchy = Helper.GetTypeCastPriority(ioDirection.Receive, GSATargetLayer.Design, false);
+      //var analysisTypeHierarchy = Helper.GetTypeCastPriority(ioDirection.Receive, GSATargetLayer.Analysis, false);
+      var keywords = typeHierarchy.Select(i => i.Key.GetGSAKeyword()).ToList();
+      keywords.AddRange(typeHierarchy.SelectMany(i => i.Key.GetSubGSAKeyword()));
+      //keywords.AddRange(analysisTypeHierarchy.Select(i => i.Key.GetGSAKeyword()));
+      //keywords.AddRange(analysisTypeHierarchy.SelectMany(i => i.Key.GetSubGSAKeyword()));
       keywords = keywords.Where(k => k.Length > 0).Select(k => Helper.RemoveVersionFromKeyword(k)).Distinct().ToList();
 
       Initialiser.AppResources.Proxy.Sync(); // send GWA to GSA

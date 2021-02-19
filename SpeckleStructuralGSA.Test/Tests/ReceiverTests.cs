@@ -71,7 +71,8 @@ namespace SpeckleStructuralGSA.Test
       Assert.IsNotNull(actualGwaRecords);
       Assert.IsNotEmpty(actualGwaRecords);
 
-      var keywords = Helper.GetTypeCastPriority(ioDirection.Receive, layer, false).Select(i => i.Key.GetGSAKeyword()).Distinct().ToList();
+      var TypePrerequisites = Initialiser.GsaKit.RxTypeDependencies;
+      var keywords = TypePrerequisites.Select(i => i.Key.GetGSAKeyword()).Distinct().ToList();
 
       //Log outcome to file
 
@@ -116,7 +117,8 @@ namespace SpeckleStructuralGSA.Test
       Assert.IsNotNull(actualGwaRecords);
       Assert.IsNotEmpty(actualGwaRecords);
 
-      var keywords = Helper.GetTypeCastPriority(ioDirection.Receive, layer, false).Select(i => i.Key.GetGSAKeyword()).Distinct().ToList();
+      var TypePrerequisites = Initialiser.GsaKit.RxTypeDependencies;
+      var keywords = TypePrerequisites.Select(i => i.Key.GetGSAKeyword()).Distinct().ToList();
 
       //Log outcome to file
 
@@ -162,7 +164,8 @@ namespace SpeckleStructuralGSA.Test
       Assert.IsNotNull(actualGwaRecords);
       Assert.IsNotEmpty(actualGwaRecords);
 
-      var keywords = Helper.GetTypeCastPriority(ioDirection.Receive, layer, false).Select(i => i.Key.GetGSAKeyword()).Distinct().ToList();
+      var TypePrerequisites = Initialiser.GsaKit.RxTypeDependencies;
+      var keywords = TypePrerequisites.Select(i => i.Key.GetGSAKeyword()).Distinct().ToList();
 
       //Log outcome to file
 
