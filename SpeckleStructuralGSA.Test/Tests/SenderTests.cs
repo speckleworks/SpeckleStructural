@@ -10,6 +10,7 @@ using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleGSAProxy;
 using SpeckleStructuralClasses;
+using SpeckleStructuralGSA.Schema;
 
 namespace SpeckleStructuralGSA.Test
 {
@@ -78,6 +79,13 @@ namespace SpeckleStructuralGSA.Test
 
       var actualObjects = ModelToSpeckleObjects(layer, resultsOnly, embedResults, loadCases, resultTypes);
       Assert.IsNotNull(actualObjects);
+
+      //This replaces what the real sender does in terms of stream buckets
+      if (resultsOnly)
+      {
+        actualObjects = actualObjects.Where(o => o.Type.Contains("Result")).ToList();
+      }
+
       actualObjects = actualObjects.OrderBy(a => a.ApplicationId).ToList();
 
       var actual = new Dictionary<SpeckleObject, string>();
@@ -96,6 +104,7 @@ namespace SpeckleStructuralGSA.Test
       var matchedLock = new object();
       var unmatching = new List<Tuple<string, string, List<string>>>();
       var unmatchingLock = new object();
+
       //Compare each object
       //foreach(var actualObject in actual.Keys)
       Parallel.ForEach(actual.Keys, actualObject =>

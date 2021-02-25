@@ -32,7 +32,7 @@ namespace SpeckleStructuralGSA
 
       var targetList = pieces[counter++];
 
-      obj.ElementRefs = new List<string>();
+      var elementRefs = obj.ElementRefs == null ? new List<string>() : obj.ElementRefs;
 
       if (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Analysis)
       {
@@ -41,7 +41,6 @@ namespace SpeckleStructuralGSA
           var memberList = Initialiser.AppResources.Proxy.ConvertGSAList(targetList, GSAEntity.MEMBER);
           var match1D = e1Ds.Where(e => memberList.Contains(Convert.ToInt32(e.Member)));
           var match2D = e2Ds.Where(e => memberList.Contains(Convert.ToInt32(e.Member)));
-          var elementRefs = obj.ElementRefs;
           elementRefs.AddRange(match1D.Select(e => e.Value.ApplicationId.ToString()));
           elementRefs.AddRange(match2D.Select(e => e.Value.ApplicationId.ToString()));
           obj.ElementRefs = elementRefs;
@@ -53,7 +52,6 @@ namespace SpeckleStructuralGSA
           var elementList = Initialiser.AppResources.Proxy.ConvertGSAList(targetList, SpeckleGSAInterfaces.GSAEntity.ELEMENT);
           var match1D = e1Ds.Where(e => elementList.Contains(e.GSAId));
           var match2D = e2Ds.Where(e => elementList.Contains(e.GSAId));
-          var elementRefs = obj.ElementRefs;
           elementRefs.AddRange(match1D.Select(e => (e.Value).ApplicationId.ToString()));
           elementRefs.AddRange(match2D.Select(e => (e.Value).ApplicationId.ToString()));
           obj.ElementRefs = elementRefs;
@@ -68,7 +66,6 @@ namespace SpeckleStructuralGSA
           var memberList = Initialiser.AppResources.Proxy.ConvertGSAList(targetList, SpeckleGSAInterfaces.GSAEntity.MEMBER);
           var match1D = m1Ds.Where(e => memberList.Contains(e.GSAId));
           var match2D = m2Ds.Where(e => memberList.Contains(e.GSAId));
-          var elementRefs = obj.ElementRefs;
           elementRefs.AddRange(match1D.Select(e => ((Structural1DElement)e.Value).ApplicationId.ToString()));
           elementRefs.AddRange(match2D.Select(e => ((Structural2DElement)e.Value).ApplicationId.ToString()));
           obj.ElementRefs = elementRefs;
@@ -158,7 +155,8 @@ namespace SpeckleStructuralGSA
           Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
             "Keyword=" + keyword, "Index=" + k);
         }
-      });
+      }
+      );
 
       Initialiser.GsaKit.GSASenderObjects.AddRange(assemblies.Values.ToList());
 

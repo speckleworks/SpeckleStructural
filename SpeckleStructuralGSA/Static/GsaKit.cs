@@ -72,7 +72,7 @@ namespace SpeckleStructuralGSA
           var typeDeps = TypeDependencies(StreamDirection.Send);
           typeDepData.Add(new TypeDependencyData(StreamDirection.Send, currentLayer, typeDeps));
         }
-        if (Initialiser.AppResources.Settings.SendResults && !resultsTypeDepData.Any(td => td.Layer == currentLayer))
+        if (Initialiser.AppResources.Settings.SendResults && currentLayer == GSATargetLayer.Analysis && resultsTypeDepData.Count() == 0)
         {
           var resultTypeDeps = ResultTypeDependencies();
           resultsTypeDepData.Add(new TypeDependencyData(StreamDirection.Send, currentLayer, resultTypeDeps));
@@ -81,7 +81,7 @@ namespace SpeckleStructuralGSA
         var retDict = typeDepData.FirstOrDefault(td => td.Direction == StreamDirection.Send && td.Layer == currentLayer).Dependencies
           .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
-        if (Initialiser.AppResources.Settings.SendResults)
+        if (Initialiser.AppResources.Settings.SendResults && currentLayer == GSATargetLayer.Analysis)
         {
           foreach (var kvp in resultsTypeDepData.FirstOrDefault(td => td.Layer == currentLayer).Dependencies)
           {

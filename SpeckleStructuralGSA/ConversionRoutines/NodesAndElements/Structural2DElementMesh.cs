@@ -5,11 +5,11 @@ using SpeckleCore;
 using SpeckleCoreGeometryClasses;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
+using SpeckleStructuralGSA.Schema;
 
 namespace SpeckleStructuralGSA
 {
-  // Keyword set as MEMB to not clash with grouping of members
-  [GSAObject("MEMB.8", new string[] { }, "model", true, false, new Type[] { typeof(GSA2DElement), typeof(GSA2DElementResult) }, new Type[] { typeof(GSANode), typeof(GSA2DProperty) })]
+  [GSAObject("EL.4", new string[] { }, "model", true, false, new Type[] { typeof(GSA2DElement), typeof(GSA2DElementResult) }, new Type[] { typeof(GSANode), typeof(GSA2DProperty) })]
   public class GSA2DElementMesh : GSABase<Structural2DElementMesh>
   {
     public void ParseGWACommand(List<GSA2DElement> elements)
@@ -19,7 +19,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural2DElementMesh
       {
-        ApplicationId = Helper.GetApplicationId(typeof(GSA2DElementMesh).GetGSAKeyword(), GSAId),
+        ApplicationId = Helper.GetApplicationId(GsaRecord.GetKeyword<GsaMemb>(), GSAId),
 
         Vertices = new List<double>(),
         Faces = new List<int>(),

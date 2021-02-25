@@ -513,11 +513,31 @@ namespace SpeckleStructuralGSA
   
   public static partial class Conversions
   {
-    public static string ToNative(this Structural2DElement mesh)
+    public static string ToNative(this Structural2DElement el)
     {
-      return SchemaConversion.Helper.ToNativeTryCatch(mesh, () => (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Analysis) 
-        ? new GSA2DElement() { Value = mesh }.SetGWACommand() 
-        : new GSA2DMember() { Value = mesh }.SetGWACommand());
+      var layer = Initialiser.AppResources.Settings.TargetLayer;
+
+      if (el == null || el.Vertices == null || el.ApplicationId == null)
+      {
+        return "";
+      }
+
+      if (layer == GSATargetLayer.Design)
+      {
+        return new GSA2DMember() { Value = el }.SetGWACommand();
+      }
+      if (layer == GSATargetLayer.Analysis && (el.NumFaces() == 1))
+      {
+        return new GSA2DElement() { Value = el }.SetGWACommand();
+      }
+
+      //Reaching this point means it should be treated as a full analytical mesh - where each face creates a new 2D element
+      el.Consolidate();
+
+      var elMesh = new Structural2DElementMesh(el.Vertices, el.Faces, el.Colors, el.ElementType, el.PropertyRef,
+        new[] { el.Axis }, new[] { el.Offset ?? 0 }, el.ApplicationId, el.GSAMeshSize ?? 0, el.Properties);
+
+      return (new GSA2DElementMesh() { Value = elMesh }).SetGWACommand();
     }
 
     public static SpeckleObject ToSpeckle(this GSA2DElement dummyObject)

@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
+using MathNet.Spatial.Euclidean;
+using SpeckleCoreGeometryClasses;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
 using SpeckleStructuralGSA.Schema;
@@ -10,6 +13,223 @@ namespace SpeckleStructuralGSA
 {
   public static class Extensions
   {
+    #region mesh
+    //This is to cater for situations where the mesh has duplicate points; these are when the same combination of x/y/z values are repeated
+    //in the vertices collection
+    public static void Consolidate(this SpeckleMesh mesh)
+    {
+      var vPts = Enumerable.Range(0, mesh.NumVertices()).Select(v => new Point3D(mesh.Vertices[v * 3], mesh.Vertices[(v * 3) + 1], mesh.Vertices[(v * 3) + 2])).ToList();
+
+      //This algorithm is O(N^2) at the moment
+      var indexConsolidateMappings = new Dictionary<int, int>();
+      var newPts = new List<Point3D>();
+      for (var i = 0; i < vPts.Count(); i++)
+      {
+        var found = false;
+        for (int j = 0; j < newPts.Count(); j++)
+        {
+          if (vPts[i].Equals(newPts[j], SpeckleStructuralClasses.Helper.PointComparisonEpsilon))
+          {
+            indexConsolidateMappings.Add(i, j);
+            found = true;
+            break;
+          }
+        }
+        if (!found)
+        {
+          var newIndex = newPts.Count();
+          newPts.Add(vPts[i]);
+          indexConsolidateMappings.Add(i, newIndex);
+        }
+      }
+
+      var newFaces = mesh.Faces.ToList();
+      var f = 0;
+      do
+      {
+        var numInFace = (newFaces[f] == 0) ? 3 : 4;
+        if ((f + numInFace) < newFaces.Count())
+        {
+          f++;
+          for (var v = 0; v < numInFace; v++)
+          {
+            if (indexConsolidateMappings.ContainsKey(newFaces[f + v]))
+            {
+              newFaces[f + v] = indexConsolidateMappings[newFaces[f + v]];
+            }
+          }
+        }
+        f += numInFace;
+      } while (f < newFaces.Count());
+
+      mesh.Faces = newFaces;
+      mesh.Vertices = newPts.SelectMany(p => new[] { p.X, p.Y, p.Z }).ToList();
+    }
+
+    public static List<int[]> Edges(this SpeckleMesh mesh)
+    {
+      var edgePairs = mesh.FaceEdgePairs();
+      var vPts = Enumerable.Range(0, mesh.Vertices.Count() / 3).Select(i => new Point3D(mesh.Vertices[i * 3], mesh.Vertices[(i * 3) + 1], mesh.Vertices[(i * 3) + 2])).ToList();
+
+      //Cap the number of attempts at finding connecting lines to no more than the number of lines overall
+      var iterationCount = 0;
+      var maxIterations = edgePairs.Count();
+
+      var loops = new List<List<int>>();
+
+      var remainingEdgePairs = edgePairs.ToList();
+
+      do
+      {
+        var currIndex = remainingEdgePairs.First()[1];
+        var endIndex = remainingEdgePairs.First()[0];
+
+        var loop = new List<int>() { currIndex };
+
+        remainingEdgePairs = remainingEdgePairs.Skip(1).ToList();
+        var error = false;
+
+        do
+        {
+          for (var i = 0; i < 2; i++)
+          {
+            if (FindNextLoopEndIndex(currIndex, remainingEdgePairs, out var nextLoopEndIndex, out var connectingEdgePairIndex))
+            {
+              currIndex = nextLoopEndIndex.Value;  //Move the end of the loop along this newly-found line to its end
+              loop.Add(currIndex);
+              remainingEdgePairs.RemoveAt(connectingEdgePairIndex.Value);
+            }
+            iterationCount++;
+          }
+
+        } while (remainingEdgePairs.Count() > 0 && currIndex != endIndex && !error && iterationCount < maxIterations);
+
+        if (!error && loop.Count() > 0)
+        {
+          loops.Add(loop);
+        }
+      } while (remainingEdgePairs.Count() > 0 && iterationCount < maxIterations);
+
+      var lengthsOfLoops = new List<double>();
+      foreach (var l in loops)
+      {
+        double length = 0;
+        for (var i = 0; i < l.Count(); i++)
+        {
+          var j = ((i + 1) < l.Count()) ? i + 1 : 0;
+
+          length += (new Line3D(vPts[l[i]], vPts[l[j]])).Length;
+        }
+        lengthsOfLoops.Add(length);
+      }
+
+      //Assumption: the longest length loop is the outer loop
+      //Sort by loop length
+      var ordered = lengthsOfLoops
+        .Select((x, i) => new KeyValuePair<double, int>(x, i))
+        .OrderBy(x => x.Key)
+        .Select(x => x.Value)
+        .Reverse();
+
+      var sortedEdgeConnectivities = new List<int[]>();
+      foreach (var i in ordered)
+      {
+        sortedEdgeConnectivities.Add(loops[i].ToArray()); ;
+      }
+
+      return sortedEdgeConnectivities;
+    }
+
+    public static int NumVertices(this SpeckleMesh mesh) => (mesh.Vertices == null) ? 0 : (int)(mesh.Vertices.Count() / 3);
+
+    public static int NumFaces(this SpeckleMesh mesh)
+    {
+      if (mesh.Vertices == null || mesh.Vertices.Count() == 0 || mesh.Faces == null || mesh.Faces.Count() == 0)
+      {
+        return 0;
+      }
+      var remainingNumPointsInFace = 0;
+      var numFaces = 0;
+      for (var i = 0; i < mesh.Faces.Count(); i++)
+      {
+        if (remainingNumPointsInFace == 0)
+        {
+          numFaces++;
+          remainingNumPointsInFace = mesh.Faces[i] + 3;
+        }
+        else
+        {
+          remainingNumPointsInFace--;
+        }
+      }
+      return numFaces;
+    }
+
+    private static List<int[]> FaceEdgePairs(this SpeckleMesh mesh)
+    {
+      var allEdgePairs = new List<int[]>();
+      var edgePairCounts = new Dictionary<int, int>();
+
+      var i = 0;
+      do
+      {
+        var numInFace = (mesh.Faces[i] == 0) ? 3 : 4;
+        if ((i + numInFace) < mesh.Faces.Count())
+        {
+          i++;
+          for (var v = 0; v < numInFace; v++)
+          {
+            var pair = (new int[] { mesh.Faces[i + v], mesh.Faces[((v + 1) == numInFace) ? i : i + v + 1] }).OrderBy(n => n).ToArray();
+            var foundIndex = allEdgePairs.FindIndex(ep => EqualPair(ep, pair));
+            if (foundIndex >= 0)
+            {
+              edgePairCounts[foundIndex]++;
+            }
+            else
+            {
+              allEdgePairs.Add(pair);
+              edgePairCounts.Add(allEdgePairs.IndexOf(pair), 1);
+            }
+          }
+        }
+        i += numInFace;
+      } while (i < mesh.Faces.Count());
+
+      var edgePairIndices = edgePairCounts.Where(kvp => kvp.Value == 1).Select(kvp => kvp.Key).ToList();
+
+      return edgePairIndices.Select(pi => allEdgePairs[pi]).ToList();
+    }
+
+    private static bool FindNextLoopEndIndex(int pointIndex, List<int[]> edgePairs, out int? nextLoopEndIndex, out int? connectingEdgePairIndex)
+    {
+      for (var i = 0; i < edgePairs.Count(); i++)
+      {
+        if (pointIndex == edgePairs[i][0])
+        {
+          nextLoopEndIndex = edgePairs[i][1];
+          connectingEdgePairIndex = i;
+          return true;
+        }
+        else if (pointIndex == edgePairs[i][1])
+        {
+          nextLoopEndIndex = edgePairs[i][0];
+          connectingEdgePairIndex = i;
+          return true;
+        }
+      }
+      nextLoopEndIndex = null;
+      connectingEdgePairIndex = null;
+      return false;
+    }
+
+    private static bool EqualPair(int[] p1, int[] p2)
+    {
+      return ((p1[0] == p2[0] && p1[1] == p2[1]) || (p1[1] == p2[0] && p1[0] == p2[1]));
+    }
+
+    #endregion
+
+
     /// <summary>
     /// Will get the string value for a given enums value, this will
     /// only work if you assign the StringValue attribute to

@@ -10,7 +10,7 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   //TO DO: check why everything except GSA1DElement is needed as read prerequisites 
-  [GSAObject("MEMB.8", new string[] { }, "model", true, true, new Type[] { typeof(GSA1DProperty), typeof(GSA1DElement), typeof(GSA1DLoad), typeof(GSA1DElementResult), typeof(GSAAssembly), typeof(GSAConstructionStage), typeof(GSA1DInfluenceEffect) }, new Type[] { typeof(GSA1DProperty), typeof(GSA1DElement) })]
+  [GSAObject("EL.4", new string[] { }, "model", true, false, new Type[] { typeof(GSA1DProperty), typeof(GSA1DElement), typeof(GSA1DLoad), typeof(GSA1DElementResult), typeof(GSAAssembly), typeof(GSAConstructionStage), typeof(GSA1DInfluenceEffect) }, new Type[] { typeof(GSA1DProperty), typeof(GSA1DElement) })]
   public class GSA1DElementPolyline : GSABase<Structural1DElementPolyline>
   {
     public void ParseGWACommand(List<GSA1DElement> elements)
@@ -22,7 +22,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural1DElementPolyline
       {
-        ApplicationId = Helper.GetApplicationId(typeof(GSA1DElementPolyline).GetGSAKeyword(), GSAId),
+        ApplicationId = Helper.GetApplicationId(typeof(GSA1DMember).GetGSAKeyword(), GSAId),
 
         Value = new List<double>(),
         ElementApplicationId = new List<string>(),

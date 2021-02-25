@@ -12,6 +12,8 @@ namespace SpeckleStructuralGSA.Test
   {
     private List<Tuple<string, SpeckleObject>> receivedObjects;
 
+    private Dictionary<Type, IGSASpeckleContainer> dummyObjectDict = new Dictionary<Type, IGSASpeckleContainer>();
+
     public ReceiverProcessor(string directory, IGSAAppResources appResources, GSATargetLayer layer = GSATargetLayer.Design) : base (directory)
     {
       this.appResources = appResources;
@@ -66,8 +68,15 @@ namespace SpeckleStructuralGSA.Test
       var currentBatch = new List<Type>();
       var traversedTypes = new List<Type>();
 
-      //var TypePrerequisites = Helper.GetTypeCastPriority(ioDirection.Receive, layer, false);
       var TypePrerequisites = Initialiser.GsaKit.RxTypeDependencies;
+
+      foreach (var tuple in receivedObjects)
+      {
+        tuple.Item2.Properties.Add("StreamId", tuple.Item1);
+      }
+
+      var rxObjsByType = CollateRxObjectsByType(receivedObjects.Select(tuple => tuple.Item2).ToList());
+
       do
       {
         currentBatch = TypePrerequisites.Where(i => i.Value.Count(x => !traversedTypes.Contains(x)) == 0).Select(i => i.Key).ToList();
@@ -77,7 +86,7 @@ namespace SpeckleStructuralGSA.Test
         {
           var dummyObject = Activator.CreateInstance(t);
           var keyword = dummyObject.GetAttribute<GSAObject>("GSAKeyword").ToString();
-          var valueType = t.GetProperty("Value").GetValue(dummyObject).GetType();
+          var valueType = dummyObjectDict[t].SpeckleObject.GetType();
           var speckleTypeName = valueType.GetType().Name;
           var targetObjects = receivedObjects.Select(o => new { o, t = o.Item2.GetType() })
             .Where(x => (x.t == valueType || x.t.IsSubclassOf(valueType))).Select(x => x.o).ToList();
@@ -111,6 +120,44 @@ namespace SpeckleStructuralGSA.Test
       {
         appResources.Proxy.SetGwa(toBeAddedGwa[i]);
       }
+    }
+
+    private Dictionary<Type, List<SpeckleObject>> CollateRxObjectsByType(List<SpeckleObject> rxObjs)
+    {
+      var rxTypePrereqs = Initialiser.GsaKit.RxTypeDependencies;
+      var rxSpeckleTypes = rxObjs.Select(k => k.GetType()).Distinct().ToList();
+
+      //build up dictionary of old schema (IGSASpeckleContainer) types and dummy instances
+      rxTypePrereqs.Keys.Where(t => !dummyObjectDict.ContainsKey(t)).ToList()
+        .ForEach(t => dummyObjectDict[t] = (IGSASpeckleContainer)Activator.CreateInstance(t));
+
+      ///[ GSA type , [ SpeckleObjects ]]
+      var d = new Dictionary<Type, List<SpeckleObject>>();
+      foreach (var o in rxObjs)
+      {
+        var speckleType = o.GetType();
+
+        var matchingGsaTypes = rxTypePrereqs.Keys.Where(t => dummyObjectDict[t].SpeckleObject.GetType() == speckleType);
+        if (matchingGsaTypes.Count() == 0)
+        {
+          matchingGsaTypes = rxTypePrereqs.Keys.Where(t => speckleType.IsSubclassOf(dummyObjectDict[t].SpeckleObject.GetType()));
+        }
+
+        if (matchingGsaTypes.Count() == 0)
+        {
+          continue;
+        }
+
+        var gsaType = matchingGsaTypes.First();
+        if (!d.ContainsKey(gsaType))
+        {
+          d.Add(gsaType, new List<SpeckleObject>());
+        }
+        d[gsaType].Add(o);
+
+      }
+
+      return d;
     }
 
     public List<Tuple<string, SpeckleObject>> ExtractObjects(string fileName, string directory)

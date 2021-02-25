@@ -24,6 +24,10 @@ namespace SpeckleStructuralGSA.Test
       {
         processResultLabels(resultsToSend);
       }
+      if (resultsToSend != null && resultsToSend.Count() > 0 && cases != null && cases.Count() > 0)
+      {
+        ((MockSettings)this.appResources.Settings).SendResults = true;
+      }
     }
 
     public void JsonGwaCacheFileToCacheRecords(string savedJsonFileName, string directory, out Dictionary<string, object> gwaCacheRecords)
