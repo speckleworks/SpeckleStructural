@@ -246,8 +246,13 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      for (var i = 0; i < Value.Count(); i++)
-        Value[i] *= factor;
+      if (Value != null)
+      {
+        for (var i = 0; i < Value.Count(); i++)
+        {
+          Value[i] *= factor;
+        }
+      }
 
       if (Loading.Value != null)
       {
@@ -307,8 +312,13 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      for (var i = 0; i < this.Value.Count(); i++)
-        this.Value[i] *= factor;
+      if (this.Value != null)
+      {
+        for (var i = 0; i < this.Value.Count(); i++)
+        {
+          this.Value[i] *= factor;
+        }
+      }
 
       Helper.ScaleProperties(Properties, factor);
 
@@ -377,8 +387,13 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      for (var i = 0; i < this.Value.Count(); i++)
-        this.Value[i] *= factor;
+      if (this.Value != null)
+      {
+        for (var i = 0; i < this.Value.Count(); i++)
+        {
+          this.Value[i] *= factor;
+        }
+      }
 
       Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();

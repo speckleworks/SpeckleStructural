@@ -129,7 +129,10 @@ namespace SpeckleStructuralClasses
 
     public override void Scale(double factor)
     {
-      this.Thickness *= factor;
+      if (this.Thickness.HasValue)
+      {
+        this.Thickness *= factor;
+      }
 
       Helper.ScaleProperties(Properties, factor);
       this.GenerateHash();
