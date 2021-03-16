@@ -187,11 +187,13 @@ namespace SpeckleStructuralGSA
       {
         if (element.PropertyRef == null)
         {
-          Helper.SafeDisplay("Blank property references found for these Application IDs:", element.ApplicationId);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "Blank property references found for these Application IDs:",
+            element.ApplicationId);
         }
         else
         {
-          Helper.SafeDisplay("1D property references not found:", element.ApplicationId + " referencing " + element.PropertyRef);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "1D property references not found:",
+            element.ApplicationId + " referencing " + element.PropertyRef);
         }
       }
 
@@ -491,11 +493,13 @@ namespace SpeckleStructuralGSA
       {
         if (member.PropertyRef == null)
         {
-          Helper.SafeDisplay("Blank property references found for these Application IDs:", member.ApplicationId);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "Blank property references found for these Application IDs:",
+            member.ApplicationId);
         }
         else
         {
-          Helper.SafeDisplay("1D property references not found:", member.ApplicationId + " referencing " + member.PropertyRef);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "1D property references not found:",
+            member.ApplicationId + " referencing " + member.PropertyRef);
         }
       }
 
@@ -552,10 +556,18 @@ namespace SpeckleStructuralGSA
       ls.Add("0"); // Time 4
       ls.Add((member.GSADummy.HasValue && member.GSADummy.Value) ? "DUMMY" : "ACTIVE");
 
-      if (member.EndRelease == null || member.EndRelease.Count != 2)
+      if (member.EndRelease == null || member.EndRelease.Count == 0)
+      {
         ls.AddRange(new[] { EndReleaseToGWA(null), EndReleaseToGWA(null) });
+      }
+      else if (member.EndRelease != null && member.EndRelease.Count == 1)
+      {
+        ls.AddRange(new[] { EndReleaseToGWA(member.EndRelease.First()), EndReleaseToGWA(null) });
+      }
       else
-        ls.AddRange(new[] { EndReleaseToGWA(member.EndRelease[0]), EndReleaseToGWA(member.EndRelease[1]) });
+      {
+        ls.AddRange(new[] { EndReleaseToGWA(member.EndRelease.First()), EndReleaseToGWA(member.EndRelease.Last()) });
+      }
 
       ls.Add("Free"); // restraint_end_1
       ls.Add("Free"); // restraint_end_2

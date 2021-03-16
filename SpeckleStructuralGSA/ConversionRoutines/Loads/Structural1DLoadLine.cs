@@ -158,11 +158,13 @@ namespace SpeckleStructuralGSA
       {
         if (load.LoadCaseRef == null)
         {
-          Helper.SafeDisplay("Blank load case references found for these Application IDs:", load.ApplicationId);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "Blank load case references found for these Application IDs:",
+            load.ApplicationId);
         }
         else
         {
-          Helper.SafeDisplay("Load case references not found:", load.ApplicationId + " referencing " + load.LoadCaseRef);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "Load case references not found:",
+            load.ApplicationId + " referencing " + load.LoadCaseRef);
         }
       }
 

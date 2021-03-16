@@ -49,8 +49,8 @@ namespace SpeckleStructuralGSA.Test
       var receiverProcessor = new ReceiverProcessor(TestDataDirectory, Initialiser.AppResources);
 
       var rxObjs = ExtractObjects(fileName, TestDataDirectory);
-
-
+      var rx2DElements = rxObjs.Select(t => t.Item2).Where(o => o is Structural2DElement).Cast<Structural2DElement>().ToList();
+      Assert.IsTrue(rx2DElements.All(o => o.Faces != null && o.Faces.Count() > 0 && o.Vertices != null && o.Vertices.Count() > 0));
 
     }
 

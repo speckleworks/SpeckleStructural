@@ -85,11 +85,13 @@ namespace SpeckleStructuralGSA
       {
         if (spring.PropertyRef == null)
         {
-          Helper.SafeDisplay("Blank property references found for these Application IDs:", spring.ApplicationId);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "Blank property references found for these Application IDs:",
+            spring.ApplicationId);
         }
         else
         {
-          Helper.SafeDisplay("Spring property references not found:", spring.ApplicationId + " referencing " + spring.PropertyRef);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "Spring property references not found:",
+            spring.ApplicationId + " referencing " + spring.PropertyRef);
         }
       }
 
