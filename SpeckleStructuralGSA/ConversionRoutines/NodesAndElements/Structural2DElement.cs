@@ -152,11 +152,13 @@ namespace SpeckleStructuralGSA
       {
         if (mesh.PropertyRef == null)
         {
-          Helper.SafeDisplay("Blank property references found for these Application IDs:", mesh.ApplicationId);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "Blank property references found for these Application IDs:",
+            mesh.ApplicationId);
         }
         else
         {
-          Helper.SafeDisplay("2D property references not found:", mesh.ApplicationId + " referencing " + mesh.PropertyRef);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "2D property references not found:",
+            mesh.ApplicationId + " referencing " + mesh.PropertyRef);
         }
       }
 
@@ -404,11 +406,13 @@ namespace SpeckleStructuralGSA
       {
         if (propRef == null)
         {
-          Helper.SafeDisplay("Blank property references found for these Application IDs:", obj.ApplicationId);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "Blank property references found for these Application IDs:",
+            obj.ApplicationId);
         }
         else
         {
-          Helper.SafeDisplay("2D property references not found:", obj.ApplicationId + " referencing " + propRef);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "2D property references not found:",
+            obj.ApplicationId + " referencing " + propRef);
         }
       }
 

@@ -7,7 +7,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("LOAD_GRID_AREA.2", new string[] { "POLYLINE.1", "GRID_SURFACE.1", "GRID_PLANE.4", "AXIS.1" }, "model", true, true, new Type[] { }, new Type[] { typeof(GSALoadCase) })]
+  [GSAObject("LOAD_GRID_AREA.2", new string[] { "POLYLINE.1", "GRID_SURFACE.1", "GRID_PLANE.4", "AXIS.1" }, "model", true, true, new Type[] { typeof(GSALoadCase), typeof(GSAGridSurface) }, new Type[] { typeof(GSALoadCase), typeof(GSAGridSurface) })]
   public class GSAGridAreaLoad : GSABase<Structural2DLoadPanel>
   {
     public void ParseGWACommand()

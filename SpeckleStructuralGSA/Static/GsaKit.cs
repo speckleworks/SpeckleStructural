@@ -31,7 +31,8 @@ namespace SpeckleStructuralGSA
         var elementKw = Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Design ? GwaKeyword.MEMB : GwaKeyword.EL;
         return new Dictionary<Type, string>()
         { { typeof(StructuralLoadCase), GwaKeyword.LOAD_TITLE.GetStringValue() },
-          { typeof(StructuralLoadCombo), GwaKeyword.COMBINATION.GetStringValue() },
+          //Removed because combos can be self-referential
+          //{ typeof(StructuralLoadCombo), GwaKeyword.COMBINATION.GetStringValue() },
           { typeof(StructuralAssembly), GwaKeyword.ASSEMBLY.GetStringValue() },
           { typeof(Structural1DElement), elementKw.GetStringValue() },
           { typeof(Structural2DElement), elementKw.GetStringValue() },

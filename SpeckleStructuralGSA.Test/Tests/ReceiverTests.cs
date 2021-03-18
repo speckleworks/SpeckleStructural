@@ -100,8 +100,8 @@ namespace SpeckleStructuralGSA.Test
       */
     }
 
-    [Ignore("Just used for debugging at this stage, will be finished in the future as a test")]
-    [TestCase(GSATargetLayer.Design, "gMu-Xgpc.json")]
+    ///[Ignore("Just used for debugging at this stage, will be finished in the future as a test")]
+    [TestCase(GSATargetLayer.Design, "AgBSsoCjO-uk.json")]
     //[TestCase(GSATargetLayer.Analysis, "S5pNxjmUH.json")]
     public void ReceiverTestForDebug(GSATargetLayer layer, string fileName)
     {
