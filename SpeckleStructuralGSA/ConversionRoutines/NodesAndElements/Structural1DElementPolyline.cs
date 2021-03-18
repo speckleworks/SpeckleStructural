@@ -264,6 +264,12 @@ namespace SpeckleStructuralGSA
     }
   }
 
+  //This class is here to host the GSAObject attribute which is picked up in the reflection-based construction of the type hierarchy
+  [GSAObject("MEMB.8", new string[] { }, "model", false, true, new Type[] { typeof(GSA1DProperty), typeof(GSA1DMember), typeof(GSA1DLoad), typeof(GSA1DElementResult), typeof(GSAAssembly), typeof(GSAConstructionStage), typeof(GSA1DInfluenceEffect) }, new Type[] { typeof(GSA1DProperty), typeof(GSA1DMember) })]
+  public class GSA1DMemberFromPolyline : GSABase<Structural1DElementPolyline>
+  {
+  }
+
   public static partial class Conversions
   {
     public static string ToNative(this SpecklePolyline inputObject)

@@ -26,7 +26,10 @@ namespace SpeckleStructuralGSA.SchemaConversion
 
       try
       {
-        streamId = so.Properties["StreamId"].ToString();
+        if (so.Properties.ContainsKey("StreamId"))
+        {
+          streamId = so.Properties["StreamId"].ToString();
+        }
         speckleType = so.Type;
         id = so._id;
         url = Initialiser.AppResources.Settings.ObjectUrl(id);
@@ -109,6 +112,22 @@ namespace SpeckleStructuralGSA.SchemaConversion
         obj.Properties.Add("structural", new Dictionary<string, object>());
       }
       ((Dictionary<string, object>)obj.Properties["structural"]).Add("NativeId", value);
+    }
+
+    public static bool ValidateCoordinates(List<double> coords, out List<int> nodeIndices)
+    {
+      nodeIndices = new List<int>();
+      for (var i = 0; i < coords.Count(); i += 3)
+      {
+        var nodeIndex = Initialiser.AppResources.Proxy.NodeAt(coords[i], coords[i + 1], coords[i + 2], Initialiser.AppResources.Settings.CoincidentNodeAllowance);
+        if (nodeIndices.Contains(nodeIndex))
+        {
+          //Two nodes resolve to the same node
+          return false;
+        }
+        nodeIndices.Add(nodeIndex);
+      }
+      return true;
     }
 
     public static bool IsZeroAxis(StructuralAxis axis)

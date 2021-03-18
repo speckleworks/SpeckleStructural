@@ -4,10 +4,11 @@ using System.Linq;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
+using SpeckleStructuralGSA.Schema;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("LOAD_GRID_LINE.2", new string[] { "POLYLINE.1", "GRID_SURFACE.1", "GRID_PLANE.4", "AXIS.1" }, "model", true, true, new Type[] { }, new Type[] { typeof(GSAGridSurface), typeof(GSAStorey), typeof(GSALoadCase) })]
+  [GSAObject("LOAD_GRID_LINE.2", new string[] { "POLYLINE.1", "GRID_SURFACE.1", "GRID_PLANE.4", "AXIS.1" }, "model", true, true, new Type[] { typeof(GSAGridSurface), typeof(GSAStorey), typeof(GSALoadCase) }, new Type[] { typeof(GSAGridSurface), typeof(GSAStorey), typeof(GSALoadCase) })]
   public class GSAGridLineLoad : GSABase<Structural1DLoadLine>
   {
     public void ParseGWACommand()
@@ -230,13 +231,15 @@ namespace SpeckleStructuralGSA
       }
       else //LoadPlaneRef is not empty/null
       {
-        try
+        var gridSurfaceKeyword = GsaRecord.GetKeyword<GsaGridSurface>();
+        var lookupIndex = Initialiser.AppResources.Cache.LookupIndex(gridSurfaceKeyword, load.LoadPlaneRef);
+        if (lookupIndex == null)
         {
-          gridSurfaceIndex = Initialiser.AppResources.Cache.LookupIndex("GRID_SURFACE.1", load.LoadPlaneRef).Value;
+          gridSurfaceIndex = Initialiser.AppResources.Cache.ResolveIndex(gridSurfaceKeyword, load.LoadPlaneRef);
         }
-        catch
+        else
         {
-          gridSurfaceIndex = Initialiser.AppResources.Cache.ResolveIndex("GRID_SURFACE.1", load.LoadPlaneRef);
+          gridSurfaceIndex = lookupIndex.Value;
         }
 
         var loadPlanesDict = Initialiser.AppResources.Cache.GetIndicesSpeckleObjects(typeof(StructuralLoadPlane).Name);
