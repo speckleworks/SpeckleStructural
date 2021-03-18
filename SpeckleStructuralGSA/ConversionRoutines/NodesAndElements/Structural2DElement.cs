@@ -74,7 +74,7 @@ namespace SpeckleStructuralGSA
       }
       catch
       {
-        Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, "Generating axis from coordinates for 2D element", obj.ApplicationId);
+        Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "Generating axis from coordinates for 2D element", obj.ApplicationId);
       }
 
       if (prop != null)
@@ -152,11 +152,13 @@ namespace SpeckleStructuralGSA
       {
         if (mesh.PropertyRef == null)
         {
-          Helper.SafeDisplay("Blank property references found for these Application IDs:", mesh.ApplicationId);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "Blank property references found for these Application IDs:",
+            mesh.ApplicationId);
         }
         else
         {
-          Helper.SafeDisplay("2D property references not found:", mesh.ApplicationId + " referencing " + mesh.PropertyRef);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "2D property references not found:",
+            mesh.ApplicationId + " referencing " + mesh.PropertyRef);
         }
       }
 
@@ -294,7 +296,7 @@ namespace SpeckleStructuralGSA
       }
       catch
       {
-        Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, "Generating axis from coordinates for 2D member", obj.ApplicationId);
+        Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "Generating axis from coordinates for 2D member", obj.ApplicationId);
       }
 
       if (axis != null)
@@ -404,11 +406,13 @@ namespace SpeckleStructuralGSA
       {
         if (propRef == null)
         {
-          Helper.SafeDisplay("Blank property references found for these Application IDs:", obj.ApplicationId);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "Blank property references found for these Application IDs:",
+            obj.ApplicationId);
         }
         else
         {
-          Helper.SafeDisplay("2D property references not found:", obj.ApplicationId + " referencing " + propRef);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "2D property references not found:",
+            obj.ApplicationId + " referencing " + propRef);
         }
       }
 
@@ -439,7 +443,7 @@ namespace SpeckleStructuralGSA
       var coor = new List<double>();
       foreach (var c in connectivities[0])
       {
-        coor.AddRange(baseMesh.Vertices.Skip(c * 3).Take(3));
+        coor.AddRange(mesh.Vertices.Skip(c * 3).Take(3));
       }
       coor = coor.Essential().ToList();
       var coorPts = Enumerable.Range(0, coor.Count() / 3).Select(i => new double[] { coor[i * 3], coor[i * 3 + 1], coor[i * 3 + 2] }).ToList();
@@ -513,11 +517,31 @@ namespace SpeckleStructuralGSA
   
   public static partial class Conversions
   {
-    public static string ToNative(this Structural2DElement mesh)
+    public static string ToNative(this Structural2DElement el)
     {
-      return (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Analysis) 
-        ? new GSA2DElement() { Value = mesh }.SetGWACommand() 
-        : new GSA2DMember() { Value = mesh }.SetGWACommand();
+      var layer = Initialiser.AppResources.Settings.TargetLayer;
+
+      if (el == null || el.Vertices == null || el.ApplicationId == null)
+      {
+        return "";
+      }
+
+      if (layer == GSATargetLayer.Design)
+      {
+        return new GSA2DMember() { Value = el }.SetGWACommand();
+      }
+      if (layer == GSATargetLayer.Analysis && (el.NumFaces() == 1))
+      {
+        return new GSA2DElement() { Value = el }.SetGWACommand();
+      }
+
+      //Reaching this point means it should be treated as a full analytical mesh - where each face creates a new 2D element
+      el.Consolidate();
+
+      var elMesh = new Structural2DElementMesh(el.Vertices, el.Faces, el.Colors, el.ElementType, el.PropertyRef,
+        new[] { el.Axis }, new[] { el.Offset ?? 0 }, el.ApplicationId, el.GSAMeshSize ?? 0, el.Properties);
+
+      return (new GSA2DElementMesh() { Value = elMesh }).SetGWACommand();
     }
 
     public static SpeckleObject ToSpeckle(this GSA2DElement dummyObject)
@@ -526,6 +550,8 @@ namespace SpeckleStructuralGSA
       var newElementLines = ToSpeckleBase<GSA2DElement>();
       var newMeshLines = ToSpeckleBase<GSA2DElementMesh>();
       var newLinesTuples = new List<Tuple<int, string>>();
+      var keyword = dummyObject.GetGSAKeyword();
+
       foreach (var k in newElementLines.Keys)
       {
         newLinesTuples.Add(new Tuple<int, string>(k, newElementLines[k]));
@@ -560,8 +586,8 @@ namespace SpeckleStructuralGSA
           }
           catch (Exception ex)
           {
-            Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, gsaId);
-            Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, gsaId);
+            Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+              "Keyword=" + keyword, "Index=" + gsaId);
           }
         }
       });
@@ -579,6 +605,7 @@ namespace SpeckleStructuralGSA
       var members = new SortedDictionary<int, GSA2DMember>();
       var nodes = Initialiser.GsaKit.GSASenderObjects.Get<GSANode>();
       var props = Initialiser.GsaKit.GSASenderObjects.Get<GSA2DProperty>();
+      var keyword = dummyObject.GetGSAKeyword();
 
 #if DEBUG
       foreach (var k in newLines.Keys)
@@ -604,8 +631,8 @@ namespace SpeckleStructuralGSA
             }
             catch (Exception ex)
             {
-              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, gsaId);
-              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, gsaId);
+              Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+                "Keyword=" + keyword, "Index=" + k);
             }
           }
         }

@@ -7,7 +7,7 @@ using SpeckleStructuralClasses;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("LOAD_GRID_AREA.2", new string[] { "POLYLINE.1", "GRID_SURFACE.1", "GRID_PLANE.4", "AXIS.1" }, "model", true, true, new Type[] { }, new Type[] { typeof(GSALoadCase) })]
+  [GSAObject("LOAD_GRID_AREA.2", new string[] { "POLYLINE.1", "GRID_SURFACE.1", "GRID_PLANE.4", "AXIS.1" }, "model", true, true, new Type[] { typeof(GSALoadCase), typeof(GSAGridSurface) }, new Type[] { typeof(GSALoadCase), typeof(GSAGridSurface) })]
   public class GSAGridAreaLoad : GSABase<Structural2DLoadPanel>
   {
     public void ParseGWACommand()
@@ -126,6 +126,7 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSAGridAreaLoad>();
       var loads = new List<GSAGridAreaLoad>();
       var typeName = dummyObject.GetType().Name;
+      var keyword = dummyObject.GetGSAKeyword();
 
       foreach (var k in newLines.Keys)
       {
@@ -136,8 +137,8 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+          Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+            "Keyword=" + keyword, "Index=" + k);
         }
 
         loads.Add(load);

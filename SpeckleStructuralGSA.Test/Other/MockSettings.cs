@@ -27,5 +27,10 @@ namespace SpeckleStructuralGSA.Test
     public bool ResultInLocalAxis { get; set; } = false;
     public int Result1DNumPosition { get; set; } = 3;
     public bool EmbedResults { get; set; } = true;
+
+    public string ObjectUrl(string id)
+    {
+      return "";
+    }
   }
 }

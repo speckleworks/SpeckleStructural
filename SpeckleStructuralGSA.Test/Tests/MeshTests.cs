@@ -26,28 +26,61 @@ namespace SpeckleStructuralGSA.Test
       // %LocalAppData%\SpeckleKits directory, so therefore this project doesn't need to reference the projects within in this solution
       SpeckleInitializer.Initialize();
       Initialiser.AppResources = new MockGSAApp(proxy: new GSAProxy());
-      //gsaInterfacer = new GSAProxy();
-      //gsaCache = new GSACache();
-
-      //Initialiser.Instance.Cache = gsaCache;
-      //Initialiser.Instance.Interface = gsaInterfacer;
-      //Initialiser.Instance.Settings = new MockSettings();
-      //Initialiser.Instance.AppUI = new SpeckleAppUI();
     }
 
     [SetUp]
     public void SetUp()
     {
-      //gsaCache.Clear();
-
+      ((GSACache)Initialiser.AppResources.Cache).Clear();
       //Clear out all sender objects that might be there from the last test preparation
       Initialiser.GsaKit.GSASenderObjects.Clear();
     }
 
+    ///[Ignore("Just used for debugging at this stage, will be finished in the future as a test")]
+    [TestCase(GSATargetLayer.Design, "AgBSsoCjO-uk.json")]
+    //[TestCase(GSATargetLayer.Analysis, "S5pNxjmUH.json")]
+    public void ReceiveFullMesh(GSATargetLayer layer, string fileName)
+    {
+      var json = Helper.ReadFile(fileName, TestDataDirectory);
+
+      var mockGsaCom = SetupMockGsaCom();
+      Initialiser.AppResources.Proxy.OpenFile("", false, mockGsaCom.Object);
+
+      var receiverProcessor = new ReceiverProcessor(TestDataDirectory, Initialiser.AppResources);
+
+      var rxObjs = ExtractObjects(fileName, TestDataDirectory);
+      var rx2DElements = rxObjs.Select(t => t.Item2).Where(o => o is Structural2DElement).Cast<Structural2DElement>().ToList();
+      Assert.IsTrue(rx2DElements.All(o => o.Faces != null && o.Faces.Count() > 0 && o.Vertices != null && o.Vertices.Count() > 0));
+
+    }
+
+    private List<Tuple<string, SpeckleObject>> ExtractObjects(string fileName, string directory)
+    {
+      return ExtractObjects(new string[] { fileName }, directory);
+    }
+
+      private List<Tuple<string, SpeckleObject>> ExtractObjects(string[] fileNames, string directory)
+    {
+      var speckleObjects = new List<Tuple<string, SpeckleObject>>();
+      foreach (var fileName in fileNames)
+      {
+        var json = Helper.ReadFile(fileName, directory);
+        var streamId = fileName.Split(new[] { '.' }).First();
+
+        var response = ResponseObject.FromJson(json);
+        for (int i = 0; i < response.Resources.Count(); i++)
+        {
+          speckleObjects.Add(new Tuple<string, SpeckleObject>(streamId, response.Resources[i]));
+        }
+      }
+      return speckleObjects;
+    }
+
+
     [Test]
     public void MeshTest()
     {
-      Initialiser.AppResources.Proxy.OpenFile(Path.Combine(TestDataDirectory, "sjc.gwb"));
+      Initialiser.AppResources.Proxy.OpenFile(Path.Combine(TestDataDirectory, "sjc.gwb"), false);
 
       var data = Initialiser.AppResources.Proxy.GetGwaData(new[] { "NODE.2", "MEMB.7" }, false);
       Assert.IsNotNull(data);

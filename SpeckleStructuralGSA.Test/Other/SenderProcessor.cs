@@ -5,7 +5,6 @@ using Interop.Gsa_10_1;
 using Moq;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
-using SpeckleGSAProxy;
 
 namespace SpeckleStructuralGSA.Test
 {
@@ -14,16 +13,20 @@ namespace SpeckleStructuralGSA.Test
     public SenderProcessor(string directory, IGSAAppResources appResources, GSATargetLayer layer, bool embedResults, string[] cases = null, string[] resultsToSend = null) : base(directory)
     {
       this.appResources = appResources;
-      this.appResources.Settings.TargetLayer = layer;
+      ((MockSettings)this.appResources.Settings).TargetLayer = layer;
 
-      this.appResources.Settings.EmbedResults = embedResults;
+      ((MockSettings)this.appResources.Settings).EmbedResults = embedResults;
       if (cases != null)
       {
-        this.appResources.Settings.ResultCases = cases.ToList();
+        ((MockSettings)this.appResources.Settings).ResultCases = cases.ToList();
       }
       if (resultsToSend != null)
       {
         processResultLabels(resultsToSend);
+      }
+      if (resultsToSend != null && resultsToSend.Count() > 0 && cases != null && cases.Count() > 0)
+      {
+        ((MockSettings)this.appResources.Settings).SendResults = true;
       }
     }
 
@@ -41,7 +44,8 @@ namespace SpeckleStructuralGSA.Test
 
     public void GsaInstanceToSpeckleObjects(GSATargetLayer layer, out List<SpeckleObject> speckleObjects, bool resultOnly)
     {
-      var TypePrerequisites = Helper.GetTypeCastPriority(ioDirection.Send, layer, resultOnly);
+      var TypePrerequisites = Initialiser.GsaKit.TxTypeDependencies;
+      //var TypePrerequisites = Helper.GetTypeCastPriority(ioDirection.Send, layer, resultOnly);
 
       var gwaCacheRecords = new Dictionary<string, object>();
       speckleObjects = new List<SpeckleObject>();

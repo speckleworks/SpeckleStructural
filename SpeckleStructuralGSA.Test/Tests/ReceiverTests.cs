@@ -71,7 +71,8 @@ namespace SpeckleStructuralGSA.Test
       Assert.IsNotNull(actualGwaRecords);
       Assert.IsNotEmpty(actualGwaRecords);
 
-      var keywords = Helper.GetTypeCastPriority(ioDirection.Receive, layer, false).Select(i => i.Key.GetGSAKeyword()).Distinct().ToList();
+      var TypePrerequisites = Initialiser.GsaKit.RxTypeDependencies;
+      var keywords = TypePrerequisites.Select(i => i.Key.GetGSAKeyword()).Distinct().ToList();
 
       //Log outcome to file
 
@@ -99,8 +100,8 @@ namespace SpeckleStructuralGSA.Test
       */
     }
 
-    [Ignore("Just used for debugging at this stage, will be finished in the future as a test")]
-    [TestCase(GSATargetLayer.Design, "gMu-Xgpc.json")]
+    ///[Ignore("Just used for debugging at this stage, will be finished in the future as a test")]
+    [TestCase(GSATargetLayer.Design, "AgBSsoCjO-uk.json")]
     //[TestCase(GSATargetLayer.Analysis, "S5pNxjmUH.json")]
     public void ReceiverTestForDebug(GSATargetLayer layer, string fileName)
     {
@@ -116,7 +117,8 @@ namespace SpeckleStructuralGSA.Test
       Assert.IsNotNull(actualGwaRecords);
       Assert.IsNotEmpty(actualGwaRecords);
 
-      var keywords = Helper.GetTypeCastPriority(ioDirection.Receive, layer, false).Select(i => i.Key.GetGSAKeyword()).Distinct().ToList();
+      var TypePrerequisites = Initialiser.GsaKit.RxTypeDependencies;
+      var keywords = TypePrerequisites.Select(i => i.Key.GetGSAKeyword()).Distinct().ToList();
 
       //Log outcome to file
 
@@ -162,7 +164,8 @@ namespace SpeckleStructuralGSA.Test
       Assert.IsNotNull(actualGwaRecords);
       Assert.IsNotEmpty(actualGwaRecords);
 
-      var keywords = Helper.GetTypeCastPriority(ioDirection.Receive, layer, false).Select(i => i.Key.GetGSAKeyword()).Distinct().ToList();
+      var TypePrerequisites = Initialiser.GsaKit.RxTypeDependencies;
+      var keywords = TypePrerequisites.Select(i => i.Key.GetGSAKeyword()).Distinct().ToList();
 
       //Log outcome to file
 

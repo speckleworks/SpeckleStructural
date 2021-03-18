@@ -376,7 +376,7 @@ namespace SpeckleStructuralGSA
       }
       else
       {
-        Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, "1D section profile string (" + type + ") is not supported", prop.ApplicationId);  // TODO: IMPLEMENT ALL SECTIONS
+        Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "1D section profile string (" + type + ") is not supported", prop.ApplicationId);  // TODO: IMPLEMENT ALL SECTIONS
       }
 
       return prop;
@@ -713,7 +713,7 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this Structural1DProperty prop)
     {
-      return new GSA1DProperty() { Value = prop }.SetGWACommand(Initialiser.AppResources.Settings.Units);
+      return SchemaConversion.Helper.ToNativeTryCatch(prop, () => new GSA1DProperty() { Value = prop }.SetGWACommand(Initialiser.AppResources.Settings.Units));
     }
 
     public static SpeckleObject ToSpeckle(this GSA1DProperty dummyObject)
@@ -724,6 +724,7 @@ namespace SpeckleStructuralGSA
       var props = new SortedDictionary<int, GSA1DProperty>();
       var steels = Initialiser.GsaKit.GSASenderObjects.Get<GSAMaterialSteel>();      
       var concretes = Initialiser.GsaKit.GSASenderObjects.Get<GSAMaterialConcrete>();
+      var keyword = dummyObject.GetGSAKeyword();
 
       Parallel.ForEach(newLines.Keys, k =>
       {
@@ -740,8 +741,8 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, gsaId);
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, gsaId);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+            "Keyword=" + keyword, "Index=" + k);
         }
       });
 

@@ -172,8 +172,14 @@ namespace SpeckleStructuralGSA.Schema
 
     public string AddEntities(List<int> entities)
     {
-      //Unlike other keywords which have entity type as a parameter, this keyword (at least for version 2) still has "element list" which means, for members,
-      //the group is used
+      //For now assume that an empty list means "all"
+      if (entities == null || entities.Count() == 0)
+      {
+        return "all";
+      }
+
+      //Unlike other keywords which have entity type as a parameter, this keyword (at least for version 2) still has "element list" which means, 
+      //for members, the group is used
 
       var allIndices = Initialiser.AppResources.Cache.LookupIndices(
         (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Design) ? GetKeyword<GsaMemb>() : GetKeyword<GsaEl>())
@@ -186,6 +192,27 @@ namespace SpeckleStructuralGSA.Schema
       return (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Design)
         ? string.Join(" ", entities.Select(i => "G" + i))
         : string.Join(" ", entities);
+    }
+
+    public string AddNodes(List<int> indices)
+    {
+      //For now assume that an empty list means "all"
+      if (indices == null || indices.Count() == 0)
+      {
+        return "all";
+      }
+
+      //Unlike other keywords which have entity type as a parameter, this keyword (at least for version 2) still has "element list" which means, 
+      //for members, the group is used
+
+      var allIndices = Initialiser.AppResources.Cache.LookupIndices(GetKeyword<GsaNode>())
+        .Where(i => i.HasValue).Select(i => i.Value).Distinct().OrderBy(i => i).ToList();
+
+      if (indices.Distinct().OrderBy(i => i).SequenceEqual(allIndices))
+      {
+        return "all";
+      }
+      return string.Join(" ", indices);
     }
 
     protected void AddEndReleaseItems(ref List<string> items, Dictionary<AxisDirection6, ReleaseCode> releases, List<double> stiffnesses, List<AxisDirection6> axisDirs)
@@ -423,7 +450,8 @@ namespace SpeckleStructuralGSA.Schema
 
     protected string IndicesList(List<int> indices)
     {
-      return string.Join(" ", indices);
+      //Like entities, assume an empty list means "all"
+      return (indices == null || indices.Count() == 0) ? "all" : string.Join(" ", indices);
     }
 
     protected List<int> StringToIntList(string s, char delim = ' ')

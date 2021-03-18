@@ -29,31 +29,6 @@ namespace SpeckleStructuralGSA.Test
     {
       Initialiser.AppResources = new MockGSAApp();
       Initialiser.GsaKit.Clear();
-      /*
-      var mockGSAObject = new Mock<IGSAProxy>();
-
-      mockGSAObject.Setup(x => x.ParseGeneralGwa(It.IsAny<string>(), out It.Ref<string>.IsAny, out It.Ref<int?>.IsAny, out It.Ref<string>.IsAny, out It.Ref<string>.IsAny, out It.Ref<string>.IsAny, out It.Ref<GwaSetCommandType?>.IsAny, It.IsAny<bool>()))
-      .Callback(new MockGSAProxy.ParseCallback(MockGSAProxy.ParseGeneralGwa));
-      mockGSAObject.Setup(x => x.NodeAt(It.IsAny<double>(), It.IsAny<double>(), It.IsAny<double>(), It.IsAny<double>()))
-        .Returns(new Func<double, double, double, double, int>(MockGSAProxy.NodeAt));
-      mockGSAObject.Setup(x => x.FormatApplicationIdSidTag(It.IsAny<string>()))
-        .Returns(new Func<string, string>(MockGSAProxy.FormatApplicationIdSidTag));
-      mockGSAObject.Setup(x => x.FormatSidTags(It.IsAny<string>(), It.IsAny<string>()))
-        .Returns(new Func<string, string, string>(MockGSAProxy.FormatSidTags));
-      mockGSAObject.Setup(x => x.ConvertGSAList(It.IsAny<string>(), It.IsAny<GSAEntity>()))
-        .Returns(new Func<string, GSAEntity, int[]>(MockGSAProxy.ConvertGSAList));
-      mockGSAObject.SetupGet(x => x.GwaDelimiter).Returns(GSAProxy.GwaDelimiter);
-      mockGSAObject.Setup(x => x.GetUnits()).Returns("m");
-
-      Initialiser.AppResources.Cache = new GSACache();
-      Initialiser.AppResources.Interface = mockGSAObject.Object;
-      Initialiser.AppResources.AppUI = new SpeckleAppUI();
-      Initialiser.AppResources.GSASenderObjects.Clear();
-      Initialiser.AppResources.Settings = new MockSettings
-      {
-        Units = "m"
-      };
-      */
     }
 
     [Test]
@@ -140,7 +115,7 @@ namespace SpeckleStructuralGSA.Test
         Index = 1,
         PlaneRefType = GridPlaneAxisRefType.Global,
         Type = GridSurfaceElementsType.OneD,
-        AllIndices = true,
+        //leave entities blank, which will be treated as "all"
         Tolerance = 0.01,
         Span = GridSurfaceSpan.One,
         Angle = angleDegrees,
@@ -380,7 +355,7 @@ namespace SpeckleStructuralGSA.Test
     [TestCase(GSATargetLayer.Analysis)]
     public void Structural1DLoad(GSATargetLayer layer)
     {
-      Initialiser.AppResources.Settings.TargetLayer = layer;
+      ((MockSettings)Initialiser.AppResources.Settings).TargetLayer = layer;
 
       var loadCase = new StructuralLoadCase()
       {
@@ -480,8 +455,7 @@ namespace SpeckleStructuralGSA.Test
       var baseAppId2 = "LoadFromSpeckle2";
       var loadCase1 = new GsaLoadCase() { Index = 1, CaseType = StructuralLoadCaseType.Dead };
       var loadCase2 = new GsaLoadCase() { Index = 2, CaseType = StructuralLoadCaseType.Live };
-      var node1 = new GsaNode() { Index = 1, X = 10, Y = 10, Z = 0 };
-      var node2 = new GsaNode() { Index = 2, X = 30, Y = -10, Z = 10 };
+      var nodes = GenerateGsaNodes();
       var axis1 = new GsaAxis() { Index = 1, OriginX = 0, OriginY = 0, OriginZ = 0, XDirX = 1, XDirY = 2, XDirZ = 0, XYDirX = -1, XYDirY = 1, XYDirZ = 0 };
       var axis2 = new GsaAxis() { Index = 2, OriginX = 20, OriginY = -20, OriginZ = 0, XDirX = 1, XDirY = 2, XDirZ = 0, XYDirX = -1, XYDirY = 1, XYDirZ = 0 };
       var load1 = new GsaLoadNode() { Index = 1, NodeIndices = new List<int> { 1 }, LoadCaseIndex = 1, AxisIndex = 1, LoadDirection = AxisDirection6.X, Value = 10 };
@@ -493,8 +467,10 @@ namespace SpeckleStructuralGSA.Test
       var load7 = new GsaLoadNode() { Index = 7, ApplicationId = (baseAppId2 + "_YY"), NodeIndices = new List<int> { 1, 2 }, LoadCaseIndex = 2, GlobalAxis = true, LoadDirection = AxisDirection6.YY, Value = 14 };
       var load8 = new GsaLoadNode() { Index = 8, NodeIndices = new List<int> { 1 }, LoadCaseIndex = 2, GlobalAxis = true, LoadDirection = AxisDirection6.Z, Value = -10 };  //Test global without application ID
 
-      Assert.IsTrue(ExtractAndValidateGwa(new GsaRecord[] { loadCase1, loadCase2, node1, node2, axis1, axis2, load1, load2, load3, load4, load5, load6, load7, load8 }, 
-        out var gwaCommands, out var mismatchByKw));
+      var gsaRecords = new List<GsaRecord> { loadCase1, loadCase2 };
+      gsaRecords.AddRange(nodes);
+      gsaRecords.AddRange(new GsaRecord[] { axis1, axis2, load1, load2, load3, load4, load5, load6, load7, load8 });
+      Assert.IsTrue(ExtractAndValidateGwa(gsaRecords, out var gwaCommands, out var mismatchByKw));
 
       Assert.IsTrue(UpsertGwaIntoCache(gwaCommands));
 
@@ -742,53 +718,18 @@ namespace SpeckleStructuralGSA.Test
     [Test]
     public void GsaElSimple()
     {
-      var gsaElBeam = new GsaEl()
+      var gsaEls = GenerateMixedGsaEls();
+      var gwaToTest = new List<string>();
+      foreach (var gsaEl in gsaEls)
       {
-        ApplicationId = "elbeam",
-        Name = "Beam",
-        Index = 1,
-        Type = ElementType.Beam, //*
-        Group = 1,
-        PropertyIndex = 2,
-        NodeIndices = new List<int> { 3, 4 },
-        OrientationNodeIndex = 5,
-        Angle = 6,
-        ReleaseInclusion = ReleaseInclusion.Included,
-        Releases1 = new Dictionary<AxisDirection6, ReleaseCode>() { { AxisDirection6.Y, ReleaseCode.Released }, { AxisDirection6.YY, ReleaseCode.Stiff } }, //*
-        Stiffnesses1 = new List<double>() { 7 }, //*
-        End1OffsetX = 8,
-        End2OffsetX = 9, 
-        OffsetY = 10,
-        OffsetZ = 11,
-        ParentIndex = 1
-      };
-      Assert.IsTrue(gsaElBeam.Gwa(out var gwa1, false));
+        Assert.IsTrue(gsaEl.Gwa(out var gwa, false));
 
-      var gsaEl = new GsaEl();
-      Assert.IsTrue(gsaEl.FromGwa(gwa1.First()));
-      gsaElBeam.ShouldDeepEqual(gsaEl);
+        var gsaElNew = new GsaEl();
+        Assert.IsTrue(gsaElNew.FromGwa(gwa.First()));
+        gsaEl.ShouldDeepEqual(gsaElNew);
 
-      var gsaElTri3 = new GsaEl()
-      {
-        ApplicationId = "eltri3",
-        Name = "Triangle 3",
-        Index = 2,
-        Type = ElementType.Triangle3, //*
-        Group = 1,
-        PropertyIndex = 3,
-        NodeIndices = new List<int> { 4, 5, 6 },
-        OrientationNodeIndex = 7,
-        Angle = 8,
-        ReleaseInclusion = ReleaseInclusion.NotIncluded,  //only BEAMs have releases
-        End1OffsetX = 10
-      };
-      Assert.IsTrue(gsaElTri3.Gwa(out var gwa2, false));
-
-      gsaEl = new GsaEl();
-      Assert.IsTrue(gsaEl.FromGwa(gwa2.First()));
-      gsaElTri3.ShouldDeepEqual(gsaEl);
-
-      var gwaToTest = gwa1.Union(gwa2).ToList();
+        gwaToTest = gwaToTest.Union(gwa).ToList();
+      }
 
       Assert.IsTrue(ModelValidation(gwaToTest, GsaRecord.GetKeyword<GsaEl>(), 2, out var mismatch));
     }
@@ -799,7 +740,7 @@ namespace SpeckleStructuralGSA.Test
     {
       //Currently only UDL is supported, so only test that for now, despte the new schema containing classes for the other types
 
-      Initialiser.AppResources.Settings.TargetLayer = layer;
+      ((MockSettings)Initialiser.AppResources.Settings).TargetLayer = layer;
 
       var gsaPrereqs = new List<GsaRecord>()
       {
@@ -899,12 +840,41 @@ namespace SpeckleStructuralGSA.Test
       Assert.IsTrue(gwaExp.Equals(gwaOutExp.First(), StringComparison.InvariantCulture));
     }
 
-    [Ignore("Conversion code not implemented yet")]
     [Test]
-    public void GsaLoadGravity()
+    public void GsaLoadGravitySimple()
     {
-      //TO DO
-      Assert.IsTrue(false);
+      ((MockSettings)Initialiser.AppResources.Settings).TargetLayer = GSATargetLayer.Analysis;
+
+      var gsaEls = GenerateMixedGsaEls();
+      foreach (var gsaEl in gsaEls)
+      {
+        Assert.IsTrue(gsaEl.Gwa(out var gwa, true));
+        Helper.GwaToCache(gwa.First(), streamId1);
+      }
+
+      var gsaNodes = GenerateGsaNodes();
+      foreach (var gsaNode in gsaNodes)
+      {
+        Assert.IsTrue(gsaNode.Gwa(out var gwa, true));
+        Helper.GwaToCache(gwa.First(), streamId1);
+      }
+
+      var gwa1 = "LOAD_GRAVITY.3\t+10% connections\tall\tall\t1\t0\t0\t-1.100000024";
+
+      var gsaGrav1 = new GsaLoadGravity()
+      {
+        Index = 1,
+        Name = "+10% connections",
+        Entities = new List<int> { 1, 2 }, //all
+        Nodes = new List<int> { 1, 2 }, //all
+        LoadCaseIndex = 1,
+        Z = -1.100000024
+      };
+
+      Assert.IsTrue(gsaGrav1.Gwa(out var gsaGravGwa, false));
+      Assert.IsTrue(gwa1.Equals(gsaGravGwa.First()));
+
+      Assert.IsTrue(ModelValidation(gsaGravGwa, GsaRecord.GetKeyword<GsaLoadGravity>(), 1, out var mismatch));
     }
 
     [Ignore("Conversion code not implemented yet")]
@@ -938,6 +908,56 @@ namespace SpeckleStructuralGSA.Test
       //TO DO
       Assert.IsTrue(false);
     }
+
+    #region data_gen_fns
+    private List<GsaEl> GenerateMixedGsaEls()
+    {
+      var gsaElBeam = new GsaEl()
+      {
+        ApplicationId = "elbeam",
+        Name = "Beam",
+        Index = 1,
+        Type = ElementType.Beam, //*
+        Group = 1,
+        PropertyIndex = 2,
+        NodeIndices = new List<int> { 3, 4 },
+        OrientationNodeIndex = 5,
+        Angle = 6,
+        ReleaseInclusion = ReleaseInclusion.Included,
+        Releases1 = new Dictionary<AxisDirection6, ReleaseCode>() { { AxisDirection6.Y, ReleaseCode.Released }, { AxisDirection6.YY, ReleaseCode.Stiff } }, //*
+        Stiffnesses1 = new List<double>() { 7 }, //*
+        End1OffsetX = 8,
+        End2OffsetX = 9,
+        OffsetY = 10,
+        OffsetZ = 11,
+        ParentIndex = 1
+      };
+
+      var gsaElTri3 = new GsaEl()
+      {
+        ApplicationId = "eltri3",
+        Name = "Triangle 3",
+        Index = 2,
+        Type = ElementType.Triangle3, //*
+        Group = 1,
+        PropertyIndex = 3,
+        NodeIndices = new List<int> { 4, 5, 6 },
+        OrientationNodeIndex = 7,
+        Angle = 8,
+        ReleaseInclusion = ReleaseInclusion.NotIncluded,  //only BEAMs have releases
+        End1OffsetX = 10
+      };
+
+      return new List<GsaEl> { gsaElBeam, gsaElTri3 };
+    }
+
+    private List<GsaNode> GenerateGsaNodes()
+    {
+      var node1 = new GsaNode() { Index = 1, X = 10, Y = 10, Z = 0 };
+      var node2 = new GsaNode() { Index = 2, X = 30, Y = -10, Z = 10 };
+      return new List<GsaNode> { node1, node2 };
+    }
+    #endregion
 
     #region other_methods
 

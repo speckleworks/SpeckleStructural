@@ -1068,18 +1068,6 @@ namespace SpeckleStructuralGSA
       desc = pieces[6];
     }
 
-    public static void SafeDisplay(string groupMessage, string details)
-    {
-      try
-      {
-        Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, groupMessage, details);
-      }
-      catch
-      {
-        //Since display of these are not critical, if there is any error in displaying then these can be quashed
-      }
-    }
-
     public static StructuralVectorBoolSix RestraintFromCode(string code)
     {
       return new StructuralVectorBoolSix(RestraintBoolArrayFromCode(code));

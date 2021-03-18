@@ -70,7 +70,7 @@ namespace SpeckleStructuralGSA.Test
       //Compile all GWA commands with application IDs
       var senderProcessor = new SenderProcessor(TestDataDirectory, Initialiser.AppResources, layer, embedResults, cases, resultsToSend);
 
-      var keywords = senderProcessor.GetKeywords(layer);
+      var keywords = Initialiser.GsaKit.Keywords;
       var data = Initialiser.AppResources.Proxy.GetGwaData(keywords, false);
       for (int i = 0; i < data.Count(); i++)
       {

@@ -10,7 +10,7 @@ using SpeckleStructuralClasses;
 namespace SpeckleStructuralGSA
 {
   //TO DO: check why everything except GSA1DElement is needed as read prerequisites 
-  [GSAObject("MEMB.8", new string[] { }, "model", true, true, new Type[] { typeof(GSA1DProperty), typeof(GSA1DElement), typeof(GSA1DLoad), typeof(GSA1DElementResult), typeof(GSAAssembly), typeof(GSAConstructionStage), typeof(GSA1DInfluenceEffect) }, new Type[] { typeof(GSA1DProperty), typeof(GSA1DElement) })]
+  [GSAObject("EL.4", new string[] { }, "model", true, false, new Type[] { typeof(GSA1DProperty), typeof(GSA1DElement), typeof(GSA1DLoad), typeof(GSA1DElementResult), typeof(GSAAssembly), typeof(GSAConstructionStage), typeof(GSA1DInfluenceEffect) }, new Type[] { typeof(GSA1DProperty), typeof(GSA1DElement) })]
   public class GSA1DElementPolyline : GSABase<Structural1DElementPolyline>
   {
     public void ParseGWACommand(List<GSA1DElement> elements)
@@ -22,7 +22,7 @@ namespace SpeckleStructuralGSA
 
       var obj = new Structural1DElementPolyline
       {
-        ApplicationId = Helper.GetApplicationId(typeof(GSA1DElementPolyline).GetGSAKeyword(), GSAId),
+        ApplicationId = Helper.GetApplicationId(typeof(GSA1DMember).GetGSAKeyword(), GSAId),
 
         Value = new List<double>(),
         ElementApplicationId = new List<string>(),
@@ -264,29 +264,41 @@ namespace SpeckleStructuralGSA
     }
   }
 
+  //This class is here to host the GSAObject attribute which is picked up in the reflection-based construction of the type hierarchy
+  [GSAObject("MEMB.8", new string[] { }, "model", false, true, new Type[] { typeof(GSA1DProperty), typeof(GSA1DMember), typeof(GSA1DLoad), typeof(GSA1DElementResult), typeof(GSAAssembly), typeof(GSAConstructionStage), typeof(GSA1DInfluenceEffect) }, new Type[] { typeof(GSA1DProperty), typeof(GSA1DMember) })]
+  public class GSA1DMemberFromPolyline : GSABase<Structural1DElementPolyline>
+  {
+  }
+
   public static partial class Conversions
   {
     public static string ToNative(this SpecklePolyline inputObject)
     {
-      var convertedObject = new Structural1DElementPolyline();
-
-      foreach (var p in convertedObject.GetType().GetProperties().Where(p => p.CanWrite))
+      return SchemaConversion.Helper.ToNativeTryCatch(inputObject, () =>
       {
-        var inputProperty = inputObject.GetType().GetProperty(p.Name);
-        if (inputProperty != null)
-          p.SetValue(convertedObject, inputProperty.GetValue(inputObject));
-      }
+        var convertedObject = new Structural1DElementPolyline();
 
-      return convertedObject.ToNative();
+        foreach (var p in convertedObject.GetType().GetProperties().Where(p => p.CanWrite))
+        {
+          var inputProperty = inputObject.GetType().GetProperty(p.Name);
+          if (inputProperty != null)
+          {
+            p.SetValue(convertedObject, inputProperty.GetValue(inputObject));
+          }
+        }
+
+        return convertedObject.ToNative();
+      });
     }
 
     public static string ToNative(this Structural1DElementPolyline poly)
     {
-      return new GSA1DElementPolyline() { Value = poly }.SetGWACommand();
+      return SchemaConversion.Helper.ToNativeTryCatch(poly, () => new GSA1DElementPolyline() { Value = poly }.SetGWACommand());
     }
 
     public static SpeckleObject ToSpeckle(this GSA1DElementPolyline dummyObject)
     {
+      var keyword = dummyObject.GetGSAKeyword();
       var polylines = new List<GSA1DElementPolyline>();
       var typeName = dummyObject.GetType().Name;
       // Perform mesh merging
@@ -310,8 +322,8 @@ namespace SpeckleStructuralGSA
             }
             catch (Exception ex)
             {
-              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, member.ToString());
-              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, member.ToString());
+              Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+                "Keyword=" + keyword, "Index=" + member);
             }
 
             Initialiser.GsaKit.GSASenderObjects.RemoveAll(matching1dElementList);

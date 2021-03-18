@@ -184,7 +184,7 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this StructuralRigidConstraints constraint)
     {
-      return new GSARigidConstraints() { Value = constraint }.SetGWACommand();
+      return SchemaConversion.Helper.ToNativeTryCatch(constraint, () => new GSARigidConstraints() { Value = constraint }.SetGWACommand());
     }
 
     public static SpeckleObject ToSpeckle(this GSARigidConstraints dummyObject)
@@ -195,6 +195,7 @@ namespace SpeckleStructuralGSA
       var constraints = new SortedDictionary<int, GSARigidConstraints>();
       var nodes = Initialiser.GsaKit.GSASenderObjects.Get<GSANode>();
       var stages = Initialiser.GsaKit.GSASenderObjects.Get<GSAConstructionStage>();
+      var keyword = dummyObject.GetGSAKeyword();
 
       Parallel.ForEach(newLines.Keys, k =>
       {
@@ -209,8 +210,8 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+          Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+            "Keyword=" + keyword, "Index=" + k);
         }
       });
 

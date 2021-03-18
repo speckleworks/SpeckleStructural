@@ -85,11 +85,13 @@ namespace SpeckleStructuralGSA
       {
         if (spring.PropertyRef == null)
         {
-          Helper.SafeDisplay("Blank property references found for these Application IDs:", spring.ApplicationId);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "Blank property references found for these Application IDs:",
+            spring.ApplicationId);
         }
         else
         {
-          Helper.SafeDisplay("Spring property references not found:", spring.ApplicationId + " referencing " + spring.PropertyRef);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "Spring property references not found:",
+            spring.ApplicationId + " referencing " + spring.PropertyRef);
         }
       }
 
@@ -134,8 +136,11 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this Structural0DSpring spring)
     {
-      var group = Initialiser.AppResources.Cache.ResolveIndex(typeof(GSA0DSpring).GetGSAKeyword(), spring.ApplicationId);
-      return new GSA0DSpring() { Value = spring }.SetGWACommand(Initialiser.AppResources.Proxy, group);
+      return SchemaConversion.Helper.ToNativeTryCatch(spring, () =>
+      {
+        var group = Initialiser.AppResources.Cache.ResolveIndex(typeof(GSA0DSpring).GetGSAKeyword(), spring.ApplicationId);
+        return new GSA0DSpring() { Value = spring }.SetGWACommand(Initialiser.AppResources.Proxy, group);
+      });
     }
 
     //Sending to Speckle, search through a
@@ -145,6 +150,8 @@ namespace SpeckleStructuralGSA
       var newSpringLines = ToSpeckleBase<GSA0DSpring>();
       var newNodeLines = ToSpeckleBase<GSANode>();
       var newLines = new List<Tuple<int, string>>();
+      var keyword = dummyObject.GetGSAKeyword();
+
       foreach (var k in newSpringLines.Keys)
       {
         newLines.Add(new Tuple<int, string>(k, newSpringLines[k]));
@@ -176,8 +183,8 @@ namespace SpeckleStructuralGSA
           }
           catch (Exception ex)
           {
-            Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, gsaId);
-            Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, gsaId);
+            Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+            "Keyword=" + keyword, "Index=" + pPieces[1]);
           }
         }
       }

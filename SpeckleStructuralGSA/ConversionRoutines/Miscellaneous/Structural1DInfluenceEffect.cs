@@ -159,7 +159,7 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this Structural1DInfluenceEffect infl)
     {
-      return new GSA1DInfluenceEffect() { Value = infl }.SetGWACommand();
+      return SchemaConversion.Helper.ToNativeTryCatch(infl, () => new GSA1DInfluenceEffect() { Value = infl }.SetGWACommand());
     }
 
     public static SpeckleObject ToSpeckle(this GSA1DInfluenceEffect dummyObject)
@@ -167,6 +167,7 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSA1DInfluenceEffect>();
       var typeName = dummyObject.GetType().Name;
       var e1Ds = Initialiser.GsaKit.GSASenderObjects.Get<GSA1DElement>();
+      var keyword = dummyObject.GetGSAKeyword();
 
       var inflsLock = new object();
       var infls = new SortedDictionary<int, GSA1DInfluenceEffect>();
@@ -184,8 +185,8 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+          Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+            "Keyword=" + keyword, "Index=" + k);
         }
       });
 

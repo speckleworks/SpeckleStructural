@@ -125,11 +125,13 @@ namespace SpeckleStructuralGSA
       {
         if (load.LoadCaseRef == null)
         {
-          Helper.SafeDisplay("Blank load case references found for these Application IDs:", load.ApplicationId);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "Blank load case references found for these Application IDs:", 
+            load.ApplicationId);
         }
         else
         {
-          Helper.SafeDisplay("Load case references not found:", load.ApplicationId + " referencing " + load.LoadCaseRef);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "Load case references not found:",
+            load.ApplicationId + " referencing " + load.LoadCaseRef);
         }
       }
 
@@ -171,9 +173,7 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this Structural2DLoad load)
     {
-      return (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Analysis)
-        ? new GSA2DLoad() { Value = load }.SetGWACommand()
-        : new GSA2DLoad() { Value = load }.SetGWACommand();
+      return SchemaConversion.Helper.ToNativeTryCatch(load, () => new GSA2DLoad() { Value = load }.SetGWACommand());
     }
 
     public static SpeckleObject ToSpeckle(this GSA2DLoad dummyObject)
@@ -184,6 +184,7 @@ namespace SpeckleStructuralGSA
       var elements = Initialiser.GsaKit.GSASenderObjects.Get<GSA2DElement>();
       var members = Initialiser.GsaKit.GSASenderObjects.Get<GSA2DMember>();
       var loadLock = new object();
+      var keyword = dummyObject.GetGSAKeyword();
 
       foreach (var k in newLines.Keys)
       {
@@ -199,8 +200,8 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+          Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+            "Keyword=" + keyword, "Index=" + k);
         }
 
         lock (loadLock)

@@ -128,83 +128,6 @@ namespace SpeckleStructuralGSA
 
       this.Value = obj;
     }
-
-    public string SetGWACommand()
-    {
-      if (this.Value == null)
-        return "";
-
-      var load = this.Value as Structural1DLoad;
-
-      if (load.Loading == null)
-        return "";
-
-      var keyword = typeof(GSA1DLoad).GetGSAKeyword();
-
-      List<int> elementRefs;
-      List<int> groupRefs;
-
-      if (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Analysis)
-      {
-        elementRefs = Initialiser.AppResources.Cache.LookupIndices(typeof(GSA1DElement).GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-        groupRefs = Initialiser.AppResources.Cache.LookupIndices(typeof(GSA1DElementPolyline).GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-      }
-      else if (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Design)
-      {
-        elementRefs = new List<int>();
-        groupRefs = Initialiser.AppResources.Cache.LookupIndices(typeof(GSA1DMember).GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList();
-        groupRefs.AddRange(Initialiser.AppResources.Cache.LookupIndices(typeof(GSA1DElementPolyline).GetGSAKeyword(), load.ElementRefs).Where(x => x.HasValue).Select(x => x.Value).ToList());
-      }
-      else
-      {
-        return "";
-      }
-
-      var loadCaseKeyword = typeof(GSALoadCase).GetGSAKeyword();
-      var indexResult = Initialiser.AppResources.Cache.LookupIndex(loadCaseKeyword, load.LoadCaseRef);
-      var loadCaseRef = indexResult ?? Initialiser.AppResources.Cache.ResolveIndex(loadCaseKeyword, load.LoadCaseRef);
-      if (indexResult == null && load.ApplicationId != null)
-      {
-        if (load.LoadCaseRef == null)
-        {
-          Helper.SafeDisplay("Blank load case references found for these Application IDs:", load.ApplicationId);
-        }
-        else
-        {
-          Helper.SafeDisplay("Load case references not found:", load.ApplicationId + " referencing " + load.LoadCaseRef);
-        }
-      }
-
-      var direction = new string[6] { "X", "Y", "Z", "XX", "YY", "ZZ" };
-
-      var gwaCommands = new List<string>();
-
-      for (var i = 0; i < load.Loading.Value.Count(); i++)
-      {
-        var ls = new List<string>();
-
-        if (load.Loading.Value[i] == 0) continue;
-
-        var index = Initialiser.AppResources.Cache.ResolveIndex(keyword);
-
-        ls.Add("SET_AT");
-        ls.Add(index.ToString());
-        var sid = Helper.GenerateSID(load);
-        ls.Add("LOAD_BEAM_UDL.2" + (string.IsNullOrEmpty(sid) ? "" : ":" + sid)); // TODO: Only writes to UDL load
-        ls.Add(load.Name == null || load.Name == "" ? " " : load.Name + (load.Name.All(char.IsDigit) ? " " : ""));
-        // TODO: This is a hack.
-        ls.Add(string.Join(" ", elementRefs.Select(x => x.ToString()).Concat(groupRefs.Select(x => "G" + x.ToString())).OrderBy(e => e)));
-        ls.Add(loadCaseRef.ToString());
-        ls.Add("GLOBAL"); // Axis
-        ls.Add("NO"); // Projected
-        ls.Add(direction[i]);
-        ls.Add(load.Loading.Value[i].ToString());
-
-        gwaCommands.Add(string.Join(Initialiser.AppResources.Proxy.GwaDelimiter.ToString(), ls));
-      }
-
-      return string.Join("\n", gwaCommands);
-    }
   }
 
   public static partial class Conversions
@@ -218,6 +141,7 @@ namespace SpeckleStructuralGSA
       var loads = new List<GSA1DLoad>();
       var elements = Initialiser.GsaKit.GSASenderObjects.Get<GSA1DElement>();
       var members = Initialiser.GsaKit.GSASenderObjects.Get<GSA1DMember>();
+      var keyword = dummyObject.GetGSAKeyword();
 
       foreach (var k in newLines.Keys)
       {
@@ -233,8 +157,8 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+          Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+            "Keyword=" + keyword, "Index=" + k);
         }
 
         // Create load for each element applied

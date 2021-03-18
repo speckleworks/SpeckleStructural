@@ -59,11 +59,13 @@ namespace SpeckleStructuralGSA
       {
         if (load.LoadCaseRef == null)
         {
-          Helper.SafeDisplay("Blank load case references found for these Application IDs:", load.ApplicationId);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "Blank load case references found for these Application IDs:",
+            load.ApplicationId);
         }
         else
         {
-          Helper.SafeDisplay("Load case references not found:", load.ApplicationId + " referencing " + load.LoadCaseRef);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "Load case references not found:",
+            load.ApplicationId + " referencing " + load.LoadCaseRef);
         }
       }
 
@@ -93,14 +95,14 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this StructuralGravityLoading load)
     {
-      return new GSAGravityLoading() { Value = load }.SetGWACommand();
+      return SchemaConversion.Helper.ToNativeTryCatch(load, () => new GSAGravityLoading() { Value = load }.SetGWACommand());
     }
 
     public static SpeckleObject ToSpeckle(this GSAGravityLoading dummyObject)
     {
       var newLines = ToSpeckleBase<GSAGravityLoading>();
-      var typeName = dummyObject.GetType().Name;
       var loads = new List<GSAGravityLoading>();
+      var keyword = dummyObject.GetGSAKeyword();
 
       foreach (var k in newLines.Keys)
       {
@@ -112,8 +114,8 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+          Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+            "Keyword=" + keyword, "Index=" + k);
         }
         loads.Add(load);
       }

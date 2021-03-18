@@ -4,10 +4,11 @@ using System.Linq;
 using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleStructuralClasses;
+using SpeckleStructuralGSA.Schema;
 
 namespace SpeckleStructuralGSA
 {
-  [GSAObject("LOAD_GRID_LINE.2", new string[] { "POLYLINE.1", "GRID_SURFACE.1", "GRID_PLANE.4", "AXIS.1" }, "model", true, true, new Type[] { }, new Type[] { typeof(GSAGridSurface), typeof(GSAStorey), typeof(GSALoadCase) })]
+  [GSAObject("LOAD_GRID_LINE.2", new string[] { "POLYLINE.1", "GRID_SURFACE.1", "GRID_PLANE.4", "AXIS.1" }, "model", true, true, new Type[] { typeof(GSAGridSurface), typeof(GSAStorey), typeof(GSALoadCase) }, new Type[] { typeof(GSAGridSurface), typeof(GSAStorey), typeof(GSALoadCase) })]
   public class GSAGridLineLoad : GSABase<Structural1DLoadLine>
   {
     public void ParseGWACommand()
@@ -43,7 +44,7 @@ namespace SpeckleStructuralGSA
         case "POLYREF":
           var polylineRef = pieces[counter++];
           string newRec = null;
-         Helper.GetPolylineDesc(Convert.ToInt32(polylineRef), out polylineDescription, out newRec);
+          Helper.GetPolylineDesc(Convert.ToInt32(polylineRef), out polylineDescription, out newRec);
           this.SubGWACommand.Add(newRec);
           break;
         case "POLYGON":
@@ -158,11 +159,13 @@ namespace SpeckleStructuralGSA
       {
         if (load.LoadCaseRef == null)
         {
-          Helper.SafeDisplay("Blank load case references found for these Application IDs:", load.ApplicationId);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "Blank load case references found for these Application IDs:",
+            load.ApplicationId);
         }
         else
         {
-          Helper.SafeDisplay("Load case references not found:", load.ApplicationId + " referencing " + load.LoadCaseRef);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "Load case references not found:",
+            load.ApplicationId + " referencing " + load.LoadCaseRef);
         }
       }
 
@@ -228,13 +231,15 @@ namespace SpeckleStructuralGSA
       }
       else //LoadPlaneRef is not empty/null
       {
-        try
+        var gridSurfaceKeyword = GsaRecord.GetKeyword<GsaGridSurface>();
+        var lookupIndex = Initialiser.AppResources.Cache.LookupIndex(gridSurfaceKeyword, load.LoadPlaneRef);
+        if (lookupIndex == null)
         {
-          gridSurfaceIndex = Initialiser.AppResources.Cache.LookupIndex("GRID_SURFACE.1", load.LoadPlaneRef).Value;
+          gridSurfaceIndex = Initialiser.AppResources.Cache.ResolveIndex(gridSurfaceKeyword, load.LoadPlaneRef);
         }
-        catch
+        else
         {
-          gridSurfaceIndex = Initialiser.AppResources.Cache.ResolveIndex("GRID_SURFACE.1", load.LoadPlaneRef);
+          gridSurfaceIndex = lookupIndex.Value;
         }
 
         var loadPlanesDict = Initialiser.AppResources.Cache.GetIndicesSpeckleObjects(typeof(StructuralLoadPlane).Name);
@@ -316,14 +321,14 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this Structural1DLoadLine load)
     {
-      return new GSAGridLineLoad() { Value = load }.SetGWACommand();
+      return SchemaConversion.Helper.ToNativeTryCatch(load, () => new GSAGridLineLoad() { Value = load }.SetGWACommand());
     }
 
     public static SpeckleObject ToSpeckle(this GSAGridLineLoad dummyObject)
     {
       var newLines = ToSpeckleBase<GSAGridLineLoad>();
-      var typeName = dummyObject.GetType().Name;
       var loads = new List<GSAGridLineLoad>();
+      var keyword = dummyObject.GetGSAKeyword();
 
       foreach (var k in newLines.Keys)
       {
@@ -335,8 +340,8 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+          Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+            "Keyword=" + keyword, "Index=" + k);
         }
 
         // Break them apart

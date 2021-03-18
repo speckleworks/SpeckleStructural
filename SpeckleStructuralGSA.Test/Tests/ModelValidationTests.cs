@@ -44,8 +44,8 @@ namespace SpeckleStructuralGSA.Test
       SpeckleInitializer.Initialize();
       Initialiser.AppResources = new MockGSAApp(proxy: new GSAProxy());
       Initialiser.GsaKit.Clear();
-      Initialiser.AppResources.Settings.TargetLayer = layer;
-      Initialiser.AppResources.Proxy.NewFile(true);
+      ((MockSettings)Initialiser.AppResources.Settings).TargetLayer = layer;
+      Initialiser.AppResources.Proxy.NewFile(false);
 
       var dir = TestDataDirectory;
       if (subdir != String.Empty)
@@ -64,12 +64,9 @@ namespace SpeckleStructuralGSA.Test
       Assert.IsNotNull(gwaRecordsFromFile);
       Assert.IsNotEmpty(gwaRecordsFromFile);
 
-      var designTypeHierarchy = Helper.GetTypeCastPriority(ioDirection.Receive, GSATargetLayer.Design, false);
-      var analysisTypeHierarchy = Helper.GetTypeCastPriority(ioDirection.Receive, GSATargetLayer.Analysis, false);
-      var keywords = designTypeHierarchy.Select(i => i.Key.GetGSAKeyword()).ToList();
-      keywords.AddRange(designTypeHierarchy.SelectMany(i => i.Key.GetSubGSAKeyword()));
-      keywords.AddRange(analysisTypeHierarchy.Select(i => i.Key.GetGSAKeyword()));
-      keywords.AddRange(analysisTypeHierarchy.SelectMany(i => i.Key.GetSubGSAKeyword()));
+      var typeHierarchy = Initialiser.GsaKit.RxTypeDependencies;
+      var keywords = typeHierarchy.Select(i => i.Key.GetGSAKeyword()).ToList();
+      keywords.AddRange(typeHierarchy.SelectMany(i => i.Key.GetSubGSAKeyword()));
       keywords = keywords.Where(k => k.Length > 0).Select(k => Helper.RemoveVersionFromKeyword(k)).Distinct().ToList();
 
       Initialiser.AppResources.Proxy.Sync(); // send GWA to GSA
@@ -120,5 +117,40 @@ namespace SpeckleStructuralGSA.Test
 
       // GSA sometimes forgets the SID - should check that this has passed through correctly here
     }
+
+    /*
+    private Dictionary<Type, List<SpeckleObject>> CollateRxObjectsByType(List<SpeckleObject> rxObjs)
+    {
+      var rxTypePrereqs = GSA.RxTypeDependencies;
+      var rxSpeckleTypes = rxObjs.Select(k => k.GetType()).Distinct().ToList();
+
+      ///[ GSA type , [ SpeckleObjects ]]
+      var d = new Dictionary<Type, List<SpeckleObject>>();
+      foreach (var o in rxObjs)
+      {
+        var speckleType = o.GetType();
+
+        var matchingGsaTypes = rxTypePrereqs.Keys.Where(t => dummyObjectDict[t].SpeckleObject.GetType() == speckleType);
+        if (matchingGsaTypes.Count() == 0)
+        {
+          matchingGsaTypes = rxTypePrereqs.Keys.Where(t => speckleType.IsSubclassOf(dummyObjectDict[t].SpeckleObject.GetType()));
+        }
+
+        if (matchingGsaTypes.Count() == 0)
+        {
+          continue;
+        }
+
+        var gsaType = matchingGsaTypes.First();
+        if (!d.ContainsKey(gsaType))
+        {
+          d.Add(gsaType, new List<SpeckleObject>());
+        }
+        d[gsaType].Add(o);
+      }
+
+      return d;
+    }
+    */
   }
 }

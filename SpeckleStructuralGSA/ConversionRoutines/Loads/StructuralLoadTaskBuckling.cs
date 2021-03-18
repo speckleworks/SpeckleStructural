@@ -44,7 +44,7 @@ namespace SpeckleStructuralGSA
 
     public string SetGWACommand()
     {
-      if (this.Value == null)
+      if (this.Value == null  || string.IsNullOrEmpty(this.Value.ApplicationId))
         return "";
 
       var gwaCommands = new List<string>();
@@ -120,7 +120,7 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this StructuralLoadTaskBuckling loadTask)
     {
-      return new GSALoadTaskBuckling() { Value = loadTask }.SetGWACommand();
+      return SchemaConversion.Helper.ToNativeTryCatch(loadTask, () => new GSALoadTaskBuckling() { Value = loadTask }.SetGWACommand());
     }
 
     // TODO: Same keyword as StructuralLoadTask so will conflict. Need a way to differentiate between.

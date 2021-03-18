@@ -71,6 +71,7 @@ namespace SpeckleStructuralGSA
       var newLines = ToSpeckleBase<GSALoadCase>();
       var typeName = dummyObject.GetType().Name;
       var loadCases = new SortedDictionary<int, GSALoadCase>();
+      var keyword = dummyObject.GetGSAKeyword();
 
       foreach (var k in newLines.Keys)
       {
@@ -82,8 +83,8 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+          Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+            "Keyword=" + keyword, "Index=" + k);
         }
         loadCases.Add(k, loadCase);
       }

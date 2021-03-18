@@ -38,7 +38,7 @@ namespace SpeckleStructuralGSA
 
       var origPtsExtended = new List<Point3D>();
       
-      if (origPts.First().Equals(origPts.Last(),  SpeckleStructuralClasses.Helper.PointComparisonEpsilon))
+      if (origPts.First().Equals(origPts.Last(), SpeckleStructuralClasses.Helper.PointComparisonEpsilon))
       {
         origPtsExtended.Add(origPts[origPts.Count() - 2]);
         origPtsExtended.AddRange(origPts);

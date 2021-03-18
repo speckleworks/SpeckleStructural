@@ -33,6 +33,7 @@ namespace SpeckleStructuralGSA.Test
       return keyword.Split('.').First();
     }
 
+    /*
     //made public so that the sender tests can use it to know which keywords to use to hydrate the cache
     public static Dictionary<Type, List<Type>> GetTypeCastPriority(ioDirection ioDirection, GSATargetLayer layer, bool resultsOnly)
     {
@@ -96,6 +97,7 @@ namespace SpeckleStructuralGSA.Test
       //TypeCastPriority = TypePrerequisites.ToList();
       //TypeCastPriority.Sort((x, y) => x.Value.Count().CompareTo(y.Value.Count()));
     }
+    */
 
     public static T DeserialiseJson<T>(string json)
     {

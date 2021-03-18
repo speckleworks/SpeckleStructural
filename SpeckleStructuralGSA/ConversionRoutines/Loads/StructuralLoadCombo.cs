@@ -28,41 +28,50 @@ namespace SpeckleStructuralGSA
       obj.Name = pieces[counter++];
 
       // Parse type
-      var description = pieces[counter++];
-      if (description.Contains("+"))
-        obj.ComboType = StructuralLoadComboType.LinearAdd;
-      else if (description.Contains("or"))
-        obj.ComboType = StructuralLoadComboType.Envelope;
-      else
-        obj.ComboType = StructuralLoadComboType.LinearAdd;
-
-      obj.LoadTaskRefs = new List<string>();
-      obj.LoadTaskFactors = new List<double>();
-      obj.LoadComboRefs = new List<string>();
-      obj.LoadComboFactors = new List<double>();
-
-      // TODO: this only parses the super simple linear add descriptions
-      try
+      if (counter < pieces.Length)
       {
-        var desc = Helper.ParseLoadDescription(description);
-
-        foreach (var t in desc)
+        var description = pieces[counter++];
+        if (description.Contains("+"))
         {
-          switch (t.Item1[0])
+          obj.ComboType = StructuralLoadComboType.LinearAdd;
+        }
+        else if (description.Contains("or"))
+        {
+          obj.ComboType = StructuralLoadComboType.Envelope;
+        }
+        else
+        {
+          obj.ComboType = StructuralLoadComboType.LinearAdd;
+        }
+
+        obj.LoadTaskRefs = new List<string>();
+        obj.LoadTaskFactors = new List<double>();
+        obj.LoadComboRefs = new List<string>();
+        obj.LoadComboFactors = new List<double>();
+
+        // TODO: this only parses the super simple linear add descriptions
+        try
+        {
+          var desc = Helper.ParseLoadDescription(description);
+
+          foreach (var t in desc)
           {
-            case 'A':
-              obj.LoadTaskRefs.Add(Helper.GetApplicationId(typeof(GSALoadTask).GetGSAKeyword(), Convert.ToInt32(t.Item1.Substring(1))));
-              obj.LoadTaskFactors.Add(t.Item2);
-              break;
-            case 'C':
-              obj.LoadComboRefs.Add(Helper.GetApplicationId(typeof(GSALoadCombo).GetGSAKeyword(), Convert.ToInt32(t.Item1.Substring(1))));
-              obj.LoadComboFactors.Add(t.Item2);
-              break;
+            switch (t.Item1[0])
+            {
+              case 'A':
+                obj.LoadTaskRefs.Add(Helper.GetApplicationId(typeof(GSALoadTask).GetGSAKeyword(), Convert.ToInt32(t.Item1.Substring(1))));
+                obj.LoadTaskFactors.Add(t.Item2);
+                break;
+              case 'C':
+                obj.LoadComboRefs.Add(Helper.GetApplicationId(typeof(GSALoadCombo).GetGSAKeyword(), Convert.ToInt32(t.Item1.Substring(1))));
+                obj.LoadComboFactors.Add(t.Item2);
+                break;
+            }
           }
         }
-      }
-      catch
-      {
+        catch
+        {
+        }
       }
 
       this.Value = obj;
@@ -71,7 +80,9 @@ namespace SpeckleStructuralGSA
     public string SetGWACommand()
     {
       if (this.Value == null)
+      {
         return "";
+      }
 
       var loadCombo = this.Value as StructuralLoadCombo;
       if (string.IsNullOrEmpty(loadCombo.ApplicationId))
@@ -92,18 +103,28 @@ namespace SpeckleStructuralGSA
         loadCombo.Name == null || loadCombo.Name == "" ? " " : loadCombo.Name
       };
 
+      var unresolvedRefs = new List<string>();
+
       var subLs = new List<string>();
       if (loadCombo.LoadTaskRefs != null)
       {
         for (var i = 0; i < loadCombo.LoadTaskRefs.Count(); i++)
         {
-          var loadTaskRef = Initialiser.AppResources.Cache.LookupIndex(typeof(GSALoadTask).GetGSAKeyword(), loadCombo.LoadTaskRefs[i]);
+          if (string.IsNullOrEmpty(loadCombo.LoadTaskRefs[i]))
+          {
+            continue;
+          }
+          var loadTaskIndex = Initialiser.AppResources.Cache.LookupIndex(typeof(GSALoadTask).GetGSAKeyword(), loadCombo.LoadTaskRefs[i]);
 
-          if (loadTaskRef.HasValue)
+          if (loadTaskIndex.HasValue)
           {
             subLs.Add((loadCombo.LoadTaskFactors != null && loadCombo.LoadTaskFactors.Count() > i) 
-              ? loadCombo.LoadTaskFactors[i].ToString() + "A" + loadTaskRef.Value.ToString()
-              : "A" + loadTaskRef.Value.ToString());
+              ? loadCombo.LoadTaskFactors[i].ToString() + "A" + loadTaskIndex.Value.ToString()
+              : "A" + loadTaskIndex.Value.ToString());
+          }
+          else
+          {
+            unresolvedRefs.Add(loadCombo.LoadTaskRefs[i]);
           }
         }
       }
@@ -112,15 +133,32 @@ namespace SpeckleStructuralGSA
       {
         for (var i = 0; i < loadCombo.LoadComboRefs.Count(); i++)
         {
-          var loadComboRef = Initialiser.AppResources.Cache.LookupIndex(typeof(GSALoadTask).GetGSAKeyword(), loadCombo.LoadComboRefs[i]);
+          if (string.IsNullOrEmpty(loadCombo.LoadComboRefs[i]))
+          {
+            continue;
+          }
+          var loadComboIndex = Initialiser.AppResources.Cache.LookupIndex(keyword, loadCombo.LoadComboRefs[i]);
 
-          if (loadComboRef.HasValue)
+          if (loadComboIndex.HasValue)
           {
             subLs.Add((loadCombo.LoadComboFactors != null && loadCombo.LoadComboFactors.Count() > i)
-              ? loadCombo.LoadComboFactors[i].ToString() + "C" + loadComboRef.Value.ToString()
-              : "C" + loadComboRef.Value.ToString());
+              ? loadCombo.LoadComboFactors[i].ToString() + "C" + loadComboIndex.Value.ToString()
+              : "C" + loadComboIndex.Value.ToString());
+          }
+          else
+          {
+            unresolvedRefs.Add(loadCombo.LoadTaskRefs[i]);
           }
         }
+      }
+
+      if (unresolvedRefs.Count() > 0)
+      {
+        Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Error, "Unable to resolve load task/combo references with Application ID:",
+          string.Join(",", unresolvedRefs));
+        Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, 
+          (new[] { "Unable to resolve load task/combo references" }).Union(unresolvedRefs).ToArray());
+        return "";
       }
 
       switch (loadCombo.ComboType)
@@ -144,14 +182,14 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this StructuralLoadCombo loadCombo)
     {
-      return new GSALoadCombo() { Value = loadCombo }.SetGWACommand();
+      return SchemaConversion.Helper.ToNativeTryCatch(loadCombo, () => new GSALoadCombo() { Value = loadCombo }.SetGWACommand());
     }
 
     public static SpeckleObject ToSpeckle(this GSALoadCombo dummyObject)
     {
       var newLines = ToSpeckleBase<GSALoadCombo>();
-      var typeName = dummyObject.GetType().Name;
       var loadCombos = new SortedDictionary<int, GSALoadCombo>();
+      var keyword = dummyObject.GetGSAKeyword();
 
       foreach (var k in newLines.Keys)
       {
@@ -163,8 +201,8 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString()); 
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+          Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+            "Keyword=" + keyword, "Index=" + k);
         }
         loadCombos.Add(k, combo);
       }

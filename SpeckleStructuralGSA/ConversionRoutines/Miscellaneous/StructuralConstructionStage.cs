@@ -158,7 +158,7 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this StructuralConstructionStage stage)
     {
-      return (new GSAConstructionStage() { Value = stage }).SetGWACommand();
+      return SchemaConversion.Helper.ToNativeTryCatch(stage, () => (new GSAConstructionStage() { Value = stage }).SetGWACommand());
     }
 
     public static SpeckleObject ToSpeckle(this GSAConstructionStage dummyObject)
@@ -171,6 +171,7 @@ namespace SpeckleStructuralGSA
       var e2Ds = new List<GSA2DElement>();
       var m1Ds = new List<GSA1DMember>();
       var m2Ds = new List<GSA2DMember>();
+      var keyword = dummyObject.GetGSAKeyword();
 
       if (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Analysis)
       {
@@ -196,8 +197,8 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString());
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+          Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+            "Keyword=" + keyword, "Index=" + k);
         }
       });
 

@@ -51,6 +51,12 @@ namespace SpeckleStructuralGSA
         }
       }
 
+      if (coordinates == null || coordinates.Count() == 0)
+      {
+        Initialiser.AppResources.Messenger.Message(MessageIntent.Display, MessageLevel.Information, "2D voids with unresolvable node references", obj.ApplicationId);
+        return;
+      }
+
       var temp = new Structural2DVoid(
           coordinates.Essential(),
           color.HexToArgbColor());
@@ -96,20 +102,21 @@ namespace SpeckleStructuralGSA
         "0" // Group
       };
       
-      // topo
-      var topo = "";
-      var prevNodeIndex = -1;
-      //var coor = new List<double>();
       
+      var prevNodeIndex = -1;
+
+      // topo
+      var topoIndices = new List<int>();
       if (v.Faces != null && v.Faces.Count() > 0)
       {
         var connectivities = v.Edges();
         foreach (var c in connectivities[0])
         {
-          //coor.AddRange(v.Vertices.Skip(c * 3).Take(3));
           var currIndex = Initialiser.AppResources.Proxy.NodeAt(v.Vertices[c * 3], v.Vertices[c * 3 + 1], v.Vertices[c * 3 + 2], Initialiser.AppResources.Settings.CoincidentNodeAllowance);
           if (prevNodeIndex != currIndex)
-            topo += currIndex.ToString() + " ";
+          {
+            topoIndices.Add(currIndex);
+          }
           prevNodeIndex = currIndex;
         }
       }
@@ -122,13 +129,12 @@ namespace SpeckleStructuralGSA
         if (v.Vertices != null && (v.Vertices.Count() == 9 || v.Vertices.Count() == 12))
         {
           int numVertices = v.Vertices.Count() / 3;
-          var indices = new List<int>();
           for (var i = 0; i < numVertices; i++)
           {
             var currIndex = Initialiser.AppResources.Proxy.NodeAt(v.Vertices[i * 3], v.Vertices[i * 3 + 1], v.Vertices[i * 3 + 2], Initialiser.AppResources.Settings.CoincidentNodeAllowance);
             if (prevNodeIndex != currIndex)
             {
-              topo += currIndex.ToString() + " ";
+              topoIndices.Add(currIndex);
             }
             prevNodeIndex = currIndex;
           }
@@ -139,7 +145,7 @@ namespace SpeckleStructuralGSA
         }
       }
       
-      ls.Add(topo);
+      ls.Add(string.Join(" ", topoIndices));
       
       ls.Add("0"); // Orientation node
       ls.Add("0"); // Angles
@@ -168,18 +174,19 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this Structural2DVoid v)
     {
-      return new GSA2DVoid() { Value = v }.SetGWACommand();
+      return SchemaConversion.Helper.ToNativeTryCatch(v, () => new GSA2DVoid() { Value = v }.SetGWACommand());
     }
 
     public static SpeckleObject ToSpeckle(this GSA2DVoid dummyObject)
     {
       var newLines = ToSpeckleBase<GSA2DVoid>();
-      var typeName = dummyObject.GetType().Name;
       var voidsLock = new object();
       var voids = new SortedDictionary<int, GSA2DVoid>();
       var nodes = Initialiser.GsaKit.GSASenderObjects.Get<GSANode>();
+      var keyword = dummyObject.GetGSAKeyword();
 
-      Parallel.ForEach(newLines.Keys, k =>
+      //Parallel.ForEach(newLines.Keys, k =>
+      foreach (var k in newLines.Keys)
       {
         var pPieces = newLines[k].ListSplit(Initialiser.AppResources.Proxy.GwaDelimiter);
         if (!pPieces[4].Is2DMember())
@@ -199,12 +206,13 @@ namespace SpeckleStructuralGSA
             }
             catch (Exception ex)
             {
-              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, gsaId);
-              Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, gsaId);
+              Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+                "Keyword=" + keyword, "Index=" + k);
             }
           }
         }
-      });
+      }
+      //);
 
       Initialiser.GsaKit.GSASenderObjects.AddRange(voids.Values.ToList());
 

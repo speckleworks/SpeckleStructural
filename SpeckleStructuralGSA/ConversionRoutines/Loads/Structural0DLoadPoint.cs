@@ -169,7 +169,7 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this Structural0DLoadPoint load)
     {
-      return new GSA0DLoadPoint() { Value = load }.SetGWACommand();
+      return SchemaConversion.Helper.ToNativeTryCatch(load, () => new GSA0DLoadPoint() { Value = load }.SetGWACommand());
     }
 
     public static SpeckleObject ToSpeckle(this GSA0DLoadPoint dummyObject)
@@ -177,10 +177,8 @@ namespace SpeckleStructuralGSA
       var newPoints = ToSpeckleBase<GSA0DLoadPoint>();
 
       var loads = new List<GSA0DLoadPoint>();
+      var keyword = dummyObject.GetGSAKeyword();
 
-      var nodes = Initialiser.GsaKit.GSASenderObjects.Get<GSANode>();
-
-      var typeName = dummyObject.GetType().Name;
       foreach (var k in newPoints.Keys)
       {
         var p = newPoints[k];
@@ -195,8 +193,8 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, k.ToString());
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, k.ToString());
+          Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+            "Keyword=" + keyword, "Index=" + k);
         }
 
         loads.AddRange(loadSubList);

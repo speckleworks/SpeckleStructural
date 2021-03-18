@@ -137,7 +137,7 @@ namespace SpeckleStructuralGSA
   {
     public static string ToNative(this StructuralMaterialSteel mat)
     {
-      return new GSAMaterialSteel() { Value = mat }.SetGWACommand();
+      return SchemaConversion.Helper.ToNativeTryCatch(mat, () => new GSAMaterialSteel() { Value = mat }.SetGWACommand());
     }
 
     public static SpeckleObject ToSpeckle(this GSAMaterialSteel dummyObject)
@@ -146,6 +146,7 @@ namespace SpeckleStructuralGSA
       var typeName = dummyObject.GetType().Name;
       var materialsLock = new object();
       var materials = new SortedDictionary<int, GSAMaterialSteel>();
+      var keyword = dummyObject.GetGSAKeyword();
 
       Parallel.ForEach(newLines.Keys, k =>
       {
@@ -162,8 +163,8 @@ namespace SpeckleStructuralGSA
         }
         catch (Exception ex)
         {
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.Display, MessageLevel.Error, typeName, gsaId);
-          Initialiser.AppResources.Messenger.CacheMessage(MessageIntent.TechnicalLog, MessageLevel.Error, ex, typeName, gsaId);
+          Initialiser.AppResources.Messenger.Message(MessageIntent.TechnicalLog, MessageLevel.Error, ex,
+            "Keyword=" + keyword, "Index=" + k);
         }
       });
 

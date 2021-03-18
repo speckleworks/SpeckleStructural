@@ -14,8 +14,8 @@ namespace SpeckleStructuralGSA.Schema
     public GridPlaneAxisRefType PlaneRefType;
     public int? PlaneIndex;
     public GridSurfaceElementsType Type;  
-    public bool AllIndices = false;
-    public List<int> EntityIndices = new List<int>();
+    //public bool AllIndices = false;
+    public List<int> Entities = new List<int>();
     public double? Tolerance;
     public GridSurfaceSpan Span;
     public double? Angle;  //Degrees
@@ -37,7 +37,7 @@ namespace SpeckleStructuralGSA.Schema
       }
 
       //GRID_SURFACE.1 | num | name | plane | type | elements | tol | span | angle | grid
-      return FromGwaByFuncs(remainingItems, out var _, AddName, AddPlane, AddType, AddList, AddTol, AddSpan, AddAngle, AddGrid);
+      return FromGwaByFuncs(remainingItems, out var _, AddName, AddPlane, AddType, (v) => AddEntities(v, out Entities), AddTol, AddSpan, AddAngle, AddGrid);
     }
 
     public override bool Gwa(out List<string> gwa, bool includeSet = false)
@@ -52,7 +52,7 @@ namespace SpeckleStructuralGSA.Schema
       AddItems(ref items, Name, 
         AddPlane(), 
         ((Type == GridSurfaceElementsType.OneD) ? 1 : 2).ToString(), 
-        AllIndices ? "all" : IndicesList(EntityIndices), 
+        AddEntities(Entities), 
         Tolerance ?? 0, AddSpan(),
         AddAngle(), 
         SchemaConversion.Helper.GridExpansionToString(Expansion));
@@ -129,21 +129,6 @@ namespace SpeckleStructuralGSA.Schema
     {
       Span = (!string.IsNullOrEmpty(v) && v.ToUpperInvariant().StartsWith("ONE")) ? GridSurfaceSpan.One : GridSurfaceSpan.Two;
       return true;
-    }
-
-    private bool AddList(string v)
-    {
-      if (v.Equals("all", StringComparison.InvariantCultureIgnoreCase))
-      {
-        AllIndices = true;
-        return true;
-      }
-      else
-      {
-        var entityType = (Initialiser.AppResources.Settings.TargetLayer == GSATargetLayer.Design) ? GSAEntity.MEMBER : GSAEntity.ELEMENT;
-        EntityIndices = Initialiser.AppResources.Proxy.ConvertGSAList(v, entityType).ToList();
-        return (EntityIndices.Count() > 0);
-      }
     }
 
     private bool AddTol(string v)

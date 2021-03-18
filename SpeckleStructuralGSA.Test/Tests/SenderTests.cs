@@ -10,6 +10,7 @@ using SpeckleCore;
 using SpeckleGSAInterfaces;
 using SpeckleGSAProxy;
 using SpeckleStructuralClasses;
+using SpeckleStructuralGSA.Schema;
 
 namespace SpeckleStructuralGSA.Test
 {
@@ -29,15 +30,8 @@ namespace SpeckleStructuralGSA.Test
       //This uses the installed SpeckleKits - when SpeckleStructural is built, the built files are copied into the 
       // %LocalAppData%\SpeckleKits directory, so therefore this project doesn't need to reference the projects within in this solution
       SpeckleInitializer.Initialize();
-      //gsaInterfacer = new GSAProxy();
-      //gsaCache = new GSACache();
       Initialiser.AppResources = new MockGSAApp(proxy: new GSAProxy());
       Initialiser.GsaKit.Clear();
-
-      //Initialiser.Instance.Cache = gsaCache;
-      //Initialiser.Instance.Interface = gsaInterfacer;
-      //Initialiser.Instance.Settings = new MockSettings();
-      //Initialiser.Instance.AppUI = new SpeckleAppUI();
     }
 
     [TestCase("TxSpeckleObjectsDesignLayer.json", GSATargetLayer.Design, false, true, gsaFileNameWithResults)]
@@ -47,7 +41,7 @@ namespace SpeckleStructuralGSA.Test
     [TestCase("TxSpeckleObjectsNotEmbedded.json", GSATargetLayer.Analysis, false, false, gsaFileNameWithResults)]
     public void TransmissionTest(string inputJsonFileName, GSATargetLayer layer, bool resultsOnly, bool embedResults, string gsaFileName)
     {
-      Initialiser.AppResources.Proxy.OpenFile(Path.Combine(TestDataDirectory, gsaFileName));
+      Initialiser.AppResources.Proxy.OpenFile(Path.Combine(TestDataDirectory, gsaFileName), false);
 
       //Deserialise into Speckle Objects so that these can be compared in any order
 
@@ -61,8 +55,8 @@ namespace SpeckleStructuralGSA.Test
 
       var expected = new Dictionary<Type, List<Tuple<string, SpeckleObject, string>>>();
       var expectedLock = new object();
-      //Parallel.ForEach(expectedObjects, expectedObject =>
-      foreach(var expectedObject in expectedObjects)
+      Parallel.ForEach(expectedObjects, expectedObject =>
+      //foreach(var expectedObject in expectedObjects)
       {
         var expectedJson = JsonConvert.SerializeObject(expectedObject, jsonSettings);
 
@@ -81,10 +75,17 @@ namespace SpeckleStructuralGSA.Test
           expected[type].Add(new Tuple<string, SpeckleObject, string>(expectedObjectAppId, expectedObject, expectedJson));
         }
       }
-      //);
+      );
 
       var actualObjects = ModelToSpeckleObjects(layer, resultsOnly, embedResults, loadCases, resultTypes);
       Assert.IsNotNull(actualObjects);
+
+      //This replaces what the real sender does in terms of stream buckets
+      if (resultsOnly)
+      {
+        actualObjects = actualObjects.Where(o => o.Type.Contains("Result")).ToList();
+      }
+
       actualObjects = actualObjects.OrderBy(a => a.ApplicationId).ToList();
 
       var actual = new Dictionary<SpeckleObject, string>();
@@ -103,9 +104,10 @@ namespace SpeckleStructuralGSA.Test
       var matchedLock = new object();
       var unmatching = new List<Tuple<string, string, List<string>>>();
       var unmatchingLock = new object();
+
       //Compare each object
-      foreach(var actualObject in actual.Keys)
-      //Parallel.ForEach(actual.Keys, actualObject =>
+      //foreach(var actualObject in actual.Keys)
+      Parallel.ForEach(actual.Keys, actualObject =>
       {
         var actualJson = actual[actualObject];
         var actualType = actualObject.GetType();
@@ -163,7 +165,7 @@ namespace SpeckleStructuralGSA.Test
           }
         }
       }
-      //);
+      );
 
       Initialiser.AppResources.Proxy.Close();
       Assert.IsFalse(actual.Keys.Any(a => !a.Type.ToLower().EndsWith("result") && string.IsNullOrEmpty(a.ApplicationId)));
@@ -185,6 +187,22 @@ namespace SpeckleStructuralGSA.Test
         appId = so.ApplicationId ?? "";
       }
       return Helper.RemoveKeywordVersionFromApplicationIds(appId);
+    }
+
+    [Test]
+    public void ResultTypeDependencies()
+    {
+      var resultTypes = new List<Type> { typeof(GSAMiscResult), typeof(GSANodeResult), typeof(GSA1DElementResult), typeof(GSA2DElementResult) };
+      ((MockSettings)Initialiser.AppResources.Settings).TargetLayer = GSATargetLayer.Analysis;
+      ((MockSettings)Initialiser.AppResources.Settings).SendResults = false;
+      resultTypes.ForEach(rt => Assert.IsFalse(Initialiser.GsaKit.TxTypeDependencies.ContainsKey(rt)));
+
+      ((MockSettings)Initialiser.AppResources.Settings).SendResults = true;
+      foreach (var rt in resultTypes)
+      {
+        Assert.IsTrue(Initialiser.GsaKit.TxTypeDependencies.ContainsKey(rt));
+        Assert.IsTrue(Initialiser.GsaKit.TxTypeDependencies[rt].Count() > 0);
+      }
     }
 
     [Ignore("There is an equivalent test in SpeckleGSA repo, so this one might be removed")]
